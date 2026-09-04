@@ -1,0 +1,24 @@
+[gd_scene format=3 uid="uid://ckjd7sjdoa6ss"]
+
+[ext_resource type="Script" uid="uid://b8d1mibht44wc" path="res://script/ui/item_card.gd" id="1_1o3om"]
+
+[node name="ItemCard" type="Button" unique_id=1507082648]
+custom_minimum_size = Vector2(100, 125)
+script = ExtResource("1_1o3om")
+
+[node name="IconRect" type="TextureRect" parent="." unique_id=636873408]
+layout_mode = 0
+offset_right = 70.0
+offset_bottom = 70.0
+offset_transform_position = Vector2(15, 20)
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="CountLabel" type="Label" parent="." unique_id=1059312738]
+layout_mode = 0
+offset_left = 55.0
+offset_top = 3.0
+offset_right = 95.0
+offset_bottom = 28.0
+horizontal_alignment = 2
