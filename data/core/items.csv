@@ -15,7 +15,4 @@ rusty_sword,낡은 검,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1
 leather_armor,가죽 갑옷,equipment,tool,0,2,2,false,false,res://art/items/pixel_v1/leather_armor.png,가볍게 몸을 보호하는 가죽 갑옷이다.,0,3,bag,expedition
 sickle,낫,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1/sickle.png,야생 밀을 안정적으로 베어내는 원정용 낫이다.,0,0,bag,expedition
 gathering_bottle,채집용 물병,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/gathering_bottle.png,호수의 물을 담아 운반할 수 있는 원정용 물병이다.,0,0,bag,expedition
-forest_herb,숲 약초,material,material,0,1,1,false,false,res://art/items/pixel_v1/forest_herb.png,숲에서 채집할 수 있는 약초다.,0,0,inventory,shelf
-mine_crystal,수정 원석,material,material,0,1,1,false,false,res://art/items/pixel_v1/mine_crystal.png,광산에서 채집할 수 있는 수정 원석이다.,0,0,inventory,shelf
-swamp_moss,늪 이끼,material,material,0,1,1,false,false,res://art/items/pixel_v1/swamp_moss.png,늪에서 채집할 수 있는 이끼다.,0,0,inventory,shelf
 treasure_map,보물 지도,special,etc,0,1,1,false,false,res://art/items/pixel_v1/treasure_map.png,숨겨진 원정지를 가리키는 오래된 지도다.,0,0,inventory,expedition
