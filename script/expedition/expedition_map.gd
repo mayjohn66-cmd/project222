@@ -283,3 +283,11 @@ func set_region(
 	new_region_id: String
 ) -> void:
 	region_id = new_region_id
+
+	# 시작 지점 층 + 방 개수(보스 방 포함)
+	layer_count = (
+		ExpeditionTierData.get_room_count(
+			new_region_id
+		)
+		+ 1
+	)
