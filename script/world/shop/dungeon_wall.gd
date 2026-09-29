@@ -1,6 +1,6 @@
 extends Node2D
 ## A straight village boundary with an open road through its center.
-const LOW_WALL = preload("res://art/world/village_decor_v1/low_wall.png")
+static var LOW_WALL: Texture2D = ArtLoader.load_texture("res://art/world/village_decor_v1/low_wall.png")
 const SEGMENT_COLUMNS := [-7,-3,3,7]
 const SEGMENT_SCALE := Vector2(0.15,0.2)
 const SEGMENT_ANCHOR := Vector2(768,710)

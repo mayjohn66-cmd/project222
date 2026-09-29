@@ -1,11 +1,11 @@
 @tool
 extends Node2D
 
-const VIEWS = [
-	preload("res://art/world/cozy_v6/shelf_front.png"),
-	preload("res://art/world/cozy_v6/shelf_front_flipped.png"),
-	preload("res://art/world/cozy_v8/shelf_back.png"),
-	preload("res://art/world/cozy_v8/shelf_back_flipped.png")
+static var VIEWS: Array = [
+	ArtLoader.load_texture("res://art/world/cozy_v6/shelf_front.png"),
+	ArtLoader.load_texture("res://art/world/cozy_v6/shelf_front_flipped.png"),
+	ArtLoader.load_texture("res://art/world/cozy_v8/shelf_back.png"),
+	ArtLoader.load_texture("res://art/world/cozy_v8/shelf_back_flipped.png")
 ]
 
 @export var tile_width: float = 96.0:
@@ -69,6 +69,8 @@ func set_rotation_index(value: int):
 
 func _draw():
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if VIEWS[rotation_index] == null:
+		return
 	var contact := FurnitureFootprint.polygon(Vector2i.ONE,0.5,rotation_index,Vector2(tile_width,tile_height))[2]
 	var foot_pixel := Vector2(48,84) if rotation_index%2==0 else Vector2(24,84)
 	if rotation_index>=2: foot_pixel = Vector2(51, 84) if rotation_index==2 else Vector2(19, 84)

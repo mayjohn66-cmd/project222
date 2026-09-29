@@ -1,9 +1,9 @@
 extends Node2D
 ## Small rural landmarks around the square. Collision is limited to trunks/rim.
-const TREE = preload("res://art/world/village_decor_v1/apple_tree.png")
-const WELL = preload("res://art/world/village_decor_v1/village_well.png")
+static var TREE: Texture2D = ArtLoader.load_texture("res://art/world/village_decor_v1/apple_tree.png")
+static var WELL: Texture2D = ArtLoader.load_texture("res://art/world/village_decor_v1/village_well.png")
 const STALL = preload("res://art/world/village_decor_v6/market_stall_quarter_turn.png")
-const LOW_WALL = preload("res://art/world/village_decor_v1/low_wall.png")
+static var LOW_WALL: Texture2D = ArtLoader.load_texture("res://art/world/village_decor_v1/low_wall.png")
 const HERB_STALL = preload("res://art/world/plaza_props_v1/herb_stall_roof_diamond_v6.png")
 const SUPPLY_CART = preload("res://art/world/plaza_props_v1/supply_cart_tile_aligned_v3.png")
 const SUPPLY_CRATES = preload("res://art/world/plaza_props_v1/plaza_crates.png")

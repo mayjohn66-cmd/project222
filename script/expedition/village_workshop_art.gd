@@ -7,11 +7,12 @@ var elapsed := 0.0
 
 func prop(path: String, foot: Vector2) -> Sprite2D:
  var sprite := Sprite2D.new()
- sprite.texture = load("res://art/"+path)
+ sprite.texture = ArtLoader.load_texture("res://art/"+path)
  sprite.centered = false
  var factor := 0.5 if path.begins_with("items/") else 1.0
  sprite.scale = Vector2.ONE*factor
- sprite.position = foot-Vector2(sprite.texture.get_width()/2.0,sprite.texture.get_height())*factor
+ if sprite.texture != null:
+  sprite.position = foot-Vector2(sprite.texture.get_width()/2.0,sprite.texture.get_height())*factor
  add_child(sprite)
  return sprite
 
