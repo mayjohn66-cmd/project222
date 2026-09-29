@@ -1,0 +1,7 @@
+8430aa5 추가 테스트
+e4f16f9 2차 테스트
+af68db8 Add .gitattributes file
+9251bb7 Update .gitignore file
+ae28ca9 규칙 업로드
+33b9d5e 1차 테스트
+c17dae9 Initial commit
