@@ -1,0 +1,9 @@
+template_id,region_id,room_type,width_tiles,height_tiles,player_x,player_y,exit_x,exit_y,exit_opens_when,time_limit_sec,weight
+forest_battle_a,forest,battle,20,12,2,6,18,6,all_enemies_dead,60,50
+forest_battle_b,forest,battle,20,12,2,10,17,2,all_enemies_dead,60,50
+forest_gather_a,forest,gather,20,12,2,6,18,6,always,60,60
+forest_gather_b,forest,gather,20,12,10,10,10,1,always,60,40
+forest_treasure_a,forest,treasure,20,12,2,6,18,6,always,45,100
+forest_unknown_a,forest,unknown,20,12,2,6,18,6,event_done,45,100
+forest_rest_a,forest,rest,20,12,2,6,18,6,always,30,100
+forest_boss_a,forest,boss,20,12,2,6,18,6,boss_dead,90,100

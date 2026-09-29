@@ -1,0 +1,5 @@
+region_id,tier,room_count,monster_hp_mult,monster_atk_mult,loot_price_mult,entry_item_id
+forest,1,6,1.0,1.0,1.0,
+mine,2,7,1.4,1.2,1.5,
+swamp,3,8,1.8,1.4,2.0,
+hidden_ruins,4,9,2.4,1.7,3.0,treasure_map
