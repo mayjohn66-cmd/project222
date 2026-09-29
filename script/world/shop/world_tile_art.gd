@@ -1,11 +1,13 @@
 @tool
 extends RefCounted
 
-# 이미지가 없으면 null이 되고, draw_cell이 단색 칸으로 대신 그린다.
-static var WOOD: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v3/wood.png")
-static var GRASS: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v3/grass.png")
-static var PAVING: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v3/paving.png")
-static var ROAD: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v3/road.png")
+# 다른 스크립트가 const preload로 받아 TILE_ART.WOOD처럼 읽으므로 const로 둔다.
+# static var로 바꾸면 그 접근이 파싱 오류가 난다.
+# art/world/cozy_v3/의 그림은 임시 이미지이다. 진짜 이미지로 덮어쓰면 된다.
+const WOOD = preload("res://art/world/cozy_v3/wood.png")
+const GRASS = preload("res://art/world/cozy_v3/grass.png")
+const PAVING = preload("res://art/world/cozy_v3/paving.png")
+const ROAD = preload("res://art/world/cozy_v3/road.png")
 
 const FALLBACK_COLOR := Color(0.45, 0.4, 0.35)
 
