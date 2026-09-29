@@ -38,6 +38,16 @@ const SAVE_SLOT_PATHS: Array = [
 	"user://save_slot_2.dat"
 ]
 
+const SAVE_PATH: String = "user://save_game.dat"
+const SAVE_TEST_PATH: String = "user://save_test.dat"
+
+# 마을 지도 편집 결과를 저장하는 경로
+const VILLAGE_LAYOUT_USER_PATH: String = "user://village_map_layout.json"
+
+
+# 원정 지역을 고르지 않았을 때 쓰는 기본 지역 (expedition_regions.csv의 region_id)
+const DEFAULT_REGION_ID: String = "forest"
+
 
 const STARTING_INVENTORY: Dictionary = {
 	"water": 999,

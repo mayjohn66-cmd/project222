@@ -49,8 +49,8 @@ var build_quick_slots: Array[String] = []
 var first_settlement_done: bool = false
 
 const SAVE_VERSION: int = 1
-const SAVE_PATH: String = "user://save_game.dat"
-const SAVE_TEST_PATH: String = "user://save_test.dat"
+const SAVE_PATH: String = GameConfig.SAVE_PATH
+const SAVE_TEST_PATH: String = GameConfig.SAVE_TEST_PATH
 
 
 signal furniture_inventory_changed(

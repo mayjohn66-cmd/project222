@@ -212,7 +212,7 @@ var current_expedition_phase: ExpeditionPhase = (
 var run_message_queue: Array[String] = []
 var run_message_finish_action: Callable = Callable()
 
-var current_region_id: String = "forest"
+var current_region_id: String = GameConfig.DEFAULT_REGION_ID
 
 var expedition_departure_service = (
 	EXPEDITION_DEPARTURE_SERVICE_SCRIPT.new()
@@ -1838,7 +1838,7 @@ func start_expedition_run() -> void:
 	# 선택 지역 가져오기
 	# =========================
 
-	current_region_id = "forest"
+	current_region_id = GameConfig.DEFAULT_REGION_ID
 
 	if prep_panel.has_method(
 		"get_selected_region_id"
@@ -2079,7 +2079,7 @@ func reset_for_next_expedition_day():
 	selected_bag_uid = -1
 	selected_map_node_id = ""
 	current_map_node_id = ""
-	current_region_id = "forest"
+	current_region_id = GameConfig.DEFAULT_REGION_ID
 
 	visited_map_node_ids.clear()
 
@@ -2932,7 +2932,7 @@ func restore_expedition_checkpoint() -> bool:
 	current_region_id = str(
 		checkpoint.get(
 			"region_id",
-			"forest"
+			GameConfig.DEFAULT_REGION_ID
 		)
 	)
 

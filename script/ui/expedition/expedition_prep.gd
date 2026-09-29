@@ -187,4 +187,4 @@ func get_selected_region_id() -> String:
 			)
 		)
 
-	return "forest"
+	return GameConfig.DEFAULT_REGION_ID

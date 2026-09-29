@@ -4,7 +4,7 @@ extends Node2D
 const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
 const TILE_GRID_OVERLAY = preload("res://script/world/shop/tile_grid_overlay.gd")
 const VILLAGE_LAYOUT_PATH := "res://data/village_map_layout.json"
-const VILLAGE_LAYOUT_FALLBACK := "user://village_map_layout.json"
+const VILLAGE_LAYOUT_FALLBACK := GameConfig.VILLAGE_LAYOUT_USER_PATH
 
 var _layout_objects: Dictionary = {}
 var _layout_tiles: Dictionary = {}

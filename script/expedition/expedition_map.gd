@@ -18,7 +18,7 @@ var width: int = 3
 var layers: Array = []
 
 
-var region_id: String = "forest"
+var region_id: String = GameConfig.DEFAULT_REGION_ID
 
 
 
