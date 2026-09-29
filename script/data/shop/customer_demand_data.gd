@@ -325,7 +325,7 @@ static func _load_csv() -> void:
 			continue
 
 		var customer_type_id: String = (
-			_get_cell(
+			CsvReader.get_cell(
 				row,
 				indexes,
 				"customer_type_id"
@@ -333,7 +333,7 @@ static func _load_csv() -> void:
 		)
 
 		var target_type: String = (
-			_get_cell(
+			CsvReader.get_cell(
 				row,
 				indexes,
 				"target_type"
@@ -341,7 +341,7 @@ static func _load_csv() -> void:
 		)
 
 		var target_id: String = (
-			_get_cell(
+			CsvReader.get_cell(
 				row,
 				indexes,
 				"target_id"
@@ -349,7 +349,7 @@ static func _load_csv() -> void:
 		)
 
 		var weight: int = int(
-			_get_cell(
+			CsvReader.get_cell(
 				row,
 				indexes,
 				"weight"
@@ -389,19 +389,3 @@ static func _load_csv() -> void:
 		)
 
 
-static func _get_cell(
-	row: PackedStringArray,
-	indexes: Dictionary,
-	column_name: String
-) -> String:
-	if not indexes.has(column_name):
-		return ""
-
-	var index: int = int(
-		indexes[column_name]
-	)
-
-	if index < 0 or index >= row.size():
-		return ""
-
-	return row[index].strip_edges()

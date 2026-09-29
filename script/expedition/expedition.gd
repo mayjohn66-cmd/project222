@@ -5,15 +5,7 @@ extends Node2D
 # 세부 규칙과 데이터 로딩은 각 전용 클래스에 위임한다.
 
 
-enum Weekday {
-	MONDAY = 1,
-	TUESDAY = 2,
-	WEDNESDAY = 3,
-	THURSDAY = 4,
-	FRIDAY = 5,
-	SATURDAY = 6,
-	SUNDAY = 7
-}
+const Weekday = CalendarData.Weekday
 
 
 enum ExpeditionPhase {

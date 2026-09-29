@@ -712,7 +712,7 @@ func _add_cell_boundary(
 	if not is_exterior_cell(
 		cell + Vector2i(1, 0)
 	):
-		_add_boundary_segment(
+		BoundarySegment.add(
 			boundary,
 			right,
 			bottom
@@ -721,7 +721,7 @@ func _add_cell_boundary(
 	if not is_exterior_cell(
 		cell + Vector2i(-1, 0)
 	):
-		_add_boundary_segment(
+		BoundarySegment.add(
 			boundary,
 			left,
 			top
@@ -730,7 +730,7 @@ func _add_cell_boundary(
 	if not is_exterior_cell(
 		cell + Vector2i(0, 1)
 	):
-		_add_boundary_segment(
+		BoundarySegment.add(
 			boundary,
 			bottom,
 			left
@@ -739,30 +739,12 @@ func _add_cell_boundary(
 	if not is_exterior_cell(
 		cell + Vector2i(0, -1)
 	):
-		_add_boundary_segment(
+		BoundarySegment.add(
 			boundary,
 			top,
 			right
 		)
 
-
-func _add_boundary_segment(
-	boundary: StaticBody2D,
-	point_a: Vector2,
-	point_b: Vector2
-) -> void:
-	var segment := SegmentShape2D.new()
-
-	segment.a = point_a
-	segment.b = point_b
-
-	var collision := CollisionShape2D.new()
-
-	collision.shape = segment
-
-	boundary.add_child(
-		collision
-	)
 
 # =========================
 # 도로와 보도 설정

@@ -4,9 +4,10 @@ extends RefCounted
 
 # 매장 확장 단계별 내부 크기를 관리한다.
 # 기존 매장 크기인 10×8을 1단계로 사용한다.
+# 단계 규칙은 ExpansionLevelData를 따른다.
 
-const MIN_LEVEL: int = 1
-const MAX_LEVEL: int = 4
+const MIN_LEVEL: int = ExpansionLevelData.MIN_LEVEL
+const MAX_LEVEL: int = ExpansionLevelData.MAX_LEVEL
 
 
 const STORE_SIZES: Dictionary = {
@@ -24,37 +25,30 @@ const EXPANSION_COSTS: Dictionary = {
 	4: 40000
 }
 
+
 static func get_store_size(
 	expansion_level: int
 ) -> Vector2i:
-	var safe_level: int = clampi(
-		expansion_level,
-		MIN_LEVEL,
-		MAX_LEVEL
-	)
-
-	return STORE_SIZES.get(
-		safe_level,
-		STORE_SIZES[MIN_LEVEL]
+	return ExpansionLevelData.get_size(
+		STORE_SIZES,
+		expansion_level
 	)
 
 
 static func can_expand(
 	current_level: int
 ) -> bool:
-	return current_level < MAX_LEVEL
+	return ExpansionLevelData.can_expand(
+		current_level
+	)
+
 
 # 현재 단계 다음의 확장 단계를 반환한다.
 static func get_next_level(
 	current_level: int
 ) -> int:
-	if not can_expand(current_level):
-		return MAX_LEVEL
-
-	return clampi(
-		current_level + 1,
-		MIN_LEVEL,
-		MAX_LEVEL
+	return ExpansionLevelData.get_next_level(
+		current_level
 	)
 
 
@@ -62,18 +56,9 @@ static func get_next_level(
 static func get_expansion_cost(
 	current_level: int
 ) -> int:
-	if not can_expand(current_level):
-		return 0
-
-	var next_level: int = (
-		get_next_level(current_level)
-	)
-
-	return int(
-		EXPANSION_COSTS.get(
-			next_level,
-			0
-		)
+	return ExpansionLevelData.get_expansion_cost(
+		EXPANSION_COSTS,
+		current_level
 	)
 
 
@@ -81,10 +66,6 @@ static func get_expansion_cost(
 static func get_next_store_size(
 	current_level: int
 ) -> Vector2i:
-	var next_level: int = (
-		get_next_level(current_level)
-	)
-
 	return get_store_size(
-		next_level
+		get_next_level(current_level)
 	)

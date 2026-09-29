@@ -96,43 +96,43 @@ static func load_data() -> void:
 		if _is_empty_row(row):
 			continue
 
-		var table_id: String = _get_cell(
+		var table_id: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"loot_table_id"
 		)
 
-		var tool_effect_id: String = _get_cell(
+		var tool_effect_id: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"tool_effect_id"
 		)
 
-		var no_tool_rate_text: String = _get_cell(
+		var no_tool_rate_text: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"no_tool_success_rate"
 		)
 
-		var tool_rate_text: String = _get_cell(
+		var tool_rate_text: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"tool_success_rate"
 		)
 
-		var tool_bonus_text: String = _get_cell(
+		var tool_bonus_text: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"tool_bonus_amount"
 		)
 
-		var level_bonus_text: String = _get_cell(
+		var level_bonus_text: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"enhancement_bonus_per_level"
 		)
 
-		var required_text: String = _get_cell(
+		var required_text: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"tool_required"
@@ -295,23 +295,6 @@ static func get_all_rules() -> Array[Dictionary]:
 		)
 
 	return result
-
-
-static func _get_cell(
-	row: PackedStringArray,
-	indexes: Dictionary,
-	column: String
-) -> String:
-	var index: int = int(
-		indexes.get(column, -1)
-	)
-
-	if index < 0 or index >= row.size():
-		return ""
-
-	return str(
-		row[index]
-	).strip_edges()
 
 
 static func _is_empty_row(

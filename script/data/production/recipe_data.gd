@@ -227,7 +227,7 @@ static func _load_csv() -> bool:
 	while file.get_position() < file.get_length():
 		var row: PackedStringArray = file.get_csv_line()
 
-		var recipe_id: String = _get_cell(
+		var recipe_id: String = CsvReader.get_cell(
 			row, indexes, "recipe_id"
 		)
 
@@ -240,11 +240,11 @@ static func _load_csv() -> bool:
 			)
 			continue
 
-		var result_item_id: String = _get_cell(
+		var result_item_id: String = CsvReader.get_cell(
 			row, indexes, "result_item_id"
 		)
 
-		var result_amount_text: String = _get_cell(
+		var result_amount_text: String = CsvReader.get_cell(
 			row, indexes, "result_amount"
 		)
 
@@ -263,13 +263,13 @@ static func _load_csv() -> bool:
 		var materials_valid: bool = true
 
 		for material_index in range(1, 3):
-			var item_id: String = _get_cell(
+			var item_id: String = CsvReader.get_cell(
 				row,
 				indexes,
 				"material_%d" % material_index
 			)
 
-			var amount_text: String = _get_cell(
+			var amount_text: String = CsvReader.get_cell(
 				row,
 				indexes,
 				"amount_%d" % material_index
@@ -494,17 +494,3 @@ static func _add_material(
 	return true
 
 
-static func _get_cell(
-	row: PackedStringArray,
-	indexes: Dictionary,
-	column_name: String
-) -> String:
-	if not indexes.has(column_name):
-		return ""
-
-	var index: int = int(indexes[column_name])
-
-	if index < 0 or index >= row.size():
-		return ""
-
-	return row[index].strip_edges()

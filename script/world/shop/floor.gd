@@ -482,7 +482,7 @@ func _add_cell_boundary(
 			cell,
 			1
 		):
-			_add_boundary_segment(
+			BoundarySegment.add(
 				boundary,
 				right,
 				bottom
@@ -496,7 +496,7 @@ func _add_cell_boundary(
 			cell,
 			3
 		):
-			_add_boundary_segment(
+			BoundarySegment.add(
 				boundary,
 				left,
 				top
@@ -510,7 +510,7 @@ func _add_cell_boundary(
 			cell,
 			2
 		):
-			_add_boundary_segment(
+			BoundarySegment.add(
 				boundary,
 				bottom,
 				left
@@ -524,26 +524,12 @@ func _add_cell_boundary(
 			cell,
 			0
 		):
-			_add_boundary_segment(
+			BoundarySegment.add(
 				boundary,
 				top,
 				right
 			)
 
-
-func _add_boundary_segment(
-	boundary: StaticBody2D,
-	point_a: Vector2,
-	point_b: Vector2
-) -> void:
-	var segment := SegmentShape2D.new()
-	segment.a = point_a
-	segment.b = point_b
-
-	var collision := CollisionShape2D.new()
-	collision.shape = segment
-
-	boundary.add_child(collision)
 
 func get_production_entry_cell() -> Vector2i:
 	var region: Rect2i = get_production_rect()

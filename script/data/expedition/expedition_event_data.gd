@@ -183,7 +183,7 @@ static func _load_events() -> void:
 		if row.is_empty():
 			continue
 
-		var event_id := _get_cell(
+		var event_id := CsvReader.get_cell(
 			row,
 			indexes,
 			"event_id"
@@ -196,53 +196,53 @@ static func _load_events() -> void:
 			{
 				"event_id": event_id,
 
-				"region_id": _get_cell(
+				"region_id": CsvReader.get_cell(
 					row,
 					indexes,
 					"region_id"
 				),
 
-				"node_type": _get_cell(
+				"node_type": CsvReader.get_cell(
 					row,
 					indexes,
 					"node_type"
 				),
 
 				"weight": int(
-					_get_cell(
+					CsvReader.get_cell(
 						row,
 						indexes,
 						"weight"
 					)
 				),
 
-				"message": _get_cell(
+				"message": CsvReader.get_cell(
 					row,
 					indexes,
 					"message"
 				),
 
-				"result_type": _get_cell(
+				"result_type": CsvReader.get_cell(
 					row,
 					indexes,
 					"result_type"
 				),
 
-				"target_id": _get_cell(
+				"target_id": CsvReader.get_cell(
 					row,
 					indexes,
 					"target_id"
 				),
 
 				"value": int(
-					_get_cell(
+					CsvReader.get_cell(
 						row,
 						indexes,
 						"value"
 					)
 				),
 
-				"day_filter": _get_cell(
+				"day_filter": CsvReader.get_cell(
 					row,
 					indexes,
 					"day_filter"
@@ -408,13 +408,13 @@ static func _load_loot() -> void:
 		if row.is_empty():
 			continue
 
-		var table_id: String = _get_cell(
+		var table_id: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"table_id"
 		).strip_edges()
 
-		var item_id: String = _get_cell(
+		var item_id: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"item_id"
@@ -441,7 +441,7 @@ static func _load_loot() -> void:
 			"item_id": item_id,
 
 			"weight": int(
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"weight"
@@ -449,7 +449,7 @@ static func _load_loot() -> void:
 			),
 
 			"min_amount": int(
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"min_amount"
@@ -457,7 +457,7 @@ static func _load_loot() -> void:
 			),
 
 			"max_amount": int(
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"max_amount"
@@ -509,27 +509,6 @@ static func _validate_headers(
 	return true
 
 
-static func _get_cell(
-	row: PackedStringArray,
-	indexes: Dictionary,
-	column_name: String
-) -> String:
-	if not indexes.has(
-		column_name
-	):
-		return ""
-
-	var index: int = int(
-		indexes[column_name]
-	)
-
-	if index < 0:
-		return ""
-
-	if index >= row.size():
-		return ""
-
-	return row[index].strip_edges()
 
 static func _matches_day_filter(
 	day_filter: String,

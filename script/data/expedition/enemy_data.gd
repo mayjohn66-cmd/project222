@@ -146,7 +146,7 @@ static func _load_csv() -> void:
 		if row.is_empty():
 			continue
 
-		var enemy_id := _get_cell(
+		var enemy_id := CsvReader.get_cell(
 			row,
 			indexes,
 			"id"
@@ -156,14 +156,14 @@ static func _load_csv() -> void:
 			continue
 
 		enemies[enemy_id] = {
-			"name": _get_cell(
+			"name": CsvReader.get_cell(
 				row,
 				indexes,
 				"name"
 			),
 
 			"max_hp": int(
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"max_hp"
@@ -171,7 +171,7 @@ static func _load_csv() -> void:
 			),
 
 			"attack": int(
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"attack"
@@ -179,14 +179,14 @@ static func _load_csv() -> void:
 			),
 
 			"defense": int(
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"defense"
 				)
 			),
 
-			"loot_table": _get_cell(
+			"loot_table": CsvReader.get_cell(
 				row,
 				indexes,
 				"loot_table"
@@ -194,24 +194,3 @@ static func _load_csv() -> void:
 		}
 
 
-static func _get_cell(
-	row: PackedStringArray,
-	indexes: Dictionary,
-	column_name: String
-) -> String:
-	if not indexes.has(
-		column_name
-	):
-		return ""
-
-	var index: int = int(
-		indexes[column_name]
-	)
-
-	if index < 0:
-		return ""
-
-	if index >= row.size():
-		return ""
-
-	return row[index].strip_edges()
