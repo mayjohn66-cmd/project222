@@ -31,7 +31,7 @@ static func load_data() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[ProductRecipeData] 로드 완료 / 레시피 수: ",
 		recipes.size()
 	)

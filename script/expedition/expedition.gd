@@ -412,7 +412,7 @@ func _ready() -> void:
 			)
 			return
 
-		print(
+		DebugLog.write(
 			"[원정] 이전 가방 복원 / 아이템 수: ",
 			expedition_bag.placements.size()
 		)
@@ -474,7 +474,7 @@ func _ready() -> void:
 	# 12. 초기화 완료
 	# =====================================================
 
-	print(
+	DebugLog.write(
 		"[원정] 시작: ",
 		get_day_name()
 	)
@@ -496,7 +496,7 @@ func _input(event) -> void:
 				"원정 퀵 세이브 완료"
 			)
 
-			print(
+			DebugLog.write(
 				"[원정 저장] 퀵 세이브 완료"
 			)
 		else:
@@ -504,7 +504,7 @@ func _input(event) -> void:
 				save_failure_reason
 			)
 
-			print(
+			DebugLog.write(
 				"[원정 저장] 실패 / ",
 				save_failure_reason
 			)
@@ -638,7 +638,7 @@ func finish_expedition() -> void:
 func get_active_expedition_bag_placements() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리 확인] 원정 가방 모델 존재: ",
 		expedition_bag != null
 	)
@@ -651,7 +651,7 @@ func get_active_expedition_bag_placements() -> Array[Dictionary]:
 			placement.duplicate(true)
 		)
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리 확인] 실시간 가방 배치: ",
 		result
 	)
@@ -1046,7 +1046,7 @@ func return_bag_item_to_loot(
 
 	selected_bag_uid = -1
 
-	print(
+	DebugLog.write(
 		"[전리품] 가방 → 임시 보관함: ",
 		ItemData.get_item_name(
 			item_id
@@ -1180,7 +1180,7 @@ func process_battle_tick():
 		combat_player_hp
 	)
 
-	print(
+	DebugLog.write(
 		"[전투] 플레이어 → ",
 		combat_enemy_name,
 		" ",
@@ -1188,7 +1188,7 @@ func process_battle_tick():
 		" 피해"
 	)
 
-	print(
+	DebugLog.write(
 		"[전투] ",
 		combat_enemy_name,
 		" → 플레이어 ",
@@ -1226,7 +1226,7 @@ func check_battle_result() -> void:
 		battle_panel.visible = false
 		map_panel.visible = false
 
-		print("[원정] 전투 불능 → 결과 안내")
+		DebugLog.write("[원정] 전투 불능 → 결과 안내")
 
 		show_run_messages(
 			[defeat_message],
@@ -1245,7 +1245,7 @@ func check_battle_result() -> void:
 		combat_enemy_name + " 처치"
 	)
 
-	print(
+	DebugLog.write(
 		"[전투] 승리 / 남은 HP: ",
 		combat_player_hp
 	)
@@ -1337,7 +1337,7 @@ func generate_enemy_loot(
 
 	refresh_loot_ui()
 
-	print(
+	DebugLog.write(
 		"[전투 전리품] ",
 		ItemData.get_item_name(item_id),
 		" ×",
@@ -1349,7 +1349,7 @@ func generate_enemy_loot(
 # =========================================================
 
 func print_expedition_map():
-	print("===== 원정 맵 =====")
+	DebugLog.write("===== 원정 맵 =====")
 
 	for layer_index in range(
 		expedition_map.layers.size()
@@ -1375,9 +1375,9 @@ func print_expedition_map():
 				+ "] "
 			)
 
-		print(text)
+		DebugLog.write(text)
 
-	print("===================")
+	DebugLog.write("===================")
 
 func get_map_node_display_name(
 	node_type: String
@@ -1559,7 +1559,7 @@ func _on_map_node_pressed(
 		)
 	)
 
-	print(
+	DebugLog.write(
 		"[원정 맵] 진입: ",
 		node_id,
 		" / ",
@@ -1616,7 +1616,7 @@ func start_event_node(
 		complete_current_map_node()
 		return
 
-	print(
+	DebugLog.write(
 		"[원정 이벤트] 선택"
 		+ " / 노드: ",
 		node_type,
@@ -1664,12 +1664,12 @@ func complete_current_map_node():
 
 	refresh_map_ui()
 
-	print(
+	DebugLog.write(
 		"[원정 맵] 노드 완료: ",
 		current_map_node_id
 	)
 
-	print(
+	DebugLog.write(
 		"[원정 맵] 지나온 경로: ",
 		visited_map_node_ids
 	)
@@ -1693,7 +1693,7 @@ func complete_current_map_node():
 		)
 
 		if completed_node_type == ExpeditionMap.NODE_BOSS:
-			print(
+			DebugLog.write(
 				"[원정] 보스 완료 → RESULT"
 			)
 
@@ -1942,7 +1942,7 @@ func start_expedition_run() -> void:
 	# 원정 하루를 시작할 때 체력 회복
 	combat_player_hp = combat_player_max_hp
 
-	print(
+	DebugLog.write(
 		"[원정] 출발 / 지역: ",
 		current_region_id,
 		" / 가방 배치: ",
@@ -2023,7 +2023,7 @@ func open_result_phase(
 		)
 	)
 
-	print("[원정] 원정 종료 → 결과")
+	DebugLog.write("[원정] 원정 종료 → 결과")
 
 	set_expedition_phase(
 		ExpeditionPhase.RESULT
@@ -2063,7 +2063,7 @@ func confirm_result_phase() -> void:
 	selected_bag_uid = -1
 	refresh_bag_ui()
 
-	print(
+	DebugLog.write(
 		"[원정 정산] 자동 보관 수량: ",
 		settlement.get(
 			"deposited_amount",
@@ -2105,7 +2105,7 @@ func reset_for_next_expedition_day():
 			"refresh_all"
 	)
 
-	print(
+	DebugLog.write(
 		"[원정] 가방 유지 / 남은 아이템: ",
 		expedition_bag.placements.size()
 	)
@@ -2113,7 +2113,7 @@ func reset_for_next_expedition_day():
 	# 다음 원정 맵은 지역을 선택하고 출발할 때 생성한다.
 	expedition_map = null
 
-	print(
+	DebugLog.write(
 		"[원정] 정비 준비 완료"
 	)
 
@@ -2199,7 +2199,7 @@ func apply_bag_equipment_stats() -> void:
 		+ bonus_defense
 	)
 
-	print(
+	DebugLog.write(
 		"[원정 능력치]"
 		+ " / 기본 공격: ",
 		BASE_PLAYER_ATTACK,
@@ -2652,7 +2652,7 @@ func _finish_loot_organization() -> void:
 		return
 
 	if not temporary_loot.is_empty():
-		print(
+		DebugLog.write(
 			"[전리품] 포기한 아이템: ",
 			temporary_loot
 		)
@@ -2667,7 +2667,7 @@ func _finish_loot_organization() -> void:
 
 	update_ui()
 
-	print("[전리품] 정리 완료 / 가방 아이템 유지")
+	DebugLog.write("[전리품] 정리 완료 / 가방 아이템 유지")
 
 	complete_current_map_node()
 
@@ -2983,7 +2983,7 @@ func restore_expedition_checkpoint() -> bool:
 		refresh_bag_ui()
 		update_ui()
 
-		print(
+		DebugLog.write(
 			"[원정 복원] 준비 화면 복원 완료"
 		)
 
@@ -3089,7 +3089,7 @@ func restore_expedition_checkpoint() -> bool:
 	refresh_bag_ui()
 	refresh_map_ui()
 
-	print(
+	DebugLog.write(
 		"[원정 복원] 진행 상태 복원 완료"
 		+ " / 위치: ",
 		current_map_node_id
@@ -3118,7 +3118,7 @@ func _on_game_menu_save_slot_requested(
 			+ " 저장 완료"
 		)
 
-		print(
+		DebugLog.write(
 			"[원정 저장] 슬롯 ",
 			slot_index + 1,
 			" 저장 완료"
@@ -3128,7 +3128,7 @@ func _on_game_menu_save_slot_requested(
 			save_failure_reason
 		)
 
-		print(
+		DebugLog.write(
 			"[원정 저장] 실패 / ",
 			save_failure_reason
 		)

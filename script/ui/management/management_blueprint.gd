@@ -318,7 +318,7 @@ func _on_craft_pressed() -> void:
 		"\n\n제작 완료! 가구 인벤토리에 추가되었습니다."
 	)
 
-	print("[제작] ", furniture_id, " ×1")
+	DebugLog.write("[제작] ", furniture_id, " ×1")
 
 func _get_effect_description(furniture_id: String) -> String:
 	var effect: Dictionary = FurnitureData.get_effect_data(

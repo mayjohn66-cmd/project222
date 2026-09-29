@@ -249,7 +249,7 @@ func open_menu(
 	else:
 		_paused_by_menu = false
 
-	print("[관리 메뉴] 열기")
+	DebugLog.write("[관리 메뉴] 열기")
 
 
 func close_menu() -> void:
@@ -268,7 +268,7 @@ func close_menu() -> void:
 		get_tree().paused = false
 		_paused_by_menu = false
 
-	print("[관리 메뉴] 닫기")
+	DebugLog.write("[관리 메뉴] 닫기")
 
 
 func select_tab(

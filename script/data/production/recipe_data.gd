@@ -18,7 +18,7 @@ static func ensure_loaded() -> void:
 	_loaded = _load_csv()
 
 	if _loaded:
-		print(
+		DebugLog.write(
 			"[RecipeData] 로드 완료 / 제작법: ",
 			recipes.size()
 		)
@@ -397,7 +397,7 @@ static func get_missing_materials(
 
 static func craft(recipe_id: String) -> bool:
 	if not can_craft(recipe_id):
-		print(
+		DebugLog.write(
 			"[제작] 제작 불가 / 재료 또는 데이터 확인: ",
 			recipe_id
 		)
@@ -453,7 +453,7 @@ static func craft(recipe_id: String) -> bool:
 		result_amount
 	)
 
-	print(
+	DebugLog.write(
 		"[제작 성공] ",
 		ItemData.get_item_name(result_item_id),
 		" ×",

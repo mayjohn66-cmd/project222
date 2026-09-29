@@ -373,7 +373,7 @@ func start_shopping():
 
 
 	if show_movement_debug:
-		print(
+		DebugLog.write(
 			"진열대 접근 셀: ",
 			shelf_cell
 		)
@@ -542,7 +542,7 @@ func arrive_at_target():
 				return
 
 			if show_movement_debug:
-				print(
+				DebugLog.write(
 					"계산대 접근 셀: ",
 					register_cell
 				)
@@ -552,7 +552,7 @@ func arrive_at_target():
 			move_to_cell(register_cell)
 
 		CustomerState.WANDER:
-			print("구경 위치 도착")
+			DebugLog.write("구경 위치 도착")
 
 			velocity = Vector2.ZERO
 
@@ -647,7 +647,7 @@ func arrive_at_target():
 			retry_previous_target()
 
 		CustomerState.GO_TO_EXIT:
-			print("출구 도착")
+			DebugLog.write("출구 도착")
 			finish_exit()
 
 
@@ -999,7 +999,7 @@ func create_astar_grid_path(
 	)
 
 	if show_movement_debug:
-		print(
+		DebugLog.write(
 			"A* 경로: ",
 			start_cell,
 			" → ",
@@ -1065,7 +1065,7 @@ func move_to_cell(
 
 	if target_cell == start_cell:
 		if show_movement_debug:
-			print(
+			DebugLog.write(
 				"이미 목표 셀에 도착: ",
 				start_cell
 			)
@@ -1081,7 +1081,7 @@ func move_to_cell(
 	moving = not grid_path.is_empty()
 
 	if show_movement_debug:
-		print(
+		DebugLog.write(
 			"셀 이동: ",
 			start_cell,
 			" → ",
@@ -1178,7 +1178,7 @@ func move_to_next_wander_cell():
 		return
 
 	if show_movement_debug:
-		print(
+		DebugLog.write(
 			"구경 위치: ",
 			target_cell
 		)

@@ -1392,7 +1392,7 @@ func begin_shift() -> void:
 	on_duty = true
 	state = WorkerState.IDLE
 
-	print(
+	DebugLog.write(
 		"[직원] 출근 완료: ",
 		employee_display_name
 	)
@@ -1744,7 +1744,7 @@ func start_clock_out_commute() -> void:
 
 	commute_animation_running = false
 
-	print(
+	DebugLog.write(
 		"[직원] 퇴근 완료: ",
 		employee_display_name
 	)

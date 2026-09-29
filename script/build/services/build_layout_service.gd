@@ -139,7 +139,7 @@ func append_warehouse_storage_state(
 		saved_slots.duplicate(true)
 	)
 
-	print(
+	DebugLog.write(
 		"[창고 저장] 슬롯 수: ",
 		saved_slots.size()
 	)
@@ -301,7 +301,7 @@ func restore_layout(
 			reserved_cells
 		)
 
-		print(
+		DebugLog.write(
 			"[가구 복원] ",
 			build_id,
 			" / 위치: ",
@@ -368,7 +368,7 @@ func restore_shelf_state(
 	if furniture.has_method("update_stock_label"):
 		furniture.update_stock_label()
 
-	print(
+	DebugLog.write(
 		"[진열대 복원] ",
 		build_id,
 		" / 층: ",
@@ -397,7 +397,7 @@ func restore_warehouse_storage_state(
 	if not data.has(
 		"warehouse_slots"
 	):
-		print(
+		DebugLog.write(
 			"[창고 복원] 이전 저장 데이터이므로 빈 창고로 복원: ",
 			build_id
 		)
@@ -432,7 +432,7 @@ func restore_warehouse_storage_state(
 
 		return
 
-	print(
+	DebugLog.write(
 		"[창고 복원] ",
 		build_id,
 		" / 슬롯 수: ",

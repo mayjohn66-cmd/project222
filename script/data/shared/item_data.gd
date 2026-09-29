@@ -71,7 +71,7 @@ func _ready():
 	var valid := validate_all_items()
 
 	if valid:
-		print(
+		DebugLog.write(
 			"[ItemData] 데이터 검증 완료 / 아이템 수: ",
 			items.size()
 		)

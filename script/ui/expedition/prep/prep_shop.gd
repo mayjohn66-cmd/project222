@@ -551,7 +551,7 @@ func _on_buy_pressed() -> void:
 		or _is_unique_tool_owned(item_id)
 	)
 
-	print(
+	DebugLog.write(
 		"[원정 상점] 구매 완료 / ",
 		item_name,
 		" / 가격: ",

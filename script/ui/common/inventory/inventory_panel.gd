@@ -25,7 +25,7 @@ func _ready() -> void:
 			close_inventory
 		)
 
-	print(
+	DebugLog.write(
 		"[빠른 인벤토리] 준비 완료"
 	)
 
@@ -54,7 +54,7 @@ func toggle_inventory() -> void:
 	if visible:
 		open_inventory()
 	else:
-		print(
+		DebugLog.write(
 			"[빠른 인벤토리] 닫기"
 		)
 
@@ -74,7 +74,7 @@ func open_inventory() -> void:
 
 	center_inventory_panel()
 
-	print(
+	DebugLog.write(
 		"[빠른 인벤토리] 열기"
 	)
 
@@ -82,7 +82,7 @@ func open_inventory() -> void:
 func close_inventory() -> void:
 	visible = false
 
-	print(
+	DebugLog.write(
 		"[빠른 인벤토리] 닫기"
 	)
 

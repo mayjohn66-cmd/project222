@@ -45,6 +45,10 @@ const SAVE_TEST_PATH: String = "user://save_test.dat"
 const VILLAGE_LAYOUT_USER_PATH: String = "user://village_map_layout.json"
 
 
+# 개발용 출력(DebugLog.write)을 켜고 끈다. 배포 빌드에서는 값과 상관없이 꺼진다.
+const DEBUG_LOG_ENABLED: bool = true
+
+
 # 원정 지역을 고르지 않았을 때 쓰는 기본 지역 (expedition_regions.csv의 region_id)
 const DEFAULT_REGION_ID: String = "forest"
 

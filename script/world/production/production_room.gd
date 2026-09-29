@@ -159,7 +159,7 @@ func enter_actor(actor: Node2D) -> bool:
 
 	_reset_actor_camera(actor)
 
-	print(
+	DebugLog.write(
 		"[생산실] 입장 / ",
 		actor.name
 	)
@@ -218,7 +218,7 @@ func exit_actor(
 
 	_reset_actor_camera(actor)
 
-	print(
+	DebugLog.write(
 		"[생산실] 퇴장 / ",
 		actor.name
 	)
@@ -393,7 +393,7 @@ func _apply_saved_expansion_size() -> void:
 		1
 	)
 
-	print(
+	DebugLog.write(
 		"[생산실] 저장된 크기 적용 / ",
 		room_size
 	)
@@ -418,7 +418,7 @@ func _on_production_room_expansion_changed(
 	_rebuild_boundary_collision()
 	_create_return_door_visual()
 
-	print(
+	DebugLog.write(
 		"[생산실] 확장 적용 / 단계: ",
 		new_level,
 		" / 크기: ",

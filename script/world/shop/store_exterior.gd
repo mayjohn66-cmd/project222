@@ -843,7 +843,7 @@ func _apply_store_size_to_exterior() -> void:
 		+ front_space
 	)
 
-	print(
+	DebugLog.write(
 		"[외부 부지] 매장 크기: ",
 		store_size,
 		" / 외부 크기: ",
@@ -1232,7 +1232,7 @@ func _on_store_expansion_changed(
 		"_create_boundary_collision"
 	)
 
-	print(
+	DebugLog.write(
 		"[매장 외부] 확장 적용 / 단계: ",
 		new_level,
 		" / 외부 크기: ",

@@ -236,7 +236,7 @@ func _apply_saved_expansion_size() -> void:
 	columns = store_size.x
 	rows = store_size.y
 
-	print(
+	DebugLog.write(
 		"[매장 확장] 단계: ",
 		expansion_level,
 		" / 내부 크기: ",
@@ -264,7 +264,7 @@ func _on_store_expansion_changed(
 	# 바뀐 크기를 기준으로 벽 충돌을 다시 만든다.
 	request_boundary_rebuild()
 
-	print(
+	DebugLog.write(
 		"[매장 바닥] 확장 적용 / 단계: ",
 		new_level,
 		" / 크기: ",

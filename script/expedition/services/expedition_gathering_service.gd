@@ -84,7 +84,7 @@ func resolve_gathering(
 
 	var roll: float = randf()
 
-	print(
+	DebugLog.write(
 		"[채집 판정]"
 		+ " / 테이블: ",
 		loot_table_id,

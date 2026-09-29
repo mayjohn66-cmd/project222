@@ -167,7 +167,7 @@ func try_restock_shelf():
 			nearest_shelf = shelf
 
 	if nearest_shelf == null:
-		print("근처에 진열대가 없음")
+		DebugLog.write("근처에 진열대가 없음")
 		return
 
 	shelf_panel.open(

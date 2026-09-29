@@ -19,7 +19,7 @@ static func ensure_loaded() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[EnemyData] 로드 완료 / 몬스터: ",
 		enemies.size()
 	)

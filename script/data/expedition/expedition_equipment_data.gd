@@ -84,7 +84,7 @@ func load_data() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[ExpeditionEquipmentData] 로드 완료"
 		+ " / 장비: ",
 		equipment.size(),

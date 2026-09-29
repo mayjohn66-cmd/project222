@@ -75,7 +75,7 @@ func _spawn_missing_employees() -> void:
 		existing_ids[employee_id] = true
 		created_count += 1
 
-	print(
+	DebugLog.write(
 		"[직원 생성] 자동 생성 완료 / 추가: ",
 		created_count
 	)

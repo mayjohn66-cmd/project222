@@ -140,7 +140,7 @@ func request_checkout(customer) -> bool:
 
 	waiting_customer = customer
 
-	print("계산 대기 손님 등록")
+	DebugLog.write("계산 대기 손님 등록")
 
 	return true
 
@@ -165,17 +165,17 @@ func finish_checkout():
 
 
 func debug_service_cells():
-	print(
+	DebugLog.write(
 		"계산대 본체: ",
 		get_body_cells()
 	)
 
-	print(
+	DebugLog.write(
 		"직원 위치: ",
 		get_worker_cells()
 	)
 
-	print(
+	DebugLog.write(
 		"손님 위치: ",
 		get_checkout_cells()
 	)

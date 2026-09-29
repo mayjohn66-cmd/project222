@@ -83,7 +83,7 @@ func _ready() -> void:
 	refresh_recipe_list()
 	clear_recipe_detail()
 
-	print("[관리 생산] 준비 완료")
+	DebugLog.write("[관리 생산] 준비 완료")
 
 	amount_spin_box.min_value = 1
 	amount_spin_box.step = 1
@@ -119,7 +119,7 @@ func refresh_recipe_list() -> void:
 	for recipe in recipes:
 		create_recipe_button(recipe)
 
-	print(
+	DebugLog.write(
 		"[관리 생산] 레시피 목록 생성 / ",
 		recipes.size(),
 		"개"
@@ -189,7 +189,7 @@ func select_recipe(
 
 	refresh_recipe_detail()
 
-	print(
+	DebugLog.write(
 		"[관리 생산] 레시피 선택: ",
 		selected_recipe_id
 	)

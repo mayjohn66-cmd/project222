@@ -129,7 +129,7 @@ func save_player_state(
 ):
 	player_state = data.duplicate(true)
 
-	print(
+	DebugLog.write(
 		"[GameState] 플레이어 상태 저장"
 	)
 
@@ -164,7 +164,7 @@ func _ready() -> void:
 		"drink_machine"
 	)
 
-	print(
+	DebugLog.write(
 		"[GameState] 초기 상태 준비 완료"
 	)
 
@@ -248,12 +248,12 @@ func initialize_new_game():
 			"[GameState] 시작 인벤토리를 슬롯으로 변환하지 못했습니다."
 		)
 
-	print(
+	DebugLog.write(
 		"[GameState] 초기 인벤토리 생성: ",
 		inventory
 	)
 
-	print(
+	DebugLog.write(
 		"[GameState] 초기 소지금: ",
 		money,
 		" G"
@@ -272,7 +272,7 @@ func save_store_layout(
 ):
 	store_layout = layout.duplicate(true)
 
-	print(
+	DebugLog.write(
 		"[GameState] 편의점 배치 저장 / ",
 		store_layout.size(),
 		"개"
@@ -489,7 +489,7 @@ func save_expedition_bag(
 			placement.duplicate(true)
 		)
 
-	print(
+	DebugLog.write(
 		"[GameState] 원정 가방 저장 / 아이템 수: ",
 		saved_expedition_bag.size()
 	)
@@ -570,7 +570,7 @@ func initialize_furniture_inventory() -> void:
 
 	furniture_inventory_initialized = true
 
-	print(
+	DebugLog.write(
 		"[GameState] 초기 가구 인벤토리 생성: ",
 		furniture_inventory
 	)
@@ -682,7 +682,7 @@ func initialize_build_quick_slots() -> void:
 	for _i in range(BUILD_QUICK_SLOT_COUNT):
 		build_quick_slots.append("")
 
-	print(
+	DebugLog.write(
 		"[GameState] 건축 퀵슬롯 초기화 / 슬롯 수: ",
 		build_quick_slots.size()
 	)
@@ -739,13 +739,13 @@ func set_build_quick_slot(
 	)
 
 	if build_id.is_empty():
-		print(
+		DebugLog.write(
 			"[건축 퀵슬롯] 해제 / ",
 			slot_index + 1,
 			"번"
 		)
 	else:
-		print(
+		DebugLog.write(
 			"[건축 퀵슬롯] 등록 / ",
 			slot_index + 1,
 			"번 = ",
@@ -858,7 +858,7 @@ func write_save_file(
 		)
 		return false
 
-	print("[저장] 파일 기록 완료: ", path)
+	DebugLog.write("[저장] 파일 기록 완료: ", path)
 	return true
 
 func read_save_file(
@@ -930,7 +930,7 @@ func test_save_file_round_trip() -> void:
 		push_error("[저장 테스트] 좌표 타입 불일치")
 		return
 
-	print(
+	DebugLog.write(
 		"[저장 테스트] 성공 / 소지금: ",
 		restored["money"],
 		" / 퀵슬롯: ",
@@ -1629,7 +1629,7 @@ func apply_save_data(data: Dictionary) -> bool:
 	)
 
 
-	print(
+	DebugLog.write(
 		"[불러오기] 상태 적용 완료 / ",
 		current_day,
 		"일차 / 소지금: ",
@@ -1691,11 +1691,11 @@ func test_save_data_application() -> void:
 		push_error("[저장 테스트] 복원 전후 상태 불일치")
 		return
 
-	print("[저장 테스트] 상태 복원 성공")
+	DebugLog.write("[저장 테스트] 상태 복원 성공")
 
 func delete_save_file() -> bool:
 	if not FileAccess.file_exists(SAVE_PATH):
-		print("[저장 삭제] 저장 파일이 없습니다.")
+		DebugLog.write("[저장 삭제] 저장 파일이 없습니다.")
 		return true
 
 	var result: Error = DirAccess.remove_absolute(
@@ -1709,7 +1709,7 @@ func delete_save_file() -> bool:
 		)
 		return false
 
-	print("[저장 삭제] 완료")
+	DebugLog.write("[저장 삭제] 완료")
 	return true
 
 # =========================
@@ -1740,7 +1740,7 @@ func advance_calendar_day() -> int:
 			)
 		)
 
-		print(
+		DebugLog.write(
 			"[직원 월급] 월말 정산 / 신규 급여: ",
 			new_salary_due,
 			"G"
@@ -1765,7 +1765,7 @@ func advance_calendar_day() -> int:
 	if current_day > 7:
 		current_day = 1
 
-	print(
+	DebugLog.write(
 		"[달력] ",
 		total_day,
 		"일차 / 요일 값: ",
@@ -1817,7 +1817,7 @@ func discover_store_event(
 		total_day
 	)
 
-	print(
+	DebugLog.write(
 		"[이벤트 발견] ",
 		normalized_event_id,
 		" / 발견일: ",
@@ -1952,7 +1952,7 @@ func record_daily_shop_result(
 
 		daily_shop_history[index] = record
 
-		print(
+		DebugLog.write(
 			"[영업 기록] 기존 기록 교체 / ",
 			result_day,
 			"일차"
@@ -1964,7 +1964,7 @@ func record_daily_shop_result(
 		record
 	)
 
-	print(
+	DebugLog.write(
 		"[영업 기록] 추가 / ",
 		result_day,
 		"일차 / 매출: ",
@@ -2176,7 +2176,7 @@ func accrue_employee_salary_for_current_day() -> void:
 			employee_id
 		] = record
 
-		print(
+		DebugLog.write(
 			"[직원 급여] 근속일 누적 / ",
 			employee_id,
 			" / ",
@@ -2266,7 +2266,7 @@ func close_employee_salary_period() -> Dictionary:
 				"salary_amount": salary_amount
 			}
 
-			print(
+			DebugLog.write(
 				"[직원 월급] 급여 확정 / ",
 				employee_id,
 				" / 근속 ",
@@ -2295,7 +2295,7 @@ func pay_unpaid_employee_salary() -> int:
 		return 0
 
 	if money <= 0:
-		print(
+		DebugLog.write(
 			"[직원 월급] 지급할 소지금 없음 / 미지급: ",
 			unpaid_employee_salary,
 			"G"
@@ -2311,7 +2311,7 @@ func pay_unpaid_employee_salary() -> int:
 	money -= paid_amount
 	unpaid_employee_salary -= paid_amount
 
-	print(
+	DebugLog.write(
 		"[직원 월급] 지급 / ",
 		paid_amount,
 		"G / 남은 미지급: ",
@@ -2378,7 +2378,7 @@ func attach_employee_salary_to_daily_history(
 
 		daily_shop_history[index] = record
 
-		print(
+		DebugLog.write(
 			"[영업 기록] 급여 반영 / ",
 			result_day,
 			"일차 / 지급: ",
@@ -2440,7 +2440,7 @@ func create_owned_equipment_instance(
 		}
 	)
 
-	print(
+	DebugLog.write(
 		"[장비 인스턴스] 생성 / ",
 		item_id,
 		" / ID: ",
@@ -2539,7 +2539,7 @@ func take_owned_equipment_instance(
 			)
 		)
 
-		print(
+		DebugLog.write(
 			"[장비 인스턴스] 보관함에서 꺼냄 / ID: ",
 			instance_id
 		)
@@ -2586,7 +2586,7 @@ func return_owned_equipment_instance(
 		instance_id + 1
 	)
 
-	print(
+	DebugLog.write(
 		"[장비 인스턴스] 보관함으로 반환 / ",
 		instance_data.get(
 			"item_id",
@@ -2742,7 +2742,7 @@ func migrate_legacy_equipment_inventory() -> void:
 		# 장비는 이제 일반 수량 인벤토리에서 제거한다.
 		inventory.erase(item_id)
 
-		print(
+		DebugLog.write(
 			"[장비 이전] 일반 인벤토리 → 개별 장비 / ",
 			item_id,
 			" ×",
@@ -2882,7 +2882,7 @@ func upgrade_store() -> bool:
 		new_size
 	)
 
-	print(
+	DebugLog.write(
 		"[매장 확장] 완료 / ",
 		previous_level,
 		"단계 → ",
@@ -3003,7 +3003,7 @@ func upgrade_production_room() -> bool:
 		new_size
 	)
 
-	print(
+	DebugLog.write(
 		"[생산실 확장] 완료 / ",
 		previous_level,
 		"단계 → ",
@@ -3113,7 +3113,7 @@ func upgrade_warehouse() -> bool:
 		new_size
 	)
 
-	print(
+	DebugLog.write(
 		"[창고 확장] 완료 / ",
 		previous_level,
 		"단계 → ",

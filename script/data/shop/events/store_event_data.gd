@@ -23,7 +23,7 @@ static func ensure_loaded() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[StoreEventData] 로드 완료 / 이벤트: ",
 		events.size()
 	)

@@ -398,7 +398,7 @@ func deposit_from_inventory_to_slot(
 
 	_rebuild_stored_items()
 
-	print(
+	DebugLog.write(
 		"[창고 선반] 입고 / 슬롯 ",
 		slot_index,
 		" / ",
@@ -561,7 +561,7 @@ func move_item_between_slots(
 
 		_rebuild_stored_items()
 
-		print(
+		DebugLog.write(
 			"[창고 선반] 슬롯 교환 / ",
 			source_slot_index,
 			" ↔ ",
@@ -613,7 +613,7 @@ func move_item_between_slots(
 	_rebuild_stored_items()
 
 	if target_item_id == source_item_id:
-		print(
+		DebugLog.write(
 			"[창고 선반] 슬롯 합치기 / ",
 			source_slot_index,
 			" → ",
@@ -624,7 +624,7 @@ func move_item_between_slots(
 			moved_amount
 		)
 	else:
-		print(
+		DebugLog.write(
 			"[창고 선반] 빈 슬롯 이동 / ",
 			source_slot_index,
 			" → ",
@@ -707,7 +707,7 @@ func withdraw_slot_to_inventory(
 
 	_rebuild_stored_items()
 
-	print(
+	DebugLog.write(
 		"[창고 선반] 출고 / 슬롯 ",
 		slot_index,
 		" / ",

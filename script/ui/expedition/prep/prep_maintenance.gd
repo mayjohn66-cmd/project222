@@ -379,7 +379,7 @@ func _craft_selected_recipe() -> void:
 		)
 	)
 
-	print(
+	DebugLog.write(
 		"[정비] 제작 완료 / ",
 		item_name,
 		" ×",
@@ -738,7 +738,7 @@ func _enhance_selected_equipment() -> void:
 		)
 	)
 
-	print(
+	DebugLog.write(
 		"[정비] 장비 강화 완료 / ",
 		item_id,
 		" / ID: ",

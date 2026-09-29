@@ -186,7 +186,7 @@ func add_level() -> bool:
 	update_visual()
 	update_stock_label()
 
-	print(
+	DebugLog.write(
 		"진열대 단 추가: ",
 		stack_level,
 		"단 / 슬롯 ",
@@ -234,7 +234,7 @@ func remove_level() -> bool:
 	update_visual()
 	update_stock_label()
 
-	print(
+	DebugLog.write(
 		"진열대 단 제거: ",
 		stack_level,
 		"단 / 슬롯 ",
@@ -405,7 +405,7 @@ func take_items_by_id(
 
 	update_stock_label()
 
-	print(
+	DebugLog.write(
 		"[진열대] 상품 꺼냄: ",
 		item_id,
 		" / 요청: ",
@@ -584,7 +584,7 @@ func return_items_by_id(
 	if returned_amount > 0:
 		update_stock_label()
 
-		print(
+		DebugLog.write(
 			"[진열대] 미결제 상품 반환: ",
 			item_id,
 			" ×",
@@ -664,7 +664,7 @@ func worker_restock(
 
 		update_stock_label()
 
-		print(
+		DebugLog.write(
 			"자동 진열: ",
 			item_id,
 			" +",
@@ -791,7 +791,7 @@ func add_stock_to_slot(
 
 	slots[slot_index] = slot
 
-	print(
+	DebugLog.write(
 		"[진열대] 슬롯 ",
 		slot_index,
 		" / ",

@@ -16,7 +16,7 @@ static func ensure_loaded() -> void:
 	_load_csv()
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[CustomerTypeData] 로드 완료 / 손님 종류: ",
 		customer_types.size()
 	)

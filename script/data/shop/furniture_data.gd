@@ -460,7 +460,7 @@ static func load_data() -> void:
 	furniture = loaded_data
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[FurnitureData] 로드 완료 / 가구 수: ",
 		furniture.size()
 	)

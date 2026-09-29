@@ -65,7 +65,7 @@ func apply_furniture_collision(
 	)
 
 	if collision == null:
-		print(
+		DebugLog.write(
 			"Collision 노드 없음: ",
 			furniture.name
 		)
@@ -80,7 +80,7 @@ func apply_furniture_collision(
 	if collision.has_method("set_blocking"):
 		collision.set_blocking(blocking)
 
-	print(
+	DebugLog.write(
 		"충돌 크기 적용: ",
 		furniture.name,
 		" / ",

@@ -59,7 +59,7 @@ func _ready() -> void:
 			bag_model.placements[0]
 		)
 
-		print(
+		DebugLog.write(
 			"[장비 강화 검사] ",
 			EquipmentEnhancementService
 			.get_enhancement_check(
@@ -83,7 +83,7 @@ func refresh_owned_items() -> void:
 			"refresh_from_inventory"
 		)
 
-	print(
+	DebugLog.write(
 		"[원정 준비 가방] 보유 장비 격자 갱신"
 	)
 
@@ -453,7 +453,7 @@ func _rotate_selected_item() -> void:
 
 	_refresh_grid_views()
 
-	print(
+	DebugLog.write(
 		"[공통 회전] ",
 		selected_source,
 		" / UID: ",
@@ -543,7 +543,7 @@ func restore_returned_item_placement(
 
 		return false
 
-	print(
+	DebugLog.write(
 		"[원정 준비 가방] 원래 위치 복원 / ",
 		item_id,
 		" / 위치: ",
@@ -838,7 +838,7 @@ func prepare_for_departure() -> void:
 	_clear_selection()
 	_refresh_grid_selection_visuals()
 
-	print(
+	DebugLog.write(
 		"[원정 준비] 출발 전 선택 상태 초기화"
 	)
 

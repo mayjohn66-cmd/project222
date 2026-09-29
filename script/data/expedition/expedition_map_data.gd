@@ -30,7 +30,7 @@ static func ensure_loaded() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[ExpeditionMapData] 로드 완료 / 노드 데이터: ",
 		node_entries.size()
 	)

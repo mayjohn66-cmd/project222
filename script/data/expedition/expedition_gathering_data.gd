@@ -254,7 +254,7 @@ static func load_data() -> void:
 	rules = loaded_rules
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[ExpeditionGatheringData] 로드 완료"
 		+ " / 채집 규칙: ",
 		rules.size()

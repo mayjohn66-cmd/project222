@@ -22,7 +22,7 @@ static func ensure_loaded() -> void:
 	_load_csv()
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[StoreEventCustomerModifierData] 로드 완료 / 이벤트: ",
 		modifiers_by_event.size()
 	)

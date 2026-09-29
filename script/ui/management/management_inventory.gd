@@ -86,7 +86,7 @@ func _ready() -> void:
 
 	refresh_inventory()
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리] 준비 완료"
 	)
 
@@ -125,7 +125,7 @@ func select_inventory_group(
 
 	refresh_inventory()
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리] 분류 변경: ",
 		selected_inventory_group
 	)
@@ -451,7 +451,7 @@ func get_expedition_bag_placements() -> Array[Dictionary]:
 			current_scene.name
 		)
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리 확인] 현재 씬: ",
 		current_scene_name
 	)
@@ -463,7 +463,7 @@ func get_expedition_bag_placements() -> Array[Dictionary]:
 		)
 	)
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리 확인] 실시간 가방 함수 존재: ",
 		has_active_bag_method
 	)
@@ -475,7 +475,7 @@ func get_expedition_bag_placements() -> Array[Dictionary]:
 			)
 		)
 
-		print(
+		DebugLog.write(
 			"[통합 인벤토리 확인] 전달받은 데이터: ",
 			active_placements
 		)
@@ -495,7 +495,7 @@ func get_expedition_bag_placements() -> Array[Dictionary]:
 		GameState.get_saved_expedition_bag()
 	)
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리 확인] 저장된 가방 사용: ",
 		saved_placements
 	)

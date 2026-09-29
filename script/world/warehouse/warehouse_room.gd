@@ -75,7 +75,7 @@ func _on_warehouse_expansion_changed(
 
 	_rebuild_warehouse()
 
-	print(
+	DebugLog.write(
 		"[창고] 크기 변경 완료 / ",
 		columns,
 		" × ",
@@ -359,7 +359,7 @@ func enter_actor(
 
 	_reset_actor_camera(actor)
 
-	print(
+	DebugLog.write(
 		"[창고] 입장 / ",
 		actor.name
 	)
@@ -424,7 +424,7 @@ func exit_actor(
 
 	_reset_actor_camera(actor)
 
-	print(
+	DebugLog.write(
 		"[창고] 퇴장 / ",
 		actor.name
 	)

@@ -250,7 +250,7 @@ func _ready():
 func select_category(category: String):
 	selected_category = category
 
-	print(
+	DebugLog.write(
 		"상품 카테고리 선택: ",
 		selected_category
 	)
@@ -474,7 +474,7 @@ func complete_warehouse_manual_move(
 	)
 
 	if target_slot_index == source_slot_index:
-		print(
+		DebugLog.write(
 			"[창고 옮기기] 원본과 같은 슬롯입니다."
 		)
 		return
@@ -503,7 +503,7 @@ func complete_warehouse_manual_move(
 		not target_item_id.is_empty()
 		and target_item_id != source_item_id
 	):
-		print(
+		DebugLog.write(
 			"[창고 옮기기] 다른 아이템 슬롯에는 일부 수량을 옮길 수 없습니다."
 		)
 		return
@@ -518,12 +518,12 @@ func complete_warehouse_manual_move(
 	)
 
 	if moved_amount <= 0:
-		print(
+		DebugLog.write(
 			"[창고 옮기기] 이동하지 못했습니다."
 		)
 		return
 
-	print(
+	DebugLog.write(
 		"[창고 옮기기] 완료 / ",
 		source_slot_index,
 		" → ",
@@ -694,7 +694,7 @@ func _on_shelf_slot_pressed(slot_index: int):
 	if selected_slot_index == slot_index:
 		selected_slot_index = -1
 
-		print("진열 슬롯 선택 취소")
+		DebugLog.write("진열 슬롯 선택 취소")
 
 		refresh_shelf_slots()
 		return
@@ -704,7 +704,7 @@ func _on_shelf_slot_pressed(slot_index: int):
 
 	selected_slot_index = slot_index
 
-	print(
+	DebugLog.write(
 		"빈 슬롯 선택: ",
 		selected_slot_index
 	)
@@ -927,7 +927,7 @@ func _on_transfer_slot_drop(
 		)
 
 		if moved_amount <= 0:
-			print(
+			DebugLog.write(
 				"[창고 정리] 이동 실패 / ",
 				source_slot_index,
 				" → ",
@@ -935,7 +935,7 @@ func _on_transfer_slot_drop(
 			)
 			return
 
-		print(
+		DebugLog.write(
 			"[창고 정리] 전체 묶음 이동 / ",
 			item_id,
 			" ×",
@@ -1052,7 +1052,7 @@ func open_warehouse_transfer_amount_panel(
 		return
 
 	if maximum_amount <= 0:
-		print(
+		DebugLog.write(
 			"[창고 이동] 이동 가능한 수량이 없습니다: ",
 			item_id
 		)
@@ -1164,7 +1164,7 @@ func _on_inventory_item_pressed(
 		return
 
 	if selected_slot_index < 0:
-		print("먼저 빈 진열 슬롯을 선택하세요.")
+		DebugLog.write("먼저 빈 진열 슬롯을 선택하세요.")
 		return
 
 	if selected_slot_index >= current_shelf.slots.size():
@@ -1176,7 +1176,7 @@ func _on_inventory_item_pressed(
 
 	# 상품 데이터에서 진열을 허용한 아이템만 지정
 	if not ItemData.is_shelf_allowed(item_id):
-		print(
+		DebugLog.write(
 			"[진열대] 진열할 수 없는 아이템: ",
 			item_id
 		)
@@ -1199,7 +1199,7 @@ func _on_inventory_item_pressed(
 	current_shelf.slots[selected_slot_index] = slot
 	current_shelf.update_stock_label()
 
-	print(
+	DebugLog.write(
 		"상품 지정: 슬롯 ",
 		selected_slot_index,
 		" → ",
@@ -1348,7 +1348,7 @@ func clear_action_slot():
 		action_slot_index
 	] = slot
 
-	print(
+	DebugLog.write(
 		"진열 슬롯 비우기: ",
 		item_id,
 		" / 반환 ",
@@ -1815,7 +1815,7 @@ func open_restock_panel():
 	)
 
 	if restock_max_amount <= 0:
-		print("보충 가능한 상품이 없습니다.")
+		DebugLog.write("보충 가능한 상품이 없습니다.")
 		return
 
 	# 액션 메뉴의 슬롯 번호를 따로 보관
@@ -1970,7 +1970,7 @@ func confirm_restock():
 			removed - added
 		)
 
-	print(
+	DebugLog.write(
 		"수동 보충 완료: ",
 		item_id,
 		" +",
@@ -2070,7 +2070,7 @@ func confirm_warehouse_transfer() -> void:
 		)
 
 	if moved_amount > 0:
-		print(
+		DebugLog.write(
 			"[창고 이동] ",
 			item_id,
 			" ×",
@@ -2083,7 +2083,7 @@ func confirm_warehouse_transfer() -> void:
 			pending_transfer_target_slot_index
 		)
 	else:
-		print(
+		DebugLog.write(
 			"[창고 이동] 이동 실패 / ",
 			item_id
 		)
@@ -2145,7 +2145,7 @@ func confirm_warehouse_move_amount() -> void:
 		+ "개"
 	)
 
-	print(
+	DebugLog.write(
 		"[창고 옮기기] 대상 슬롯 선택 대기 / 원본: ",
 		warehouse_move_source_slot_index,
 		" / 수량: ",

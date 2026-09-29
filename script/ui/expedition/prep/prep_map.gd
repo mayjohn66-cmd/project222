@@ -56,7 +56,7 @@ func _select_region(
 		selected_region_id
 	)
 
-	print(
+	DebugLog.write(
 		"[원정 준비] 지역 선택: ",
 		selected_region_id
 	)

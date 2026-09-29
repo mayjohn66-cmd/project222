@@ -30,7 +30,7 @@ static func ensure_loaded() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[ExpeditionEventData] 로드 완료 / 이벤트: ",
 		events.size(),
 		" / 전리품 데이터: ",
