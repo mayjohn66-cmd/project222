@@ -38,7 +38,7 @@ func show_next() -> void:
 	if host.run_message_queue.is_empty():
 		host.message_panel.visible = false
 
-		var finish_action := (
+		var finish_action: Callable = (
 			host.run_message_finish_action
 		)
 

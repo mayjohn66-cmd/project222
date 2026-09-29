@@ -16,3 +16,22 @@ leather_armor,가죽 갑옷,equipment,tool,0,2,2,false,false,res://art/items/pix
 sickle,낫,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1/sickle.png,야생 밀을 안정적으로 베어내는 원정용 낫이다.,0,0,bag,expedition
 gathering_bottle,채집용 물병,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/gathering_bottle.png,호수의 물을 담아 운반할 수 있는 원정용 물병이다.,0,0,bag,expedition
 treasure_map,보물 지도,special,etc,0,1,1,false,false,res://art/items/pixel_v1/treasure_map.png,숨겨진 원정지를 가리키는 오래된 지도다.,0,0,inventory,expedition
+wild_berry,야생 열매,material,material,20,1,1,true,true,res://art/items/pixel_v1/wild_berry.png,새들이 즐겨 먹는 붉은 열매다.,0,0,inventory,shelf
+dry_branch,마른 가지,material,material,20,1,1,true,true,res://art/items/pixel_v1/dry_branch.png,불쏘시개로 쓰기 좋은 나뭇가지다.,0,0,inventory,shelf
+forest_mushroom,숲 버섯,material,material,40,1,1,true,true,res://art/items/pixel_v1/forest_mushroom.png,습한 나무 그늘에서 자란 버섯이다.,0,0,inventory,shelf
+amber_sap,호박 수액,material,material,40,1,1,true,true,res://art/items/pixel_v1/amber_sap.png,오래된 나무에서 굳은 투명한 수액이다.,0,0,inventory,shelf
+elder_seed,고목의 씨앗,material,material,80,1,1,true,true,res://art/items/pixel_v1/elder_seed.png,숲의 가장 오래된 나무에서 떨어진 씨앗이다.,0,0,inventory,shelf
+coal,석탄,material,material,30,1,1,true,true,res://art/items/pixel_v1/coal.png,광산 벽에서 캐낸 검은 연료다.,0,0,inventory,shelf
+stone_shard,돌 조각,material,material,30,1,1,true,true,res://art/items/pixel_v1/stone_shard.png,단단한 광석 조각이다.,0,0,inventory,shelf
+copper_ore,구리 광석,material,material,30,1,1,true,true,res://art/items/pixel_v1/copper_ore.png,붉은빛이 도는 광석이다.,0,0,inventory,shelf
+silver_ore,은광석,material,material,60,1,1,true,true,res://art/items/pixel_v1/silver_ore.png,희미하게 빛나는 광석이다.,0,0,inventory,shelf
+deep_gem,심층 보석,material,material,120,1,1,true,true,res://art/items/pixel_v1/deep_gem.png,광산 가장 깊은 곳에서 나온 보석이다.,0,0,inventory,shelf
+marsh_reed,늪 갈대,material,material,40,1,1,true,true,res://art/items/pixel_v1/marsh_reed.png,질기고 길게 자란 갈대다.,0,0,inventory,shelf
+bog_mud,늪 진흙,material,material,40,1,1,true,true,res://art/items/pixel_v1/bog_mud.png,끈적하고 영양이 많은 진흙이다.,0,0,inventory,shelf
+toxic_spore,독 포자,material,material,80,1,1,true,true,res://art/items/pixel_v1/toxic_spore.png,다루기 위험한 포자다.,0,0,inventory,shelf
+glow_algae,발광 해초,material,material,80,1,1,true,true,res://art/items/pixel_v1/glow_algae.png,어둠 속에서 은은하게 빛나는 해초다.,0,0,inventory,shelf
+queen_jelly,여왕의 젤리,material,material,160,1,1,true,true,res://art/items/pixel_v1/queen_jelly.png,늪의 여왕 슬라임에게서 얻은 젤리다.,0,0,inventory,shelf
+rune_dust,룬 가루,material,material,60,1,1,true,true,res://art/items/pixel_v1/rune_dust.png,룬이 새겨진 돌이 부서진 가루다.,0,0,inventory,shelf
+worn_coin,낡은 동전,material,material,60,1,1,true,true,res://art/items/pixel_v1/worn_coin.png,오래전 통용되던 동전이다.,0,0,inventory,shelf
+rune_stone,룬석,material,material,120,1,1,true,true,res://art/items/pixel_v1/rune_stone.png,마력이 남아 있는 돌이다.,0,0,inventory,shelf
+sealed_scroll,봉인된 두루마리,material,material,120,1,1,true,true,res://art/items/pixel_v1/sealed_scroll.png,봉인이 그대로 남은 두루마리다.,0,0,inventory,shelf
