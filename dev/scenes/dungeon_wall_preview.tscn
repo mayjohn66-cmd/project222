@@ -1,0 +1,5 @@
+[gd_scene load_steps=3 format=3]
+[ext_resource type="PackedScene" path="res://scenes/shop/main.tscn" id="1"]
+[ext_resource type="Script" path="res://dev/script/dungeon_wall_preview.gd" id="2"]
+[node name="DungeonWallPreview" instance=ExtResource("1")]
+script = ExtResource("2")

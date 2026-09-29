@@ -1,5 +1,0 @@
-[gd_scene load_steps=3 format=3]
-[ext_resource type="PackedScene" path="res://scenes/shop/main.tscn" id="1"]
-[ext_resource type="Script" path="res://script/world/shop/rural_village_preview.gd" id="2"]
-[node name="RuralVillagePreview" instance=ExtResource("1")]
-script = ExtResource("2")

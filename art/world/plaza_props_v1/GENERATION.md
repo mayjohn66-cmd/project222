@@ -21,7 +21,7 @@ merchant-stall and wooden-cart references supplied for the village square.
 Placement, uniform display scales, sprite anchors and collision footprints are
 defined in `script/world/shop/village_decor.gd`. Cell offsets from the square
 are defined in `script/world/shop/store_exterior.gd`. The reproducible geometry
-bake is `script/world/shop/bake_plaza_sprites.gd`. The roof edits build on
+bake is `dev/script/bake_plaza_sprites.gd`. The roof edits build on
 that baked v4 base; v6 is loaded during gameplay.
 
 ## Herb stall v2
