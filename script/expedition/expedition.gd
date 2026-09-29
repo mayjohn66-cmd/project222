@@ -244,6 +244,11 @@ var save_failure_reason: String = ""
 var expedition_checkpoint_controller := (
 	ExpeditionCheckpointController.new()
 )
+
+# 전투 시작·진행·결과 처리. _ready에서 이 씬(host)과 연결한다.
+var expedition_battle_controller := (
+	ExpeditionBattleController.new()
+)
 var preparation_return_pending: bool = false
 
 
@@ -252,6 +257,7 @@ var preparation_return_pending: bool = false
 
 func _ready() -> void:
 	expedition_checkpoint_controller.setup(self)
+	expedition_battle_controller.setup(self)
 	call_deferred("_install_preparation_village")
 	# =====================================================
 	# 1. 공용 메뉴 초기화
@@ -1096,258 +1102,29 @@ func confirm_loot_organization() -> void:
 # 전투 진행과 전리품 생성
 # =========================================================
 
+# 전투 진행은 ExpeditionBattleController가 처리한다.
+# 아래 함수는 시그널 연결과 다른 원정 코드가 쓰는 진입점이다.
 func start_test_battle(
 	enemy_id: String = "field_slime"
 ):
-	if battle_active:
-		return
-
-	var enemy: Dictionary = (
-		EnemyData.get_enemy(
-			enemy_id
-		)
+	expedition_battle_controller.start_battle(
+		enemy_id
 	)
-
-	if enemy.is_empty():
-		return
-
-	combat_enemy_id = enemy_id
-
-	combat_enemy_name = str(
-		enemy.get(
-			"name",
-			combat_enemy_id
-		)
-	)
-
-	combat_enemy_max_hp = int(
-		enemy.get(
-			"max_hp",
-			1
-		)
-	)
-
-	combat_enemy_hp = combat_enemy_max_hp
-
-	combat_enemy_attack = int(
-		enemy.get(
-			"attack",
-			1
-		)
-	)
-
-	combat_enemy_defense = int(
-		enemy.get(
-			"defense",
-			0
-		)
-	)
-
-	battle_active = true
-
-	start_battle_button.disabled = true
-
-	battle_status_label.text = (
-		combat_enemy_name
-		+ " 등장"
-	)
-
-	update_battle_ui()
-
-	battle_timer.start()
 
 func process_battle_tick():
-	if not battle_active:
-		return
-
-	var damage_to_enemy: int = max(
-		1,
-		combat_player_attack
-		- combat_enemy_defense
-	)
-
-	var damage_to_player: int = max(
-		1,
-		combat_enemy_attack
-		- combat_player_defense
-	)
-
-	# 같은 1초 안에 서로 동시에 피해
-	combat_enemy_hp -= damage_to_enemy
-	combat_player_hp -= damage_to_player
-
-	combat_enemy_hp = max(
-		0,
-		combat_enemy_hp
-	)
-
-	combat_player_hp = max(
-		0,
-		combat_player_hp
-	)
-
-	DebugLog.write(
-		"[전투] 플레이어 → ",
-		combat_enemy_name,
-		" ",
-		damage_to_enemy,
-		" 피해"
-	)
-
-	DebugLog.write(
-		"[전투] ",
-		combat_enemy_name,
-		" → 플레이어 ",
-		damage_to_player,
-		" 피해"
-	)
-
-	update_battle_ui()
-
-	check_battle_result()
+	expedition_battle_controller.process_tick()
 
 func check_battle_result() -> void:
-	if (
-		combat_player_hp > 0
-		and combat_enemy_hp > 0
-	):
-		return
-
-	battle_active = false
-	battle_timer.stop()
-
-	start_battle_button.disabled = false
-
-	# 동시 전투 불능도 플레이어 패배로 처리
-	if combat_player_hp <= 0:
-		var defeat_message: String = (
-			"체력이 모두 소진되어 원정을 종료합니다."
-		)
-
-		if combat_enemy_hp <= 0:
-			battle_status_label.text = "동시 전투 불능"
-		else:
-			battle_status_label.text = "전투 패배"
-
-		battle_panel.visible = false
-		map_panel.visible = false
-
-		DebugLog.write("[원정] 전투 불능 → 결과 안내")
-
-		show_run_messages(
-			[defeat_message],
-		Callable(
-			self,
-			"open_result_phase"
-		).bind(
-			ExpeditionEndReason.DEFEAT
-		)
-		)
-
-		return
-
-	# 플레이어가 생존한 상태에서 적을 처치
-	battle_status_label.text = (
-		combat_enemy_name + " 처치"
-	)
-
-	DebugLog.write(
-		"[전투] 승리 / 남은 HP: ",
-		combat_player_hp
-	)
-
-	generate_enemy_loot(
-		combat_enemy_id
-	)
-
-	battle_panel.visible = false
-
-	if temporary_loot.is_empty():
-		complete_current_map_node()
-	else:
-		loot_panel.visible = true
-
-
+	expedition_battle_controller.check_result()
 
 func update_battle_ui():
-	player_hp_label.text = (
-		"플레이어 HP: "
-		+ str(combat_player_hp)
-		+ " / "
-		+ str(combat_player_max_hp)
-	)
-
-	if combat_enemy_name.is_empty():
-		enemy_hp_label.text = "적 HP: -"
-
-	else:
-		enemy_hp_label.text = (
-			combat_enemy_name
-			+ " HP: "
-			+ str(combat_enemy_hp)
-			+ " / "
-			+ str(combat_enemy_max_hp)
-		)
-
-	update_player_stats_ui()
+	expedition_battle_controller.update_ui()
 
 func generate_enemy_loot(
 	enemy_id: String
 ) -> void:
-	temporary_loot.clear()
-	refresh_loot_ui()
-
-	var result: Dictionary = (
-		expedition_loot_service.roll_enemy_loot(
-			enemy_id
-		)
-	)
-
-	if not bool(
-		result.get(
-			"success",
-			false
-		)
-	):
-		push_error(
-			"[전투 전리품] "
-			+ str(
-				result.get(
-					"message",
-					"전리품 추첨 실패"
-				)
-			)
-		)
-		return
-
-	var item_id: String = str(
-		result.get(
-			"item_id",
-			""
-		)
-	)
-
-	var amount: int = int(
-		result.get(
-			"amount",
-			0
-		)
-	)
-
-	temporary_loot.append(
-		{
-			"item_id": item_id,
-			"amount": amount
-		}
-	)
-
-	refresh_loot_ui()
-
-	DebugLog.write(
-		"[전투 전리품] ",
-		ItemData.get_item_name(item_id),
-		" ×",
-		amount
+	expedition_battle_controller.generate_loot(
+		enemy_id
 	)
 
 # =========================================================
