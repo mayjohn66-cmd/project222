@@ -253,53 +253,6 @@ func update_visual():
 		visual.set_stack_level(stack_level)
 
 
-# 기존 보충 시스템 임시 호환
-# 현재는 첫 번째 슬롯에 상품을 넣는다.
-func add_stock(amount: int) -> int:
-	ensure_slot_count()
-
-	if slots.is_empty():
-		return 0
-
-	if product_id.is_empty():
-		print("이 진열대에는 상품이 지정되지 않음")
-		return 0
-
-	if stock >= capacity:
-		print("진열대가 이미 가득 참")
-		return 0
-
-	var available_space: int = capacity - stock
-	var added_amount: int = min(amount, available_space)
-
-	stock += added_amount
-
-	update_stock_label()
-
-	return added_amount
-
-
-# 기존 상품 지정 기능 임시 호환
-func set_product(new_product_id: String) -> void:
-	if not ItemData.has_item(new_product_id):
-		return
-
-	if not ItemData.is_shelf_allowed(new_product_id):
-		return
-
-	product_id = new_product_id
-	update_stock_label()
-
-
-func get_product_name() -> String:
-	if product_id.is_empty():
-		return "상품 없음"
-
-	return ItemData.get_item_name(
-		product_id
-	)
-
-
 func update_stock_label():
 	if not is_instance_valid(stock_label):
 		return
@@ -357,21 +310,6 @@ func get_interaction_distance(world_pos: Vector2) -> float:
 	return nearest_distance
 
 
-
-func has_sellable_stock() -> bool:
-	for slot in slots:
-		var item_id: String = str(
-			slot.get("item_id", "")
-		)
-
-		var slot_stock: int = int(
-			slot.get("stock", 0)
-		)
-
-		if not item_id.is_empty() and slot_stock > 0:
-			return true
-
-	return false
 
 func get_item_stock(
 	item_id: String

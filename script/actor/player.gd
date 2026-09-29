@@ -14,7 +14,6 @@ var in_production_room: bool = false
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var shelf_panel = $"../../UI/ShelfPanel"
 @onready var money_label: Label = $"../../UI/HUD/MoneyLabel"
-@onready var travel_floor = $"../../Floor"
 @onready var warehouse_room = $"../../WarehouseRoom"
 @onready var rumor_dialog: AcceptDialog = $RumorDialog
 
@@ -79,34 +78,6 @@ func _physics_process(_delta):
 	if direction != Vector2.ZERO:
 		last_direction = direction
 	# Character visual observes resolved movement and stops when blocked or idle.
-
-
-func get_direction_name(direction: Vector2) -> String:
-	var angle := direction.angle()
-
-	if angle >= -PI / 8 and angle < PI / 8:
-		return "right"
-
-	elif angle >= PI / 8 and angle < 3 * PI / 8:
-		return "down_right"
-
-	elif angle >= 3 * PI / 8 and angle < 5 * PI / 8:
-		return "down"
-
-	elif angle >= 5 * PI / 8 and angle < 7 * PI / 8:
-		return "down_left"
-
-	elif angle >= 7 * PI / 8 or angle < -7 * PI / 8:
-		return "left"
-
-	elif angle >= -7 * PI / 8 and angle < -5 * PI / 8:
-		return "up_left"
-
-	elif angle >= -5 * PI / 8 and angle < -3 * PI / 8:
-		return "up"
-
-	else:
-		return "up_right"
 
 
 func _unhandled_input(event) -> void:
@@ -1257,29 +1228,6 @@ func try_use_production_door() -> bool:
 
 	return true
 
-
-func _move_to_room_position(world_position: Vector2) -> void:
-	velocity = Vector2.ZERO
-	global_position = world_position
-
-	var camera := get_node_or_null("Camera2D") as Camera2D
-
-	if camera != null:
-		camera.reset_smoothing()
-
-
-func _move_to_area_cell(cell: Vector2i) -> void:
-	velocity = Vector2.ZERO
-
-	global_position = travel_floor.to_global(
-		travel_floor.grid_to_local(cell)
-	)
-
-	# 멀리 떨어진 구역 사이를 카메라가 천천히 가로지르지 않도록 처리
-	var camera: Camera2D = get_node_or_null("Camera2D") as Camera2D
-
-	if camera != null:
-		camera.reset_smoothing()
 
 func get_warehouse_door_candidates() -> Array[Node2D]:
 	var result: Array[Node2D] = []

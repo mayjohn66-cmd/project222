@@ -20,10 +20,6 @@ const WAREHOUSE_INVENTORY_VIEW_SCENE: PackedScene = preload(
 	$CenterContainer/WindowPanel/ContentMargin/MainVBox/Body/LeftViewHost
 )
 
-@onready var right_view_host: MarginContainer = (
-	$CenterContainer/WindowPanel/ContentMargin/MainVBox/Body/RightViewHost
-)
-
 @onready var player_inventory_view: Control = (
 	$CenterContainer/WindowPanel/ContentMargin/MainVBox/Body/RightViewHost/PlayerInventoryView
 )
@@ -54,50 +50,6 @@ func _ready() -> void:
 
 	hide()
 
-
-func open_warehouse_storage(
-	target_storage: Node
-) -> void:
-	if not is_instance_valid(
-		target_storage
-	):
-		return
-
-	if target_storage.is_queued_for_deletion():
-		return
-
-	var created_view: WarehouseInventoryView = (
-		WAREHOUSE_INVENTORY_VIEW_SCENE.instantiate()
-		as WarehouseInventoryView
-	)
-
-	if created_view == null:
-		push_error(
-			"[아이템 이동 창] 창고 인벤토리 UI 생성 실패"
-		)
-		return
-
-	current_warehouse_storage = target_storage
-	warehouse_inventory_view = created_view
-
-	set_left_view(
-		warehouse_inventory_view
-	)
-
-	warehouse_inventory_view.bind_storage(
-		current_warehouse_storage
-	)
-
-	if not warehouse_inventory_view.contents_changed.is_connected(
-		_on_warehouse_contents_changed
-	):
-		warehouse_inventory_view.contents_changed.connect(
-			_on_warehouse_contents_changed
-		)
-
-	open_window(
-		"창고 선반"
-	)
 
 func open_window(
 	window_title: String
@@ -144,10 +96,6 @@ func close_window() -> void:
 	window_closed.emit()
 
 
-func is_window_open() -> bool:
-	return visible
-
-
 func set_left_view(
 	view: Control
 ) -> void:
@@ -155,14 +103,6 @@ func set_left_view(
 		left_view_host,
 		view
 	)
-
-func clear_left_view() -> void:
-	_clear_view_host(
-		left_view_host
-	)
-
-	current_warehouse_storage = null
-	warehouse_inventory_view = null
 
 func _replace_view(
 	host: MarginContainer,

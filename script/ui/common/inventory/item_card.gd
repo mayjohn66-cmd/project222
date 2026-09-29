@@ -147,12 +147,6 @@ func enable_item_drag(
 	)
 
 
-func disable_item_drag() -> void:
-	item_drag_enabled = false
-	item_drag_source = ""
-	item_drag_amount = 0
-
-
 # 가구 보관함 항목
 # 가구의 보관 수량과 배치 수량을 함께 표시한다.
 func setup_furniture(

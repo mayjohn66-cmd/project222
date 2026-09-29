@@ -377,9 +377,6 @@ func _refresh_grid_selection_visuals() -> void:
 		)
 
 
-func get_bag_model():
-	return bag_model
-
 func _get_owned_model():
 	if owned_grid_area == null:
 		return null

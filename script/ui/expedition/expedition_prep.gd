@@ -188,18 +188,3 @@ func get_selected_region_id() -> String:
 		)
 
 	return "forest"
-
-func restore_returned_bag_item(
-	placement: Dictionary
-) -> bool:
-	if bag_content.has_method(
-		"restore_returned_item_placement"
-	):
-		return bool(
-			bag_content.call(
-				"restore_returned_item_placement",
-				placement
-			)
-		)
-
-	return false

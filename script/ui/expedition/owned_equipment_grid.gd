@@ -217,19 +217,6 @@ func _sync_model_with_instances() -> void:
 # 배치 조작
 # =========================
 
-func remove_placement(
-	uid: int
-) -> Dictionary:
-	var removed: Dictionary = (
-		model.remove_item(uid)
-	)
-
-	if not removed.is_empty():
-		refresh()
-
-	return removed
-
-
 func add_placement(
 	item_id: String,
 	cell: Vector2i,
@@ -250,57 +237,3 @@ func add_placement(
 	return uid
 
 
-func can_place_at(
-	cell: Vector2i,
-	item_size: Vector2i
-) -> bool:
-	return model.can_place_size(
-		cell,
-		item_size
-	)
-
-
-func move_placement(
-	uid: int,
-	new_cell: Vector2i
-) -> bool:
-	var moved: bool = model.move_item(
-		uid,
-		new_cell
-	)
-
-	if moved:
-		refresh()
-
-	return moved
-
-
-func rotate_placement(
-	uid: int
-) -> bool:
-	var rotated_ok: bool = (
-		model.rotate_item(uid)
-	)
-
-	if rotated_ok:
-		refresh()
-
-	return rotated_ok
-
-
-func select_owned_item(
-	uid: int
-) -> void:
-	select_grid_item(
-		"owned",
-		uid
-	)
-
-
-func toggle_owned_item(
-	uid: int
-) -> void:
-	toggle_grid_item(
-		"owned",
-		uid
-	)

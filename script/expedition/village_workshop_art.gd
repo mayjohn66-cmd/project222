@@ -3,7 +3,6 @@ extends Node2D
 const WALL = preload("res://script/world/shop/wood_walls.gd")
 const TILE = preload("res://script/world/shop/world_tile_art.gd")
 var kind := 0
-var glow: Sprite2D
 var elapsed := 0.0
 
 func prop(path: String, foot: Vector2) -> Sprite2D:

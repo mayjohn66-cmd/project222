@@ -315,69 +315,6 @@ func _get_display_text() -> String:
 	)
 
 # =========================
-# 이름 표시
-# =========================
-
-func _create_label() -> void:
-	var label := Label.new()
-
-	label.text = _get_display_text()
-
-	label.horizontal_alignment = (
-		HORIZONTAL_ALIGNMENT_CENTER
-	)
-
-	label.vertical_alignment = (
-		VERTICAL_ALIGNMENT_CENTER
-	)
-
-	label.autowrap_mode = (
-		TextServer.AUTOWRAP_WORD_SMART
-	)
-
-	label.clip_text = true
-
-	label.mouse_filter = (
-		Control.MOUSE_FILTER_IGNORE
-	)
-
-	label.set_anchors_and_offsets_preset(
-		Control.PRESET_FULL_RECT
-	)
-
-	# 아이템 테두리와 글자가 붙지 않게 안쪽 여백 적용
-	label.offset_left = 3.0
-	label.offset_top = 2.0
-	label.offset_right = -3.0
-	label.offset_bottom = -2.0
-
-	# 폭이 좁은 아이템은 글자를 작게 표시
-	var font_size: int = 14
-
-	if item_size.x <= 1:
-		font_size = 11
-
-	elif item_size.x == 2:
-		font_size = 13
-
-	label.add_theme_font_size_override(
-		"font_size",
-		font_size
-	)
-
-	# 여러 줄이 들어가도 세로 공간을 적게 사용
-	label.add_theme_constant_override(
-		"line_spacing",
-		-2
-	)
-
-	# 잘린 이름은 마우스를 올려 전체 내용을 확인
-	tooltip_text = _get_display_text()
-
-	add_child(label)
-
-
-# =========================
 # 선택 표시
 # =========================
 

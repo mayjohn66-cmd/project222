@@ -58,10 +58,6 @@ func get_checkout_cells() -> Array[Vector2i]:
 	)
 
 
-func get_cashier_cells() -> Array[Vector2i]:
-	return get_worker_cells()
-
-
 func offsets_to_world_cells(
 	offsets: Array[Vector2i]
 ) -> Array[Vector2i]:

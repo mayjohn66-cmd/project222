@@ -17,8 +17,6 @@ func set_rotation_index(value: int) -> void:
 	rotation_index = posmod(value,4)
 	queue_redraw()
 
-const ART = preload("res://art/world/cozy_v5/counter.png")
-
 @export var tile_width: float = 96.0:
 	set(value):
 		tile_width = value

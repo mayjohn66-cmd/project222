@@ -40,32 +40,3 @@ func configure_decoration(
 		"build_id",
 		build_id
 	)
-
-
-func get_decoration_effect_data() -> Dictionary:
-	if furniture_data.is_empty():
-		return {}
-
-	# 실제 계산은 DecorationEffectService에서 처리합니다.
-	return {
-		"effect_type": str(
-			furniture_data.get(
-				"effect_type",
-				""
-			)
-		),
-
-		"effect_value": float(
-			furniture_data.get(
-				"effect_value",
-				0.0
-			)
-		),
-
-		"effect_target": str(
-			furniture_data.get(
-				"effect_target",
-				""
-			)
-		)
-	}

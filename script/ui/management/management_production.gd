@@ -5,12 +5,6 @@ extends Control
 # 데이터에 맞춰 동적으로 갱신한다.
 
 
-@onready var recipe_content: Control = $MainHBox
-
-@onready var production_tab_bar: HBoxContainer = (
-	$ProductionTabBar
-)
-
 @onready var facility_status_button: Button = (
 	$ProductionTabBar/FacilityStatusButton
 )
@@ -495,44 +489,6 @@ func consume_ingredients(
 	return ProductionRecipeService.consume_ingredients(
 		recipe,
 		production_count
-	)
-
-func add_production_result(
-	recipe: Dictionary,
-	production_count: int
-) -> void:
-	var result_item_id: String = str(
-		recipe.get(
-			"result_item_id",
-			""
-		)
-	)
-
-	var result_amount: int = int(
-		recipe.get(
-			"result_amount",
-			1
-		)
-	)
-
-	var total_amount: int = (
-		result_amount
-		* production_count
-	)
-
-	if result_item_id.is_empty():
-		return
-
-	GameState.add_item(
-		result_item_id,
-		total_amount
-	)
-
-	print(
-		"[관리 생산] 완성품 획득 / ",
-		result_item_id,
-		" ×",
-		total_amount
 	)
 
 

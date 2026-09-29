@@ -158,14 +158,6 @@ func is_store_cell(cell: Vector2i) -> bool:
 	return get_store_rect().has_point(cell)
 
 
-func is_production_cell(cell: Vector2i) -> bool:
-	return get_production_rect().has_point(cell)
-
-
-func is_corridor_cell(cell: Vector2i) -> bool:
-	return get_corridor_rect().has_point(cell)
-
-
 # 플레이어 이동 등에 사용할 전체 바닥 범위
 func is_world_cell_inside(cell: Vector2i) -> bool:
 	return is_store_cell(cell)
@@ -531,12 +523,3 @@ func _add_cell_boundary(
 			)
 
 
-func get_production_entry_cell() -> Vector2i:
-	var region: Rect2i = get_production_rect()
-
-	return Vector2i(
-		region.position.x,
-		region.position.y + floori(
-			float(region.size.y) / 2.0
-		)
-	)

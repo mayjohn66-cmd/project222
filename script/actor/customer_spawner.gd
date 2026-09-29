@@ -314,18 +314,6 @@ func set_shop_open(value: bool):
 	else:
 		spawn_timer.stop()
 
-func start_spawning():
-	process_mode = Node.PROCESS_MODE_INHERIT
-
-	refresh_spawn_interval()
-
-	if spawn_timer.is_stopped():
-		spawn_timer.start()
-
-func stop_spawning():
-	if not spawn_timer.is_stopped():
-		spawn_timer.stop()
-
 func refresh_spawn_interval() -> void:
 	var reputation: float = maxf(
 		build_manager.get_decoration_effect("reputation"),

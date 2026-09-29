@@ -283,22 +283,6 @@ func _refresh_store_expansion() -> void:
 		)
 
 
-func _refresh_unavailable_area(
-	title_text: String,
-	description_text: String
-) -> void:
-	area_title_label.text = title_text
-	current_info_label.text = description_text
-	next_info_label.text = ""
-
-	expand_button.text = "준비 중"
-	expand_button.disabled = true
-
-	note_label.text = (
-		"현재는 사용할 수 없는 건설 항목입니다."
-	)
-
-
 func _on_expand_button_pressed() -> void:
 	match current_tab:
 		ConstructionTab.STORE:
