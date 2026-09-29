@@ -1,7 +1,7 @@
 # 방 템플릿 데이터 규격 (초안 v0.1)
 
 > 상위 문서: `docs/원정_v2_규칙서_초안.md` 3.6. 이 문서는 **ChatGPT(새 기능 코드·아트)에게 넘길 데이터 계약**의 초안이다.
-> 실제 게임에 연결된 파일이 아니다. 예시 CSV(`room_templates_draft.csv`, `room_objects_draft.csv`, `expedition_tiers_draft.csv`)는 이 폴더에 있다.
+> 실제 게임에 연결된 파일이 아니다. 예시 CSV(`room_templates_draft.csv`, `room_objects_draft.csv`)는 이 폴더에 있다.
 > 태그: ✅확정 / 🟡제안 / ❓미정
 
 ## 1. 원칙
@@ -11,17 +11,19 @@
 - 🟡 방의 모양은 **템플릿(손으로 만든 배치)** 으로 정하고, 그 안의 몬스터·재료 종류는 **CSV의 참조 ID**로 정한다. 모양은 씬/타일맵, 수치와 종류는 CSV.
 - 🟡 좌표는 타일 단위 정수. (0,0)이 좌상단.
 
-## 2. 파일 3개
+## 2. 파일 3개 (난이도 표 + 방 템플릿 2개)
 
-### 2.1 `expedition_tiers.csv` (지역 = 티어 테이블)
+### 2.1 `expedition_difficulty.csv` (난이도 테이블, 실제 데이터 파일)
+`data/expedition/expedition_difficulty.csv`에 이미 있다(초안 폴더가 아니라 실제 데이터). 지역과 무관하게 난이도 레벨(1~4)마다 한 줄이다.
 | 열 | 뜻 |
 |---|---|
-| region_id | 기존 `expedition_regions.csv`의 ID |
-| tier | 1~4 |
-| room_count | 보스 방 포함 방 수 (숲 6 ✅, 나머지 7/8/9 🟡) |
-| monster_hp_mult / monster_atk_mult | `enemies.csv` 기본 수치에 곱함 (분리 여부 ❓) |
-| loot_price_mult | 재료 가격 배율(경제용, 드롭 굴림에는 영향 없음) |
-| entry_item_id | 입장 소모품(유적 = 보물 지도) |
+| difficulty | 난이도 레벨 (1~) |
+| room_count | 보스 방 포함 방 수 (레벨 1 = 6 ✅, 나머지 7/8/9 🟡) |
+| monster_hp_mult / monster_atk_mult | `enemies.csv` 기본 수치에 곱함 |
+| reward_amount_mult | 드롭 수량 배율 |
+| rare_chance_mult | 희귀 재료 확률 배율 |
+
+지역별 차이(재료, 몬스터, 방 템플릿)는 `region_id`로 정하고 난이도 표에는 없다. 유적의 입장 소모품(보물 지도)은 `expedition_regions.csv`에 있다.
 
 ### 2.2 `room_templates.csv` (방 한 종류 = 한 줄)
 | 열 | 뜻 |
@@ -50,9 +52,9 @@
 - 🟡 미지 방(선택 이벤트)과 휴식은 오브젝트가 아닌 이벤트 데이터로 처리한다(규칙서 3.4). 이벤트 표 재설계는 ❓.
 
 ## 3. 실행 순서(코드가 지켜야 할 규칙)
-1. 원정 시작 시 `expedition_tiers`에서 `room_count` 층의 지도를 만든다(폭 3, 마지막 층 = 보스).
+1. 원정 시작 시 선택한 난이도의 `expedition_difficulty.room_count` 층의 지도를 만든다(폭 3, 마지막 층 = 보스).
 2. 칸을 고르면 그 칸의 `room_type`과 지역으로 `room_templates`에서 가중치 추첨해 방을 연다.
-3. `room_objects`대로 배치하고 몬스터 수치에 티어 배율을 곱한다.
+3. `room_objects`대로 배치하고 몬스터 수치에 난이도 배율을 곱한다.
 4. `exit_opens_when` 조건이 되면 출구가 열린다. 채집·보물·휴식은 자유 퇴장.
 5. 보스 처치 = 클리어 → 결과 화면. 언제든 철수 가능(획득품 유지).
 
