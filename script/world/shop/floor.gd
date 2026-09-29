@@ -521,5 +521,3 @@ func _add_cell_boundary(
 				top,
 				right
 			)
-
-
