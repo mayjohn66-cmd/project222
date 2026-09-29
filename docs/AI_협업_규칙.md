@@ -45,6 +45,10 @@
 
 - 수치는 코드에 직접 쓰지 않고 `data/`의 CSV나 설정 상수로 뺍니다.
 - 데이터를 바꾸면 `tools/balance_baseline.py`를 돌려 결과를 커밋 설명에 붙입니다.
+- 코드를 바꾸면 Godot 4.7.1로 실행 검증을 하고 결과를 커밋 설명에 붙입니다(Godot가 있는 환경에서만).
+  - `godot --headless --path . --import`를 두 번 돌려 두 번째에 오류가 0인지 확인(첫 실행은 가져오기 순서 때문에 테마 관련 가짜 오류가 나옴)
+  - `godot --headless --path . res://tools/check_godot.tscn`으로 모든 `.gd`와 `.tscn`이 로드되는지 확인
+  - 실행하면 `.translation`(CSV 번역 부산물)이 바뀌므로 커밋하지 않고 `git checkout`으로 되돌림
 - 이미지를 추가하면 `tools/validate_assets.py`를 돌려 **FAIL이 없는지** 확인하고 결과를 커밋 설명에 붙입니다. 검증 실패 목록은 Claude가 사용자에게 넘깁니다.
 - 이미지 도구(API 키, 크레딧)의 키는 저장소에 넣지 않고 사용자 환경 설정으로만 관리합니다.
 
