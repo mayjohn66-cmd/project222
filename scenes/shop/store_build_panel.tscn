@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://ha0i57m2y2us"]
+
+[node name="BuildPanel" type="PanelContainer" unique_id=2050221740]
+custom_minimum_size = Vector2(320, 40)
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -20.0
+offset_top = -40.0
+offset_right = 20.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=389177487]
+layout_mode = 2
+theme_override_constants/separation = 30
+
+[node name="Shelf1x1Button" type="Button" parent="HBoxContainer" unique_id=633701852]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="Shelf2x1Button" type="Button" parent="HBoxContainer" unique_id=1743847652]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="Shelf3x1Button" type="Button" parent="HBoxContainer" unique_id=1991793196]
+layout_mode = 2
+
+[node name="RegisterButton" type="Button" parent="HBoxContainer" unique_id=1819335398]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DoorButton" type="Button" parent="HBoxContainer" unique_id=845855700]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+
+[node name="DrinkMachineButton" type="Button" parent="HBoxContainer" unique_id=305383821]
+layout_mode = 2
+text = "음료 제조기"

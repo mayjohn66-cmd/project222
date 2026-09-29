@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://bc60kqhuv5lur"]
+
+[ext_resource type="Script" uid="uid://3tn0tugkdcsx" path="res://script/world/warehouse/warehouse_storage.gd" id="1_rdobq"]
+[ext_resource type="Script" uid="uid://bpa1x7t1ei6ou" path="res://script/world/warehouse/warehouse_storage_visual.gd" id="2_kngci"]
+[ext_resource type="Script" uid="uid://c03xuwfod4pk2" path="res://script/world/warehouse/warehouse_storage_collision.gd" id="3_7rds6"]
+
+[node name="WarehouseStorage" type="Node2D" unique_id=1304708096]
+script = ExtResource("1_rdobq")
+
+[node name="Visual" type="Node2D" parent="." unique_id=621359283]
+script = ExtResource("2_kngci")
+
+[node name="Collision" type="StaticBody2D" parent="." unique_id=151447564]
+script = ExtResource("3_7rds6")

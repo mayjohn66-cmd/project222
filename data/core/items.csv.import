@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bq85h0bmt8mct"
+
+[deps]
+
+files=["res://data/core/items.name.translation", "res://data/core/items.item.translation", "res://data/core/items.category.translation", "res://data/core/items.price.translation", "res://data/core/items.bag.translation", "res://data/core/items.bag.translation", "res://data/core/items.shelf.translation", "res://data/core/items.sellable.translation", "res://data/core/items.icon.translation", "res://data/core/items.description.translation", "res://data/core/items.attack.translation", "res://data/core/items.defense.translation", "res://data/core/items.expedition.translation", "res://data/core/items.inventory.translation"]
+
+source_file="res://data/core/items.csv"
+dest_files=["res://data/core/items.name.translation", "res://data/core/items.item.translation", "res://data/core/items.category.translation", "res://data/core/items.price.translation", "res://data/core/items.bag.translation", "res://data/core/items.bag.translation", "res://data/core/items.shelf.translation", "res://data/core/items.sellable.translation", "res://data/core/items.icon.translation", "res://data/core/items.description.translation", "res://data/core/items.attack.translation", "res://data/core/items.defense.translation", "res://data/core/items.expedition.translation", "res://data/core/items.inventory.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

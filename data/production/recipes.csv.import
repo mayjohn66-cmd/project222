@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://c8pacvm8tdlrg"
+
+[deps]
+
+files=["res://data/production/recipes.result.translation", "res://data/production/recipes.result.translation", "res://data/production/recipes.material.translation", "res://data/production/recipes.amount.translation", "res://data/production/recipes.material.translation", "res://data/production/recipes.amount.translation"]
+
+source_file="res://data/production/recipes.csv"
+dest_files=["res://data/production/recipes.result.translation", "res://data/production/recipes.result.translation", "res://data/production/recipes.material.translation", "res://data/production/recipes.amount.translation", "res://data/production/recipes.material.translation", "res://data/production/recipes.amount.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

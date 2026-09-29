@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://cctc08nmff77q"]
+
+[ext_resource type="Script" uid="uid://bk2gwsh1tv2pr" path="res://script/world/warehouse/warehouse_room.gd" id="1_8v6bd"]
+
+[node name="WarehouseRoom" type="Node2D" unique_id=1597451750]
+z_as_relative = false
+position = Vector2(5000, 0)
+script = ExtResource("1_8v6bd")
+
+[node name="Objects" type="Node2D" parent="." unique_id=1302105578]

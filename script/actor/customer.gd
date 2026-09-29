@@ -6,21 +6,42 @@ extends CharacterBody2D
 @export var wander_min_moves: int = 2
 @export var wander_max_moves: int = 4
 @export var wander_pause_delay: float = 0.7
-@export var checkout_delay: float = 1.2
 @export var checkout_finish_delay: float = 0.4
 @export var move_timeout: float = 4.0
 @export var max_move_retries: int = 2
+@export var show_movement_debug: bool = false
+
+
+const EXIT_PATH_SELECTOR_SCRIPT = preload(
+	"res://script/actor/navigation/exit_path_selector.gd"
+)
+
+var exit_path_selector = (
+	EXIT_PATH_SELECTOR_SCRIPT.new()
+)
 
 var wander_moves_remaining: int = 0
 var move_elapsed: float = 0.0
 var move_retry_count: int = 0
 var recover_from_state: int = CustomerState.IDLE
 var force_exit_requested: bool = false
+var decoration_extra_purchase_checked: bool = false
+
+var visit_recorded: bool = false
+var purchase_completed: bool = false
+var visit_result_recorded: bool = false
+
+# 퇴장 Tween이 중복 실행되는 것을 방지한다.
+var exit_animation_running: bool = false
 
 @onready var floor_node = $"../../Floor"
 @onready var build_manager = $"../../BuildManager"
-
+@onready var store_exterior: Node = $"../../StoreExterior"
 @onready var player = get_parent().get_node("Player")
+
+@export_range(0.0, 1.0, 0.05)
+var rumor_activation_chance: float = 1.0
+
 
 
 enum CustomerState {
@@ -28,44 +49,72 @@ enum CustomerState {
 	GO_TO_SHELF,
 	GO_TO_REGISTER,
 	WANDER,
+	WAIT_FOR_SERVICE,
 	RECOVER,
 	GO_TO_EXIT
 }
 
-enum CustomerType {
-	NORMAL,
-	TRAVELER
-}
 
-var customer_type: CustomerType = CustomerType.NORMAL
+var customer_type_id: String = "normal"
+var customer_type_selected: bool = false
 
 var state: int = CustomerState.IDLE
 var moving: bool = false
 
 var target_shelf = null
 var target_register = null
-var target_door = null
 
 var grid_path: Array[Vector2i] = []
 var grid_path_index: int = 0
 
-var current_target_position: Vector2
 var carried_item_id: String = ""
-var wanted_item_id: String = ""
+var carried_amount: int = 0
 
-func _ready():
+var wanted_item_id: String = ""
+var wanted_amount: int = 1
+var wanted_event_id: String = ""
+
+var rumor_event_id: String = ""
+var rumor_icon: Label = null
+var rumor_checked: bool = false
+
+var service_worker: Node = null
+var service_attempted: bool = false
+
+
+# =========================
+# 생명주기와 이동 처리
+# =========================
+
+func _ready() -> void:
 	add_to_group("customer")
 
+	_create_rumor_icon()
 
-func _physics_process(delta):
+	if not GameState.store_event_discovered.is_connected(
+		_on_store_event_discovered
+	):
+		GameState.store_event_discovered.connect(
+			_on_store_event_discovered
+		)
 
-	# 테스트용: Space / Enter로 쇼핑 시작
-	if Input.is_action_just_pressed("ui_accept"):
-		if state == CustomerState.IDLE:
-			start_shopping()
-
+func _physics_process(
+	delta: float
+) -> void:
 	if not moving:
 		velocity = Vector2.ZERO
+		return
+
+	if grid_path.is_empty():
+		moving = false
+		velocity = Vector2.ZERO
+		handle_move_timeout()
+		return
+
+	if grid_path_index >= grid_path.size():
+		moving = false
+		velocity = Vector2.ZERO
+		arrive_at_target()
 		return
 
 	move_elapsed += delta
@@ -74,69 +123,174 @@ func _physics_process(delta):
 		handle_move_timeout()
 		return
 
-
-	if grid_path_index >= grid_path.size():
-		moving = false
-		velocity = Vector2.ZERO
-
-		arrive_at_target()
-		return
-
-
-	var target_cell: Vector2i = (
+	var next_cell: Vector2i = (
 		grid_path[grid_path_index]
 	)
 
-	var target_local: Vector2 = (
-		floor_node.grid_to_local(target_cell)
+	var next_position: Vector2 = (
+		floor_node.to_global(
+			floor_node.grid_to_local(
+				next_cell
+			)
+		)
 	)
 
-	var target_world: Vector2 = (
-		floor_node.to_global(target_local)
+	var arrival_distance: float = maxf(
+		speed * delta,
+		4.0
 	)
 
-	var distance: float = (
-		global_position.distance_to(target_world)
-	)
+	if (
+		global_position.distance_to(
+			next_position
+		)
+		<= arrival_distance
+	):
+		global_position = next_position
+		velocity = Vector2.ZERO
 
-
-	if distance <= 4.0:
-		global_position = target_world
 		grid_path_index += 1
+
+		# 한 칸 이동에 성공했으므로
+		# 정체 감지 시간을 다시 시작
+		move_elapsed = 0.0
+
+		if grid_path_index >= grid_path.size():
+			moving = false
+			arrive_at_target()
+
 		return
 
-
-	var direction: Vector2 = (
-		target_world - global_position
-	).normalized()
-
-	velocity = direction * speed
+	velocity = (
+		global_position.direction_to(
+			next_position
+		)
+		* speed
+	)
 
 	move_and_slide()
 
-func choose_customer_type():
-	var roll: float = randf()
+# =========================
+# 손님 유형과 구매 목표
+# =========================
 
-	if roll < 0.7:
-		customer_type = CustomerType.NORMAL
-	else:
-		customer_type = CustomerType.TRAVELER
+func choose_customer_type() -> void:
+	if customer_type_selected: return
+	customer_type_selected = true
+	var decoration_bonuses: Dictionary = {}
 
-func choose_wanted_item() -> String:
-	var items: Array[String] = (
-		ItemData.get_sellable_items()
+	var manager: Node = get_tree().get_first_node_in_group(
+		"build_manager"
 	)
 
-	if items.is_empty():
+	if is_instance_valid(manager):
+		if manager.has_method("get_customer_weight_bonuses"):
+			decoration_bonuses = manager.call(
+				"get_customer_weight_bonuses"
+			)
+
+	var type_data: Dictionary = (
+		CustomerTypeData.get_random_customer_type(
+			GameState.total_day,
+			decoration_bonuses
+		)
+	)
+
+	if type_data.is_empty():
+		customer_type_id = "normal"
+
+		push_warning(
+			"[손님] 유형 데이터를 선택하지 못해 일반 손님으로 설정"
+		)
+
+		return
+
+	var selected_type_id: String = str(
+		type_data.get(
+			"customer_type_id",
+			""
+		)
+	)
+
+	if selected_type_id.is_empty():
+		customer_type_id = "normal"
+
+		push_warning(
+			"[손님] 선택된 손님 유형 ID가 비어 있습니다."
+		)
+
+		return
+
+	if not CustomerTypeData.has_customer_type(
+		selected_type_id
+	):
+		customer_type_id = "normal"
+
+		push_warning(
+			"[손님] 등록되지 않은 유형: "
+			+ selected_type_id
+		)
+
+		return
+
+	customer_type_id = selected_type_id
+
+func choose_wanted_item() -> String:
+	wanted_amount = 1
+	wanted_event_id = ""
+
+	var request: Dictionary = (
+		CustomerDemandData.get_random_wanted_request(
+			get_customer_type_id(),
+			GameState.total_day
+		)
+	)
+
+	if request.is_empty():
 		return ""
 
-	return items.pick_random()
+	var item_id: String = str(
+		request.get(
+			"item_id",
+			""
+		)
+	)
+
+	if item_id.is_empty():
+		return ""
+
+	wanted_amount = maxi(
+		int(
+			request.get(
+				"amount",
+				1
+			)
+		),
+		1
+	)
+
+	wanted_event_id = str(
+		request.get(
+			"event_id",
+			""
+		)
+	)
+
+	return item_id
 
 func start_shopping():
-	print("손님 쇼핑 시작")
+	# 같은 손님이 중복으로 쇼핑을 시작하지 않도록 방지
+	if visit_recorded or force_exit_requested:
+		return
 
-	player.record_visitor()
+	visit_recorded = true
+	decoration_extra_purchase_checked = false
 
+	choose_customer_type()
+
+	player.record_visitor(
+		get_customer_type_id()
+	)
 
 	# -------------------------
 	# 원하는 상품 결정
@@ -146,32 +300,18 @@ func start_shopping():
 	)
 
 	if sellable_items.is_empty():
-		print("판매 가능한 상품 데이터가 없습니다.")
+		push_error("[손님] 판매 가능한 상품 데이터가 없습니다.")
 		go_to_exit()
 		return
-
-	choose_customer_type()
 
 	wanted_item_id = (
 		choose_wanted_item()
 	)
 
 	if wanted_item_id.is_empty():
-		print("구매 가능한 상품을 선택하지 못했습니다.")
+		push_warning("[손님] 구매 가능한 상품을 선택하지 못했습니다.")
 		go_to_exit()
 		return
-
-	var wanted_data: Dictionary = (
-		ItemData.get_item(wanted_item_id)
-	)
-
-	print(
-		"손님이 원하는 상품: ",
-		wanted_data.get(
-			"name",
-			wanted_item_id
-		)
-	)
 
 	# -------------------------
 	# 원하는 상품이 있는 진열대 검색
@@ -196,21 +336,26 @@ func start_shopping():
 			)
 
 	if available_shelves.is_empty():
-		print(
-			"원하는 상품 재고 없음: ",
-			wanted_item_id
-		)
 
-		player.record_missed_sale()
+		player.record_unmet_demand(
+			wanted_item_id,
+			wanted_amount
+		)
 
 		start_wandering()
 		return
 
-	# 같은 상품을 파는 진열대가 여러 개라면
-	# 그중 하나를 랜덤 선택
-	target_shelf = (
-		available_shelves.pick_random()
+	target_shelf = choose_best_stocked_shelf(
+		available_shelves,
+		wanted_item_id,
+		wanted_amount
 	)
+
+	if target_shelf == null:
+		push_warning("[손님] 상품을 제공할 진열대를 선택하지 못했습니다.")
+
+		start_wandering()
+		return
 
 	# -------------------------
 	# 진열대 접근 셀 검색
@@ -222,61 +367,43 @@ func start_shopping():
 	)
 
 	if shelf_cell == Vector2i(-1, -1):
-		print("진열대에 접근할 수 없습니다.")
+		push_warning("[손님] 진열대에 접근할 수 없습니다.")
 		go_to_exit()
 		return
 
-	print(
-		"진열대 접근 셀: ",
-		shelf_cell
-	)
+
+	if show_movement_debug:
+		print(
+			"진열대 접근 셀: ",
+			shelf_cell
+		)
 
 	state = CustomerState.GO_TO_SHELF
 
 	move_to_cell(shelf_cell)
 
 
-func move_to(target: Vector2):
-	current_target_position = target
-
-	var start_cell: Vector2i = (
-		floor_node.local_to_grid(
-			floor_node.to_local(global_position)
-		)
-	)
-
-	var target_cell: Vector2i = (
-		floor_node.local_to_grid(
-			floor_node.to_local(target)
-		)
-	)
-
-	grid_path = create_astar_grid_path(
-		start_cell,
-		target_cell
-	)
-
-	grid_path_index = 0
-	moving = not grid_path.is_empty()
-	move_elapsed = 0.0
-
-	print(
-		"격자 이동: ",
-		start_cell,
-		" → ",
-		target_cell,
-		" / 경로 ",
-		grid_path
-	)
-
+# =========================
+# 진열대·계산대 이용
+# =========================
 
 func find_register():
 	var registers: Array = (
 		get_tree().get_nodes_in_group("register")
 	)
 
+	var start_cell: Vector2i = (
+		get_current_grid_cell()
+	)
+
+	var best_register = null
+	var best_path_size: int = 2147483647
+
 	for register in registers:
 		if not is_instance_valid(register):
+			continue
+
+		if register.is_queued_for_deletion():
 			continue
 
 		if bool(
@@ -290,9 +417,35 @@ func find_register():
 		if not register.has_meta("anchor"):
 			continue
 
-		return register
+		var checkout_cell: Vector2i = (
+			find_best_checkout_cell(register)
+		)
 
-	return null
+		# 접근 가능한 결제 칸이 없는 계산대 제외
+		if checkout_cell == Vector2i(-1, -1):
+			continue
+
+		if checkout_cell == start_cell:
+			return register
+
+		var path: Array[Vector2i] = (
+			create_astar_grid_path(
+				start_cell,
+				checkout_cell
+			)
+		)
+
+		if path.is_empty():
+			continue
+
+		if path[path.size() - 1] != checkout_cell:
+			continue
+
+		if path.size() < best_path_size:
+			best_path_size = path.size()
+			best_register = register
+
+	return best_register
 
 
 func arrive_at_target():
@@ -304,46 +457,76 @@ func arrive_at_target():
 	match state:
 
 		CustomerState.GO_TO_SHELF:
-			print("진열대 도착")
 
 			velocity = Vector2.ZERO
 
-			print("상품 확인 중...")
-
 			await get_tree().create_timer(
-				shelf_pick_delay
+				shelf_pick_delay,
+				false
 			).timeout
+
+			if force_exit_requested:
+				return
+
+			if state != CustomerState.GO_TO_SHELF:
+				return
 
 			if not is_instance_valid(target_shelf):
 				go_to_exit()
 				return
 
-			carried_item_id = (
-				target_shelf.take_one_item_by_id(
-					wanted_item_id
+			# 재고와 관계없이 상품을 살펴본 뒤 소문 검사
+			if not rumor_checked:
+				rumor_checked = true
+				assign_discoverable_rumor()
+
+			carried_item_id = ""
+			carried_amount = 0
+
+			if target_shelf.has_method(
+				"take_items_by_id"
+			):
+				carried_amount = int(
+					target_shelf.take_items_by_id(
+						wanted_item_id,
+						wanted_amount
+					)
 				)
-			)
 
-			if carried_item_id.is_empty():
-				print("상품을 가져오지 못했습니다.")
+			else:
+				var taken_item_id: String = (
+					target_shelf.take_one_item_by_id(
+						wanted_item_id
+					)
+				)
 
-				state = CustomerState.GO_TO_EXIT
+				if not taken_item_id.is_empty():
+					carried_amount = 1
+
+			if carried_amount <= 0:
 
 				go_to_exit()
 				return
 
-			print(
-				"손님이 상품을 가져감: ",
-				carried_item_id
-			)
+
+			carried_item_id = wanted_item_id
+			try_decoration_extra_purchase()
+
+			if carried_amount < wanted_amount:
+				var missing_amount: int = (
+					wanted_amount
+					- carried_amount
+				)
+
+				player.record_unmet_demand(
+					wanted_item_id,
+					missing_amount
+				)
 
 			target_register = find_register()
 
 			if target_register == null:
-				print("계산대가 없습니다.")
-
-				state = CustomerState.GO_TO_EXIT
-
+				push_warning("[손님] 접근 가능한 계산대가 없습니다.")
 				go_to_exit()
 				return
 
@@ -354,15 +537,15 @@ func arrive_at_target():
 			)
 
 			if register_cell == Vector2i(-1, -1):
-				print("계산대에 접근할 수 없습니다.")
-
+				push_warning("[손님] 계산대에 접근할 수 없습니다.")
 				go_to_exit()
 				return
 
-			print(
-				"계산대 접근 셀: ",
-				register_cell
-			)
+			if show_movement_debug:
+				print(
+					"계산대 접근 셀: ",
+					register_cell
+				)
 
 			state = CustomerState.GO_TO_REGISTER
 
@@ -373,24 +556,34 @@ func arrive_at_target():
 
 			velocity = Vector2.ZERO
 
+			# 원하는 상품이 없어 구경하던 손님이
+			# 처음 멈춘 순간에만 소문 활성화 검사
+			if not rumor_checked:
+				rumor_checked = true
+
+				assign_discoverable_rumor()
+
+			# 구경 중 잠시 대기
 			await get_tree().create_timer(
-				wander_pause_delay
+				wander_pause_delay,
+				false
 			).timeout
 
 			if force_exit_requested:
 				return
 
+			if state != CustomerState.WANDER:
+				return
+
 			wander_moves_remaining -= 1
 
 			if wander_moves_remaining <= 0:
-				print("손님 구경 종료")
 				go_to_exit()
 				return
 
 			move_to_next_wander_cell()
 
 		CustomerState.GO_TO_REGISTER:
-			print("계산대 도착")
 
 			moving = false
 			velocity = Vector2.ZERO
@@ -410,32 +603,46 @@ func arrive_at_target():
 				)
 
 				if accepted:
-					print("계산 기다리는 중...")
 					return
 
-				print("계산대 사용 중 - 대기")
-
+				# 계산대 사용 가능 여부를 다시 확인할 간격
 				await get_tree().create_timer(
-					0.4
+					0.4,
+					false
 				).timeout
 
-				if force_exit_requested:
-					return
+			if force_exit_requested:
+				return
 
-			# 계산대가 사라졌다면 퇴장
+			# 아직 전달하지 않은 소문이 있다면
+			# 계산 후 잠시 가게를 돌아다닌다.
+			if (
+				not rumor_event_id.is_empty()
+				and not GameState.has_discovered_store_event(
+					rumor_event_id
+				)
+			):
+
+				start_wandering()
+				return
+
 			go_to_exit()
 
 		CustomerState.RECOVER:
-			print("우회 위치 도착")
-
 			velocity = Vector2.ZERO
 
+			# 우회 후 원래 목표로 돌아가기 전 대기
 			await get_tree().create_timer(
-				0.3
+				0.3,
+				false
 			).timeout
 
 			if force_exit_requested:
 				return
+
+			if state != CustomerState.RECOVER:
+				return
+
 
 			retry_previous_target()
 
@@ -443,131 +650,110 @@ func arrive_at_target():
 			print("출구 도착")
 			finish_exit()
 
-			carried_item_id = ""
-			target_shelf = null
-			target_register = null
-			target_door = null
 
-			queue_free()
+func checkout_item() -> void:
+	if purchase_completed or visit_result_recorded:
+		return
 
+	if force_exit_requested:
+		return
 
-func checkout_item():
 	if carried_item_id.is_empty():
-		print("계산할 상품이 없습니다.")
+		push_warning("[손님] 계산할 상품이 없습니다.")
 		return
 
-	if not ItemData.has_item(
-		carried_item_id
-	):
-		print(
-			"상품 데이터를 찾을 수 없음: ",
-			carried_item_id
+	if carried_amount <= 0:
+		push_warning("[손님] 계산할 상품 수량이 없습니다.")
+		return
+
+	if not ItemData.has_item(carried_item_id):
+		push_error(
+			"[손님] 상품 데이터를 찾을 수 없습니다: "
+			+ carried_item_id
 		)
+
 		return
 
-	var price: int = (
+	var unit_price: int = (
 		ItemData.get_item_price(
 			carried_item_id
 		)
 	)
 
-	if price <= 0:
-		print(
-			"상품 가격이 없습니다: ",
-			carried_item_id
+	if unit_price <= 0:
+		push_error(
+			"[손님] 상품 가격이 없습니다: "
+			+ carried_item_id
 		)
+
 		return
 
-	player.add_money(price)
-	player.record_successful_sale(price)
+	var total_price: int = (
+		unit_price
+		* carried_amount
+	)
 
-	print(
-		"계산 완료: ",
+	purchase_completed = true
+	visit_result_recorded = true
+
+	player.add_money(
+		total_price
+	)
+
+	player.record_successful_sale(
+		total_price,
 		carried_item_id,
-		" / ",
-		price,
-		"원"
+		carried_amount
 	)
 
+	# 결제 완료 상품은 더 이상 미결제 상태가 아님
+	carried_item_id = ""
+	carried_amount = 0
 
 
-func find_door():
-	var doors: Array = (
-		get_tree().get_nodes_in_group("door")
-	)
-
-	for door in doors:
-		if not is_instance_valid(door):
-			continue
-
-		if bool(
-			door.get_meta(
-				"is_build_preview",
-				false
-			)
-		):
-			continue
-
-		if not door.has_meta("anchor"):
-			continue
-
-		return door
-
-	return null
-	
 func go_to_exit():
+	_return_unpaid_items_to_shelf()
+
+	service_worker = null
+
 	force_exit_requested = true
 
-	target_door = find_door()
-
-	if target_door == null:
-		print("출구 문이 없습니다.")
-		finish_exit()
-		return
-
-	var door_cell: Vector2i = (
-		target_door.get_meta(
-			"anchor"
-		)
-	)
-
-	print(
-		"출구 문 발견: ",
-		target_door.name,
-		" / 셀: ",
-		door_cell
-	)
-
-	# 기존 행동/경로 완전히 취소
+	# 이전 이동 중단
+	moving = false
+	velocity = Vector2.ZERO
 	grid_path.clear()
 	grid_path_index = 0
 	move_elapsed = 0.0
-	velocity = Vector2.ZERO
 
 	state = CustomerState.GO_TO_EXIT
 
-	var current_cell: Vector2i = (
-		get_current_grid_cell()
-	)
+	var exit_cell: Vector2i = find_exit_cell()
 
-	# 이미 문 칸이면 바로 퇴장
-	if current_cell == door_cell:
+	if exit_cell == Vector2i(-1, -1):
+		push_warning("[손님 퇴장] 접근 가능한 출구가 없어 강제 퇴장합니다.")
 		finish_exit()
 		return
 
-	move_to_cell(
-		door_cell
-	)
+	if get_current_grid_cell() == exit_cell:
+		finish_exit()
+		return
 
-	# 경로 생성 자체가 실패한 경우
+	move_to_cell(exit_cell)
+
 	if not moving:
-		print(
-			"[손님 퇴장] 출구 경로 생성 실패 → 강제 퇴장"
-		)
-
+		push_warning("[손님 퇴장] 출구 경로 생성에 실패해 강제 퇴장합니다.")
 		finish_exit()
 
-func finish_exit():
+func finish_exit() -> void:
+	if is_queued_for_deletion():
+		return
+
+	if exit_animation_running:
+		return
+
+	force_exit_requested = true
+	service_worker = null
+
 	moving = false
 	velocity = Vector2.ZERO
 
@@ -575,14 +761,174 @@ func finish_exit():
 	grid_path_index = 0
 	move_elapsed = 0.0
 
-	carried_item_id = ""
+	state = CustomerState.GO_TO_EXIT
+
+	_return_unpaid_items_to_shelf()
+
+	# 미결제 상품이 남아 있으면 퇴장할 수 없다.
+	if (
+		not carried_item_id.is_empty()
+		and carried_amount > 0
+	):
+		push_error(
+			"[손님 퇴장] 미결제 상품이 남아 있어 퇴장을 보류합니다."
+		)
+		return
+
+	exit_animation_running = true
+
+	# 방문 결과는 퇴장 연출 시작 시 한 번만 기록한다.
+	_record_final_visit_result()
+
 	target_shelf = null
 	target_register = null
-	target_door = null
 
-	print("손님 쇼핑 완료 / 퇴장")
+	rumor_event_id = ""
+	_refresh_rumor_icon()
 
-	queue_free()
+	var exit_door: Node = (
+		find_nearest_exit_door()
+	)
+
+	if not is_instance_valid(
+		exit_door
+	):
+		queue_free()
+		return
+
+	if not is_instance_valid(
+		store_exterior
+	):
+		queue_free()
+		return
+
+	if not store_exterior.has_method(
+		"get_sidewalk_approach_position_for_door"
+	):
+		queue_free()
+		return
+
+	if not store_exterior.has_method(
+		"get_sidewalk_spawn_position_for_door"
+	):
+		queue_free()
+		return
+
+	# 문 안쪽 위치
+	var inside_position: Vector2 = (
+		exit_door.call(
+			"get_customer_target_position"
+		)
+	)
+
+	# 문 바로 바깥 위치
+	var outside_position: Vector2 = (
+		exit_door.call(
+			"get_customer_spawn_position"
+		)
+	)
+
+	# 문에서 보도로 진입하는 위치
+	var sidewalk_approach_position: Vector2 = (
+		store_exterior.call(
+			"get_sidewalk_approach_position_for_door",
+			exit_door
+		)
+	)
+
+	# 보도 끝의 퇴장 위치
+	var sidewalk_exit_position: Vector2 = (
+		store_exterior.call(
+			"get_sidewalk_spawn_position_for_door",
+			exit_door
+		)
+	)
+
+	var safe_speed: float = maxf(
+		speed,
+		1.0
+	)
+
+	# 길찾기 도착 지점에서 정확한 문 위치까지
+	var inside_duration: float = clampf(
+		global_position.distance_to(
+			inside_position
+		) / safe_speed,
+		0.1,
+		0.6
+	)
+
+	# 문 밖에서 보도까지
+	var yard_duration: float = clampf(
+		outside_position.distance_to(
+			sidewalk_approach_position
+		) / safe_speed,
+		0.3,
+		2.0
+	)
+
+	# 보도를 따라 화면 밖으로 이동
+	var sidewalk_duration: float = clampf(
+		sidewalk_approach_position.distance_to(
+			sidewalk_exit_position
+		) / safe_speed,
+		0.4,
+		3.0
+	)
+
+	var exit_tween: Tween = (
+		create_tween()
+	)
+
+	exit_tween.set_trans(
+		Tween.TRANS_LINEAR
+	)
+
+	# 1단계: 정확한 문 안쪽으로 이동
+	exit_tween.tween_property(
+		self,
+		"global_position",
+		inside_position,
+		inside_duration
+	)
+
+	# 2단계: 문을 통과
+	exit_tween.tween_property(
+		self,
+		"global_position",
+		outside_position,
+		0.45
+	)
+
+	# 3단계: 앞마당을 지나 보도로 이동
+	exit_tween.tween_property(
+		self,
+		"global_position",
+		sidewalk_approach_position,
+		yard_duration
+	)
+
+	# 보도에 도착한 뒤 잠시 방향 전환
+	exit_tween.tween_interval(
+		0.1
+	)
+
+	# 4단계: 보도를 따라 외부 끝으로 이동
+	exit_tween.tween_property(
+		self,
+		"global_position",
+		sidewalk_exit_position,
+		sidewalk_duration
+	)
+
+	await exit_tween.finished
+
+	if is_instance_valid(self):
+		queue_free()
+
+# =========================
+# 격자 길찾기
+# =========================
 
 func create_astar_grid_path(
 	start_cell: Vector2i,
@@ -643,11 +989,6 @@ func create_astar_grid_path(
 	)
 
 	if goal_cell.x < 0:
-		print(
-			"이동 가능한 목표 셀을 찾지 못함: ",
-			target_cell
-		)
-
 		return []
 
 	var path: Array[Vector2i] = (
@@ -657,14 +998,15 @@ func create_astar_grid_path(
 		)
 	)
 
-	print(
-		"A* 경로: ",
-		start_cell,
-		" → ",
-		goal_cell,
-		" / ",
-		path
-	)
+	if show_movement_debug:
+		print(
+			"A* 경로: ",
+			start_cell,
+			" → ",
+			goal_cell,
+			" / ",
+			path
+		)
 
 	return path
 
@@ -710,76 +1052,25 @@ func get_current_grid_cell() -> Vector2i:
 	
 	
 
-func find_best_access_cell(
-	furniture
-) -> Vector2i:
-
-	var candidates: Array[Vector2i] = (
-		build_manager.get_adjacent_walkable_cells(
-			furniture
-		)
-	)
-
-	if candidates.is_empty():
-		return Vector2i(-1, -1)
-
-	var start_cell: Vector2i = (
-		get_current_grid_cell()
-	)
-
-	var best_cell := Vector2i(-1, -1)
-	var best_path_size: int = 999999
-
-	for candidate in candidates:
-
-		# 현재 손님이 서 있는 칸은
-		# 계산대 접근 위치로 사용하지 않는다.
-		if candidate == start_cell:
-			continue
-
-		var test_path: Array[Vector2i] = (
-			create_astar_grid_path(
-				start_cell,
-				candidate
-			)
-		)
-
-		# 이동 불가능
-		if test_path.is_empty():
-			continue
-
-		# 시작 셀 하나뿐인 경로도 제외
-		if test_path.size() <= 1:
-			continue
-
-		if test_path.size() < best_path_size:
-			best_path_size = test_path.size()
-			best_cell = candidate
-
-	print(
-		"접근 셀 선택 / 현재: ",
-		start_cell,
-		" / 목표: ",
-		best_cell,
-		" / 거리: ",
-		best_path_size
-	)
-
-	return best_cell
-
-
 func move_to_cell(
 	target_cell: Vector2i
-):
-	var start_cell: Vector2i = (
-		get_current_grid_cell()
-	)
+) -> void:
+	var start_cell: Vector2i = get_current_grid_cell()
+
+	moving = false
+	velocity = Vector2.ZERO
+	grid_path.clear()
+	grid_path_index = 0
+	move_elapsed = 0.0
 
 	if target_cell == start_cell:
-		print(
-			"이동 취소: 현재 셀과 목표 셀이 같음 ",
-			start_cell
-		)
+		if show_movement_debug:
+			print(
+				"이미 목표 셀에 도착: ",
+				start_cell
+			)
+
+		arrive_at_target()
 		return
 
 	grid_path = create_astar_grid_path(
@@ -787,98 +1078,44 @@ func move_to_cell(
 		target_cell
 	)
 
-	grid_path_index = 0
 	moving = not grid_path.is_empty()
-	move_elapsed = 0.0
 
-	print(
-		"셀 이동: ",
-		start_cell,
-		" → ",
-		target_cell,
-		" / 경로: ",
-		grid_path
-	)
+	if show_movement_debug:
+		print(
+			"셀 이동: ",
+			start_cell,
+			" → ",
+			target_cell,
+			" / 경로: ",
+			grid_path
+		)
+
+	if not moving:
+		handle_move_timeout()
 
 func find_best_checkout_cell(
 	register
 ) -> Vector2i:
+	if not is_instance_valid(register):
+		return Vector2i(-1, -1)
 
 	var candidates: Array[Vector2i] = (
 		register.get_checkout_cells()
 	)
 
-	var start_cell: Vector2i = (
-		get_current_grid_cell()
-	)
-
-	var best_cell := Vector2i(-1, -1)
-	var best_path_size: int = 999999
-
-	for candidate in candidates:
-		if not floor_node.is_cell_inside(candidate):
-			continue
-
-		if build_manager.is_cell_blocked_for_customer(
-			candidate
-		):
-			continue
-
-		var path: Array[Vector2i] = (
-			create_astar_grid_path(
-				start_cell,
-				candidate
-			)
-		)
-
-		if path.is_empty():
-			continue
-
-		if path.size() < best_path_size:
-			best_path_size = path.size()
-			best_cell = candidate
-
-	return best_cell
+	return find_best_reachable_cell(candidates)
 
 func find_best_shelf_access_cell(
 	shelf
 ) -> Vector2i:
+	if not is_instance_valid(shelf):
+		return Vector2i(-1, -1)
 
 	var candidates: Array[Vector2i] = (
 		shelf.get_customer_access_cells()
 	)
 
-	var start_cell: Vector2i = (
-		get_current_grid_cell()
-	)
-
-	var best_cell := Vector2i(-1, -1)
-	var best_path_size: int = 999999
-
-	for candidate in candidates:
-		if not floor_node.is_cell_inside(candidate):
-			continue
-
-		if build_manager.is_cell_blocked_for_customer(
-			candidate
-		):
-			continue
-
-		var path: Array[Vector2i] = (
-			create_astar_grid_path(
-				start_cell,
-				candidate
-			)
-		)
-
-		if path.is_empty():
-			continue
-
-		if path.size() < best_path_size:
-			best_path_size = path.size()
-			best_cell = candidate
-
-	return best_cell
+	return find_best_reachable_cell(candidates)
 
 func find_random_walkable_cell() -> Vector2i:
 	var start_cell: Vector2i = (
@@ -928,11 +1165,6 @@ func start_wandering():
 
 	state = CustomerState.WANDER
 
-	print(
-		"손님 구경 시작 / 이동 횟수: ",
-		wander_moves_remaining
-	)
-
 	move_to_next_wander_cell()
 	
 func move_to_next_wander_cell():
@@ -941,14 +1173,15 @@ func move_to_next_wander_cell():
 	)
 
 	if target_cell == Vector2i(-1, -1):
-		print("구경할 위치를 찾지 못함")
+		push_warning("[손님] 구경할 위치를 찾지 못해 퇴장합니다.")
 		go_to_exit()
 		return
 
-	print(
-		"구경 위치: ",
-		target_cell
-	)
+	if show_movement_debug:
+		print(
+			"구경 위치: ",
+			target_cell
+		)
 
 	move_to_cell(target_cell)
 
@@ -958,11 +1191,12 @@ func complete_checkout_by_worker():
 
 	checkout_item()
 
-	print("직원이 계산 완료")
-
+	# 계산 완료 후 퇴장하기 전 대기
 	await get_tree().create_timer(
-		checkout_finish_delay
+		checkout_finish_delay,
+		false
 	).timeout
+
 
 	# 기다리는 동안 폐점 명령을 받았다면
 	# 쇼핑을 다시 진행하지 않음
@@ -972,12 +1206,6 @@ func complete_checkout_by_worker():
 	go_to_exit()
 
 func handle_move_timeout():
-	print(
-		"이동 시간 초과 / 상태: ",
-		state,
-		" / 재시도: ",
-		move_retry_count
-	)
 
 	moving = false
 	velocity = Vector2.ZERO
@@ -993,23 +1221,17 @@ func handle_move_timeout():
 		or state == CustomerState.GO_TO_EXIT
 	):
 		if move_retry_count > max_move_retries:
-			print(
-				"[손님 퇴장] 이동 실패 반복 → 강제 퇴장"
-			)
+			push_warning("[손님 퇴장] 이동 실패가 반복되어 강제 퇴장합니다.")
 
 			move_retry_count = 0
 			finish_exit()
 			return
 
-		print(
-			"[손님 퇴장] 출구 이동 재시도"
-		)
-
 		go_to_exit()
 		return
 
 	if move_retry_count > max_move_retries:
-		print("이동 재시도 한도 초과 → 퇴장")
+		push_warning("[손님] 이동 재시도 한도를 초과해 퇴장합니다.")
 
 		move_retry_count = 0
 		go_to_exit()
@@ -1022,18 +1244,13 @@ func handle_move_timeout():
 	)
 
 	if escape_cell == Vector2i(-1, -1):
-		print("우회할 위치를 찾지 못함")
+		push_warning("[손님] 우회할 위치를 찾지 못해 퇴장합니다.")
 		go_to_exit()
 		return
 
-	print(
-		"잠시 다른 위치로 우회: ",
-		escape_cell
-	)
-
 	state = CustomerState.RECOVER
 	move_to_cell(escape_cell)
-	
+
 func retry_previous_target():
 	match recover_from_state:
 
@@ -1086,3 +1303,696 @@ func retry_previous_target():
 
 		_:
 			go_to_exit()
+
+
+func find_best_reachable_cell(
+	candidates: Array[Vector2i]
+) -> Vector2i:
+	var start_cell: Vector2i = (
+		get_current_grid_cell()
+	)
+
+	var best_cell := Vector2i(-1, -1)
+	var best_path_size: int = 2147483647
+
+	for candidate in candidates:
+		if not floor_node.is_cell_inside(candidate):
+			continue
+
+		if build_manager.is_cell_blocked_for_customer(
+			candidate
+		):
+			continue
+
+		# 이미 접근 칸에 서 있다면 이동할 필요 없음
+		if candidate == start_cell:
+			return candidate
+
+		var path: Array[Vector2i] = (
+			create_astar_grid_path(
+				start_cell,
+				candidate
+			)
+		)
+
+		if path.is_empty():
+			continue
+
+		# 접근 칸 대신 다른 칸으로 향하는 경로 제외
+		if path[path.size() - 1] != candidate:
+			continue
+
+		if path.size() < best_path_size:
+			best_path_size = path.size()
+			best_cell = candidate
+
+	return best_cell
+
+func find_exit_cell() -> Vector2i:
+	return exit_path_selector.find_exit_cell(
+		get_tree().get_nodes_in_group("door"),
+		get_current_grid_cell(),
+		floor_node,
+		Callable(
+			build_manager,
+			"is_cell_blocked_for_customer"
+		),
+		Callable(self, "create_astar_grid_path")
+	)
+
+func get_customer_type_id() -> String:
+	return customer_type_id
+
+# 손님이 도착한 위치에서 가장 가까운 일반 출입문을 찾는다.
+func find_nearest_exit_door() -> Node:
+	var nearest_door: Node = null
+	var nearest_distance: float = INF
+
+	var doors: Array = (
+		get_tree().get_nodes_in_group(
+			"door"
+		)
+	)
+
+	for door in doors:
+		if not is_instance_valid(door):
+			continue
+
+		if door.is_queued_for_deletion():
+			continue
+
+		if bool(
+			door.get_meta(
+				"is_build_preview",
+				false
+			)
+		):
+			continue
+
+		if not door.has_meta("anchor"):
+			continue
+
+		if not door.has_method(
+			"get_customer_target_position"
+		):
+			continue
+
+		if not door.has_method(
+			"get_customer_spawn_position"
+		):
+			continue
+
+		if not door.has_method(
+			"get_customer_arrival_position"
+		):
+			continue
+
+		var inside_position: Vector2 = (
+			door.call(
+				"get_customer_target_position"
+			)
+		)
+
+		var distance: float = (
+			global_position.distance_to(
+				inside_position
+			)
+		)
+
+		if distance >= nearest_distance:
+			continue
+
+		nearest_distance = distance
+		nearest_door = door
+
+	return nearest_door
+
+# =========================
+# 소문 이벤트
+# =========================
+
+func assign_discoverable_rumor() -> void:
+	rumor_event_id = ""
+	_refresh_rumor_icon()
+
+
+	var candidates: Array[Dictionary] = (
+		StoreEventData.get_discoverable_events(
+			GameState.total_day,
+			customer_type_id
+		)
+	)
+
+	if candidates.is_empty():
+		return
+
+	# 이 손님에게 소문 아이콘이 나타날지 확률 판정
+	var roll: float = randf()
+
+	if roll >= rumor_activation_chance:
+		return
+
+	var selected_event: Dictionary = (
+		candidates.pick_random()
+	)
+
+	rumor_event_id = str(
+		selected_event.get(
+			"event_id",
+			""
+		)
+	)
+
+	if rumor_event_id.is_empty():
+		return
+
+	_refresh_rumor_icon()
+
+
+func _create_rumor_icon() -> void:
+	rumor_icon = Label.new()
+
+	rumor_icon.text = "!"
+	rumor_icon.position = Vector2(
+		-14,
+		-54
+	)
+
+	rumor_icon.size = Vector2(
+		28,
+		28
+	)
+
+	rumor_icon.horizontal_alignment = (
+		HORIZONTAL_ALIGNMENT_CENTER
+	)
+
+	rumor_icon.vertical_alignment = (
+		VERTICAL_ALIGNMENT_CENTER
+	)
+
+	rumor_icon.mouse_filter = (
+		Control.MOUSE_FILTER_IGNORE
+	)
+
+	rumor_icon.z_index = 50
+
+	rumor_icon.add_theme_font_size_override(
+		"font_size",
+		22
+	)
+
+	rumor_icon.add_theme_color_override(
+		"font_color",
+		Color(
+			1.0,
+			0.9,
+			0.2
+		)
+	)
+
+	rumor_icon.add_theme_color_override(
+		"font_outline_color",
+		Color.BLACK
+	)
+
+	rumor_icon.add_theme_constant_override(
+		"outline_size",
+		4
+	)
+
+	var icon_background := StyleBoxFlat.new()
+
+	icon_background.bg_color = Color(
+		0.12,
+		0.12,
+		0.14,
+		0.95
+	)
+
+	icon_background.border_color = Color(
+		1.0,
+		0.85,
+		0.15,
+		1.0
+	)
+
+	icon_background.set_border_width_all(2)
+
+	icon_background.corner_radius_top_left = 14
+	icon_background.corner_radius_top_right = 14
+	icon_background.corner_radius_bottom_left = 14
+	icon_background.corner_radius_bottom_right = 14
+
+	rumor_icon.add_theme_stylebox_override(
+		"normal",
+		icon_background
+	)
+
+	add_child(
+		rumor_icon
+	)
+
+	_refresh_rumor_icon()
+
+
+func _refresh_rumor_icon() -> void:
+	if not is_instance_valid(rumor_icon):
+		return
+
+	rumor_icon.visible = (
+		not rumor_event_id.is_empty()
+	)
+
+func _on_store_event_discovered(
+	event_id: String,
+	_discovery_day: int
+) -> void:
+	if rumor_event_id != event_id:
+		return
+
+	rumor_event_id = ""
+
+	_refresh_rumor_icon()
+
+func can_share_rumor() -> bool:
+	if rumor_event_id.is_empty():
+		return false
+
+	if GameState.has_discovered_store_event(
+		rumor_event_id
+	):
+		return false
+
+	return StoreEventData.has_event(
+		rumor_event_id
+	)
+
+
+func share_rumor_event() -> Dictionary:
+	if not can_share_rumor():
+		return {}
+
+	var event_data: Dictionary = (
+		StoreEventData.get_event(
+			rumor_event_id
+		)
+	)
+
+	if event_data.is_empty():
+		return {}
+
+	var event_id: String = rumor_event_id
+
+	var discovered: bool = (
+		GameState.discover_store_event(
+			event_id
+		)
+	)
+
+	if not discovered:
+		return {}
+
+	# 발견 신호에 의해서도 지워지지만
+	# 현재 손님의 상태도 확실히 정리
+	rumor_event_id = ""
+	_refresh_rumor_icon()
+
+	return event_data
+
+func choose_best_stocked_shelf(
+	available_shelves: Array,
+	item_id: String,
+	requested_amount: int
+):
+	var enough_shelves: Array = []
+	var partial_shelves: Array = []
+
+	var highest_partial_stock: int = 0
+
+	for shelf in available_shelves:
+		if not is_instance_valid(shelf):
+			continue
+
+		var shelf_stock: int = 1
+
+		if shelf.has_method(
+			"get_item_stock"
+		):
+			shelf_stock = int(
+				shelf.get_item_stock(
+					item_id
+				)
+			)
+
+		if shelf_stock >= requested_amount:
+			enough_shelves.append(
+				shelf
+			)
+
+			continue
+
+		if shelf_stock > highest_partial_stock:
+			highest_partial_stock = shelf_stock
+
+			partial_shelves.clear()
+			partial_shelves.append(
+				shelf
+			)
+
+		elif shelf_stock == highest_partial_stock:
+			partial_shelves.append(
+				shelf
+			)
+
+	# 요구 수량을 전부 제공할 수 있는 진열대 우선
+	if not enough_shelves.is_empty():
+		return enough_shelves.pick_random()
+
+	# 전부 제공할 수 없다면 재고가 가장 많은 진열대 선택
+	if not partial_shelves.is_empty():
+		return partial_shelves.pick_random()
+
+	return null
+
+func _return_unpaid_items_to_shelf() -> void:
+	if carried_item_id.is_empty():
+		return
+
+	if carried_amount <= 0:
+		carried_item_id = ""
+		carried_amount = 0
+		return
+
+	# 먼저 원래 진열대에 반환
+	var returned_amount: int = 0
+
+	if is_instance_valid(target_shelf):
+		if not target_shelf.is_queued_for_deletion():
+			if target_shelf.has_method("return_items_by_id"):
+				returned_amount = int(
+					target_shelf.return_items_by_id(
+						carried_item_id,
+						carried_amount
+					)
+				)
+
+	returned_amount = clampi(
+		returned_amount,
+		0,
+		carried_amount
+	)
+
+	carried_amount -= returned_amount
+
+	# 진열대에 전부 반환했다면 처리 완료
+	if carried_amount == 0:
+		carried_item_id = ""
+		return
+
+	# 등록되지 않은 상품은 보존하고 오류 표시
+	if not ItemData.has_item(carried_item_id):
+		push_error(
+			"[손님] 미결제 상품 회수 실패 / 미등록 아이템: "
+			+ carried_item_id
+			+ " ×"
+			+ str(carried_amount)
+		)
+		return
+
+	# 진열대가 없거나 가득 찼으면 공용 재고로 회수
+	var recovered_item_id: String = carried_item_id
+	var recovered_amount: int = carried_amount
+
+	GameState.add_item(
+		recovered_item_id,
+		recovered_amount
+	)
+
+	# 회수 완료 후 비워서 중복 반환 방지
+	carried_item_id = ""
+	carried_amount = 0
+
+
+# =========================
+# 직원 응대와 추천 구매
+# =========================
+
+func needs_employee_service() -> bool:
+	return (
+		state == CustomerState.WANDER
+		and not service_attempted
+		and not is_instance_valid(service_worker)
+		and carried_item_id.is_empty()
+		and not force_exit_requested
+	)
+
+
+func try_reserve_employee_service(
+	worker: Node
+) -> bool:
+	if not is_instance_valid(worker):
+		return false
+
+	if not needs_employee_service():
+		return false
+
+	service_worker = worker
+	service_attempted = true
+
+	# 직원이 접근하는 동안 고객은 현재 위치에서 기다림
+	moving = false
+	velocity = Vector2.ZERO
+	grid_path.clear()
+	grid_path_index = 0
+	move_elapsed = 0.0
+
+	state = CustomerState.WAIT_FOR_SERVICE
+
+	return true
+
+
+func cancel_employee_service(
+	worker: Node
+) -> void:
+	if service_worker != worker:
+		return
+
+	service_worker = null
+
+	if force_exit_requested:
+		return
+
+	start_wandering()
+
+
+func complete_employee_service(
+	worker: Node,
+	success_chance: float
+) -> bool:
+	if service_worker != worker:
+		return false
+
+	if state != CustomerState.WAIT_FOR_SERVICE:
+		service_worker = null
+		return false
+
+	service_worker = null
+
+	var normalized_chance: float = clampf(
+		success_chance,
+		0.0,
+		1.0
+	)
+
+	var roll: float = randf()
+
+	if roll >= normalized_chance:
+		start_wandering()
+		return false
+
+	if not _start_recommended_purchase():
+		start_wandering()
+		return false
+
+	return true
+
+
+func _start_recommended_purchase() -> bool:
+	var sellable_items: Array[String] = (
+		ItemData.get_sellable_items()
+	)
+
+	if sellable_items.is_empty():
+		return false
+
+	# 매번 같은 상품만 추천되지 않도록 순서를 섞음
+	sellable_items.shuffle()
+
+	var shelves: Array = (
+		get_tree().get_nodes_in_group("shelf")
+	)
+
+	for candidate_item_id in sellable_items:
+		if candidate_item_id.is_empty():
+			continue
+
+		# 처음 원했던 품목은 대체 상품에서 제외
+		if candidate_item_id == wanted_item_id:
+			continue
+
+		var available_shelves: Array = []
+
+		for shelf in shelves:
+			if not is_instance_valid(shelf):
+				continue
+
+			if shelf.is_queued_for_deletion():
+				continue
+
+			if bool(
+				shelf.get_meta(
+					"is_build_preview",
+					false
+				)
+			):
+				continue
+
+			if not shelf.has_method(
+				"has_item_in_stock"
+			):
+				continue
+
+			if shelf.has_item_in_stock(
+				candidate_item_id
+			):
+				available_shelves.append(shelf)
+
+		if available_shelves.is_empty():
+			continue
+
+		var recommended_shelf = (
+			choose_best_stocked_shelf(
+				available_shelves,
+				candidate_item_id,
+				1
+			)
+		)
+
+		if not is_instance_valid(
+			recommended_shelf
+		):
+			continue
+
+		var shelf_cell: Vector2i = (
+			find_best_shelf_access_cell(
+				recommended_shelf
+			)
+		)
+
+		if shelf_cell == Vector2i(-1, -1):
+			continue
+
+		wanted_item_id = candidate_item_id
+		wanted_amount = 1
+		wanted_event_id = ""
+		target_shelf = recommended_shelf
+
+		state = CustomerState.GO_TO_SHELF
+		move_to_cell(shelf_cell)
+
+		return true
+
+	return false
+
+# =========================
+# 치장 추가 구매와 최종 통계
+# =========================
+
+func try_decoration_extra_purchase() -> void:
+	# 방문당 한 번만 검사
+	if decoration_extra_purchase_checked:
+		return
+
+	decoration_extra_purchase_checked = true
+
+	if not is_instance_valid(target_shelf):
+		return
+
+	if carried_item_id.is_empty():
+		return
+
+	# 원래 요구량도 확보하지 못했다면 추가 구매하지 않음
+	if carried_amount < wanted_amount:
+		return
+
+	if not target_shelf.has_method("get_item_stock"):
+		return
+
+	if not target_shelf.has_method("take_items_by_id"):
+		return
+
+	var remaining_stock: int = int(
+		target_shelf.get_item_stock(carried_item_id)
+	)
+
+	if remaining_stock <= 0:
+		return
+
+	var manager: Node = get_tree().get_first_node_in_group(
+		"build_manager"
+	)
+
+	if not is_instance_valid(manager):
+		return
+
+	if not manager.has_method("get_decoration_effect"):
+		return
+
+	var chance: float = float(
+		manager.call(
+			"get_decoration_effect",
+			"purchase_desire"
+		)
+	)
+
+	if not is_finite(chance):
+		return
+
+	# effect_value 0.20 = 추가 구매 확률 20%
+	chance = clampf(chance, 0.0, 1.0)
+
+	if chance <= 0.0:
+		return
+
+	if randf() >= chance:
+		return
+
+	var added_amount: int = int(
+		target_shelf.take_items_by_id(
+			carried_item_id,
+			1
+		)
+	)
+
+	if added_amount <= 0:
+		return
+
+	carried_amount += added_amount
+
+func _record_final_visit_result() -> void:
+	if not visit_recorded:
+		return
+
+	if visit_result_recorded:
+		return
+
+	visit_result_recorded = true
+
+	if purchase_completed:
+		return
+
+	if is_instance_valid(player):
+		# 상품 부족 수요는 앞에서 별도로 기록했으므로
+		# 여기에서는 실패 인원만 증가
+		player.record_missed_sale()

@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://ha2niuej4nnl"]
+
+[ext_resource type="Script" uid="uid://dojqwanr0xw8k" path="res://script/objects/production/production_facility.gd" id="1_uttqr"]
+
+[ext_resource type="Script" path="res://script/objects/production/production_facility_visual.gd" id="2_visual"]
+[ext_resource type="Script" path="res://script/objects/shop/furniture_collision.gd" id="3_collision"]
+
+[node name="ProductionFacility" type="StaticBody2D" unique_id=1309936626]
+script = ExtResource("1_uttqr")
+
+[node name="Visual" type="Node2D" parent="."]
+script = ExtResource("2_visual")
+
+[node name="Label" type="Label" parent="." unique_id=1314089241]
+offset_right = 140.0
+offset_bottom = 46.0
+size_flags_horizontal = 4
+offset_transform_enabled = true
+offset_transform_position = Vector2(-70, 30)
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 12
+text = "생산 설비"
+
+[node name="StatusLabel" type="Label" parent="."]
+offset_left = -80.0
+offset_top = -116.0
+offset_right = 80.0
+offset_bottom = -90.0
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+text = "대기 중"
+horizontal_alignment = 1
+
+[node name="Collision" type="CollisionPolygon2D" parent="." unique_id=1865090812]
+script = ExtResource("3_collision")

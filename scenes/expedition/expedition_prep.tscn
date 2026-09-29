@@ -1,0 +1,259 @@
+[gd_scene format=3 uid="uid://b21oveokrf4c"]
+
+[ext_resource type="Script" uid="uid://bcl67a4kob1jx" path="res://script/ui/expedition/expedition_prep.gd" id="1_script"]
+[ext_resource type="PackedScene" uid="uid://dkpmxf76nbk5n" path="res://scenes/expedition/prep/prep_bag.tscn" id="2_bag"]
+[ext_resource type="PackedScene" uid="uid://dm2esspgxul17" path="res://scenes/expedition/prep/prep_map.tscn" id="3_map"]
+[ext_resource type="Texture2D" path="res://art/ui/pixel_theme/panel_inset.png" id="4_panel"]
+[ext_resource type="Texture2D" path="res://art/ui/pixel_theme/button_normal.png" id="5_button_normal"]
+[ext_resource type="Texture2D" path="res://art/ui/pixel_theme/button_hover.png" id="6_button_hover"]
+[ext_resource type="Texture2D" path="res://art/ui/pixel_theme/button_pressed.png" id="7_button_pressed"]
+[ext_resource type="Texture2D" path="res://art/ui/pixel_theme/button_disabled.png" id="8_button_disabled"]
+[ext_resource type="Texture2D" path="res://art/ui/pixel_theme/icon_close_large.png" id="9_close"]
+
+[sub_resource type="StyleBoxTexture" id="RegionCardStyle"]
+texture = ExtResource("4_panel")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxEmpty" id="CloseStyle"]
+
+[sub_resource type="StyleBoxTexture" id="StartStyle"]
+texture = ExtResource("5_button_normal")
+texture_margin_left = 8.0
+texture_margin_top = 4.0
+texture_margin_right = 8.0
+texture_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxTexture" id="StartHover"]
+texture = ExtResource("6_button_hover")
+texture_margin_left = 8.0
+texture_margin_top = 4.0
+texture_margin_right = 8.0
+texture_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxTexture" id="StartPressed"]
+texture = ExtResource("7_button_pressed")
+texture_margin_left = 8.0
+texture_margin_top = 4.0
+texture_margin_right = 8.0
+texture_margin_bottom = 4.0
+
+[sub_resource type="StyleBoxTexture" id="StartDisabled"]
+texture = ExtResource("8_button_disabled")
+texture_margin_left = 8.0
+texture_margin_top = 4.0
+texture_margin_right = 8.0
+texture_margin_bottom = 4.0
+
+[node name="PrepPanel" type="Control" unique_id=69940936]
+mouse_filter = 0
+script = ExtResource("1_script")
+
+[node name="MapContent" parent="." unique_id=1982723152 instance=ExtResource("3_map")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BagScrim" type="ColorRect" parent="."]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.05, 0.08, 0.06, 0.14)
+
+[node name="BagContent" parent="." unique_id=1628860483 instance=ExtResource("2_bag")]
+visible = false
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -664.0
+offset_top = -444.0
+offset_right = -24.0
+offset_bottom = -24.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="RegionInfoCard" type="PanelContainer" parent="."]
+texture_filter = 1
+visible = false
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 96.0
+offset_top = -330.0
+offset_right = 400.0
+offset_bottom = -24.0
+theme_override_styles/panel = SubResource("RegionCardStyle")
+
+[node name="CardMargin" type="MarginContainer" parent="RegionInfoCard"]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 18
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 18
+
+[node name="CardColumn" type="VBoxContainer" parent="RegionInfoCard/CardMargin"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="BackToMapButton" type="Button" parent="RegionInfoCard/CardMargin/CardColumn"]
+custom_minimum_size = Vector2(86, 32)
+layout_mode = 2
+size_flags_horizontal = 0
+text = "← 지도"
+theme_override_font_sizes/font_size = 15
+theme_override_colors/font_color = Color(0.22, 0.13, 0.08, 1)
+theme_override_colors/font_hover_color = Color(0.22, 0.13, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.96, 0.81, 1)
+theme_override_styles/normal = SubResource("StartStyle")
+theme_override_styles/hover = SubResource("StartHover")
+theme_override_styles/pressed = SubResource("StartPressed")
+
+[node name="RegionNameLabel" type="Label" parent="RegionInfoCard/CardMargin/CardColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.97, 0.9, 0.72, 1)
+theme_override_font_sizes/font_size = 24
+text = "지역 이름"
+autowrap_mode = 3
+
+[node name="RegionDescriptionLabel" type="Label" parent="RegionInfoCard/CardMargin/CardColumn"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.94, 0.92, 0.84, 1)
+theme_override_font_sizes/font_size = 16
+text = "지역 설명"
+autowrap_mode = 3
+
+[node name="RegionRequirementLabel" type="Label" parent="RegionInfoCard/CardMargin/CardColumn"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.39, 1)
+theme_override_font_sizes/font_size = 14
+text = "입장 조건"
+autowrap_mode = 3
+
+[node name="CardDivider" type="HSeparator" parent="RegionInfoCard/CardMargin/CardColumn"]
+layout_mode = 2
+
+[node name="DifficultyLabel" type="Label" parent="RegionInfoCard/CardMargin/CardColumn"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.96, 0.76, 0.39, 1)
+theme_override_font_sizes/font_size = 17
+text = "난이도"
+
+[node name="Header" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = -1
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 22.0
+offset_top = 12.0
+offset_right = 295.0
+offset_bottom = 78.0
+
+[node name="HeaderColumn" type="VBoxContainer" parent="Header"]
+layout_mode = 2
+
+[node name="PrepTitleLabel" type="Label" parent="Header/HeaderColumn" unique_id=65906578]
+layout_mode = 2
+text = "원정 지도"
+theme_override_font_sizes/font_size = 22
+
+[node name="DestinationLabel" type="Label" parent="Header/HeaderColumn"]
+layout_mode = 2
+text = "이번 원정: 지역 선택"
+
+[node name="ModeTabs" type="HBoxContainer" parent="."]
+visible = false
+anchors_preset = -1
+anchor_left = 0.0
+anchor_top = 0.0
+anchor_right = 0.0
+anchor_bottom = 0.0
+offset_left = 312.0
+offset_top = 24.0
+offset_right = 563.0
+offset_bottom = 67.0
+
+[node name="MapTabButton" type="Button" parent="ModeTabs" unique_id=381657183]
+custom_minimum_size = Vector2(112, 40)
+layout_mode = 2
+toggle_mode = true
+text = "목적지"
+
+[node name="BagTabButton" type="Button" parent="ModeTabs" unique_id=1243936821]
+custom_minimum_size = Vector2(128, 40)
+layout_mode = 2
+toggle_mode = true
+text = "가방 정리"
+
+[node name="CancelPreparationButton" type="Button" parent="."]
+texture_filter = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.0
+offset_left = -80.0
+offset_top = 12.0
+offset_right = -16.0
+offset_bottom = 76.0
+tooltip_text = "원정 준비 닫기"
+icon = ExtResource("9_close")
+expand_icon = true
+theme_override_styles/normal = SubResource("CloseStyle")
+theme_override_styles/hover = SubResource("CloseStyle")
+theme_override_styles/pressed = SubResource("CloseStyle")
+
+[node name="InfoPanel" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.0
+anchor_right = 0.5
+anchor_bottom = 0.0
+offset_left = -220.0
+offset_top = 20.0
+offset_right = 220.0
+offset_bottom = 70.0
+theme_override_styles/panel = SubResource("RegionCardStyle")
+
+[node name="PrepInfoLabel" type="Label" parent="InfoPanel" unique_id=1463292198]
+layout_mode = 2
+text = "목적지를 고르고 출발하세요."
+vertical_alignment = 1
+horizontal_alignment = 1
+theme_override_colors/font_color = Color(0.97, 0.9, 0.72, 1)
+
+[node name="StartExpeditionButton" type="Button" parent="." unique_id=1485185169]
+texture_filter = 1
+visible = false
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -247.0
+offset_top = -88.0
+offset_right = -40.0
+offset_bottom = -34.0
+text = "원정 출발"
+theme_override_font_sizes/font_size = 21
+theme_override_colors/font_color = Color(0.22, 0.13, 0.08, 1)
+theme_override_colors/font_hover_color = Color(0.22, 0.13, 0.08, 1)
+theme_override_colors/font_pressed_color = Color(1, 0.96, 0.81, 1)
+theme_override_colors/font_disabled_color = Color(0.34, 0.31, 0.27, 1)
+theme_override_styles/normal = SubResource("StartStyle")
+theme_override_styles/hover = SubResource("StartHover")
+theme_override_styles/pressed = SubResource("StartPressed")
+theme_override_styles/disabled = SubResource("StartDisabled")

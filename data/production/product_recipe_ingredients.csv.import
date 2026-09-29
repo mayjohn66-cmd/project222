@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://c6ejsojplgl8q"
+
+[deps]
+
+files=["res://data/production/product_recipe_ingredients.item.translation", "res://data/production/product_recipe_ingredients.amount.translation"]
+
+source_file="res://data/production/product_recipe_ingredients.csv"
+dest_files=["res://data/production/product_recipe_ingredients.item.translation", "res://data/production/product_recipe_ingredients.amount.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

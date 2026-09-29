@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://er61rd4wl0ei"]
+
+[node name="ResultPanel" type="PanelContainer" unique_id=387850777]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=94562516]
+layout_mode = 2
+
+[node name="ResultTitleLabel" type="Label" parent="VBoxContainer" unique_id=176329148]
+layout_mode = 2
+text = "원정 결과"
+
+[node name="ResultInfoLabel" type="Label" parent="VBoxContainer" unique_id=765125406]
+layout_mode = 2
+text = "결과"
+
+[node name="ResultConfirmButton" type="Button" parent="VBoxContainer" unique_id=1143639554]
+layout_mode = 2
+text = "확인"

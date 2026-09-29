@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://script/ui/production_workshop_dialog.gd" id="1"]
+
+[node name="FacilityDialog" type="AcceptDialog"]
+script = ExtResource("1")
+title = "생산 설비"
+ok_button_text = "닫기"
+
+[node name="Content" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(584, 0)
+theme_override_constants/separation = 10
+
+[node name="RecipePicker" type="OptionButton" parent="Content"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ProductionCountRow" type="HBoxContainer" parent="Content"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ProductionCountLabel" type="Label" parent="Content/ProductionCountRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "생산 횟수"
+
+[node name="ProductionCountSpinBox" type="SpinBox" parent="Content/ProductionCountRow"]
+custom_minimum_size = Vector2(140, 42)
+layout_mode = 2
+min_value = 1.0
+max_value = 5.0
+value = 1.0
+allow_lesser = false
+allow_greater = false
+suffix = "회"
+
+[node name="DetailLabel" type="Label" parent="Content"]
+layout_mode = 2
+size_flags_horizontal = 3
+autowrap_mode = 2
+
+[node name="StartButton" type="Button" parent="Content"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "가공 시작"
+
+[node name="CollectButton" type="Button" parent="Content"]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+text = "완성품 회수"

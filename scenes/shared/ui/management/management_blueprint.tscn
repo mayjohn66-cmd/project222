@@ -1,0 +1,111 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://b7lag5wm71bep" path="res://script/ui/management/management_blueprint.gd" id="1_blueprint"]
+
+[node name="ManagementBlueprint" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_blueprint")
+
+[node name="MainVBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="MainVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "제작"
+
+[node name="CategoryTabs" type="HBoxContainer" parent="MainVBox"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="StoreButton" type="Button" parent="MainVBox/CategoryTabs"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "매장 가구"
+
+[node name="ProductionButton" type="Button" parent="MainVBox/CategoryTabs"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "생산 설비"
+
+[node name="InteriorButton" type="Button" parent="MainVBox/CategoryTabs"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "치장"
+
+[node name="ConstructionButton" type="Button" parent="MainVBox/CategoryTabs"]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+toggle_mode = true
+text = "건축"
+
+[node name="Body" type="HBoxContainer" parent="MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 20
+
+[node name="LeftPanel" type="VBoxContainer" parent="MainVBox/Body"]
+custom_minimum_size = Vector2(220, 0)
+layout_mode = 2
+
+[node name="ListScroll" type="ScrollContainer" parent="MainVBox/Body/LeftPanel"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="FurnitureList" type="VBoxContainer" parent="MainVBox/Body/LeftPanel/ListScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 8
+
+[node name="DetailScroll" type="ScrollContainer" parent="MainVBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Detail" type="VBoxContainer" parent="MainVBox/Body/DetailScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 16
+
+[node name="NameLabel" type="Label" parent="MainVBox/Body/DetailScroll/Detail"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+autowrap_mode = 2
+
+[node name="DescriptionLabel" type="Label" parent="MainVBox/Body/DetailScroll/Detail"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="OwnedLabel" type="Label" parent="MainVBox/Body/DetailScroll/Detail"]
+layout_mode = 2
+
+[node name="MaterialLabel" type="Label" parent="MainVBox/Body/DetailScroll/Detail"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="CraftButton" type="Button" parent="MainVBox/Body/DetailScroll/Detail"]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+disabled = true
+text = "1개 제작"

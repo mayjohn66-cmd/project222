@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b6xfrvq28ecfw"
+
+[deps]
+
+files=["res://data/expedition/equipment_enhancement_costs.target.translation", "res://data/expedition/equipment_enhancement_costs.material.translation", "res://data/expedition/equipment_enhancement_costs.amount.translation"]
+
+source_file="res://data/expedition/equipment_enhancement_costs.csv"
+dest_files=["res://data/expedition/equipment_enhancement_costs.target.translation", "res://data/expedition/equipment_enhancement_costs.material.translation", "res://data/expedition/equipment_enhancement_costs.amount.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

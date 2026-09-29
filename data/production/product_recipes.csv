@@ -1,0 +1,4 @@
+recipe_id,result_item_id,result_amount,facility_id,craft_time
+herb_drink,herb_drink,1,drink_machine,60
+bake_bread,bread,1,magic_oven,60
+bottled_water,water,1,drink_machine,30

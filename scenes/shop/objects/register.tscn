@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://ble8st4dirlho"]
+
+[ext_resource type="Script" uid="uid://d1va2oygg1vm5" path="res://script/objects/shop/register.gd" id="1_0bk0v"]
+[ext_resource type="Script" uid="uid://b3bor6iycwsnd" path="res://script/objects/shop/register_visual.gd" id="1_y2ixx"]
+[ext_resource type="Script" uid="uid://byob2a2wsrk2l" path="res://script/objects/shop/furniture_collision.gd" id="2_3ycl1"]
+
+[node name="Register" type="StaticBody2D" unique_id=1081582873 groups=["register"]]
+script = ExtResource("1_0bk0v")
+
+[node name="Visual" type="Node2D" parent="." unique_id=752014339]
+script = ExtResource("1_y2ixx")
+
+[node name="Collision" type="CollisionPolygon2D" parent="." unique_id=1436173518]
+polygon = PackedVector2Array(0, -24, 96, 24, 48, 48, -48, 0)
+script = ExtResource("2_3ycl1")
+depth_ratio = 0.5

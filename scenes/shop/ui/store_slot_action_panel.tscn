@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://bapdwb62f6onb"]
+
+[node name="SlotActionPanel" type="PanelContainer" unique_id=603816826]
+z_index = 20
+custom_minimum_size = Vector2(130, 150)
+offset_left = 820.0
+offset_top = 260.0
+offset_right = 1020.0
+offset_bottom = 490.0
+offset_transform_visual_only = false
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1500805061]
+layout_mode = 2
+
+[node name="InfoButton" type="Button" parent="VBoxContainer" unique_id=735539157]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="RestockButton" type="Button" parent="VBoxContainer" unique_id=1977580379]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="ClearButton" type="Button" parent="VBoxContainer" unique_id=1710399858]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+
+[node name="ActionCloseButton" type="Button" parent="VBoxContainer" unique_id=156153129]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2

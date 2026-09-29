@@ -1,0 +1,5 @@
+item_id,equipment_type,effect_id,base_value,max_enhancement_level,enhancement_group
+rusty_sword,weapon,attack,5,5,basic_weapon
+leather_armor,armor,defense,3,5,basic_armor
+sickle,tool,harvest_wheat,1,5,basic_gathering_tool
+gathering_bottle,tool,collect_water,1,5,basic_gathering_tool

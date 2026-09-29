@@ -1,0 +1,74 @@
+[gd_scene format=3 uid="uid://ccpy6hh5yue6p"]
+
+[ext_resource type="Script" uid="uid://dtpak1inihp0f" path="res://script/ui/management/management_construction.gd" id="1_c4ki7"]
+
+[node name="ManagementConstruction" type="Control" unique_id=362034735]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_c4ki7")
+
+[node name="MainVBox" type="VBoxContainer" parent="." unique_id=1590435704]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="MainVBox" unique_id=412369271]
+layout_mode = 2
+text = "건설 관리"
+autowrap_mode = 3
+
+[node name="AreaTabs" type="HBoxContainer" parent="MainVBox" unique_id=378601871]
+layout_mode = 2
+
+[node name="StoreButton" type="Button" parent="MainVBox/AreaTabs" unique_id=1949210292]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "편의점"
+
+[node name="ProductionRoomButton" type="Button" parent="MainVBox/AreaTabs" unique_id=180559668]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "생산실"
+
+[node name="WarehouseButton" type="Button" parent="MainVBox/AreaTabs" unique_id=580540020]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "창고"
+
+[node name="ContentPanel" type="PanelContainer" parent="MainVBox" unique_id=1786124721]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ContentMargin" type="MarginContainer" parent="MainVBox/ContentPanel" unique_id=992669929]
+layout_mode = 2
+
+[node name="ContentVBox" type="VBoxContainer" parent="MainVBox/ContentPanel/ContentMargin" unique_id=101588030]
+layout_mode = 2
+
+[node name="AreaTitleLabel" type="Label" parent="MainVBox/ContentPanel/ContentMargin/ContentVBox" unique_id=1218612575]
+layout_mode = 2
+text = "편의점 크기 확장"
+autowrap_mode = 3
+
+[node name="CurrentInfoLabel" type="Label" parent="MainVBox/ContentPanel/ContentMargin/ContentVBox" unique_id=953374584]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="NextInfoLabel" type="Label" parent="MainVBox/ContentPanel/ContentMargin/ContentVBox" unique_id=1801334209]
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="ExpandButton" type="Button" parent="MainVBox/ContentPanel/ContentMargin/ContentVBox" unique_id=573540541]
+layout_mode = 2
+text = "편의점 확장"
+
+[node name="NoteLabel" type="Label" parent="MainVBox/ContentPanel/ContentMargin/ContentVBox" unique_id=115585827]
+layout_mode = 2
+autowrap_mode = 3

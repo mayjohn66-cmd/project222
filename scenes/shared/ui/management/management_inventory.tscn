@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://dr8wv64jdg7cx"]
+
+[ext_resource type="Script" uid="uid://ckifkxiwddsxd" path="res://script/ui/management/management_inventory.gd" id="1_0qtff"]
+
+[node name="ManagementInventory" type="Control" unique_id=1757964247]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 56.0
+offset_bottom = 12.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_0qtff")
+
+[node name="MainVBox" type="VBoxContainer" parent="." unique_id=1003482902]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = -16.0
+offset_bottom = -14.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="CategoryTabs" type="HBoxContainer" parent="MainVBox" unique_id=1526359449]
+custom_minimum_size = Vector2(40, 0)
+layout_mode = 2
+
+[node name="ShelfButton" type="Button" parent="MainVBox/CategoryTabs" unique_id=761478701]
+layout_mode = 2
+text = "진열"
+
+[node name="FurnitureButton" type="Button" parent="MainVBox/CategoryTabs" unique_id=1229231425]
+layout_mode = 2
+text = "가구"
+
+[node name="ExpeditionButton" type="Button" parent="MainVBox/CategoryTabs" unique_id=543768971]
+layout_mode = 2
+text = "원정"
+
+[node name="ItemScroll" type="ScrollContainer" parent="MainVBox" unique_id=713251583]
+custom_minimum_size = Vector2(0, 300)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ItemGrid" type="GridContainer" parent="MainVBox/ItemScroll" unique_id=1070555864]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 7

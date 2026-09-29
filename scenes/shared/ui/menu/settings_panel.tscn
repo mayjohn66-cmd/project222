@@ -1,0 +1,46 @@
+[gd_scene format=3 uid="uid://c7gy8jd857ckf"]
+
+[node name="SettingsPanel" type="PanelContainer" unique_id=1050415203]
+custom_minimum_size = Vector2(500, 300)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -200.0
+offset_right = 200.0
+offset_bottom = 200.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+accessibility_region = true
+
+[node name="SettingsVBox" type="VBoxContainer" parent="." unique_id=1169506942]
+layout_mode = 2
+
+[node name="SettingsTitleLabel" type="Label" parent="SettingsVBox" unique_id=617167516]
+layout_mode = 2
+text = "설정"
+
+[node name="VolumeRow" type="HBoxContainer" parent="SettingsVBox" unique_id=785782541]
+layout_mode = 2
+
+[node name="VolumeTextLabel" type="Label" parent="SettingsVBox/VolumeRow" unique_id=832754594]
+layout_mode = 2
+text = "전체 음량"
+
+[node name="MasterVolumeSlider" type="HSlider" parent="SettingsVBox/VolumeRow" unique_id=1854933142]
+layout_mode = 2
+
+[node name="VolumeValueLabel" type="Label" parent="SettingsVBox/VolumeRow" unique_id=1019891796]
+layout_mode = 2
+
+[node name="FullscreenButton" type="CheckBox" parent="SettingsVBox" unique_id=1177573031]
+layout_mode = 2
+text = "전체 화면"
+
+[node name="SettingsCloseButton" type="Button" parent="SettingsVBox" unique_id=1036534192]
+layout_mode = 2
+text = "닫기"

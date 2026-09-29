@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://72ivi2tcjq0b"
+
+[deps]
+
+files=["res://data/expedition/expedition_regions.name.translation", "res://data/expedition/expedition_regions.difficulty.translation", "res://data/expedition/expedition_regions.description.translation", "res://data/expedition/expedition_regions.entry.translation", "res://data/expedition/expedition_regions.entry.translation", "res://data/expedition/expedition_regions.consume.translation"]
+
+source_file="res://data/expedition/expedition_regions.csv"
+dest_files=["res://data/expedition/expedition_regions.name.translation", "res://data/expedition/expedition_regions.difficulty.translation", "res://data/expedition/expedition_regions.description.translation", "res://data/expedition/expedition_regions.entry.translation", "res://data/expedition/expedition_regions.entry.translation", "res://data/expedition/expedition_regions.consume.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

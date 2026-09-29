@@ -1,0 +1,8 @@
+customer_type_id,target_type,target_id,weight
+normal,category,food,70
+normal,category,consumable,30
+normal,category,material,20
+traveler,category,food,30
+traveler,category,tool,50
+traveler,category,etc,20
+traveler,category,material,40

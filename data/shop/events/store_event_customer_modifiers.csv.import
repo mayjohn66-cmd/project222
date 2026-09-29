@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cwahpxrt1pktg"
+
+[deps]
+
+files=["res://data/shop/events/store_event_customer_modifiers.customer.translation", "res://data/shop/events/store_event_customer_modifiers.weight.translation"]
+
+source_file="res://data/shop/events/store_event_customer_modifiers.csv"
+dest_files=["res://data/shop/events/store_event_customer_modifiers.customer.translation", "res://data/shop/events/store_event_customer_modifiers.weight.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

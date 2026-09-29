@@ -1,0 +1,137 @@
+[gd_scene format=3 uid="uid://c23r7mffyiqi3"]
+
+[ext_resource type="Script" uid="uid://hg3xub7edyl1" path="res://script/ui/expedition/prep/prep_shop.gd" id="1_cqiu5"]
+
+[node name="ShopContent" type="PanelContainer" unique_id=2099999355]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_cqiu5")
+
+[node name="ShopHBox" type="HBoxContainer" parent="." unique_id=114450033]
+custom_minimum_size = Vector2(850, 380)
+layout_mode = 2
+
+[node name="ShopNpcPanel" type="PanelContainer" parent="ShopHBox" unique_id=1479919332]
+custom_minimum_size = Vector2(230, 360)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ShopHBox/ShopNpcPanel" unique_id=28578797]
+layout_mode = 2
+
+[node name="NpcPortrait" type="TextureRect" parent="ShopHBox/ShopNpcPanel/VBoxContainer" unique_id=919411450]
+layout_mode = 2
+
+[node name="NpcNameLabel" type="Label" parent="ShopHBox/ShopNpcPanel/VBoxContainer" unique_id=225336159]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "상점 상인"
+
+[node name="NpcDialogueLabel" type="Label" parent="ShopHBox/ShopNpcPanel/VBoxContainer" unique_id=270579752]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "필요한 장비를 골라보게."
+
+[node name="ShopItemArea" type="VBoxContainer" parent="ShopHBox" unique_id=2112703256]
+custom_minimum_size = Vector2(580, 360)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ShopCategoryTabs" type="HBoxContainer" parent="ShopHBox/ShopItemArea" unique_id=1472761476]
+layout_mode = 2
+
+[node name="WeaponButton" type="Button" parent="ShopHBox/ShopItemArea/ShopCategoryTabs" unique_id=328459952]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "무기"
+
+[node name="ArmorButton" type="Button" parent="ShopHBox/ShopItemArea/ShopCategoryTabs" unique_id=681387402]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "방어구"
+
+[node name="ToolButton" type="Button" parent="ShopHBox/ShopItemArea/ShopCategoryTabs" unique_id=42727012]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "도구"
+
+[node name="EtcButton" type="Button" parent="ShopHBox/ShopItemArea/ShopCategoryTabs" unique_id=1853312326]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "기타"
+
+[node name="ShopItemList" type="VBoxContainer" parent="ShopHBox/ShopItemArea" unique_id=284623937]
+layout_mode = 2
+
+[node name="ShopDetailOverlay" type="Control" parent="." unique_id=758922394]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Background" type="ColorRect" parent="ShopDetailOverlay" unique_id=2079808079]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7137255)
+
+[node name="CenterContainer" type="CenterContainer" parent="ShopDetailOverlay" unique_id=1953264338]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="DetailPanel" type="PanelContainer" parent="ShopDetailOverlay/CenterContainer" unique_id=1690002040]
+custom_minimum_size = Vector2(420, 320)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="ShopDetailOverlay/CenterContainer/DetailPanel" unique_id=1918207680]
+layout_mode = 2
+
+[node name="DetailTitleLabel" type="Label" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer" unique_id=1595224706]
+layout_mode = 2
+text = "상품 정보"
+horizontal_alignment = 1
+
+[node name="ItemNameLabel" type="Label" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer" unique_id=1399502534]
+layout_mode = 2
+
+[node name="ItemTypeLabel" type="Label" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer" unique_id=1681836893]
+layout_mode = 2
+
+[node name="ItemSizeLabel" type="Label" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer" unique_id=2023900966]
+layout_mode = 2
+
+[node name="ItemPriceLabel" type="Label" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer" unique_id=398178451]
+layout_mode = 2
+
+[node name="ItemDescriptionLabel" type="Label" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer" unique_id=1905411588]
+custom_minimum_size = Vector2(0, 80)
+layout_mode = 2
+autowrap_mode = 3
+
+[node name="MoneyLabel" type="Label" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer" unique_id=1643563735]
+layout_mode = 2
+text = "보유금: 0 G"
+
+[node name="PurchaseStatusLabel" type="Label" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer" unique_id=1915140439]
+layout_mode = 2
+
+[node name="ButtonRow" type="HBoxContainer" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer" unique_id=1332790952]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="BuyButton" type="Button" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer/ButtonRow" unique_id=1582130952]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+text = "구매"
+
+[node name="CloseButton" type="Button" parent="ShopDetailOverlay/CenterContainer/DetailPanel/VBoxContainer/ButtonRow" unique_id=41229752]
+custom_minimum_size = Vector2(100, 40)
+layout_mode = 2
+text = "닫기"

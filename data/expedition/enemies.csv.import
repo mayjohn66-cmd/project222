@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bhbibstbffj83"
+
+[deps]
+
+files=["res://data/expedition/enemies.name.translation", "res://data/expedition/enemies.max.translation", "res://data/expedition/enemies.attack.translation", "res://data/expedition/enemies.defense.translation", "res://data/expedition/enemies.loot.translation"]
+
+source_file="res://data/expedition/enemies.csv"
+dest_files=["res://data/expedition/enemies.name.translation", "res://data/expedition/enemies.max.translation", "res://data/expedition/enemies.attack.translation", "res://data/expedition/enemies.defense.translation", "res://data/expedition/enemies.loot.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

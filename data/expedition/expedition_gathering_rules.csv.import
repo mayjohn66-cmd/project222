@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b7ucnifxj7d08"
+
+[deps]
+
+files=["res://data/expedition/expedition_gathering_rules.tool.translation", "res://data/expedition/expedition_gathering_rules.nb.translation", "res://data/expedition/expedition_gathering_rules.tool.translation", "res://data/expedition/expedition_gathering_rules.tool.translation", "res://data/expedition/expedition_gathering_rules.enhancement.translation", "res://data/expedition/expedition_gathering_rules.tool.translation"]
+
+source_file="res://data/expedition/expedition_gathering_rules.csv"
+dest_files=["res://data/expedition/expedition_gathering_rules.tool.translation", "res://data/expedition/expedition_gathering_rules.nb.translation", "res://data/expedition/expedition_gathering_rules.tool.translation", "res://data/expedition/expedition_gathering_rules.tool.translation", "res://data/expedition/expedition_gathering_rules.enhancement.translation", "res://data/expedition/expedition_gathering_rules.tool.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

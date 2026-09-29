@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://ccsipcldjendb"
+
+[deps]
+
+files=["res://data/shop/employees/employee_training.level.translation", "res://data/shop/employees/employee_training.value.translation", "res://data/shop/employees/employee_training.upgrade.translation"]
+
+source_file="res://data/shop/employees/employee_training.csv"
+dest_files=["res://data/shop/employees/employee_training.level.translation", "res://data/shop/employees/employee_training.value.translation", "res://data/shop/employees/employee_training.upgrade.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

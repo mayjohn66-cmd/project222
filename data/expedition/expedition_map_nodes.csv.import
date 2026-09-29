@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cr8yo2slulvtv"
+
+[deps]
+
+files=["res://data/expedition/expedition_map_nodes.node.translation", "res://data/expedition/expedition_map_nodes.weight.translation"]
+
+source_file="res://data/expedition/expedition_map_nodes.csv"
+dest_files=["res://data/expedition/expedition_map_nodes.node.translation", "res://data/expedition/expedition_map_nodes.weight.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

@@ -1,0 +1,130 @@
+[gd_scene format=3 uid="uid://xcdt424d1qpl"]
+
+[node name="ManagementProduction" type="Control" unique_id=1733654707]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProductionTabBar" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 44.0
+grow_horizontal = 2
+theme_override_constants/separation = 12
+
+[node name="FacilityStatusButton" type="Button" parent="ProductionTabBar"]
+custom_minimum_size = Vector2(140, 44)
+layout_mode = 2
+text = "설비 현황"
+
+[node name="RecipeTabButton" type="Button" parent="ProductionTabBar"]
+custom_minimum_size = Vector2(140, 44)
+layout_mode = 2
+text = "레시피"
+
+[node name="FacilityStatusScroll" type="ScrollContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 56.0
+grow_horizontal = 2
+grow_vertical = 2
+horizontal_scroll_mode = 0
+
+[node name="FacilityStatusLabel" type="Label" parent="FacilityStatusScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 20
+text = "생산 설비 현황"
+autowrap_mode = 2
+
+[node name="MainHBox" type="HBoxContainer" parent="." unique_id=214299385]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 56.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LeftPanel" type="PanelContainer" parent="MainHBox" unique_id=18638531]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+
+[node name="LeftVBox" type="VBoxContainer" parent="MainHBox/LeftPanel" unique_id=473849932]
+layout_mode = 2
+
+[node name="SectionLabel" type="Label" parent="MainHBox/LeftPanel/LeftVBox" unique_id=278627163]
+layout_mode = 2
+text = "생산 가능 상품"
+
+[node name="RecipeScroll" type="ScrollContainer" parent="MainHBox/LeftPanel/LeftVBox" unique_id=1824059323]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RecipeList" type="VBoxContainer" parent="MainHBox/LeftPanel/LeftVBox/RecipeScroll" unique_id=1515768320]
+layout_mode = 2
+
+[node name="RightPanel" type="PanelContainer" parent="MainHBox" unique_id=1606174333]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DetailVBox" type="VBoxContainer" parent="MainHBox/RightPanel" unique_id=2144059198]
+layout_mode = 2
+
+[node name="ProductNameLabel" type="Label" parent="MainHBox/RightPanel/DetailVBox" unique_id=223581743]
+layout_mode = 2
+text = "상품을 선택하세요"
+
+[node name="Separator" type="HSeparator" parent="MainHBox/RightPanel/DetailVBox" unique_id=1939899335]
+layout_mode = 2
+
+[node name="DescriptionLabel" type="Label" parent="MainHBox/RightPanel/DetailVBox" unique_id=2054006837]
+layout_mode = 2
+text = "왼쪽 목록에서 생산할 상품을 선택합니다."
+
+[node name="MaterialTitleLabel" type="Label" parent="MainHBox/RightPanel/DetailVBox" unique_id=973535895]
+layout_mode = 2
+text = "필요 재료"
+
+[node name="MaterialList" type="VBoxContainer" parent="MainHBox/RightPanel/DetailVBox" unique_id=1800365812]
+layout_mode = 2
+
+[node name="Spacer" type="Control" parent="MainHBox/RightPanel/DetailVBox" unique_id=526422881]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="FacilityLabel" type="Label" parent="MainHBox/RightPanel/DetailVBox" unique_id=2074787537]
+layout_mode = 2
+text = "필요 설비: -"
+
+[node name="AmountHBox" type="HBoxContainer" parent="MainHBox/RightPanel/DetailVBox" unique_id=1042772221]
+layout_mode = 2
+
+[node name="AmountTitleLabel" type="Label" parent="MainHBox/RightPanel/DetailVBox/AmountHBox" unique_id=40750122]
+layout_mode = 2
+text = "생산 수량"
+
+[node name="MinAmountButton" type="Button" parent="MainHBox/RightPanel/DetailVBox/AmountHBox" unique_id=1688753731]
+layout_mode = 2
+text = "Min"
+
+[node name="AmountSpinBox" type="SpinBox" parent="MainHBox/RightPanel/DetailVBox/AmountHBox" unique_id=1350960420]
+layout_mode = 2
+min_value = 1.0
+max_value = 99.0
+value = 1.0
+
+[node name="MaxAmountButton" type="Button" parent="MainHBox/RightPanel/DetailVBox/AmountHBox" unique_id=1604954106]
+layout_mode = 2
+text = "Max"
+
+[node name="StartButton" type="Button" parent="MainHBox/RightPanel/DetailVBox" unique_id=340369488]
+layout_mode = 2
+disabled = true
+text = "생산 시작"

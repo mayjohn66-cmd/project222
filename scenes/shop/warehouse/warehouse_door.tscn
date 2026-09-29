@@ -1,0 +1,12 @@
+[gd_scene format=3 uid="uid://3mx5l7m0k8ty"]
+
+[ext_resource type="Script" uid="uid://ddkrkd728u5tw" path="res://script/world/warehouse/warehouse_door.gd" id="1_3ahm4"]
+[ext_resource type="Script" uid="uid://biec7n8wsohhq" path="res://script/objects/shop/door_visual.gd" id="2_t7ujq"]
+
+[node name="WarehouseDoor" type="StaticBody2D" unique_id=1240490912]
+script = ExtResource("1_3ahm4")
+
+[node name="Visual" type="Node2D" parent="." unique_id=1180697258]
+script = ExtResource("2_t7ujq")
+
+door_kind = "warehouse"

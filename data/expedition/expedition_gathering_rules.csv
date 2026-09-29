@@ -1,0 +1,3 @@
+loot_table_id,tool_effect_id,no_tool_success_rate,tool_success_rate,tool_bonus_amount,enhancement_bonus_per_level,tool_required
+gather_wheat,harvest_wheat,0.4,1.0,1,1,false
+gather_water,collect_water,0.0,1.0,0,1,true

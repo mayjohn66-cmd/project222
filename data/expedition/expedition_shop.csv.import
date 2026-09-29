@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://udjnpgrswhn7"
+
+[deps]
+
+files=["res://data/expedition/expedition_shop.shop.translation", "res://data/expedition/expedition_shop.price.translation", "res://data/expedition/expedition_shop.available.translation"]
+
+source_file="res://data/expedition/expedition_shop.csv"
+dest_files=["res://data/expedition/expedition_shop.shop.translation", "res://data/expedition/expedition_shop.price.translation", "res://data/expedition/expedition_shop.available.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

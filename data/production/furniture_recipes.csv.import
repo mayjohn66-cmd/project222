@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dl66qwn2ar5aa"
+
+[deps]
+
+files=["res://data/production/furniture_recipes.item.translation", "res://data/production/furniture_recipes.amount.translation"]
+
+source_file="res://data/production/furniture_recipes.csv"
+dest_files=["res://data/production/furniture_recipes.item.translation", "res://data/production/furniture_recipes.amount.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

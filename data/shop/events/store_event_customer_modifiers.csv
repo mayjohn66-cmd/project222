@@ -1,0 +1,3 @@
+event_id,customer_type_id,weight_multiplier
+dungeon_raid,traveler,3.0
+spring_market,normal,1.5

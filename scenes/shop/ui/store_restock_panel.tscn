@@ -1,0 +1,70 @@
+[gd_scene load_steps=2 format=3 uid="uid://ft35xs7b5h01"]
+
+[ext_resource type="Texture2D" path="res://art/ui/reference_theme/close.png" id="1_close"]
+
+[node name="RestockPanel" type="PanelContainer" unique_id=1591577266]
+custom_minimum_size = Vector2(400, 240)
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=234669773]
+layout_mode = 2
+
+[node name="TitleBar" type="HBoxContainer" parent="VBoxContainer" unique_id=180623777]
+layout_mode = 2
+
+[node name="TitleSpacer" type="Control" parent="VBoxContainer/TitleBar" unique_id=315902054]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="RestockCloseButton" type="Button" parent="VBoxContainer/TitleBar" unique_id=1858653997]
+theme_type_variation = &"CloseAction"
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+tooltip_text = "닫기"
+icon = ExtResource("1_close")
+flat = true
+expand_icon = true
+theme_override_constants/icon_max_width = 40
+
+[node name="RestockInfoLabel" type="Label" parent="VBoxContainer" unique_id=1987550616]
+layout_mode = 2
+text = "몇 개를 보충하시겠습니까?"
+horizontal_alignment = 1
+
+[node name="AmountHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=616996059]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="MinButton" type="Button" parent="VBoxContainer/AmountHBox" unique_id=873695307]
+layout_mode = 2
+text = "Min"
+
+[node name="MinusButton" type="Button" parent="VBoxContainer/AmountHBox" unique_id=398715627]
+layout_mode = 2
+text = "-"
+
+[node name="AmountLabel" type="Label" parent="VBoxContainer/AmountHBox" unique_id=1868059614]
+layout_mode = 2
+text = "1"
+
+[node name="PlusButton" type="Button" parent="VBoxContainer/AmountHBox" unique_id=1452385005]
+layout_mode = 2
+text = "+"
+
+[node name="MaxButton" type="Button" parent="VBoxContainer/AmountHBox" unique_id=770966773]
+layout_mode = 2
+text = "Max"
+
+[node name="ButtonHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1375694875]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="ConfirmButton" type="Button" parent="VBoxContainer/ButtonHBox" unique_id=412526354]
+layout_mode = 2
+text = "확인"
+
+[node name="CancelButton" type="Button" parent="VBoxContainer/ButtonHBox" unique_id=723369232]
+layout_mode = 2
+text = "취소"
+

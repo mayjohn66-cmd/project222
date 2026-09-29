@@ -1,0 +1,132 @@
+[gd_scene format=3 uid="uid://dm2esspgxul17"]
+
+[ext_resource type="Script" uid="uid://bbyplxaftytwc" path="res://script/ui/expedition/prep/prep_map.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://art/expedition/destination_world_map_v2.png" id="2_world_map"]
+[ext_resource type="Texture2D" path="res://art/expedition/region_forest_pixel.png" id="3_forest"]
+[ext_resource type="Texture2D" path="res://art/expedition/region_mine_pixel.png" id="4_mine"]
+[ext_resource type="Texture2D" path="res://art/expedition/region_swamp_pixel.png" id="5_swamp"]
+[ext_resource type="Texture2D" path="res://art/expedition/region_ruins_pixel.png" id="6_ruins"]
+[ext_resource type="Shader" path="res://art/expedition/region_icon_outline.gdshader" id="7_outline_shader"]
+
+[sub_resource type="ShaderMaterial" id="IconOutlineMaterial"]
+shader = ExtResource("7_outline_shader")
+
+[sub_resource type="StyleBoxEmpty" id="MarkerEmpty"]
+
+[node name="MapContent" type="Control" unique_id=1982723152]
+mouse_filter = 0
+script = ExtResource("1_script")
+
+[node name="WorldMap" type="TextureRect" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("2_world_map")
+expand_mode = 1
+stretch_mode = 6
+
+[node name="ForestButton" type="Button" parent="." unique_id=975272794]
+material = SubResource("IconOutlineMaterial")
+texture_filter = 1
+anchors_preset = -1
+anchor_left = 0.18
+anchor_top = 0.37
+anchor_right = 0.18
+anchor_bottom = 0.37
+offset_left = -54.0
+offset_top = -54.0
+offset_right = 54.0
+offset_bottom = 54.0
+theme_override_styles/normal = SubResource("MarkerEmpty")
+theme_override_styles/hover = SubResource("MarkerEmpty")
+theme_override_styles/hover_pressed = SubResource("MarkerEmpty")
+theme_override_styles/pressed = SubResource("MarkerEmpty")
+theme_override_styles/disabled = SubResource("MarkerEmpty")
+theme_override_styles/focus = SubResource("MarkerEmpty")
+icon = ExtResource("3_forest")
+expand_icon = true
+
+[node name="MineButton" type="Button" parent="." unique_id=2123401786]
+material = SubResource("IconOutlineMaterial")
+texture_filter = 1
+anchors_preset = -1
+anchor_left = 0.45
+anchor_top = 0.23
+anchor_right = 0.45
+anchor_bottom = 0.23
+offset_left = -54.0
+offset_top = -54.0
+offset_right = 54.0
+offset_bottom = 54.0
+theme_override_styles/normal = SubResource("MarkerEmpty")
+theme_override_styles/hover = SubResource("MarkerEmpty")
+theme_override_styles/hover_pressed = SubResource("MarkerEmpty")
+theme_override_styles/pressed = SubResource("MarkerEmpty")
+theme_override_styles/disabled = SubResource("MarkerEmpty")
+theme_override_styles/focus = SubResource("MarkerEmpty")
+icon = ExtResource("4_mine")
+expand_icon = true
+
+[node name="SwampButton" type="Button" parent="." unique_id=1747102252]
+material = SubResource("IconOutlineMaterial")
+texture_filter = 1
+anchors_preset = -1
+anchor_left = 0.68
+anchor_top = 0.63
+anchor_right = 0.68
+anchor_bottom = 0.63
+offset_left = -54.0
+offset_top = -54.0
+offset_right = 54.0
+offset_bottom = 54.0
+theme_override_styles/normal = SubResource("MarkerEmpty")
+theme_override_styles/hover = SubResource("MarkerEmpty")
+theme_override_styles/hover_pressed = SubResource("MarkerEmpty")
+theme_override_styles/pressed = SubResource("MarkerEmpty")
+theme_override_styles/disabled = SubResource("MarkerEmpty")
+theme_override_styles/focus = SubResource("MarkerEmpty")
+icon = ExtResource("5_swamp")
+expand_icon = true
+
+[node name="SpecialButton" type="Button" parent="." unique_id=1100834695]
+material = SubResource("IconOutlineMaterial")
+texture_filter = 1
+anchors_preset = -1
+anchor_left = 0.83
+anchor_top = 0.19
+anchor_right = 0.83
+anchor_bottom = 0.19
+offset_left = -54.0
+offset_top = -54.0
+offset_right = 54.0
+offset_bottom = 54.0
+theme_override_styles/normal = SubResource("MarkerEmpty")
+theme_override_styles/hover = SubResource("MarkerEmpty")
+theme_override_styles/hover_pressed = SubResource("MarkerEmpty")
+theme_override_styles/pressed = SubResource("MarkerEmpty")
+theme_override_styles/disabled = SubResource("MarkerEmpty")
+theme_override_styles/focus = SubResource("MarkerEmpty")
+icon = ExtResource("6_ruins")
+expand_icon = true
+
+[node name="SelectedRegionPanel" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = -1
+anchor_left = 0.0
+anchor_top = 1.0
+anchor_right = 0.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -208.0
+offset_right = 454.0
+offset_bottom = -90.0
+mouse_filter = 2
+
+[node name="SelectedRegionLabel" type="Label" parent="SelectedRegionPanel" unique_id=227258441]
+layout_mode = 2
+text = "선택 지역: 숲"
+autowrap_mode = 3
+theme_override_font_sizes/font_size = 16

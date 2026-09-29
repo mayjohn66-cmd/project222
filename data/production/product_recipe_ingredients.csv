@@ -1,0 +1,5 @@
+recipe_id,item_id,amount
+herb_drink,forest_herb,2
+herb_drink,water,1
+bake_bread,wheat,2
+bottled_water,raw_water,1

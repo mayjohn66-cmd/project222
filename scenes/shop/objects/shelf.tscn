@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://xtpckf2cxggm"]
+
+[ext_resource type="Script" uid="uid://x8hdcq7bkn1p" path="res://script/objects/shop/shelf.gd" id="1_82iq7"]
+[ext_resource type="Script" uid="uid://dfkx5mfkepvrj" path="res://script/objects/shop/shelf_visual.gd" id="1_eyi4x"]
+[ext_resource type="Script" uid="uid://byob2a2wsrk2l" path="res://script/objects/shop/furniture_collision.gd" id="3_l44xw"]
+
+[node name="Shelf" type="StaticBody2D" unique_id=1081582873]
+script = ExtResource("1_82iq7")
+
+[node name="Visual" type="Node2D" parent="." unique_id=752014339]
+script = ExtResource("1_eyi4x")
+
+[node name="Collision" type="CollisionPolygon2D" parent="." unique_id=893843432]
+polygon = PackedVector2Array(0, -24, 48, 0, 0, 24, -48, 0)
+script = ExtResource("3_l44xw")
+depth_ratio = 0.5
+
+[node name="StockLabel" type="Label" parent="." unique_id=2038448186]
+offset_left = -48.0
+offset_top = 26.0
+offset_right = 48.0
+offset_bottom = 44.0
+mouse_filter = 2
+theme_override_colors/font_color = Color(1, 0.94, 0.76, 1)
+theme_override_colors/font_outline_color = Color(0.18, 0.10, 0.06, 1)
+theme_override_constants/outline_size = 3
+theme_override_font_sizes/font_size = 12
+horizontal_alignment = 1

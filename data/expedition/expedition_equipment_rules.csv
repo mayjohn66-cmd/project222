@@ -1,0 +1,5 @@
+equipment_type,max_equipped,duplicate_policy,enhanceable
+weapon,2,allow,true
+armor,3,allow,true
+tool,-1,effect_id,true
+misc,-1,allow,false

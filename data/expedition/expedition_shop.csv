@@ -1,0 +1,5 @@
+item_id,shop_category,price,available
+rusty_sword,weapon,100,true
+leather_armor,armor,180,true
+sickle,tool,120,true
+gathering_bottle,tool,80,true

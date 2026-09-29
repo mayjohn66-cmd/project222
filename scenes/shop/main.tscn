@@ -1,0 +1,63 @@
+[gd_scene format=3 uid="uid://bbh6c6xkqok3l"]
+
+[ext_resource type="PackedScene" uid="uid://btx21xbgtb4at" path="res://scenes/shop/store_floor.tscn" id="1_tefeu"]
+[ext_resource type="PackedScene" uid="uid://bfwxor261s6is" path="res://scenes/shop/world/store_exterior.tscn" id="1_vd5iy"]
+[ext_resource type="PackedScene" uid="uid://dhkv1rfafmljc" path="res://scenes/shop/store_actors.tscn" id="2_tefeu"]
+[ext_resource type="PackedScene" uid="uid://s757b57dqi7t" path="res://scenes/shop/customer_spawner.tscn" id="3_o6xl0"]
+[ext_resource type="PackedScene" uid="uid://cabj1rlq872r8" path="res://scenes/shop/production/production_room.tscn" id="3_tipki"]
+[ext_resource type="Script" uid="uid://bjuornwi18j41" path="res://script/actor/employee_spawner.gd" id="5_tipki"]
+[ext_resource type="PackedScene" uid="uid://c621mye8rs1gd" path="res://scenes/shop/actors/worker.tscn" id="6_85g3d"]
+[ext_resource type="PackedScene" uid="uid://cctc08nmff77q" path="res://scenes/shop/warehouse/warehouse_room.tscn" id="6_khj0d"]
+[ext_resource type="Script" uid="uid://cdopml6757wbs" path="res://script/build/build_manager.gd" id="11_yc10j"]
+[ext_resource type="Script" uid="uid://cccklthrb0wx0" path="res://script/world/shop/day_manager.gd" id="13_a8y0u"]
+[ext_resource type="PackedScene" uid="uid://cjr6jutabrgkd" path="res://scenes/shop/ui/store_ui.tscn" id="15_jkv2x"]
+[ext_resource type="Script" path="res://script/world/shop/village_map_editor.gd" id="16_village_editor"]
+
+[node name="World" type="Node2D" unique_id=292224605]
+y_sort_enabled = true
+
+[node name="StoreExterior" parent="." unique_id=303048049 instance=ExtResource("1_vd5iy")]
+position = Vector2(530, 208)
+road_color = Color(0.16, 0.17, 0.18, 1)
+sidewalk_color = Color(0.48, 0.48, 0.45, 1)
+
+[node name="Floor" parent="." unique_id=555068720 instance=ExtResource("1_tefeu")]
+position = Vector2(530, 208)
+production_columns = 6
+production_rows = 6
+corridor_length = 2
+corridor_width = 2
+
+[node name="Actors" parent="." unique_id=894373964 instance=ExtResource("2_tefeu")]
+
+[node name="Objects" type="Node2D" parent="." unique_id=2087680223]
+y_sort_enabled = true
+position = Vector2(0, 7)
+
+[node name="ProductionRoom" parent="." unique_id=272348182 instance=ExtResource("3_tipki")]
+position = Vector2(12000, 8000)
+
+[node name="WarehouseRoom" parent="." unique_id=1597451750 instance=ExtResource("6_khj0d")]
+position = Vector2(18000, 8000)
+
+[node name="CustomerSpawner" parent="." unique_id=1468623317 instance=ExtResource("3_o6xl0")]
+
+[node name="EmployeeSpawner" type="Node2D" parent="." unique_id=1799916430]
+script = ExtResource("5_tipki")
+worker_scene = ExtResource("6_85g3d")
+
+[node name="BuildManager" type="Node2D" parent="." unique_id=1096994157]
+position = Vector2(0, 3)
+script = ExtResource("11_yc10j")
+
+[node name="DayManager" type="Node2D" parent="." unique_id=117709994]
+script = ExtResource("13_a8y0u")
+
+[node name="HourTimer" type="Timer" parent="DayManager" unique_id=863735041]
+process_mode = 1
+wait_time = 5.0
+
+[node name="UI" parent="." unique_id=1798152667 instance=ExtResource("15_jkv2x")]
+
+[node name="VillageMapEditor" type="Node2D" parent="."]
+script = ExtResource("16_village_editor")

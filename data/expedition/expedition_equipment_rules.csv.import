@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dw0ggwxoinxu6"
+
+[deps]
+
+files=["res://data/expedition/expedition_equipment_rules.max.translation", "res://data/expedition/expedition_equipment_rules.duplicate.translation", "res://data/expedition/expedition_equipment_rules.enhanceable.translation"]
+
+source_file="res://data/expedition/expedition_equipment_rules.csv"
+dest_files=["res://data/expedition/expedition_equipment_rules.max.translation", "res://data/expedition/expedition_equipment_rules.duplicate.translation", "res://data/expedition/expedition_equipment_rules.enhanceable.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

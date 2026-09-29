@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dsng02t7fv1ml"
+
+[deps]
+
+files=["res://data/expedition/expedition_equipment.equipment.translation", "res://data/expedition/expedition_equipment.effect.translation", "res://data/expedition/expedition_equipment.base.translation", "res://data/expedition/expedition_equipment.max.translation", "res://data/expedition/expedition_equipment.enhancement.translation"]
+
+source_file="res://data/expedition/expedition_equipment.csv"
+dest_files=["res://data/expedition/expedition_equipment.equipment.translation", "res://data/expedition/expedition_equipment.effect.translation", "res://data/expedition/expedition_equipment.base.translation", "res://data/expedition/expedition_equipment.max.translation", "res://data/expedition/expedition_equipment.enhancement.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

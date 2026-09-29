@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://c7ijqalh7siaf"]
+
+[ext_resource type="Script" uid="uid://biprm7djro7li" path="res://script/ui/expedition/loot_drop_area.gd" id="1_kghqm"]
+[ext_resource type="Script" uid="uid://c2iog0x20alms" path="res://script/ui/common/inventory/grid_inventory_view.gd" id="1_wwolw"]
+[ext_resource type="Script" uid="uid://c8wbdlhgwe7cx" path="res://script/ui/expedition/expedition_map_view.gd" id="2_wwolw"]
+
+[node name="RunPanel" type="Control" unique_id=1509964834]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="BagPanel" type="PanelContainer" parent="." unique_id=1233909025]
+custom_minimum_size = Vector2(340, 300)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 11.646001
+anchor_top = 5.025
+anchor_right = 11.646001
+anchor_bottom = 5.025
+offset_left = -36.840027
+offset_top = -110.0
+offset_right = 303.15997
+offset_bottom = 190.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BagPanel" unique_id=1308097865]
+layout_mode = 2
+
+[node name="BagTitleLabel" type="Label" parent="BagPanel/VBoxContainer" unique_id=128824263]
+layout_mode = 2
+
+[node name="BagGridView" type="Control" parent="BagPanel/VBoxContainer" unique_id=1217393357]
+layout_mode = 2
+script = ExtResource("1_wwolw")
+
+[node name="LootPanel" type="PanelContainer" parent="." unique_id=1890347381]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 5.0870004
+anchor_top = 5.025
+anchor_right = 5.0870004
+anchor_bottom = 5.025
+offset_left = -42.48001
+offset_top = -31.0
+offset_right = 42.51999
+offset_bottom = 31.0
+script = ExtResource("1_kghqm")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="LootPanel" unique_id=1676182430]
+layout_mode = 2
+
+[node name="LootTitleLabel" type="Label" parent="LootPanel/VBoxContainer" unique_id=1595968645]
+layout_mode = 2
+text = "임시 보관함"
+
+[node name="LootGrid" type="GridContainer" parent="LootPanel/VBoxContainer" unique_id=792019158]
+layout_mode = 2
+columns = 4
+
+[node name="LootConfirmButton" type="Button" parent="LootPanel/VBoxContainer" unique_id=953225142]
+layout_mode = 2
+text = "정리 완료"
+
+[node name="BattlePanel" type="PanelContainer" parent="." unique_id=2145819769]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 2.312
+anchor_top = 8.662001
+anchor_right = 2.312
+anchor_bottom = 8.662001
+offset_left = -45.480003
+offset_top = -69.48004
+offset_right = 45.519997
+offset_bottom = 69.51996
+
+[node name="VBoxContainer" type="VBoxContainer" parent="BattlePanel" unique_id=6879766]
+layout_mode = 2
+
+[node name="BattleTitleLabel" type="Label" parent="BattlePanel/VBoxContainer" unique_id=1057487726]
+layout_mode = 2
+text = "자동 전투"
+
+[node name="PlayerHpLabel" type="Label" parent="BattlePanel/VBoxContainer" unique_id=1293316405]
+layout_mode = 2
+text = "플레이어 HP"
+
+[node name="EnemyHpLabel" type="Label" parent="BattlePanel/VBoxContainer" unique_id=277767684]
+layout_mode = 2
+text = "적 HP"
+
+[node name="BattleStatusLabel" type="Label" parent="BattlePanel/VBoxContainer" unique_id=431807950]
+layout_mode = 2
+text = "전투 대기"
+
+[node name="StartBattleButton" type="Button" parent="BattlePanel/VBoxContainer" unique_id=847147287]
+layout_mode = 2
+text = "전투 시작"
+
+[node name="MapPanel" type="PanelContainer" parent="." unique_id=1034516829]
+custom_minimum_size = Vector2(420, 430)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 14.250001
+anchor_top = 7.8750005
+anchor_right = 14.250001
+anchor_bottom = 7.8750005
+offset_left = -567.00006
+offset_top = -311.00003
+offset_right = -147.00006
+offset_bottom = 118.99997
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MapPanel" unique_id=1440790315]
+layout_mode = 2
+
+[node name="MapTitleLabel" type="Label" parent="MapPanel/VBoxContainer" unique_id=1404681073]
+layout_mode = 2
+text = "원정 경로"
+
+[node name="MapLayers" type="VBoxContainer" parent="MapPanel/VBoxContainer" unique_id=312068533]
+layout_mode = 2
+script = ExtResource("2_wwolw")
+
+[node name="PlayerStatusPanel" type="PanelContainer" parent="." unique_id=56585922]
+visible = false
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PlayerStatusPanel" unique_id=1268697140]
+layout_mode = 2
+
+[node name="StatusTitleLabel" type="Label" parent="PlayerStatusPanel/VBoxContainer" unique_id=913627158]
+layout_mode = 2
+
+[node name="PlayerStatsLabel" type="Label" parent="PlayerStatusPanel/VBoxContainer" unique_id=319226690]
+layout_mode = 2
+
+[node name="MessagePanel" type="PanelContainer" parent="." unique_id=1982294448]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 8.152
+anchor_top = 9.187
+anchor_right = 8.152
+anchor_bottom = 9.187
+offset_left = -280.08002
+offset_top = -56.48001
+offset_right = 19.919983
+offset_bottom = 48.51999
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MessagePanel" unique_id=1622002783]
+layout_mode = 2
+
+[node name="MessageLabel" type="Label" parent="MessagePanel/VBoxContainer" unique_id=915440432]
+custom_minimum_size = Vector2(300, 70)
+layout_mode = 2
+text = "원정 메시지"
+autowrap_mode = 3
+
+[node name="ContinueButton" type="Button" parent="MessagePanel/VBoxContainer" unique_id=116126329]
+layout_mode = 2
+text = "▼"

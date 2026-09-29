@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://cswi7ejudr32v"]
+
+[ext_resource type="Script" uid="uid://crhypia7nef11" path="res://script/ui/common/build/build_quick_slot_bar.gd" id="1_8k0dq"]
+
+[node name="BuildQuickSlotBar" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_8k0dq")
+
+[node name="QuickSlotPanel" type="PanelContainer" parent="."]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -390.0
+offset_top = -122.0
+offset_right = 390.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 0
+
+[node name="Slots" type="HBoxContainer" parent="QuickSlotPanel"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="FurnitureBagButton" type="Button" parent="."]
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 415.0
+offset_top = -122.0
+offset_right = 495.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+focus_mode = 0
+mouse_filter = 0
+text = "가구\n가방"
+
+[node name="FurnitureInventoryClip" type="Control" parent="."]
+visible = false
+clip_contents = true
+layout_mode = 1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -390.0
+offset_top = -260.0
+offset_right = 390.0
+offset_bottom = -10.0
+grow_horizontal = 2
+grow_vertical = 0
+mouse_filter = 2
+
+[node name="FurnitureInventoryPanel" type="PanelContainer" parent="FurnitureInventoryClip"]
+custom_minimum_size = Vector2(780, 250)
+layout_mode = 0
+offset_top = 250.0
+offset_right = 780.0
+offset_bottom = 500.0
+mouse_filter = 0
+
+[node name="Margin" type="MarginContainer" parent="FurnitureInventoryClip/FurnitureInventoryPanel"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+mouse_filter = 1
+
+[node name="Column" type="VBoxContainer" parent="FurnitureInventoryClip/FurnitureInventoryPanel/Margin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+mouse_filter = 1
+
+[node name="Header" type="HBoxContainer" parent="FurnitureInventoryClip/FurnitureInventoryPanel/Margin/Column"]
+layout_mode = 2
+mouse_filter = 1
+
+[node name="Title" type="Label" parent="FurnitureInventoryClip/FurnitureInventoryPanel/Margin/Column/Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 2
+text = "가구 인벤토리"
+
+[node name="Scroll" type="ScrollContainer" parent="FurnitureInventoryClip/FurnitureInventoryPanel/Margin/Column"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="Content" type="VBoxContainer" parent="FurnitureInventoryClip/FurnitureInventoryPanel/Margin/Column/Scroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+mouse_filter = 1
+
+[node name="EmptyLabel" type="Label" parent="FurnitureInventoryClip/FurnitureInventoryPanel/Margin/Column/Scroll/Content"]
+layout_mode = 2
+mouse_filter = 2
+text = "보유한 가구가 없습니다."
+
+[node name="InventoryGrid" type="GridContainer" parent="FurnitureInventoryClip/FurnitureInventoryPanel/Margin/Column/Scroll/Content"]
+layout_mode = 2
+theme_override_constants/h_separation = 6
+theme_override_constants/v_separation = 6
+columns = 9
+mouse_filter = 1
+

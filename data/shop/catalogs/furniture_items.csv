@@ -1,0 +1,13 @@
+id,name,category,icon_path,description,craft_category,effect_type,effect_value,effect_group,max_effective_count,effect_target
+shelf_1x1,1×1 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,작은 상품 진열대다.,store,,0,,0,
+shelf_2x1,2×1 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,중형 상품 진열대다.,store,,0,,0,
+shelf_3x1,3×1 진열대,sales,res://art/furniture/pixel_v1/shelf_3x1.png,대형 상품 진열대다.,store,,0,,0,
+warehouse_rack,창고 선반,facility,res://art/furniture/pixel_v1/warehouse_rack.png,아이템을 보관하는 창고용 선반이다.,construction,,0,,0,
+register,계산대,facility,res://art/furniture/pixel_v1/register.png,상품을 계산하는 계산대다.,store,,0,,0,
+door,문,facility,res://art/furniture/pixel_v1/door.png,매장의 출입문이다.,construction,,0,,0,
+warehouse_door,창고 문,facility,res://art/furniture/pixel_v1/warehouse_door.png,창고로 이동하는 문이다.,construction,,0,,0,
+production_door,생산실 문,facility,res://art/furniture/pixel_v1/production_door.png,생산·보관 구역으로 이동하는 문이다.,construction,,0,,0,
+drink_machine,음료 제조기,production,res://art/furniture/pixel_v1/drink_machine.png,음료 상품을 생산하는 설비다.,production,,0,,0,
+plant_small,작은 화분,decoration,res://art/furniture/pixel_v1/plant_small.png,일반 손님의 방문 비중을 높입니다.,interior,customer_weight,0.20,plant,2,normal
+wall_poster,상품 포스터,decoration,res://art/furniture/pixel_v1/wall_poster.png,손님의 구매욕구를 높이는 포스터다.,interior,purchase_desire,0.03,poster,2,
+magic_oven,마법 오븐,production,res://art/furniture/pixel_v1/magic_oven.png,빵을 굽는 생산 설비다.,production,,0,,0,

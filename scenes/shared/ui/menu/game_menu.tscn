@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://csyuipdt1v7ex"]
+
+[ext_resource type="Script" uid="uid://bft3g0vpn2moj" path="res://script/ui/common/menu/game_menu.gd" id="1_lit2r"]
+[ext_resource type="PackedScene" uid="uid://c7gy8jd857ckf" path="res://scenes/shared/ui/menu/settings_panel.tscn" id="1_vmjd0"]
+[ext_resource type="PackedScene" path="res://scenes/shared/ui/menu/save_slot_panel.tscn" id="2_lit2r"]
+
+[node name="GameMenu" type="Control" unique_id=1070152093]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_lit2r")
+
+[node name="MenuButton" type="Button" parent="." unique_id=2043663103]
+custom_minimum_size = Vector2(112, 54)
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -78.0
+offset_right = 136.0
+offset_bottom = -24.0
+grow_vertical = 0
+theme_override_font_sizes/font_size = 20
+text = "메뉴"
+
+[node name="MainMenuPanel" type="PanelContainer" parent="." unique_id=767777505]
+visible = false
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 24.0
+offset_top = -416.0
+offset_right = 204.0
+offset_bottom = -88.0
+grow_vertical = 0
+
+[node name="MenuVBox" type="VBoxContainer" parent="MainMenuPanel" unique_id=778002699]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="ManagementButton" type="Button" parent="MainMenuPanel/MenuVBox" unique_id=1116246058]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "관리"
+
+[node name="InfoButton" type="Button" parent="MainMenuPanel/MenuVBox" unique_id=732346817]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "정보"
+
+[node name="SettingsButton" type="Button" parent="MainMenuPanel/MenuVBox" unique_id=941315579]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "설정"
+
+[node name="SaveButton" type="Button" parent="MainMenuPanel/MenuVBox" unique_id=1399117822]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "저장"
+
+[node name="TitleButton" type="Button" parent="MainMenuPanel/MenuVBox" unique_id=85251255]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "시작 화면"
+
+[node name="QuitButton" type="Button" parent="MainMenuPanel/MenuVBox" unique_id=1493808066]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "게임 종료"
+
+[node name="SettingsPanel" parent="." unique_id=1873147968 instance=ExtResource("1_vmjd0")]
+visible = false
+layout_mode = 1
+
+[node name="SaveSlotPanel" parent="." unique_id=550524575 instance=ExtResource("2_lit2r")]
+visible = false
+layout_mode = 1
+
+[node name="ReturnTitleDialog" type="ConfirmationDialog" parent="." unique_id=1421028340]
+
+[node name="OverwriteSaveDialog" type="ConfirmationDialog" parent="." unique_id=783810924]
+
+[node name="QuitGameDialog" type="ConfirmationDialog" parent="." unique_id=765073014]
+
+
+

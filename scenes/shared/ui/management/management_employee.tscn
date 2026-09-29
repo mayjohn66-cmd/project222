@@ -1,0 +1,71 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" uid="uid://cgtmycehsh0uy" path="res://script/ui/management/management_employee.gd" id="1_employee"]
+
+[node name="ManagementEmployee" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_employee")
+
+[node name="MainVBox" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="MainVBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+text = "직원 관리"
+
+[node name="Tabs" type="HBoxContainer" parent="MainVBox"]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="ScheduleButton" type="Button" parent="MainVBox/Tabs"]
+custom_minimum_size = Vector2(120, 42)
+layout_mode = 2
+text = "근무표"
+
+[node name="EmploymentButton" type="Button" parent="MainVBox/Tabs"]
+custom_minimum_size = Vector2(120, 42)
+layout_mode = 2
+text = "고용·해고"
+
+[node name="TrainingButton" type="Button" parent="MainVBox/Tabs"]
+custom_minimum_size = Vector2(120, 42)
+layout_mode = 2
+text = "교육"
+
+[node name="InfoButton" type="Button" parent="MainVBox/Tabs"]
+custom_minimum_size = Vector2(120, 42)
+layout_mode = 2
+text = "정보"
+
+[node name="MessageLabel" type="Label" parent="MainVBox"]
+layout_mode = 2
+autowrap_mode = 2
+
+[node name="EmployeeScroll" type="ScrollContainer" parent="MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="EmployeeList" type="GridContainer" parent="MainVBox/EmployeeScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 3
+theme_override_constants/h_separation = 12
+theme_override_constants/v_separation = 12
+
+[node name="DismissDialog" type="ConfirmationDialog" parent="."]
+title = "직원 해고"
+ok_button_text = "해고"
+cancel_button_text = "취소"

@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b4y7sxyithauq"
+
+[deps]
+
+files=["res://data/shop/events/store_event_demands.customer.translation", "res://data/shop/events/store_event_demands.target.translation", "res://data/shop/events/store_event_demands.target.translation", "res://data/shop/events/store_event_demands.weight.translation", "res://data/shop/events/store_event_demands.min.translation", "res://data/shop/events/store_event_demands.max.translation"]
+
+source_file="res://data/shop/events/store_event_demands.csv"
+dest_files=["res://data/shop/events/store_event_demands.customer.translation", "res://data/shop/events/store_event_demands.target.translation", "res://data/shop/events/store_event_demands.target.translation", "res://data/shop/events/store_event_demands.weight.translation", "res://data/shop/events/store_event_demands.min.translation", "res://data/shop/events/store_event_demands.max.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

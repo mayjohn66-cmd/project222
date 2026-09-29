@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://c621mye8rs1gd"]
+
+[ext_resource type="Script" uid="uid://clswe1oery63l" path="res://script/actor/worker.gd" id="1_4twfu"]
+[ext_resource type="Script" path="res://script/actor/character_visual.gd" id="2_visual"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_uos3x"]
+
+[node name="Worker" type="CharacterBody2D" unique_id=484772766 groups=["worker"]]
+script = ExtResource("1_4twfu")
+
+[node name="Visual" type="AnimatedSprite2D" parent="."]
+position = Vector2(0, -32)
+texture_filter = 1
+script = ExtResource("2_visual")
+actor_role = "employee"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=273875260]
+visibility_layer = 2
+shape = SubResource("CircleShape2D_uos3x")
+disabled = true

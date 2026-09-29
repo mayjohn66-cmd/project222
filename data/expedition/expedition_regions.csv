@@ -1,0 +1,5 @@
+region_id,name,difficulty,description,entry_item_id,entry_amount,consume_on_entry
+forest,숲,쉬움,기본적인 재료와 약한 몬스터가 등장합니다.,,0,false
+mine,광산,보통,광물 재료가 많지만 전투가 자주 발생합니다.,,0,false
+swamp,늪,어려움,위험한 몬스터와 희귀 재료가 등장합니다.,,0,false
+hidden_ruins,숨겨진 유적,특수,보물 지도로 발견한 고대 유적입니다.,treasure_map,1,true

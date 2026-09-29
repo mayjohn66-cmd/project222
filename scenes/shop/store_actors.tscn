@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://dhkv1rfafmljc"]
+
+[ext_resource type="Script" uid="uid://bdc07y0n7g6a3" path="res://script/actor/player.gd" id="1_vnc6t"]
+[ext_resource type="PackedScene" path="res://scenes/shop/ui/components/rumor_dialog.tscn" id="10_rumor"]
+[ext_resource type="Script" path="res://script/actor/character_visual.gd" id="11_visual"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_ip07v"]
+
+[node name="Actors" type="Node2D" unique_id=894373964]
+y_sort_enabled = true
+
+[node name="Player" type="CharacterBody2D" parent="." unique_id=1897994313]
+position = Vector2(491, 351)
+script = ExtResource("1_vnc6t")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Player" unique_id=2102862741]
+position = Vector2(0, -32)
+texture_filter = 1
+script = ExtResource("11_visual")
+actor_role = "player"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player" unique_id=153278412]
+shape = SubResource("CapsuleShape2D_ip07v")
+
+[node name="Camera2D" type="Camera2D" parent="Player" unique_id=559111509]
+zoom = Vector2(1, 1)
+
+[node name="RumorDialog" parent="Player" unique_id=1389393674 instance=ExtResource("10_rumor")]

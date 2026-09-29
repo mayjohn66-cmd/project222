@@ -1,0 +1,17 @@
+furniture_id,item_id,amount
+shelf_1x1,iron_ore,2
+shelf_2x1,iron_ore,3
+shelf_3x1,iron_ore,4
+register,iron_ore,5
+register,mine_crystal,1
+door,iron_ore,2
+production_door,iron_ore,3
+production_door,mine_crystal,1
+drink_machine,iron_ore,5
+drink_machine,mine_crystal,2
+plant_small,iron_ore,2
+plant_small,water,1
+wall_poster,iron_ore,2
+wall_poster,mine_crystal,1
+magic_oven,iron_ore,6
+magic_oven,mine_crystal,3

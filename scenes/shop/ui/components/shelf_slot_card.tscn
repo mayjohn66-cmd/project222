@@ -1,0 +1,36 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://script/ui/shop/components/shelf_slot_card.gd" id="1_shelf_slot"]
+
+[node name="ShelfSlotCard" type="Button"]
+custom_minimum_size = Vector2(100, 125)
+text = ""
+script = ExtResource("1_shelf_slot")
+
+[node name="IconRect" type="TextureRect" parent="."]
+layout_mode = 0
+offset_left = 15.0
+offset_top = 20.0
+offset_right = 85.0
+offset_bottom = 90.0
+mouse_filter = 2
+expand_mode = 1
+stretch_mode = 5
+
+[node name="StatusLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 3.0
+offset_right = 95.0
+offset_bottom = 28.0
+mouse_filter = 2
+horizontal_alignment = 1
+
+[node name="StockLabel" type="Label" parent="."]
+layout_mode = 0
+offset_left = 5.0
+offset_top = 96.0
+offset_right = 95.0
+offset_bottom = 121.0
+mouse_filter = 2
+horizontal_alignment = 1

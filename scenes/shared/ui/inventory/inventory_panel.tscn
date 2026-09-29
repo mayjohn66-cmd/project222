@@ -1,0 +1,37 @@
+[gd_scene format=3 uid="uid://d3r5v48lo08kj"]
+
+[ext_resource type="Script" uid="uid://cc7kwb74ggqmt" path="res://script/ui/common/inventory/inventory_panel.gd" id="1_7ck5g"]
+[ext_resource type="PackedScene" uid="uid://dr8wv64jdg7cx" path="res://scenes/shared/ui/management/management_inventory.tscn" id="2_bxtnd"]
+[ext_resource type="Texture2D" path="res://art/ui/reference_theme/close.png" id="3_close"]
+
+[node name="InventoryPanel" type="PanelContainer" unique_id=1031747485]
+custom_minimum_size = Vector2(650, 420)
+script = ExtResource("1_7ck5g")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=992194043]
+layout_mode = 2
+
+[node name="TitleHBox" type="HBoxContainer" parent="VBoxContainer" unique_id=1934299339]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/TitleHBox" unique_id=1904538583]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 22
+text = "인벤토리"
+
+[node name="CloseButton" type="Button" parent="VBoxContainer/TitleHBox" unique_id=1784026870]
+theme_type_variation = &"CloseAction"
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+tooltip_text = "닫기"
+icon = ExtResource("3_close")
+flat = true
+expand_icon = true
+theme_override_constants/icon_max_width = 40
+
+[node name="UnifiedInventory" parent="VBoxContainer" unique_id=1757964247 instance=ExtResource("2_bxtnd")]
+custom_minimum_size = Vector2(600, 310)
+layout_mode = 2
+
+

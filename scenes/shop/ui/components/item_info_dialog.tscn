@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://ctsn4uo1mupbp"]
+
+[node name="ItemInfoDialog" type="AcceptDialog" unique_id=1846875784]
+oversampling_override = 1.0
+title = "아이템 정보"
+ok_button_text = "닫기"

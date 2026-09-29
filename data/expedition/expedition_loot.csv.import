@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dk1mopdcsnyog"
+
+[deps]
+
+files=["res://data/expedition/expedition_loot.item.translation", "res://data/expedition/expedition_loot.weight.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation"]
+
+source_file="res://data/expedition/expedition_loot.csv"
+dest_files=["res://data/expedition/expedition_loot.item.translation", "res://data/expedition/expedition_loot.weight.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

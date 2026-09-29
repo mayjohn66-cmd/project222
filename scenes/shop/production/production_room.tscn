@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://cabj1rlq872r8"]
+
+[ext_resource type="Script" uid="uid://bmml5pkjxincp" path="res://script/world/production/production_room.gd" id="1_hjq4i"]
+
+[node name="ProductionRoom" type="Node2D" unique_id=272348182]
+script = ExtResource("1_hjq4i")
+
+[node name="Objects" type="Node2D" parent="." unique_id=335540983]
+z_as_relative = false

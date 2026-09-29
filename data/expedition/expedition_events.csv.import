@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cs8b5s4bvxosy"
+
+[deps]
+
+files=["res://data/expedition/expedition_events.region.translation", "res://data/expedition/expedition_events.node.translation", "res://data/expedition/expedition_events.weight.translation", "res://data/expedition/expedition_events.message.translation", "res://data/expedition/expedition_events.result.translation", "res://data/expedition/expedition_events.target.translation", "res://data/expedition/expedition_events.value.translation", "res://data/expedition/expedition_events.day.translation"]
+
+source_file="res://data/expedition/expedition_events.csv"
+dest_files=["res://data/expedition/expedition_events.region.translation", "res://data/expedition/expedition_events.node.translation", "res://data/expedition/expedition_events.weight.translation", "res://data/expedition/expedition_events.message.translation", "res://data/expedition/expedition_events.result.translation", "res://data/expedition/expedition_events.target.translation", "res://data/expedition/expedition_events.value.translation", "res://data/expedition/expedition_events.day.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

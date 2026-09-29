@@ -1,0 +1,39 @@
+[gd_scene format=3 uid="uid://cjr6jutabrgkd"]
+
+[ext_resource type="PackedScene" uid="uid://bbjbudrqmavmv" path="res://scenes/shop/ui/store_shelf_panel.tscn" id="2_jhkag"]
+[ext_resource type="PackedScene" uid="uid://d3r5v48lo08kj" path="res://scenes/shared/ui/inventory/inventory_panel.tscn" id="2_ngy0j"]
+[ext_resource type="PackedScene" uid="uid://bapdwb62f6onb" path="res://scenes/shop/ui/store_slot_action_panel.tscn" id="3_t0nkd"]
+[ext_resource type="PackedScene" uid="uid://ft35xs7b5h01" path="res://scenes/shop/ui/store_restock_panel.tscn" id="5_qykmc"]
+[ext_resource type="PackedScene" uid="uid://dh26w1caxofpa" path="res://scenes/shop/ui/store_build_confirm.tscn" id="6_kto26"]
+[ext_resource type="PackedScene" uid="uid://dxpg68bbh3ivk" path="res://scenes/shop/ui/store_day_summary.tscn" id="7_5na3j"]
+[ext_resource type="PackedScene" uid="uid://cqkqxha5yrvti" path="res://scenes/shop/ui/store_hud.tscn" id="8_5na3j"]
+[ext_resource type="PackedScene" uid="uid://coiv2sh2r2mcm" path="res://scenes/shared/ui/management/management_menu.tscn" id="9_h6rum"]
+[ext_resource type="PackedScene" uid="uid://cswi7ejudr32v" path="res://scenes/shared/ui/build/build_quick_slot_bar.tscn" id="10_p7lp6"]
+[ext_resource type="PackedScene" uid="uid://csyuipdt1v7ex" path="res://scenes/shared/ui/menu/game_menu.tscn" id="12_i1etu"]
+[ext_resource type="PackedScene" path="res://scenes/shop/ui/components/item_info_dialog.tscn" id="13_item_info"]
+
+[node name="UI" type="CanvasLayer" unique_id=1798152667]
+
+[node name="ShelfPanel" parent="." unique_id=365516084 instance=ExtResource("2_jhkag")]
+
+[node name="SlotActionPanel" parent="." unique_id=603816826 instance=ExtResource("3_t0nkd")]
+
+[node name="ItemInfoDialog" parent="." instance=ExtResource("13_item_info")]
+
+[node name="InventoryPanel" parent="." unique_id=1031747485 instance=ExtResource("2_ngy0j")]
+visible = true
+
+[node name="RestockPanel" parent="." unique_id=1591577266 instance=ExtResource("5_qykmc")]
+
+[node name="BuildConfirmCenter" parent="." unique_id=844524368 instance=ExtResource("6_kto26")]
+visible = true
+
+[node name="DaySummaryCenter" parent="." unique_id=1990696905 instance=ExtResource("7_5na3j")]
+
+[node name="HUD" parent="." unique_id=1895525498 instance=ExtResource("8_5na3j")]
+
+[node name="GameMenu" parent="." unique_id=1070152093 instance=ExtResource("12_i1etu")]
+
+[node name="ManagementMenu" parent="." unique_id=1142601100 instance=ExtResource("9_h6rum")]
+
+[node name="BuildQuickSlotBar" parent="." unique_id=627044800 instance=ExtResource("10_p7lp6")]

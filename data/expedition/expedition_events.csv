@@ -1,0 +1,41 @@
+event_id,region_id,node_type,weight,message,result_type,target_id,value,day_filter
+gather_iron_forest,forest,gather,20,숲에서 철광석을 발견했다!,loot,gather_iron,0,
+gather_wheat_forest,forest,gather,100,야생 밀밭을 발견했다!,loot,gather_wheat,0,
+gather_water_forest,forest,gather,100,맑은 호수를 발견했다!,loot,gather_water,0,
+unknown_slime_forest,forest,unknown,35,숲에서 몬스터를 발견했다!,battle,field_slime,0,
+unknown_rest_forest,forest,unknown,25,숲속에서 쉴 곳을 발견했다!,heal,,20,
+unknown_treasure_forest,forest,unknown,25,숲에서 보물 상자를 발견했다!,loot,treasure_basic,0,
+unknown_empty_forest,forest,unknown,15,숲을 살펴봤지만 아무것도 없었다.,none,,0,
+treasure_forest,forest,treasure,100,숲의 보물 상자를 발견했다!,loot,treasure_basic,0,
+
+gather_iron_mine,mine,gather,100,광산에서 철광맥을 발견했다!,loot,gather_iron,0,
+unknown_slime_mine,mine,unknown,35,광산 안에서 몬스터를 발견했다!,battle,field_slime,0,
+unknown_rest_mine,mine,unknown,25,광산의 안전한 공간을 발견했다!,heal,,20,
+unknown_treasure_mine,mine,unknown,25,광산에서 보물 상자를 발견했다!,loot,treasure_basic,0,
+unknown_empty_mine,mine,unknown,15,빈 갱도를 발견했다.,none,,0,
+treasure_mine,mine,treasure,100,광산의 보물을 발견했다!,loot,treasure_basic,0,
+
+gather_iron_swamp,swamp,gather,100,늪지에서 광물을 발견했다!,loot,gather_iron,0,
+unknown_slime_swamp,swamp,unknown,35,늪에서 몬스터를 발견했다!,battle,field_slime,0,
+unknown_rest_swamp,swamp,unknown,25,잠시 머물 수 있는 마른 땅을 발견했다!,heal,,20,
+unknown_treasure_swamp,swamp,unknown,25,늪에 묻힌 보물 상자를 발견했다!,loot,treasure_basic,0,
+unknown_empty_swamp,swamp,unknown,15,늪을 뒤졌지만 아무것도 발견하지 못했다.,none,,0,
+treasure_swamp,swamp,treasure,100,늪에 숨겨진 보물을 발견했다!,loot,treasure_basic,0,
+
+battle_slime_forest,forest,battle,100,슬라임을 발견했다!,battle,field_slime,0,
+battle_bat_mine,mine,battle,100,광산 박쥐를 발견했다!,battle,mine_bat,0,
+battle_slime_swamp,swamp,battle,100,늪 슬라임을 발견했다!,battle,swamp_slime,0,
+
+boss_forest_event,forest,boss,100,거대 슬라임이 길을 막고 있다!,battle,forest_alpha_slime,0,
+boss_mine_event,mine,boss,100,광산 골렘이 나타났다!,battle,mine_golem,0,
+boss_swamp_event,swamp,boss,100,늪의 여왕 슬라임이 모습을 드러냈다!,battle,swamp_queen_slime,0,
+
+unknown_map_forest,forest,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,saturday
+unknown_map_mine,mine,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,saturday
+unknown_map_swamp,swamp,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,saturday
+
+hidden_battle,hidden_ruins,battle,100,유적 수호병이 나타났다!,battle,ruins_sentinel,0,
+hidden_gather,hidden_ruins,gather,100,유적 바닥에서 고대 파편을 발견했다!,loot,hidden_gather,0,
+hidden_unknown,hidden_ruins,unknown,100,무너진 방 안에서 고대 파편을 발견했다!,loot,hidden_gather,0,
+hidden_treasure,hidden_ruins,treasure,100,봉인된 고대 유물을 발견했다!,loot,hidden_treasure,0,
+hidden_boss,hidden_ruins,boss,100,고대 수호자가 깨어났다!,battle,ancient_guardian,0,

@@ -1,0 +1,114 @@
+[gd_scene format=3 uid="uid://dkpmxf76nbk5n"]
+
+[ext_resource type="Script" uid="uid://co6p4wjpj2v78" path="res://script/ui/expedition/prep/prep_bag.gd" id="1_qbc33"]
+[ext_resource type="Script" uid="uid://dunv6piyyoiqb" path="res://script/ui/expedition/owned_equipment_grid.gd" id="2_hp7ll"]
+[ext_resource type="Script" uid="uid://c2iog0x20alms" path="res://script/ui/common/inventory/grid_inventory_view.gd" id="3_jmw6g"]
+[ext_resource type="Texture2D" path="res://art/ui/pixel_theme/panel_inset.png" id="4_panel"]
+
+[sub_resource type="StyleBoxTexture" id="BagFrame"]
+content_margin_left = 16.0
+content_margin_top = 18.0
+content_margin_right = 16.0
+content_margin_bottom = 16.0
+texture = ExtResource("4_panel")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxTexture" id="GridPaper"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+texture = ExtResource("4_panel")
+texture_margin_left = 8.0
+texture_margin_top = 8.0
+texture_margin_right = 8.0
+texture_margin_bottom = 8.0
+
+[node name="BagContent" type="PanelContainer" unique_id=1628860483]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("BagFrame")
+script = ExtResource("1_qbc33")
+
+[node name="MainVBox" type="VBoxContainer" parent="." unique_id=835937791]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TopTitles" type="HBoxContainer" parent="MainVBox"]
+layout_mode = 2
+
+[node name="OwnedHeading" type="Label" parent="MainVBox/TopTitles"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.88, 0.7, 1)
+theme_override_font_sizes/font_size = 20
+text = "보유 장비"
+horizontal_alignment = 1
+
+[node name="BagHeading" type="Label" parent="MainVBox/TopTitles"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.88, 0.7, 1)
+theme_override_font_sizes/font_size = 20
+text = "원정 장비"
+horizontal_alignment = 1
+
+[node name="BagBody" type="HBoxContainer" parent="MainVBox" unique_id=1004787954]
+custom_minimum_size = Vector2(0, 280)
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="OwnedPanel" type="PanelContainer" parent="MainVBox/BagBody" unique_id=1425781624]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("GridPaper")
+
+[node name="OwnedVBox" type="VBoxContainer" parent="MainVBox/BagBody/OwnedPanel" unique_id=169233335]
+layout_mode = 2
+alignment = 1
+
+[node name="OwnedTitleLabel" type="Label" parent="MainVBox/BagBody/OwnedPanel/OwnedVBox" unique_id=1582342566]
+visible = false
+layout_mode = 2
+text = "보유 장비"
+
+[node name="OwnedGridArea" type="Control" parent="MainVBox/BagBody/OwnedPanel/OwnedVBox" unique_id=910102504]
+custom_minimum_size = Vector2(276, 230)
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("2_hp7ll")
+
+[node name="BagGridPanel" type="PanelContainer" parent="MainVBox/BagBody" unique_id=1928500727]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_styles/panel = SubResource("GridPaper")
+
+[node name="BagGridVBox" type="VBoxContainer" parent="MainVBox/BagBody/BagGridPanel" unique_id=827667471]
+layout_mode = 2
+alignment = 1
+
+[node name="BagGridTitleLabel" type="Label" parent="MainVBox/BagBody/BagGridPanel/BagGridVBox" unique_id=252994227]
+visible = false
+layout_mode = 2
+text = "원정 가방"
+
+[node name="BagGridView" type="Control" parent="MainVBox/BagBody/BagGridPanel/BagGridVBox" unique_id=1493975187]
+layout_mode = 2
+size_flags_horizontal = 4
+script = ExtResource("3_jmw6g")
+
+[node name="DepartureFooter" type="Control" parent="MainVBox"]
+custom_minimum_size = Vector2(0, 56)
+layout_mode = 2
+size_flags_vertical = 3

@@ -1,0 +1,324 @@
+[gd_scene format=3 uid="uid://coiv2sh2r2mcm"]
+
+[ext_resource type="Script" uid="uid://o0312atgab04" path="res://script/ui/management/management_menu.gd" id="1_s855e"]
+[ext_resource type="PackedScene" uid="uid://dr8wv64jdg7cx" path="res://scenes/shared/ui/management/management_inventory.tscn" id="2_u5eed"]
+[ext_resource type="PackedScene" uid="uid://xcdt424d1qpl" path="res://scenes/shared/ui/management/management_production.tscn" id="3_scpk5"]
+[ext_resource type="Script" uid="uid://rcsup08iyp6k" path="res://script/ui/management/management_production.gd" id="4_dicqs"]
+[ext_resource type="PackedScene" path="res://scenes/shared/ui/management/management_blueprint.tscn" id="5_46mo5"]
+[ext_resource type="PackedScene" path="res://scenes/shared/ui/management/management_employee.tscn" id="5_w6d4b"]
+[ext_resource type="PackedScene" uid="uid://ccpy6hh5yue6p" path="res://scenes/shared/ui/management/management_construction.tscn" id="7_ywjrt"]
+[ext_resource type="Texture2D" path="res://art/ui/reference_theme/close.png" id="8_close"]
+[ext_resource type="Texture2D" path="res://art/ui/pixel_theme/icon_leaf.png" id="9_leaf"]
+[ext_resource type="Texture2D" path="res://art/ui/pixel_theme/icon_coin.png" id="10_coin"]
+
+[node name="ManagementMenu" type="Control" unique_id=1142601100]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_s855e")
+
+[node name="DimBackground" type="ColorRect" parent="." unique_id=972801743]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.8509804)
+
+[node name="CenterContainer" type="CenterContainer" parent="DimBackground" unique_id=1850755919]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MainPanel" type="PanelContainer" parent="DimBackground/CenterContainer" unique_id=981246302]
+custom_minimum_size = Vector2(1040, 590)
+layout_mode = 2
+
+[node name="MainVBox" type="VBoxContainer" parent="DimBackground/CenterContainer/MainPanel" unique_id=1130272469]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="Header" type="PanelContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox" unique_id=304889226]
+custom_minimum_size = Vector2(0, 58)
+layout_mode = 2
+theme_type_variation = &"WoodHeader"
+
+[node name="HeaderMargin" type="MarginContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Header"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 8
+theme_override_constants/margin_bottom = 6
+
+[node name="HeaderRow" type="HBoxContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Header/HeaderMargin"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="LeafIcon" type="TextureRect" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Header/HeaderMargin/HeaderRow"]
+custom_minimum_size = Vector2(30, 30)
+layout_mode = 2
+texture = ExtResource("9_leaf")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TitleLabel" type="Label" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Header/HeaderMargin/HeaderRow" unique_id=1083764489]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme_override_colors/font_color = Color(1, 0.941176, 0.733333, 1)
+theme_override_colors/font_shadow_color = Color(0.121569, 0.0705882, 0.0470588, 1)
+theme_override_constants/shadow_offset_x = 2
+theme_override_constants/shadow_offset_y = 2
+theme_override_font_sizes/font_size = 26
+text = "편의점 관리"
+
+[node name="CloseButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Header/HeaderMargin/HeaderRow" unique_id=1187458029]
+theme_type_variation = &"CloseAction"
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+tooltip_text = "닫기"
+icon = ExtResource("8_close")
+flat = true
+expand_icon = true
+theme_override_constants/icon_max_width = 40
+
+[node name="Body" type="HBoxContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox" unique_id=1084764035]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 10
+
+[node name="Navigation" type="VBoxContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body" unique_id=1020899385]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="InventoryButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation" unique_id=1658182329]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+toggle_mode = true
+text = "인벤토리"
+
+[node name="ProductionButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation" unique_id=1408039905]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+toggle_mode = true
+text = "생산"
+
+[node name="EmployeeButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation" unique_id=1609727061]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+toggle_mode = true
+text = "직원"
+
+[node name="BlueprintButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation" unique_id=194023440]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+toggle_mode = true
+text = "설계도"
+
+[node name="ConstructionButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation" unique_id=2027787397]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+toggle_mode = true
+text = "건설"
+
+[node name="ScheduleButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation" unique_id=300679183]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+toggle_mode = true
+text = "일정"
+
+[node name="HistoryButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation" unique_id=1100197805]
+custom_minimum_size = Vector2(0, 44)
+layout_mode = 2
+toggle_mode = true
+text = "정보"
+
+[node name="ContentArea" type="Control" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body" unique_id=747227479]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ContentBackdrop" type="Panel" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"ParchmentContent"
+
+[node name="InventoryContent" type="Control" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea" unique_id=1963660168]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ManagementInventory" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/InventoryContent" unique_id=1934206105 instance=ExtResource("2_u5eed")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ProductionContent" type="PanelContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea" unique_id=869210072]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ManagementProduction" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/ProductionContent" unique_id=1733654707 instance=ExtResource("3_scpk5")]
+layout_mode = 2
+script = ExtResource("4_dicqs")
+
+[node name="EmployeeContent" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea" unique_id=1472301861 instance=ExtResource("5_w6d4b")]
+layout_mode = 1
+
+[node name="BlueprintContent" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea" unique_id=1711839046 instance=ExtResource("5_46mo5")]
+layout_mode = 1
+
+[node name="ScheduleContent" type="Control" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea" unique_id=1591879487]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/ScheduleContent" unique_id=1846805787]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScheduleVBox" type="VBoxContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/ScheduleContent/MarginContainer" unique_id=695617896]
+layout_mode = 2
+
+[node name="CurrentDateLabel" type="Label" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/ScheduleContent/MarginContainer/ScheduleVBox" unique_id=644336178]
+layout_mode = 2
+
+[node name="ScheduleScroll" type="ScrollContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/ScheduleContent/MarginContainer/ScheduleVBox" unique_id=911506606]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScheduleList" type="VBoxContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/ScheduleContent/MarginContainer/ScheduleVBox/ScheduleScroll" unique_id=1690402084]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ConstructionContent" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea" unique_id=362034735 instance=ExtResource("7_ywjrt")]
+layout_mode = 1
+
+[node name="HistoryContent" type="Control" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea" unique_id=422182867]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent" unique_id=124793286]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HistoryVBox" type="VBoxContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer" unique_id=1076670937]
+layout_mode = 2
+
+[node name="HistoryTitleLabel" type="Label" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer/HistoryVBox" unique_id=1866342794]
+layout_mode = 2
+
+[node name="InfoTabBar" type="HBoxContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer/HistoryVBox" unique_id=1850903391]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="BasicInfoButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer/HistoryVBox/InfoTabBar" unique_id=1574820741]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "기본 정보"
+
+[node name="DetailInfoButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer/HistoryVBox/InfoTabBar" unique_id=361197528]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "상세 정보"
+
+[node name="SalesTrendButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer/HistoryVBox/InfoTabBar" unique_id=746307278]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "매출 추이"
+
+[node name="ExtraRecordButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer/HistoryVBox/InfoTabBar" unique_id=1954539558]
+custom_minimum_size = Vector2(0, 42)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "추가 기록"
+
+[node name="HistoryScroll" type="ScrollContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer/HistoryVBox" unique_id=858687732]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="HistoryList" type="VBoxContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer/HistoryVBox/HistoryScroll" unique_id=1612652077]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Footer" type="PanelContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox" unique_id=268404668]
+custom_minimum_size = Vector2(0, 48)
+layout_mode = 2
+theme_type_variation = &"WoodHeader"
+
+[node name="FooterMargin" type="MarginContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Footer"]
+layout_mode = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 5
+
+[node name="FooterRow" type="HBoxContainer" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Footer/FooterMargin"]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="CoinIcon" type="TextureRect" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Footer/FooterMargin/FooterRow"]
+custom_minimum_size = Vector2(28, 28)
+layout_mode = 2
+texture = ExtResource("10_coin")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="MoneyLabel" type="Label" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Footer/FooterMargin/FooterRow" unique_id=1105714281]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.941176, 0.733333, 1)
+theme_override_font_sizes/font_size = 18
+text = "소지금: 500 G"
+
+[node name="FooterSeparator" type="VSeparator" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Footer/FooterMargin/FooterRow"]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Footer/FooterMargin/FooterRow" unique_id=1814395407]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.956863, 0.890196, 0.709804, 1)
+text = "현재 메뉴 설명"
+

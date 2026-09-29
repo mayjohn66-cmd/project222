@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://btx21xbgtb4at"]
+
+[ext_resource type="Script" uid="uid://dtkki2hvf2nn5" path="res://script/world/shop/floor.gd" id="1_vt38n"]
+
+[node name="Floor" type="Node2D" unique_id=555068720]
+z_index = -10
+script = ExtResource("1_vt38n")
+production_columns = null
+production_rows = null
+corridor_length = null
+corridor_width = null

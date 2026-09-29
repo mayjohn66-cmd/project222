@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dh31llcr2hda5"
+
+[deps]
+
+files=["res://data/shop/employees/employees.display.translation", "res://data/shop/employees/employees.speed.translation", "res://data/shop/employees/employees.checkout.translation", "res://data/shop/employees/employees.restock.translation", "res://data/shop/employees/employees.can.translation", "res://data/shop/employees/employees.can.translation", "res://data/shop/employees/employees.default.translation", "res://data/shop/employees/employees.hire.translation", "res://data/shop/employees/employees.initially.translation", "res://data/shop/employees/employees.preferred.translation", "res://data/shop/employees/employees.monthly.translation"]
+
+source_file="res://data/shop/employees/employees.csv"
+dest_files=["res://data/shop/employees/employees.display.translation", "res://data/shop/employees/employees.speed.translation", "res://data/shop/employees/employees.checkout.translation", "res://data/shop/employees/employees.restock.translation", "res://data/shop/employees/employees.can.translation", "res://data/shop/employees/employees.can.translation", "res://data/shop/employees/employees.default.translation", "res://data/shop/employees/employees.hire.translation", "res://data/shop/employees/employees.initially.translation", "res://data/shop/employees/employees.preferred.translation", "res://data/shop/employees/employees.monthly.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

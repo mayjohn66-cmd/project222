@@ -1,0 +1,107 @@
+[gd_scene format=3 uid="uid://bbjbudrqmavmv"]
+
+[ext_resource type="Script" uid="uid://b1v81wkhhcuoj" path="res://script/ui/shop/shelf_ui.gd" id="1_sqmg8"]
+[ext_resource type="Texture2D" path="res://art/ui/reference_theme/close.png" id="2_close"]
+
+[node name="ShelfPanel" type="PanelContainer" unique_id=365516084]
+custom_minimum_size = Vector2(760, 420)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -43.0
+offset_right = 20.0
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_sqmg8")
+
+[node name="WindowBg" type="VBoxContainer" parent="." unique_id=1834882172]
+custom_minimum_size = Vector2(880, 560)
+layout_mode = 2
+size_flags_horizontal = 5
+theme_override_constants/separation = 12
+
+[node name="TitleBar" type="HBoxContainer" parent="WindowBg" unique_id=411146231]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="WindowBg/TitleBar" unique_id=371824948]
+layout_mode = 2
+text = "진열대 관리"
+
+[node name="Spacer" type="Control" parent="WindowBg/TitleBar" unique_id=2037963899]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CloseButton" type="Button" parent="WindowBg/TitleBar" unique_id=2047445172]
+theme_type_variation = &"CloseAction"
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 2
+tooltip_text = "닫기"
+icon = ExtResource("2_close")
+flat = true
+expand_icon = true
+theme_override_constants/icon_max_width = 40
+
+[node name="ContentHBox" type="HBoxContainer" parent="WindowBg" unique_id=1572168532]
+layout_mode = 2
+size_flags_horizontal = 5
+
+[node name="ShelfArea" type="MarginContainer" parent="WindowBg/ContentHBox" unique_id=826228350]
+custom_minimum_size = Vector2(330, 330)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ShelfCenter" type="CenterContainer" parent="WindowBg/ContentHBox/ShelfArea" unique_id=452696848]
+layout_mode = 2
+size_flags_horizontal = 5
+size_flags_vertical = 5
+
+[node name="ShelfSlotGrid" type="GridContainer" parent="WindowBg/ContentHBox/ShelfArea/ShelfCenter" unique_id=1818680159]
+custom_minimum_size = Vector2(120, 150)
+layout_mode = 2
+columns = 2
+
+[node name="InventoryArea" type="VBoxContainer" parent="WindowBg/ContentHBox" unique_id=1278169422]
+custom_minimum_size = Vector2(360, 330)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="CategoryTabs" type="HBoxContainer" parent="WindowBg/ContentHBox/InventoryArea" unique_id=349668421]
+layout_mode = 2
+
+[node name="FoodTabButton" type="Button" parent="WindowBg/ContentHBox/InventoryArea/CategoryTabs" unique_id=1666553566]
+custom_minimum_size = Vector2(80, 38)
+layout_mode = 2
+text = "음식"
+
+[node name="ConsumableTabButton" type="Button" parent="WindowBg/ContentHBox/InventoryArea/CategoryTabs" unique_id=1074527854]
+custom_minimum_size = Vector2(80, 38)
+layout_mode = 2
+text = "소비"
+
+[node name="MaterialTabButton" type="Button" parent="WindowBg/ContentHBox/InventoryArea/CategoryTabs" unique_id=121517576]
+layout_mode = 2
+text = "재료"
+
+[node name="ToolTabButton" type="Button" parent="WindowBg/ContentHBox/InventoryArea/CategoryTabs" unique_id=73519030]
+custom_minimum_size = Vector2(80, 38)
+layout_mode = 2
+text = "도구"
+
+[node name="EtcTabButton" type="Button" parent="WindowBg/ContentHBox/InventoryArea/CategoryTabs" unique_id=654766403]
+custom_minimum_size = Vector2(80, 38)
+layout_mode = 2
+text = "기타"
+
+[node name="InventoryScroll" type="ScrollContainer" parent="WindowBg/ContentHBox/InventoryArea" unique_id=1052703700]
+custom_minimum_size = Vector2(340, 280)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="InventoryGrid" type="GridContainer" parent="WindowBg/ContentHBox/InventoryArea/InventoryScroll" unique_id=282473903]
+layout_mode = 2
+columns = 4
+

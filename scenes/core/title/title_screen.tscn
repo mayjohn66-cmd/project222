@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://c0uq5w2vpwxki"]
+
+[ext_resource type="Script" uid="uid://dcisd008ss1n0" path="res://script/ui/common/menu/title_screen.gd" id="1_6d6rd"]
+
+[node name="TitleScreen" type="Control" unique_id=1776288594]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_6d6rd")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=1544250292]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 5.0
+offset_right = 1.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1238172877]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=766716976]
+layout_mode = 2
+text = "편의점 게임"
+horizontal_alignment = 1
+
+[node name="NewGameButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=504837553]
+custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
+text = "새 게임"
+
+[node name="ContinueButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1007886096]
+custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
+text = "이어하기"
+
+[node name="DeleteSaveButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1307776234]
+custom_minimum_size = Vector2(240, 50)
+layout_mode = 2
+text = "저장 기록 삭제"
+
+[node name="StatusLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1580178094]
+layout_mode = 2
+
+[node name="DeleteSaveDialog" type="ConfirmationDialog" parent="." unique_id=48977977]
+ok_button_text = "저장 기록 삭제"
+
+[node name="NewGameDialog" type="ConfirmationDialog" parent="." unique_id=1355396811]
+
+[node name="LoadSlotPanel" type="PanelContainer" parent="." unique_id=884868730]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -200.0
+offset_right = 150.0
+offset_bottom = 100.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="LoadSlotVBox" type="VBoxContainer" parent="LoadSlotPanel" unique_id=1947854879]
+layout_mode = 2
+
+[node name="LoadSlotTitleLabel" type="Label" parent="LoadSlotPanel/LoadSlotVBox" unique_id=592737510]
+layout_mode = 2
+text = "불러 오기"
+horizontal_alignment = 1
+
+[node name="AutoSaveButton" type="Button" parent="LoadSlotPanel/LoadSlotVBox" unique_id=126234784]
+layout_mode = 2
+
+[node name="LoadSlot1Button" type="Button" parent="LoadSlotPanel/LoadSlotVBox" unique_id=1754863491]
+layout_mode = 2
+
+[node name="LoadSlot2Button" type="Button" parent="LoadSlotPanel/LoadSlotVBox" unique_id=837306720]
+layout_mode = 2
+
+[node name="LoadSlotCloseButton" type="Button" parent="LoadSlotPanel/LoadSlotVBox" unique_id=1235079300]
+layout_mode = 2
+text = "닫기"
