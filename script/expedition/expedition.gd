@@ -21,10 +21,6 @@ enum ExpeditionEndReason {
 }
 
 
-const LOOT_ITEM_CARD_SCRIPT = preload(
-	"res://script/ui/expedition/loot_item_card.gd"
-)
-
 @onready var day_label: Label = (
 	$UI/Panel/VBoxContainer/DayLabel
 )
@@ -254,6 +250,26 @@ var expedition_battle_controller := (
 var expedition_map_controller := (
 	ExpeditionMapController.new()
 )
+
+# CSV 이벤트 결과 처리. _ready에서 이 씬(host)과 연결한다.
+var expedition_event_controller := (
+	ExpeditionEventController.new()
+)
+
+# 장비 능력치 계산과 표시. _ready에서 이 씬(host)과 연결한다.
+var expedition_stats_controller := (
+	ExpeditionStatsController.new()
+)
+
+# 진행 메시지 큐. _ready에서 이 씬(host)과 연결한다.
+var expedition_message_controller := (
+	ExpeditionMessageController.new()
+)
+
+# 가방 선택·드래그와 전리품 정리. _ready에서 이 씬(host)과 연결한다.
+var expedition_bag_controller := (
+	ExpeditionBagController.new()
+)
 var preparation_return_pending: bool = false
 
 
@@ -264,6 +280,10 @@ func _ready() -> void:
 	expedition_checkpoint_controller.setup(self)
 	expedition_battle_controller.setup(self)
 	expedition_map_controller.setup(self)
+	expedition_event_controller.setup(self)
+	expedition_stats_controller.setup(self)
+	expedition_message_controller.setup(self)
+	expedition_bag_controller.setup(self)
 	call_deferred("_install_preparation_village")
 	# =====================================================
 	# 1. 공용 메뉴 초기화
@@ -654,113 +674,56 @@ func finish_expedition() -> void:
 # 관리 인벤토리 등 외부 UI에서 현재 원정 가방을
 # 조회할 때 사용하는 읽기 전용 복사본이다.
 func get_active_expedition_bag_placements() -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
-
-	DebugLog.write(
-		"[통합 인벤토리 확인] 원정 가방 모델 존재: ",
-		expedition_bag != null
-	)
-
-	if expedition_bag == null:
-		return result
-
-	for placement in expedition_bag.placements:
-		result.append(
-			placement.duplicate(true)
-		)
-
-	DebugLog.write(
-		"[통합 인벤토리 확인] 실시간 가방 배치: ",
-		result
-	)
-
-	return result
+	return expedition_bag_controller.get_active_bag_placements()
 
 # =========================================================
 # 원정 가방과 전리품 정리
 # =========================================================
+# 가방 선택·드래그 앤 드롭과 전리품 정리는 ExpeditionBagController가 처리한다.
+# 그리드 뷰와 전리품 카드가 이 씬을 대상으로 호출하므로 같은 이름의 진입점을 유지한다.
 
 func setup_bag_grid_view() -> void:
-	if expedition_bag == null:
-		return
-
-	if bag_grid_view == null:
-		return
-
-	bag_grid_view.setup(
-		"bag",
-		expedition_bag,
-		self,
-		expedition_bag.width,
-		expedition_bag.height,
-		52
-	)
+	expedition_bag_controller.setup_grid_view()
 
 func refresh_bag_ui() -> void:
-	if bag_grid_view == null:
-		return
-
-	if expedition_bag == null:
-		return
-
-	bag_grid_view.refresh()
-	bag_grid_view.refresh_selection_visuals()
+	expedition_bag_controller.refresh_bag_ui()
 
 func select_grid_item(
 	source: String,
 	uid: int
 ) -> void:
-	if source != "bag":
-		return
-
-	if uid < 0:
-		return
-
-	selected_bag_uid = uid
-
-	if bag_grid_view != null:
-		bag_grid_view.refresh_selection_visuals()
+	expedition_bag_controller.select_grid_item(
+		source,
+		uid
+	)
 
 
 func toggle_grid_item(
 	source: String,
 	uid: int
 ) -> void:
-	if source != "bag":
-		return
-
-	if uid < 0:
-		return
-
-	if selected_bag_uid == uid:
-		selected_bag_uid = -1
-	else:
-		selected_bag_uid = uid
-
-	if bag_grid_view != null:
-		bag_grid_view.refresh_selection_visuals()
+	expedition_bag_controller.toggle_grid_item(
+		source,
+		uid
+	)
 
 
 func is_grid_item_selected(
 	source: String,
 	uid: int
 ) -> bool:
-	return (
-		source == "bag"
-		and selected_bag_uid == uid
+	return expedition_bag_controller.is_grid_item_selected(
+		source,
+		uid
 	)
 
 
 func clear_grid_selection(
 	source: String
 ) -> void:
-	if source != "bag":
-		return
-
-	selected_bag_uid = -1
-
-	if bag_grid_view != null:
-		bag_grid_view.refresh_selection_visuals()
+	expedition_bag_controller.clear_grid_selection(
+		source
+	)
 
 
 func can_drop_grid_data(
@@ -768,341 +731,38 @@ func can_drop_grid_data(
 	data: Dictionary,
 	cursor_cell: Vector2i
 ) -> bool:
-	if target_source != "bag":
-		return false
-
-	if expedition_bag == null:
-		return false
-
-	var source: String = str(
-		data.get(
-			"source",
-			""
-		)
+	return expedition_bag_controller.can_drop_grid_data(
+		target_source,
+		data,
+		cursor_cell
 	)
-
-	var grab_offset: Vector2i = data.get(
-		"grab_offset_cell",
-		Vector2i.ZERO
-	)
-
-	var target_cell: Vector2i = (
-		cursor_cell - grab_offset
-	)
-
-	if source == "bag":
-		var uid: int = int(
-			data.get(
-				"uid",
-				-1
-			)
-		)
-
-		var placement: Dictionary = (
-			expedition_bag.get_placement(
-				uid
-			)
-		)
-
-		if placement.is_empty():
-			return false
-
-		var item_id: String = str(
-			placement.get(
-				"item_id",
-				""
-			)
-		)
-
-		var rotated: bool = bool(
-			placement.get(
-				"rotated",
-				false
-			)
-		)
-
-		return expedition_bag.can_place(
-			item_id,
-			target_cell,
-			rotated,
-			uid
-		)
-
-	if source == "loot":
-		var loot_index: int = int(
-			data.get(
-				"loot_index",
-				-1
-			)
-		)
-
-		if (
-			loot_index < 0
-			or loot_index >= temporary_loot.size()
-		):
-			return false
-
-		var loot: Dictionary = (
-			temporary_loot[loot_index]
-		)
-
-		var item_id: String = str(
-			loot.get(
-				"item_id",
-				""
-			)
-		)
-
-		if item_id.is_empty():
-			return false
-
-		return expedition_bag.can_place(
-			item_id,
-			target_cell,
-			false
-		)
-
-	return false
 
 func drop_grid_data(
 	target_source: String,
 	data: Dictionary,
 	cursor_cell: Vector2i
 ) -> void:
-	if not can_drop_grid_data(
+	expedition_bag_controller.drop_grid_data(
 		target_source,
 		data,
 		cursor_cell
-	):
-		return
-
-	var source: String = str(
-		data.get(
-			"source",
-			""
-		)
 	)
-
-	var grab_offset: Vector2i = data.get(
-		"grab_offset_cell",
-		Vector2i.ZERO
-	)
-
-	var target_cell: Vector2i = (
-		cursor_cell - grab_offset
-	)
-
-	# 원정 가방 내부 이동
-	if source == "bag":
-		var uid: int = int(
-			data.get(
-				"uid",
-				-1
-			)
-		)
-
-		if expedition_bag.move_item(
-			uid,
-			target_cell
-		):
-			selected_bag_uid = uid
-			refresh_bag_ui()
-
-		return
-
-	# 임시 전리품 → 원정 가방
-	if source == "loot":
-		var loot_index: int = int(
-			data.get(
-				"loot_index",
-				-1
-			)
-		)
-
-		if (
-			loot_index < 0
-			or loot_index >= temporary_loot.size()
-		):
-			return
-
-		var loot: Dictionary = (
-			temporary_loot[loot_index]
-		)
-
-		var item_id: String = str(
-			loot.get(
-				"item_id",
-				""
-			)
-		)
-
-		var amount: int = int(
-			loot.get(
-				"amount",
-				1
-			)
-		)
-
-		var new_uid: int = (
-			expedition_bag.add_item(
-				item_id,
-				target_cell,
-				amount,
-				false
-			)
-		)
-
-		if new_uid < 0:
-			return
-
-		temporary_loot.remove_at(
-			loot_index
-		)
-
-		selected_bag_uid = new_uid
-
-		refresh_loot_ui()
-		refresh_bag_ui()
 
 func rotate_selected_bag_item() -> void:
-	if selected_bag_uid < 0:
-		return
-
-	if expedition_bag == null:
-		return
-
-	if not expedition_bag.rotate_item(
-		selected_bag_uid
-	):
-		return
-
-	refresh_bag_ui()
+	expedition_bag_controller.rotate_selected_bag_item()
 
 func refresh_loot_ui():
-	for child in loot_grid.get_children():
-		child.queue_free()
-
-	for index in range(
-		temporary_loot.size()
-	):
-		var loot: Dictionary = (
-			temporary_loot[index]
-		)
-
-		var item_id: String = str(
-			loot.get(
-				"item_id",
-				""
-			)
-		)
-
-		var amount: int = int(
-			loot.get(
-				"amount",
-				1
-			)
-		)
-
-		var card = LOOT_ITEM_CARD_SCRIPT.new()
-
-		card.custom_minimum_size = Vector2(
-			100,
-			80
-		)
-
-		loot_grid.add_child(card)
-
-		card.setup(
-			index,
-			item_id,
-			amount,
-			self
-		)
+	expedition_bag_controller.refresh_loot_ui()
 
 func return_bag_item_to_loot(
 	data: Dictionary
 ):
-	var uid: int = int(
-		data.get(
-			"uid",
-			-1
-		)
+	expedition_bag_controller.return_bag_item_to_loot(
+		data
 	)
-
-	if uid < 0:
-		return
-
-	var placement: Dictionary = (
-		expedition_bag.remove_item(
-			uid
-		)
-	)
-
-	if placement.is_empty():
-		return
-
-	var item_id: String = str(
-		placement.get(
-			"item_id",
-			""
-		)
-	)
-
-	var amount: int = int(
-		placement.get(
-			"amount",
-			1
-		)
-	)
-
-	temporary_loot.append(
-		{
-			"item_id": item_id,
-			"amount": amount
-		}
-	)
-
-	selected_bag_uid = -1
-
-	DebugLog.write(
-		"[전리품] 가방 → 임시 보관함: ",
-		ItemData.get_item_name(
-			item_id
-		),
-		" ×",
-		amount
-	)
-
-	refresh_bag_ui()
-	refresh_loot_ui()
 
 func confirm_loot_organization() -> void:
-	if current_expedition_phase != ExpeditionPhase.RUN:
-		return
-
-	if not loot_panel.visible:
-		return
-
-	# 남은 전리품이 없다면 바로 완료
-	if temporary_loot.is_empty():
-		_finish_loot_organization()
-		return
-
-	var remaining_amount: int = 0
-
-	for loot in temporary_loot:
-		remaining_amount += maxi(
-			int(loot.get("amount", 0)),
-			0
-		)
-
-	discard_loot_dialog.dialog_text = (
-		"가방에 넣지 않은 전리품이 %d개 남아 있습니다."
-		% remaining_amount
-		+ "\n남은 전리품을 포기하고 진행하시겠습니까?"
-	)
-
-	discard_loot_dialog.popup_centered()
+	expedition_bag_controller.confirm_loot_organization()
 
 # =========================================================
 # 전투 진행과 전리품 생성
@@ -1602,110 +1262,12 @@ func reset_for_next_expedition_day():
 # 장비 능력치와 진행 메시지
 # =========================================================
 
+# 장비 능력치 계산은 ExpeditionStatsController가 처리한다.
 func apply_bag_equipment_stats() -> void:
-	var bonus_attack: int = 0
-	var bonus_defense: int = 0
-
-	if expedition_bag == null:
-		combat_player_attack = BASE_PLAYER_ATTACK
-		combat_player_defense = BASE_PLAYER_DEFENSE
-		return
-
-	for placement in expedition_bag.placements:
-		var item_id: String = str(
-			placement.get(
-				"item_id",
-				""
-			)
-		)
-
-		if item_id.is_empty():
-			continue
-
-		if not ExpeditionEquipmentData.has_equipment(
-			item_id
-		):
-			continue
-
-		var equipment_type: String = (
-			ExpeditionEquipmentData.get_equipment_type(
-				item_id
-			)
-		)
-
-		# 전투 능력치에는 무기와 방어구만 반영한다.
-		if (
-			equipment_type
-			!= ExpeditionEquipmentData.TYPE_WEAPON
-			and equipment_type
-			!= ExpeditionEquipmentData.TYPE_ARMOR
-		):
-			continue
-
-		var effect_id: String = (
-			ExpeditionEquipmentData.get_effect_id(
-				item_id
-			)
-		)
-
-		var effective_value: int = int(
-			EquipmentEnhancementService.get_effective_value(
-				placement
-			)
-		)
-
-		match effect_id:
-			"attack":
-				bonus_attack += effective_value
-
-			"defense":
-				bonus_defense += effective_value
-
-			_:
-				push_warning(
-					"[원정 능력치] 처리되지 않은 장비 효과"
-					+ " / 아이템: "
-					+ item_id
-					+ " / 효과: "
-					+ effect_id
-				)
-
-	combat_player_attack = (
-		BASE_PLAYER_ATTACK
-		+ bonus_attack
-	)
-
-	combat_player_defense = (
-		BASE_PLAYER_DEFENSE
-		+ bonus_defense
-	)
-
-	DebugLog.write(
-		"[원정 능력치]"
-		+ " / 기본 공격: ",
-		BASE_PLAYER_ATTACK,
-		" / 장비 공격: ",
-		bonus_attack,
-		" / 최종 공격: ",
-		combat_player_attack,
-		" / 기본 방어: ",
-		BASE_PLAYER_DEFENSE,
-		" / 장비 방어: ",
-		bonus_defense,
-		" / 최종 방어: ",
-		combat_player_defense
-	)
+	expedition_stats_controller.apply_bag_equipment_stats()
 
 func update_player_stats_ui() -> void:
-	player_stats_label.text = (
-		"HP %d/%d | 공격 %d | 방어 %d"
-		% [
-			combat_player_hp,
-			combat_player_max_hp,
-			combat_player_attack,
-			combat_player_defense
-		]
-	)
+	expedition_stats_controller.update_player_stats_ui()
 
 
 func _open_loot_after_message() -> void:
@@ -1720,437 +1282,34 @@ func _open_loot_after_message() -> void:
 	loot_panel.visible = true
 
 
+# 진행 메시지 큐는 ExpeditionMessageController가 처리한다.
 func show_run_messages(
 	messages: Array[String],
 	finish_action: Callable = Callable()
 ) -> void:
-	run_message_queue.clear()
-
-	for message in messages:
-		run_message_queue.append(
-			message
-		)
-
-	run_message_finish_action = (
+	expedition_message_controller.show_messages(
+		messages,
 		finish_action
-	)
-
-	message_panel.visible = true
-
-	_show_next_run_message()
-
-
-func _show_next_run_message() -> void:
-	if run_message_queue.is_empty():
-		message_panel.visible = false
-
-		var finish_action := (
-			run_message_finish_action
-		)
-
-		run_message_finish_action = (
-			Callable()
-		)
-
-		if finish_action.is_valid():
-			finish_action.call()
-
-		return
-
-	message_label.text = (
-		run_message_queue.pop_front()
 	)
 
 
 func _on_message_continue_pressed() -> void:
-	if current_expedition_phase != ExpeditionPhase.RUN:
-		return
-
-	if not message_panel.visible:
-		return
-
-	_show_next_run_message()
-
-	# 종료 제한 안내를 원래 상태 문구로 복구
-	if not message_panel.visible:
-		update_ui()
+	expedition_message_controller.on_continue_pressed()
 
 # =========================================================
 # 원정 이벤트 처리
 # =========================================================
 
+# CSV 이벤트 결과 처리는 ExpeditionEventController가 담당한다.
 func resolve_expedition_event(
 	event: Dictionary
 ) -> void:
-	var message := str(
-		event.get(
-			"message",
-			""
-		)
-	)
-
-	var result_type := str(
-		event.get(
-			"result_type",
-			"none"
-		)
-	)
-
-	var target_id := str(
-		event.get(
-			"target_id",
-			""
-		)
-	)
-
-	var value := int(
-		event.get(
-			"value",
-			0
-		)
-	)
-
-	match result_type:
-		"battle":
-			show_run_messages(
-				[
-					message
-				],
-				Callable(
-					self,
-					"_start_csv_event_battle"
-				).bind(
-					target_id
-				)
-			)
-
-		"loot":
-			_resolve_csv_loot_event(
-				message,
-				target_id
-			)
-
-		"heal":
-			_resolve_csv_heal_event(
-				message,
-				value
-			)
-
-		"none":
-			show_run_messages(
-				[
-					message
-				],
-				Callable(
-					self,
-					"complete_current_map_node"
-				)
-			)
-
-		_:
-			push_warning(
-				"[원정] 알 수 없는 result_type: "
-				+ result_type
-			)
-
-			complete_current_map_node()
-
-func _start_csv_event_battle(
-	enemy_id: String
-) -> void:
-	if enemy_id.is_empty():
-		push_warning(
-			"[원정] 적 ID가 비어 있습니다."
-		)
-
-		complete_current_map_node()
-		return
-
-	start_map_battle(
-		enemy_id
-	)
-
-func _resolve_csv_heal_event(
-	message: String,
-	heal_amount: int
-) -> void:
-	var before_hp: int = (
-		combat_player_hp
-	)
-
-	var safe_heal_amount: int = max(
-		heal_amount,
-		0
-	)
-
-	combat_player_hp = min(
-		combat_player_hp + safe_heal_amount,
-		combat_player_max_hp
-	)
-
-	var healed: int = (
-		combat_player_hp
-		- before_hp
-	)
-
-	update_battle_ui()
-
-	var result_message: String
-
-	if healed <= 0:
-		result_message = (
-			"이미 체력이 가득 차 있다."
-		)
-	else:
-		result_message = (
-			"HP를 %d 회복했다!"
-			% healed
-		)
-
-	show_run_messages(
-		[
-			message,
-			result_message
-		],
-		Callable(
-			self,
-			"complete_current_map_node"
-		)
-	)
-
-func _resolve_csv_loot_event(
-	message: String,
-	table_id: String
-) -> void:
-	temporary_loot.clear()
-
-	var gathering_result: Dictionary = (
-		expedition_gathering_service.resolve_gathering(
-			table_id,
-			expedition_bag,
-			expedition_loot_service
-		)
-	)
-
-	var gathering_handled: bool = bool(
-		gathering_result.get(
-			"handled",
-			false
-		)
-	)
-
-	# =========================
-	# 도구 채집 규칙이 있는 전리품
-	# =========================
-
-	if gathering_handled:
-		var gathering_success: bool = bool(
-			gathering_result.get(
-				"success",
-				false
-			)
-		)
-
-		if not gathering_success:
-			var error_message: String = str(
-				gathering_result.get(
-					"message",
-					"채집 정보를 확인할 수 없습니다."
-				)
-			)
-
-			push_error(
-				"[원정 채집] " + error_message
-			)
-
-			show_run_messages(
-				[
-					message,
-					error_message
-				],
-				Callable(
-					self,
-					"complete_current_map_node"
-				)
-			)
-			return
-
-		var gathered: bool = bool(
-			gathering_result.get(
-				"gathered",
-				false
-			)
-		)
-
-		var gathering_message: String = str(
-			gathering_result.get(
-				"message",
-				""
-			)
-		)
-
-		# 도구 부족 또는 확률 판정 실패
-		if not gathered:
-			show_run_messages(
-				[
-					message,
-					gathering_message
-				],
-				Callable(
-					self,
-					"complete_current_map_node"
-				)
-			)
-			return
-
-		var gathered_item_id: String = str(
-			gathering_result.get(
-				"item_id",
-				""
-			)
-		)
-
-		var gathered_amount: int = int(
-			gathering_result.get(
-				"amount",
-				0
-			)
-		)
-
-		temporary_loot.append(
-			{
-				"item_id": gathered_item_id,
-				"amount": gathered_amount
-			}
-		)
-
-		map_panel.visible = false
-		battle_panel.visible = false
-		loot_panel.visible = false
-
-		show_run_messages(
-			[
-				message,
-				gathering_message,
-				"%s ×%d 획득!"
-				% [
-					ItemData.get_item_name(
-						gathered_item_id
-					),
-					gathered_amount
-				]
-			],
-			Callable(
-				self,
-				"_open_loot_after_message"
-			)
-		)
-		return
-
-	# =========================
-	# 기존 일반 전리품 처리
-	# =========================
-
-	var result: Dictionary = (
-		expedition_loot_service.roll_loot_table(
-			table_id
-		)
-	)
-
-	if not bool(
-		result.get(
-			"success",
-			false
-		)
-	):
-		push_error(
-			"[원정 전리품] "
-			+ str(
-				result.get(
-					"message",
-					"전리품 추첨 실패"
-				)
-			)
-		)
-
-		show_run_messages(
-			[
-				message,
-				"전리품 정보를 확인할 수 없습니다."
-			],
-			Callable(
-				self,
-				"complete_current_map_node"
-			)
-		)
-		return
-
-	var item_id: String = str(
-		result.get(
-			"item_id",
-			""
-		)
-	)
-
-	var amount: int = int(
-		result.get(
-			"amount",
-			0
-		)
-	)
-
-	temporary_loot.append(
-		{
-			"item_id": item_id,
-			"amount": amount
-		}
-	)
-
-	map_panel.visible = false
-	battle_panel.visible = false
-	loot_panel.visible = false
-
-	show_run_messages(
-		[
-			message,
-			"%s ×%d 발견!"
-			% [
-				ItemData.get_item_name(item_id),
-				amount
-			]
-		],
-		Callable(
-			self,
-			"_open_loot_after_message"
-		)
+	expedition_event_controller.resolve(
+		event
 	)
 
 func _finish_loot_organization() -> void:
-	if current_expedition_phase != ExpeditionPhase.RUN:
-		return
-
-	if not loot_panel.visible:
-		return
-
-	if not temporary_loot.is_empty():
-		DebugLog.write(
-			"[전리품] 포기한 아이템: ",
-			temporary_loot
-		)
-
-	temporary_loot.clear()
-	selected_bag_uid = -1
-
-	refresh_loot_ui()
-	refresh_bag_ui()
-
-	loot_panel.visible = false
-
-	update_ui()
-
-	DebugLog.write("[전리품] 정리 완료 / 가방 아이템 유지")
-
-	complete_current_map_node()
+	expedition_bag_controller.finish_loot_organization()
 
 
 func _on_prep_region_changed(
