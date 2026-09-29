@@ -239,6 +239,11 @@ var checkpoint_file_service = (
 )
 
 var save_failure_reason: String = ""
+
+# 체크포인트 저장·복원. _ready에서 이 씬(host)과 연결한다.
+var expedition_checkpoint_controller := (
+	ExpeditionCheckpointController.new()
+)
 var preparation_return_pending: bool = false
 
 
@@ -246,6 +251,7 @@ var preparation_return_pending: bool = false
 
 
 func _ready() -> void:
+	expedition_checkpoint_controller.setup(self)
 	call_deferred("_install_preparation_village")
 	# =====================================================
 	# 1. 공용 메뉴 초기화
@@ -2738,364 +2744,23 @@ func get_expedition_end_reason_text(
 # 원정 체크포인트 저장과 복원
 # =========================================================
 
+# 체크포인트 저장·복원은 ExpeditionCheckpointController가 처리한다.
+# 아래 함수는 외부(day_manager, 점검 스크립트)가 쓰는 공개 진입점이다.
 func can_save_expedition_checkpoint() -> bool:
-	if expedition_bag == null:
-		return false
-
-	# 원정 준비 화면에서는 저장 가능
-	if current_expedition_phase == ExpeditionPhase.PREP:
-		return true
-
-	# 결과 정산 화면에서는 저장하지 않는다.
-	if current_expedition_phase != ExpeditionPhase.RUN:
-		return false
-
-	if battle_active:
-		return false
-
-	if not battle_timer.is_stopped():
-		return false
-
-	if message_panel.visible:
-		return false
-
-	if not run_message_queue.is_empty():
-		return false
-
-	if run_message_finish_action.is_valid():
-		return false
-
-	if loot_panel.visible:
-		return false
-
-	if not temporary_loot.is_empty():
-		return false
-
-	if not selected_map_node_id.is_empty():
-		return false
-
-	if discard_loot_dialog.visible:
-		return false
-
-	# 다음 경로를 선택하는 지도 화면에서만 저장 가능
-	return map_panel.visible
-
-func _get_map_layers_for_save() -> Array:
-	var saved_layers: Array = []
-
-	if expedition_map == null:
-		return saved_layers
-
-	for raw_layer in expedition_map.layers:
-		if not raw_layer is Array:
-			continue
-
-		saved_layers.append(
-			raw_layer.duplicate(true)
-		)
-
-	return saved_layers
+	return expedition_checkpoint_controller.can_save()
 
 func create_expedition_checkpoint_data() -> Dictionary:
-	if not can_save_expedition_checkpoint():
-		return {}
-
-	var saved_region_id: String = (
-		current_region_id
-	)
-
-	if (
-		current_expedition_phase
-		== ExpeditionPhase.PREP
-		and prep_panel.has_method(
-			"get_selected_region_id"
-		)
-	):
-		saved_region_id = str(
-			prep_panel.call(
-				"get_selected_region_id"
-			)
-		)
-
-	return {
-		"checkpoint_version": 1,
-		"shop_return_context": GameState.get_meta("shop_return_context",{}).duplicate(true),
-		"current_day": current_day,
-		"phase": int(current_expedition_phase),
-		"region_id": saved_region_id,
-
-		"bag_placements": (
-			expedition_bag.placements.duplicate(true)
-		),
-
-		"map_layers": (
-			_get_map_layers_for_save()
-		),
-
-		"current_map_node_id": (
-			current_map_node_id
-		),
-
-		"visited_map_node_ids": (
-			visited_map_node_ids.duplicate()
-		),
-
-		"combat_player_hp": combat_player_hp,
-		"combat_player_max_hp": combat_player_max_hp,
-	}
+	return expedition_checkpoint_controller.create_data()
 
 func save_expedition_checkpoint(
 	target_path: String = GameState.SAVE_PATH
 ) -> bool:
-	save_failure_reason = ""
-
-	if not can_save_expedition_checkpoint():
-		save_failure_reason = (
-			"현재 진행을 마친 뒤 저장해주세요."
-		)
-		return false
-
-	var checkpoint_data: Dictionary = (
-		create_expedition_checkpoint_data()
+	return expedition_checkpoint_controller.save(
+		target_path
 	)
-
-	if checkpoint_data.is_empty():
-		save_failure_reason = (
-			"원정 저장 정보를 만들지 못했습니다."
-		)
-		return false
-
-	# 현재 원정 가방도 공통 저장 데이터에 반영
-	GameState.save_expedition_bag(
-		expedition_bag.placements
-	)
-
-	GameState.current_day = current_day
-
-	GameState.set_expedition_checkpoint(
-		checkpoint_data
-	)
-
-	var save_data: Dictionary = (
-		GameState.create_save_data()
-	)
-
-	var save_result: Dictionary = (
-		checkpoint_file_service.write_verified_checkpoint(
-			save_data,
-			target_path
-		)
-	)
-
-	if not bool(
-		save_result.get(
-			"success",
-			false
-		)
-	):
-		save_failure_reason = str(
-			save_result.get(
-				"message",
-				"원정 데이터를 저장하지 못했습니다."
-			)
-		)
-		return false
-
-	return true
 
 func restore_expedition_checkpoint() -> bool:
-	if not GameState.has_expedition_checkpoint():
-		return false
-
-	var checkpoint: Dictionary = (
-		GameState.expedition_checkpoint.duplicate(true)
-	)
-
-	GameState.set_meta("shop_return_context",checkpoint.get("shop_return_context",{}).duplicate(true))
-
-	var saved_phase: int = int(
-		checkpoint.get(
-			"phase",
-			ExpeditionPhase.PREP
-		)
-	)
-
-	current_day = int(
-		checkpoint.get(
-			"current_day",
-			GameState.current_day
-		)
-	)
-
-	GameState.current_day = current_day
-
-	current_region_id = str(
-		checkpoint.get(
-			"region_id",
-			GameConfig.DEFAULT_REGION_ID
-		)
-	)
-
-	var saved_bag: Variant = (
-		checkpoint.get(
-			"bag_placements",
-			[]
-		)
-	)
-
-	if saved_bag is Array:
-		if not expedition_bag.load_placements(
-			saved_bag
-		):
-			push_error(
-				"[원정 복원] 가방 배치를 복원하지 못했습니다."
-			)
-			return false
-
-	combat_player_max_hp = maxi(
-		int(
-			checkpoint.get(
-				"combat_player_max_hp",
-				100
-			)
-		),
-		1
-	)
-
-	combat_player_hp = clampi(
-		int(
-			checkpoint.get(
-				"combat_player_hp",
-				combat_player_max_hp
-			)
-		),
-		0,
-		combat_player_max_hp
-	)
-
-	# 준비 화면 저장 복원
-	if saved_phase == ExpeditionPhase.PREP:
-		set_expedition_phase(
-			ExpeditionPhase.PREP
-		)
-
-		setup_bag_grid_view()
-		refresh_bag_ui()
-		update_ui()
-
-		DebugLog.write(
-			"[원정 복원] 준비 화면 복원 완료"
-		)
-
-		return true
-
-	# 현재는 PREP와 안전한 RUN만 저장한다.
-	if saved_phase != ExpeditionPhase.RUN:
-		push_error(
-			"[원정 복원] 지원하지 않는 원정 단계입니다."
-		)
-		return false
-
-	var saved_layers: Variant = (
-		checkpoint.get(
-			"map_layers",
-			[]
-		)
-	)
-
-	if (
-		not saved_layers is Array
-		or saved_layers.is_empty()
-	):
-		push_error(
-			"[원정 복원] 저장된 지도 정보가 없습니다."
-		)
-		return false
-
-	var restored_map := ExpeditionMap.new()
-
-	restored_map.region_id = current_region_id
-	restored_map.layers.clear()
-
-	for raw_layer in saved_layers:
-		if not raw_layer is Array:
-			continue
-
-		restored_map.layers.append(
-			raw_layer.duplicate(true)
-		)
-
-	if restored_map.layers.is_empty():
-		push_error(
-			"[원정 복원] 지도 층을 복원하지 못했습니다."
-		)
-		return false
-
-	restored_map.layer_count = (
-		restored_map.layers.size()
-	)
-
-	expedition_map = restored_map
-
-	current_map_node_id = str(
-		checkpoint.get(
-			"current_map_node_id",
-			""
-		)
-	)
-
-	selected_map_node_id = ""
-	visited_map_node_ids.clear()
-
-	var saved_visited_nodes: Variant = (
-		checkpoint.get(
-			"visited_map_node_ids",
-			[]
-		)
-	)
-
-	if saved_visited_nodes is Array:
-		for raw_node_id in saved_visited_nodes:
-			visited_map_node_ids.append(
-				str(raw_node_id)
-			)
-
-	if current_map_node_id.is_empty():
-		push_error(
-			"[원정 복원] 현재 지도 위치가 없습니다."
-		)
-		return false
-
-	temporary_loot.clear()
-	run_message_queue.clear()
-	run_message_finish_action = Callable()
-
-	battle_active = false
-	battle_timer.stop()
-
-	message_panel.visible = false
-	battle_panel.visible = false
-	loot_panel.visible = false
-
-	apply_bag_equipment_stats()
-	setup_bag_grid_view()
-
-	set_expedition_phase(
-		ExpeditionPhase.RUN
-	)
-
-	update_ui()
-	update_battle_ui()
-	refresh_bag_ui()
-	refresh_map_ui()
-
-	DebugLog.write(
-		"[원정 복원] 진행 상태 복원 완료"
-		+ " / 위치: ",
-		current_map_node_id
-	)
-
-	return true
+	return expedition_checkpoint_controller.restore()
 
 func _on_game_menu_save_slot_requested(
 	path: String,
