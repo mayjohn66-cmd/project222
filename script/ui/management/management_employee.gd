@@ -88,20 +88,20 @@ func refresh_view() -> void:
 	match current_employee_tab:
 		EmployeeTab.SCHEDULE:
 			message_label.text = (
-				"주간은 연속된 최대 2타임, 심야는 단독으로 선택합니다."
+				"이어진 시간대를 최대 2타임까지 선택합니다(각 6시간, 심야와 저녁도 이어집니다)."
 				+ "\n모두 해제하면 휴무입니다. 변경 후 적용을 눌러주세요."
 			)
 
 		EmployeeTab.EMPLOYMENT:
 			message_label.text = (
 				"직원을 고용하거나 해고합니다."
-				+ "\n오전 9시 오픈 준비 중에 변경할 수 있습니다."
+				+ "\n아침 6시 오픈 준비 중에 변경할 수 있습니다."
 			)
 
 		EmployeeTab.TRAINING:
 			message_label.text = (
 				"교육할 능력을 선택합니다."
-				+ "\n오전 9시 오픈 준비 중인 고용 직원만 교육할 수 있습니다."
+				+ "\n아침 6시 오픈 준비 중인 고용 직원만 교육할 수 있습니다."
 			)
 
 		EmployeeTab.INFO:

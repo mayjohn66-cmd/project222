@@ -185,7 +185,7 @@ func _refresh_production_room_expansion() -> void:
 
 	if not can_expand_now:
 		note_label.text = (
-			"공간 확장은 오전 9시 영업 시작 전에만 가능합니다."
+			"공간 확장은 아침 6시 영업 시작 전에만 가능합니다."
 		)
 	elif not can_afford_expansion:
 		note_label.text = (
@@ -271,7 +271,7 @@ func _refresh_store_expansion() -> void:
 
 	if not can_expand_now:
 		note_label.text = (
-			"공간 확장은 오전 9시 영업 시작 전에만 가능합니다."
+			"공간 확장은 아침 6시 영업 시작 전에만 가능합니다."
 		)
 	elif not can_afford_expansion:
 		note_label.text = (
@@ -428,7 +428,7 @@ func _refresh_warehouse_expansion() -> void:
 
 	if not can_expand_now:
 		note_label.text = (
-			"공간 확장은 오전 9시 영업 시작 전에만 가능합니다."
+			"공간 확장은 아침 6시 영업 시작 전에만 가능합니다."
 		)
 
 	elif not can_afford_expansion:
@@ -608,7 +608,7 @@ func _confirm_production_room_expansion(
 	refresh_view()
 	expansion_completed.emit()
 
-# 공간 확장은 오전 9시 영업 시작 전 준비 시간에만 허용한다.
+# 공간 확장은 아침 6시 영업 시작 전 준비 시간에만 허용한다.
 func _can_expand_space_now() -> bool:
 	var current_scene: Node = (
 		get_tree().current_scene
@@ -641,19 +641,8 @@ func _can_expand_space_now() -> bool:
 			return false
 
 	return (
-		int(day_manager.get("current_hour")) == 9
+		int(day_manager.get("current_hour")) == GameConfig.DAY_START_HOUR
 		and not bool(day_manager.get("shop_open"))
 		and not bool(day_manager.get("summary_open"))
 		and not bool(day_manager.get("closing_shop"))
-		and not bool(day_manager.get("night_closed"))
-		and not bool(
-			day_manager.get(
-				"fast_forwarding_to_morning"
-			)
-		)
-		and not bool(
-			day_manager.get(
-				"night_auto_running"
-			)
-		)
 	)

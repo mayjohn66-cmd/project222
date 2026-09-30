@@ -189,6 +189,11 @@ static func get_monthly_salary(
 static func get_period_name(period: String) -> String:
 	return str(PERIOD_NAMES.get(period, period))
 
+# 하루의 시간대를 시간 순서대로 둔 고리(심야 → 아침 → 낮 → 저녁 → 심야).
+const PERIOD_CYCLE: Array[String] = ["night", "morning", "day", "evening"]
+
+# 근무표는 시간대가 겹치지 않는 최대 2개, 두 개일 때는 이어진 시간대여야 한다
+# (심야+아침, 아침+낮, 낮+저녁, 저녁+심야). 자정을 넘는 저녁+심야도 이어진 것으로 본다.
 static func is_work_periods_valid(periods: Array[String]) -> bool:
 	if periods.is_empty():
 		return true
@@ -204,15 +209,17 @@ static func is_work_periods_valid(periods: Array[String]) -> bool:
 
 		unique.append(period)
 
-	if unique.has("night"):
-		return unique.size() == 1
-
 	if unique.size() > 2:
 		return false
 
-	# 떨어져 있는 아침+저녁 조합 금지
-	if unique.has("morning") and unique.has("evening"):
-		return false
+	if unique.size() == 2:
+		var gap: int = absi(
+			PERIOD_CYCLE.find(unique[0])
+			- PERIOD_CYCLE.find(unique[1])
+		)
+
+		# 고리에서 이웃이면 차이가 1 또는 3(처음과 끝)이다.
+		return gap == 1 or gap == PERIOD_CYCLE.size() - 1
 
 	return true
 
@@ -221,13 +228,19 @@ static func get_period_at_hour(hour: int) -> String:
 	if hour < 0 or hour > 23:
 		return ""
 
-	if hour >= 9 and hour < 13:
+	if (
+		hour >= GameConfig.MORNING_PERIOD_START_HOUR
+		and hour < GameConfig.DAY_PERIOD_START_HOUR
+	):
 		return "morning"
 
-	if hour >= 13 and hour < 17:
+	if (
+		hour >= GameConfig.DAY_PERIOD_START_HOUR
+		and hour < GameConfig.EVENING_PERIOD_START_HOUR
+	):
 		return "day"
 
-	if hour >= 17 and hour < 21:
+	if hour >= GameConfig.EVENING_PERIOD_START_HOUR:
 		return "evening"
 
 	return "night"
