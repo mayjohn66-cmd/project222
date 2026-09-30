@@ -58,6 +58,9 @@ const EXPEDITION_AUTO_WIN_BATTLES: bool = true
 #  - 지금 진열대에 재고가 있는 품목은 이 배수만큼 더 자주 원해진다(재고 없는 품목도 원할 수 있음).
 #  - 희귀한 재료일수록 덜 원해진다(희귀도 0~3 → 가중치).
 const DEMAND_STOCKED_WEIGHT_MULT: float = 10.0
+# 손님 유형이 특정 품목(target_type=item)을 원하는 행의 무게: 재고가 있으면 이 배수만 곱한다.
+# 유형별 취향(무게)이 재고에 묻히지 않게 카테고리 안 배수보다 작게 둔다.
+const DEMAND_STOCKED_ENTRY_WEIGHT_MULT: float = 2.0
 const DEMAND_RARITY_WEIGHTS: Dictionary = {
 	0: 100.0,
 	1: 100.0,
@@ -70,13 +73,12 @@ const DEFAULT_REGION_ID: String = "forest"
 
 
 # 시작 재고. 판매 상품은 2~3일치를 넉넉하게, 건축·제작 재료는 첫 설비 하나를 지을 만큼만 준다.
-# 손님 수요는 진열대에 재고가 있는 품목을 더 자주 고른다(DEMAND_STOCKED_WEIGHT_MULT).
-# 방문객 27명(규칙서의 시간 제안 기준)이면 물·빵은 하루 약 4.7개, 포션은 약 2.4개가 팔린다.
-# 방문객이 8명(현재 시간 설정)이면 하루 1.4개 / 0.7개라서 더 오래 간다.
+# 손님 유형별 취향(customer_demands.csv)과 재고 가중치를 반영하면, 방문객 27명(규칙서의 시간 제안 기준)일 때
+# 하루 물 약 3.9개, 빵 약 4.7개, 포션 약 4.2개가 팔린다(방문객 8명이면 약 0.3배).
 const STARTING_INVENTORY: Dictionary = {
 	"water": 12,
-	"bread": 12,
-	"potion": 6,
+	"bread": 14,
+	"potion": 12,
 	"iron_ore": 20,
 	"mine_crystal": 6,
 	"wheat": 6

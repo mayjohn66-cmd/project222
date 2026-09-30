@@ -104,7 +104,7 @@ static func get_random_wanted_request(
 	# =====================================================
 
 	var candidates: Array[Dictionary] = []
-	var total_weight: int = 0
+	var total_weight: float = 0.0
 
 	for entry in combined_entries:
 		var item_ids: Array[String] = (
@@ -116,14 +116,23 @@ static func get_random_wanted_request(
 		if item_ids.is_empty():
 			continue
 
-		var weight: int = int(
+		var weight: float = float(
 			entry.get(
 				"weight",
 				0
 			)
 		)
 
-		if weight <= 0:
+		# 특정 품목을 원하는 행은 지금 재고가 있으면 조금 더 자주 나온다.
+		if (
+			str(entry.get("target_type", "")) == "item"
+			and stocked_item_ids.has(
+				str(entry.get("target_id", ""))
+			)
+		):
+			weight *= GameConfig.DEMAND_STOCKED_ENTRY_WEIGHT_MULT
+
+		if weight <= 0.0:
 			continue
 
 		var min_amount: int = maxi(
@@ -166,29 +175,26 @@ static func get_random_wanted_request(
 	if candidates.is_empty():
 		return {}
 
-	if total_weight <= 0:
+	if total_weight <= 0.0:
 		return {}
 
 	# =====================================================
 	# 가중치 추첨
 	# =====================================================
 
-	var roll: int = randi_range(
-		1,
-		total_weight
-	)
+	var roll: float = randf() * total_weight
 
-	var accumulated: int = 0
+	var accumulated: float = 0.0
 
 	for candidate in candidates:
-		accumulated += int(
+		accumulated += float(
 			candidate.get(
 				"weight",
-				0
+				0.0
 			)
 		)
 
-		if roll > accumulated:
+		if roll >= accumulated:
 			continue
 
 		var item_ids: Array = candidate.get(
