@@ -9,6 +9,7 @@ var hp_label: Label
 var hint_label: Label
 var attack_button: Button
 var interact_button: Button
+var swap_button: Button
 var move_buttons: Dictionary = {}
 var board: Rect2
 var notice: String = ""
@@ -50,6 +51,9 @@ func _ready() -> void:
 		var button := _button(str(entry[0]), controls)
 		move_buttons[button] = entry[1]
 	attack_button = _button("공격 [J / Space]", controls)
+	swap_button = _button("무기 교체 [Q]", controls)
+	swap_button.pressed.connect(func():
+		if _can_play(): model.swap_weapon())
 	interact_button = _button("상호작용 [E]", controls)
 	interact_button.pressed.connect(func():
 		if _can_play(): model.interact())
@@ -59,7 +63,7 @@ func _ready() -> void:
 	var help := Label.new()
 	help.add_theme_font_override("font", ThemeDB.fallback_font)
 	help.add_theme_color_override("font_color", Color("c9d9d1"))
-	help.text = "이동 WASD / 방향키 · 기본 공격 J / Space · 상호작용 E"
+	help.text = "이동 WASD / 방향키 · 기본 공격 J / Space · 무기 교체 Q · 상호작용 E"
 	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(help)
 	if ResourceLoader.exists("res://art/characters/cozy_v1/player/frames.tres"):
@@ -85,6 +89,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if _can_play() and event.is_action_pressed("interact"):
 		model.interact()
 		get_viewport().set_input_as_handled()
+	elif _can_play() and event is InputEventKey and event.pressed and not event.echo \
+			and event.physical_keycode == KEY_Q:
+		model.swap_weapon()
+		get_viewport().set_input_as_handled()
 
 func _physics_process(delta: float) -> void:
 	if not visible or model == null:
@@ -97,8 +105,14 @@ func _physics_process(delta: float) -> void:
 		var attacking: bool = attack_button.is_pressed() or Input.is_physical_key_pressed(KEY_J) \
 			or Input.is_physical_key_pressed(KEY_SPACE)
 		model.step(delta, direction.limit_length(), attacking)
+	var weapon_text: String = model.attack_profile.display_name
+	if model.loadout != null and not model.loadout.slots.is_empty():
+		weapon_text = "%s(%s)" % [model.loadout.active_name(), model.attack_profile.display_name]
+		if model.loadout.has_choice():
+			weapon_text += " ⇄ " + model.loadout.other_name()
+	swap_button.disabled = model.loadout == null or not model.loadout.has_choice() or not _can_play()
 	hp_label.text = "HP %d / %d   ·   %s   ·   남은 적 %d" % [model.player_hp,
-		model.player_max_hp, model.attack_profile.display_name, model.alive_enemies()]
+		model.player_max_hp, weapon_text, model.alive_enemies()]
 	var caption := model.interaction_label()
 	interact_button.disabled = caption.is_empty() or not _can_play()
 	interact_button.text = "%s [E]" % ("상호작용" if caption.is_empty() else caption)

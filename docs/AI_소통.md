@@ -28,7 +28,7 @@
 
 - 저장소: `mayjohn66-cmd/project222`
 - **기준 작업 브랜치: `claude/large-file-refactor-plan-52hp51`** (`main`보다 훨씬 앞섬)
-- 규칙서 최신: `docs/원정_v2_규칙서_초안.md` v0.31
+- 규칙서 최신: `docs/원정_v2_규칙서_초안.md` v0.32
 - Godot 4.7.1. 검증 방법: `AI_협업_규칙.md` 5장 (import 2회, `check_godot`, 원정을 바꿨으면 `check_expedition_run`)
 
 ## 4. 이미 있는 것 (새로 만들기 전에 확인)
@@ -57,6 +57,14 @@
 ## 6. 질문과 답변 (최신이 위)
 
 > 형식: `### [날짜] 보내는 AI → 받는 AI: 제목` / 내용 / `**답변 (AI, 날짜)**: …`
+
+### [2026-09-30] Claude → ChatGPT, 사용자: 무기 교체(2개)와 공격력 비표시 구현
+- 사용자 결정: **무기 2개를 골라 들고 방 안에서 교체**하고, **공격력 숫자는 표시하지 않는다.**
+- 새 파일: `script/expedition/rooms/expedition_weapon_loadout.gd`(가방 무기 최대 2개를 순서대로 담고 교체, 공격 방식 설명 문구 제공).
+- **ChatGPT 담당 파일에 작은 수정(알림)**: `expedition_room_model.gd`(`setup`에 끝 인자 `weapon_loadout = null`, `swap_weapon()`, `loadout`·`base_attack`), `expedition_room_view.gd`(Q 키·"무기 교체" 버튼, HP 줄에 `들고 있는 무기(공격 방식) ⇄ 다른 무기`), `expedition_room_controller.gd`(진입 때 `loadout.build`, 공격력 = 기본 + 들고 있는 무기 보너스), `expedition_room_settings.gd`(`weapon_swap_delay`). 기존 호출은 그대로 동작하고 `dev/script/check_direct_expedition.gd`에 교체 검사를 더했습니다.
+- 표시: 인벤토리·상점 설명·원정 능력치 줄에서 "공격력 +N"을 지우고 "공격 방식: …"으로 바꿨습니다. 그래서 `default_room_settings.tres`의 `equipment_attacks` 순서는 이제 상관없습니다.
+- 검증: import 2회차 오류 0, `check_godot` 302개 로드 실패 0, `check_expedition_run` 종료 0, 직접 조작 검사(교체·맨손·무기 1개·3개 중 2개만 선택·교체 지연·설명에 숫자 없음)와 방 흐름 검사 실패 0, 방 화면 스크린샷 확인(Q로 활↔단검 교체).
+- 앞의 질문(방 안 포션 사용, 무기 우선순위)은 이 결정으로 우선순위 질문만 해결됐습니다. 포션 사용 여부는 여전히 확인 요청.
 
 ### [2026-09-30] Claude → ChatGPT, 사용자: 장비 추가와 전투 수치 점검
 - 사용자 결정: 지금 방은 완전 평면이라 **방 구성은 바뀔 예정**(ChatGPT 담당)이고, 이번에 **장비 아이템**을 만들었습니다(규칙서 6.7).

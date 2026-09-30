@@ -603,9 +603,10 @@ func _get_equipment_tooltip_text() -> String:
 
 	match effect_id:
 		"attack":
+			# 공격력 숫자는 보이지 않고 공격 방식만 보인다.
 			result += (
-				"\n공격력: +"
-				+ str(effective_value)
+				"\n공격 방식: "
+				+ ExpeditionWeaponLoadout.get_style_text(item_id)
 			)
 
 		"defense":

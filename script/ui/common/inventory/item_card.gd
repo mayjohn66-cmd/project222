@@ -351,10 +351,8 @@ func get_equipment_effect_text(
 ) -> String:
 	match effect_id:
 		"attack":
-			return (
-				"공격력: +"
-				+ str(effect_value)
-			)
+			# 공격력 숫자는 보이지 않는다(무기 종류가 공격 방식을 정한다).
+			return "무기"
 
 		"defense":
 			return (

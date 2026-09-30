@@ -90,5 +90,37 @@ func _ready() -> void:
 	model.basic_attack()
 	for i in range(20): model.step(1.0 / 60.0, Vector2.ZERO, false)
 	expect(int(model.enemies[0]["hp"]) == 40, "벽 너머 원거리 타격 금지")
+	# 무기 2개 교체: 공격 방식과 공격 보너스가 함께 바뀐다(화면에는 숫자를 보이지 않음).
+	var bag := {"placements": [
+		{"item_id": "rusty_sword", "enhancement_level": 0},
+		{"item_id": "hand_axe", "enhancement_level": 2},
+		{"item_id": "hunting_bow", "enhancement_level": 0}]}
+	var loadout := ExpeditionWeaponLoadout.new()
+	loadout.build(CONFIG, bag)
+	expect(loadout.slots.size() == 2, "무기는 최대 2개만 고른다")
+	expect(loadout.active_profile().equipment_id == "rusty_sword" and loadout.active_bonus() == 5, "처음에는 첫 무기")
+	expect(loadout.other_name() == ItemData.get_item_name("hand_axe"), "교체 대상 이름")
+	model = ExpeditionRoomModel.new()
+	model.setup(CONFIG, loadout.active_profile(), 100, 100, 12 + loadout.active_bonus(), 3, slime, 1, false, "gather", loadout)
+	model.player_position = Vector2(2.5, 3.0)
+	model.enemies[0]["position"] = Vector2(2.5, 2.2)
+	model.facing = Vector2.UP
+	model.basic_attack()
+	expect(int(model.enemies[0]["hp"]) == 40 - 15, "검 피해(공격 17 - 방어 2)")
+	expect(model.swap_weapon(), "무기 교체 성공")
+	expect(model.attack_profile.equipment_id == "hand_axe" and model.player_attack == 12 + 12 + 2, "교체하면 공격 방식과 공격 보너스가 함께 바뀜")
+	expect(model.attack_remaining >= CONFIG.weapon_swap_delay, "교체 지연으로 쿨다운을 건너뛸 수 없음")
+	model.attack_remaining = 0.0
+	var hp_before: int = int(model.enemies[0]["hp"])
+	model.basic_attack()
+	expect(hp_before - int(model.enemies[0]["hp"]) == 26 - 2 or int(model.enemies[0]["hp"]) == 0, "도끼 피해(공격 26 - 방어 2)")
+	expect(model.swap_weapon() and model.attack_profile.equipment_id == "rusty_sword", "다시 교체하면 첫 무기")
+	var single := ExpeditionWeaponLoadout.new()
+	single.build(CONFIG, {"placements": [{"item_id": "iron_spear", "enhancement_level": 0}]})
+	expect(not single.has_choice() and not single.swap(), "무기가 하나면 교체하지 않음")
+	var bare := ExpeditionWeaponLoadout.new()
+	bare.build(CONFIG, {"placements": []})
+	expect(bare.active_profile() == CONFIG.default_attack and bare.active_bonus() == 0 and bare.active_name() == "맨손", "무기가 없으면 맨손")
+	expect(ExpeditionWeaponLoadout.get_style_text("hunting_bow").find("원거리") >= 0 and ExpeditionWeaponLoadout.get_style_text("hunting_bow").find("+") < 0, "공격 방식 설명은 숫자 없이")
 	print("[직접 조작 검사] 실패 ", failures.size())
 	get_tree().quit(0 if failures.is_empty() else 1)

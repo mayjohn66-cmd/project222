@@ -81,5 +81,5 @@ heal_fraction = 0.05
 [resource]
 script = ExtResource("1")
 default_attack = SubResource("bare")
-; 여러 무기를 들고 있으면 이 목록에서 앞쪽 무기의 공격 방식을 쓴다(위쪽이 우선).
+; 무기 공격 방식 목록. 방 안에서는 가방의 무기(최대 2개)를 ExpeditionWeaponLoadout이 id로 찾아 쓰고 순서는 상관없다.
 equipment_attacks = Array[ExtResource("2")]([SubResource("rune"), SubResource("staff"), SubResource("spear"), SubResource("axe"), SubResource("bow"), SubResource("sword"), SubResource("dagger")])

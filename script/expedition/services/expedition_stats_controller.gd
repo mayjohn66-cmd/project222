@@ -110,11 +110,10 @@ func apply_bag_equipment_stats() -> void:
 
 func update_player_stats_ui() -> void:
 	host.player_stats_label.text = (
-		"HP %d/%d | 공격 %d | 방어 %d"
+		"HP %d/%d | 방어 %d"
 		% [
 			host.combat_player_hp,
 			host.combat_player_max_hp,
-			host.combat_player_attack,
 			host.combat_player_defense
 		]
 	)

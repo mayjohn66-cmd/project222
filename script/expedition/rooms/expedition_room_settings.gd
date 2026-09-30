@@ -13,6 +13,8 @@ const GRID_SIZE: int = 8
 @export var hurt_grace: float = 0.6
 @export var interaction_reach: float = 1.0
 @export var gathering_seconds: float = 0.75
+# 무기 교체 직후 공격할 수 없는 시간(교체로 쿨다운을 건너뛰는 것을 막는다).
+@export var weapon_swap_delay: float = 0.35
 @export var ordinary_enemy_count: int = 2
 @export var default_attack: ExpeditionAttackProfile
 @export var equipment_attacks: Array[ExpeditionAttackProfile] = []

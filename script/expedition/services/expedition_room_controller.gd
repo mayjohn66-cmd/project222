@@ -6,6 +6,7 @@ const SETTINGS = preload("res://scenes/expedition/rooms/default_room_settings.tr
 var host
 var view: ExpeditionRoomView
 var model: ExpeditionRoomModel
+var loadout: ExpeditionWeaponLoadout = ExpeditionWeaponLoadout.new()
 var event: Dictionary = {}
 var node_type: String = ""
 var pending_loot: Array[Dictionary] = []
@@ -55,10 +56,12 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	var kind: String = ""
 	if result_type == "loot": kind = "gather" if room_type == ExpeditionMap.NODE_GATHER else "chest"
 	if result_type == "heal": kind = "heal"
+	# 가방의 무기(최대 2개) 중 처음 든 무기로 시작하고, 방 안에서 교체할 수 있다.
+	loadout.build(SETTINGS, host.expedition_bag)
 	model = ExpeditionRoomModel.new()
-	model.setup(SETTINGS, SETTINGS.attack_for(host.expedition_bag), host.combat_player_hp,
-		host.combat_player_max_hp, host.combat_player_attack, host.combat_player_defense,
-		enemy, host.get_run_difficulty(), boss, kind)
+	model.setup(SETTINGS, loadout.active_profile(), host.combat_player_hp,
+		host.combat_player_max_hp, host.BASE_PLAYER_ATTACK + loadout.active_bonus(), host.combat_player_defense,
+		enemy, host.get_run_difficulty(), boss, kind, loadout)
 	model.object_used.connect(_object_used)
 	model.enemies_cleared.connect(_enemies_cleared)
 	model.exited.connect(_exit)

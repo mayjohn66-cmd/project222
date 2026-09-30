@@ -8,6 +8,8 @@ signal defeated
 
 var settings: ExpeditionRoomSettings
 var attack_profile: ExpeditionAttackProfile
+var loadout: ExpeditionWeaponLoadout = null
+var base_attack: int = 12
 var player_position := Vector2(3.5, 7.0)
 var facing := Vector2.UP
 var exit_position := Vector2(3.5, 0.5)
@@ -33,9 +35,13 @@ var elapsed: float = 0.0
 
 func setup(config: ExpeditionRoomSettings, profile: ExpeditionAttackProfile,
 		hp: int, max_hp: int, attack: int, defense: int,
-		enemy: Dictionary, difficulty: int, boss: bool, kind: String) -> void:
+		enemy: Dictionary, difficulty: int, boss: bool, kind: String,
+		weapon_loadout: ExpeditionWeaponLoadout = null) -> void:
 	settings = config
 	attack_profile = profile
+	loadout = weapon_loadout
+	# attack에는 처음 든 무기의 보너스가 포함돼 있으므로 뺀 값이 맨몸 공격력이다.
+	base_attack = attack - (loadout.active_bonus() if loadout != null else 0)
 	player_hp = hp
 	player_max_hp = max_hp
 	player_attack = attack
@@ -118,6 +124,19 @@ func _wall_between(from: Vector2, to: Vector2) -> bool:
 			if Geometry2D.segment_intersects_segment(from, to, corners[i], corners[(i + 1) % 4]) != null:
 				return true
 	return false
+
+# 들고 있는 무기를 바꾼다. 공격 방식과 공격 보너스가 함께 바뀌고, 쿨다운은 이어지며 교체 지연이 붙는다.
+func swap_weapon() -> bool:
+	if finished or loadout == null or not loadout.swap():
+		return false
+
+	attack_profile = loadout.active_profile()
+	player_attack = base_attack + loadout.active_bonus()
+	attack_remaining = maxf(attack_remaining, settings.weapon_swap_delay)
+	projectiles.clear()
+	feedback.append({"position": player_position, "text": loadout.active_name(), "life": 0.6})
+	return true
+
 
 func basic_attack() -> bool:
 	if finished or attack_remaining > 0.0:
