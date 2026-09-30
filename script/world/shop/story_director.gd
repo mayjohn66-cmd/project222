@@ -39,7 +39,15 @@ func _process(delta: float) -> void:
 
 	elapsed = 0.0
 
-	if talking or is_instance_valid(active_npc):
+	if talking:
+		return
+
+	if is_instance_valid(active_npc):
+		if not NpcInterventionSelector.is_available(
+			active_npc.beat, get_tree()
+		):
+			active_npc.leave()
+			active_npc = null
 		return
 
 	if _is_blocked():
@@ -68,21 +76,7 @@ func _is_blocked() -> bool:
 
 
 func _find_available_beat() -> Dictionary:
-	for beat in StoryData.get_beats():
-		if not PlayerProgress.can_play_story_beat(
-			str(beat["beat_id"]),
-			int(beat["repeat_days"]),
-			GameState.total_day
-		):
-			continue
-
-		if StoryConditions.are_met(
-			beat["conditions"],
-			get_tree()
-		):
-			return beat
-
-	return {}
+	return NpcInterventionSelector.find_available(get_tree())
 
 
 func _spawn_npc(beat: Dictionary) -> void:
@@ -93,7 +87,7 @@ func _spawn_npc(beat: Dictionary) -> void:
 	active_npc = npc
 
 	DebugLog.write(
-		"[스토리] NPC 등장: ",
+		"[스토리] NPC ", NpcInterventionSelector.kind_of(beat), " 등장: ",
 		beat["beat_id"]
 	)
 
@@ -130,6 +124,13 @@ func _unhandled_input(event: InputEvent) -> void:
 	if player.global_position.distance_to(
 		active_npc.global_position
 	) > TALK_DISTANCE:
+		return
+
+	if not NpcInterventionSelector.is_available(
+		active_npc.beat, get_tree()
+	):
+		active_npc.leave()
+		active_npc = null
 		return
 
 	get_viewport().set_input_as_handled()
