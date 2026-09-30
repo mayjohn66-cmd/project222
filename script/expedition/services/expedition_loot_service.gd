@@ -38,7 +38,8 @@ func roll_loot_table(
 			table_id,
 			ExpeditionDifficultyData.get_rare_chance_mult(
 				difficulty
-			)
+			),
+			difficulty
 		)
 	)
 

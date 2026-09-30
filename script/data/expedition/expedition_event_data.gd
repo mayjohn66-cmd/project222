@@ -462,6 +462,25 @@ static func _load_loot() -> void:
 					indexes,
 					"max_amount"
 				)
+			),
+
+			# 이 난이도 범위에서만 나오는 행. 비어 있으면 모든 난이도.
+			"min_difficulty": _get_difficulty_bound(
+				CsvReader.get_cell(
+					row,
+					indexes,
+					"min_difficulty"
+				),
+				1
+			),
+
+			"max_difficulty": _get_difficulty_bound(
+				CsvReader.get_cell(
+					row,
+					indexes,
+					"max_difficulty"
+				),
+				9999
 			)
 		}
 
@@ -473,6 +492,16 @@ static func _load_loot() -> void:
 # =========================
 # CSV 공통 처리
 # =========================
+
+static func _get_difficulty_bound(
+	text: String,
+	fallback: int
+) -> int:
+	if not text.is_valid_int():
+		return fallback
+
+	return int(text)
+
 
 static func _make_header_indexes(
 	header: PackedStringArray
@@ -691,15 +720,26 @@ static func get_invalid_region_event_ids(
 	return invalid_event_ids
 
 # 희귀도 2 이상 재료의 가중치에 rare_chance_mult를 곱해서 추첨한다.
+# difficulty: 이 난이도에서 나올 수 있는 행(min~max 난이도 범위)만 후보로 쓴다.
 static func get_random_loot(
 	table_id: String,
-	rare_chance_mult: float = 1.0
+	rare_chance_mult: float = 1.0,
+	difficulty: int = 1
 ) -> Dictionary:
-	var candidates: Array[Dictionary] = (
+	var all_entries: Array[Dictionary] = (
 		get_loot_entries(
 			table_id
 		)
 	)
+
+	var candidates: Array[Dictionary] = []
+
+	for entry in all_entries:
+		if (
+			difficulty >= int(entry.get("min_difficulty", 1))
+			and difficulty <= int(entry.get("max_difficulty", 9999))
+		):
+			candidates.append(entry)
 
 	if candidates.is_empty():
 		push_warning(
