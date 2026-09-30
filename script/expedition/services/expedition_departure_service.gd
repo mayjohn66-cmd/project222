@@ -3,7 +3,8 @@ extends RefCounted
 
 func prepare_departure(
 	region_id: String,
-	current_day: int
+	current_day: int,
+	difficulty: int = 1
 ) -> Dictionary:
 	if region_id.is_empty():
 		return _failure(
@@ -88,6 +89,8 @@ func prepare_departure(
 	prepared_map.set_region(
 		region_id
 	)
+
+	prepared_map.difficulty = difficulty
 
 	prepared_map.generate()
 

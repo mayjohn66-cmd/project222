@@ -110,6 +110,23 @@ func get_item_name(
 	)
 
 
+# 재료 희귀도(1 흔함, 2 드묾, 3 매우 드묾). 재료가 아니면 0.
+func get_rarity(
+	item_id: String
+) -> int:
+	var data: Dictionary = get_item(item_id)
+
+	if data.is_empty():
+		return 0
+
+	return int(
+		data.get(
+			"rarity",
+			0
+		)
+	)
+
+
 func get_item_price(
 	item_id: String
 ) -> int:

@@ -37,20 +37,38 @@ func start_battle(
 		)
 	)
 
-	host.combat_enemy_max_hp = int(
-		enemy.get(
-			"max_hp",
-			1
-		)
+	var difficulty: int = host.get_run_difficulty()
+
+	host.combat_enemy_max_hp = maxi(
+		roundi(
+			float(
+				enemy.get(
+					"max_hp",
+					1
+				)
+			)
+			* ExpeditionDifficultyData.get_monster_hp_mult(
+				difficulty
+			)
+		),
+		1
 	)
 
 	host.combat_enemy_hp = host.combat_enemy_max_hp
 
-	host.combat_enemy_attack = int(
-		enemy.get(
-			"attack",
-			1
-		)
+	host.combat_enemy_attack = maxi(
+		roundi(
+			float(
+				enemy.get(
+					"attack",
+					1
+				)
+			)
+			* ExpeditionDifficultyData.get_monster_atk_mult(
+				difficulty
+			)
+		),
+		1
 	)
 
 	host.combat_enemy_defense = int(
@@ -218,7 +236,8 @@ func generate_loot(
 
 	var result: Dictionary = (
 		host.expedition_loot_service.roll_enemy_loot(
-			enemy_id
+			enemy_id,
+			host.get_run_difficulty()
 		)
 	)
 

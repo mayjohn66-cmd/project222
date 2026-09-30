@@ -100,6 +100,7 @@ func create_data() -> Dictionary:
 		"current_day": host.current_day,
 		"phase": int(host.current_expedition_phase),
 		"region_id": saved_region_id,
+		"difficulty": host.get_run_difficulty(),
 
 		"bag_placements": (
 			host.expedition_bag.placements.duplicate(true)
@@ -294,6 +295,15 @@ func restore() -> bool:
 	var restored_map := ExpeditionMap.new()
 
 	restored_map.region_id = host.current_region_id
+
+	restored_map.difficulty = ExpeditionDifficultyData.clamp_level(
+		int(
+			checkpoint.get(
+				"difficulty",
+				ExpeditionDifficultyData.MIN_LEVEL
+			)
+		)
+	)
 	restored_map.layers.clear()
 
 	for raw_layer in saved_layers:

@@ -32,6 +32,10 @@ static func load_items_from_csv() -> Dictionary:
 		"inventory_group"
 	)
 
+	var rarity_column: int = headers.find(
+		"rarity"
+	)
+
 	while not file.eof_reached():
 		var row := file.get_csv_line()
 
@@ -91,6 +95,15 @@ static func load_items_from_csv() -> Dictionary:
 				inventory_group = group_value
 
 
+		# 희귀도(재료 1~3, 그 외 0). 열이 없거나 비어 있으면 0.
+		var rarity: int = 0
+
+		if rarity_column >= 0 and rarity_column < row.size():
+			var rarity_text: String = row[rarity_column].strip_edges()
+
+			if rarity_text.is_valid_int():
+				rarity = int(rarity_text)
+
 		result[item_id] = {
 			"name": row[1].strip_edges(),
 			"item_type": row[2].strip_edges(),
@@ -107,7 +120,8 @@ static func load_items_from_csv() -> Dictionary:
 			"attack": int(row[11]),
 			"defense": int(row[12]),
 			"expedition_storage": expedition_storage,
-			"inventory_group": inventory_group
+			"inventory_group": inventory_group,
+			"rarity": rarity
 		}
 
 	return result

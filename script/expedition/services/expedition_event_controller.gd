@@ -165,7 +165,8 @@ func resolve_loot_event(
 		host.expedition_gathering_service.resolve_gathering(
 			table_id,
 			host.expedition_bag,
-			host.expedition_loot_service
+			host.expedition_loot_service,
+			host.get_run_difficulty()
 		)
 	)
 
@@ -290,7 +291,8 @@ func resolve_loot_event(
 
 	var result: Dictionary = (
 		host.expedition_loot_service.roll_loot_table(
-			table_id
+			table_id,
+			host.get_run_difficulty()
 		)
 	)
 

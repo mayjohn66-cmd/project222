@@ -603,6 +603,14 @@ func _on_info_requested() -> void:
 # 날짜 표시와 편의점 복귀
 # =========================================================
 
+# 현재 원정의 난이도 레벨. 지도가 없으면 기본 난이도.
+func get_run_difficulty() -> int:
+	if expedition_map == null:
+		return ExpeditionDifficultyData.MIN_LEVEL
+
+	return expedition_map.difficulty
+
+
 func get_day_name() -> String:
 	return ["월요일","화요일","수요일","목요일","금요일","토요일","일요일"][clampi(current_day-1,0,6)]
 
@@ -994,10 +1002,22 @@ func start_expedition_run() -> void:
 	# 출발 검사와 맵 준비
 	# =========================
 
+	var selected_difficulty: int = ExpeditionDifficultyData.MIN_LEVEL
+
+	if prep_panel.has_method(
+		"get_selected_difficulty"
+	):
+		selected_difficulty = int(
+			prep_panel.call(
+				"get_selected_difficulty"
+			)
+		)
+
 	var departure_result: Dictionary = (
 		expedition_departure_service.prepare_departure(
 			current_region_id,
-			GameState.current_day
+			GameState.current_day,
+			selected_difficulty
 		)
 	)
 

@@ -1,8 +1,10 @@
 extends RefCounted
 
 
+# difficulty: 원정 난이도 레벨. 수량 배율과 희귀 재료 확률 배율을 정한다.
 func roll_enemy_loot(
-	enemy_id: String
+	enemy_id: String,
+	difficulty: int = 1
 ) -> Dictionary:
 	var table_id: String = (
 		EnemyData.get_loot_table(
@@ -17,12 +19,14 @@ func roll_enemy_loot(
 		)
 
 	return roll_loot_table(
-		table_id
+		table_id,
+		difficulty
 	)
 
 
 func roll_loot_table(
-	table_id: String
+	table_id: String,
+	difficulty: int = 1
 ) -> Dictionary:
 	if table_id.is_empty():
 		return _failure(
@@ -31,7 +35,10 @@ func roll_loot_table(
 
 	var loot: Dictionary = (
 		ExpeditionEventData.get_random_loot(
-			table_id
+			table_id,
+			ExpeditionDifficultyData.get_rare_chance_mult(
+				difficulty
+			)
 		)
 	)
 
@@ -88,9 +95,16 @@ func roll_loot_table(
 			+ table_id
 		)
 
-	var amount: int = randi_range(
-		min_amount,
-		max_amount
+	var amount: int = ceili(
+		float(
+			randi_range(
+				min_amount,
+				max_amount
+			)
+		)
+		* ExpeditionDifficultyData.get_reward_amount_mult(
+			difficulty
+		)
 	)
 
 	return {

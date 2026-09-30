@@ -690,8 +690,10 @@ static func get_invalid_region_event_ids(
 
 	return invalid_event_ids
 
+# 희귀도 2 이상 재료의 가중치에 rare_chance_mult를 곱해서 추첨한다.
 static func get_random_loot(
-	table_id: String
+	table_id: String,
+	rare_chance_mult: float = 1.0
 ) -> Dictionary:
 	var candidates: Array[Dictionary] = (
 		get_loot_entries(
@@ -706,45 +708,44 @@ static func get_random_loot(
 		)
 		return {}
 
-	var total_weight: int = 0
+	var weights: Array[float] = []
+	var total_weight: float = 0.0
 
 	for entry in candidates:
-		total_weight += max(
-			0,
-			int(
-				entry.get(
-					"weight",
-					0
+		var weight: float = float(
+			max(
+				0,
+				int(
+					entry.get(
+						"weight",
+						0
+					)
 				)
 			)
 		)
 
-	if total_weight <= 0:
+		if ItemData.get_rarity(
+			str(entry.get("item_id", ""))
+		) >= 2:
+			weight *= maxf(rare_chance_mult, 0.0)
+
+		weights.append(weight)
+		total_weight += weight
+
+	if total_weight <= 0.0:
 		push_warning(
 			"[ExpeditionEventData] 전리품 가중치 합계가 0: "
 			+ table_id
 		)
 		return {}
 
-	var roll: int = randi_range(
-		1,
-		total_weight
-	)
+	var roll: float = randf() * total_weight
+	var accumulated: float = 0.0
 
-	var accumulated: int = 0
+	for index in range(candidates.size()):
+		accumulated += weights[index]
 
-	for entry in candidates:
-		accumulated += max(
-			0,
-			int(
-				entry.get(
-					"weight",
-					0
-				)
-			)
-		)
+		if roll < accumulated:
+			return candidates[index].duplicate(true)
 
-		if roll <= accumulated:
-			return entry.duplicate(true)
-
-	return {}
+	return candidates[candidates.size() - 1].duplicate(true)
