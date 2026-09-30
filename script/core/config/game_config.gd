@@ -81,7 +81,8 @@ const STARTING_INVENTORY: Dictionary = {
 	"potion": 12,
 	"iron_ore": 20,
 	"mine_crystal": 6,
-	"wheat": 6
+	"wheat": 6,
+	"wild_berry": 10 # 아이콘 스타일 비교용 임시 지급(Pixel Lab 시험작)
 }
 
 const STARTING_MONEY: int = 500000
