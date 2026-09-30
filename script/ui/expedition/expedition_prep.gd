@@ -49,12 +49,11 @@ var transition_tween: Tween
 @onready var start_button: Button = $StartExpeditionButton
 @onready var region_card_column: VBoxContainer = $RegionInfoCard/CardMargin/CardColumn
 
-# 난이도 선택 줄(◀ 난이도 N ▶)과 상세 안내. 씬을 고치지 않고 코드로 만든다.
+# 난이도 선택 줄(◀ 난이도 N ▶). 설명은 두지 않는다. 씬을 고치지 않고 코드로 만든다.
 var selected_difficulty: int = ExpeditionDifficultyData.MIN_LEVEL
 var difficulty_prev_button: Button
 var difficulty_next_button: Button
 var difficulty_level_label: Label
-var difficulty_detail_label: Label
 
 
 func _ready() -> void:
@@ -239,18 +238,8 @@ func _build_difficulty_selector() -> void:
 	difficulty_next_button.pressed.connect(_step_difficulty.bind(1))
 	row.add_child(difficulty_next_button)
 
-	difficulty_detail_label = Label.new()
-	difficulty_detail_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	difficulty_detail_label.add_theme_font_size_override("font_size", 14)
-	difficulty_detail_label.add_theme_color_override(
-		"font_color",
-		Color(0.94, 0.92, 0.84, 1)
-	)
-	region_card_column.add_child(difficulty_detail_label)
-	region_card_column.move_child(difficulty_detail_label, insert_index + 1)
-
-	# 난이도 줄만큼 카드를 키우고, 화면 아래쪽 메뉴 버튼·안내 문구와 겹치지 않게 위로 올린다.
-	region_info_card.offset_top -= 90.0
+	# 화면 아래쪽 메뉴 버튼·안내 문구와 겹치지 않게 카드를 위로 올린다.
+	region_info_card.offset_top -= 60.0
 	region_info_card.offset_bottom -= 60.0
 
 
@@ -275,7 +264,6 @@ func _refresh_difficulty_selector() -> void:
 	var region_id: String = get_selected_region_id()
 	selected_difficulty = _clamp_to_unlocked(selected_difficulty)
 
-	var max_level: int = ExpeditionDifficultyData.get_max_level()
 	var highest: int = PlayerProgress.get_highest_unlocked_difficulty(region_id)
 
 	difficulty_level_label.text = "난이도 %d" % selected_difficulty
@@ -283,20 +271,3 @@ func _refresh_difficulty_selector() -> void:
 		selected_difficulty <= ExpeditionDifficultyData.MIN_LEVEL
 	)
 	difficulty_next_button.disabled = selected_difficulty >= highest
-
-	var lines: Array[String] = [
-		"방 %d개 · 체력 ×%.1f · 공격 ×%.1f" % [
-			ExpeditionDifficultyData.get_room_count(selected_difficulty),
-			ExpeditionDifficultyData.get_monster_hp_mult(selected_difficulty),
-			ExpeditionDifficultyData.get_monster_atk_mult(selected_difficulty)
-		],
-		"획득량 ×%.1f · 희귀 확률 ×%.1f" % [
-			ExpeditionDifficultyData.get_reward_amount_mult(selected_difficulty),
-			ExpeditionDifficultyData.get_rare_chance_mult(selected_difficulty)
-		]
-	]
-
-	if highest < max_level and selected_difficulty >= highest:
-		lines.append("보스 클리어 시 난이도 %d 개방" % (highest + 1))
-
-	difficulty_detail_label.text = "\n".join(lines)

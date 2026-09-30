@@ -53,13 +53,17 @@ const DEBUG_LOG_ENABLED: bool = true
 const DEFAULT_REGION_ID: String = "forest"
 
 
+# 시작 재고. 판매 상품은 2~3일치를 넉넉하게, 건축·제작 재료는 첫 설비 하나를 지을 만큼만 준다.
+# 손님은 카테고리를 고른 뒤 그 안의 판매 가능 품목 중 하나를 균등하게 뽑는다.
+# 음식 11종 중 하나라서 물·빵 각각 하루 기대 구매는 방문객 8명이면 0.4개, 27명이면 1.25개다.
+# 27명 기준 3일 기대 3.7개의 두 배 남짓인 8개를 준다(방문객이 8명이면 더 오래 간다).
 const STARTING_INVENTORY: Dictionary = {
-	"water": 999,
-	"bread": 999,
-	"potion": 999,
-	"iron_ore": 999,
-	"mine_crystal": 999,
-	"wheat": 999
+	"water": 8,
+	"bread": 8,
+	"potion": 4,
+	"iron_ore": 20,
+	"mine_crystal": 6,
+	"wheat": 6
 }
 
 const STARTING_MONEY: int = 500000

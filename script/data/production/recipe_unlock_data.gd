@@ -16,6 +16,8 @@ const KIND_EQUIPMENT: String = "equipment"
 static var by_recipe: Dictionary = {}
 # scroll_item_id -> recipe_id
 static var by_scroll: Dictionary = {}
+# 첫 원정에서 반드시 주는 기본 음식 제작 두루마리(starter 열이 true인 행)
+static var starter_scroll_item_id: String = ""
 static var _loaded: bool = false
 
 
@@ -30,6 +32,7 @@ static func ensure_loaded() -> void:
 static func reload() -> void:
 	by_recipe.clear()
 	by_scroll.clear()
+	starter_scroll_item_id = ""
 	_loaded = false
 	ensure_loaded()
 
@@ -80,6 +83,12 @@ static func is_scroll_worth_dropping(
 		return false
 
 	return GameState.get_item_count(item_id) <= 0
+
+
+static func get_starter_scroll_item_id() -> String:
+	ensure_loaded()
+
+	return starter_scroll_item_id
 
 
 static func get_all_scroll_item_ids() -> Array[String]:
@@ -144,5 +153,8 @@ static func _load_csv() -> void:
 			"scroll_item_id": scroll_item_id
 		}
 		by_scroll[scroll_item_id] = recipe_id
+
+		if CsvReader.get_cell(row, indexes, "starter").to_lower() == "true":
+			starter_scroll_item_id = scroll_item_id
 
 	file.close()
