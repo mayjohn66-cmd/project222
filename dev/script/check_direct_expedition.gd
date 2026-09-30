@@ -69,7 +69,7 @@ func _ready() -> void:
 	model.player_position = Vector2(2.5, 2.5)
 	model.step(0.01, Vector2.ZERO, false)
 	for i in range(45): model.step(1.0 / 60.0, Vector2.ZERO, false)
-	expect(model.player_hp == 95, "적 공격/플레이어 방어 반영")
+	expect(model.player_hp == 100 - ExpeditionDamage.calculate(8, 3), "적 공격/플레이어 방어 반영(피해 계산식)")
 	# 원거리 장비 계약도 같은 기본 공격으로 작동한다.
 	var ranged := ExpeditionAttackProfile.new()
 	ranged.method = ExpeditionAttackProfile.Method.PROJECTILE
@@ -136,5 +136,19 @@ func _ready() -> void:
 	bar.set_hp(0, 0)
 	expect(bar.ratio == 0.0, "최대 체력 0이어도 안전")
 	bar.free()
+	# 피해 계산식: 공격² ÷ (공격 + 방어), 반올림, 최소 1.
+	expect(ExpeditionDamage.calculate(12, 0) == 12, "방어 0이면 공격력 그대로")
+	expect(ExpeditionDamage.calculate(20, 20) == 10, "방어가 공격과 같으면 절반")
+	expect(ExpeditionDamage.calculate(17, 2) == 15, "검 vs 슬라임")
+	expect(ExpeditionDamage.calculate(14, 6) == 10, "보스 vs 기본 방어(196 / 20)")
+	expect(ExpeditionDamage.calculate(14, 60) >= 1, "방어가 아무리 높아도 최소 1")
+	expect(ExpeditionDamage.calculate(0, 5) == 1 and ExpeditionDamage.calculate(-3, 5) == 1, "공격이 0 이하여도 안전")
+	var previous: int = 999
+	var monotonic := true
+	for defense in range(0, 80):
+		var damage: int = ExpeditionDamage.calculate(20, defense)
+		if damage > previous: monotonic = false
+		previous = damage
+	expect(monotonic, "방어가 높을수록 피해는 줄어들기만 한다")
 	print("[직접 조작 검사] 실패 ", failures.size())
 	get_tree().quit(0 if failures.is_empty() else 1)

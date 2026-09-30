@@ -2,7 +2,7 @@
 """장비 밸런스 점검: 무기 공격 프로필(.tres)·장비 CSV·제작 재료를 읽어 초당 피해와 생존력을 계산한다.
 
 가정(코드 ExpeditionRoomModel/Settings와 같게, 이동·명중 손실은 생략한 이론치):
-- 플레이어 기본 공격 12, 방어 3, 체력 100. 피해 = max(1, 공격 - 방어).
+- 플레이어 기본 공격 12, 방어 3, 체력 100. 피해 = 공격² ÷ (공격 + 방어), 반올림, 최소 1(ExpeditionDamage와 같은 식).
 - 무기 공격력 = 12 + 무기 base + 강화(+0/+4/+8). 초당 피해 = 피해 / 쿨다운, 다중 타격은 인접한 적 2마리 기준(최대 타격 수와 각도 반영).
 - 적 공격은 예고 0.65초 + 쿨다운 1.1초로 약 1.75초에 1회, 방 안 일반 몬스터 2마리·보스 1마리.
 사용: python tools/check_equipment.py .
@@ -13,6 +13,18 @@ import sys
 from pathlib import Path
 
 BASE_ATK, BASE_DEF, PLAYER_HP = 12, 3, 100
+
+
+def dmg(attack, defense):
+    """최종 피해(코드 ExpeditionDamage.calculate와 같은 식)."""
+    if attack <= 0:
+        return 1
+    return max(1, round(attack * attack / (attack + max(defense, 0))))
+
+
+def attack_for_hit(hit, defense):
+    """방어가 defense일 때 한 방에 hit만큼 들어가게 하는 공격력(a^2/(a+d)=hit의 해)."""
+    return (hit + (hit * hit + 4 * hit * defense) ** 0.5) / 2
 ENEMY_CYCLE = 0.65 + 1.1
 
 
@@ -64,7 +76,7 @@ def main():
         dps = []
         for lvl in (0, 4, 8):
             atk = BASE_ATK + base + lvl
-            dps.append(max(1, atk - 5) / p["cooldown"] * eff_targets)
+            dps.append(dmg(atk, 5) / p["cooldown"] * eff_targets)
         weapon_rows.append((item_id, dps))
         kind = "원거리" if p.get("method", 0) == 1 else "근접"
         print(f"{items[item_id]['name']:9}{base:6.0f}{p['cooldown']:6.2f}{p['reach']:7.2f}{p['targets']:5}   {kind} {dps[0]:5.0f} / {dps[1]:5.0f} / {dps[2]:5.0f}  ({p['name']}, 회복 {p.get('heal', 0) * 100:.0f}%, 넉백 {p.get('kb', 0)})")
@@ -94,9 +106,9 @@ def main():
             for region, boss in boss_ids.items():
                 en = enemies[boss]
                 hp = float(en["max_hp"]) * hp_m
-                dmg = max(1, atk - float(en["defense"]))
-                ttk = hp / dmg * p["cooldown"]
-                taken = max(1, float(en["attack"]) * atk_m - armor) / ENEMY_CYCLE
+                per_hit = dmg(atk, float(en["defense"]))
+                ttk = hp / per_hit * p["cooldown"]
+                taken = dmg(float(en["attack"]) * atk_m, armor) / ENEMY_CYCLE
                 cells.append(f"{region[:4]} 처치 {ttk:4.0f}초/받는 피해 {taken:4.1f}/s")
             print(f"  난이도{d}: " + " | ".join(cells))
 
@@ -111,9 +123,9 @@ def main():
         p = profiles.get(weapon, {"cooldown": 0.4})
         atk = BASE_ATK + float(eq[weapon]["base_value"]) + wl
         armor = BASE_DEF + sum(float(eq[a]["base_value"]) + l for a, l in armors)
-        dps = max(1, atk - 5) / p["cooldown"]
+        dps = dmg(atk, 5) / p["cooldown"]
         need_hp = dps * TARGET_TTK
-        need_atk = armor + HIT_PCT
+        need_atk = attack_for_hit(HIT_PCT, armor)
         first = first or (need_hp, need_atk)
         print(f"난이도{d} ({items[weapon]['name']}+{wl}, 공격 {atk:.0f}, 방어 {armor:.0f}): 초당 피해 {dps:4.0f} -> 보스 체력 약 {need_hp:5.0f} (난이도1의 {need_hp / first[0]:.1f}배), 보스 공격 약 {need_atk:3.0f} (난이도1의 {need_atk / first[1]:.1f}배)")
     print("지금 값: 보스 체력 90~120, 공격 13~16, 난이도 체력 배율 1/1.4/1.8/2.4, 공격 배율 1/1.2/1.4/1.7 -> 체력을 몇 배 올리고 공격을 올려야 함(플레이 확인 뒤 적용, 규칙서 6.7)")
@@ -129,6 +141,12 @@ def main():
             print(f"[오류] 두루마리 해금이 없는 장비 레시피: {item_id}")
             problems += 1
         print(f"{items[item_id]['name']:9} 재료 {cost:4}원 / 두루마리 난이도 {u.get('difficulty', '?')} {u.get('regions', '')}")
+    print("\n== 피해 계산식 표: 피해 = 공격² ÷ (공격 + 방어) — 세로 공격력, 가로 방어력, 칸 = 최종 피해 (괄호 = 방어로 줄어든 비율) ==")
+    defenses = (0, 3, 6, 10, 15, 20, 30, 40, 50)
+    print("공격\\방어 " + "".join(f"{d:>10}" for d in defenses))
+    for a in (10, 12, 17, 22, 27, 34, 45):
+        print(f"{a:>8}   " + "".join(f"{dmg(a, d):>4}({100 * d / (a + d):>2.0f}%)" for d in defenses))
+
     print(f"\n문제 {problems}개")
     return 1 if problems else 0
 

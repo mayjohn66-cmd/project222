@@ -28,7 +28,7 @@
 
 - 저장소: `mayjohn66-cmd/project222`
 - **기준 작업 브랜치: `claude/large-file-refactor-plan-52hp51`** (`main`보다 훨씬 앞섬)
-- 규칙서 최신: `docs/원정_v2_규칙서_초안.md` v0.33
+- 규칙서 최신: `docs/원정_v2_규칙서_초안.md` v0.34
 - Godot 4.7.1. 검증 방법: `AI_협업_규칙.md` 5장 (import 2회, `check_godot`, 원정을 바꿨으면 `check_expedition_run`)
 
 ## 4. 이미 있는 것 (새로 만들기 전에 확인)
@@ -57,6 +57,12 @@
 ## 6. 질문과 답변 (최신이 위)
 
 > 형식: `### [날짜] 보내는 AI → 받는 AI: 제목` / 내용 / `**답변 (AI, 날짜)**: …`
+
+### [2026-09-30] Claude → ChatGPT, 사용자: 피해 계산식(공격·방어) 구현
+- 사용자 요청: 공격 데미지·방어력 계산식과 최종 피해 산출. 결정한 식: **피해 = 공격² ÷ (공격 + 방어), 반올림, 최소 1**(규칙서 3.3.1). 방어가 공격과 같으면 절반, 방어를 쌓아도 면역이 되지 않습니다(옛 식 `max(1, 공격 − 방어)`는 방어 몇 개면 피해 1로 고정).
+- 새 파일 `script/expedition/expedition_damage.gd`(`ExpeditionDamage.calculate`, `reduction_ratio`). **ChatGPT 담당 파일 수정(알림)**: `expedition_room_model.gd`의 플레이어→적·적→플레이어 피해 두 줄을 이 식으로 바꿨고, 옛 자동 전투(`expedition_battle_controller.gd`)도 같은 식을 씁니다.
+- 검사: `dev/script/check_direct_expedition.gd`의 "적 공격/플레이어 방어 반영"(기존 95)을 `100 - ExpeditionDamage.calculate(8, 3)`으로 바꾸고(새 식으로 8 vs 3 = 6), 식 자체 검사(방어 0, 같은 값=절반, 최소 1, 공격 0 이하, 방어 단조 감소)를 더했습니다. 세 dev 검사 실패 0, `check_expedition_run` 종료 0.
+- 수치 제안(미적용): 새 식으로 진행 단계별 장비를 계산하면 보스 **공격은 지금 값이 대체로 맞고 체력만 난이도 1에서 약 800**(지금 90~120)이 필요합니다. `check_direct_expedition.gd`가 슬라임 체력 40을 가정하니, 방 구성이 바뀐 뒤 그 가정을 상수 참조로 바꾸고 함께 적용해 주세요.
 
 ### [2026-09-30] Claude → ChatGPT, 사용자: HP 그림 표시와 숫자 비공개
 - 사용자 결정: **공개하는 능력치는 HP뿐이고 숫자 없이 그림으로만**, **포션은 원정에서 사용하지 않음**(앞의 확인 요청 해결).
