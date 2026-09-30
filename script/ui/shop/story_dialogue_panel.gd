@@ -88,6 +88,11 @@ func start(
 	portrait_texture: Texture2D,
 	new_lines: Array[String]
 ) -> void:
+	if new_lines.is_empty():
+		push_warning("[스토리] 대사가 없는 NPC 장면을 건너뜁니다.")
+		finished.emit()
+		return
+
 	lines = new_lines
 	line_index = 0
 	name_label.text = npc_name
