@@ -53,18 +53,30 @@ const DEBUG_LOG_ENABLED: bool = true
 # false로 바꾸면 예전의 1초 단위 자동 전투가 돌아간다.
 const EXPEDITION_AUTO_WIN_BATTLES: bool = true
 
+# 손님 수요: 카테고리를 고른 뒤 그 안에서 품목을 고를 때의 가중치.
+# 판매 품목이 늘어도 손님의 수요가 재고 없는 품목으로 흩어지지 않게 하려는 값이다.
+#  - 지금 진열대에 재고가 있는 품목은 이 배수만큼 더 자주 원해진다(재고 없는 품목도 원할 수 있음).
+#  - 희귀한 재료일수록 덜 원해진다(희귀도 0~3 → 가중치).
+const DEMAND_STOCKED_WEIGHT_MULT: float = 10.0
+const DEMAND_RARITY_WEIGHTS: Dictionary = {
+	0: 100.0,
+	1: 100.0,
+	2: 60.0,
+	3: 30.0
+}
+
 # 원정 지역을 고르지 않았을 때 쓰는 기본 지역 (expedition_regions.csv의 region_id)
 const DEFAULT_REGION_ID: String = "forest"
 
 
 # 시작 재고. 판매 상품은 2~3일치를 넉넉하게, 건축·제작 재료는 첫 설비 하나를 지을 만큼만 준다.
-# 손님은 카테고리를 고른 뒤 그 안의 판매 가능 품목 중 하나를 균등하게 뽑는다.
-# 음식 11종 중 하나라서 물·빵 각각 하루 기대 구매는 방문객 8명이면 0.4개, 27명이면 1.25개다.
-# 27명 기준 3일 기대 3.7개의 두 배 남짓인 8개를 준다(방문객이 8명이면 더 오래 간다).
+# 손님 수요는 진열대에 재고가 있는 품목을 더 자주 고른다(DEMAND_STOCKED_WEIGHT_MULT).
+# 방문객 27명(규칙서의 시간 제안 기준)이면 물·빵은 하루 약 4.7개, 포션은 약 2.4개가 팔린다.
+# 방문객이 8명(현재 시간 설정)이면 하루 1.4개 / 0.7개라서 더 오래 간다.
 const STARTING_INVENTORY: Dictionary = {
-	"water": 8,
-	"bread": 8,
-	"potion": 4,
+	"water": 12,
+	"bread": 12,
+	"potion": 6,
 	"iron_ore": 20,
 	"mine_crystal": 6,
 	"wheat": 6

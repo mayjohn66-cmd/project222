@@ -46,9 +46,12 @@ static func get_random_wanted_item(
 	)
 
 
+# stocked_item_ids: 지금 진열대에 재고가 있는 품목. 카테고리 안에서 이 품목들이
+# 더 자주 뽑힌다(GameConfig.DEMAND_STOCKED_WEIGHT_MULT). 비워 두면 재고를 보지 않는다.
 static func get_random_wanted_request(
 	customer_type_id: String,
-	total_day: int
+	total_day: int,
+	stocked_item_ids: Array = []
 ) -> Dictionary:
 	ensure_loaded()
 
@@ -196,8 +199,9 @@ static func get_random_wanted_request(
 		if item_ids.is_empty():
 			return {}
 
-		var item_id: String = str(
-			item_ids.pick_random()
+		var item_id: String = _pick_weighted_item(
+			item_ids,
+			stocked_item_ids
 		)
 
 		var min_amount: int = int(
@@ -231,6 +235,44 @@ static func get_random_wanted_request(
 		}
 
 	return {}
+
+
+# 품목별 가중치로 하나를 뽑는다. 희귀할수록 가볍고, 진열대에 재고가 있으면 무겁다.
+static func _pick_weighted_item(
+	item_ids: Array,
+	stocked_item_ids: Array
+) -> String:
+	var weights: Array[float] = []
+	var total: float = 0.0
+
+	for raw_id in item_ids:
+		var item_id: String = str(raw_id)
+
+		var weight: float = float(
+			GameConfig.DEMAND_RARITY_WEIGHTS.get(
+				ItemData.get_rarity(item_id),
+				100.0
+			)
+		)
+
+		if stocked_item_ids.has(item_id):
+			weight *= GameConfig.DEMAND_STOCKED_WEIGHT_MULT
+
+		weights.append(weight)
+		total += weight
+
+	if total <= 0.0:
+		return str(item_ids.pick_random())
+
+	var roll: float = randf() * total
+
+	for index in range(item_ids.size()):
+		roll -= weights[index]
+
+		if roll < 0.0:
+			return str(item_ids[index])
+
+	return str(item_ids[item_ids.size() - 1])
 
 
 static func _get_candidate_items(
