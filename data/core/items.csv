@@ -35,11 +35,11 @@ rune_dust,룬 가루,material,material,60,1,1,true,true,res://art/items/pixel_v1
 worn_coin,낡은 동전,material,material,60,1,1,true,true,res://art/items/pixel_v1/worn_coin.png,오래전 통용되던 동전이다.,0,0,inventory,shelf,1
 rune_stone,룬석,material,material,120,1,1,true,true,res://art/items/pixel_v1/rune_stone.png,마력이 남아 있는 돌이다.,0,0,inventory,shelf,2
 sealed_scroll,봉인된 두루마리,material,material,120,1,1,true,true,res://art/items/pixel_v1/sealed_scroll.png,봉인이 그대로 남은 두루마리다.,0,0,inventory,shelf,2
-scroll_herb_drink,약초 음료 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_herb_drink.png,약초 음료를 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_bake_bread,빵 굽기 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_bake_bread.png,빵을 굽는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_bottled_water,병물 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_bottled_water.png,물을 병에 담는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_rusty_sword,낡은 검 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rusty_sword.png,낡은 검을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_leather_armor,가죽 갑옷 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_leather_armor.png,가죽 갑옷을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_herb_drink,약초 음료 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,약초 음료를 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_bake_bread,빵 굽기 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,빵을 굽는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_bottled_water,병물 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,물을 병에 담는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_rusty_sword,낡은 검 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,낡은 검을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_leather_armor,가죽 갑옷 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,가죽 갑옷을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
 berry_juice,열매 주스,store_product,food,200,0,0,true,true,res://art/items/pixel_v1/berry_juice.png,새콤한 야생 열매를 짜서 만든 주스다.,0,0,inventory,shelf,0
 mushroom_stew,버섯 스튜,store_product,food,310,0,0,true,true,res://art/items/pixel_v1/mushroom_stew.png,숲 버섯을 푹 끓인 든든한 스튜다.,0,0,inventory,shelf,0
 elder_tonic,고목 강장제,store_product,consumable,390,0,0,true,true,res://art/items/pixel_v1/elder_tonic.png,고목의 씨앗과 호박 수액으로 만든 강장제다.,0,0,inventory,shelf,0
@@ -49,15 +49,15 @@ gem_lantern,보석 랜턴,store_product,consumable,590,0,0,true,true,res://art/i
 reed_tea,갈대 차,store_product,food,250,0,0,true,true,res://art/items/pixel_v1/reed_tea.png,늪 갈대를 우려낸 향긋한 차다.,0,0,inventory,shelf,0
 mud_pack,진흙 팩,store_product,consumable,400,0,0,true,true,res://art/items/pixel_v1/mud_pack.png,발광 해초를 섞은 늪 진흙 팩이다.,0,0,inventory,shelf,0
 swamp_elixir,늪의 비약,store_product,consumable,780,0,0,true,true,res://art/items/pixel_v1/swamp_elixir.png,여왕의 젤리로 빚은 진한 비약이다.,0,0,inventory,shelf,0
-scroll_berry_juice,열매 주스 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_berry_juice.png,열매 주스을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_mushroom_stew,버섯 스튜 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_mushroom_stew.png,버섯 스튜을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_elder_tonic,고목 강장제 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_elder_tonic.png,고목 강장제을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_mineral_water,미네랄 워터 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_mineral_water.png,미네랄 워터을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_hand_warmer,손난로 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_hand_warmer.png,손난로을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_gem_lantern,보석 랜턴 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_gem_lantern.png,보석 랜턴을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_reed_tea,갈대 차 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_reed_tea.png,갈대 차을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_mud_pack,진흙 팩 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_mud_pack.png,진흙 팩을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_swamp_elixir,늪의 비약 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_swamp_elixir.png,늪의 비약을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_berry_juice,열매 주스 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,열매 주스을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_mushroom_stew,버섯 스튜 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,버섯 스튜을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_elder_tonic,고목 강장제 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,고목 강장제을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+scroll_mineral_water,미네랄 워터 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,미네랄 워터을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_hand_warmer,손난로 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,손난로을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_gem_lantern,보석 랜턴 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,보석 랜턴을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+scroll_reed_tea,갈대 차 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,갈대 차을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_mud_pack,진흙 팩 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,진흙 팩을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+scroll_swamp_elixir,늪의 비약 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,늪의 비약을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
 dried_fruit,말린 열매,store_product,food,250,0,0,true,true,res://art/items/pixel_v1/dried_fruit.png,새콤달콤한 열매를 말린 간식이다.,0,0,inventory,shelf,0
 herbal_bread,약초 빵,store_product,food,220,0,0,true,true,res://art/items/pixel_v1/herbal_bread.png,약초 향이 은은한 빵이다.,0,0,inventory,shelf,0
 copper_kettle,구리 주전자,store_product,consumable,300,0,0,true,true,res://art/items/pixel_v1/copper_kettle.png,구리로 두드려 만든 주전자다.,0,0,inventory,shelf,0
@@ -67,13 +67,13 @@ glow_lamp,발광 등불,store_product,consumable,500,0,0,true,true,res://art/ite
 traveler_stew,여행자 스튜,store_product,food,340,0,0,true,true,res://art/items/pixel_v1/traveler_stew.png,여러 지역의 재료를 넣은 든든한 스튜다.,0,0,inventory,shelf,0
 explorer_kit,탐험가 세트,store_product,consumable,450,0,0,true,true,res://art/items/pixel_v1/explorer_kit.png,원정에 쓰는 잡동사니를 한데 묶은 세트다.,0,0,inventory,shelf,0
 rainbow_tonic,삼색 강장제,store_product,consumable,1010,0,0,true,true,res://art/items/pixel_v1/rainbow_tonic.png,세 지역의 귀한 재료를 섞은 강장제다.,0,0,inventory,shelf,0
-scroll_dried_fruit,말린 열매 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_dried_fruit.png,말린 열매을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_herbal_bread,약초 빵 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_herbal_bread.png,약초 빵을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_potion,포션 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_potion.png,포션을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_copper_kettle,구리 주전자 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_copper_kettle.png,구리 주전자을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_silver_pendant,은 펜던트 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_silver_pendant.png,은 펜던트을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_bog_soup,늪 수프 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_bog_soup.png,늪 수프을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_glow_lamp,발광 등불 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_glow_lamp.png,발광 등불을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_traveler_stew,여행자 스튜 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_traveler_stew.png,여행자 스튜을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_explorer_kit,탐험가 세트 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_explorer_kit.png,탐험가 세트을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
-scroll_rainbow_tonic,삼색 강장제 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rainbow_tonic.png,삼색 강장제을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_dried_fruit,말린 열매 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,말린 열매을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_herbal_bread,약초 빵 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,약초 빵을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_potion,포션 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,포션을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_copper_kettle,구리 주전자 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,구리 주전자을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_silver_pendant,은 펜던트 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,은 펜던트을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_bog_soup,늪 수프 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,늪 수프을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_glow_lamp,발광 등불 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,발광 등불을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+scroll_traveler_stew,여행자 스튜 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,여행자 스튜을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_explorer_kit,탐험가 세트 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,탐험가 세트을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+scroll_rainbow_tonic,삼색 강장제 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,삼색 강장제을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
