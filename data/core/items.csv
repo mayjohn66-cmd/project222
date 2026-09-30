@@ -77,3 +77,23 @@ scroll_glow_lamp,발광 등불 레시피,special,etc,0,1,1,false,false,res://art
 scroll_traveler_stew,여행자 스튜 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,여행자 스튜을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
 scroll_explorer_kit,탐험가 세트 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,탐험가 세트을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
 scroll_rainbow_tonic,삼색 강장제 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,삼색 강장제을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+herb_dagger,약초 단검,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/herb_dagger.png,가볍고 빨라서 연속으로 찌를 수 있다. 벨 때마다 약초 향이 나서 조금씩 기운이 돈다.,3,0,bag,expedition,0
+hunting_bow,사냥용 활,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1/hunting_bow.png,멀리서 한 마리씩 안전하게 맞히는 활이다. 화살은 날아가는 방향으로 나간다.,4,0,bag,expedition,0
+hand_axe,손도끼,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1/hand_axe.png,느리지만 묵직하다. 두 마리까지 한꺼번에 밀어낸다.,12,0,bag,expedition,0
+iron_spear,쇠창,equipment,tool,0,1,3,false,false,res://art/items/pixel_v1/iron_spear.png,길고 좁게 찔러서 일렬로 선 적 둘을 꿰뚫는다.,9,0,bag,expedition,0
+crystal_staff,수정 지팡이,equipment,tool,0,1,3,false,false,res://art/items/pixel_v1/crystal_staff.png,수정의 마력을 쏘아 보낸다. 앞에 선 적 셋까지 관통한다.,12,0,bag,expedition,0
+rune_blade,룬 검,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1/rune_blade.png,유적의 룬을 새긴 검이다. 넓게 베고 넷까지 밀어내며 베는 힘이 조금씩 몸으로 돌아온다.,18,0,bag,expedition,0
+miner_helmet,광부 투구,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/miner_helmet.png,낙석을 막아 주는 두꺼운 투구다.,0,1,bag,expedition,0
+marsh_boots,늪 장화,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/marsh_boots.png,진흙탕도 걷기 편한 방수 장화다.,0,1,bag,expedition,0
+iron_plate,철판 갑옷,equipment,tool,0,2,2,false,false,res://art/items/pixel_v1/iron_plate.png,철판을 덧댄 묵직한 갑옷이다.,0,6,bag,expedition,0
+rune_mail,룬 갑옷,equipment,tool,0,2,2,false,false,res://art/items/pixel_v1/rune_mail.png,유적의 룬 가루를 스며들게 한 갑옷이다.,0,9,bag,expedition,0
+scroll_herb_dagger,약초 단검 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,약초 단검을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_hunting_bow,사냥용 활 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,사냥용 활을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_hand_axe,손도끼 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,손도끼을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_iron_spear,쇠창 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,쇠창을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+scroll_crystal_staff,수정 지팡이 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,수정 지팡이을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+scroll_rune_blade,룬 검 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,룬 검을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+scroll_miner_helmet,광부 투구 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,광부 투구을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_marsh_boots,늪 장화 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,늪 장화을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_iron_plate,철판 갑옷 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,철판 갑옷을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
+scroll_rune_mail,룬 갑옷 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,룬 갑옷을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2

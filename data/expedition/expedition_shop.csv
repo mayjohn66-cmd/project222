@@ -3,3 +3,7 @@ rusty_sword,weapon,100,true
 leather_armor,armor,180,true
 sickle,tool,120,true
 gathering_bottle,tool,80,true
+herb_dagger,weapon,150,true
+hunting_bow,weapon,220,true
+miner_helmet,armor,120,true
+marsh_boots,armor,130,true
