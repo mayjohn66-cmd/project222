@@ -72,6 +72,7 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 		host.get_map_node_display_name(room_type)]
 	view.floor_color = {"forest": Color("253e32"), "mine": Color("343d49"),
 		"swamp": Color("354235"), "hidden_ruins": Color("43394b")}.get(host.current_region_id, Color("253e32"))
+	view.floor_texture = view.TILE_ART.PAVING if host.current_region_id in ["mine", "hidden_ruins"] else view.TILE_ART.GRASS
 	host.map_panel.hide()
 	host.bag_panel.hide()
 	host.battle_panel.hide()
