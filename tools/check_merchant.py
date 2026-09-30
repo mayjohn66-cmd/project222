@@ -20,6 +20,40 @@ def read(path):
         return [r for r in csv.DictReader(f) if r and next(iter(r.values()))]
 
 
+def scroll_report(root, items, price, scroll_price, units_per_day=5):
+    """두루마리(레시피) 가격 점검: 상품은 개당 마진, 장비는 재료 가치로 본다."""
+    unlocks = read(root / "data/production/recipe_unlocks.csv")
+    prod = {r["recipe_id"]: r for r in read(root / "data/production/product_recipes.csv")}
+    ing = defaultdict(list)
+    for g in read(root / "data/production/product_recipe_ingredients.csv"):
+        ing[g["recipe_id"]].append(g)
+    print("\n== 두루마리(레시피) 가격 점검 (상인 가격 = 기준가 x (희귀도-1)) ==")
+    print(f"가정: 상품 하루 {units_per_day}개 판매. 이미 배운 레시피와 갖고 있는 두루마리는 진열에서 제외")
+    rows = []
+    for u in unlocks:
+        sid = u["scroll_item_id"]
+        rar = int(items[sid]["rarity"]) if sid in items else 2
+        sp = scroll_price * max(rar - 1, 1)
+        if u["recipe_kind"] == "product":
+            r = prod.get(u["recipe_id"])
+            if not r:
+                continue
+            res = r["result_item_id"]
+            cost = sum(price.get(g["item_id"], 0) * int(g["amount"]) for g in ing.get(u["recipe_id"], []))
+            margin = price[res] - cost
+            rows.append((items[res]["name"], rar, sp, f"마진 {margin}원/개 -> 회수 {sp / max(margin, 1) / units_per_day:.1f}일"))
+        else:
+            rec = next((r for r in read(root / "data/production/recipes.csv") if r["recipe_id"] == u["recipe_id"]), None)
+            res = rec["result_item_id"] if rec else u["recipe_id"]
+            cost = 0
+            if rec:
+                cost = sum(price.get(rec[f"material_{i}"], 0) * int(rec[f"amount_{i}"] or 0) for i in (1, 2, 3) if rec.get(f"material_{i}"))
+            rows.append((items.get(res, {"name": res})["name"], rar, sp, f"장비(재료 {cost}원어치, 제작 1회 + 강화 재료가 따로 듦)"))
+    rows.sort(key=lambda r: (r[1], r[2]))
+    for name, rar, sp, note in rows:
+        print(f"  {name:10} 희귀도 {rar} {sp:6,}원  {note}")
+
+
 def main():
     root = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
     items = {r["id"]: r for r in read(root / "data/core/items.csv")}
@@ -127,6 +161,8 @@ def main():
 
     print(f"\\n한 번 방문의 기대 진열 {expected_offers:.1f}종, 전부 사면 약 {expected_spend:,.0f}원 (하루 최대 매출의 {expected_spend / day_revenue:.1f}배)")
     print(f"골드 용도 참고: 확장 비용 매장 5,000/15,000/40,000, 창고 7,000/22,000/55,000, 생산실 8,000/25,000/60,000")
+    scroll_price = next((int(m["price"]) for m in merchant if m["item_id"] == "scroll_random"), 0)
+    scroll_report(root, items, price, scroll_price)
     print(f"문제 {problems}개")
     return 1 if problems else 0
 
