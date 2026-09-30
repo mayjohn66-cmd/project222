@@ -21,6 +21,7 @@ func _ready() -> void:
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
 	add_child(world)
+	world.get_node("TutorialDirector").enabled = false
 	for i in range(4): await get_tree().process_frame
 	for worker in get_tree().get_nodes_in_group("worker"): worker.queue_free()
 	await get_tree().process_frame

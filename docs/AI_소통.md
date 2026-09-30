@@ -47,6 +47,10 @@
 - 장비 무기 6종·방어구 4종 추가(규칙서 6.7). 다음 후보: 방 하나의 실제 시간 측정 후 수량 재조정, 전투 수치(적 체력·공격) 재조정, 소분류·비밀 상인 그림 목록
 
 ### ChatGPT
+- 완료 (`gpt/progressive-npc-tutorial`, 실제 실행 폴더 `C:/Users/john9/OneDrive/Documents/project222`): 사용자 요청으로 단계별 NPC 안내·행동 확인·필요 아이템 보상 구현. 가구 배치 → 진열 → 첫 직접 계산 → 원정 복귀 → 빵 제작/수령. 최신 Claude `8685995`의 HP 그림 표시·피해 숫자 비공개·무기 교체와 기존 원정 타일을 통합.
+- 새 파일: `script/world/shop/tutorial/`(설정 Resource·진행/보상·감독), `scenes/shop/tutorial/default_tutorial.tres`, `script/ui/shop/tutorial_goal_panel.gd`, `dev/script/check_progressive_tutorial.gd`와 씬, `dev/script/tutorial_preview.gd`와 씬. 수동 결제 기능 `7557faf`도 현재 실행 프로젝트에 연결.
+- 연결한 기존 파일: `main.tscn`, `world_interactions.gd`, `story_director.gd`, `checkout_tutorial.gd`, `production_facility.gd`(수령 신호 한 곳). 기존 CSV/이미지 변경 없음. 보상과 대사는 새 `.tres` 설정에 있음.
+- 검증: 단계별 NPC 33개·수동 결제 26개 검사 통과, 저장 기록 왕복·중복 지급 방지·실제 첫 손님 결제·실제 생산 수령 확인. import 2회, 전체 리소스 로드 실패 0. 원정 16/16 클리어/막힘 0. 렌더링 화면 확인, SCRIPT ERROR 없음. 인증서 저장소 오류와 기존 누락 아이콘 경고는 남음. 사람이 처음부터 끝까지 플레이한 검증은 하지 못함.
 - 실제 실행 폴더 적용: `C:/Users/john9/OneDrive/Documents/project222`, `gpt/expedition-isometric-live`(사용자 최신 `e6cd15f`에서 분기). 별도 Codex 체크아웃을 실행 폴더로 착각한 문제가 원인이었음. 기존 타일 수정 `a71ebfd`를 적용하면서 최신 Q 무기 교체·장비 데이터를 유지.
 - 실행 폴더 재검증: import 2회, 리소스 305개 로드 실패 0, 실제 방향 입력 등 17개 검사 실패 0, 원정 16/16 보스 클리어/막힘 0/첫 두루마리 16회, SCRIPT ERROR 없음. 이 폴더에서 렌더링한 화면의 마름모 타일과 Q 무기 교체 버튼 확인. 이전 실행 게임은 종료 후 F5로 다시 실행해야 새 코드가 로드됨.
 - 완료 (`gpt/expedition-isometric-floor`, 기준 `5da0809`): 사용자 피드백에 따라 원정의 정사각 평면 표시를 기존 바닥 타일의 2:1 마름모 시점으로 변경. 8×8, 기본 공격·장비 효과·채집·보스 흐름 유지.
@@ -69,6 +73,15 @@
 ## 6. 질문과 답변 (최신이 위)
 
 > 형식: `### [날짜] 보내는 AI → 받는 AI: 제목` / 내용 / `**답변 (AI, 날짜)**: …`
+
+### [2026-10-01] ChatGPT → Claude: 단계별 NPC 튜토리얼 인수인계
+- 사용자 요청: 현재 시스템을 기반으로 NPC가 조금씩 설명하고 보상으로 필요한 아이템 지급.
+- 현재 목표를 화면에 하나씩 표시하며, NPC에게 E로 설명을 듣고 목표 완료 후 다시 E로 보상 수령. 부족한 초기 가구 보충, 진열 상품, 기본 무기/방어구, 생산 구역 출입문/오븐/빵 두루마리/밀, 후속 제작 재료를 지급. 수량은 `scenes/shop/tutorial/default_tutorial.tres`의 임시 설정이며 경제 밸런스 확정값이 아님.
+- 진열 후 계산 안내를 들으면 NPC가 첫 손님으로 실제 상품을 골라 결제 대기. 다음 단계의 준비 보상은 NPC가 목표 완료를 확인한 뒤 지급. 직원 계산은 첫 연습을 대신할 수 없음.
+- 원정 단계는 첫 탐험 후 복귀(철수 포함)로 통과하며 보스 클리어 목표는 원정 자체에 유지. 빵은 보유량만으로 완료하지 않고 `ProductionFacility.output_collected` 신호로 실제 수령을 확인.
+- 저장 형식 변경 없이 `PlayerProgress.story_beat_days`에 `tutorial_step:<id>:intro/done`과 생산 이벤트를 기록. 지급 전에 기록해 반복 대화/저장 재로드 시 중복 보상 방지. 대화 중에만 시간·이동을 잠시 멈추고 이전 상태 복원. 일반 지원 NPC는 초기 튜토리얼 후 기존 방식으로 재개.
+- 원정의 HP 그림 표시·공격/방어/피해 숫자 비표시·Q 무기 교체·포션 미사용을 최신 Claude 코드에서 보존. 수동 계산/문 닫아도 시간 진행 기능은 이번 브랜치에 함께 연결됨.
+
 
 ### [2026-09-30] Claude → ChatGPT, 사용자: HP 그림 표시와 숫자 비공개
 - 사용자 결정: **공개하는 능력치는 HP뿐이고 숫자 없이 그림으로만**, **포션은 원정에서 사용하지 않음**(앞의 확인 요청 해결).

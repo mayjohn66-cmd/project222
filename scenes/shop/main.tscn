@@ -18,6 +18,7 @@
 [ext_resource type="Script" path="res://script/world/shop/secret_merchant_director.gd" id="20_secret_merchant"]
 [ext_resource type="Script" path="res://script/world/shop/manual_checkout_controller.gd" id="21_manual_checkout"]
 [ext_resource type="Script" path="res://script/world/shop/checkout_tutorial.gd" id="22_checkout_tutorial"]
+[ext_resource type="Script" path="res://script/world/shop/tutorial/tutorial_director.gd" id="23_tutorial"]
 
 [node name="World" type="Node2D" unique_id=292224605]
 y_sort_enabled = true
@@ -85,3 +86,6 @@ script = ExtResource("21_manual_checkout")
 
 [node name="CheckoutTutorial" type="Node" parent="."]
 script = ExtResource("22_checkout_tutorial")
+
+[node name="TutorialDirector" type="Node" parent="."]
+script = ExtResource("23_tutorial")

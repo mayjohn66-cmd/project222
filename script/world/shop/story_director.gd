@@ -62,6 +62,8 @@ func _process(delta: float) -> void:
 
 
 func _is_blocked() -> bool:
+	var tutorial = get_parent().get_node_or_null("TutorialDirector")
+	if tutorial != null and tutorial.is_guiding(): return true
 	# WorldInteractions는 실행 중에 만들어지므로 그때그때 찾는다.
 	if world_interactions == null:
 		world_interactions = get_parent().get_node_or_null("WorldInteractions")

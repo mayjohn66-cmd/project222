@@ -1,6 +1,8 @@
 class_name ProductionFacility
 extends StaticBody2D
 
+signal output_collected(item_id: String, amount: int)
+
 enum ProductionState {
 	IDLE,
 	PROCESSING,
@@ -392,6 +394,7 @@ func collect_production() -> bool:
 		pending_item_id,
 		pending_amount
 	)
+	output_collected.emit(pending_item_id, pending_amount)
 
 
 	active_recipe_id = ""

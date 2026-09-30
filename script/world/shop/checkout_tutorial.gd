@@ -58,6 +58,11 @@ func _process(_delta: float) -> void:
 	if not completed(): try_start()
 
 func try_start() -> void:
+	var tutorial = get_parent().get_node_or_null("TutorialDirector")
+	if tutorial != null and not tutorial.permits_first_checkout():
+		if manager.shop_open and not completed():
+			manager.customer_spawner.process_mode = Node.PROCESS_MODE_DISABLED
+		return
 	if completed() or is_instance_valid(guide) or not manager.shop_open \
 			or manager.closing_shop or manager.summary_open or cashier.blocked(): return
 	var story = get_parent().get_node_or_null("StoryDirector")
