@@ -736,10 +736,18 @@ static func get_random_loot(
 
 	for entry in all_entries:
 		if (
-			difficulty >= int(entry.get("min_difficulty", 1))
-			and difficulty <= int(entry.get("max_difficulty", 9999))
+			difficulty < int(entry.get("min_difficulty", 1))
+			or difficulty > int(entry.get("max_difficulty", 9999))
 		):
-			candidates.append(entry)
+			continue
+
+		# 이미 배웠거나 이미 가진 레시피 두루마리는 더 나오지 않는다.
+		if not RecipeUnlockData.is_scroll_worth_dropping(
+			str(entry.get("item_id", ""))
+		):
+			continue
+
+		candidates.append(entry)
 
 	if candidates.is_empty():
 		push_warning(
