@@ -3,7 +3,8 @@ extends RefCounted
 
 
 # 심야 비밀 상인의 판매 목록을 CSV에서 읽고, 방문할 때마다 오늘의 진열을 정한다.
-# 열: item_id, price, min_stock, max_stock, offer_chance(%).
+# 열: item_id, price, min_stock, max_stock, offer_chance(%), kind(item 또는 furniture, 비우면 item).
+# kind가 furniture이면 item_id는 가구 ID이고 산 뒤 가구 인벤토리에 들어간다.
 # item_id가 scroll_random이면 아직 배우지 않았고 갖고 있지 않은 레시피 두루마리 중 하나를 뽑고,
 # 가격은 행의 가격 x (두루마리 희귀도 - 1)이다(희귀도 2 = 기준가, 3 = 2배).
 
@@ -48,7 +49,20 @@ static func ensure_loaded() -> void:
 		if item_id.is_empty():
 			continue
 
-		if item_id != RANDOM_SCROLL_ID and not ItemData.has_item(item_id):
+		var kind: String = CsvReader.get_cell(row, indexes, "kind")
+
+		if kind.is_empty():
+			kind = "item"
+
+		if kind != "item" and kind != "furniture":
+			push_warning("[SecretMerchantData] 알 수 없는 종류: " + kind + " / " + item_id)
+			continue
+
+		if kind == "furniture":
+			if FurnitureData.get_furniture(item_id).is_empty():
+				push_warning("[SecretMerchantData] 없는 가구: " + item_id)
+				continue
+		elif item_id != RANDOM_SCROLL_ID and not ItemData.has_item(item_id):
 			push_warning("[SecretMerchantData] 없는 아이템: " + item_id)
 			continue
 
@@ -70,7 +84,8 @@ static func ensure_loaded() -> void:
 			"price": price,
 			"min_stock": min_stock,
 			"max_stock": max_stock,
-			"offer_chance": chance
+			"offer_chance": chance,
+			"kind": kind
 		})
 
 
@@ -123,6 +138,7 @@ static func _make_offer(
 
 	return {
 		"item_id": item_id,
+		"kind": str(entry.get("kind", "item")),
 		"price": price,
 		"stock": randi_range(
 			int(entry["min_stock"]),

@@ -190,7 +190,7 @@ def main():
         if item == "scroll_random":
             print(f"{item:15} {p}원(희귀도 2) / 희귀도 3은 2배 -> 레시피 하나 = 상품 마진 x 판매량으로 회수")
             continue
-        base = price[item]
+        base = price.get(item, 0)
         print(f"{item:15} {p:5}원" + (f" (판매가 {base}원의 {p / base:.1f}배)" if base else " (판매가 없음: 획득 대안 = 보스 확률 드롭)"))
     print(f"유적 1회 재료 가치 {ruins_v:.0f}원 vs 다른 지역 평균 {other_avg:.0f}원 -> 지도 1장의 초과 가치 약 {max(ruins_v - other_avg, 0):.0f}원")
     print(f"문제 {problems + nonlocal_problem[0]}개")

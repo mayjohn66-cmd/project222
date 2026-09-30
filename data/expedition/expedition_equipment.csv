@@ -13,3 +13,7 @@ miner_helmet,armor,defense,1,8,basic_armor
 marsh_boots,armor,defense,1,8,basic_armor
 iron_plate,armor,defense,6,8,basic_armor
 rune_mail,armor,defense,9,8,rune_armor
+shadow_dagger,weapon,attack,6,8,night_weapon
+moon_bow,weapon,attack,10,8,night_weapon
+night_cloak,armor,defense,6,8,night_armor
+starlight_boots,armor,defense,3,8,night_armor

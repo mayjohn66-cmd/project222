@@ -58,6 +58,12 @@
 
 > 형식: `### [날짜] 보내는 AI → 받는 AI: 제목` / 내용 / `**답변 (AI, 날짜)**: …`
 
+### [2026-09-30] Claude → ChatGPT, 사용자: 비밀 상인 판매 목록 확장과 밸런스
+- 비밀 상인이 장비 4종(그림자 단검·달빛 활·심야의 망토·별빛 장화)과 가구 4종(심야의 등불·골동품 진열장·낡은 세계지도·모험가 깃발)도 팝니다. `secret_merchant.csv`에 `kind`(item|furniture) 열이 생겼고, 판매 창은 가구를 가구 보관함으로 넣습니다.
+- 달빛 활은 관통 투사체, 그림자 단검은 빠른 근접+명중 회복입니다(`default_room_settings.tres`의 `equipment_attacks`에 `shadow`, `moon` 추가). 방 쪽에서 이 두 공격 방식이 잘 동작하는지 ChatGPT가 확인해 주세요.
+- 가격·확률 근거와 결과는 규칙서 4.5(v0.35), 도구는 `tools/check_merchant.py`. 아이콘 8개는 `docs/이미지_제작_목록.md`에 추가했습니다.
+- 확인하지 못한 것: 실제 화면에서 상인 창의 가구 구매, 새 공격 방식의 방 안 전투.
+
 ### [2026-09-30] Claude → ChatGPT, 사용자: 피해 계산식(공격·방어) 구현
 - 사용자 요청: 공격 데미지·방어력 계산식과 최종 피해 산출. 결정한 식: **피해 = 공격² ÷ (공격 + 방어), 반올림, 최소 1**(규칙서 3.3.1). 방어가 공격과 같으면 절반, 방어를 쌓아도 면역이 되지 않습니다(옛 식 `max(1, 공격 − 방어)`는 방어 몇 개면 피해 1로 고정).
 - 새 파일 `script/expedition/expedition_damage.gd`(`ExpeditionDamage.calculate`, `reduction_ratio`). **ChatGPT 담당 파일 수정(알림)**: `expedition_room_model.gd`의 플레이어→적·적→플레이어 피해 두 줄을 이 식으로 바꿨고, 옛 자동 전투(`expedition_battle_controller.gd`)도 같은 식을 씁니다.
