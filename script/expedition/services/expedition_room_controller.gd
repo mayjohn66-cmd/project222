@@ -96,7 +96,7 @@ func _object_used() -> void:
 	if model.object_kind == "heal":
 		var healed: int = mini(maxi(0, int(event.get("value", 0))), model.player_max_hp - model.player_hp)
 		model.player_hp += healed
-		view.notice = "HP %d 회복" % healed
+		view.notice = "체력을 회복했다" if healed > 0 else "체력이 가득 차 있다"
 		return
 	var table_id: String = str(event.get("target_id", ""))
 	var result: Dictionary = host.expedition_gathering_service.resolve_gathering(table_id,

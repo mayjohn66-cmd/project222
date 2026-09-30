@@ -109,11 +109,20 @@ func apply_bag_equipment_stats() -> void:
 
 
 func update_player_stats_ui() -> void:
-	host.player_stats_label.text = (
-		"HP %d/%d | 방어 %d"
-		% [
-			host.combat_player_hp,
-			host.combat_player_max_hp,
-			host.combat_player_defense
-		]
-	)
+	# 능력치는 숫자로 보이지 않고 HP만 그림 막대로 보인다.
+	host.player_stats_label.text = ""
+
+	var bar: HpBar = null
+
+	if host.player_stats_label.has_meta("hp_bar"):
+		bar = host.player_stats_label.get_meta("hp_bar") as HpBar
+
+	if bar == null:
+		# 막대는 라벨의 자식이라 라벨이 보일 때만 보인다.
+		host.player_stats_label.custom_minimum_size = Vector2(260, 24)
+		bar = HpBar.new()
+		host.player_stats_label.add_child(bar)
+		bar.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		host.player_stats_label.set_meta("hp_bar", bar)
+
+	bar.set_hp(host.combat_player_hp, host.combat_player_max_hp)

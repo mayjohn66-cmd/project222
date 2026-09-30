@@ -138,10 +138,7 @@ func resolve_heal_event(
 			"이미 체력이 가득 차 있다."
 		)
 	else:
-		result_message = (
-			"HP를 %d 회복했다!"
-			% healed
-		)
+		result_message = "체력을 회복했다!"
 
 	host.show_run_messages(
 		[

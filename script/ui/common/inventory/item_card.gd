@@ -355,10 +355,8 @@ func get_equipment_effect_text(
 			return "무기"
 
 		"defense":
-			return (
-				"방어력: +"
-				+ str(effect_value)
-			)
+			# 방어력 숫자는 보이지 않는다.
+			return "방어구"
 
 		_:
 			if effect_id.is_empty():
