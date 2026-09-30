@@ -7,5 +7,5 @@ forest_alpha_slime,거대 슬라임,90,14,5,boss_forest
 mine_golem,광산 골렘,120,16,8,boss_mine
 swamp_queen_slime,늪의 여왕 슬라임,105,15,7,boss_swamp
 
-ruins_sentinel,유적 수호병,65,12,5,enemy_ruins_sentinel
-ancient_guardian,고대 수호자,95,13,6,boss_hidden_ruins
+ruins_sentinel,유적 수호병,65,12,5,ruins_enemy
+ancient_guardian,고대 수호자,95,13,6,ruins_boss

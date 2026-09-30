@@ -1,5 +1,7 @@
 event_id,customer_type_id,target_type,target_id,weight,min_amount,max_amount
 dungeon_raid,normal,item,potion,100,1,2
 dungeon_raid,traveler,item,potion,250,2,4
+dungeon_raid,adventurer,item,potion,300,2,4
 spring_market,normal,category,food,120,2,3
 spring_market,traveler,category,food,60,1,2
+spring_market,child,category,food,150,2,3

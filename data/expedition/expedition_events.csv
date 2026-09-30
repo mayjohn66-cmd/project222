@@ -35,7 +35,7 @@ unknown_map_mine,mine,unknown,5,낡은 보물 지도를 발견했다!,loot,treas
 unknown_map_swamp,swamp,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,saturday
 
 hidden_battle,hidden_ruins,battle,100,유적 수호병이 나타났다!,battle,ruins_sentinel,0,
-hidden_gather,hidden_ruins,gather,100,유적 바닥에서 고대 파편을 발견했다!,loot,hidden_gather,0,
-hidden_unknown,hidden_ruins,unknown,100,무너진 방 안에서 고대 파편을 발견했다!,loot,hidden_gather,0,
-hidden_treasure,hidden_ruins,treasure,100,봉인된 고대 유물을 발견했다!,loot,hidden_treasure,0,
+hidden_gather,hidden_ruins,gather,100,유적 바닥에서 무언가를 발견했다!,loot,ruins_gather,0,
+hidden_unknown,hidden_ruins,unknown,100,무너진 방 안에서 무언가를 발견했다!,loot,ruins_gather,0,
+hidden_treasure,hidden_ruins,treasure,100,봉인된 보물 상자를 발견했다!,loot,ruins_treasure,0,
 hidden_boss,hidden_ruins,boss,100,고대 수호자가 깨어났다!,battle,ancient_guardian,0,

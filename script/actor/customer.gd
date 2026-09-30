@@ -242,7 +242,8 @@ func choose_wanted_item() -> String:
 	var request: Dictionary = (
 		CustomerDemandData.get_random_wanted_request(
 			get_customer_type_id(),
-			GameState.total_day
+			GameState.total_day,
+			ShopStock.get_stocked_item_ids(get_tree())
 		)
 	)
 

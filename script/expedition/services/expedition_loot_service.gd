@@ -6,13 +6,6 @@ func roll_enemy_loot(
 	enemy_id: String,
 	difficulty: int = 1
 ) -> Dictionary:
-	# 아직 레시피를 하나도 모르는 첫 원정에서는 첫 전투 전리품이
-	# 반드시 기본 음식 제작 두루마리다.
-	var starter_result: Dictionary = _roll_starter_scroll()
-
-	if not starter_result.is_empty():
-		return starter_result
-
 	var table_id: String = (
 		EnemyData.get_loot_table(
 			enemy_id
@@ -124,7 +117,9 @@ func roll_loot_table(
 	}
 
 
-func _roll_starter_scroll() -> Dictionary:
+# 아직 레시피를 하나도 모르는 플레이어가 처음 보스를 잡았을 때 함께 주는
+# 기본 음식 제작 두루마리. 줄 게 없으면 빈 Dictionary. 한 번 주면 다시 주지 않는다.
+func roll_starter_scroll() -> Dictionary:
 	if not PlayerProgress.is_starter_scroll_pending():
 		return {}
 
@@ -143,7 +138,7 @@ func _roll_starter_scroll() -> Dictionary:
 	PlayerProgress.mark_starter_scroll_granted()
 
 	DebugLog.write(
-		"[첫 원정] 기본 제작 두루마리 지급: ",
+		"[첫 보스] 기본 제작 두루마리 지급: ",
 		scroll_item_id
 	)
 
