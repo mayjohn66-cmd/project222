@@ -6,10 +6,10 @@ uid="uid://cn3ooppnu2yy2"
 
 [deps]
 
-files=["res://data/production/recipe_unlocks.recipe.translation", "res://data/production/recipe_unlocks.scroll.translation"]
+files=["res://data/production/recipe_unlocks.recipe.translation", "res://data/production/recipe_unlocks.scroll.translation", "res://data/production/recipe_unlocks.difficulty.translation", "res://data/production/recipe_unlocks.regions.translation"]
 
 source_file="res://data/production/recipe_unlocks.csv"
-dest_files=["res://data/production/recipe_unlocks.recipe.translation", "res://data/production/recipe_unlocks.scroll.translation"]
+dest_files=["res://data/production/recipe_unlocks.recipe.translation", "res://data/production/recipe_unlocks.scroll.translation", "res://data/production/recipe_unlocks.difficulty.translation", "res://data/production/recipe_unlocks.regions.translation"]
 
 [params]
 

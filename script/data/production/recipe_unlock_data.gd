@@ -65,6 +65,23 @@ static func is_scroll(
 	return not get_recipe_id_for_scroll(item_id).is_empty()
 
 
+# 드롭에서 나올 가치가 있는 두루마리인지. 이미 배운 레시피이거나
+# 이미 그 두루마리를 가지고 있으면 더 나올 필요가 없다.
+# 두루마리가 아닌 아이템은 항상 true.
+static func is_scroll_worth_dropping(
+	item_id: String
+) -> bool:
+	var recipe_id: String = get_recipe_id_for_scroll(item_id)
+
+	if recipe_id.is_empty():
+		return true
+
+	if PlayerProgress.is_recipe_learned(recipe_id):
+		return false
+
+	return GameState.get_item_count(item_id) <= 0
+
+
 static func get_all_scroll_item_ids() -> Array[String]:
 	ensure_loaded()
 
