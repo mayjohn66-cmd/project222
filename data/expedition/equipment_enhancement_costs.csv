@@ -7,6 +7,13 @@ basic_weapon,4,iron_ore,8
 basic_weapon,4,mine_crystal,2
 basic_weapon,5,iron_ore,10
 basic_weapon,5,mine_crystal,3
+basic_weapon,6,ancient_fragment,6
+basic_weapon,6,iron_ore,10
+basic_weapon,7,rune_dust,6
+basic_weapon,7,rune_stone,1
+basic_weapon,8,sealed_scroll,1
+basic_weapon,8,rune_stone,2
+basic_weapon,8,ancient_relic,1
 basic_armor,1,forest_herb,2
 basic_armor,2,forest_herb,3
 basic_armor,2,swamp_moss,1
@@ -16,6 +23,13 @@ basic_armor,4,iron_ore,2
 basic_armor,4,swamp_moss,3
 basic_armor,5,iron_ore,4
 basic_armor,5,mine_crystal,2
+basic_armor,6,ancient_fragment,6
+basic_armor,6,swamp_moss,6
+basic_armor,7,worn_coin,6
+basic_armor,7,rune_stone,1
+basic_armor,8,sealed_scroll,1
+basic_armor,8,rune_stone,2
+basic_armor,8,ancient_relic,1
 basic_gathering_tool,1,iron_ore,2
 basic_gathering_tool,2,iron_ore,3
 basic_gathering_tool,3,iron_ore,4

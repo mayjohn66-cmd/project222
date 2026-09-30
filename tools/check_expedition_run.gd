@@ -3,7 +3,7 @@ extends Node
 # 원정 한 판을 끝까지 자동으로 진행해서 실행 중 오류(타입 오류 등)를 찾는다.
 # 로드 검사(check_godot)로는 잡히지 않는 런타임 오류용이다.
 # 실행: godot --headless --path . res://tools/check_expedition_run.tscn
-# 지역 3곳 × 난이도 1·2 × 2판을 돌리고, 모든 판이 결과 화면까지 가고 첫 두루마리가 보스에서만 나와야 종료 코드 0이다.
+# 지역 4곳(유적 포함) × 난이도 1·2 × 2판을 돌리고, 모든 판이 결과 화면까지 가고 첫 두루마리가 보스에서만 나와야 종료 코드 0이다.
 # 오류 메시지는 Godot 로그(SCRIPT ERROR / ERROR)에 출력되니 함께 확인한다.
 
 var report := {
@@ -57,6 +57,8 @@ func _run_once(region: String, difficulty: int) -> void:
 	var prep = inst.prep_panel
 	prep.call("show_departure_choice")
 	prep.show()
+	# 유적은 보물 지도를 소모해서 들어간다.
+	GameState.add_item("treasure_map", 1)
 	prep.map_content._select_region(region)
 	for i in range(difficulty - 1): prep._step_difficulty(1)
 	inst.start_expedition_run()
@@ -88,7 +90,7 @@ func _run_once(region: String, difficulty: int) -> void:
 
 func _ready() -> void:
 	seed(12345)
-	for region in ["forest", "mine", "swamp"]:
+	for region in ["forest", "mine", "swamp", "hidden_ruins"]:
 		for difficulty in [1, 2]:
 			for n in range(2):
 				await _run_once(region, difficulty)
