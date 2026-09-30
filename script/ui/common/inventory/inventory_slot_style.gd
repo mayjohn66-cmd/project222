@@ -1,5 +1,7 @@
 extends RefCounted
 
+const ICON_SIZE: int = 64
+
 static func box(color: String) -> StyleBoxFlat:
 	var result := StyleBoxFlat.new()
 	result.bg_color = Color(color)
@@ -18,11 +20,13 @@ static func apply(button: Button) -> void:
 static func content(button: Button) -> void:
 	apply(button)
 	var icon: TextureRect = button.get_node("IconRect")
-	icon.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	icon.offset_left = 8
-	icon.offset_top = 6
-	icon.offset_right = -8
-	icon.offset_bottom = -10
+	# 64px 아이콘은 늘리거나 줄이지 않고 1:1로 가운데에 그린다(정수 배율이 아니면 도트가 깨져 보임).
+	icon.set_anchors_preset(Control.PRESET_CENTER)
+	icon.offset_left = -ICON_SIZE / 2
+	icon.offset_right = ICON_SIZE / 2
+	icon.offset_top = -ICON_SIZE / 2 - 3
+	icon.offset_bottom = ICON_SIZE / 2 - 3
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	icon.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	var count: Label = button.get_node("CountLabel")
 	count.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
