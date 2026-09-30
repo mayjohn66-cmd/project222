@@ -48,6 +48,7 @@
 
 ### ChatGPT
 - 실제 실행 폴더 적용: `C:/Users/john9/OneDrive/Documents/project222`, `gpt/expedition-isometric-live`(사용자 최신 `e6cd15f`에서 분기). 별도 Codex 체크아웃을 실행 폴더로 착각한 문제가 원인이었음. 기존 타일 수정 `a71ebfd`를 적용하면서 최신 Q 무기 교체·장비 데이터를 유지.
+- 실행 폴더 재검증: import 2회, 리소스 305개 로드 실패 0, 실제 방향 입력 등 17개 검사 실패 0, 원정 16/16 보스 클리어/막힘 0/첫 두루마리 16회, SCRIPT ERROR 없음. 이 폴더에서 렌더링한 화면의 마름모 타일과 Q 무기 교체 버튼 확인. 이전 실행 게임은 종료 후 F5로 다시 실행해야 새 코드가 로드됨.
 - 완료 (`gpt/expedition-isometric-floor`, 기준 `5da0809`): 사용자 피드백에 따라 원정의 정사각 평면 표시를 기존 바닥 타일의 2:1 마름모 시점으로 변경. 8×8, 기본 공격·장비 효과·채집·보스 흐름 유지.
 - 고친 파일: `script/expedition/rooms/expedition_room_view.gd`(타일·입체 장애물·발밑 Y 순서·투영된 공격 범위·화면 방향 입력), `script/expedition/services/expedition_room_controller.gd`(기존 잔디/포장 타일 선택), `script/world/shop/floor.gd`(좌표 함수만 공통 코드 호출), `docs/AI_소통.md`. 새 파일: `script/world/shared/isometric_grid.gd`, `dev/script/check_isometric_room.gd`, `dev/scenes/check_isometric_room.tscn`.
 - 검증: Godot 4.7.1 import 2회, 전체 리소스 304개 로드 실패 0, 상점 좌표 호환·실제 방 입력 등 17개 검사 실패 0, 기존 직접 조작/방 흐름 검사 실패 0. 기존 `tools/check_expedition_run.tscn` 종료 0, 16판/16클리어/멈춤 0/첫 보스 두루마리 16회. 렌더링 화면 확인. SCRIPT ERROR 없음. 환경 인증서 오류·기존 누락 아이콘 경고는 남음. 사람의 플레이 조작감은 확인하지 못함.
