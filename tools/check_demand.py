@@ -61,6 +61,9 @@ def main():
         season_w[gid], period_w[gid] = sw or {}, pw or {}
 
     for t in types:
+        for column, keys in (("season_weights", {k for k, _ in SEASONS}), ("period_weights", {k for k, _ in PERIODS})):
+            if parse_map(t.get(column, ""), f"{t['customer_type_id']}.{column}", keys) is None:
+                problems += 1
         if t["group_id"] not in groups:
             print(f"[오류] 소분류의 대분류가 없음: {t['customer_type_id']} -> {t['group_id']}")
             problems += 1

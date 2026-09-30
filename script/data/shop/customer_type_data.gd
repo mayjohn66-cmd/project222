@@ -6,6 +6,7 @@ extends RefCounted
 #   대분류(customer_groups.csv): 모험가·광부처럼 큰 무리. 계절과 시간대에 따라 오는 비율이 달라진다.
 #   소분류(customer_types.csv): 대분류 안의 종류(궁수·도적·전사 등). 원하는 품목 가중치를 갖는다
 #     (customer_demands.csv, 대분류의 수요를 바탕으로 소분류가 덮어쓰거나 추가).
+#     계절·시간대는 우선 대분류에서만 정하고, 특정 소분류만 season_weights/period_weights 열에 따로 적는다.
 # 방문 손님은 "대분류 뽑기(계절·시간대·이벤트·치장) → 소분류 뽑기" 순서로 정해진다.
 # 손님 한 명의 customer_type_id는 소분류 ID이고, 대분류는 group_id로 얻는다.
 
@@ -163,6 +164,18 @@ static func get_random_customer_type(
 			target_day,
 			decoration_bonuses
 		)
+
+		# 소분류의 계절·시간대 배수는 특정 손님만 따로 조절할 때 쓴다(비워 두면 1.0).
+		type_weight *= get_group_season_multiplier(
+			type_data,
+			season_id
+		)
+
+		if period != "":
+			type_weight *= get_group_period_multiplier(
+				type_data,
+				period
+			)
 
 		if type_weight > 0.0:
 			type_candidates.append({
@@ -607,5 +620,19 @@ static func _load_csv() -> void:
 				row,
 				indexes,
 				"description"
+			),
+			"season_weights": parse_weight_map(
+				CsvReader.get_cell(
+					row,
+					indexes,
+					"season_weights"
+				)
+			),
+			"period_weights": parse_weight_map(
+				CsvReader.get_cell(
+					row,
+					indexes,
+					"period_weights"
+				)
 			)
 		}

@@ -66,6 +66,7 @@ signal period_changed(period: String)
 var current_period: String = ""
 var save_failure_reason: String = ""
 var displayed_minute: int = 0
+var pending_absence: Dictionary = {}
 
 # =========================
 # 초기화
@@ -84,7 +85,12 @@ func _ready():
 
 	# GameState를 요일의 기준으로 사용
 	current_day = GameState.current_day
-	current_hour = int(GameState.get_meta("shop_return_context",{}).get("hour",GameConfig.DAY_START_HOUR))
+	var return_context: Dictionary = GameState.get_meta("shop_return_context",{})
+	current_hour = int(return_context.get("hour",GameConfig.DAY_START_HOUR))
+
+	# 원정에서 돌아왔다면 자리를 비운 시간을 나중에 정산한다(_install_world_interactions 뒤).
+	if float(return_context.get("expedition_seconds", 0.0)) > 0.0:
+		pending_absence = return_context.duplicate(true)
 	first_settlement_done = GameState.first_settlement_done
 
 	hour_timer.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -136,6 +142,7 @@ func _ready():
 		"_setup_common_game_menu"
 	)
 	call_deferred("_install_world_interactions")
+	call_deferred("_settle_expedition_absence")
 
 # =========================
 # 영업 종료와 일일 정산
@@ -802,6 +809,8 @@ func enter_expedition_scene():
 	expedition_transition_pending = true
 	GameState.set_meta("shop_return_context",{
 		"hour":current_hour,
+		"was_open":shop_open,
+		"expedition_seconds":0.0,
 		"stats":player.get_daily_shop_stats(),
 		"position":[player.global_position.x,player.global_position.y]
 	})
@@ -1261,3 +1270,100 @@ func _install_world_interactions() -> void:
 		player.daily_unmet_demand = stats.get("unmet_demand",{}).duplicate(true)
 		player.update_shop_stats_ui()
 	if GameState.has_meta("shop_return_context"): GameState.remove_meta("shop_return_context")
+
+
+# =========================
+# 원정 중 자리를 비운 시간 정산
+# =========================
+
+# 원정 안에서는 상점 시간이 GameConfig.EXPEDITION_TIME_SCALE 배율로 흐른다.
+# 돌아오면 그 시간만큼 시각을 흘리고, 영업 중이었다면 그동안의 손님·판매를 계산한다.
+# 하루 경계(06:00)를 넘으면 06:00까지만 계산하고 정산 화면을 띄운다(남은 시간은 버림).
+func _settle_expedition_absence() -> void:
+	if pending_absence.is_empty():
+		return
+
+	var context: Dictionary = pending_absence
+	pending_absence = {}
+
+	var seconds: float = float(context.get("expedition_seconds", 0.0))
+
+	if seconds <= 0.0 or hour_timer.wait_time <= 0.0:
+		return
+
+	var hours: float = (
+		seconds
+		* GameConfig.EXPEDITION_TIME_SCALE
+		/ hour_timer.wait_time
+	)
+
+	var start_hour: int = current_hour
+	var until_boundary: int = posmod(
+		GameConfig.DAY_START_HOUR - start_hour,
+		24
+	)
+
+	if until_boundary == 0:
+		until_boundary = 24
+
+	var crossed_boundary: bool = hours >= float(until_boundary)
+	var simulated_hours: float = minf(hours, float(until_boundary))
+
+	var result: Dictionary = {}
+
+	if bool(context.get("was_open", false)):
+		result = ShopOfflineSimulator.simulate(
+			get_tree(),
+			player,
+			start_hour,
+			simulated_hours
+		)
+
+	if crossed_boundary:
+		current_hour = GameConfig.DAY_START_HOUR
+	else:
+		current_hour = (
+			start_hour + int(floor(simulated_hours))
+		) % 24
+
+	current_period = get_period()
+
+	hour_changed.emit(current_hour)
+	period_changed.emit(current_period)
+	update_time_ui()
+
+	_show_absence_result(result, simulated_hours, crossed_boundary, bool(context.get("was_open", false)))
+
+	if crossed_boundary:
+		await end_shop_day()
+
+
+func _show_absence_result(
+	result: Dictionary,
+	simulated_hours: float,
+	crossed_boundary: bool,
+	was_open: bool
+) -> void:
+	var text: String = "원정에서 돌아왔습니다.\n\n"
+
+	if was_open:
+		text += ShopOfflineSimulator.format_summary(
+			result,
+			simulated_hours
+		)
+	else:
+		text += "가게를 닫고 나갔기 때문에 손님이 오지 않았습니다.\n(자리를 비운 시간: 약 %.1f시간)" % simulated_hours
+
+	if crossed_boundary:
+		text += "\n\n하루가 지나 정산합니다."
+
+	var dialog := AcceptDialog.new()
+	dialog.title = "자리를 비운 동안"
+	dialog.dialog_text = text
+	dialog.process_mode = Node.PROCESS_MODE_ALWAYS
+
+	dialog.confirmed.connect(dialog.queue_free)
+	dialog.canceled.connect(dialog.queue_free)
+
+	get_parent().get_node("UI").add_child(dialog)
+	dialog.popup_centered()

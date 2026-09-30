@@ -12,6 +12,14 @@ const EXPEDITION_SCENE_PATH: String = "res://scenes/expedition/expedition.tscn"
 # 영업 중에는 24시간 시간이 흐르고, 06:00에 시간이 멈춘 상태에서 정비(건축·근무표·저장)한다.
 const DAY_START_HOUR: int = 6
 
+# 원정 안에서는 상점 시간이 이 배율로 느리게 흐른다(0.5 = 절반 속도).
+# 원정에서 돌아오면 자리를 비운 게임 시간만큼 상점을 한꺼번에 정산한다(ShopOfflineSimulator).
+const EXPEDITION_TIME_SCALE: float = 0.5
+
+# 심야 비밀 상인: 밤(심야 시간대)이 시작될 때 이 확률로 찾아와 06:00까지 머문다.
+# 첫 원정을 다녀온 뒤부터 나올 수 있다. 판매 목록은 data/shop/catalogs/secret_merchant.csv.
+const SECRET_MERCHANT_NIGHT_CHANCE: float = 0.10
+
 # 하루 4등분 시간대 시작 시각(각 6시간): 아침 6~12 / 낮 12~18 / 저녁 18~24 / 심야 0~6.
 # EmployeeData.get_period_at_hour()와 DayManager.get_period()가 사용한다.
 const MORNING_PERIOD_START_HOUR: int = 6
