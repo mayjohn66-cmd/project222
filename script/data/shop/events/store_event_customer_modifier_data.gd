@@ -225,7 +225,7 @@ static func _load_csv() -> void:
 
 		if (
 			customer_type_id != "any"
-			and not CustomerTypeData.has_customer_type(
+			and not CustomerTypeData.has_customer_target(
 				customer_type_id
 			)
 		):

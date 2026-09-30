@@ -46,6 +46,51 @@ static func get_random_wanted_item(
 	)
 
 
+# 소분류의 기본 수요 = 대분류 수요 + 소분류 수정(같은 target은 덮어쓰기).
+# customer_type_id가 대분류 ID이면 대분류 수요만 돌려준다.
+static func get_merged_base_entries(
+	customer_type_id: String
+) -> Array:
+	ensure_loaded()
+
+	var group_id: String = CustomerTypeData.get_group_id(
+		customer_type_id
+	)
+
+	var merged: Dictionary = {}
+	var order: Array[String] = []
+
+	var owner_ids: Array[String] = []
+
+	if not group_id.is_empty() and group_id != customer_type_id:
+		owner_ids.append(group_id)
+
+	owner_ids.append(customer_type_id)
+
+	for owner_id in owner_ids:
+		for raw_entry in demands_by_type.get(owner_id, []):
+			if not raw_entry is Dictionary:
+				continue
+
+			var key: String = (
+				str(raw_entry.get("target_type", ""))
+				+ ":"
+				+ str(raw_entry.get("target_id", ""))
+			)
+
+			if not merged.has(key):
+				order.append(key)
+
+			merged[key] = raw_entry
+
+	var result: Array = []
+
+	for key in order:
+		result.append(merged[key])
+
+	return result
+
+
 # stocked_item_ids: 지금 진열대에 재고가 있는 품목. 카테고리 안에서 이 품목들이
 # 더 자주 뽑힌다(GameConfig.DEMAND_STOCKED_WEIGHT_MULT). 비워 두면 재고를 보지 않는다.
 static func get_random_wanted_request(
@@ -61,9 +106,9 @@ static func get_random_wanted_request(
 	# 손님 유형의 기본 수요
 	# =====================================================
 
-	var base_entries: Array = demands_by_type.get(
-		customer_type_id,
-		[]
+	# 대분류의 수요를 바탕으로 소분류가 같은 대상은 덮어쓰고(0이면 제거), 새 대상은 더한다.
+	var base_entries: Array = get_merged_base_entries(
+		customer_type_id
 	)
 
 	for raw_entry in base_entries:
@@ -87,17 +132,30 @@ static func get_random_wanted_request(
 	# 현재 활성 이벤트의 추가 수요
 	# =====================================================
 
-	var event_entries: Array[Dictionary] = (
-		StoreEventDemandData.get_active_demand_entries(
-			customer_type_id,
-			total_day
-		)
+	# 이벤트는 대분류 기준으로 걸리고, 소분류 ID로 걸린 것도 함께 적용한다.
+	var event_owner_ids: Array[String] = []
+	var group_id: String = CustomerTypeData.get_group_id(
+		customer_type_id
 	)
 
-	for event_entry in event_entries:
-		combined_entries.append(
-			event_entry.duplicate(true)
+	if not group_id.is_empty():
+		event_owner_ids.append(group_id)
+
+	if not event_owner_ids.has(customer_type_id):
+		event_owner_ids.append(customer_type_id)
+
+	for owner_id in event_owner_ids:
+		var event_entries: Array[Dictionary] = (
+			StoreEventDemandData.get_active_demand_entries(
+				owner_id,
+				total_day
+			)
 		)
+
+		for event_entry in event_entries:
+			combined_entries.append(
+				event_entry.duplicate(true)
+			)
 
 	# =====================================================
 	# 실제 선택 가능한 후보 구성

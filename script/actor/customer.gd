@@ -56,6 +56,7 @@ enum CustomerState {
 
 
 var customer_type_id: String = "normal"
+var customer_group_id: String = "normal"
 var customer_type_selected: bool = false
 
 var state: int = CustomerState.IDLE
@@ -189,10 +190,23 @@ func choose_customer_type() -> void:
 				"get_customer_weight_bonuses"
 			)
 
+	# 시간대는 DayManager의 현재 시각으로 정한다(없으면 시간대를 보지 않는다).
+	var current_period: String = ""
+	var scene: Node = get_tree().current_scene
+	var day_manager: Node = (
+		scene.get_node_or_null("DayManager")
+		if scene != null
+		else null
+	)
+
+	if is_instance_valid(day_manager) and day_manager.has_method("get_period"):
+		current_period = str(day_manager.call("get_period"))
+
 	var type_data: Dictionary = (
 		CustomerTypeData.get_random_customer_type(
 			GameState.total_day,
-			decoration_bonuses
+			decoration_bonuses,
+			current_period
 		)
 	)
 
@@ -234,6 +248,9 @@ func choose_customer_type() -> void:
 		return
 
 	customer_type_id = selected_type_id
+	customer_group_id = CustomerTypeData.get_group_id(
+		selected_type_id
+	)
 
 func choose_wanted_item() -> String:
 	wanted_amount = 1

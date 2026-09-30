@@ -6,10 +6,10 @@ uid="uid://bcj2gged4m4t5"
 
 [deps]
 
-files=["res://data/shop/catalogs/customer_types.display.translation", "res://data/shop/catalogs/customer_types.weight.translation", "res://data/shop/catalogs/customer_types.description.translation"]
+files=["res://data/shop/catalogs/customer_types.display.translation", "res://data/shop/catalogs/customer_types.group.translation", "res://data/shop/catalogs/customer_types.weight.translation", "res://data/shop/catalogs/customer_types.description.translation"]
 
 source_file="res://data/shop/catalogs/customer_types.csv"
-dest_files=["res://data/shop/catalogs/customer_types.display.translation", "res://data/shop/catalogs/customer_types.weight.translation", "res://data/shop/catalogs/customer_types.description.translation"]
+dest_files=["res://data/shop/catalogs/customer_types.display.translation", "res://data/shop/catalogs/customer_types.group.translation", "res://data/shop/catalogs/customer_types.weight.translation", "res://data/shop/catalogs/customer_types.description.translation"]
 
 [params]
 

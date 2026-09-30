@@ -989,12 +989,13 @@ func get_schedule_effect_text(
 ) -> String:
 	var effect_lines: Array[String] = []
 
+	# 이벤트 효과는 대분류 기준으로 정해진다.
 	for customer_data in (
-		CustomerTypeData.get_all_customer_types()
+		CustomerTypeData.get_all_customer_groups()
 	):
 		var customer_type_id: String = str(
 			customer_data.get(
-				"customer_type_id",
+				"group_id",
 				""
 			)
 		)
