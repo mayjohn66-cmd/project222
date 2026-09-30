@@ -78,6 +78,18 @@ func start_battle(
 		)
 	)
 
+	# 전투 파트는 새로 만들 예정이라, 지금은 승리한 것으로 보고 보상으로 넘어간다.
+	if GameConfig.EXPEDITION_AUTO_WIN_BATTLES:
+		host.combat_enemy_hp = 0
+
+		DebugLog.write(
+			"[전투] 자동 승리: ",
+			host.combat_enemy_name
+		)
+
+		resolve_victory()
+		return
+
 	host.battle_active = true
 
 	host.start_battle_button.disabled = true
@@ -183,7 +195,11 @@ func check_result() -> void:
 
 		return
 
-	# 플레이어가 생존한 상태에서 적을 처치
+	resolve_victory()
+
+
+# 적을 처치했을 때: 전리품을 굴리고 정리 화면(또는 다음 칸)으로 넘어간다.
+func resolve_victory() -> void:
 	host.battle_status_label.text = (
 		host.combat_enemy_name + " 처치"
 	)

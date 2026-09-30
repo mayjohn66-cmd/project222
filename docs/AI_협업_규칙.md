@@ -1,4 +1,4 @@
-# AI 협업 규칙 (초안 v0.2)
+# AI 협업 규칙 (초안 v0.3)
 
 이 프로젝트는 사용자 1명과 AI 2개(Claude, ChatGPT)가 코드·데이터를 작업하고, 이미지는 전용 이미지 AI(예: Pixel Lab)가 만듭니다. 파일이 꼬이지 않도록 아래 규칙을 지켜 주세요.
 규칙은 필요할 때마다 사용자와 상의해서 고칩니다.
@@ -48,6 +48,7 @@
 - 코드를 바꾸면 Godot 4.7.1로 실행 검증을 하고 결과를 커밋 설명에 붙입니다(Godot가 있는 환경에서만).
   - `godot --headless --path . --import`를 두 번 돌려 두 번째에 오류가 0인지 확인(첫 실행은 가져오기 순서 때문에 테마 관련 가짜 오류가 나옴)
   - `godot --headless --path . res://tools/check_godot.tscn`으로 모든 `.gd`와 `.tscn`이 로드되는지 확인
+  - 원정 흐름을 바꿨다면 `godot --headless --path . res://tools/check_expedition_run.tscn`으로 원정 한 판을 끝까지 자동 진행(로드 검사로는 안 잡히는 실행 중 타입 오류용). 종료 코드가 0이고 로그에 `SCRIPT ERROR`가 없어야 함
   - 실행하면 `.translation`(CSV 번역 부산물)이 바뀌므로 커밋하지 않고 `git checkout`으로 되돌림
 - 이미지를 추가하면 `tools/validate_assets.py`를 돌려 **FAIL이 없는지** 확인하고 결과를 커밋 설명에 붙입니다. 검증 실패 목록은 Claude가 사용자에게 넘깁니다.
 - 이미지 도구(API 키, 크레딧)의 키는 저장소에 넣지 않고 사용자 환경 설정으로만 관리합니다.
