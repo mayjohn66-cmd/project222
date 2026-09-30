@@ -57,7 +57,7 @@ script = ExtResource("13_a8y0u")
 
 [node name="HourTimer" type="Timer" parent="DayManager" unique_id=863735041]
 process_mode = 1
-wait_time = 6.0
+wait_time = 25.0
 
 [node name="UI" parent="." unique_id=1798152667 instance=ExtResource("15_jkv2x")]
 
