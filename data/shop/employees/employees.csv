@@ -1,4 +1,4 @@
 employee_id,display_name,speed,checkout_time,restock_time,can_checkout,can_restock,default_work_periods,hire_cost,initially_hired,preferred_period,monthly_salary
 worker_001,직원 1,100,1.2,0.8,true,true,morning|day,0,true,morning,1000
-worker_002,직원 2,100,1.2,0.8,true,true,night,0,true,night,1200
+worker_002,직원 2,100,1.2,0.8,true,true,evening|night,0,true,night,1200
 worker_003,직원 3,100,1.2,0.8,true,true,,100,false,evening,1400

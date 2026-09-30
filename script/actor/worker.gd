@@ -124,7 +124,7 @@ func _ready():
 		)
 
 	# 게임 시작은 아직 오픈 준비 상태
-	# 09시 근무자도 미리 출근시키지 않는다.
+	# 06시 근무자도 미리 출근시키지 않는다.
 	shift_was_active = false
 	on_duty = false
 	shift_ending = false
@@ -1961,13 +1961,10 @@ func can_change_employment() -> bool:
 		return false
 
 	return (
-		day_manager.current_hour == 9
+		day_manager.current_hour == GameConfig.DAY_START_HOUR
 		and not day_manager.shop_open
 		and not day_manager.summary_open
 		and not day_manager.closing_shop
-		and not day_manager.night_closed
-		and not day_manager.fast_forwarding_to_morning
-		and not day_manager.night_auto_running
 		and not on_duty
 		and not shift_ending
 		and not moving
@@ -2142,7 +2139,7 @@ func get_customer_service_chance() -> float:
 
 
 func train_stat(stat_id: String) -> bool:
-	# 고용된 비근무 직원, 오전 9시 오픈 준비 중에만 교육
+	# 고용된 비근무 직원, 아침 6시 오픈 준비 중에만 교육
 	if not can_edit_work_schedule():
 		return false
 

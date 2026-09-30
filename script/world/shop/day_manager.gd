@@ -1,7 +1,8 @@
 extends Node
 
 # 편의점의 하루 흐름을 조정한다.
-# 영업 시작·종료, 심야 처리, 정산, 원정 전환과 저장 가능 시점을 관리한다.
+# 영업 시작·종료, 하루 경계(06:00) 정산, 원정 전환과 저장 가능 시점을 관리한다.
+# 하루는 06:00에 시작해 다음 날 06:00에 정산하며, 영업 중에는 24시간 시간이 흐른다.
 
 
 const CHECKPOINT_FILE_SERVICE_SCRIPT = preload(
@@ -26,18 +27,8 @@ var current_phase: GamePhase = GamePhase.SHOP
 
 var summary_open: bool = false
 var closing_shop: bool = false
-var night_closed: bool = false
 var first_settlement_done: bool = false
-var fast_forwarding_to_morning: bool = false
-var night_auto_running: bool = false
 
-@export var night_auto_time_scale: float = 4.0
-
-var saved_time_scale: float = 1.0
-var saved_player_collision_layer: int = 0
-var saved_player_collision_mask: int = 0
-
-@export var night_fast_forward_delay: float = 0.08
 @onready var day_label: Label = $"../UI/HUD/DayLabel"
 @onready var player = $"../Actors/Player"
 @onready var customer_spawner = $"../CustomerSpawner"
@@ -64,7 +55,7 @@ var save_status_remaining: float = 0.0
 signal hour_changed(hour: int)
 signal period_changed(period: String)
 
-@export var current_hour: int = GameConfig.SHOP_OPEN_HOUR
+@export var current_hour: int = GameConfig.DAY_START_HOUR
 
 @onready var open_shop_button: Button = (
 	$"../UI/HUD/OpenShopButton"
@@ -74,6 +65,7 @@ signal period_changed(period: String)
 
 var current_period: String = ""
 var save_failure_reason: String = ""
+var displayed_minute: int = 0
 
 # =========================
 # 초기화
@@ -92,7 +84,7 @@ func _ready():
 
 	# GameState를 요일의 기준으로 사용
 	current_day = GameState.current_day
-	current_hour = int(GameState.get_meta("shop_return_context",{}).get("hour",GameConfig.SHOP_OPEN_HOUR))
+	current_hour = int(GameState.get_meta("shop_return_context",{}).get("hour",GameConfig.DAY_START_HOUR))
 	first_settlement_done = GameState.first_settlement_done
 
 	hour_timer.process_mode = Node.PROCESS_MODE_PAUSABLE
@@ -168,32 +160,7 @@ func end_shop_day() -> void:
 		return
 
 
-	if check_full_night_staffing():
-		await settle_before_night_operation()
-	else:
-		await close_shop_for_night_and_settle()
-
-
-func settle_before_night_operation() -> void:
-	if summary_open or closing_shop:
-		return
-
-	closing_shop = true
-	night_closed = false
-
-	hour_timer.stop()
-	customer_spawner.set_shop_open(false)
-	customer_spawner.process_mode = Node.PROCESS_MODE_DISABLED
-
-	update_day_ui()
-
-	send_all_customers_out()
-	await wait_for_customers_to_leave()
-
-	show_day_summary()
-
-	closing_shop = false
-	update_day_ui()
+	await close_shop_for_day_end_and_settle()
 
 
 func show_day_summary():
@@ -297,16 +264,7 @@ func show_day_summary():
 			* 100.0
 		)
 
-	var settlement_period: String
-
-	if not first_settlement_done:
-		settlement_period = (
-			"09:00 ~ 21:00"
-		)
-	else:
-		settlement_period = (
-			"전일 21:00 ~ 금일 21:00"
-		)
+	var settlement_period: String = "06:00 ~ 익일 06:00"
 
 	summary_text.text = (
 		CalendarData.get_display_date(
@@ -364,11 +322,8 @@ func confirm_next_day():
 	# =========================
 	advance_to_next_day()
 
-	if night_closed:
-		fast_forward_to_morning()
-		return
-
-	resolve_night_operation()
+	# 다음 날 06:00에 시간이 멈춘 채로 정비(건축·근무표·저장) 후 영업을 시작한다.
+	update_time_ui()
 
 
 func advance_to_next_day() -> void:
@@ -393,8 +348,6 @@ func apply_phase() -> void:
 		and shop_open
 		and not closing_shop
 		and not summary_open
-		and not night_closed
-		and not fast_forwarding_to_morning
 	)
 
 	if can_spawn:
@@ -438,16 +391,7 @@ func wait_for_customers_to_leave():
 # =========================
 
 func get_period() -> String:
-	if current_hour >= GameConfig.SHOP_OPEN_HOUR and current_hour < GameConfig.DAY_PERIOD_START_HOUR:
-		return "morning"
-
-	if current_hour >= GameConfig.DAY_PERIOD_START_HOUR and current_hour < GameConfig.EVENING_PERIOD_START_HOUR:
-		return "day"
-
-	if current_hour >= GameConfig.EVENING_PERIOD_START_HOUR and current_hour < GameConfig.SHOP_CLOSE_HOUR:
-		return "evening"
-
-	return "night"
+	return EmployeeData.get_period_at_hour(current_hour)
 
 
 func get_period_name() -> String:
@@ -468,14 +412,6 @@ func get_period_name() -> String:
 
 
 
-func is_player_control_time() -> bool:
-	return (
-		current_hour >= GameConfig.SHOP_OPEN_HOUR
-		and current_hour < GameConfig.SHOP_CLOSE_HOUR
-	)
-
-
-
 func update_time_ui():
 	if time_label == null:
 		return
@@ -484,38 +420,30 @@ func update_time_ui():
 		time_label.text = "원정 기간"
 		return
 
-	if fast_forwarding_to_morning:
-		time_label.text = (
-			format_hour(current_hour)
-			+ " / 심야 시간 경과"
-		)
-		return
-
-	if night_auto_running:
-		time_label.text = (
-			format_hour(current_hour)
-			+ " / 심야 자동영업 ×"
-			+ str(int(night_auto_time_scale))
-		)
-
-		return
-
-	if night_closed:
-		time_label.text = (
-			format_hour(current_hour)
-			+ " / 심야 폐점"
-		)
-		return
-
 	time_label.text = (
-		format_hour(current_hour)
+		format_hour(current_hour, get_display_minute())
 		+ " / "
 		+ get_period_name()
 	)
 
 
-func format_hour(hour: int) -> String:
-	return "%02d:00" % hour
+# 시계가 흐르는 동안 이번 시(時)의 앞 절반은 :00, 뒤 절반은 :30으로 보여 준다(30분 단위).
+func get_display_minute() -> int:
+	if hour_timer == null or hour_timer.is_stopped():
+		return 0
+
+	if hour_timer.wait_time <= 0.0:
+		return 0
+
+	var elapsed_ratio: float = (
+		1.0 - hour_timer.time_left / hour_timer.wait_time
+	)
+
+	return 30 if elapsed_ratio >= 0.5 else 0
+
+
+func format_hour(hour: int, minute: int = 0) -> String:
+	return "%02d:%02d" % [hour, minute]
 
 
 func _on_hour_timer_timeout():
@@ -532,16 +460,10 @@ func _on_hour_timer_timeout():
 	if current_hour >= 24:
 		current_hour = 0
 
-	# 심야 자동영업이 09:00에 도착
-	if (
-		current_hour == GameConfig.SHOP_OPEN_HOUR
-		and night_auto_running
-	):
-		finish_night_auto_operation()
-
 	var new_period: String = get_period()
 
-	if current_hour == GameConfig.SHOP_CLOSE_HOUR:
+	# 하루 경계(06:00): 정산하고 시간을 멈춘 채 다음 날 정비로 들어간다.
+	if current_hour == GameConfig.DAY_START_HOUR:
 		await end_shop_day()
 
 	hour_changed.emit(
@@ -560,14 +482,13 @@ func _on_hour_timer_timeout():
 
 func open_shop():
 
-	if shop_open or closing_shop or summary_open or fast_forwarding_to_morning or night_auto_running:
+	if shop_open or closing_shop or summary_open:
 		return
 
 	if not can_open_shop():
 		return
 
 	shop_open = true
-	night_closed = false
 
 	open_shop_button.visible = false
 
@@ -626,36 +547,8 @@ func can_open_shop() -> bool:
 	return true
 
 # =========================
-# 심야 영업과 인원 정리
+# 인원 정리
 # =========================
-
-func has_worker_at_hour(hour: int) -> bool:
-	var actors = get_node_or_null("../Actors")
-
-	if actors == null:
-		push_error("[심야 검사] Actors를 찾지 못했습니다.")
-		return false
-
-	for actor in actors.get_children():
-		# Player 등 Worker가 아닌 노드 제외
-		if not actor.has_method("is_hour_in_shift"):
-			continue
-
-		if actor.is_hour_in_shift(hour):
-			return true
-
-	return false
-
-func check_full_night_staffing() -> bool:
-	var fully_staffed: bool = true
-
-	for hour in GameConfig.NIGHT_HOURS:
-		var staffed: bool = has_worker_at_hour(hour)
-
-		if not staffed:
-			fully_staffed = false
-
-	return fully_staffed
 
 func send_all_customers_out():
 	var customers: Array = (
@@ -670,44 +563,6 @@ func send_all_customers_out():
 
 		if customer.has_method("go_to_exit"):
 			customer.go_to_exit()
-
-func close_shop_for_night():
-	if night_closed:
-		return
-
-	night_closed = true
-
-	# 21:00에서 시간 정지
-	hour_timer.stop()
-
-	update_time_ui()
-
-	# 신규 손님 생성 종료
-	customer_spawner.set_shop_open(false)
-
-	customer_spawner.process_mode = (
-		Node.PROCESS_MODE_DISABLED
-	)
-
-	# 기존 손님 전원 퇴장
-	send_all_customers_out()
-
-func resolve_night_operation():
-	# 원정일이면 심야 편의점 영업을 하지 않음
-	if current_phase != GamePhase.SHOP:
-		return
-
-	var night_staffed: bool = (
-		check_full_night_staffing()
-	)
-
-	if not night_staffed:
-		close_shop_for_night()
-		return
-
-	night_closed = false
-
-	start_night_auto_operation()
 
 func send_all_workers_out():
 	var actors = get_node_or_null(
@@ -731,7 +586,7 @@ func send_all_workers_out():
 		actor.request_shift_end()
 
 
-func wait_for_night_close_complete():
+func wait_for_shop_close_complete():
 	while true:
 		var customers: Array = (
 			get_tree().get_nodes_in_group(
@@ -765,171 +620,32 @@ func wait_for_night_close_complete():
 			0.25
 		).timeout
 
-func close_shop_for_night_and_settle() -> void:
+func close_shop_for_day_end_and_settle() -> void:
 	if summary_open or closing_shop:
 		return
 
 	closing_shop = true
 	shop_open = false
 
-	close_shop_for_night()
+	# 06:00에서 시간 정지
+	hour_timer.stop()
+
+	# 신규 손님 생성 종료, 기존 손님·직원 퇴장
+	customer_spawner.set_shop_open(false)
+	customer_spawner.process_mode = Node.PROCESS_MODE_DISABLED
+	send_all_customers_out()
 	send_all_workers_out()
 
 	update_day_ui()
+	update_time_ui()
 
-	await wait_for_night_close_complete()
+	await wait_for_shop_close_complete()
 
 	show_day_summary()
 
 	closing_shop = false
 	update_day_ui()
 
-func fast_forward_to_morning():
-	if fast_forwarding_to_morning:
-		return
-
-	fast_forwarding_to_morning = true
-
-	# 일반 HourTimer는 정지
-	hour_timer.stop()
-
-	# 손님도 계속 생성 금지
-	customer_spawner.set_shop_open(false)
-
-	customer_spawner.process_mode = (
-		Node.PROCESS_MODE_DISABLED
-	)
-
-	while current_hour != GameConfig.SHOP_OPEN_HOUR:
-		await get_tree().create_timer(
-			night_fast_forward_delay
-		).timeout
-
-		current_hour += 1
-
-		if current_hour >= 24:
-			current_hour = 0
-
-		current_period = get_period()
-
-		hour_changed.emit(
-			current_hour
-		)
-
-		update_time_ui()
-
-	# =========================
-	# 09:00 도착
-	# =========================
-	fast_forwarding_to_morning = false
-
-	night_closed = false
-	shop_open = false
-	closing_shop = false
-
-	current_period = get_period()
-
-	open_shop_button.visible = false
-
-	update_time_ui()
-	update_day_ui()
-
-	period_changed.emit(
-		current_period
-	)
-
-func start_night_auto_operation():
-	if night_auto_running:
-		return
-
-	night_auto_running = true
-	night_closed = false
-
-	shop_open = true
-
-	customer_spawner.process_mode = Node.PROCESS_MODE_INHERIT
-	customer_spawner.set_shop_open(true)
-
-	hour_timer.start()
-
-	# 현재 배속 기억
-	saved_time_scale = Engine.time_scale
-
-	# =========================
-	# 플레이어 제거
-	# =========================
-	if is_instance_valid(player):
-		player.velocity = Vector2.ZERO
-
-		saved_player_collision_layer = (
-			player.collision_layer
-		)
-
-		saved_player_collision_mask = (
-			player.collision_mask
-		)
-
-		# 화면에서 숨김
-		player.visible = false
-
-		# 심야 자동영업 중 충돌하지 않게 함
-		player.collision_layer = 0
-		player.collision_mask = 0
-
-		# 플레이어 조작 정지
-		player.set_physics_process(false)
-		player.set_process_input(false)
-		player.set_process_unhandled_input(false)
-
-	# B 건축모드 입력도 차단
-	if is_instance_valid(build_manager):
-		build_manager.set_process_unhandled_input(
-			false
-		)
-
-	# =========================
-	# 실제 게임 전체 배속
-	# =========================
-	Engine.time_scale = night_auto_time_scale
-
-	update_time_ui()
-
-func finish_night_auto_operation():
-	if not night_auto_running:
-		return
-
-	night_auto_running = false
-
-	# 원래 속도로 복구
-	Engine.time_scale = saved_time_scale
-
-	# =========================
-	# 플레이어 복귀
-	# =========================
-	if is_instance_valid(player):
-		player.collision_layer = (
-			saved_player_collision_layer
-		)
-
-		player.collision_mask = (
-			saved_player_collision_mask
-		)
-
-		player.visible = true
-
-		player.set_physics_process(true)
-		player.set_process_input(true)
-		player.set_process_unhandled_input(true)
-
-		player.velocity = Vector2.ZERO
-
-	# 건축모드 B키 다시 허용
-	if is_instance_valid(build_manager):
-		build_manager.set_process_unhandled_input(
-			true
-		)
-
-	update_time_ui()
 
 func enter_expedition_phase():
 	# 편의점 시간 정지
@@ -937,7 +653,6 @@ func enter_expedition_phase():
 
 	# 가게 영업 종료
 	shop_open = false
-	night_closed = false
 
 	# 손님 생성 완전 중단
 	if customer_spawner.has_method(
@@ -1049,7 +764,7 @@ func close_shop_for_expedition_and_settle():
 
 	update_day_ui()
 
-	await wait_for_night_close_complete()
+	await wait_for_shop_close_complete()
 
 	closing_shop = false
 
@@ -1057,7 +772,7 @@ func close_shop_for_expedition_and_settle():
 
 func enter_expedition_scene():
 	if expedition_transition_pending: return
-	if closing_shop or summary_open or fast_forwarding_to_morning or night_auto_running:
+	if closing_shop or summary_open:
 		return
 
 	# =========================
@@ -1125,13 +840,10 @@ func save_preparation_checkpoint(
 		return false
 
 	if (
-		current_hour != GameConfig.SHOP_OPEN_HOUR
+		current_hour != GameConfig.DAY_START_HOUR
 		or shop_open
 		or summary_open
 		or closing_shop
-		or night_closed
-		or fast_forwarding_to_morning
-		or night_auto_running
 	):
 		save_failure_reason = "오전 9시 오픈 준비 중에 저장할 수 있습니다."
 		return false
@@ -1225,6 +937,12 @@ func show_save_status(
 	save_status_label.show()
 
 func _process(delta: float) -> void:
+	var minute: int = get_display_minute()
+
+	if minute != displayed_minute:
+		displayed_minute = minute
+		update_time_ui()
+
 	if save_status_remaining <= 0.0:
 		return
 
@@ -1411,12 +1129,9 @@ func _on_game_menu_return_title_requested() -> void:
 	if (
 		summary_open
 		or closing_shop
-		or night_closed
-		or fast_forwarding_to_morning
-		or night_auto_running
 	):
 		show_save_status(
-			"정산과 심야 처리를 마친 뒤 돌아갈 수 있습니다.",
+			"정산을 마친 뒤 돌아갈 수 있습니다.",
 			false
 		)
 		return
@@ -1508,7 +1223,6 @@ func _setup_common_game_menu() -> void:
 # Manual door closure is not a day-end settlement and never changes the date.
 func close_shop_manually() -> void:
 	shop_open = false
-	night_closed = false
 	hour_timer.stop()
 	customer_spawner.set_shop_open(false)
 	customer_spawner.process_mode = Node.PROCESS_MODE_DISABLED
@@ -1518,7 +1232,7 @@ func close_shop_manually() -> void:
 	update_time_ui()
 
 func toggle_shop_at_door() -> String:
-	if closing_shop or summary_open or fast_forwarding_to_morning or night_auto_running:
+	if closing_shop or summary_open:
 		return "현재 정산 중입니다. 잠시 기다려주세요."
 	if shop_open:
 		close_shop_manually()

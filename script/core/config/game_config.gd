@@ -8,20 +8,16 @@ const TITLE_SCENE_PATH: String = "res://scenes/core/title/title_screen.tscn"
 const EXPEDITION_SCENE_PATH: String = "res://scenes/expedition/expedition.tscn"
 
 
-# 편의점의 기본 영업 시간
-const SHOP_OPEN_HOUR: int = 9
-const SHOP_CLOSE_HOUR: int = 21
+# 하루는 06:00(아침 시작)에 시작해 다음 날 06:00에 정산한다.
+# 영업 중에는 24시간 시간이 흐르고, 06:00에 시간이 멈춘 상태에서 정비(건축·근무표·저장)한다.
+const DAY_START_HOUR: int = 6
 
-# 하루 중 시간대 구분 (아침/낮/저녁/밤) 경계 시각.
-# day_manager.gd의 get_period()에서 사용. 영업 시간을 바꿀 때
-# 이 값들도 함께 검토할 것.
-const DAY_PERIOD_START_HOUR: int = 13
-const EVENING_PERIOD_START_HOUR: int = 17
-
-const NIGHT_HOURS: Array = [
-	21, 22, 23,
-	0, 1, 2, 3, 4, 5, 6, 7, 8
-]
+# 하루 4등분 시간대 시작 시각(각 6시간): 아침 6~12 / 낮 12~18 / 저녁 18~24 / 심야 0~6.
+# EmployeeData.get_period_at_hour()와 DayManager.get_period()가 사용한다.
+const MORNING_PERIOD_START_HOUR: int = 6
+const DAY_PERIOD_START_HOUR: int = 12
+const EVENING_PERIOD_START_HOUR: int = 18
+const NIGHT_PERIOD_START_HOUR: int = 0
 
 
 # 공용 UI 씬 (여러 인벤토리/진열대 화면에서 공유)
@@ -32,6 +28,9 @@ const ITEM_CARD_SCENE: PackedScene = preload(
 
 # 사용자 데이터 경로
 const SETTINGS_PATH: String = "user://settings.cfg"
+
+# 설정에서 고를 수 있는 게임 속도 배율(상점 화면에서만 적용, 원정은 항상 1배).
+const GAME_SPEED_OPTIONS: Array = [1.0, 2.0, 3.0, 4.0]
 
 const SAVE_SLOT_PATHS: Array = [
 	"user://save_slot_1.dat",

@@ -14,7 +14,8 @@ func load_settings() -> Dictionary:
 		return {
 			"success": true,
 			"master_volume": 100.0,
-			"fullscreen": false
+			"fullscreen": false,
+			"game_speed": 1.0
 		}
 
 	if load_error != OK:
@@ -32,13 +33,17 @@ func load_settings() -> Dictionary:
 		),
 		"fullscreen": bool(
 			config.get_value("display", "fullscreen", false)
+		),
+		"game_speed": float(
+			config.get_value("gameplay", "game_speed", 1.0)
 		)
 	}
 
 
 func save_settings(
 	master_volume: float,
-	fullscreen: bool
+	fullscreen: bool,
+	game_speed: float = 1.0
 ) -> bool:
 	var config := ConfigFile.new()
 
@@ -52,6 +57,12 @@ func save_settings(
 		"display",
 		"fullscreen",
 		fullscreen
+	)
+
+	config.set_value(
+		"gameplay",
+		"game_speed",
+		game_speed
 	)
 
 	var save_error: Error = config.save(
