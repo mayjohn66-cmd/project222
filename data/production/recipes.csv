@@ -1,3 +1,13 @@
 recipe_id,result_item_id,result_amount,material_1,amount_1,material_2,amount_2
 rusty_sword_recipe,rusty_sword,1,iron_ore,3,mine_crystal,1
 leather_armor_recipe,leather_armor,1,forest_herb,2,swamp_moss,2
+herb_dagger_recipe,herb_dagger,1,dry_branch,3,forest_mushroom,1
+hunting_bow_recipe,hunting_bow,1,dry_branch,4,amber_sap,1
+hand_axe_recipe,hand_axe,1,iron_ore,4,stone_shard,2
+iron_spear_recipe,iron_spear,1,iron_ore,5,copper_ore,2
+crystal_staff_recipe,crystal_staff,1,mine_crystal,3,dry_branch,2
+rune_blade_recipe,rune_blade,1,rune_stone,2,ancient_fragment,5
+miner_helmet_recipe,miner_helmet,1,iron_ore,3,coal,2
+marsh_boots_recipe,marsh_boots,1,swamp_moss,3,bog_mud,2
+iron_plate_recipe,iron_plate,1,iron_ore,6,copper_ore,3
+rune_mail_recipe,rune_mail,1,rune_dust,5,worn_coin,3

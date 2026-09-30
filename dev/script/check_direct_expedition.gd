@@ -48,7 +48,7 @@ func _ready() -> void:
 	model.basic_attack()
 	expect(int(model.enemies[0]["hp"]) == 30, "기본 공격 피해/방어 반영")
 	expect(not model.basic_attack() and int(model.enemies[0]["hp"]) == 30, "공격 쿨다운")
-	model = room(slime, CONFIG.equipment_attacks[0])
+	model = room(slime, CONFIG.equipment_attacks.filter(func(p): return p.equipment_id == "rusty_sword")[0])
 	model.player_position = Vector2(4, 3)
 	model.enemies[0]["position"] = Vector2(3.5, 2.5)
 	model.enemies[1]["position"] = Vector2(4.5, 2.5)
