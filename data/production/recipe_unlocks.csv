@@ -4,3 +4,12 @@ bake_bread,product,scroll_bake_bread
 bottled_water,product,scroll_bottled_water
 rusty_sword_recipe,equipment,scroll_rusty_sword
 leather_armor_recipe,equipment,scroll_leather_armor
+berry_juice,product,scroll_berry_juice
+mushroom_stew,product,scroll_mushroom_stew
+elder_tonic,product,scroll_elder_tonic
+mineral_water,product,scroll_mineral_water
+hand_warmer,product,scroll_hand_warmer
+gem_lantern,product,scroll_gem_lantern
+reed_tea,product,scroll_reed_tea
+mud_pack,product,scroll_mud_pack
+swamp_elixir,product,scroll_swamp_elixir

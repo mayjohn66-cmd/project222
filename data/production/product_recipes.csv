@@ -2,3 +2,12 @@ recipe_id,result_item_id,result_amount,facility_id,craft_time
 herb_drink,herb_drink,1,drink_machine,60
 bake_bread,bread,1,magic_oven,60
 bottled_water,water,1,drink_machine,30
+berry_juice,berry_juice,1,drink_machine,45
+mushroom_stew,mushroom_stew,1,magic_oven,90
+elder_tonic,elder_tonic,1,drink_machine,120
+mineral_water,mineral_water,1,drink_machine,40
+hand_warmer,hand_warmer,1,magic_oven,60
+gem_lantern,gem_lantern,1,magic_oven,120
+reed_tea,reed_tea,1,drink_machine,50
+mud_pack,mud_pack,1,magic_oven,80
+swamp_elixir,swamp_elixir,1,drink_machine,150

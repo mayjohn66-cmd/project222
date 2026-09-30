@@ -17,10 +17,19 @@ boss_forest,forest_herb,100,3,5
 boss_forest,scroll_herb_drink,5,1,1
 boss_forest,scroll_bake_bread,5,1,1
 boss_forest,scroll_bottled_water,5,1,1
+boss_forest,scroll_berry_juice,3,1,1
+boss_forest,scroll_mushroom_stew,3,1,1
+boss_forest,scroll_elder_tonic,3,1,1
 boss_mine,mine_crystal,100,3,5
 boss_mine,scroll_rusty_sword,12,1,1
+boss_mine,scroll_mineral_water,4,1,1
+boss_mine,scroll_hand_warmer,4,1,1
+boss_mine,scroll_gem_lantern,4,1,1
 boss_swamp,swamp_moss,100,3,5
 boss_swamp,scroll_leather_armor,12,1,1
+boss_swamp,scroll_reed_tea,4,1,1
+boss_swamp,scroll_mud_pack,4,1,1
+boss_swamp,scroll_swamp_elixir,4,1,1
 
 hidden_gather,ancient_fragment,100,1,3
 hidden_treasure,ancient_relic,100,1,1
@@ -45,6 +54,9 @@ forest_treasure,elder_seed,10,1,1
 forest_treasure,scroll_herb_drink,3,1,1
 forest_treasure,scroll_bake_bread,3,1,1
 forest_treasure,scroll_bottled_water,3,1,1
+forest_treasure,scroll_berry_juice,2,1,1
+forest_treasure,scroll_mushroom_stew,2,1,1
+forest_treasure,scroll_elder_tonic,2,1,1
 forest_boss,forest_herb,5,3,4
 forest_boss,wild_berry,5,3,4
 forest_boss,dry_branch,5,3,4
@@ -54,6 +66,9 @@ forest_boss,elder_seed,55,1,1
 forest_boss,scroll_herb_drink,4,1,1
 forest_boss,scroll_bake_bread,4,1,1
 forest_boss,scroll_bottled_water,4,1,1
+forest_boss,scroll_berry_juice,3,1,1
+forest_boss,scroll_mushroom_stew,3,1,1
+forest_boss,scroll_elder_tonic,3,1,1
 mine_gather,coal,30,1,3
 mine_gather,stone_shard,30,1,3
 mine_gather,copper_ore,30,1,3
@@ -70,6 +85,9 @@ mine_treasure,mine_crystal,30,1,2
 mine_treasure,silver_ore,30,1,2
 mine_treasure,deep_gem,10,1,1
 mine_treasure,scroll_rusty_sword,8,1,1
+mine_treasure,scroll_mineral_water,2,1,1
+mine_treasure,scroll_hand_warmer,2,1,1
+mine_treasure,scroll_gem_lantern,2,1,1
 mine_boss,coal,5,3,4
 mine_boss,stone_shard,5,3,4
 mine_boss,copper_ore,5,3,4
@@ -77,6 +95,9 @@ mine_boss,mine_crystal,15,2,3
 mine_boss,silver_ore,15,2,3
 mine_boss,deep_gem,55,1,1
 mine_boss,scroll_rusty_sword,10,1,1
+mine_boss,scroll_mineral_water,3,1,1
+mine_boss,scroll_hand_warmer,3,1,1
+mine_boss,scroll_gem_lantern,3,1,1
 swamp_gather,swamp_moss,30,1,3
 swamp_gather,marsh_reed,30,1,3
 swamp_gather,bog_mud,30,1,3
@@ -93,6 +114,9 @@ swamp_treasure,toxic_spore,30,1,2
 swamp_treasure,glow_algae,30,1,2
 swamp_treasure,queen_jelly,10,1,1
 swamp_treasure,scroll_leather_armor,8,1,1
+swamp_treasure,scroll_reed_tea,2,1,1
+swamp_treasure,scroll_mud_pack,2,1,1
+swamp_treasure,scroll_swamp_elixir,2,1,1
 swamp_boss,swamp_moss,5,3,4
 swamp_boss,marsh_reed,5,3,4
 swamp_boss,bog_mud,5,3,4
@@ -100,6 +124,9 @@ swamp_boss,toxic_spore,15,2,3
 swamp_boss,glow_algae,15,2,3
 swamp_boss,queen_jelly,55,1,1
 swamp_boss,scroll_leather_armor,10,1,1
+swamp_boss,scroll_reed_tea,3,1,1
+swamp_boss,scroll_mud_pack,3,1,1
+swamp_boss,scroll_swamp_elixir,3,1,1
 ruins_gather,ancient_fragment,30,1,3
 ruins_gather,rune_dust,30,1,3
 ruins_gather,worn_coin,30,1,3
