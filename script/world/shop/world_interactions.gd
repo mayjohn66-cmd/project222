@@ -24,6 +24,7 @@ func _ready() -> void:
 
 func blocked() -> bool:
  var world = get_parent()
+ if bool(world.get_meta("checkout_tutorial_dialogue",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
  if manager.closing_shop or manager.summary_open: return true
  var menu = world.get_node_or_null("UI/GameMenu")
@@ -57,6 +58,8 @@ func _process(_delta: float) -> void:
 
 func try_interact() -> bool:
  if blocked(): return false
+ var cashier = get_parent().get_node_or_null("ManualCheckoutController")
+ if cashier != null and cashier.try_interact(): return true
  if near_dungeon():
   manager.enter_expedition_scene()
   return true

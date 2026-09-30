@@ -16,6 +16,8 @@
 [ext_resource type="Script" path="res://script/world/shop/day_night_tint.gd" id="18_day_night_tint"]
 [ext_resource type="Script" path="res://script/world/shop/shop_speed_controller.gd" id="19_shop_speed"]
 [ext_resource type="Script" path="res://script/world/shop/secret_merchant_director.gd" id="20_secret_merchant"]
+[ext_resource type="Script" path="res://script/world/shop/manual_checkout_controller.gd" id="21_manual_checkout"]
+[ext_resource type="Script" path="res://script/world/shop/checkout_tutorial.gd" id="22_checkout_tutorial"]
 
 [node name="World" type="Node2D" unique_id=292224605]
 y_sort_enabled = true
@@ -77,3 +79,9 @@ script = ExtResource("19_shop_speed")
 
 [node name="SecretMerchantDirector" type="Node" parent="."]
 script = ExtResource("20_secret_merchant")
+
+[node name="ManualCheckoutController" type="Node" parent="."]
+script = ExtResource("21_manual_checkout")
+
+[node name="CheckoutTutorial" type="Node" parent="."]
+script = ExtResource("22_checkout_tutorial")
