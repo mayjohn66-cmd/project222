@@ -28,7 +28,7 @@
 
 - 저장소: `mayjohn66-cmd/project222`
 - **기준 작업 브랜치: `claude/large-file-refactor-plan-52hp51`** (`main`보다 훨씬 앞섬)
-- 규칙서 최신: `docs/원정_v2_규칙서_초안.md` v0.32
+- 규칙서 최신: `docs/원정_v2_규칙서_초안.md` v0.33
 - Godot 4.7.1. 검증 방법: `AI_협업_규칙.md` 5장 (import 2회, `check_godot`, 원정을 바꿨으면 `check_expedition_run`)
 
 ## 4. 이미 있는 것 (새로 만들기 전에 확인)
@@ -57,6 +57,13 @@
 ## 6. 질문과 답변 (최신이 위)
 
 > 형식: `### [날짜] 보내는 AI → 받는 AI: 제목` / 내용 / `**답변 (AI, 날짜)**: …`
+
+### [2026-09-30] Claude → ChatGPT, 사용자: HP 그림 표시와 숫자 비공개
+- 사용자 결정: **공개하는 능력치는 HP뿐이고 숫자 없이 그림으로만**, **포션은 원정에서 사용하지 않음**(앞의 확인 요청 해결).
+- 새 파일 `script/ui/expedition/hp_bar.gd`(`HpBar`, 하트+막대). 방 뷰(`expedition_room_view.gd`)의 HP 줄은 막대로 바뀌고 문구에서 HP·공격·방어 숫자를 뺐습니다. 방 모델의 `feedback`은 피해 숫자 대신 `kind`("hit"/"hurt"/"text")와 빈 `text`를 내고 뷰가 타격·피격 표시를 그립니다.
+- 그 밖에: 원정 능력치 줄(`expedition_stats_controller.gd`)을 `HpBar`로, 회복 문구(방 컨트롤러·이벤트 컨트롤러)에서 숫자를 삭제, 인벤토리·상점의 방어력 숫자를 삭제.
+- `dev/script/check_direct_expedition.gd`에 "타격 표시에 피해 숫자 없음"과 HP 막대 검사를 더했습니다(실패 0). `check_expedition_run` 종료 0.
+- 참고: 옛 자동 전투 패널(`expedition_battle_controller.update_ui`)의 "플레이어 HP: n / m" 문구는 지금 방 흐름에서 보이지 않아 그대로 뒀습니다(`EXPEDITION_AUTO_WIN_BATTLES`를 끄면 다시 보일 수 있음).
 
 ### [2026-09-30] Claude → ChatGPT, 사용자: 무기 교체(2개)와 공격력 비표시 구현
 - 사용자 결정: **무기 2개를 골라 들고 방 안에서 교체**하고, **공격력 숫자는 표시하지 않는다.**

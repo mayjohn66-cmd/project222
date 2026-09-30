@@ -6,6 +6,7 @@ var model: ExpeditionRoomModel
 var blocked: Callable
 var title_label: Label
 var hp_label: Label
+var hp_bar: HpBar
 var hint_label: Label
 var attack_button: Button
 var interact_button: Button
@@ -32,6 +33,9 @@ func _ready() -> void:
 	title_label.add_theme_color_override("font_color", Color("f4eddb"))
 	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(title_label)
+	hp_bar = HpBar.new()
+	hp_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	column.add_child(hp_bar)
 	hp_label = Label.new()
 	hp_label.add_theme_color_override("font_color", Color("f4eddb"))
 	hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -111,8 +115,8 @@ func _physics_process(delta: float) -> void:
 		if model.loadout.has_choice():
 			weapon_text += " ⇄ " + model.loadout.other_name()
 	swap_button.disabled = model.loadout == null or not model.loadout.has_choice() or not _can_play()
-	hp_label.text = "HP %d / %d   ·   %s   ·   남은 적 %d" % [model.player_hp,
-		model.player_max_hp, weapon_text, model.alive_enemies()]
+	hp_bar.set_hp(model.player_hp, model.player_max_hp)
+	hp_label.text = "%s   ·   남은 적 %d" % [weapon_text, model.alive_enemies()]
 	var caption := model.interaction_label()
 	interact_button.disabled = caption.is_empty() or not _can_play()
 	interact_button.text = "%s [E]" % ("상호작용" if caption.is_empty() else caption)
@@ -183,7 +187,20 @@ func _draw() -> void:
 	for shot in model.projectiles:
 		draw_circle(_point(shot["position"]), 5, Color("f6d391"))
 	for note in model.feedback:
-		draw_string(ThemeDB.fallback_font, _point(note["position"]) - Vector2(0, cell * 0.5), str(note["text"]), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
+		var note_at := _point(note["position"])
+		var kind: String = str(note.get("kind", "text"))
+		if kind == "hit":
+			# 타격: 튀는 선 세 줄
+			var life: float = clampf(float(note["life"]) / 0.35, 0.0, 1.0)
+			for i in range(3):
+				var angle: float = -PI * 0.5 + (i - 1) * 0.7
+				draw_line(note_at + Vector2.from_angle(angle) * cell * (0.15 + 0.2 * (1.0 - life)),
+					note_at + Vector2.from_angle(angle) * cell * (0.3 + 0.2 * (1.0 - life)), Color(1, 1, 0.85, life), 3)
+		elif kind == "hurt":
+			var hurt_life: float = clampf(float(note["life"]) / 0.45, 0.0, 1.0)
+			draw_arc(note_at, cell * (0.3 + 0.35 * (1.0 - hurt_life)), 0, TAU, 24, Color(1, 0.3, 0.3, hurt_life), 4)
+		else:
+			draw_string(ThemeDB.fallback_font, note_at - Vector2(0, cell * 0.5), str(note["text"]), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
 
 func _point(tile: Vector2) -> Vector2:
 	return board.position + tile * board.size.x / ExpeditionRoomSettings.GRID_SIZE

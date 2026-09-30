@@ -278,10 +278,8 @@ func _on_item_pressed(
 				)
 
 			"defense":
-				description += (
-					"\n\n[방어]\n방어력 +"
-					+ str(base_power)
-				)
+				# 방어력 숫자는 보이지 않는다.
+				pass
 
 			_:
 				description += "\n\n[도구 효과]"
@@ -327,11 +325,7 @@ func _on_item_pressed(
 				+ ExpeditionWeaponLoadout.get_style_text(item_id)
 			)
 
-		if defense_bonus != 0:
-			description += (
-				"\n방어력 %+d"
-				% defense_bonus
-			)
+		# 방어력 숫자는 보이지 않는다.
 
 	item_description_label.text = description
 

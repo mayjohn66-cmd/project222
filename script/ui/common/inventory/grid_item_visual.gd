@@ -610,10 +610,8 @@ func _get_equipment_tooltip_text() -> String:
 			)
 
 		"defense":
-			result += (
-				"\n방어력: +"
-				+ str(effective_value)
-			)
+			# 방어력 숫자는 보이지 않는다.
+			pass
 
 		"harvest_wheat":
 			result += (

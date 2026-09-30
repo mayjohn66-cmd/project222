@@ -171,7 +171,8 @@ func _hit_enemy(enemy: Dictionary, direction: Vector2) -> void:
 	enemy["hp"] = maxi(0, int(enemy["hp"]) - damage)
 	enemy["position"] = move_actor(enemy["position"], direction * attack_profile.knockback)
 	player_hp = mini(player_max_hp, player_hp + roundi(damage * attack_profile.heal_fraction))
-	feedback.append({"position": enemy["position"], "text": str(damage), "life": 0.5})
+	# 피해 숫자는 보이지 않고 타격 표시만 낸다(공개하는 능력치는 HP 그림뿐).
+	feedback.append({"position": enemy["position"], "text": "", "kind": "hit", "life": 0.35})
 	if alive_enemies() == 0 and not exit_open:
 		exit_open = true
 		enemies_cleared.emit()
@@ -216,7 +217,7 @@ func _step_enemy(enemy: Dictionary, delta: float) -> void:
 				hurt_remaining = settings.hurt_grace
 				interacting = false
 				interaction_progress = 0.0
-				feedback.append({"position": player_position, "text": "-%d" % damage, "life": 0.5})
+				feedback.append({"position": player_position, "text": "", "kind": "hurt", "life": 0.45})
 				if player_hp == 0:
 					finished = true
 					defeated.emit()
