@@ -12,6 +12,7 @@
 [ext_resource type="Script" uid="uid://cccklthrb0wx0" path="res://script/world/shop/day_manager.gd" id="13_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://cjr6jutabrgkd" path="res://scenes/shop/ui/store_ui.tscn" id="15_jkv2x"]
 [ext_resource type="Script" path="res://script/world/shop/village_map_editor.gd" id="16_village_editor"]
+[ext_resource type="Script" path="res://script/world/shop/story_director.gd" id="17_story_director"]
 
 [node name="World" type="Node2D" unique_id=292224605]
 y_sort_enabled = true
@@ -61,3 +62,6 @@ wait_time = 5.0
 
 [node name="VillageMapEditor" type="Node2D" parent="."]
 script = ExtResource("16_village_editor")
+
+[node name="StoryDirector" type="Node" parent="."]
+script = ExtResource("17_story_director")

@@ -1232,6 +1232,9 @@ func confirm_result_phase() -> void:
 		)
 	)
 
+	# 첫 원정을 다녀온 기록(스토리 NPC 등장 조건)
+	PlayerProgress.record_expedition_completed()
+
 	finish_expedition()
 
 func reset_for_next_expedition_day():
