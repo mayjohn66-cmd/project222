@@ -6,6 +6,13 @@ func roll_enemy_loot(
 	enemy_id: String,
 	difficulty: int = 1
 ) -> Dictionary:
+	# 아직 레시피를 하나도 모르는 첫 원정에서는 첫 전투 전리품이
+	# 반드시 기본 음식 제작 두루마리다.
+	var starter_result: Dictionary = _roll_starter_scroll()
+
+	if not starter_result.is_empty():
+		return starter_result
+
 	var table_id: String = (
 		EnemyData.get_loot_table(
 			enemy_id
@@ -114,6 +121,38 @@ func roll_loot_table(
 		"table_id": table_id,
 		"item_id": item_id,
 		"amount": amount
+	}
+
+
+func _roll_starter_scroll() -> Dictionary:
+	if not PlayerProgress.is_starter_scroll_pending():
+		return {}
+
+	var scroll_item_id: String = (
+		RecipeUnlockData.get_starter_scroll_item_id()
+	)
+
+	if scroll_item_id.is_empty():
+		return {}
+
+	if not ItemData.can_store_in_expedition_bag(
+		scroll_item_id
+	):
+		return {}
+
+	PlayerProgress.mark_starter_scroll_granted()
+
+	DebugLog.write(
+		"[첫 원정] 기본 제작 두루마리 지급: ",
+		scroll_item_id
+	)
+
+	return {
+		"success": true,
+		"message": "",
+		"table_id": "starter_scroll",
+		"item_id": scroll_item_id,
+		"amount": 1
 	}
 
 

@@ -7,11 +7,13 @@ extends RefCounted
 
 static var learned_recipe_ids: Dictionary = {}
 static var cleared_difficulty: Dictionary = {}
+static var starter_scroll_granted: bool = false
 
 
 static func reset() -> void:
 	learned_recipe_ids.clear()
 	cleared_difficulty.clear()
+	starter_scroll_granted = false
 
 
 # =========================
@@ -37,6 +39,22 @@ static func learn_recipe(
 	learned_recipe_ids[recipe_id] = true
 
 	return true
+
+
+# =========================
+# 첫 원정 두루마리
+# =========================
+
+# 아직 첫 두루마리를 받지 않았고 배운 레시피도 없으면 지급 대기 중이다.
+static func is_starter_scroll_pending() -> bool:
+	return (
+		not starter_scroll_granted
+		and learned_recipe_ids.is_empty()
+	)
+
+
+static func mark_starter_scroll_granted() -> void:
+	starter_scroll_granted = true
 
 
 # =========================
@@ -92,7 +110,8 @@ static func record_clear(
 static func to_save_data() -> Dictionary:
 	return {
 		"learned_recipe_ids": learned_recipe_ids.keys(),
-		"cleared_difficulty": cleared_difficulty.duplicate(true)
+		"cleared_difficulty": cleared_difficulty.duplicate(true),
+		"starter_scroll_granted": starter_scroll_granted
 	}
 
 
@@ -109,6 +128,13 @@ static func load_save_data(
 	if saved_recipes is Array:
 		for recipe_id in saved_recipes:
 			learned_recipe_ids[str(recipe_id)] = true
+
+	starter_scroll_granted = bool(
+		data.get(
+			"starter_scroll_granted",
+			false
+		)
+	)
 
 	var saved_clears: Variant = data.get(
 		"cleared_difficulty",
