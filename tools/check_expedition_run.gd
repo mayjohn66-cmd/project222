@@ -12,6 +12,12 @@ var report := {
 }
 
 func _drain(inst) -> void:
+	# 8x8 직접 조작 방이 열려 있으면 검증용 드라이버가 실제 이동·공격·상호작용 API로 클리어한다.
+	if inst.expedition_room_controller.is_active():
+		var played: bool = await ExpeditionRoomTestDriver.play(inst.expedition_room_controller)
+		if not played:
+			report["stuck"] += 1
+
 	# 메시지·전리품 창을 사람처럼 넘긴다.
 	var guard := 0
 	while guard < 60:
