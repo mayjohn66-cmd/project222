@@ -33,6 +33,9 @@ const ITEM_CARD_SCENE: PackedScene = preload(
 # 사용자 데이터 경로
 const SETTINGS_PATH: String = "user://settings.cfg"
 
+# 설정에서 고를 수 있는 게임 속도 배율(상점 화면에서만 적용, 원정은 항상 1배).
+const GAME_SPEED_OPTIONS: Array = [1.0, 2.0, 3.0, 4.0]
+
 const SAVE_SLOT_PATHS: Array = [
 	"user://save_slot_1.dat",
 	"user://save_slot_2.dat"

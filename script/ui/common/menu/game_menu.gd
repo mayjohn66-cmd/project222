@@ -102,6 +102,10 @@ const GAME_SETTINGS_SERVICE_SCRIPT = preload(
 	$SettingsPanel/SettingsVBox/FullscreenButton
 )
 
+@onready var speed_option_button: OptionButton = (
+	$SettingsPanel/SettingsVBox/SpeedRow/SpeedOptionButton
+)
+
 
 
 var game_settings_service = (
@@ -237,6 +241,15 @@ func _ready() -> void:
 
 	fullscreen_button.toggled.connect(
 		_on_fullscreen_toggled
+	)
+
+	for speed_option in GameConfig.GAME_SPEED_OPTIONS:
+		speed_option_button.add_item(
+			str(int(speed_option)) + "배속"
+		)
+
+	speed_option_button.item_selected.connect(
+		_on_game_speed_selected
 	)
 
 	z_index = 1000
@@ -497,6 +510,18 @@ func _on_fullscreen_toggled(
 		_save_game_settings()
 
 
+func _on_game_speed_selected(
+	index: int
+) -> void:
+	GameSpeed.set_current(
+		float(GameConfig.GAME_SPEED_OPTIONS[index]),
+		get_tree()
+	)
+
+	if not loading_settings:
+		_save_game_settings()
+
+
 func _update_volume_value_label() -> void:
 	volume_value_label.text = (
 		str(
@@ -511,7 +536,8 @@ func _update_volume_value_label() -> void:
 func _save_game_settings() -> void:
 	game_settings_service.save_settings(
 		master_volume_slider.value,
-		fullscreen_button.button_pressed
+		fullscreen_button.button_pressed,
+		GameSpeed.get_current()
 	)
 
 
@@ -554,6 +580,17 @@ func _load_game_settings() -> void:
 
 	game_settings_service.apply_fullscreen(
 		saved_fullscreen
+	)
+
+	GameSpeed.set_current(
+		float(settings.get("game_speed", 1.0)),
+		get_tree()
+	)
+
+	speed_option_button.select(
+		GameConfig.GAME_SPEED_OPTIONS.find(
+			GameSpeed.get_current()
+		)
 	)
 
 	loading_settings = false

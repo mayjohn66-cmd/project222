@@ -37,6 +37,16 @@ layout_mode = 2
 [node name="VolumeValueLabel" type="Label" parent="SettingsVBox/VolumeRow" unique_id=1019891796]
 layout_mode = 2
 
+[node name="SpeedRow" type="HBoxContainer" parent="SettingsVBox"]
+layout_mode = 2
+
+[node name="SpeedTextLabel" type="Label" parent="SettingsVBox/SpeedRow"]
+layout_mode = 2
+text = "게임 속도"
+
+[node name="SpeedOptionButton" type="OptionButton" parent="SettingsVBox/SpeedRow"]
+layout_mode = 2
+
 [node name="FullscreenButton" type="CheckBox" parent="SettingsVBox" unique_id=1177573031]
 layout_mode = 2
 text = "전체 화면"
