@@ -12,6 +12,20 @@ func prepare_departure(
 			"[원정 출발] 지역 ID가 비어 있습니다."
 		)
 
+	if not PlayerProgress.is_difficulty_unlocked(
+		region_id,
+		difficulty
+	):
+		return _failure(
+			"아직 열리지 않은 난이도입니다. 이전 난이도를 먼저 클리어해주세요.",
+			(
+				"[원정 출발] 잠긴 난이도 / 지역: "
+				+ region_id
+				+ " / 난이도: "
+				+ str(difficulty)
+			)
+		)
+
 	if not ExpeditionMapData.has_valid_region_nodes(
 		region_id
 	):

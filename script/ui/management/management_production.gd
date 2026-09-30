@@ -113,7 +113,7 @@ func refresh_recipe_list() -> void:
 	clear_container(recipe_list)
 
 	var recipes: Array[Dictionary] = (
-		ProductRecipeData.get_all_recipes()
+		ProductRecipeData.get_learned_recipes()
 	)
 
 	for recipe in recipes:

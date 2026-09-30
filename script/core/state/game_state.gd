@@ -180,6 +180,8 @@ func initialize_new_game():
 	current_day = 1
 	total_day = 1
 
+	PlayerProgress.reset()
+
 	store_expansion_level = (
 		StoreExpansionData.MIN_LEVEL
 	)
@@ -824,6 +826,7 @@ func create_save_data() -> Dictionary:
 		"next_equipment_instance_id": next_equipment_instance_id,
 		"resume_scene_id": resume_scene_id,
 		"expedition_checkpoint": expedition_checkpoint.duplicate(true),
+		"progress": PlayerProgress.to_save_data(),
 	}
 
 func write_save_file(
@@ -1442,6 +1445,13 @@ func apply_save_data(data: Dictionary) -> bool:
 
 	# 기존 저장 파일에 직원 급여 기록이 없다면 자동 생성
 	ensure_employee_salary_records()
+
+	PlayerProgress.load_save_data(
+		data.get(
+			"progress",
+			{}
+		)
+	)
 
 	warehouse_expansion_level = clampi(
 		int(

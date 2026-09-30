@@ -369,6 +369,12 @@ func complete_current_node():
 				"[원정] 보스 완료 → RESULT"
 			)
 
+			# 클리어한 난이도를 기록해서 다음 난이도를 연다.
+			PlayerProgress.record_clear(
+				host.current_region_id,
+				host.get_run_difficulty()
+			)
+
 			host.open_result_phase(
 				host.ExpeditionEndReason.BOSS_CLEAR
 			)

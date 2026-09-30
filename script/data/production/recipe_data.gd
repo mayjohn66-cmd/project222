@@ -58,6 +58,19 @@ static func get_all_recipes() -> Array[Dictionary]:
 
 	return result
 
+# 배운 레시피(또는 잠금 대상이 아닌 레시피)만 돌려준다.
+static func get_learned_recipes() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+
+	for recipe in get_all_recipes():
+		if RecipeUnlockData.is_recipe_available(
+			str(recipe.get("recipe_id", ""))
+		):
+			result.append(recipe)
+
+	return result
+
+
 static func get_recipe_by_result_item(
 	item_id: String
 ) -> Dictionary:

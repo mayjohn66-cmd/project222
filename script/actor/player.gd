@@ -653,7 +653,7 @@ func _fill_facility_recipes(
 	facility_recipe_picker.clear()
 
 	var recipes: Array[Dictionary] = (
-		ProductRecipeData.get_all_recipes()
+		ProductRecipeData.get_learned_recipes()
 	)
 
 	for recipe in recipes:
