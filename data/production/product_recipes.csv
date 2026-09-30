@@ -11,3 +11,13 @@ gem_lantern,gem_lantern,1,magic_oven,120
 reed_tea,reed_tea,1,drink_machine,50
 mud_pack,mud_pack,1,magic_oven,80
 swamp_elixir,swamp_elixir,1,drink_machine,150
+dried_fruit,dried_fruit,1,magic_oven,60
+herbal_bread,herbal_bread,1,magic_oven,60
+potion,potion,1,drink_machine,90
+copper_kettle,copper_kettle,1,magic_oven,70
+silver_pendant,silver_pendant,1,magic_oven,100
+bog_soup,bog_soup,1,magic_oven,70
+glow_lamp,glow_lamp,1,magic_oven,100
+traveler_stew,traveler_stew,1,magic_oven,80
+explorer_kit,explorer_kit,1,magic_oven,110
+rainbow_tonic,rainbow_tonic,1,drink_machine,180
