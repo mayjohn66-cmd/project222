@@ -244,6 +244,18 @@ func update_ui():
 	host.update_player_stats_ui()
 
 
+# 지금 싸우는 칸이 보스 칸인지.
+func _is_boss_battle() -> bool:
+	if host.expedition_map == null:
+		return false
+
+	var node: Dictionary = host.expedition_map.get_node(
+		host.selected_map_node_id
+	)
+
+	return str(node.get("type", "")) == ExpeditionMap.NODE_BOSS
+
+
 func generate_loot(
 	enemy_id: String
 ) -> void:
@@ -294,6 +306,20 @@ func generate_loot(
 			"amount": amount
 		}
 	)
+
+	# 처음 보스를 잡으면 기본 음식 제작 두루마리를 보스 전리품과 함께 준다.
+	if _is_boss_battle():
+		var starter_result: Dictionary = (
+			host.expedition_loot_service.roll_starter_scroll()
+		)
+
+		if not starter_result.is_empty():
+			host.temporary_loot.append(
+				{
+					"item_id": str(starter_result.get("item_id", "")),
+					"amount": int(starter_result.get("amount", 1))
+				}
+			)
 
 	host.refresh_loot_ui()
 
