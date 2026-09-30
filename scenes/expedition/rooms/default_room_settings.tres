@@ -1,0 +1,22 @@
+[gd_resource type="Resource" load_steps=5 format=3]
+
+[ext_resource type="Script" path="res://script/expedition/rooms/expedition_room_settings.gd" id="1"]
+[ext_resource type="Script" path="res://script/expedition/rooms/expedition_attack_profile.gd" id="2"]
+
+[sub_resource type="Resource" id="bare"]
+script = ExtResource("2")
+display_name = "찌르기"
+
+[sub_resource type="Resource" id="sword"]
+script = ExtResource("2")
+equipment_id = "rusty_sword"
+display_name = "검 휘두르기"
+reach = 1.55
+arc_degrees = 130.0
+max_targets = 3
+knockback = 0.35
+
+[resource]
+script = ExtResource("1")
+default_attack = SubResource("bare")
+equipment_attacks = Array[ExtResource("2")]([SubResource("sword")])
