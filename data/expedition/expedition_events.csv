@@ -30,9 +30,9 @@ boss_forest_event,forest,boss,100,거대 슬라임이 길을 막고 있다!,batt
 boss_mine_event,mine,boss,100,광산 골렘이 나타났다!,battle,mine_golem,0,
 boss_swamp_event,swamp,boss,100,늪의 여왕 슬라임이 모습을 드러냈다!,battle,swamp_queen_slime,0,
 
-unknown_map_forest,forest,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,saturday
-unknown_map_mine,mine,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,saturday
-unknown_map_swamp,swamp,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,saturday
+unknown_map_forest,forest,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,
+unknown_map_mine,mine,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,
+unknown_map_swamp,swamp,unknown,5,낡은 보물 지도를 발견했다!,loot,treasure_map_drop,0,
 
 hidden_battle,hidden_ruins,battle,100,유적 수호병이 나타났다!,battle,ruins_sentinel,0,
 hidden_gather,hidden_ruins,gather,100,유적 바닥에서 무언가를 발견했다!,loot,ruins_gather,0,
