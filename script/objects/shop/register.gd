@@ -182,6 +182,11 @@ func debug_service_cells():
 
 
 func try_reserve_worker(worker_node) -> bool:
+	# 첫 손님 튜토리얼은 플레이어의 결제를 기다린다.
+	var customer = get_waiting_customer()
+	if customer != null and customer.has_method("can_be_checked_out_by") \
+			and not customer.can_be_checked_out_by(worker_node):
+		return false
 	if is_instance_valid(reserved_worker):
 		return reserved_worker == worker_node
 
