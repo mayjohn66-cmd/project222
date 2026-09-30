@@ -176,6 +176,7 @@ var expedition_bag: ExpeditionBag
 var selected_bag_uid: int = -1
 
 var battle_active: bool = false
+var expedition_room_controller := ExpeditionRoomController.new()
 
 const BASE_PLAYER_ATTACK: int = 12
 const BASE_PLAYER_DEFENSE: int = 3
@@ -277,6 +278,7 @@ var preparation_return_pending: bool = false
 
 
 func _ready() -> void:
+	expedition_room_controller.setup(self)
 	expedition_checkpoint_controller.setup(self)
 	expedition_battle_controller.setup(self)
 	expedition_map_controller.setup(self)
@@ -849,6 +851,8 @@ func start_map_battle(
 	)
 
 func complete_current_map_node():
+	if expedition_room_controller.finish_retreat():
+		return
 	expedition_map_controller.complete_current_node()
 
 # =========================================================
@@ -906,7 +910,7 @@ func set_expedition_phase(
 
 	if has_node("PreparationVillage"):
 		$PreparationVillage.sync_phase()
-		$PreparationVillage.clock_hud.show()
+		$PreparationVillage.clock_hud.visible = new_phase == ExpeditionPhase.PREP
 
 func start_expedition_run() -> void:
 	if (
@@ -1484,6 +1488,7 @@ func _install_preparation_village() -> void:
 	village.name = "PreparationVillage"
 	add_child(village)
 	village.sync_phase()
+	village.clock_hud.visible = current_expedition_phase == ExpeditionPhase.PREP
 	if bool(GameState.get_meta("shop_expedition_prep",false)):
 		GameState.remove_meta("shop_expedition_prep")
 		prep_panel.call("show_departure_choice")

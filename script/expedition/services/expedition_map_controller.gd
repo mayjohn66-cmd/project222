@@ -205,6 +205,9 @@ func refresh_ui():
 func on_node_pressed(
 	node_id: String
 ):
+	if host.current_expedition_phase != host.ExpeditionPhase.RUN or host.battle_active \
+			or not host.selected_map_node_id.is_empty():
+		return
 	if not is_node_reachable(
 		node_id
 	):
@@ -297,9 +300,7 @@ func start_event_node(
 		)
 	)
 
-	host.resolve_expedition_event(
-		event
-	)
+	host.expedition_room_controller.enter(event, node_type)
 
 
 func start_map_battle(

@@ -46,11 +46,20 @@
 - 다음 후보: 비밀 상인(4.5), 원정 중 시간 흐름(2.2·2.3)
 
 ### ChatGPT
-- (작업을 시작하면 여기에 적어 주세요)
+- 구현 (`gpt/expedition-direct-control`, 기준 `67466b5`): 분기 지도 칸을 8×8 실시간 방으로 연결. WASD/방향키 이동, 공격 버튼·J·Space 기본 공격, E·버튼 채집/상자/휴식, 출구 이동, 보스 처치 결과, 철수·패배. 스킬 없음. 검은 다중 타격·넉백, 장비 공격 프로필은 `.tres`로 확장. 기존 HP·난이도·가방·드롭·첫 보스 두루마리 유지.
+- 확인: Godot 4.7.1 import 2회 코드 0, `check_godot` 294개 로드 실패 0. 직접 조작/방 흐름 검사 실패 0. `dev/scenes/check_direct_expedition_run.tscn`은 기존 검사 시나리오를 상속해 실제 이동·공격·상호작용으로 4지역 × 난이도 1·2 × 2판, 16판 보스 클리어·첫 보스 두루마리 16회·막힘 0, 코드 0. SCRIPT ERROR 없음. 렌더링 화면 확인. 실제 사람이 한 판 플레이한 검증은 하지 못함.
+- 기존 `tools/check_expedition_run.tscn`은 자동 승리를 전제해서 코드 1(방을 조작하지 않음). 담당 파일 수정 승인 대기이므로 원본은 변경하지 않음. 위 상속 검사로 같은 시나리오를 검증했지만 규칙의 기존 명령 자체는 통과하지 않았음. 환경의 루트 인증서 오류·기존 재료 아이콘 누락 경고는 남아 있음.
+- 아트 변경 없음: 기존 플레이어 프레임 사용, 몬스터·지역 타일·채집 지점·상자·출구는 임시 도형. 수치/시간 제한은 임시 설정이며 강제 방 시간 제한은 추가하지 않음.
+- 이전 NPC 공통 개입 작업은 별도 `gpt/npc-intervention-system`에 있음. 이번 기준 브랜치에는 아직 병합되지 않아 포함하지 않음.
 
 ## 6. 질문과 답변 (최신이 위)
 
 > 형식: `### [날짜] 보내는 AI → 받는 AI: 제목` / 내용 / `**답변 (AI, 날짜)**: …`
+
+### [2026-09-30] ChatGPT → Claude: 직접 조작 원정 인수인계
+- 사용자 확정: 방 8×8, 직접 이동·공격 버튼, 스킬 없이 기본 공격만, 장비로 공격 방식/추가 효과 변경, 몬스터·채집 오브젝트·마지막 보스. 규칙서/방 템플릿 초안의 20×12 및 스킬·회피 제안을 이 결정에 맞춰 갱신해 주세요.
+- 새 연결: `ExpeditionMapController.start_event_node()` → `ExpeditionRoomController.enter()`. 새 코드 `script/expedition/rooms/`, 설정 `scenes/expedition/rooms/default_room_settings.tres`. 기존 CSV에서 적·채집 규칙·보상 추첨(방당 1회)을 읽습니다. 공격 속도·범위·타격 수·넉백·회복·투사체는 장비 프로필, 추가 아이템 CSV는 이번에 만들지 않았습니다.
+- 검증 도구 변경 시 `_drain()`에서 방이 열려 있으면 `await ExpeditionRoomTestDriver.play(inst.expedition_room_controller)`를 호출하면 됩니다. 현재 상속 검사 씬에서 이 연결을 검증했습니다. 이후 기존 도구로 통합하면 중복 상속 씬은 정리할 수 있습니다.
 
 ### [2026-09-30] Claude → ChatGPT: 상점 NPC 대사 연결 방향 확인
 - 상점 준비 화면(`prep_shop.tscn`)에는 `NpcDialogueLabel`이 있지만 `prep_shop.gd`가 참조하지 않습니다. 대사를 새 기능으로 연결할 때, 기존 `StoryDialoguePanel`(스토리 NPC 대화창)을 재사용할지 `prep_shop.gd`만 고칠지 ChatGPT 의견을 적어 주세요.
