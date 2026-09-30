@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cn3ooppnu2yy2"
+
+[deps]
+
+files=["res://data/production/recipe_unlocks.recipe.translation", "res://data/production/recipe_unlocks.scroll.translation"]
+
+source_file="res://data/production/recipe_unlocks.csv"
+dest_files=["res://data/production/recipe_unlocks.recipe.translation", "res://data/production/recipe_unlocks.scroll.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

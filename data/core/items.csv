@@ -35,3 +35,8 @@ rune_dust,룬 가루,material,material,60,1,1,true,true,res://art/items/pixel_v1
 worn_coin,낡은 동전,material,material,60,1,1,true,true,res://art/items/pixel_v1/worn_coin.png,오래전 통용되던 동전이다.,0,0,inventory,shelf,1
 rune_stone,룬석,material,material,120,1,1,true,true,res://art/items/pixel_v1/rune_stone.png,마력이 남아 있는 돌이다.,0,0,inventory,shelf,2
 sealed_scroll,봉인된 두루마리,material,material,120,1,1,true,true,res://art/items/pixel_v1/sealed_scroll.png,봉인이 그대로 남은 두루마리다.,0,0,inventory,shelf,2
+scroll_herb_drink,약초 음료 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_herb_drink.png,약초 음료를 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_bake_bread,빵 굽기 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_bake_bread.png,빵을 굽는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_bottled_water,병물 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_bottled_water.png,물을 병에 담는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_rusty_sword,낡은 검 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rusty_sword.png,낡은 검을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+scroll_leather_armor,가죽 갑옷 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_leather_armor.png,가죽 갑옷을 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2

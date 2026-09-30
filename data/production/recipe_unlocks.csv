@@ -1,0 +1,6 @@
+recipe_id,recipe_kind,scroll_item_id
+herb_drink,product,scroll_herb_drink
+bake_bread,product,scroll_bake_bread
+bottled_water,product,scroll_bottled_water
+rusty_sword_recipe,equipment,scroll_rusty_sword
+leather_armor_recipe,equipment,scroll_leather_armor
