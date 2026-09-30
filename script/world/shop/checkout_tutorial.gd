@@ -5,7 +5,7 @@ const GUIDE_SCENE = preload("res://scenes/shop/actors/checkout_guide.tscn")
 const BEAT_ID: String = "tutorial_manual_checkout"
 @export var intro_lines: Array[String] = [
 	"개업을 축하해! 내가 첫 손님이 되어 줄게.",
-	"진열대에서 물건을 골라 계산대로 가져갈게. 직원이 없어도 네가 계산할 수 있어."
+	"계산 연습을 위해 물건을 준비했어. 내가 계산대에서 기다릴 테니 직접 결제해 줘."
 ]
 @export var checkout_lines: Array[String] = [
 	"물건을 골랐어. 표시된 계산대 뒤쪽으로 와 줘.",
@@ -22,6 +22,7 @@ var dialogue: StoryDialoguePanel
 var guide: CheckoutGuideCustomer
 var guide_register
 var guide_cell := Vector2i(-1, -1)
+var customer_cell := Vector2i(-1, -1)
 var stage: String = ""
 var dialogue_open: bool = false
 var previous_timer_paused: bool = false
@@ -50,9 +51,8 @@ func _process(_delta: float) -> void:
 				or not is_instance_valid(guide_register) or guide_register.is_queued_for_deletion():
 			_abort()
 			return
-		if stage == "shopping" and guide_register.get_waiting_customer() == guide:
-			stage = "checkout"
-			_show_dialogue(checkout_lines)
+		if stage == "checkout" and not guide.purchase_completed and not guide_register.has_waiting_customer():
+			guide_register.request_checkout(guide)
 		return
 	if not stage.is_empty(): _abort()
 	if not completed(): try_start()
@@ -71,34 +71,41 @@ func try_start() -> void:
 	var items := ShopStock.get_stocked_item_ids(get_tree())
 	items = items.filter(func(item_id: String) -> bool:
 		return ItemData.get_item_price(item_id) > 0 and ItemData.get_sellable_items().has(item_id))
-	if items.is_empty(): return
+	if items.is_empty(): items.append("water")
 	var door
 	for candidate in get_tree().get_nodes_in_group("door"):
 		if candidate.get_parent() == get_parent().get_node("Objects") \
 				and not candidate.get_meta("is_build_preview", false) and not candidate.is_queued_for_deletion():
 			door = candidate
 			break
-	if door == null: return
+	var build = get_parent().get_node("BuildManager")
 	for register in get_tree().get_nodes_in_group("register"):
 		if register.get_parent() != get_parent().get_node("Objects") \
 				or register.is_queued_for_deletion() or register.get_meta("is_build_preview", false): continue
-		if register.has_waiting_customer() or register.is_reserved_for_other(player): continue
+		if register.has_waiting_customer(): continue
+		var available_customer_cell := Vector2i(-1, -1)
+		for cell in register.get_checkout_cells():
+			if not build.is_cell_blocked_for_customer(cell):
+				available_customer_cell = cell
+				break
+		if available_customer_cell == Vector2i(-1, -1): continue
 		for cell in register.get_worker_cells():
-			if not register.is_worker_cell_available(cell, player): continue
-			if not register.try_reserve_worker(player): continue
-			if not register.try_reserve_worker_cell(cell, player):
-				register.release_worker_reservation(player)
-				continue
+			if build.is_cell_blocked_for_customer(cell): continue
+			if not register.reserve_tutorial_cashier(player, cell): continue
 			guide_register = register
 			guide_cell = cell
+			customer_cell = available_customer_cell
 			break
 		if is_instance_valid(guide_register): break
 	if not is_instance_valid(guide_register): return
+	if tutorial != null:
+		var step: Dictionary = tutorial.flow.current()
+		if str(step.get("id", "")) == "checkout": tutorial.flow.introduce(step)
 	guide = GUIDE_SCENE.instantiate()
 	guide.guide_register = guide_register
 	guide.guide_item_id = items[0]
 	get_parent().get_node("Actors").add_child(guide)
-	guide.global_position = door.get_customer_target_position()
+	guide.global_position = door.get_customer_target_position() if door != null else build.get_cell_world_position(customer_cell)
 	stage = "intro"
 	manager.customer_spawner.process_mode = Node.PROCESS_MODE_DISABLED
 	marker = CashierMarker.new()
@@ -128,8 +135,11 @@ func _on_dialogue_finished() -> void:
 	_restore_dialogue_state()
 	if aborting or not is_instance_valid(guide): return
 	if stage == "intro":
-		stage = "shopping"
-		guide.start_shopping()
+		if guide.prepare_practice_checkout(customer_cell):
+			stage = "checkout"
+			_show_dialogue(checkout_lines)
+		else:
+			_abort()
 	elif stage == "finished":
 		guide.go_to_exit()
 		_release()
@@ -155,6 +165,7 @@ func _release() -> void:
 		guide_register.release_worker_cell(player)
 	guide_register = null
 	guide_cell = Vector2i(-1, -1)
+	customer_cell = Vector2i(-1, -1)
 	if is_instance_valid(marker): marker.queue_free()
 	marker = null
 	if manager.shop_open and not manager.closing_shop:

@@ -56,7 +56,7 @@ func run() -> void:
 	talk()
 	talk()
 	check(director.flow.current()["id"] == "checkout", "stock advances to manual checkout")
-	talk()
+	check(not director.flow.seen("checkout"), "no extra NPC dialogue required before checkout event")
 	manager.open_shop()
 	var checkout = world.get_node("CheckoutTutorial")
 	check(is_instance_valid(checkout.guide), "stage opens first customer exercise")
@@ -67,7 +67,7 @@ func run() -> void:
 	drain(checkout.dialogue)
 	var deadline: int = Time.get_ticks_msec() + 20000
 	while checkout.stage == "shopping" and Time.get_ticks_msec() < deadline: await get_tree().process_frame
-	check(checkout.stage == "checkout", "guide physically shops and queues")
+	check(checkout.stage == "checkout", "guide event reliably prepares a waiting customer")
 	if checkout.stage != "checkout":
 		get_tree().quit(1)
 		return

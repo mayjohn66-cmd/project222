@@ -52,7 +52,7 @@ func run() -> void:
 	var deadline: int = Time.get_ticks_msec() + 20000
 	while tutorial.stage == "shopping" and Time.get_ticks_msec() < deadline:
 		await get_tree().process_frame
-	check(tutorial.stage == "checkout", "guide walks to shelf and queues at register")
+	check(tutorial.stage == "checkout", "guide waits at register through forced practice event")
 	if tutorial.stage != "checkout":
 		get_tree().quit(1)
 		return

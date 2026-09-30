@@ -133,6 +133,22 @@ var waiting_customer = null
 var reserved_worker = null
 var worker_cell_users: Dictionary = {}
 
+func reserve_tutorial_cashier(player_node: Node, cell: Vector2i) -> bool:
+	if has_waiting_customer() or not get_worker_cells().has(cell): return false
+	# 연습은 도착률이나 직원 대기 자리 예약 때문에 무기한 미뤄지면 안 된다.
+	for worker in worker_cell_users.values().duplicate():
+		if not is_instance_valid(worker) or worker == player_node: continue
+		if worker.has_method("release_worker_position"): worker.release_worker_position()
+		else: release_worker_cell(worker)
+	if is_instance_valid(reserved_worker) and reserved_worker != player_node:
+		var previous = reserved_worker
+		if previous.has_method("release_register_reservation"):
+			previous.release_register_reservation()
+			previous.pending_register = null
+			previous.finish_current_work()
+		reserved_worker = null
+	return try_reserve_worker(player_node) and try_reserve_worker_cell(cell, player_node)
+
 
 func request_checkout(customer) -> bool:
 	if has_waiting_customer():

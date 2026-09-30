@@ -2,6 +2,7 @@ class_name TutorialDirector
 extends Node
 const SETTINGS = preload("res://scenes/shop/tutorial/default_tutorial.tres")
 @export var enabled: bool = true
+@export var talk_distance: float = 48.0
 var flow := TutorialFlow.new()
 var npc: StoryNpc
 var dialogue: StoryDialoguePanel
@@ -28,7 +29,8 @@ func is_guiding() -> bool:
 	return enabled and not flow.current().is_empty()
 
 func permits_first_checkout() -> bool:
-	return not enabled or (flow.seen("checkout") or flow.done("checkout"))
+	var step := flow.current()
+	return not enabled or str(step.get("id", "")) == "checkout" or flow.done("checkout")
 
 func _blocked() -> bool:
 	var world = get_parent()
@@ -76,19 +78,26 @@ func refresh() -> void:
 		and not (is_instance_valid(player.facility_dialog) and player.facility_dialog.visible) \
 		and not (menu != null and (menu.menu_open or menu.settings_panel.visible or menu.save_slot_panel.visible))
 	if talking or _blocked(): return
+	if str(step["id"]) == "checkout" and not ready:
+		# 같은 안내 인물이 첫 손님 역할을 맡는다. 두 NPC를 동시에 세우지 않는다.
+		if is_instance_valid(npc): npc.queue_free()
+		npc = null
+		return
+	if is_instance_valid(npc) and _npc_needs_relocation():
+		npc.global_position = _guidance_position()
 	if not is_instance_valid(npc):
 		npc = StoryNpc.new()
 		npc.setup({"beat_id": "tutorial", "lines": step["lines"]})
 		get_parent().get_node("Actors").add_child(npc)
 		var floor_node = get_parent().get_node("Floor")
-		npc.global_position = floor_node.to_global(floor_node.grid_to_local(Vector2i(2, maxi(1, floor_node.rows - 2))))
+		npc.global_position = _guidance_position()
 		npc.mark.text = "안내 [E]"
 		npc.mark.position.x = -52
 		npc.mark.add_theme_font_size_override("font_size", 18)
 
 func try_interact() -> bool:
 	if not enabled or talking or _blocked() or not is_instance_valid(npc): return false
-	if player.global_position.distance_to(npc.global_position) > 90: return false
+	if player.global_position.distance_to(npc.global_position) > talk_distance: return false
 	var step := flow.current()
 	if step.is_empty(): return false
 	var lines: Array[String] = []
@@ -123,6 +132,50 @@ func _end_talk() -> void:
 	get_parent().remove_meta("progressive_tutorial_dialogue")
 	if is_instance_valid(manager): manager.hour_timer.paused = timer_was_paused
 	if is_instance_valid(player): player.set_physics_process(physics_was_enabled)
+	call_deferred("refresh")
+	var checkout = get_parent().get_node_or_null("CheckoutTutorial")
+	if checkout != null: checkout.call_deferred("try_start")
+
+func _guidance_position() -> Vector2:
+	var floor_node = get_parent().get_node("Floor")
+	var build = get_parent().get_node("BuildManager")
+	var astar := AStarGrid2D.new()
+	astar.region = Rect2i(0, 0, floor_node.columns, floor_node.rows)
+	astar.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_NEVER
+	astar.update()
+	for x in range(floor_node.columns):
+		for y in range(floor_node.rows):
+			astar.set_point_solid(Vector2i(x, y), build.is_cell_blocked_for_customer(Vector2i(x, y)))
+	var start: Vector2i = floor_node.local_to_grid(floor_node.to_local(player.global_position))
+	start = Vector2i(clampi(start.x, 0, floor_node.columns - 1), clampi(start.y, 0, floor_node.rows - 1))
+	astar.set_point_solid(start, false)
+	var best: Vector2 = player.global_position + Vector2(180, 0)
+	var best_score: float = -1.0
+	for x in range(1, floor_node.columns - 1):
+		for y in range(1, floor_node.rows - 1):
+			var cell := Vector2i(x, y)
+			if build.is_cell_blocked_for_customer(cell) or astar.get_id_path(start, cell).is_empty(): continue
+			var position: Vector2 = floor_node.to_global(floor_node.grid_to_local(cell))
+			var clearance: float = position.distance_to(player.global_position)
+			for object in get_parent().get_node("Objects").get_children():
+				if object.get_meta("is_build_preview", false) or object.is_queued_for_deletion(): continue
+				clearance = minf(clearance, position.distance_to(object.global_position))
+				if object.is_in_group("register"):
+					for service_cell in object.get_worker_cells() + object.get_checkout_cells():
+						clearance = minf(clearance, position.distance_to(floor_node.to_global(floor_node.grid_to_local(service_cell))))
+			if clearance > best_score:
+				best_score = clearance
+				best = position
+	return best
+
+func _npc_needs_relocation() -> bool:
+	var floor_node = get_parent().get_node("Floor")
+	var cell: Vector2i = floor_node.local_to_grid(floor_node.to_local(npc.global_position))
+	if get_parent().get_node("BuildManager").is_cell_blocked_for_customer(cell): return true
+	for object in get_parent().get_node("Objects").get_children():
+		if object.get_meta("is_build_preview", false) or object.is_queued_for_deletion(): continue
+		if npc.global_position.distance_to(object.global_position) < 100: return true
+	return false
 
 func _on_output_collected(item_id: String, amount: int) -> void:
 	if enabled and amount > 0 and item_id == "bread" and flow.seen("production"):
