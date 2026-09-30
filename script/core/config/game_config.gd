@@ -49,6 +49,10 @@ const VILLAGE_LAYOUT_USER_PATH: String = "user://village_map_layout.json"
 const DEBUG_LOG_ENABLED: bool = true
 
 
+# 전투 파트를 새로 만들 때까지, 전투는 승리한 것으로 보고 보상 단계로 바로 넘어간다.
+# false로 바꾸면 예전의 1초 단위 자동 전투가 돌아간다.
+const EXPEDITION_AUTO_WIN_BATTLES: bool = true
+
 # 원정 지역을 고르지 않았을 때 쓰는 기본 지역 (expedition_regions.csv의 region_id)
 const DEFAULT_REGION_ID: String = "forest"
 

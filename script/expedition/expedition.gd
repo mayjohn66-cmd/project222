@@ -1306,12 +1306,16 @@ func _open_loot_after_message() -> void:
 
 
 # 진행 메시지 큐는 ExpeditionMessageController가 처리한다.
+# 컨트롤러가 타입 없는 배열 리터럴로 부르므로 여기서 Array[String]으로 바꿔 넘긴다.
 func show_run_messages(
-	messages: Array[String],
+	messages: Array,
 	finish_action: Callable = Callable()
 ) -> void:
+	var typed_messages: Array[String] = []
+	typed_messages.assign(messages)
+
 	expedition_message_controller.show_messages(
-		messages,
+		typed_messages,
 		finish_action
 	)
 
