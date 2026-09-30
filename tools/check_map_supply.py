@@ -16,7 +16,7 @@ rare_mult = {int(r["difficulty"]): float(r["rare_chance_mult"])
 rows = list(csv.DictReader(open(root / "data/expedition/expedition_loot.csv", encoding="utf-8")))
 
 print("표: 보스 1회 처치 시 보물 지도 확률")
-for table in ("boss_forest", "boss_mine", "boss_swamp"):
+for table in ("forest_boss", "mine_boss", "swamp_boss"):
     for d in sorted(rare_mult):
         cells = []
         for learned in (False, True):

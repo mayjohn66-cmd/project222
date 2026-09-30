@@ -4,7 +4,8 @@ extends RefCounted
 
 # 심야 비밀 상인의 판매 목록을 CSV에서 읽고, 방문할 때마다 오늘의 진열을 정한다.
 # 열: item_id, price, min_stock, max_stock, offer_chance(%).
-# item_id가 scroll_random이면 아직 배우지 않았고 갖고 있지 않은 레시피 두루마리 중 하나를 뽑는다.
+# item_id가 scroll_random이면 아직 배우지 않았고 갖고 있지 않은 레시피 두루마리 중 하나를 뽑고,
+# 가격은 행의 가격 x (두루마리 희귀도 - 1)이다(희귀도 2 = 기준가, 3 = 2배).
 
 const CSV_PATH: String = "res://data/shop/catalogs/secret_merchant.csv"
 const RANDOM_SCROLL_ID: String = "scroll_random"
@@ -114,9 +115,15 @@ static func _make_offer(
 		if item_id.is_empty():
 			return {}
 
+	# 두루마리는 희귀도에 비례해 비싸진다(희귀도 2 = 기준가, 3 = 2배).
+	var price: int = int(entry["price"])
+
+	if str(entry["item_id"]) == RANDOM_SCROLL_ID:
+		price *= maxi(ItemData.get_rarity(item_id) - 1, 1)
+
 	return {
 		"item_id": item_id,
-		"price": int(entry["price"]),
+		"price": price,
 		"stock": randi_range(
 			int(entry["min_stock"]),
 			int(entry["max_stock"])

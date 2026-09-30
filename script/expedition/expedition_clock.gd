@@ -17,10 +17,10 @@ func _process(delta: float) -> void:
 	if int(host.get("current_expedition_phase")) != int(host.ExpeditionPhase.RUN):
 		return
 
-	var context: Variant = GameState.get_meta(
-		"shop_return_context",
-		null
-	)
+	if not GameState.has_meta("shop_return_context"):
+		return
+
+	var context: Variant = GameState.get_meta("shop_return_context")
 
 	if not context is Dictionary:
 		return

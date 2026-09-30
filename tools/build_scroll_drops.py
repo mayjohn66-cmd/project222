@@ -15,10 +15,10 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 REGION_TABLES = {
-    "forest": ["boss_forest", "forest_boss", "forest_treasure"],
-    "mine": ["boss_mine", "mine_boss", "mine_treasure"],
-    "swamp": ["boss_swamp", "swamp_boss", "swamp_treasure"],
-    "hidden_ruins": ["boss_hidden_ruins", "ruins_boss", "ruins_treasure"],
+    "forest": ["forest_boss", "forest_treasure"],
+    "mine": ["mine_boss", "mine_treasure"],
+    "swamp": ["swamp_boss", "swamp_treasure"],
+    "hidden_ruins": ["ruins_boss", "ruins_treasure"],
 }
 TARGET_TOTAL = 60
 MIN_W = 5

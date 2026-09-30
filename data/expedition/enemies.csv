@@ -1,11 +1,11 @@
 id,name,max_hp,attack,defense,loot_table
-field_slime,슬라임,40,8,2,enemy_field_slime
-mine_bat,광산 박쥐,50,10,2,enemy_mine_bat
-swamp_slime,늪 슬라임,55,9,4,enemy_swamp_slime
+field_slime,슬라임,40,8,2,forest_enemy
+mine_bat,광산 박쥐,50,10,2,mine_enemy
+swamp_slime,늪 슬라임,55,9,4,swamp_enemy
 
-forest_alpha_slime,거대 슬라임,90,14,5,boss_forest
-mine_golem,광산 골렘,120,16,8,boss_mine
-swamp_queen_slime,늪의 여왕 슬라임,105,15,7,boss_swamp
+forest_alpha_slime,거대 슬라임,90,14,5,forest_boss
+mine_golem,광산 골렘,120,16,8,mine_boss
+swamp_queen_slime,늪의 여왕 슬라임,105,15,7,swamp_boss
 
 ruins_sentinel,유적 수호병,65,12,5,ruins_enemy
 ancient_guardian,고대 수호자,95,13,6,ruins_boss
