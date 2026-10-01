@@ -45,7 +45,4 @@ for /f "delims=" %%f in ('dir /b /o-d docs\drafts\story\story_beats_gemini_*.csv
 )
 echo [WARN] no draft file found.
 :done
-)
-echo [WARN] no draft file found.
-:done
 endlocal
