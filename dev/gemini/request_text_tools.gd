@@ -299,6 +299,18 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 			if all_text.contains(word):
 				errors.append("%s 게임 용어 '%s' 사용 금지(사람의 부탁으로 말하세요)" % [tag, word])
 
+		# 대사·마무리 줄 수는 현재 문장과 같아야 한다(칸이 하나 사라지면 부탁 내용이 통째로 빠질 수 있다).
+		if known.get(kind, {}).has(id):
+			var current: PackedStringArray = row_from_source(kind, known[kind][id])
+			var cur_lines: int = current[4].split("|", false).size()
+			var cur_done: int = current[5].split("|", false).size()
+
+			if cur_lines > 0 and cur_lines != lines.size():
+				warns.append("%s 대사 줄 수가 현재와 다름(현재 %d줄, 초안 %d줄): 부탁 내용이 빠지지 않았는지 확인하세요" % [tag, cur_lines, lines.size()])
+
+			if cur_done > 0 and cur_done != completion.split("|", false).size():
+				warns.append("%s 마무리 줄 수가 현재와 다름(현재 %d줄, 초안 %d줄)" % [tag, cur_done, completion.split("|", false).size()])
+
 		for phrase in CLICHE_PHRASES:
 			if all_text.contains(phrase):
 				warns.append("%s 상투 표현 '%s' 이 있음: 인물 사정에 맞는 다른 말로 바꾸세요" % [tag, phrase])

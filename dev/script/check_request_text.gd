@@ -116,6 +116,12 @@ func _run() -> void:
 	_check(tabbed_cells.size() == 6 and tabbed_cells[4].contains("여기, 쉼표") and tabbed_cells[5] == "끝, 정말.", "탭으로 받은 줄은 쉼표가 있어도 6칸 CSV로 바뀜")
 	_check(Runner.csv_to_tsv("a,\"b,c\",d\n") == "a\tb,c\td", "CSV를 탭 구분으로 바꿈")
 	_check(Runner.BASE_PROMPT.contains("탭 문자"), "기본 지침이 탭 구분을 요청")
+	_check(Runner.BASE_PROMPT.contains("칸을 지우지 말고") and Runner.build_repair_prompt("id\tkind\n", ["x"]).contains("칸(줄)을 지우거나"), "지침과 수정 요청이 칸 수 유지를 요구")
+	var cnt_known: Dictionary = {"resident_request": {"cnt_id": {"id": "cnt_id", "lines": ["부탁", "행동", "소문"], "completion": ["끝"]}}}
+	var cnt_rows: Array = [PackedStringArray(["cnt_id", "resident_request", "제목", "", "부탁|행동", "끝"])]
+	var cnt: Dictionary = Tools.validate_rows(Tools.COLUMNS, cnt_rows, cnt_known, "cnt")
+	_check("\n".join(PackedStringArray(cnt["warns"])).contains("대사 줄 수가 현재와 다름(현재 3줄, 초안 2줄)"), "줄 수가 줄면 주의")
+	_check(Runner._repairable(cnt).size() == 1, "줄 수 주의는 자동 수정 대상")
 	var chunks: Array = Runner.chunk_ids(["a", "b", "c", "d", "e"], 2)
 	_check(chunks.size() == 3 and chunks[0] == ["a", "b"] and chunks[2] == ["e"], "항목을 2개씩 묶음")
 	_check(Runner.chunk_ids([], 2).is_empty() and Runner.chunk_ids(["a"], 0).size() == 1, "빈 목록·0 크기 처리")

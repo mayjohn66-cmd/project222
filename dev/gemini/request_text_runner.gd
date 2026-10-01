@@ -26,6 +26,7 @@ const BASE_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임
 - kind별로 채울 열: resident_request = title, lines, completion / community_request = title, summary, completion / resident_greeting = lines 만. 나머지 열은 비운다.
 - 추가 종류: resident_introduction / tutorial_dialogue = lines; trade_offer = title; tutorial_step = title, summary, lines, completion; service_text = 현재 행에서 채워진 글 열만. 기능 안내와 조작 키의 의미는 유지한다.
 - lines와 completion의 여러 칸은 | 로 나눈다. 칸 수와 역할(예: 인사말은 아침·안부·하루 이야기·밤 순서)은 "현재 문장"과 같게 맞춘다.
+- 칸(줄) 수는 "현재 문장"과 항상 같다. 부탁하는 말, 플레이어 행동 안내, 소문·마무리처럼 칸마다 맡은 역할을 하나도 빼지 않는다. 길이가 넘으면 칸을 지우지 말고 그 칸의 문장을 짧게 쓴다.
 - 길이: title 20자 이내, summary 60자 이내, lines·completion 한 칸 45자 이내, lines는 6칸 이하.
 - 쓰지 않는 말: 퀘스트, 의뢰, 보상, 레벨, 경험치, 미션, 임무, 스탯, 수락, 클리어. 사람이 하는 자연스러운 부탁으로 말한다.
 - 수량·돈·평판 숫자는 쓰지 않는다(몇 개, 두 개 같은 표현도 금지). 필요한 재료 이름은 말해도 된다. 숫자는 게임 데이터가 정하므로 글이 틀려지지 않게 한다.
@@ -212,7 +213,7 @@ static func _repairable(result: Dictionary) -> Array[String]:
 		problems.append(str(e))
 
 	for w in result["warns"]:
-		if str(w).contains("수량 표현") or str(w).contains("한 칸이") or str(w).contains("상투 표현") or str(w).contains("반복 어구"):
+		if str(w).contains("수량 표현") or str(w).contains("한 칸이") or str(w).contains("상투 표현") or str(w).contains("반복 어구") or str(w).contains("줄 수가 현재와 다름"):
 			problems.append(str(w))
 
 	return problems
@@ -475,7 +476,7 @@ func _flag(name: String) -> bool:
 
 
 static func build_repair_prompt(csv_text: String, problems: Array[String]) -> String:
-	return "아래 표(탭으로 구분)는 검사에서 다음 문제가 나왔다. 문제가 있는 행의 글만 규칙에 맞게 고쳐서, 모든 행을 같은 형식(탭 구분)으로 다시 출력한다(머리글 줄 없이 행만). id와 kind와 칸 수는 그대로 둔다. 글자 수 제한을 꼭 지킨다(한 칸에 공백 포함).\n\n문제:\n- %s\n\n현재 표:\n%s" % ["\n- ".join(problems), csv_to_tsv(csv_text)]
+	return "아래 표(탭으로 구분)는 검사에서 다음 문제가 나왔다. 문제가 있는 행의 글만 규칙에 맞게 고쳐서, 모든 행을 같은 형식(탭 구분)으로 다시 출력한다(머리글 줄 없이 행만). id와 kind와 칸 수는 그대로 둔다. 글자 수 제한은 한 칸의 문장을 짧게 줄여서 지킨다(한 칸에 공백 포함). 글자 수를 맞추려고 칸(줄)을 지우거나 합치지 않는다. 칸 수와 칸별 역할은 그대로 둔다.\n\n문제:\n- %s\n\n현재 표:\n%s" % ["\n- ".join(problems), csv_to_tsv(csv_text)]
 
 
 # kind별 요청 글. 현재 문장(참고용)과 기계 정보 중 글에 도움이 되는 것만 준다.
