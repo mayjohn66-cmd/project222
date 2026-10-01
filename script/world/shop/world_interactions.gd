@@ -30,6 +30,7 @@ func blocked() -> bool:
  if bool(world.get_meta("community_board_open",false)): return true
  if bool(world.get_meta("resident_trade_open",false)): return true
  if bool(world.get_meta("village_smithy_open",false)): return true
+ if bool(world.get_meta("village_journal_open",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
  if manager.closing_shop or manager.summary_open: return true
  var menu = world.get_node_or_null("UI/GameMenu")

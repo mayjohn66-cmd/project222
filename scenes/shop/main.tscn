@@ -25,6 +25,7 @@
 [ext_resource type="Script" path="res://script/world/shop/requests/community_board_director.gd" id="27_board"]
 [ext_resource type="Script" path="res://script/world/shop/requests/resident_trade_director.gd" id="28_trade"]
 [ext_resource type="Script" path="res://script/world/shop/requests/village_smithy_director.gd" id="29_smithy"]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_journal_director.gd" id="30_journal"]
 
 [node name="World" type="Node2D" unique_id=292224605]
 y_sort_enabled = true
@@ -113,3 +114,6 @@ script = ExtResource("28_trade")
 
 [node name="VillageSmithyDirector" type="Node" parent="."]
 script = ExtResource("29_smithy")
+
+[node name="VillageJournalDirector" type="Node" parent="."]
+script = ExtResource("30_journal")
