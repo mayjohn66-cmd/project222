@@ -40,7 +40,11 @@ if errorlevel 1 (
 rem Validate the newest draft
 for /f "delims=" %%f in ('dir /b /o-d docs\drafts\story\story_beats_gemini_*.csv') do (
   echo Validating docs\drafts\story\%%f
-  python tools\validate_story.py . "docs\drafts\story\%%f"
+  python tools\validate_story.py . "docs\drafts\story\%%f" 2>nul
+  if errorlevel 9009 (
+    py tools\validate_story.py . "docs\drafts\story\%%f"
+  )
+  if errorlevel 1 echo [NOTE] validation did not run or reported errors. If Python is not installed, install it from python.org and tick "Add python.exe to PATH".
   goto :done
 )
 echo [WARN] no draft file found.
