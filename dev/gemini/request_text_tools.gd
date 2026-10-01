@@ -49,6 +49,12 @@ const FORBIDDEN_WORDS: PackedStringArray = ["퀘스트", "의뢰", "보상", "�
 # 수량·보상 숫자는 데이터가 정한다. 글에 쓰면 수치를 바꿀 때 글이 틀려진다.
 const QUANTITY_PATTERN: String = "([0-9]+|한|두|세|네|다섯|여섯|일곱|여덟|아홉|열)\\s?(개|병|장|자루|묶음)"
 
+# AI가 쓴 티가 나는 상투 표현. 쓰면 "주의"로 알리고 자동 수정 때 다시 쓰게 한다. 새로 눈에 띄는 표현은 여기에 더한다.
+const CLICHE_PHRASES: PackedStringArray = ["덕분에", "정말 고마", "로구나", "말해 둘게", "말해 줄게", "소개해 줄게", "추천해 줄게", "소문도 내", "참 독특", "!!"]
+
+# 여러 항목에서 같은 어구(어절 2개)가 이만큼 반복되면 주의한다. 플레이어 행동 안내("말을 걸") 칸은 세지 않는다.
+const REPEAT_ROWS: int = 3
+
 
 # ---------- 원본 읽기 ----------
 # `.tres`의 한 줄 항목({"id":...},)은 JSON 모양이라 스크립트 없이 그대로 읽는다.
@@ -143,6 +149,7 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 
 	var seen: Dictionary = {}
 	var quantity := RegEx.create_from_string(QUANTITY_PATTERN)
+	var gram_rows: Dictionary = {}
 
 	for index in rows.size():
 		var row: PackedStringArray = rows[index]
@@ -218,12 +225,56 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 			if all_text.contains(word):
 				errors.append("%s 게임 용어 '%s' 사용 금지(사람의 부탁으로 말하세요)" % [tag, word])
 
+		for phrase in CLICHE_PHRASES:
+			if all_text.contains(phrase):
+				warns.append("%s 상투 표현 '%s' 이 있음: 인물 사정에 맞는 다른 말로 바꾸세요" % [tag, phrase])
+
+		for cell in _flavor_cells(lines, completion):
+			for gram in _bigrams(cell):
+				if not gram_rows.has(gram):
+					gram_rows[gram] = {}
+
+				gram_rows[gram][id] = true
+
 		var q := quantity.search(all_text)
 
 		if q != null:
 			warns.append("%s 수량 표현 '%s' 이 있음: 수치를 바꾸면 글이 틀려지므로 수량은 쓰지 마세요" % [tag, q.get_string()])
 
+	for gram in gram_rows.keys():
+		if gram_rows[gram].size() >= REPEAT_ROWS:
+			warns.append("반복 어구 '%s' 이 %d개 항목에 나옴(%s): 항목마다 다르게 쓰세요" % [gram, gram_rows[gram].size(), ", ".join(gram_rows[gram].keys())])
+
 	return {"errors": errors, "warns": warns, "rows": rows.size()}
+
+
+# 반복 검사 대상 칸: 플레이어에게 할 일을 안내하는 칸("말을 걸")은 같은 말이 맞으므로 뺀다.
+static func _flavor_cells(lines: PackedStringArray, completion: String) -> PackedStringArray:
+	var cells: PackedStringArray = []
+
+	for cell in lines:
+		if not cell.contains("말을 걸"):
+			cells.append(cell)
+
+	for cell in completion.split("|", false):
+		cells.append(cell)
+
+	return cells
+
+
+# 문장부호를 뺀 어절 2개씩의 묶음. 같은 항목 안의 중복은 한 번만 센다.
+static func _bigrams(text: String) -> PackedStringArray:
+	var clean: String = text
+	for mark in [".", ",", "!", "?", "~", "…", "\"", "'"]:
+		clean = clean.replace(mark, " ")
+
+	var words: PackedStringArray = clean.split(" ", false)
+	var out: PackedStringArray = []
+
+	for i in range(words.size() - 1):
+		out.append(words[i] + " " + words[i + 1])
+
+	return out
 
 
 static func _need(errors: Array[String], tag: String, field: String, value: String, max_len: int) -> void:

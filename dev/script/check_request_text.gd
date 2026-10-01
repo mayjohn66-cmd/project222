@@ -88,6 +88,19 @@ func _run() -> void:
 	_check(Runner.BASE_PROMPT.contains("새 id를 만들거나 빼지 않는다"), "기본 지침에 id 고정 규칙")
 	_check(Runner.BASE_PROMPT.contains("다시 말을 걸기") and Runner.BASE_PROMPT.contains("가지러 올게"), "기본 지침에 플레이어 행동 유지 규칙")
 	_check(Runner.BASE_PROMPT.contains("말투(반말/존댓말)"), "기본 지침에 말투 일관 규칙")
+	_check(Runner.BASE_PROMPT.contains("상투 표현") and Runner.BASE_PROMPT.contains("되풀이하지"), "기본 지침에 상투·반복 금지 규칙")
+	var slop_header: PackedStringArray = Tools.COLUMNS
+	var slop_rows: Array = []
+
+	for n in ["a", "b", "c"]:
+		slop_rows.append(PackedStringArray([n, "resident_request", "제목", "", "첫 줄 입니다|창고에 두고 다시 말을 걸어 줘", "무사히 끝났어 덕분에 편해졌어. 오늘 밤은 푹 자겠다"]))
+
+	var slop: Dictionary = Tools.validate_rows(slop_header, slop_rows, {}, "slop")
+	var slop_text: String = "\n".join(PackedStringArray(slop["warns"]))
+	_check(slop_text.contains("상투 표현 '덕분에'"), "상투 표현을 주의로 알림")
+	_check(slop_text.contains("반복 어구 '오늘 밤은'"), "여러 항목의 반복 어구를 주의로 알림")
+	_check(not slop_text.contains("말을 걸"), "행동 안내 칸은 반복 검사에서 제외")
+	_check(Runner._repairable(slop).size() >= 3, "상투·반복 주의는 자동 수정 대상")
 	var chunks: Array = Runner.chunk_ids(["a", "b", "c", "d", "e"], 2)
 	_check(chunks.size() == 3 and chunks[0] == ["a", "b"] and chunks[2] == ["e"], "항목을 2개씩 묶음")
 	_check(Runner.chunk_ids([], 2).is_empty() and Runner.chunk_ids(["a"], 0).size() == 1, "빈 목록·0 크기 처리")
