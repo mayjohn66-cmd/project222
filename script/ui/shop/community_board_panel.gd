@@ -10,7 +10,7 @@ var cards: Dictionary = {}
 var close_button: Button
 var backdrop: ColorRect
 
-func entries() -> Array[Dictionary]: return CommunityRequestFlow.SETTINGS.requests
+func entries() -> Array[Dictionary]: return RequestTextData.enrich_all(CommunityRequestFlow.SETTINGS.requests, "community_request")
 func panel_title() -> String: return "마을 부탁 게시판"
 func introduction() -> String: return "물품은 창고에서 전달합니다. 기한 없이 천천히 준비하세요."
 
@@ -96,7 +96,7 @@ func display() -> void:
 
 func refresh() -> void:
 	count_label.text = "공동 부탁 %d/%d 완료 · 마을 평판 %d" % [CommunityRequestFlow.completed_count(), CommunityRequestFlow.SETTINGS.requests.size(), ResidentRequestFlow.reputation()]
-	for entry in CommunityRequestFlow.SETTINGS.requests:
+	for entry in entries():
 		var id := str(entry["id"])
 		var card: Dictionary = cards[id]
 		var text := str(entry["summary"]) + "\n"

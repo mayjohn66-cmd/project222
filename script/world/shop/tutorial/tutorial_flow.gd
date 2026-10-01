@@ -11,7 +11,7 @@ func done(id: String) -> bool:
 
 func current() -> Dictionary:
 	for step in settings.steps:
-		if not done(str(step["id"])): return step
+		if not done(str(step["id"])): return RequestTextData.enrich(step, "tutorial_step")
 	return {}
 
 func mark(id: String, suffix: String) -> void:

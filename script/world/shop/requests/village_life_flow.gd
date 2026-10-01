@@ -6,7 +6,7 @@ const PREFIX := "village_life:"
 
 static func resident(id: String) -> Dictionary:
 	for entry in SETTINGS.residents:
-		if str(entry["id"]) == id: return entry
+		if str(entry["id"]) == id: return RequestTextData.enrich(entry, "resident_greeting")
 	return {}
 
 static func available(entry: Dictionary) -> bool:

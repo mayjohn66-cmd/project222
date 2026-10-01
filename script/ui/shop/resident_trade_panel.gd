@@ -1,9 +1,9 @@
 class_name ResidentTradePanel
 extends CommunityBoardPanel
 
-func entries() -> Array[Dictionary]: return ResidentTradeFlow.SETTINGS.offers
-func panel_title() -> String: return ResidentTradeFlow.SETTINGS.title
-func introduction() -> String: return ResidentTradeFlow.SETTINGS.introduction
+func entries() -> Array[Dictionary]: return RequestTextData.enrich_all(ResidentTradeFlow.SETTINGS.offers, "trade_offer")
+func panel_title() -> String: return RequestTextData.text("service_text", "trade_panel", "title", "재료 교환")
+func introduction() -> String: return RequestTextData.text("service_text", "trade_panel", "summary")
 
 func refresh() -> void:
 	count_label.text = "행상인 나루 · " + VillageLifeFlow.friendship_name("naru")

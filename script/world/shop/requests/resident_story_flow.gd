@@ -13,7 +13,7 @@ static func pending_introduction() -> Dictionary:
 		var type_id := str(introduction["type"])
 		if PlayerProgress.story_beat_days.has(ResidentRequestFlow.PREFIX + "visited:" + type_id) \
 				and not introduction_read(type_id):
-			return introduction
+			return RequestTextData.enrich(introduction, "resident_introduction")
 	return {}
 
 static func meet(type_id: String) -> bool:
@@ -27,7 +27,7 @@ static func current_request() -> Dictionary:
 		if ResidentRequestFlow.done(str(request["id"])): continue
 		if not introduction_read(str(request["requires_intro"])): continue
 		if request.has("after") and not ResidentRequestFlow.done(str(request["after"])): continue
-		return request
+		return RequestTextData.enrich(request, "resident_request")
 	return {}
 
 static func stage() -> int:
@@ -41,5 +41,5 @@ static func place_name() -> String:
 
 static func landmark_for_request(id: String) -> String:
 	for landmark in SETTINGS.landmarks:
-		if str(landmark["request"]) == id: return str(landmark["title"])
+		if str(landmark["request"]) == id: return RequestTextData.text("service_text", "landmark_" + id, "title", id)
 	return ""

@@ -9,7 +9,7 @@ static func board_available() -> bool:
 
 static func request(id: String) -> Dictionary:
 	for entry in SETTINGS.requests:
-		if str(entry["id"]) == id: return entry
+		if str(entry["id"]) == id: return RequestTextData.enrich(entry, "community_request")
 	return {}
 
 static func done(id: String) -> bool:

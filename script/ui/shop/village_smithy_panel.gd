@@ -2,8 +2,8 @@ class_name VillageSmithyPanel
 extends CommunityBoardPanel
 
 func entries() -> Array[Dictionary]: return VillageSmithyFlow.recipes()
-func panel_title() -> String: return "마을 대장간 · 장비 제작"
-func introduction() -> String: return "배운 제작법으로 장비를 만듭니다. 완성품은 창고에 보관되며, 원정 준비 화면에서 가방으로 옮겨 사용하세요."
+func panel_title() -> String: return RequestTextData.text("service_text", "smithy_panel", "title", "장비 제작")
+func introduction() -> String: return RequestTextData.text("service_text", "smithy_panel", "summary")
 
 func refresh() -> void:
 	count_label.text = "도윤의 대장간 · " + VillageLifeFlow.friendship_name("doyun")
