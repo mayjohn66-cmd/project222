@@ -24,6 +24,13 @@ const SETTING_KEY: String = "gemini/api_key"
 const USER_CONFIG: String = "user://gemini.cfg"
 const TIMEOUT_SEC: float = 60.0
 
+# 일시적 서버 오류(붐빔 503, 내부 오류 500, 한도 429)는 기다렸다가 다시 시도한다.
+const MAX_ATTEMPTS: int = 5
+const RETRY_BASE_SEC: float = 4.0     # 대기 = 4, 8, 16, 32초
+const RETRYABLE_CODES: Array[int] = [429, 500, 502, 503, 504]
+# 모든 시도가 실패하면 이 모델로 한 번 더 시도한다(비워 두면 사용 안 함). 예: setx GEMINI_FALLBACK_MODEL "모델이름"
+const ENV_FALLBACK_MODEL: String = "GEMINI_FALLBACK_MODEL"
+
 
 # 키를 찾는다. 없으면 빈 문자열. 반환값을 화면·로그에 출력하지 않는다.
 static func find_api_key() -> String:
@@ -87,7 +94,7 @@ static func parse_response(http_code: int, body_text: String) -> Dictionary:
 		if data.has("error") and typeof(data["error"]) == TYPE_DICTIONARY:
 			message += ": " + str(data["error"].get("message", ""))
 
-		return _fail(message)
+		return _fail(message, http_code)
 
 	var feedback: Dictionary = data.get("promptFeedback", {})
 
@@ -111,19 +118,83 @@ static func parse_response(http_code: int, body_text: String) -> Dictionary:
 	if text.is_empty():
 		return _fail("응답 글이 비어 있음(finishReason: %s)" % finish)
 
-	return {"ok": true, "text": text, "error": "", "finish_reason": finish}
+	return {"ok": true, "text": text, "error": "", "finish_reason": finish, "http_code": 200}
 
 
-static func _fail(message: String) -> Dictionary:
-	return {"ok": false, "text": "", "error": message, "finish_reason": ""}
+static func _fail(message: String, http_code: int = 0) -> Dictionary:
+	return {"ok": false, "text": "", "error": message, "finish_reason": "", "http_code": http_code}
 
 
-# Gemini 호출. await 로 기다린다. 키는 요청 헤더로만 보내고(주소에 붙이지 않음) 로그에 남기지 않는다.
+static func is_retryable(http_code: int) -> bool:
+	return RETRYABLE_CODES.has(http_code)
+
+
+# attempt = 1부터. 1회 실패 뒤 4초, 그다음 8, 16, 32초.
+static func retry_delay_sec(attempt: int) -> float:
+	return RETRY_BASE_SEC * pow(2.0, float(maxi(attempt - 1, 0)))
+
+
+static func find_fallback_model() -> String:
+	return OS.get_environment(ENV_FALLBACK_MODEL).strip_edges()
+
+
+# Gemini 호출. await 로 기다린다. 일시적 오류(503 등)는 자동으로 기다렸다가 다시 시도한다.
+# 키는 요청 헤더로만 보내고(주소에 붙이지 않음) 로그에 남기지 않는다.
 func generate(
 	prompt: String,
 	system_instruction: String = "",
 	temperature: float = 0.8,
 	json_output: bool = false
+) -> Dictionary:
+	var model: String = find_model()
+	var result: Dictionary = await _generate_with_retry(model, prompt, system_instruction, temperature, json_output)
+	var fallback: String = find_fallback_model()
+
+	if (
+		not bool(result["ok"])
+		and is_retryable(int(result.get("http_code", 0)))
+		and not fallback.is_empty()
+		and fallback != model
+	):
+		print("[제미나이] %s 가 계속 실패해 예비 모델 %s 로 시도합니다." % [model, fallback])
+		result = await _generate_with_retry(fallback, prompt, system_instruction, temperature, json_output)
+
+	return result
+
+
+# 시험용: 재시도 대기 시간 배율(1.0 = 실제 시간).
+var retry_wait_scale: float = 1.0
+
+
+func _generate_with_retry(
+	model: String,
+	prompt: String,
+	system_instruction: String,
+	temperature: float,
+	json_output: bool
+) -> Dictionary:
+	var result: Dictionary = {}
+
+	for attempt in range(1, MAX_ATTEMPTS + 1):
+		result = await _request_once(model, prompt, system_instruction, temperature, json_output)
+
+		if bool(result["ok"]) or not is_retryable(int(result.get("http_code", 0))):
+			return result
+
+		if attempt < MAX_ATTEMPTS:
+			var wait: float = retry_delay_sec(attempt) * retry_wait_scale
+			print("[제미나이] %s (시도 %d/%d). %.0f초 뒤 다시 시도합니다." % [result["error"], attempt, MAX_ATTEMPTS, wait])
+			await get_tree().create_timer(wait).timeout
+
+	return result
+
+
+func _request_once(
+	model: String,
+	prompt: String,
+	system_instruction: String,
+	temperature: float,
+	json_output: bool
 ) -> Dictionary:
 	var key: String = find_api_key()
 
@@ -141,7 +212,7 @@ func generate(
 		"x-goog-api-key: " + key,
 	]
 	var error: int = request.request(
-		ENDPOINT % find_model(),
+		ENDPOINT % model,
 		headers,
 		HTTPClient.METHOD_POST,
 		build_request_body(prompt, system_instruction, temperature, json_output)
