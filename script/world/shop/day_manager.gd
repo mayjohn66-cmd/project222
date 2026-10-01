@@ -505,7 +505,9 @@ func open_shop():
 
 	customer_spawner.set_shop_open(true)
 
-	hour_timer.start()
+	# 재개점으로 시계의 진행률을 초기화하지 않는다.
+	if hour_timer.is_stopped():
+		hour_timer.start()
 
 	shop_opened.emit()
 
@@ -1232,7 +1234,7 @@ func _setup_common_game_menu() -> void:
 # Manual door closure is not a day-end settlement and never changes the date.
 func close_shop_manually() -> void:
 	shop_open = false
-	hour_timer.stop()
+	# 문 닫기는 입장만 막는다. 정산 전까지 하루의 시계는 계속 흐른다.
 	customer_spawner.set_shop_open(false)
 	customer_spawner.process_mode = Node.PROCESS_MODE_DISABLED
 	send_all_customers_out()

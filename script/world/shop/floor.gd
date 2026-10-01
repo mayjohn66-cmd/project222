@@ -1,6 +1,7 @@
 @tool
 extends Node2D
 const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
+const GRID = preload("res://script/world/shared/isometric_grid.gd")
 
 
 # 기존 매장 크기
@@ -129,25 +130,12 @@ func _draw_region(region: Rect2i, _fill_color: Color) -> void:
 
 
 func grid_to_local(cell: Vector2i) -> Vector2:
-	return Vector2(
-		(cell.x - cell.y) * tile_width * 0.5,
-		(cell.x + cell.y) * tile_height * 0.5
-	)
+	return GRID.project(Vector2(cell), Vector2(tile_width, tile_height))
 
 
 func local_to_grid(pos: Vector2) -> Vector2i:
-	var column: float = (
-		pos.x / tile_width + pos.y / tile_height
-	)
-
-	var row: float = (
-		pos.y / tile_height - pos.x / tile_width
-	)
-
-	return Vector2i(
-		roundi(column),
-		roundi(row)
-	)
+	var cell := GRID.unproject(pos, Vector2(tile_width, tile_height))
+	return Vector2i(roundi(cell.x), roundi(cell.y))
 
 
 # 기존 호출과의 호환성: 매장 범위

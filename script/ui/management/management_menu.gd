@@ -1739,11 +1739,12 @@ func _show_store_decoration_info() -> void:
 	var reputation: float = float(
 		manager.call("get_decoration_effect", "reputation")
 	)
+	var resident_reputation: int = ResidentRequestFlow.reputation()
 
 	# 평판만 원래 점수로 보관하므로 방문 보너스로 변환
 	var visit_bonus: float = (
 		DecorationEffectService.get_reputation_visit_bonus(
-			reputation
+			reputation + resident_reputation
 		)
 	)
 
@@ -1759,6 +1760,7 @@ func _show_store_decoration_info() -> void:
 	var lines: Array[String] = [
 		"[매장 치장 효과]",
 		"치장 평판: %.1f" % reputation,
+		"주민 부탁 평판: %d" % resident_reputation,
 		"평판에 따른 방문 빈도 보너스: +%.1f%%" % (
 			visit_bonus * 100.0
 		),

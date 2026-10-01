@@ -37,7 +37,7 @@ static func simulate(
 	while remaining > 0.0001:
 		var slice: float = minf(remaining, 1.0)
 
-		carry += CustomerArrivalData.get_rate(hour) * slice
+		carry += CustomerArrivalData.get_rate(hour) * slice * (1.0 + DecorationEffectService.get_reputation_visit_bonus(ResidentRequestFlow.reputation()))
 
 		var arrivals: int = int(floor(carry))
 		carry -= float(arrivals)
