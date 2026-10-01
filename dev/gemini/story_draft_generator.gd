@@ -62,6 +62,11 @@ func _run() -> void:
 
 # 기본 지침 뒤에 세계관 설정 문서를 붙인다(안내용 첫 줄 인용문은 제외).
 static func build_system_prompt(setting_text: String) -> String:
+	return append_world_setting(SYSTEM_PROMPT, setting_text)
+
+
+# 어떤 기본 지침에도 세계관 설정을 붙일 수 있게 분리(부탁 글 초안에서도 같이 쓴다).
+static func append_world_setting(base_prompt: String, setting_text: String) -> String:
 	var setting_lines: PackedStringArray = []
 
 	for raw_line in setting_text.split("\n"):
@@ -75,9 +80,9 @@ static func build_system_prompt(setting_text: String) -> String:
 	var setting: String = "\n".join(setting_lines).strip_edges()
 
 	if setting.is_empty():
-		return SYSTEM_PROMPT
+		return base_prompt
 
-	return SYSTEM_PROMPT + "\n\n[세계관 설정 — 대사에 반영한다]\n" + setting
+	return base_prompt + "\n\n[세계관 설정 — 대사에 반영한다]\n" + setting
 
 
 func _read_world_setting() -> String:
