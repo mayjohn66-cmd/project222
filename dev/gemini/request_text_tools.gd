@@ -9,14 +9,24 @@ const KIND_RESIDENT_REQUEST: String = "resident_request"   # 주민 부탁: titl
 const KIND_COMMUNITY_REQUEST: String = "community_request"  # 마을 게시판: title, summary, completion
 const KIND_RESIDENT_GREETING: String = "resident_greeting"  # 주민 인사말: lines
 
-const KINDS: PackedStringArray = [KIND_RESIDENT_REQUEST, KIND_COMMUNITY_REQUEST, KIND_RESIDENT_GREETING]
+const KIND_RESIDENT_INTRODUCTION := "resident_introduction"
+const KIND_TRADE_OFFER := "trade_offer"
+const KIND_TUTORIAL_STEP := "tutorial_step"
+const KIND_TUTORIAL_DIALOGUE := "tutorial_dialogue"
+const KIND_SERVICE_TEXT := "service_text"
+const KINDS: PackedStringArray = [KIND_RESIDENT_REQUEST, KIND_COMMUNITY_REQUEST, KIND_RESIDENT_GREETING, KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT]
+const TextData = preload("res://script/data/production/request_text_data.gd")
 
 # 원본(기계 부분이 들어 있는) 파일. 없는 파일은 건너뛴다.
 const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/requests/default_resident_requests.tres": KIND_RESIDENT_REQUEST,
 	"res://scenes/shop/requests/default_community_requests.tres": KIND_COMMUNITY_REQUEST,
 	"res://scenes/shop/requests/default_village_life.tres": KIND_RESIDENT_GREETING,
+	"res://scenes/shop/requests/default_resident_story.tres": KIND_RESIDENT_REQUEST,
+	"res://scenes/shop/requests/default_resident_trade.tres": KIND_TRADE_OFFER,
+	"res://scenes/shop/tutorial/default_tutorial.tres": KIND_TUTORIAL_STEP,
 }
+
 
 # 글이 들어가는 최종 위치(ChatGPT가 만들면 이쪽을 우선 사용). 없으면 기준 문장 파일을 쓴다.
 const TEXT_PATH: String = "res://data/shop/requests/requests_text.csv"
@@ -25,7 +35,7 @@ const TEXT_FALLBACK_PATH: String = "res://docs/drafts/story/requests_text_baseli
 const STATE_PATH: String = "res://docs/drafts/story/requests_text_state.csv"
 
 # 글에 해당하는 필드(이것들은 지문에 넣지 않는다. 나머지가 기계 부분이다).
-const TEXT_FIELDS: PackedStringArray = ["title", "summary", "lines", "completion", "greetings", "name"]
+const TEXT_FIELDS: PackedStringArray = ["title", "summary", "lines", "completion", "greetings", "name", "objective"]
 
 const MAX_TITLE: int = 20
 const MAX_SUMMARY: int = 60
@@ -57,8 +67,12 @@ static func load_sources() -> Dictionary:
 
 		for raw_line in FileAccess.get_file_as_string(path).split("\n"):
 			var line: String = raw_line.strip_edges().trim_suffix(",")
+			if path.ends_with("default_resident_story.tres"):
+				if line.begins_with("introductions ="): kind = KIND_RESIDENT_INTRODUCTION
+				if line.begins_with("settlement_requests ="): kind = KIND_RESIDENT_REQUEST
+				if line.begins_with("landmarks ="): kind = KIND_SERVICE_TEXT
 
-			if not line.begins_with("{\"id\""):
+			if not line.begins_with("{"):
 				continue
 
 			var json := JSON.new()
@@ -66,7 +80,17 @@ static func load_sources() -> Dictionary:
 			if json.parse(line) != OK or typeof(json.data) != TYPE_DICTIONARY:
 				continue
 
-			result[kind][str(json.data["id"])] = json.data
+			var data: Dictionary = json.data
+			var id := str(data.get("id", data.get("type", data.get("request", ""))))
+			if not data.has("id") and kind == KIND_RESIDENT_REQUEST: continue
+			if id.is_empty(): continue
+			if kind == KIND_SERVICE_TEXT: id = "landmark_" + id
+			data["id"] = id
+			result[kind][id] = TextData.enrich(data,kind)
+	for id in ["trade_panel", "smithy_panel", "trade_first_greeting"]:
+		result[KIND_SERVICE_TEXT][id] = {"id":id}
+	for id in ["checkout_intro", "checkout_checkout", "checkout_finished"]:
+		result[KIND_TUTORIAL_DIALOGUE][id] = {"id":id}
 
 	return result
 
@@ -79,6 +103,9 @@ static func row_from_source(kind: String, data: Dictionary) -> PackedStringArray
 	var completion: String = ""
 
 	match kind:
+		KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT:
+			var prose := TextData.entry(kind, str(data["id"]))
+			return PackedStringArray([str(data["id"]),kind,str(prose.get("title","")),str(prose.get("summary","")),str(prose.get("lines","")),str(prose.get("completion",""))])
 		KIND_RESIDENT_REQUEST:
 			title = str(data.get("title", ""))
 			lines = "|".join(PackedStringArray(data.get("lines", [])))
@@ -150,6 +177,16 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 			errors.append("%s 원본에 없는 id입니다. 제미나이는 새 id를 만들 수 없습니다" % tag)
 
 		match kind:
+			KIND_RESIDENT_INTRODUCTION, KIND_TUTORIAL_DIALOGUE:
+				_need_lines(errors,warns,tag,lines)
+			KIND_TRADE_OFFER:
+				_need(errors,tag,"title",title,MAX_TITLE)
+			KIND_TUTORIAL_STEP:
+				_need(errors,tag,"title",title,MAX_TITLE)
+				_need(errors,tag,"summary",summary,120)
+				_need_lines(errors,warns,tag,lines)
+			KIND_SERVICE_TEXT:
+				if title.is_empty() and summary.is_empty() and lines.is_empty(): errors.append("%s 안내 글이 비어 있음" % tag)
 			KIND_RESIDENT_REQUEST:
 				_need(errors, tag, "title", title, MAX_TITLE)
 				_need_lines(errors, warns, tag, lines)
@@ -298,18 +335,20 @@ static func find_todo(sources: Dictionary, texts: Dictionary, state: Dictionary)
 		result["new"][kind] = {}
 		result["changed"][kind] = {}
 
-		for id in sources[kind].keys():
+		var kind_sources: Dictionary = sources.get(kind, {})
+
+		for id in kind_sources.keys():
 			var key: String = kind + ":" + id
 
 			if not texts.has(key):
-				result["new"][kind][id] = sources[kind][id]
-			elif state.has(key) and state[key] != fingerprint(sources[kind][id]):
-				result["changed"][kind][id] = sources[kind][id]
+				result["new"][kind][id] = kind_sources[id]
+			elif state.has(key) and state[key] != fingerprint(kind_sources[id]):
+				result["changed"][kind][id] = kind_sources[id]
 
 	for key in texts.keys():
 		var parts: PackedStringArray = str(key).split(":", true, 1)
 
-		if parts.size() == 2 and sources.has(parts[0]) and not sources[parts[0]].is_empty() and not sources[parts[0]].has(parts[1]):
+		if parts.size() == 2 and not sources.get(parts[0], {}).is_empty() and not sources[parts[0]].has(parts[1]):
 			result["orphan"].append(key)
 
 	return result
@@ -333,16 +372,18 @@ static func merge_draft(texts: Dictionary, draft_rows: Array, sources: Dictionar
 		var key: String = str(row[1]) + ":" + str(row[0])
 		merged[key] = row
 
-		if sources.has(row[1]) and sources[row[1]].has(row[0]):
+		if sources.get(row[1], {}).has(row[0]):
 			new_state[key] = fingerprint(sources[row[1]][row[0]])
 
 	# 모든 항목 상태도 채워 둔다(처음 승인할 때 기존 글의 기준을 잡는다).
 	for kind in KINDS:
-		for id in sources[kind].keys():
+		var kind_sources: Dictionary = sources.get(kind, {})
+
+		for id in kind_sources.keys():
 			var k: String = kind + ":" + id
 
 			if merged.has(k) and not new_state.has(k):
-				new_state[k] = fingerprint(sources[kind][id])
+				new_state[k] = fingerprint(kind_sources[id])
 
 	var lines: PackedStringArray = [csv_line(COLUMNS)]
 	var state_lines: PackedStringArray = [csv_line(PackedStringArray(["id", "kind", "mech_hash"]))]

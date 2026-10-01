@@ -21,6 +21,10 @@
 [ext_resource type="Script" path="res://script/world/shop/tutorial/tutorial_director.gd" id="23_tutorial"]
 [ext_resource type="Script" path="res://script/world/shop/requests/resident_request_director.gd" id="24_requests"]
 [ext_resource type="Script" path="res://script/world/shop/requests/village_settlement.gd" id="25_settlement"]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_life_director.gd" id="26_life"]
+[ext_resource type="Script" path="res://script/world/shop/requests/community_board_director.gd" id="27_board"]
+[ext_resource type="Script" path="res://script/world/shop/requests/resident_trade_director.gd" id="28_trade"]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_smithy_director.gd" id="29_smithy"]
 
 [node name="World" type="Node2D" unique_id=292224605]
 y_sort_enabled = true
@@ -97,3 +101,15 @@ script = ExtResource("24_requests")
 
 [node name="VillageSettlement" type="Node" parent="."]
 script = ExtResource("25_settlement")
+
+[node name="VillageLifeDirector" type="Node" parent="."]
+script = ExtResource("26_life")
+
+[node name="CommunityBoardDirector" type="Node" parent="."]
+script = ExtResource("27_board")
+
+[node name="ResidentTradeDirector" type="Node" parent="."]
+script = ExtResource("28_trade")
+
+[node name="VillageSmithyDirector" type="Node" parent="."]
+script = ExtResource("29_smithy")
