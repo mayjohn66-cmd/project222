@@ -26,6 +26,9 @@ func get_door_texture() -> Texture2D:
 # 옛 방식(art_is_frontal = false)용 배율. 1.0 = 그림 원본 크기.
 @export var art_scale: float = 1.2
 
+# 확인용: 켜면 문이 서는 평행사변형 테두리를 빨간 선으로 그린다(코드가 적용됐는지 확인할 때).
+@export var show_outline: bool = false
+
 # 바닥 중앙 기준 위치 보정(픽셀). 양수 x = 오른쪽, 양수 y = 아래.
 @export var art_offset: Vector2 = Vector2.ZERO
 
@@ -87,6 +90,10 @@ func _draw():
 		return
 
 	if art_is_frontal:
+		if show_outline:
+			var quad := get_wall_quad()
+			draw_polyline(PackedVector2Array([quad[0], quad[1], quad[2], quad[3], quad[0]]), Color.RED, 2.0)
+
 		draw_polygon(
 			get_wall_quad(),
 			PackedColorArray([Color.WHITE]),
