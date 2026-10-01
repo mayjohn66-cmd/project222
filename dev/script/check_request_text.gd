@@ -117,8 +117,8 @@ func _run() -> void:
 	_check(Runner.csv_to_tsv("a,\"b,c\",d\n") == "a\tb,c\td", "CSV를 탭 구분으로 바꿈")
 	_check(Runner.BASE_PROMPT.contains("탭 문자"), "기본 지침이 탭 구분을 요청")
 	_check(Runner.BASE_PROMPT.contains("칸을 지우지 말고") and Runner.build_repair_prompt("id\tkind\n", ["x"]).contains("칸(줄)을 지우거나"), "지침과 수정 요청이 칸 수 유지를 요구")
-	var cnt_known: Dictionary = {"resident_request": {"cnt_id": {"id": "cnt_id", "lines": ["부탁", "행동", "소문"], "completion": ["끝"]}}}
-	var cnt_rows: Array = [PackedStringArray(["cnt_id", "resident_request", "제목", "", "부탁|행동", "끝"])]
+	var cnt_known: Dictionary = {"resident_request": {"cnt_id": {"id": "cnt_id", "lines": ["부탁", "말을 걸어 줘", "소문"], "completion": ["끝"]}}}
+	var cnt_rows: Array = [PackedStringArray(["cnt_id", "resident_request", "제목", "", "부탁|말을 걸어 줘", "끝"])]
 	var cnt: Dictionary = Tools.validate_rows(Tools.COLUMNS, cnt_rows, cnt_known, "cnt")
 	_check("\n".join(PackedStringArray(cnt["warns"])).contains("대사 줄 수가 현재와 다름(현재 3줄, 초안 2줄)"), "줄 수가 줄면 주의")
 	_check(Runner._repairable(cnt).size() == 1, "줄 수 주의는 자동 수정 대상")
