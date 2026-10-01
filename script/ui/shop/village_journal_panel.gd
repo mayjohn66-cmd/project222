@@ -14,6 +14,9 @@ func refresh() -> void:
 		var id := str(entry["id"])
 		var card: Dictionary = cards[id]
 		card["info"].text = VillageJournalFlow.information(id)
+		if id.begins_with("resident:"):
+			var resident = VillageJournalFlow.destination(world,id)
+			if resident != null: card["info"].text += "\n현재: " + resident.routine_status()
 		var target := VillageJournalFlow.destination(world,id)
 		card["action"].text = "목적지 표시 해제" if tracked_id == id else "목적지 표시"
 		card["action"].disabled = target == null and tracked_id != id

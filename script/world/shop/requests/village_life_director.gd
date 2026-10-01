@@ -47,8 +47,19 @@ func refresh() -> void:
 			npc.customer_group_id = str(entry["group"])
 			world.get_node("Actors").add_child(npc)
 			residents[id] = npc
+			npc.global_position = position
 		npc.visible = true
-		npc.global_position = position
+		var routine := VillageRoutine.location(entry,manager.current_hour)
+		var destination_site := VillageSettlement.find_site(world,str(routine["path"]))
+		if destination_site == null or not destination_site.visible: destination_site = site
+		var target := _approach_position(destination_site)
+		if target != Vector2.INF:
+			# Offset neighbors sharing a landmark onto separate clear standing places.
+			var offset := Vector2(32 * VillageLifeFlow.SETTINGS.residents.find(entry),0)
+			var shape := CircleShape2D.new()
+			shape.radius = VillageLifeFlow.SETTINGS.resident_radius
+			if VillageRoutine.clear(world.get_world_2d().direct_space_state,shape,target + offset): target += offset
+			npc.set_destination(target,str(routine["label"]))
 		npc.refresh_title(entry)
 
 # Keep a clear standing spot on an existing exterior tile, outside the building footprint.
