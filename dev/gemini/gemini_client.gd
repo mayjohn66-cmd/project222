@@ -25,8 +25,8 @@ const USER_CONFIG: String = "user://gemini.cfg"
 const TIMEOUT_SEC: float = 60.0
 
 # 일시적 서버 오류(붐빔 503, 내부 오류 500, 한도 429)는 기다렸다가 다시 시도한다.
-const MAX_ATTEMPTS: int = 5
-const RETRY_BASE_SEC: float = 4.0     # 대기 = 4, 8, 16, 32초
+const MAX_ATTEMPTS: int = 6
+const RETRY_BASE_SEC: float = 6.0     # 대기 = 6, 12, 24, 48, 96초(최대 약 3분)
 const RETRYABLE_CODES: Array[int] = [429, 500, 502, 503, 504]
 # 모든 시도가 실패하면 이 모델로 한 번 더 시도한다(비워 두면 사용 안 함). 예: setx GEMINI_FALLBACK_MODEL "모델이름"
 const ENV_FALLBACK_MODEL: String = "GEMINI_FALLBACK_MODEL"
@@ -129,7 +129,7 @@ static func is_retryable(http_code: int) -> bool:
 	return RETRYABLE_CODES.has(http_code)
 
 
-# attempt = 1부터. 1회 실패 뒤 4초, 그다음 8, 16, 32초.
+# attempt = 1부터. 1회 실패 뒤 6초, 그다음 12, 24, 48, 96초.
 static func retry_delay_sec(attempt: int) -> float:
 	return RETRY_BASE_SEC * pow(2.0, float(maxi(attempt - 1, 0)))
 
