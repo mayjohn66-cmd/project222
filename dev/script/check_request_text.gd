@@ -87,5 +87,13 @@ func _run() -> void:
 	_check(Runner.clean_rows("```csv\nid,kind,title,summary,lines,completion\na,b,c,,d,e\n```\n") == "a,b,c,,d,e\n", "코드블록·머리글 제거")
 	_check(Runner.BASE_PROMPT.contains("새 id를 만들거나 빼지 않는다"), "기본 지침에 id 고정 규칙")
 
+	# 수정 요청 조립
+	var result := {"errors": ["a.csv:2 [x] lines 한 칸이 48자(최대 45)"], "warns": ["a.csv:3 [y] 수량 표현 '한 병' 이 있음", "a.csv:4 [z] completion 한 칸이 46자(권장 45 이하)", "a.csv:5 [w] 원본 파일이 없어 id를 확인하지 못함"]}
+	var problems: Array[String] = Runner._repairable(result)
+	_check(problems.size() == 3, "고칠 문제: 오류 전부 + 수량·길이 주의, 그 밖의 주의는 제외")
+	var repair: String = Runner.build_repair_prompt("id,kind\nx,y\n", problems)
+	_check("48자" in repair and "한 병" in repair and "id,kind" in repair, "수정 요청에 문제와 현재 CSV가 들어감")
+	_check(Runner._repairable({"errors": [], "warns": ["a [x] 돈 선물"]}).is_empty(), "문제 없으면 수정 요청 안 함")
+
 	print("CHECK_REQUEST_TEXT failures=", failures)
 	get_tree().quit(1 if failures > 0 else 0)

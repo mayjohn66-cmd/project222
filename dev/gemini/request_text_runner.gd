@@ -12,6 +12,9 @@ const StoryGen = preload("res://dev/gemini/story_draft_generator.gd")
 
 const OUT_DIR: String = "res://docs/drafts/story"
 
+# 검사에서 오류나 수량 표현이 걸리면 그 내용을 제미나이에게 돌려보내 고치게 한다(최대 횟수).
+const MAX_REPAIRS: int = 2
+
 const BASE_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임의 글 작가다. 이미 있는 항목의 "글"만 새로 쓴다. 설명·머리말·코드블록 표시 없이 CSV 행만 출력한다.
 - 열: id,kind,title,summary,lines,completion (쉼표 구분. 칸 안에 쉼표가 있으면 그 칸 전체를 큰따옴표로 감싼다)
 - 준 항목마다 정확히 한 행. id와 kind는 내가 준 그대로 쓴다. 새 id를 만들거나 빼지 않는다.
@@ -108,13 +111,52 @@ func _draft(sources: Dictionary) -> void:
 	var path: String = "%s/requests_text_gemini_%s.csv" % [OUT_DIR, stamp]
 	_write(path, csv_text)
 	print("[부탁 글] 저장: ", path)
-	_validate_saved(path, sources)
 
-
-func _validate_saved(path: String, sources: Dictionary) -> void:
+	# 검사 → 문제가 있으면 제미나이에게 고치게 한다.
 	var result: Dictionary = Tools.validate_file(path, sources)
+
+	for round in range(1, MAX_REPAIRS + 1):
+		var problems: Array[String] = _repairable(result)
+
+		if problems.is_empty():
+			break
+
+		print("[부탁 글] 검사 문제 %d건을 제미나이에게 돌려보내 고칩니다 (%d/%d)" % [problems.size(), round, MAX_REPAIRS])
+		var fixed: Dictionary = await client.generate(build_repair_prompt(csv_text, problems), system_prompt)
+
+		if not bool(fixed["ok"]):
+			print("[부탁 글] 수정 요청 실패: ", fixed["error"], " — 현재 초안을 그대로 둡니다.")
+			break
+
+		var repaired: String = clean_rows(str(fixed["text"]))
+
+		if repaired.is_empty():
+			break
+
+		csv_text = Tools.csv_line(Tools.COLUMNS) + "\n" + repaired
+		_write(path, csv_text)
+		result = Tools.validate_file(path, sources)
+
 	_print_result(path, result)
 	get_tree().quit(1 if not result["errors"].is_empty() else 0)
+
+
+# 고치게 할 문제: 모든 오류와, 글이 틀려지기 쉬운 수량 표현 주의.
+static func _repairable(result: Dictionary) -> Array[String]:
+	var problems: Array[String] = []
+
+	for e in result["errors"]:
+		problems.append(str(e))
+
+	for w in result["warns"]:
+		if str(w).contains("수량 표현") or str(w).contains("한 칸이"):
+			problems.append(str(w))
+
+	return problems
+
+
+static func build_repair_prompt(csv_text: String, problems: Array[String]) -> String:
+	return "아래 CSV는 검사에서 다음 문제가 나왔다. 문제가 있는 행의 글만 규칙에 맞게 고쳐서, 모든 행을 같은 형식의 CSV로 다시 출력한다(머리글 줄 없이 행만). id와 kind와 칸 수는 그대로 둔다. 글자 수 제한을 꼭 지킨다(한 칸에 공백 포함).\n\n문제:\n- %s\n\n현재 CSV:\n%s" % ["\n- ".join(problems), csv_text]
 
 
 # kind별 요청 글. 현재 문장(참고용)과 기계 정보 중 글에 도움이 되는 것만 준다.
