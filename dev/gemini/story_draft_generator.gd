@@ -13,6 +13,9 @@ const GeminiClient = preload("res://dev/gemini/gemini_client.gd")
 const OUT_DIR: String = "res://docs/drafts/story"
 const HEADER: String = "beat_id,npc_id,conditions,gifts,repeat_days,lines"
 
+# 세계관·NPC 반응 지침(코드가 아니라 이 문서를 고치면 반영된다). 없으면 붙이지 않는다.
+const WORLD_SETTING_PATH: String = "res://docs/drafts/story/world_setting.md"
+
 const SYSTEM_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임의 스토리 작가다. 규칙에 맞는 장면 CSV 행만 출력한다(설명·머리말·코드블록 표시 없음).
 - 열: beat_id,npc_id,conditions,gifts,repeat_days,lines (쉼표 구분. 칸 안에 쉼표가 있으면 그 칸 전체를 큰따옴표로 감싼다)
 - npc_id는 neighbor 만 사용한다.
@@ -43,7 +46,7 @@ func _run() -> void:
 	var client := GeminiClient.new()
 	add_child(client)
 	print("[스토리] 제미나이 호출 중 / 모델: ", GeminiClient.find_model())
-	var result: Dictionary = await client.generate(prompt, SYSTEM_PROMPT)
+	var result: Dictionary = await client.generate(prompt, build_system_prompt(_read_world_setting()))
 
 	if not bool(result["ok"]):
 		push_error("[스토리] 실패: " + str(result["error"]))
@@ -55,6 +58,33 @@ func _run() -> void:
 	print("[스토리] 저장: ", path)
 	print("[스토리] 다음 단계: 검사(파이썬 없이) godot --headless --path . res://dev/gemini/validate_story.tscn -- --file ", path.replace("res://", ""))
 	get_tree().quit(0)
+
+
+# 기본 지침 뒤에 세계관 설정 문서를 붙인다(안내용 첫 줄 인용문은 제외).
+static func build_system_prompt(setting_text: String) -> String:
+	var setting_lines: PackedStringArray = []
+
+	for raw_line in setting_text.split("\n"):
+		var line: String = raw_line.strip_edges(false, true)
+
+		if line.begins_with("#") or line.begins_with(">"):
+			continue
+
+		setting_lines.append(line)
+
+	var setting: String = "\n".join(setting_lines).strip_edges()
+
+	if setting.is_empty():
+		return SYSTEM_PROMPT
+
+	return SYSTEM_PROMPT + "\n\n[세계관 설정 — 대사에 반영한다]\n" + setting
+
+
+func _read_world_setting() -> String:
+	if not FileAccess.file_exists(WORLD_SETTING_PATH):
+		return ""
+
+	return FileAccess.get_file_as_string(WORLD_SETTING_PATH)
 
 
 func _build_prompt(topic: String, scene_count: int) -> String:
