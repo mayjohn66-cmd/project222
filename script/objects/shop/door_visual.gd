@@ -1,7 +1,7 @@
 @tool
 extends Node2D
 
-static var ART: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v1/door.png")
+static var ART: Texture2D = ArtLoader.load_texture("res://art/world/shop_entrance_door_iso.png")
 static var WAREHOUSE: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v6/warehouse_door.png")
 static var PRODUCTION: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v8/production_door.png")
 @export_enum("entrance", "warehouse", "production") var door_kind: String = "entrance"
@@ -32,6 +32,7 @@ func get_art_rect() -> Rect2:
 	return Rect2(Vector2(-size.x * 0.5, tile_height * 0.25 - size.y), size)
 
 func _draw():
+	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	var texture := get_door_texture()
 	if texture == null:
 		return
