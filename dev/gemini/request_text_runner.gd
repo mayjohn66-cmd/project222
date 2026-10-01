@@ -21,7 +21,7 @@ const MAX_REPAIRS: int = 2
 const DEFAULT_CHUNK_SIZE: int = 2
 
 const BASE_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임의 글 작가다. 이미 있는 항목의 "글"만 새로 쓴다. 설명·머리말·코드블록 표시 없이 CSV 행만 출력한다.
-- 열: id,kind,title,summary,lines,completion (쉼표 구분. 칸 안에 쉼표가 있으면 그 칸 전체를 큰따옴표로 감싼다)
+- 열: id, kind, title, summary, lines, completion 을 **탭 문자**로 구분한다(쉼표로 구분하지 않는다). 칸 안에는 쉼표를 써도 되지만 탭과 줄바꿈은 쓰지 않고, 따옴표로 감싸지 않는다. 비우는 칸은 탭 사이를 비워 둔다(칸 수는 항상 6개).
 - 준 항목마다 정확히 한 행. id와 kind는 내가 준 그대로 쓴다. 새 id를 만들거나 빼지 않는다.
 - kind별로 채울 열: resident_request = title, lines, completion / community_request = title, summary, completion / resident_greeting = lines 만. 나머지 열은 비운다.
 - 추가 종류: resident_introduction / tutorial_dialogue = lines; trade_offer = title; tutorial_step = title, summary, lines, completion; service_text = 현재 행에서 채워진 글 열만. 기능 안내와 조작 키의 의미는 유지한다.
@@ -475,7 +475,7 @@ func _flag(name: String) -> bool:
 
 
 static func build_repair_prompt(csv_text: String, problems: Array[String]) -> String:
-	return "아래 CSV는 검사에서 다음 문제가 나왔다. 문제가 있는 행의 글만 규칙에 맞게 고쳐서, 모든 행을 같은 형식의 CSV로 다시 출력한다(머리글 줄 없이 행만). id와 kind와 칸 수는 그대로 둔다. 글자 수 제한을 꼭 지킨다(한 칸에 공백 포함).\n\n문제:\n- %s\n\n현재 CSV:\n%s" % ["\n- ".join(problems), csv_text]
+	return "아래 표(탭으로 구분)는 검사에서 다음 문제가 나왔다. 문제가 있는 행의 글만 규칙에 맞게 고쳐서, 모든 행을 같은 형식(탭 구분)으로 다시 출력한다(머리글 줄 없이 행만). id와 kind와 칸 수는 그대로 둔다. 글자 수 제한을 꼭 지킨다(한 칸에 공백 포함).\n\n문제:\n- %s\n\n현재 표:\n%s" % ["\n- ".join(problems), csv_to_tsv(csv_text)]
 
 
 # kind별 요청 글. 현재 문장(참고용)과 기계 정보 중 글에 도움이 되는 것만 준다.
@@ -517,7 +517,7 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 			info += " / 말하는 사람: %s / 말버릇: %s" % [voice["name"], voice["voice"]]
 
 		out.append("id=%s | %s" % [id, info])
-		out.append("현재 문장(참고, 같은 칸 수와 역할로 새로 쓴다): " + Tools.csv_line(current))
+		out.append("현재 문장(참고, 같은 칸 수와 역할로 새로 쓴다): " + "\t".join(current))
 		out.append("")
 
 	return "\n".join(out)
@@ -531,6 +531,19 @@ static func _item_name(item_id: String) -> String:
 
 
 # 코드블록 표시와 머리글 줄을 지운 CSV 행들(끝에 줄바꿈 포함).
+# CSV 글을 탭으로 구분한 줄로 바꾼다(제미나이에게 보여 줄 때 쓴다. 칸 안의 쉼표가 헷갈리지 않게).
+static func csv_to_tsv(csv_text: String) -> String:
+	var out: PackedStringArray = []
+
+	for line in csv_text.split("\n"):
+		if line.strip_edges().is_empty():
+			continue
+
+		out.append("\t".join(Tools.parse_csv_line(line.strip_edges())))
+
+	return "\n".join(out)
+
+
 static func clean_rows(text: String) -> String:
 	var kept: PackedStringArray = []
 
@@ -540,9 +553,19 @@ static func clean_rows(text: String) -> String:
 		if line.is_empty() or line.begins_with("```") or line.begins_with("id,kind"):
 			continue
 
-		var cells: PackedStringArray = Tools.parse_csv_line(line)
+		# 탭으로 구분한 줄(요청한 형식)이면 칸을 나눠 CSV로 바꾼다. 아니면 CSV로 읽는다.
+		var is_tsv: bool = line.contains("\t")
+		var cells: PackedStringArray = line.split("\t") if is_tsv else Tools.parse_csv_line(line)
+
+		if is_tsv and cells.size() >= 1 and cells[0].strip_edges() == "id" and cells.size() > 1 and cells[1].strip_edges() == "kind":
+			continue
+
 		var fixed: PackedStringArray = Tools.fix_missing_empty_cell(cells)
-		kept.append(Tools.csv_line(fixed) if fixed.size() != cells.size() else line)
+
+		for i in range(fixed.size()):
+			fixed[i] = fixed[i].strip_edges()
+
+		kept.append(Tools.csv_line(fixed) if (is_tsv or fixed.size() != cells.size()) else line)
 
 	return "\n".join(kept) + "\n" if not kept.is_empty() else ""
 
