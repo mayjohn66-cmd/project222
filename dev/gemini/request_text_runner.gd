@@ -315,7 +315,16 @@ func _ensure_clean_merge_state() -> bool:
 		print("[자동 순환] 병합을 취소해 원래 상태로 되돌렸습니다.")
 		return true
 
-	print("[자동 순환] 자동으로 되돌리지 못했습니다(%s). 이 폴더(스토리 전용)에서 아래를 직접 실행하세요:" % str(abort["out"]).left(120))
+	# 병합이 진행 중이 아닌데 충돌 흔적만 남은 경우(MERGE_HEAD 없음): 병합 취소와 같은 효과의 reset --merge.
+	# 커밋하지 않은 다른 변경은 지우지 않는다.
+	var reset: Dictionary = _git(["reset", "--merge"])
+	after = _git(["diff", "--name-only", "--diff-filter=U"])
+
+	if str(after["out"]).is_empty():
+		print("[자동 순환] 남은 충돌 흔적을 정리했습니다(git reset --merge).")
+		return true
+
+	print("[자동 순환] 자동으로 되돌리지 못했습니다(%s / %s). 이 폴더(스토리 전용)에서 아래를 직접 실행하세요:" % [str(abort["out"]).left(80), str(reset["out"]).left(80)])
 	print("    git status                     (무엇이 충돌인지 확인)")
 	print("    git merge --abort              (병합 중이면 취소)")
 	print("    git reset --hard origin/feature/story-script   (그래도 안 되면 원격 상태로 맞춤. 올리지 않은 변경은 사라짐)")
