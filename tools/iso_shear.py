@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """정면 그림을 아이소메트릭 벽면(2:1 기울기)에 맞게 기울입니다.
 
-문처럼 마름모 타일의 한 변에 서는 오브젝트용입니다. 기본 결과는 52x99이고,
+문처럼 마름모 타일의 한 변에 서는 오브젝트용입니다. 기본 결과는 52x124이고,
 `\\` 방향(왼쪽이 높고 오른쪽이 낮음)입니다. 게임이 회전에 따라 좌우를 뒤집어 `/`로 그립니다.
 
 사용법:
@@ -19,7 +19,7 @@ def main():
     ap.add_argument("src")
     ap.add_argument("dst")
     ap.add_argument("--width", type=int, default=52)
-    ap.add_argument("--height", type=int, default=99)
+    ap.add_argument("--height", type=int, default=124)
     ap.add_argument("--slope", type=float, default=0.5, help="가로 1칸당 세로 이동(2:1 = 0.5)")
     ap.add_argument("--flip", action="store_true")
     a = ap.parse_args()
