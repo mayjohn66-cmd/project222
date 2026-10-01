@@ -129,6 +129,12 @@
 - 가격·확률 근거와 결과는 규칙서 4.5(v0.35), 도구는 `tools/check_merchant.py`. 아이콘 8개는 `docs/이미지_제작_목록.md`에 추가했습니다.
 - 확인하지 못한 것: 실제 화면에서 상인 창의 가구 구매, 새 공격 방식의 방 안 전투.
 
+### [2026-10-01] Claude → ChatGPT, 제미나이, 사용자: ChatGPT 콘텐츠를 제미나이가 다듬는 동기화 완성
+- 사용자 제안: ChatGPT가 만든 콘텐츠를 탐지해서 스토리 글로 다듬는 체계. **구현했습니다**(`feature/story-script`, 설명 `docs/스토리_작성_가이드.md` 5.2). 방식은 커밋 감시가 아니라 **원본(.tres)과 글 CSV 비교**입니다. 글이 없는 새 항목, 그리고 승인 뒤에 기계 부분(재료·수량·보상 등)이 바뀐 항목을 찾아 제미나이가 그 항목만 씁니다.
+- **ChatGPT에게**: 새 부탁을 만들 때 기계 부분만 만들고 글 필드는 비워 두거나 임시 문장을 넣으면 됩니다(`id`가 있으면 감지됩니다). 수량을 바꾸면 글이 "바뀐 항목"으로 잡혀 다시 쓰게 됩니다. 글 필드를 `data/shop/requests/requests_text.csv`로 빼 주시면 `sync`가 그 파일을 기준으로 삼습니다. 새 콘텐츠 종류가 생기면 `request_text_tools.gd`의 `SOURCE_FILES`에 원본 파일과 kind를 알려 주세요.
+- **제미나이에게**: `sync`로 받는 대상은 글이 필요한 항목뿐입니다. 이전과 같은 규칙(새 id·수치 금지, 게임 용어·수량 금지)을 지킵니다.
+- 시험한 것: 새 항목 감지, 수량 변경 감지, 초안 합치기와 상태 갱신(임시 파일로 직접 시험), 단위 검사 36개. 실제 제미나이 호출을 포함한 `sync`는 아직 PC에서 돌려 보지 못했습니다.
+
 ### [2026-10-01] Claude → ChatGPT, 제미나이: 부탁 글 분업 승인됨, 도구 완성
 - 사용자가 **기계/글 분리 분업을 승인**했습니다(`docs/스토리_작성_가이드.md` 5.1). 도구를 `feature/story-script`에 올렸습니다: 글 CSV 규격(`id,kind,title,summary,lines,completion`), 검사기, 제미나이 글 초안 모드, 기준 문장 내보내기(`docs/drafts/story/requests_text_baseline.csv`, 원본 11행). 시험 21개 통과.
 - **ChatGPT에게**: `.tres`의 글 필드(`title`, `summary`, `lines`, `completion`, `greetings`)를 `data/shop/requests/requests_text.csv`로 옮기고 코드가 `id`로 읽게 해 주세요(형식은 위 규격과 같게, 기준 문장 CSV를 시작 파일로 쓰면 됩니다). 이후 부탁을 새로 만들 때는 기계 부분(id·재료·수량·보상·landmark)만 만들고 글은 비워 두세요. 수량·보상 값은 Claude 확인을 받습니다.
