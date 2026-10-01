@@ -40,6 +40,7 @@
 | `feature/world-doors` | 문 3종의 그림·크기·기울기(`door_visual.gd`), 문 이미지 규격 | Claude(코드 조절)·사용자(그림) | Claude 문 작업(`7129525`~`74582b8`)과 ChatGPT `081a158`(사용자 문 이미지 연결)이 여기 모임 |
 | `feature/expedition-rooms` | 8×8 방, 바닥 타일 원정 시점, 전투 표시, HP 그림, 방 데이터 | ChatGPT(코드)·Claude(수치·검증) | `gpt/expedition-direct-control`, `gpt/expedition-isometric-floor`, `gpt/expedition-isometric-live` 대체 |
 | `feature/npc-tutorial` | 단계별 NPC 튜토리얼, 수동 결제, 폐점 중 시간, NPC 개입 | ChatGPT | `gpt/progressive-npc-tutorial`, `gpt/manual-checkout-tutorial`, `gpt/npc-intervention-system` 대체 |
+| `feature/iso-objects` | 도형 우선 오브젝트(발자국+높이에서 면·충돌 생성), 가구·건물을 이 방식으로 이전. 설계: `docs/도형_오브젝트_설계.md` | Claude(기반)·ChatGPT(가구·건물 적용) | 2026-10-01 사용자 결정으로 신설, 기반(`IsoGeometry`, `IsoBox`, 문 적용) 푸시됨 |
 | `feature/economy-balance` | `data/` 수치, 비밀 상인 판매 목록, 손님 소분류, 장비·제작 밸런스, `tools/check_*.py` | Claude | 지금까지의 Claude 데이터 작업(통합 브랜치에 있음) |
 | 통합 브랜치 `claude/large-file-refactor-plan-52hp51` | 위 기능이 완성되어 합쳐지는 곳, 문서(`docs/`) | 모두 | 문서 수정은 기능 브랜치를 따로 만들지 않고 여기서 직접 |
 
@@ -47,7 +48,7 @@
 - `gpt/progressive-npc-tutorial`(이전 `gpt/` 브랜치 8개를 모두 포함한 단일 통합 브랜치)을 통합 브랜치에 **병합했습니다**(충돌 없음). 다른 `gpt/…` 브랜치는 전부 이 브랜치의 조상이라 함께 병합된 셈입니다.
 - 병합 뒤 검증: import 2회차 오류 0, `check_godot` 331개 로드 실패 0, `check_expedition_run` 종료 0, `check_direct_expedition`·`check_direct_room_lifecycle`·`check_direct_expedition_run` 실패 0, `check_isometric_room`·`check_manual_checkout`·`check_progressive_tutorial`·`check_checkout_event` 실패 0.
 - 문: 병합으로 들어온 `shop_entrance_door_iso.png`(이미 기울어 있음)는 새 방식(코드가 기울임)과 겹쳐서, 매장 출입문은 정면 그림 `shop_entrance_door_front.png`(52×112)를 쓰도록 바꿨습니다. 창고·생산실 문은 아직 옛 임시 그림입니다.
-- 위 4개 **기능 브랜치를 통합 브랜치의 같은 지점에서 만들었습니다**: `feature/world-doors`, `feature/expedition-rooms`, `feature/npc-tutorial`, `feature/economy-balance`. 이전 `gpt/…` 브랜치 9개는 **삭제하지 않았습니다**(삭제는 사용자 승인 사항). 더 이상 올리지 않습니다.
+- 위 기능 브랜치(처음 4개)를 통합 브랜치의 같은 지점에서 만들었습니다**: `feature/world-doors`, `feature/expedition-rooms`, `feature/npc-tutorial`, `feature/economy-balance`. 이전 `gpt/…` 브랜치 9개는 **삭제하지 않았습니다**(삭제는 사용자 승인 사항). 더 이상 올리지 않습니다.
 - 확인하지 못한 것: 사람이 직접 플레이한 확인(튜토리얼 흐름, 문 크기·위치, 방 전투), 병합 뒤 Godot 에디터에서의 화면.
 
 **ChatGPT에게**: 작업을 시작하기 전에 위 표에서 기능을 고르고(없으면 한 줄 추가), 5장 ChatGPT 항목에 `기능 브랜치` 이름을 적어 주세요. `gpt/…` 브랜치에는 더 올리지 말아 주세요. 정리(삭제)는 사용자 승인 후 Claude가 계획을 만들어 보여 줍니다.
