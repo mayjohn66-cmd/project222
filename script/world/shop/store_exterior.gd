@@ -1300,6 +1300,7 @@ func _refresh_dungeon_wall() -> void:
 		world.add_child(gathering)
 	gathering.rebuild(self)
 	_apply_editor_objects(world)
+	VillageSettlement.apply_world(world)
 
 func _apply_editor_objects(world: Node) -> void:
 	for key in _layout_added:
@@ -1314,6 +1315,7 @@ func _apply_editor_objects(world: Node) -> void:
 		group.add_child(copy)
 		copy.position = group.to_local(to_global(grid_to_local(cell)))
 		copy.set_meta("tile_cell",cell)
+		copy.set_meta("settlement_source",str(record.get("source","")))
 		if group.has_method("apply_house_variant"):
 			group.apply_house_variant(copy,str(record.get("source","")),str(record.get("variant","")))
 		if group.has_method("apply_cottage_roof_variant"):
@@ -1325,4 +1327,5 @@ func _apply_editor_objects(world: Node) -> void:
 		if removed == null: continue
 		removed.visible = false
 		removed.collision_layer = 0
+		removed.set_meta("settlement_layout_removed",true)
 
