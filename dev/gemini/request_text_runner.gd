@@ -40,7 +40,11 @@ func _run() -> void:
 		"validate":
 			_validate(sources)
 		"draft":
-			await _draft(sources)
+			await _draft(sources, sources)
+		"sync":
+			await _sync(sources)
+		"accept":
+			_accept(sources)
 		_:
 			push_error("--mode 는 export, validate, draft 중 하나입니다.")
 			get_tree().quit(2)
@@ -78,7 +82,7 @@ func _validate(sources: Dictionary) -> void:
 	get_tree().quit(1 if not result["errors"].is_empty() else 0)
 
 
-func _draft(sources: Dictionary) -> void:
+func _draft(sources: Dictionary, targets: Dictionary) -> void:
 	var only_kind: String = _arg("--kind")
 	var client := GeminiClient.new()
 	add_child(client)
@@ -92,12 +96,12 @@ func _draft(sources: Dictionary) -> void:
 		if not only_kind.is_empty() and only_kind != kind:
 			continue
 
-		if sources[kind].is_empty():
-			print("[부탁 글] %s: 원본이 없어 건너뜀" % kind)
+		if targets[kind].is_empty():
+			print("[부탁 글] %s: 대상이 없어 건너뜀" % kind)
 			continue
 
-		print("[부탁 글] %s %d개 요청 중 / 모델: %s" % [kind, sources[kind].size(), GeminiClient.find_model()])
-		var result: Dictionary = await client.generate(build_prompt(kind, sources), system_prompt)
+		print("[부탁 글] %s %d개 요청 중 / 모델: %s" % [kind, targets[kind].size(), GeminiClient.find_model()])
+		var result: Dictionary = await client.generate(build_prompt(kind, targets, sources), system_prompt)
 
 		if not bool(result["ok"]):
 			push_error("[부탁 글] 실패(%s): %s" % [kind, str(result["error"])])
@@ -141,6 +145,90 @@ func _draft(sources: Dictionary) -> void:
 	get_tree().quit(1 if not result["errors"].is_empty() else 0)
 
 
+# 글이 없거나(새 항목) 기계 부분이 바뀐 항목을 찾아 보여 주고, --dry 가 아니면 그 항목만 제미나이에게 쓰게 한다.
+func _sync(sources: Dictionary) -> void:
+	var texts: Dictionary = Tools.load_text_rows(Tools.text_path())
+	var todo: Dictionary = Tools.find_todo(sources, texts, Tools.load_state())
+	var new_count: int = Tools.count_targets(todo["new"])
+	var changed_count: int = Tools.count_targets(todo["changed"])
+	print("[부탁 글 동기화] 글 파일: %s (글 %d행)" % [Tools.text_path().trim_prefix("res://"), texts.size()])
+	print("[부탁 글 동기화] 글이 없는 새 항목 %d건, 기계 부분이 바뀐 항목 %d건" % [new_count, changed_count])
+
+	for group in ["new", "changed"]:
+		for kind in Tools.KINDS:
+			for id in todo[group][kind].keys():
+				print("  - %s %s: %s" % ["새" if group == "new" else "바뀜", kind, id])
+
+	for key in todo["orphan"]:
+		print("  - 원본이 사라진 글(확인 필요): ", key)
+
+	if new_count + changed_count == 0:
+		print("[부탁 글 동기화] 할 일이 없습니다.")
+		get_tree().quit(0)
+		return
+
+	if _flag("--dry"):
+		print("[부탁 글 동기화] --dry: 제미나이를 부르지 않았습니다.")
+		get_tree().quit(0)
+		return
+
+	var targets: Dictionary = {}
+
+	for kind in Tools.KINDS:
+		targets[kind] = {}
+		targets[kind].merge(todo["new"][kind])
+		targets[kind].merge(todo["changed"][kind])
+
+	await _draft(sources, targets)
+
+
+# 검토를 끝낸 초안을 글 CSV에 합치고, 기계 부분 지문(상태)을 갱신한다. 사용자가 승인한 뒤에만 쓴다.
+func _accept(sources: Dictionary) -> void:
+	var path: String = _arg("--file")
+
+	if path.is_empty():
+		push_error("--file 이 필요합니다.")
+		get_tree().quit(2)
+		return
+
+	var full: String = "res://" + path.trim_prefix("res://")
+	var check: Dictionary = Tools.validate_file(full, sources)
+
+	if not check["errors"].is_empty():
+		_print_result(path, check)
+		push_error("오류가 있는 초안은 합칠 수 없습니다.")
+		get_tree().quit(1)
+		return
+
+	var file := FileAccess.open(full, FileAccess.READ)
+	file.get_csv_line()
+	var rows: Array = []
+
+	while not file.eof_reached():
+		var row: PackedStringArray = file.get_csv_line()
+
+		if row.size() == Tools.COLUMNS.size():
+			rows.append(row)
+
+	file.close()
+	var out: Dictionary = Tools.merge_draft(Tools.load_text_rows(Tools.text_path()), rows, sources, Tools.load_state())
+	var target: String = _arg("--into")
+
+	if target.is_empty():
+		target = Tools.text_path()
+	else:
+		target = "res://" + target.trim_prefix("res://")
+
+	_write(target, out["csv"])
+	_write(Tools.STATE_PATH, out["state_csv"])
+	print("[부탁 글] %d행을 합쳤습니다: %s (상태: %s)" % [rows.size(), target.trim_prefix("res://"), Tools.STATE_PATH.trim_prefix("res://")])
+	get_tree().quit(0)
+
+
+func _flag(name: String) -> bool:
+	return OS.get_cmdline_user_args().has(name)
+
+
 # 고치게 할 문제: 모든 오류와, 글이 틀려지기 쉬운 수량 표현 주의.
 static func _repairable(result: Dictionary) -> Array[String]:
 	var problems: Array[String] = []
@@ -160,12 +248,12 @@ static func build_repair_prompt(csv_text: String, problems: Array[String]) -> St
 
 
 # kind별 요청 글. 현재 문장(참고용)과 기계 정보 중 글에 도움이 되는 것만 준다.
-static func build_prompt(kind: String, sources: Dictionary) -> String:
+static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary = {}) -> String:
 	var out: PackedStringArray = ["kind = %s 인 항목들의 글을 새로 쓴다. 항목마다 한 행." % kind, ""]
-	var residents: Dictionary = sources.get(Tools.KIND_RESIDENT_GREETING, {})
+	var residents: Dictionary = (sources if not sources.is_empty() else targets).get(Tools.KIND_RESIDENT_GREETING, {})
 
-	for id in sources[kind].keys():
-		var d: Dictionary = sources[kind][id]
+	for id in targets[kind].keys():
+		var d: Dictionary = targets[kind][id]
 		var current: PackedStringArray = Tools.row_from_source(kind, d)
 		var info: String = ""
 

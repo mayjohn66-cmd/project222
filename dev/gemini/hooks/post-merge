@@ -1,0 +1,7 @@
+#!/bin/sh
+# 선택 사항: git pull/merge 뒤에 "글이 없는 새 부탁이나 기계 부분이 바뀐 부탁"이 있는지만 알려 준다.
+# 제미나이를 부르지 않는다(키·비용·대기 없음). 쓰는 방법은 docs/스토리_작성_가이드.md 5.2.
+# 설치: 이 파일을 프로젝트 폴더의 .git/hooks/post-merge (확장자 없음)로 복사. 훅은 저장소에 올라가지 않는다.
+if [ -n "$GODOT_EXE" ] && [ -f dev/gemini/request_text.tscn ]; then
+  "$GODOT_EXE" --headless --path . res://dev/gemini/request_text.tscn -- --mode sync --dry 2>/dev/null | grep "동기화\|  - "
+fi

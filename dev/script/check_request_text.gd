@@ -95,5 +95,42 @@ func _run() -> void:
 	_check("48자" in repair and "한 병" in repair and "id,kind" in repair, "수정 요청에 문제와 현재 CSV가 들어감")
 	_check(Runner._repairable({"errors": [], "warns": ["a [x] 돈 선물"]}).is_empty(), "문제 없으면 수정 요청 안 함")
 
+	# ---- 동기화: 새 항목·바뀐 항목 탐지 ----
+	var src := {
+		Tools.KIND_RESIDENT_REQUEST: {
+			"a": {"id": "a", "npc": "이웃", "item": "bread", "amount": 2, "title": "t", "lines": ["x"]},
+			"b": {"id": "b", "npc": "광부", "item": "iron_ore", "amount": 3, "title": "t2", "lines": ["y"]},
+			"c": {"id": "c", "npc": "새 주민", "item": "water", "amount": 1},
+		},
+		Tools.KIND_COMMUNITY_REQUEST: {},
+		Tools.KIND_RESIDENT_GREETING: {},
+	}
+	_check(Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["a"]) == Tools.fingerprint({"id": "a", "npc": "이웃", "item": "bread", "amount": 2, "title": "완전히 다른 제목", "lines": ["다른 대사"]}), "글 필드가 바뀌어도 기계 지문은 같다")
+	_check(Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["a"]) != Tools.fingerprint({"id": "a", "npc": "이웃", "item": "bread", "amount": 3, "title": "t", "lines": ["x"]}), "수량이 바뀌면 지문이 달라진다")
+	var texts := {
+		"resident_request:a": PackedStringArray(["a", "resident_request", "t", "", "x", ""]),
+		"resident_request:b": PackedStringArray(["b", "resident_request", "t2", "", "y", ""]),
+		"resident_request:gone": PackedStringArray(["gone", "resident_request", "t3", "", "z", ""]),
+	}
+	var state := {
+		"resident_request:a": Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["a"]),
+		"resident_request:b": "old-hash",
+	}
+	var todo := Tools.find_todo(src, texts, state)
+	_check(todo["new"][Tools.KIND_RESIDENT_REQUEST].has("c") and todo["new"][Tools.KIND_RESIDENT_REQUEST].size() == 1, "글이 없는 c는 새 항목")
+	_check(todo["changed"][Tools.KIND_RESIDENT_REQUEST].has("b") and todo["changed"][Tools.KIND_RESIDENT_REQUEST].size() == 1, "지문이 달라진 b는 바뀐 항목")
+	_check(not todo["changed"][Tools.KIND_RESIDENT_REQUEST].has("a"), "지문이 같은 a는 할 일 없음")
+	_check(todo["orphan"] == ["resident_request:gone"], "원본이 사라진 글을 알려 줌")
+	_check(Tools.count_targets(todo["new"]) == 1, "새 항목 개수")
+	# 상태가 비어 있으면(처음) 글이 있는 항목은 바뀐 것으로 보지 않는다.
+	var first := Tools.find_todo(src, texts, {})
+	_check(Tools.count_targets(first["changed"]) == 0 and Tools.count_targets(first["new"]) == 1, "상태가 없으면 기존 글은 승인된 것으로 간주")
+	# 합치기: 초안이 기존 글을 덮어쓰고 새 id를 추가하며 상태를 갱신한다.
+	var merged := Tools.merge_draft(texts, [PackedStringArray(["b", "resident_request", "새 제목", "", "새 대사", ""]), PackedStringArray(["c", "resident_request", "c 제목", "", "c 대사", ""])], src, state)
+	_check("새 제목" in merged["csv"] and "c 제목" in merged["csv"] and not ("t2" in merged["csv"]), "합치면 덮어쓰고 추가한다")
+	_check(merged["csv"].begins_with("id,kind,title,summary,lines,completion\n"), "합친 CSV 머리글")
+	_check(merged["state_csv"].contains(Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["b"])), "합친 항목의 상태 지문 갱신")
+	_check(merged["state_csv"].contains(Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["c"])), "새 항목 상태 지문 추가")
+
 	print("CHECK_REQUEST_TEXT failures=", failures)
 	get_tree().quit(1 if failures > 0 else 0)

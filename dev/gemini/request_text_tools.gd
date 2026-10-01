@@ -18,6 +18,15 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/requests/default_village_life.tres": KIND_RESIDENT_GREETING,
 }
 
+# 글이 들어가는 최종 위치(ChatGPT가 만들면 이쪽을 우선 사용). 없으면 기준 문장 파일을 쓴다.
+const TEXT_PATH: String = "res://data/shop/requests/requests_text.csv"
+const TEXT_FALLBACK_PATH: String = "res://docs/drafts/story/requests_text_baseline.csv"
+# 글을 마지막으로 승인했을 때의 "기계 부분" 지문(id, kind, mech_hash). 이게 바뀌면 글을 다시 봐야 한다.
+const STATE_PATH: String = "res://docs/drafts/story/requests_text_state.csv"
+
+# 글에 해당하는 필드(이것들은 지문에 넣지 않는다. 나머지가 기계 부분이다).
+const TEXT_FIELDS: PackedStringArray = ["title", "summary", "lines", "completion", "greetings", "name"]
+
 const MAX_TITLE: int = 20
 const MAX_SUMMARY: int = 60
 const MAX_COMPLETION: int = 45
@@ -221,3 +230,133 @@ static func validate_file(path: String, known: Dictionary) -> Dictionary:
 
 	file.close()
 	return validate_rows(header, rows, known, path.get_file())
+
+
+# ---------- 동기화: 새 항목·기계 부분이 바뀐 항목 찾기 ----------
+# 기계 부분 지문: 글 필드를 뺀 나머지를 키 순서대로 문자열로 만들어 md5.
+static func fingerprint(data: Dictionary) -> String:
+	var mech: Dictionary = {}
+
+	for key in data.keys():
+		if not TEXT_FIELDS.has(str(key)):
+			mech[key] = data[key]
+
+	return JSON.stringify(mech, "", true).md5_text()
+
+
+static func text_path() -> String:
+	return TEXT_PATH if FileAccess.file_exists(TEXT_PATH) else TEXT_FALLBACK_PATH
+
+
+# 글 CSV → {"kind:id": 행}
+static func load_text_rows(path: String) -> Dictionary:
+	var result: Dictionary = {}
+	var file := FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		return result
+
+	file.get_csv_line()
+
+	while not file.eof_reached():
+		var row: PackedStringArray = file.get_csv_line()
+
+		if row.size() == COLUMNS.size():
+			result[row[1] + ":" + row[0]] = row
+
+	file.close()
+	return result
+
+
+# 상태 CSV → {"kind:id": 지문}
+static func load_state(path: String = STATE_PATH) -> Dictionary:
+	var result: Dictionary = {}
+	var file := FileAccess.open(path, FileAccess.READ)
+
+	if file == null:
+		return result
+
+	file.get_csv_line()
+
+	while not file.eof_reached():
+		var row: PackedStringArray = file.get_csv_line()
+
+		if row.size() == 3:
+			result[row[1] + ":" + row[0]] = row[2]
+
+	file.close()
+	return result
+
+
+# 반환: {"new": {kind: {id: dict}}, "changed": {...}, "orphan": [글만 있고 원본이 없는 "kind:id"]}
+# new = 글이 없는 항목, changed = 글은 있지만 승인 뒤에 기계 부분이 바뀐 항목.
+# 상태 파일에 없는 기존 글은 "승인된 것"으로 보고 지금 지문을 기준으로 삼는다(처음 한 번은 바뀌지 않은 것으로 취급).
+static func find_todo(sources: Dictionary, texts: Dictionary, state: Dictionary) -> Dictionary:
+	var result: Dictionary = {"new": {}, "changed": {}, "orphan": []}
+
+	for kind in KINDS:
+		result["new"][kind] = {}
+		result["changed"][kind] = {}
+
+		for id in sources[kind].keys():
+			var key: String = kind + ":" + id
+
+			if not texts.has(key):
+				result["new"][kind][id] = sources[kind][id]
+			elif state.has(key) and state[key] != fingerprint(sources[kind][id]):
+				result["changed"][kind][id] = sources[kind][id]
+
+	for key in texts.keys():
+		var parts: PackedStringArray = str(key).split(":", true, 1)
+
+		if parts.size() == 2 and sources.has(parts[0]) and not sources[parts[0]].is_empty() and not sources[parts[0]].has(parts[1]):
+			result["orphan"].append(key)
+
+	return result
+
+
+static func count_targets(targets: Dictionary) -> int:
+	var n: int = 0
+
+	for kind in targets.keys():
+		n += targets[kind].size()
+
+	return n
+
+
+# 초안 행들을 글 CSV에 합친다(같은 kind·id는 덮어쓰고 새 id는 추가). 합친 CSV 텍스트와 새 상태를 돌려준다.
+static func merge_draft(texts: Dictionary, draft_rows: Array, sources: Dictionary, state: Dictionary) -> Dictionary:
+	var merged: Dictionary = texts.duplicate()
+	var new_state: Dictionary = state.duplicate()
+
+	for row in draft_rows:
+		var key: String = str(row[1]) + ":" + str(row[0])
+		merged[key] = row
+
+		if sources.has(row[1]) and sources[row[1]].has(row[0]):
+			new_state[key] = fingerprint(sources[row[1]][row[0]])
+
+	# 모든 항목 상태도 채워 둔다(처음 승인할 때 기존 글의 기준을 잡는다).
+	for kind in KINDS:
+		for id in sources[kind].keys():
+			var k: String = kind + ":" + id
+
+			if merged.has(k) and not new_state.has(k):
+				new_state[k] = fingerprint(sources[kind][id])
+
+	var lines: PackedStringArray = [csv_line(COLUMNS)]
+	var state_lines: PackedStringArray = [csv_line(PackedStringArray(["id", "kind", "mech_hash"]))]
+	var keys: Array = merged.keys()
+	keys.sort()
+
+	for key in keys:
+		lines.append(csv_line(merged[key]))
+
+	var state_keys: Array = new_state.keys()
+	state_keys.sort()
+
+	for key in state_keys:
+		var parts: PackedStringArray = str(key).split(":", true, 1)
+		state_lines.append(csv_line(PackedStringArray([parts[1], parts[0], new_state[key]])))
+
+	return {"csv": "\n".join(lines) + "\n", "state_csv": "\n".join(state_lines) + "\n"}
