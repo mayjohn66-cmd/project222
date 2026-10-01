@@ -274,6 +274,9 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 
 				if not summary.is_empty():
 					errors.append("%s resident_request는 summary가 비어야 함" % tag)
+
+				if not "|".join(lines).contains("말을 걸"):
+					warns.append("%s 플레이어 행동 안내가 없음: 창고에 준비한 뒤 '다시 말을 걸어 줘'로 안내하세요" % tag)
 			KIND_COMMUNITY_REQUEST:
 				_need(errors, tag, "title", title, MAX_TITLE)
 				_need(errors, tag, "summary", summary, MAX_SUMMARY)

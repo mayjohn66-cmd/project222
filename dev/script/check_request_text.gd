@@ -122,6 +122,9 @@ func _run() -> void:
 	var cnt: Dictionary = Tools.validate_rows(Tools.COLUMNS, cnt_rows, cnt_known, "cnt")
 	_check("\n".join(PackedStringArray(cnt["warns"])).contains("대사 줄 수가 현재와 다름(현재 3줄, 초안 2줄)"), "줄 수가 줄면 주의")
 	_check(Runner._repairable(cnt).size() == 1, "줄 수 주의는 자동 수정 대상")
+	var act_rows: Array = [PackedStringArray(["act_id", "resident_request", "제목", "", "부탁해.|창고에 두었으니 확인해 줘.", "끝"])]
+	var act: Dictionary = Tools.validate_rows(Tools.COLUMNS, act_rows, {}, "act")
+	_check("\n".join(PackedStringArray(act["warns"])).contains("플레이어 행동 안내가 없음"), "'말을 걸' 안내가 없으면 주의")
 	var chunks: Array = Runner.chunk_ids(["a", "b", "c", "d", "e"], 2)
 	_check(chunks.size() == 3 and chunks[0] == ["a", "b"] and chunks[2] == ["e"], "항목을 2개씩 묶음")
 	_check(Runner.chunk_ids([], 2).is_empty() and Runner.chunk_ids(["a"], 0).size() == 1, "빈 목록·0 크기 처리")

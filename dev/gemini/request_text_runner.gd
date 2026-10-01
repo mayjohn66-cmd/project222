@@ -213,7 +213,7 @@ static func _repairable(result: Dictionary) -> Array[String]:
 		problems.append(str(e))
 
 	for w in result["warns"]:
-		if str(w).contains("수량 표현") or str(w).contains("한 칸이") or str(w).contains("상투 표현") or str(w).contains("반복 어구") or str(w).contains("줄 수가 현재와 다름"):
+		if str(w).contains("수량 표현") or str(w).contains("한 칸이") or str(w).contains("상투 표현") or str(w).contains("반복 어구") or str(w).contains("줄 수가 현재와 다름") or str(w).contains("행동 안내가 없음"):
 			problems.append(str(w))
 
 	return problems
