@@ -7,6 +7,7 @@ rem   dev\gemini\run_request_text.bat export           export current texts as t
 rem   dev\gemini\run_request_text.bat sync [--dry]    find NEW or CHANGED requests (no text yet) and have Gemini write only those; --dry = list only, no API call
 rem   dev\gemini\run_request_text.bat accept file     merge a reviewed draft into the text CSV and update the state
 rem   extra option for draft: --chunk N  (items per Gemini call, default 2), e.g.  draft resident_request --chunk 3
+rem   --ids a,b,c  (draft only these item ids, comma separated, no spaces), e.g.  draft resident_request --ids settle_naru,settle_doyun --chunk 3
 rem kind = resident_request | community_request | resident_greeting (optional)
 rem Needs GODOT_EXE (and GEMINI_API_KEY for draft). Set them once with setx, then open a NEW terminal.
 chcp 65001 >nul
@@ -37,7 +38,7 @@ if "%MODE%"=="draft" (
   if "%~2"=="" (
     "%GODOT_EXE%" --headless --path "%CD%" res://dev/gemini/request_text.tscn -- --mode draft
   ) else (
-    "%GODOT_EXE%" --headless --path "%CD%" res://dev/gemini/request_text.tscn -- --mode draft --kind %~2 %~3 %~4
+    "%GODOT_EXE%" --headless --path "%CD%" res://dev/gemini/request_text.tscn -- --mode draft --kind %~2 %~3 %~4 %~5 %~6
   )
   goto :done
 )

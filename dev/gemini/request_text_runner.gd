@@ -117,6 +117,7 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 		BASE_PROMPT,
 		FileAccess.get_file_as_string(StoryGen.WORLD_SETTING_PATH) if FileAccess.file_exists(StoryGen.WORLD_SETTING_PATH) else ""
 	)
+	var only_ids: PackedStringArray = _arg("--ids").split(",", false)
 	var rows_text: PackedStringArray = []
 	var failed_ids: Array[String] = []
 	var chunk_size: int = maxi(1, int(_arg("--chunk")) if not _arg("--chunk").is_empty() else DEFAULT_CHUNK_SIZE)
@@ -129,8 +130,14 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 			print("[부탁 글] %s: 대상이 없어 건너뜀" % kind)
 			continue
 
-		var chunks: Array = chunk_ids(targets[kind].keys(), chunk_size)
-		print("[부탁 글] %s %d개를 %d묶음으로 나눠 요청 / 모델: %s" % [kind, targets[kind].size(), chunks.size(), GeminiClient.find_model()])
+		var ids: Array = filter_ids(targets[kind].keys(), only_ids)
+
+		if ids.is_empty():
+			print("[부탁 글] %s: --ids 에 해당하는 항목이 없어 건너뜀" % kind)
+			continue
+
+		var chunks: Array = chunk_ids(ids, chunk_size)
+		print("[부탁 글] %s %d개를 %d묶음으로 나눠 요청 / 모델: %s" % [kind, ids.size(), chunks.size(), GeminiClient.find_model()])
 
 		for i in range(chunks.size()):
 			var part: Dictionary = targets.duplicate()
@@ -192,6 +199,20 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 
 	client.queue_free()
 	return {"ok": result["errors"].is_empty() and failed_ids.is_empty(), "path": path, "result": result, "made": true}
+
+
+# --ids 로 고른 id만 남긴다(비어 있으면 전부).
+static func filter_ids(ids: Array, only: PackedStringArray) -> Array:
+	if only.is_empty():
+		return ids
+
+	var out: Array = []
+
+	for id in ids:
+		if only.has(str(id)):
+			out.append(id)
+
+	return out
 
 
 # id 목록을 size개씩 묶는다.
