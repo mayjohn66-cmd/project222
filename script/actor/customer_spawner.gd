@@ -212,6 +212,10 @@ func spawn_customer() -> void:
 	)
 	# Lock identity before the pedestrian appears; keep it throughout the visit.
 	customer.choose_customer_type()
+	var introduced_type := ResidentRequestFlow.pending_introduction()
+	if not introduced_type.is_empty():
+		customer.customer_type_id = introduced_type
+		customer.customer_group_id = CustomerTypeData.get_group_id(introduced_type)
 	customer.get_node("Visual").refresh_profile()
 
 	# 손님은 반드시 도로 양쪽 끝 중 한 곳에서 생성된다.
@@ -256,7 +260,7 @@ func spawn_customer() -> void:
 
 	# 입장 여부는 한 번만 판정한다.
 	var wants_to_enter: bool = (
-		should_pedestrian_enter_store()
+		not introduced_type.is_empty() or should_pedestrian_enter_store()
 	)
 
 	if not wants_to_enter:
@@ -334,6 +338,8 @@ func spawn_customer() -> void:
 	customer.call(
 		"start_shopping"
 	)
+	if customer.visit_recorded:
+		ResidentRequestFlow.record_visit(customer.get_customer_type_id())
 
 func set_shop_open(value: bool):
 	shop_open = value
@@ -347,7 +353,7 @@ func set_shop_open(value: bool):
 
 func refresh_spawn_interval() -> void:
 	var reputation: float = maxf(
-		build_manager.get_decoration_effect("reputation"),
+		build_manager.get_decoration_effect("reputation") + ResidentRequestFlow.reputation(),
 		0.0
 	)
 
@@ -369,7 +375,7 @@ func should_pedestrian_enter_store() -> bool:
 	var reputation: float = maxf(
 		build_manager.get_decoration_effect(
 			"reputation"
-		),
+		) + ResidentRequestFlow.reputation(),
 		0.0
 	)
 

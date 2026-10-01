@@ -61,6 +61,8 @@ func try_interact() -> bool:
  if blocked(): return false
  var tutorial = get_parent().get_node_or_null("TutorialDirector")
  if tutorial != null and tutorial.try_interact(): return true
+ var requests = get_parent().get_node_or_null("ResidentRequestDirector")
+ if requests != null and requests.try_interact(): return true
  var cashier = get_parent().get_node_or_null("ManualCheckoutController")
  if cashier != null and cashier.try_interact(): return true
  if near_dungeon():

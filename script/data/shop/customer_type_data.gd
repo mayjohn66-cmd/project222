@@ -155,6 +155,8 @@ static func get_random_customer_type(
 	var type_candidates: Array[Dictionary] = []
 
 	for type_data in customer_types.values():
+		if not ResidentRequestFlow.customer_available(str(type_data.get("customer_type_id", ""))):
+			continue
 		if str(type_data.get("group_id", "")) != selected_group_id:
 			continue
 
