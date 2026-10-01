@@ -13,9 +13,15 @@ static func entries() -> Array[Dictionary]:
 	for request in CommunityRequestFlow.SETTINGS.requests:
 		var id := str(request["id"])
 		result.append({"id":"community:" + id, "title":RequestTextData.text("community_request",id,"title","마을 부탁")})
+	for request in PersonalRequestFlow.entries(): result.append({"id":"personal:" + str(request["id"]),"title":str(request["title"])})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with("personal:"):
+		var entry := PersonalRequestFlow.request(id.trim_prefix("personal:"))
+		if entry.is_empty(): return ""
+		var status := "함께 완료한 부탁" if PersonalRequestFlow.done(str(entry["id"])) else ("물품 준비 중" if PersonalRequestFlow.accepted(str(entry["id"])) else "게시판에서 부탁 듣기")
+		return status + "\n" + PersonalRequestFlow.information(entry)
 	if id == "next_request":
 		var introduction := ResidentStoryFlow.pending_introduction()
 		if not introduction.is_empty(): return "가게를 방문한 %s와 먼저 인사하세요." % introduction["npc"]
@@ -44,6 +50,12 @@ static func information(id: String) -> String:
 
 static func destination(world: Node, id: String) -> Node2D:
 	if not available(): return null
+	if id.begins_with("personal:"):
+		var entry := PersonalRequestFlow.request(id.trim_prefix("personal:"))
+		if entry.is_empty() or not PersonalRequestFlow.locked_reason(entry).is_empty(): return null
+		if PersonalRequestFlow.done(str(entry["id"])): return destination(world,"resident:" + str(entry["resident"]))
+		var board := VillageSettlement.find_site(world,CommunityRequestFlow.SETTINGS.board_path)
+		return board if board != null and board.visible else null
 	if id == "next_request":
 		var director = world.get_node_or_null("ResidentRequestDirector")
 		return director.npc if director != null and is_instance_valid(director.npc) and director.npc.visible else null

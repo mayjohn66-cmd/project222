@@ -14,11 +14,13 @@ const KIND_TRADE_OFFER := "trade_offer"
 const KIND_TUTORIAL_STEP := "tutorial_step"
 const KIND_TUTORIAL_DIALOGUE := "tutorial_dialogue"
 const KIND_SERVICE_TEXT := "service_text"
-const KINDS: PackedStringArray = [KIND_RESIDENT_REQUEST, KIND_COMMUNITY_REQUEST, KIND_RESIDENT_GREETING, KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT]
+const KIND_PERSONAL_REQUEST := "personal_request"
+const KINDS: PackedStringArray = [KIND_RESIDENT_REQUEST, KIND_COMMUNITY_REQUEST, KIND_RESIDENT_GREETING, KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT, KIND_PERSONAL_REQUEST]
 const TextData = preload("res://script/data/production/request_text_data.gd")
 
 # 원본(기계 부분이 들어 있는) 파일. 없는 파일은 건너뛴다.
 const SOURCE_FILES: Dictionary = {
+	"res://scenes/shop/requests/default_personal_requests.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_resident_requests.tres": KIND_RESIDENT_REQUEST,
 	"res://scenes/shop/requests/default_community_requests.tres": KIND_COMMUNITY_REQUEST,
 	"res://scenes/shop/requests/default_village_life.tres": KIND_RESIDENT_GREETING,
@@ -93,7 +95,7 @@ static func row_from_source(kind: String, data: Dictionary) -> PackedStringArray
 	var completion: String = ""
 
 	match kind:
-		KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT:
+		KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT, KIND_PERSONAL_REQUEST:
 			var prose := TextData.entry(kind, str(data["id"]))
 			return PackedStringArray([str(data["id"]),kind,str(prose.get("title","")),str(prose.get("summary","")),str(prose.get("lines","")),str(prose.get("completion",""))])
 		KIND_RESIDENT_REQUEST:
@@ -167,6 +169,11 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 			errors.append("%s 원본에 없는 id입니다. 제미나이는 새 id를 만들 수 없습니다" % tag)
 
 		match kind:
+			KIND_PERSONAL_REQUEST:
+				_need(errors,tag,"title",title,MAX_TITLE)
+				_need(errors,tag,"summary",summary,MAX_SUMMARY)
+				_need_lines(errors,warns,tag,lines)
+				_need(errors,tag,"completion",completion,MAX_COMPLETION)
 			KIND_RESIDENT_INTRODUCTION, KIND_TUTORIAL_DIALOGUE:
 				_need_lines(errors,warns,tag,lines)
 			KIND_TRADE_OFFER:

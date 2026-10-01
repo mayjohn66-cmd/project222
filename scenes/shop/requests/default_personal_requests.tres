@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CommunityRequestSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/community_request_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+requests = Array[Dictionary]([
+{"id":"naru_provisions","resident":"naru","friendship":3,"requirements":[{"item":"bread","amount":3}],"reputation":1,"money":30},
+{"id":"doyun_water","resident":"doyun","friendship":3,"requirements":[{"item":"water","amount":3}],"reputation":1,"money":30},
+{"id":"sora_herbs","resident":"sora","friendship":3,"requirements":[{"item":"forest_herb","amount":2}],"reputation":1,"money":30}
+])

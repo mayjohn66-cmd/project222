@@ -9,7 +9,7 @@ var previous_paused := false
 var previous_physics := true
 var elapsed := 0.0
 
-func create_panel() -> CommunityBoardPanel: return CommunityBoardPanel.new()
+func create_panel() -> CommunityBoardPanel: return VillageRequestsPanel.new()
 func modal_key() -> String: return "community_board_open"
 
 func _ready() -> void:
@@ -75,6 +75,17 @@ func try_interact() -> bool:
 
 func _on_action(id: String) -> void:
 	if not open: return
+	if id.begins_with("personal:"):
+		var personal_id := id.trim_prefix("personal:")
+		if not PersonalRequestFlow.accepted(personal_id):
+			if PersonalRequestFlow.accept(personal_id): panel.message.text = "개인 부탁을 맡았습니다. 기한 없이 준비한 뒤 게시판에서 전달하세요."
+		else:
+			var result := PersonalRequestFlow.deliver(personal_id)
+			if not result.is_empty():
+				panel.message.text = "%s 평판 +%d · %d G" % [result["completion"],result["reputation"],result["money"]]
+				manager.customer_spawner.refresh_spawn_interval()
+		panel.refresh()
+		return
 	if not CommunityRequestFlow.accepted(id):
 		if CommunityRequestFlow.accept(id): panel.message.text = "부탁을 맡았습니다. 준비되면 이 게시판에서 전달하세요."
 	else:

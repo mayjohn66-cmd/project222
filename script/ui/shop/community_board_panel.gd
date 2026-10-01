@@ -96,7 +96,7 @@ func display() -> void:
 
 func refresh() -> void:
 	count_label.text = "공동 부탁 %d/%d 완료 · 마을 평판 %d" % [CommunityRequestFlow.completed_count(), CommunityRequestFlow.SETTINGS.requests.size(), ResidentRequestFlow.reputation()]
-	for entry in entries():
+	for entry in RequestTextData.enrich_all(CommunityRequestFlow.SETTINGS.requests, "community_request"):
 		var id := str(entry["id"])
 		var card: Dictionary = cards[id]
 		var text := str(entry["summary"]) + "\n"

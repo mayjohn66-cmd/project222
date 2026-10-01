@@ -129,6 +129,11 @@ static func build_prompt(kind: String, sources: Dictionary) -> String:
 		var info: String = ""
 
 		match kind:
+			Tools.KIND_PERSONAL_REQUEST:
+				var resident: Dictionary = residents.get(str(d.get("resident","")),{})
+				var items: PackedStringArray = []
+				for requirement in d.get("requirements",[]): items.append(_item_name(str(requirement["item"])))
+				info = "인물: %s / 필요한 물건: %s / 정착 뒤 안부를 나눈 이웃의 개인 부탁 / 기한 없음" % [resident.get("name",d.get("resident","")),"·".join(items)]
 			Tools.KIND_RESIDENT_INTRODUCTION:
 				info = "인물: %s / 손님 유형: %s" % [d.get("npc",""), d.get("type","")]
 			Tools.KIND_TRADE_OFFER:
