@@ -13,8 +13,19 @@ func get_door_texture() -> Texture2D:
 
 @export var tile_width: float = 96.0
 @export var tile_height: float = 48.0
-# 그림 비율(기울기)은 그대로 두고 크기만 키운다. 1.0 = 그림 원본 크기(52x99).
+
+# true  = 그림이 "정면"이고 기울기·크기는 코드가 계산한다(권장).
+#         문은 마름모 한 변(가로 tile_width/2, 세로 tile_height/2 = 2:1)에 서는 평행사변형으로 그려진다.
+# false = 그림에 이미 기울기가 들어 있다(옛 방식, art_scale로 크기만 조절).
+@export var art_is_frontal: bool = true
+
+# 정면 그림용: 문이 벽면에서 차지하는 가로(타일 변보다 약간 넓게)와 세로(안쪽 벽 높이 120에 맞춤).
+@export var door_width: float = 52.0
+@export var door_height: float = 110.0
+
+# 옛 방식(art_is_frontal = false)용 배율. 1.0 = 그림 원본 크기.
 @export var art_scale: float = 1.2
+
 # 바닥 중앙 기준 위치 보정(픽셀). 양수 x = 오른쪽, 양수 y = 아래.
 @export var art_offset: Vector2 = Vector2.ZERO
 
@@ -30,6 +41,7 @@ func set_rotation_index(value: int):
 	queue_redraw()
 
 
+# 옛 방식: 그림 원본 크기 x art_scale 직사각형, 바닥 중앙 고정.
 func get_art_rect() -> Rect2:
 	var texture := get_door_texture()
 	var size := Vector2(tile_width * 0.5 + 4.0, 99.0)
@@ -39,15 +51,48 @@ func get_art_rect() -> Rect2:
 
 	size *= art_scale
 
-	# 바닥 중앙을 고정하고 위로 키운다.
 	return Rect2(
 		Vector2(-size.x * 0.5, tile_height * 0.25 - size.y) + art_offset,
 		size
 	)
 
+
+# 정면 그림: 문이 서는 벽면의 네 꼭짓점(왼쪽 위, 오른쪽 위, 오른쪽 아래, 왼쪽 아래).
+# 짝수 회전은 `\`(오른쪽이 낮음), 홀수 회전은 `/`(왼쪽이 낮음)로 기울고 그림은 뒤집지 않는다.
+func get_wall_quad() -> PackedVector2Array:
+	var half_w: float = door_width * 0.5
+	# 가로 door_width에 2:1 기울기를 맞춘 세로 이동량.
+	var drop: float = door_width * 0.5
+	var base_y: float = tile_height * 0.25
+	var left_bottom: float = base_y - drop * 0.5
+	var right_bottom: float = base_y + drop * 0.5
+
+	if rotation_index % 2 == 1:
+		var swap: float = left_bottom
+		left_bottom = right_bottom
+		right_bottom = swap
+
+	var offset := art_offset
+	return PackedVector2Array([
+		Vector2(-half_w, left_bottom - door_height) + offset,
+		Vector2(half_w, right_bottom - door_height) + offset,
+		Vector2(half_w, right_bottom) + offset,
+		Vector2(-half_w, left_bottom) + offset,
+	])
+
+
 func _draw():
 	var texture := get_door_texture()
 	if texture == null:
+		return
+
+	if art_is_frontal:
+		draw_polygon(
+			get_wall_quad(),
+			PackedColorArray([Color.WHITE]),
+			PackedVector2Array([Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1)]),
+			texture
+		)
 		return
 
 	var rect := get_art_rect()
