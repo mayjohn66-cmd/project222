@@ -16,7 +16,9 @@ extends Node
 ##   if result.ok: print(result.text) else: push_error(result.error)
 
 const ENDPOINT: String = "https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent"
-const DEFAULT_MODEL: String = "gemini-2.5-flash"   # ❓ 확인 필요: 사용 가능한 모델은 AI Studio에서 보고 GEMINI_MODEL로 바꾼다
+# 2026-10-01 웹 검색 확인: 2.5 계열은 9/18부터 기존 사용자만 접근 가능, 새 프로젝트에는 3.8 Flash(또는 3.5 Flash-Lite) 권장.
+# 모델 이름은 자주 바뀌므로 AI Studio에서 확인하고 GEMINI_MODEL 환경 변수로 바꾼다.
+const DEFAULT_MODEL: String = "gemini-3.8-flash"
 const ENV_KEY: String = "GEMINI_API_KEY"
 const ENV_MODEL: String = "GEMINI_MODEL"
 const SETTING_KEY: String = "gemini/api_key"
