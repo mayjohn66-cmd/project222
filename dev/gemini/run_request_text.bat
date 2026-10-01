@@ -22,6 +22,9 @@ if not exist "%GODOT_EXE%" (
   exit /b 2
 )
 
+rem Refresh Godot's global class cache first (new class_name scripts pulled from git are unknown until then).
+echo Refreshing Godot project cache (first run takes a while)...
+"%GODOT_EXE%" --headless --path "%CD%" --import >nul 2>&1
 set "MODE=%~1"
 if "%MODE%"=="" set "MODE=draft"
 

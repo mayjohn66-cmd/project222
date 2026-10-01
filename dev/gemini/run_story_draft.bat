@@ -25,6 +25,9 @@ if "%GEMINI_API_KEY%"=="" (
   exit /b 2
 )
 
+rem Refresh Godot's global class cache first (new class_name scripts pulled from git are unknown until then).
+echo Refreshing Godot project cache (first run takes a while)...
+"%GODOT_EXE%" --headless --path "%CD%" --import >nul 2>&1
 set "TOPIC=%~1"
 set "COUNT=%~2"
 if "%TOPIC%"=="" set "TOPIC=first customer talk"
