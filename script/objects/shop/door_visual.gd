@@ -1,7 +1,7 @@
 @tool
 extends Node2D
 
-static var ART: Texture2D = ArtLoader.load_texture("res://art/world/shop_entrance_door_iso.png")
+static var ART: Texture2D = ArtLoader.load_texture("res://art/world/shop_entrance_door_front.png")
 static var WAREHOUSE: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v6/warehouse_door.png")
 static var PRODUCTION: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v8/production_door.png")
 @export_enum("entrance", "warehouse", "production") var door_kind: String = "entrance"

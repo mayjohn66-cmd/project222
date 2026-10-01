@@ -43,11 +43,12 @@
 | `feature/economy-balance` | `data/` 수치, 비밀 상인 판매 목록, 손님 소분류, 장비·제작 밸런스, `tools/check_*.py` | Claude | 지금까지의 Claude 데이터 작업(통합 브랜치에 있음) |
 | 통합 브랜치 `claude/large-file-refactor-plan-52hp51` | 위 기능이 완성되어 합쳐지는 곳, 문서(`docs/`) | 모두 | 문서 수정은 기능 브랜치를 따로 만들지 않고 여기서 직접 |
 
-**현재 상태(Claude 확인)**
-- ChatGPT의 `gpt/progressive-npc-tutorial`은 이전 `gpt/` 브랜치들(원정 타일, 수동 결제, 개입)을 이미 모두 포함한 **단일 통합 브랜치**입니다(커밋 20개, 통합 브랜치보다 앞섬).
-- 통합 브랜치에 시험 병합(커밋하지 않고 취소)을 해 보니 **충돌 없이 합쳐집니다**(`AI_소통.md`, `door_visual.gd` 자동 병합). 단 사용자 확인 전이라 **실제 병합은 하지 않았습니다**(합치는 것은 사용자 결정, 규칙 2장).
-- 병합 후 기능 브랜치를 만들면 네 브랜치가 모두 같은 지점에서 출발해 갈라질 일이 없습니다. 병합 전에 만들면 ChatGPT 작업이 빠진 채 갈라집니다. **그래서 기능 브랜치 생성은 병합 결정 뒤에 합니다.**
-- 병합 뒤 알려진 후속 작업(`feature/world-doors`): ChatGPT가 연결한 문 그림 `shop_entrance_door_iso.png`는 이미 기울어 있어서 코드가 기울이는 새 방식(`art_is_frontal` 기본 켬)과 겹칩니다. 같은 폴더의 `shop_entrance_door_front.png`(정면)를 쓰거나 `art_is_frontal`을 끄면 됩니다. 어느 쪽으로 할지는 문 담당이 정합니다.
+**현재 상태 (2026-10-01, 사용자 승인으로 병합·분리 완료)**
+- `gpt/progressive-npc-tutorial`(이전 `gpt/` 브랜치 8개를 모두 포함한 단일 통합 브랜치)을 통합 브랜치에 **병합했습니다**(충돌 없음). 다른 `gpt/…` 브랜치는 전부 이 브랜치의 조상이라 함께 병합된 셈입니다.
+- 병합 뒤 검증: import 2회차 오류 0, `check_godot` 331개 로드 실패 0, `check_expedition_run` 종료 0, `check_direct_expedition`·`check_direct_room_lifecycle`·`check_direct_expedition_run` 실패 0, `check_isometric_room`·`check_manual_checkout`·`check_progressive_tutorial`·`check_checkout_event` 실패 0.
+- 문: 병합으로 들어온 `shop_entrance_door_iso.png`(이미 기울어 있음)는 새 방식(코드가 기울임)과 겹쳐서, 매장 출입문은 정면 그림 `shop_entrance_door_front.png`(52×112)를 쓰도록 바꿨습니다. 창고·생산실 문은 아직 옛 임시 그림입니다.
+- 위 4개 **기능 브랜치를 통합 브랜치의 같은 지점에서 만들었습니다**: `feature/world-doors`, `feature/expedition-rooms`, `feature/npc-tutorial`, `feature/economy-balance`. 이전 `gpt/…` 브랜치 9개는 **삭제하지 않았습니다**(삭제는 사용자 승인 사항). 더 이상 올리지 않습니다.
+- 확인하지 못한 것: 사람이 직접 플레이한 확인(튜토리얼 흐름, 문 크기·위치, 방 전투), 병합 뒤 Godot 에디터에서의 화면.
 
 **ChatGPT에게**: 작업을 시작하기 전에 위 표에서 기능을 고르고(없으면 한 줄 추가), 5장 ChatGPT 항목에 `기능 브랜치` 이름을 적어 주세요. `gpt/…` 브랜치에는 더 올리지 말아 주세요. 정리(삭제)는 사용자 승인 후 Claude가 계획을 만들어 보여 줍니다.
 
