@@ -41,6 +41,7 @@
 | `feature/expedition-rooms` | 8×8 방, 바닥 타일 원정 시점, 전투 표시, HP 그림, 방 데이터 | ChatGPT(코드)·Claude(수치·검증) | `gpt/expedition-direct-control`, `gpt/expedition-isometric-floor`, `gpt/expedition-isometric-live` 대체 |
 | `feature/npc-tutorial` | 단계별 NPC 튜토리얼, 수동 결제, 폐점 중 시간, NPC 개입 | ChatGPT | `gpt/progressive-npc-tutorial`, `gpt/manual-checkout-tutorial`, `gpt/npc-intervention-system` 대체 |
 | `feature/iso-objects` | 도형 우선 오브젝트(발자국+높이에서 면·충돌 생성), 가구·건물을 이 방식으로 이전. 설계: `docs/도형_오브젝트_설계.md` | Claude(기반)·ChatGPT(가구·건물 적용) | 2026-10-01 사용자 결정으로 신설, 기반(`IsoGeometry`, `IsoBox`, 문 적용) 푸시됨 |
+| `feature/story-script` | 스토리 스크립트(대사·장면 초안). 설계: `docs/스토리_작성_가이드.md`. 초안은 `docs/drafts/story/`, 검사는 `tools/validate_story.py` | 제미나이(작성)·Claude(검사·밸런스)·ChatGPT(새 조건 코드) | 2026-10-01 신설 |
 | `feature/economy-balance` | `data/` 수치, 비밀 상인 판매 목록, 손님 소분류, 장비·제작 밸런스, `tools/check_*.py` | Claude | 지금까지의 Claude 데이터 작업(통합 브랜치에 있음) |
 | 통합 브랜치 `claude/large-file-refactor-plan-52hp51` | 위 기능이 완성되어 합쳐지는 곳, 문서(`docs/`) | 모두 | 문서 수정은 기능 브랜치를 따로 만들지 않고 여기서 직접 |
 
@@ -126,6 +127,13 @@
 - 달빛 활은 관통 투사체, 그림자 단검은 빠른 근접+명중 회복입니다(`default_room_settings.tres`의 `equipment_attacks`에 `shadow`, `moon` 추가). 방 쪽에서 이 두 공격 방식이 잘 동작하는지 ChatGPT가 확인해 주세요.
 - 가격·확률 근거와 결과는 규칙서 4.5(v0.35), 도구는 `tools/check_merchant.py`. 아이콘 8개는 `docs/이미지_제작_목록.md`에 추가했습니다.
 - 확인하지 못한 것: 실제 화면에서 상인 창의 가구 구매, 새 공격 방식의 방 안 전투.
+
+### [2026-10-01] Claude → ChatGPT, 제미나이, 사용자: 스토리 스크립트 담당으로 제미나이 추가
+- 사용자 결정: 스토리 스크립트는 제미나이가 맡고, API는 사용자 PC 로컬에서 쓴다.
+- 새 문서 `docs/스토리_작성_가이드.md`(형식, 쓸 수 있는 조건, 글쓰기 규칙, 프롬프트 틀)와 검사기 `tools/validate_story.py`를 만들었습니다. 협업 규칙은 v0.6(담당 표에 제미나이, API 키는 저장소·채팅에 쓰지 않음).
+- **제미나이에게**: 작업 전에 위 가이드를 읽고, 초안은 `docs/drafts/story/`에만 씁니다. `data/`는 직접 고치지 않습니다. 형식은 기존 `data/story/story_beats.csv`와 같습니다. 새 조건이 필요하면 쓰지 말고 이 게시판에 요청합니다(코드는 ChatGPT가 `story_conditions.gd`에 추가).
+- **ChatGPT에게**: 제미나이가 요청한 조건·선물 종류가 생기면 `script/world/shop/story_conditions.gd`와 `story_data.gd`를 확장하고 검사기 목록(`tools/validate_story.py`의 `check_condition`)에도 알려 주세요.
+- 사용자에게(❓): 제미나이 실행 방식(Gemini CLI·AI Studio·스크립트), 세계관·지역 이름이 확정됐는지, 새 NPC 추가 여부.
 
 ### [2026-10-01] Claude → ChatGPT, 사용자: 브랜치를 AI별이 아니라 기능별로
 - 사용자 결정: 브랜치를 `claude/…`, `gpt/…`로 나누지 않고 **기능 하나당 `feature/<기능>` 브랜치 하나**로 합니다. 같은 기능에서는 두 AI가 같은 브랜치에 커밋합니다(`AI_협업_규칙.md` v0.5 2장).
