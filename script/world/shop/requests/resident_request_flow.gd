@@ -12,9 +12,24 @@ static func tutorial_finished() -> bool:
 
 static func current() -> Dictionary:
 	if not tutorial_finished(): return {}
+	var base_request: Dictionary = {}
 	for request in SETTINGS.requests:
-		if not done(str(request["id"])): return request
-	return {}
+		if not done(str(request["id"])):
+			base_request = request
+			break
+	# 이미 받은 부탁은 새 손님 등장 때문에 숨기지 않는다.
+	if not base_request.is_empty() and accepted(str(base_request["id"])): return base_request
+	var settlement := ResidentStoryFlow.current_request()
+	return settlement if not settlement.is_empty() else base_request
+
+static func total_completed_count() -> int:
+	var count := completed_count()
+	for request in ResidentStoryFlow.SETTINGS.settlement_requests:
+		if done(str(request["id"])): count += 1
+	return count
+
+static func total_request_count() -> int:
+	return SETTINGS.requests.size() + ResidentStoryFlow.SETTINGS.settlement_requests.size()
 
 static func done(id: String) -> bool:
 	return PlayerProgress.story_beat_days.has(PREFIX + id + ":done")

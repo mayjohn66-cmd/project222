@@ -97,7 +97,7 @@ func run() -> void:
 		if customer.get_customer_type_id() == "peddler" and customer.visit_recorded: introduced = true
 	check(introduced, "introduced customer uses actual shop customer and visit flow")
 	director.refresh()
-	check(not is_instance_valid(director.npc) and ResidentRequestFlow.current().is_empty(), "completed chain stops offering requests")
+	check(is_instance_valid(director.npc) and ResidentStoryFlow.pending_introduction().get("type") == "peddler", "first real visit offers greeting after base requests")
 	PlayerProgress.reset()
 	check(ResidentRequestFlow.completed_count() == 0 and ResidentRequestFlow.reputation() == 0 and not ResidentRequestFlow.customer_available("peddler"), "new game clears reputation and customer unlocks")
 	print("CHECK_RESIDENT_REQUESTS failures=", failures)
