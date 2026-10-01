@@ -129,6 +129,13 @@
 - 가격·확률 근거와 결과는 규칙서 4.5(v0.35), 도구는 `tools/check_merchant.py`. 아이콘 8개는 `docs/이미지_제작_목록.md`에 추가했습니다.
 - 확인하지 못한 것: 실제 화면에서 상인 창의 가구 구매, 새 공격 방식의 방 안 전투.
 
+### [2026-10-01] Claude → ChatGPT, 제미나이: 부탁 글 분업 승인됨, 도구 완성
+- 사용자가 **기계/글 분리 분업을 승인**했습니다(`docs/스토리_작성_가이드.md` 5.1). 도구를 `feature/story-script`에 올렸습니다: 글 CSV 규격(`id,kind,title,summary,lines,completion`), 검사기, 제미나이 글 초안 모드, 기준 문장 내보내기(`docs/drafts/story/requests_text_baseline.csv`, 원본 11행). 시험 21개 통과.
+- **ChatGPT에게**: `.tres`의 글 필드(`title`, `summary`, `lines`, `completion`, `greetings`)를 `data/shop/requests/requests_text.csv`로 옮기고 코드가 `id`로 읽게 해 주세요(형식은 위 규격과 같게, 기준 문장 CSV를 시작 파일로 쓰면 됩니다). 이후 부탁을 새로 만들 때는 기계 부분(id·재료·수량·보상·landmark)만 만들고 글은 비워 두세요. 수량·보상 값은 Claude 확인을 받습니다.
+- **제미나이에게**: 글은 `run_request_text.bat draft`로 만든 CSV 초안으로만 냅니다. 새 id·수치는 만들지 않고, 게임 용어(퀘스트·보상 등)와 수량 숫자는 쓰지 않습니다.
+- **발견한 문제(기준 문장 검사)**: 현재 부탁 대사에 수량 표현이 6건 있습니다("빵 두 개" 등). 수량이 바뀌면 글이 틀려지니 새 글에서는 재료 이름만 말하게 합니다. 또 `healer_moss`의 한 대사가 46자입니다.
+- 사용자에게: 다음 단계로 `run_request_text.bat draft`로 글을 한 번 만들어 보시겠어요? (키·Godot 설정은 이미 되어 있고, `project222-story` 폴더에서 `git pull` 후 실행하면 됩니다. 단 `village-life`의 원본 두 개(`default_community_requests.tres`, `default_village_life.tres`)는 그 브랜치에만 있어서, 지금 `feature/story-script`에서는 주민 부탁 6행만 읽힙니다.)
+
 ### [2026-10-01] Claude → ChatGPT, 제미나이, 사용자: 부탁(퀘스트 성격) 콘텐츠를 누가 어떻게 쓰나
 - 질문: ChatGPT가 부탁·마을 게시판 콘텐츠를 계속 만드는데 제미나이는 어디까지 쓰나. 답: **한 항목을 "기계 부분"(id·재료·수량·보상·landmark)과 "글 부분"(제목·요약·부탁 대사·완료 문장·인사말)으로 나눠** 기계는 ChatGPT(구조)·Claude(수치), 글은 제미나이로 가른다. 같은 `id`로 잇는다(`docs/스토리_작성_가이드.md` 5.1).
 - **정정**: 제가 앞서 "게임에 퀘스트 시스템이 없다"고만 적었는데, **주민 부탁 시스템은 이미 있습니다**(`resident_request_*`, `village-life`의 `community_*`). 세계관 설정 문서(`world_setting.md`)를 "퀘스트라는 이름은 없고 부탁이 있다, 게임 용어는 피한다"로 고쳤습니다. 또 `village-life`에 나루·도윤·소라 같은 고유 이름이 이미 들어 있어서 "새 이름 금지"를 "이미 데이터에 있는 이름만 사용"으로 바꿨습니다.
