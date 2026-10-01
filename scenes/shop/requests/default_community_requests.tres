@@ -4,5 +4,6 @@
 script = ExtResource("1")
 requests = Array[Dictionary]([
 {"id":"path_light", "resident":"naru", "friendship":1, "title":"길목에 작은 등불", "summary":"노점 주변에 등불을 놓을 재료를 준비합니다.", "requirements":[{"item":"dry_branch", "amount":5}], "reputation":1, "money":40, "landmark":"VillageGathering/MarketLantern", "landmark_name":"길목 등불", "completion":"길목에 작은 등불을 마련했습니다."},
-{"id":"flower_corner", "resident":"doyun", "friendship":3, "after":"path_light", "title":"함께 꾸미는 꽃자리", "summary":"첫 집 주변에 작은 꽃자리를 꾸밀 재료를 준비합니다.", "requirements":[{"item":"forest_herb", "amount":3}], "reputation":1, "money":50, "landmark":"VillageGathering/EastFlowerBed", "landmark_name":"마을 꽃자리", "completion":"마을에 작은 꽃자리를 마련했습니다."}
+{"id":"flower_corner", "resident":"doyun", "friendship":3, "after":"path_light", "title":"함께 꾸미는 꽃자리", "summary":"첫 집 주변에 작은 꽃자리를 꾸밀 재료를 준비합니다.", "requirements":[{"item":"forest_herb", "amount":3}], "reputation":1, "money":50, "landmark":"VillageGathering/EastFlowerBed", "landmark_name":"마을 꽃자리", "completion":"마을에 작은 꽃자리를 마련했습니다."},
+{"id":"open_smithy", "resident":"doyun", "friendship":7, "after":"flower_corner", "title":"이웃을 위한 작은 대장간", "summary":"도윤이 장비를 만들 작업장을 마련하도록 철광석과 돌을 준비합니다. 문을 열면 대장간 근처에서 [E]로 배운 장비 제작법을 이용할 수 있어요.", "requirements":[{"item":"iron_ore", "amount":5},{"item":"stone_shard", "amount":4}], "reputation":1, "money":60, "landmark":"VillageBlacksmith/Smithy", "landmark_name":"대장간 장비 제작", "completion":"마을 대장간이 문을 열었습니다. 대장간 근처에서 [E]로 장비를 만들어 보세요."}
 ])
