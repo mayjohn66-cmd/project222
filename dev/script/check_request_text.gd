@@ -86,6 +86,8 @@ func _run() -> void:
 	_check("행상인 나루" in cprompt and "길목 등불" in cprompt, "게시판 프롬프트에 주민 이름과 완성 장소")
 	_check(Runner.clean_rows("```csv\nid,kind,title,summary,lines,completion\na,b,c,,d,e\n```\n") == "a,b,c,,d,e\n", "코드블록·머리글 제거")
 	_check(Runner.BASE_PROMPT.contains("새 id를 만들거나 빼지 않는다"), "기본 지침에 id 고정 규칙")
+	_check(Runner.BASE_PROMPT.contains("다시 말을 걸기") and Runner.BASE_PROMPT.contains("가지러 올게"), "기본 지침에 플레이어 행동 유지 규칙")
+	_check(Runner.BASE_PROMPT.contains("말투(반말/존댓말)"), "기본 지침에 말투 일관 규칙")
 
 	# 수정 요청 조립
 	var result := {"errors": ["a.csv:2 [x] lines 한 칸이 48자(최대 45)"], "warns": ["a.csv:3 [y] 수량 표현 '한 병' 이 있음", "a.csv:4 [z] completion 한 칸이 46자(권장 45 이하)", "a.csv:5 [w] 원본 파일이 없어 id를 확인하지 못함"]}
