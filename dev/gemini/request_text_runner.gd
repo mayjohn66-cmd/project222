@@ -16,6 +16,10 @@ const OUT_DIR: String = "res://docs/drafts/story"
 # 검사에서 오류나 수량 표현이 걸리면 그 내용을 제미나이에게 돌려보내 고치게 한다(최대 횟수).
 const MAX_REPAIRS: int = 2
 
+# 한 번에 제미나이에게 맡기는 항목 수. 작을수록 503(과부하)에 덜 걸리고 항목마다 구조가 달라진다.
+# 바꾸려면 --chunk <수>.
+const DEFAULT_CHUNK_SIZE: int = 2
+
 const BASE_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임의 글 작가다. 이미 있는 항목의 "글"만 새로 쓴다. 설명·머리말·코드블록 표시 없이 CSV 행만 출력한다.
 - 열: id,kind,title,summary,lines,completion (쉼표 구분. 칸 안에 쉼표가 있으면 그 칸 전체를 큰따옴표로 감싼다)
 - 준 항목마다 정확히 한 행. id와 kind는 내가 준 그대로 쓴다. 새 id를 만들거나 빼지 않는다.
@@ -110,6 +114,8 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 		FileAccess.get_file_as_string(StoryGen.WORLD_SETTING_PATH) if FileAccess.file_exists(StoryGen.WORLD_SETTING_PATH) else ""
 	)
 	var rows_text: PackedStringArray = []
+	var failed_ids: Array[String] = []
+	var chunk_size: int = maxi(1, int(_arg("--chunk")) if not _arg("--chunk").is_empty() else DEFAULT_CHUNK_SIZE)
 
 	for kind in Tools.KINDS:
 		if not only_kind.is_empty() and only_kind != kind:
@@ -119,15 +125,30 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 			print("[부탁 글] %s: 대상이 없어 건너뜀" % kind)
 			continue
 
-		print("[부탁 글] %s %d개 요청 중 / 모델: %s" % [kind, targets[kind].size(), GeminiClient.find_model()])
-		var result: Dictionary = await client.generate(build_prompt(kind, targets, sources), system_prompt)
+		var chunks: Array = chunk_ids(targets[kind].keys(), chunk_size)
+		print("[부탁 글] %s %d개를 %d묶음으로 나눠 요청 / 모델: %s" % [kind, targets[kind].size(), chunks.size(), GeminiClient.find_model()])
 
-		if not bool(result["ok"]):
-			push_error("[부탁 글] 실패(%s): %s" % [kind, str(result["error"])])
-			client.queue_free()
-			return {"ok": false, "path": "", "result": {}, "made": false}
+		for i in range(chunks.size()):
+			var part: Dictionary = targets.duplicate()
+			var subset: Dictionary = {}
 
-		rows_text.append(clean_rows(str(result["text"])))
+			for id in chunks[i]:
+				subset[id] = targets[kind][id]
+
+			part[kind] = subset
+			print("[부탁 글] %s 묶음 %d/%d: %s" % [kind, i + 1, chunks.size(), ", ".join(chunks[i])])
+			var result: Dictionary = await client.generate(build_prompt(kind, part, sources), system_prompt)
+
+			if not bool(result["ok"]):
+				push_error("[부탁 글] 묶음 실패(%s %d/%d): %s" % [kind, i + 1, chunks.size(), str(result["error"])])
+				failed_ids.append_array(chunks[i])
+				continue
+
+			rows_text.append(clean_rows(str(result["text"])))
+
+	if rows_text.is_empty():
+		client.queue_free()
+		return {"ok": false, "path": "", "result": {}, "made": false}
 
 	var csv_text: String = Tools.csv_line(Tools.COLUMNS) + "\n" + "".join(rows_text)
 	var stamp: String = Time.get_datetime_string_from_system().replace(":", "").replace("-", "").replace("T", "_")
@@ -161,8 +182,23 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 		result = Tools.validate_file(path, sources)
 
 	_print_result(path, result)
+
+	if not failed_ids.is_empty():
+		print("[부탁 글] 실패한 항목(초안에 없음, 나중에 다시 실행): ", ", ".join(failed_ids))
+
 	client.queue_free()
-	return {"ok": result["errors"].is_empty(), "path": path, "result": result, "made": true}
+	return {"ok": result["errors"].is_empty() and failed_ids.is_empty(), "path": path, "result": result, "made": true}
+
+
+# id 목록을 size개씩 묶는다.
+static func chunk_ids(ids: Array, size: int) -> Array:
+	var out: Array = []
+	var step: int = maxi(1, size)
+
+	for i in range(0, ids.size(), step):
+		out.append(ids.slice(i, i + step))
+
+	return out
 
 
 # 고치게 할 문제: 모든 오류와, 글이 틀려지기 쉬운 수량 표현 주의.

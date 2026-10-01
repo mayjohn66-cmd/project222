@@ -88,6 +88,9 @@ func _run() -> void:
 	_check(Runner.BASE_PROMPT.contains("새 id를 만들거나 빼지 않는다"), "기본 지침에 id 고정 규칙")
 	_check(Runner.BASE_PROMPT.contains("다시 말을 걸기") and Runner.BASE_PROMPT.contains("가지러 올게"), "기본 지침에 플레이어 행동 유지 규칙")
 	_check(Runner.BASE_PROMPT.contains("말투(반말/존댓말)"), "기본 지침에 말투 일관 규칙")
+	var chunks: Array = Runner.chunk_ids(["a", "b", "c", "d", "e"], 2)
+	_check(chunks.size() == 3 and chunks[0] == ["a", "b"] and chunks[2] == ["e"], "항목을 2개씩 묶음")
+	_check(Runner.chunk_ids([], 2).is_empty() and Runner.chunk_ids(["a"], 0).size() == 1, "빈 목록·0 크기 처리")
 
 	# 수정 요청 조립
 	var result := {"errors": ["a.csv:2 [x] lines 한 칸이 48자(최대 45)"], "warns": ["a.csv:3 [y] 수량 표현 '한 병' 이 있음", "a.csv:4 [z] completion 한 칸이 46자(권장 45 이하)", "a.csv:5 [w] 원본 파일이 없어 id를 확인하지 못함"]}
