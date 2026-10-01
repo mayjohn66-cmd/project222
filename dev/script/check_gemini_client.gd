@@ -128,7 +128,20 @@ func _run() -> void:
 	m4.script_results = [_res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_ok()]
 	var g4: Dictionary = await m4.generate("x")
 	_check(g4["ok"] and m4.calls.size() == 7 and m4.calls[6] == "backup-model" and m4.calls[0] == "main-model", "예비 모델로 넘어가 성공")
+	var m5 := MockClient.new()
+	add_child(m5)
+	m5.retry_wait_scale = 0.0
+	m5.script_results = [_res_fail(429), _res_ok(), _res_ok()]
+	var g5: Dictionary = await m5.generate("x")
+	var g5b: Dictionary = await m5.generate("y")
+	_check(g5["ok"] and m5.calls == ["main-model", "backup-model", "backup-model"] and g5b["ok"], "429는 기다리지 않고 예비 모델로, 다음 요청도 처음부터 예비 모델")
 	OS.set_environment("GEMINI_FALLBACK_MODEL", "")
+	var m6 := MockClient.new()
+	add_child(m6)
+	m6.retry_wait_scale = 0.0
+	m6.script_results = [_res_fail(429), _res_ok()]
+	var g6: Dictionary = await m6.generate("x")
+	_check(g6["ok"] and m6.calls.size() == 2, "예비 모델이 없으면 429도 기다렸다가 다시 시도")
 	OS.set_environment("GEMINI_MODEL", "")
 
 	# CSV 정리
