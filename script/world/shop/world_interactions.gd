@@ -26,6 +26,7 @@ func blocked() -> bool:
  var world = get_parent()
  if bool(world.get_meta("checkout_tutorial_dialogue",false)): return true
  if bool(world.get_meta("progressive_tutorial_dialogue",false)): return true
+ if bool(world.get_meta("village_life_dialogue",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
  if manager.closing_shop or manager.summary_open: return true
  var menu = world.get_node_or_null("UI/GameMenu")
@@ -51,6 +52,10 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var life = get_parent().get_node_or_null("VillageLifeDirector")
+ if life != null and not life.interaction_hint().is_empty():
+  prompt.text = life.interaction_hint()
+  return
  if near_dungeon():
   prompt.text = "[E] 원정으로 출발하기"
   return
@@ -63,6 +68,8 @@ func try_interact() -> bool:
  if tutorial != null and tutorial.try_interact(): return true
  var requests = get_parent().get_node_or_null("ResidentRequestDirector")
  if requests != null and requests.try_interact(): return true
+ var life = get_parent().get_node_or_null("VillageLifeDirector")
+ if life != null and life.try_interact(): return true
  var cashier = get_parent().get_node_or_null("ManualCheckoutController")
  if cashier != null and cashier.try_interact(): return true
  if near_dungeon():
