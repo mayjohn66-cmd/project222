@@ -13,7 +13,7 @@ func get_door_texture() -> Texture2D:
 
 @export var tile_width: float = 96.0
 @export var tile_height: float = 48.0
-@export var height: float = 75.0
+@export var height: float = 116.0  # 안쪽 벽(120)에 맞춤. 그림 크기 = 52 x (height + 24)
 
 var rotation_index: int = 0
 

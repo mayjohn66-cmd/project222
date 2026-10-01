@@ -11,3 +11,7 @@ drink_machine,res://scenes/shop/production/production_facility.tscn,1,1,true,tru
 plant_small,res://scenes/shop/objects/decoration.tscn,1,1,true,true,normal,decoration,
 wall_poster,res://scenes/shop/objects/decoration.tscn,1,1,true,false,wall,decoration,
 magic_oven,res://scenes/shop/production/production_facility.tscn,2,1,true,true,normal,production_facility,
+night_lantern,res://scenes/shop/objects/decoration.tscn,1,1,true,true,normal,decoration,
+antique_cabinet,res://scenes/shop/objects/decoration.tscn,1,1,true,true,normal,decoration,
+old_world_map,res://scenes/shop/objects/decoration.tscn,1,1,true,false,wall,decoration,
+adventurer_banner,res://scenes/shop/objects/decoration.tscn,1,1,true,false,wall,decoration,

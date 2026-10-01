@@ -167,7 +167,7 @@ func basic_attack() -> bool:
 	return true
 
 func _hit_enemy(enemy: Dictionary, direction: Vector2) -> void:
-	var damage: int = mini(int(enemy["hp"]), maxi(1, player_attack - int(enemy["defense"])))
+	var damage: int = mini(int(enemy["hp"]), ExpeditionDamage.calculate(player_attack, int(enemy["defense"])))
 	enemy["hp"] = maxi(0, int(enemy["hp"]) - damage)
 	enemy["position"] = move_actor(enemy["position"], direction * attack_profile.knockback)
 	player_hp = mini(player_max_hp, player_hp + roundi(damage * attack_profile.heal_fraction))
@@ -212,7 +212,7 @@ func _step_enemy(enemy: Dictionary, delta: float) -> void:
 			enemy["cooldown"] = settings.enemy_cooldown
 			if player_position.distance_to(enemy["target"]) <= reach and hurt_remaining <= 0.0 \
 					and not _wall_between(enemy["position"], player_position):
-				var damage: int = maxi(1, int(enemy["attack"]) - player_defense)
+				var damage: int = ExpeditionDamage.calculate(int(enemy["attack"]), player_defense)
 				player_hp = maxi(0, player_hp - damage)
 				hurt_remaining = settings.hurt_grace
 				interacting = false

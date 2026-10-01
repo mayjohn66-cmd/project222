@@ -125,6 +125,7 @@ func _make_row(
 	var item_id: String = str(offer["item_id"])
 	var price: int = int(offer["price"])
 	var stock: int = int(offer["stock"])
+	var is_furniture: bool = str(offer.get("kind", "item")) == "furniture"
 
 	var row := HBoxContainer.new()
 	row.add_theme_constant_override("separation", 12)
@@ -134,11 +135,15 @@ func _make_row(
 	icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	icon.texture = ItemData.get_item_icon(item_id)
+	icon.texture = (
+		FurnitureData.get_furniture_icon(item_id)
+		if is_furniture
+		else ItemData.get_item_icon(item_id)
+	)
 	row.add_child(icon)
 
 	var name_label := Label.new()
-	name_label.text = ItemData.get_item_name(item_id)
+	name_label.text = _get_offer_name(offer)
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	name_label.add_theme_font_size_override("font_size", 20)
 	name_label.add_theme_color_override("font_color", Color(0.96, 0.93, 0.85))
@@ -180,8 +185,23 @@ func _on_buy_pressed(
 		message_label.text = "돈이 모자라는군."
 		return
 
-	GameState.add_item(item_id, 1)
+	if str(offer.get("kind", "item")) == "furniture":
+		GameState.add_furniture(item_id, 1)
+	else:
+		GameState.add_item(item_id, 1)
+
 	offer["stock"] = int(offer["stock"]) - 1
 
-	message_label.text = "%s, 잘 골랐네." % ItemData.get_item_name(item_id)
+	message_label.text = "%s, 잘 골랐네." % _get_offer_name(offer)
 	_refresh()
+
+
+func _get_offer_name(
+	offer: Dictionary
+) -> String:
+	var item_id: String = str(offer["item_id"])
+
+	if str(offer.get("kind", "item")) == "furniture":
+		return FurnitureData.get_furniture_name(item_id)
+
+	return ItemData.get_item_name(item_id)

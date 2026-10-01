@@ -108,16 +108,15 @@ func process_tick():
 	if not host.battle_active:
 		return
 
-	var damage_to_enemy: int = max(
-		1,
-		host.combat_player_attack
-		- host.combat_enemy_defense
+	# 피해 계산식은 방 전투와 같다(ExpeditionDamage: 공격² ÷ (공격 + 방어)).
+	var damage_to_enemy: int = ExpeditionDamage.calculate(
+		host.combat_player_attack,
+		host.combat_enemy_defense
 	)
 
-	var damage_to_player: int = max(
-		1,
-		host.combat_enemy_attack
-		- host.combat_player_defense
+	var damage_to_player: int = ExpeditionDamage.calculate(
+		host.combat_enemy_attack,
+		host.combat_player_defense
 	)
 
 	# 같은 1초 안에 서로 동시에 피해

@@ -97,3 +97,7 @@ scroll_miner_helmet,광부 투구 제작법,special,etc,0,1,1,false,false,res://
 scroll_marsh_boots,늪 장화 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,늪 장화을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
 scroll_iron_plate,철판 갑옷 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_3.png,철판 갑옷을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,3
 scroll_rune_mail,룬 갑옷 제작법,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,룬 갑옷을(를) 만드는 법이 적힌 두루마리다. 사용하면 레시피를 배운다.,0,0,bag,expedition,2
+shadow_dagger,그림자 단검,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/shadow_dagger.png,"밤에만 나타나는 상인이 파는 단검이다. 아주 빠르게 찌르고, 벨 때마다 기운을 빨아들인다.",6,0,bag,expedition,2
+moon_bow,달빛 활,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1/moon_bow.png,달빛처럼 하얀 화살이 날아가 일렬로 선 적 둘을 꿰뚫는다.,10,0,bag,expedition,2
+night_cloak,심야의 망토,equipment,tool,0,2,1,false,false,res://art/items/pixel_v1/night_cloak.png,밤하늘색 망토다. 어둠 속에서도 공격을 잘 흘려 보낸다.,0,6,bag,expedition,2
+starlight_boots,별빛 장화,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/starlight_boots.png,걸을 때마다 은은한 별빛이 남는 가벼운 장화다.,0,3,bag,expedition,2
