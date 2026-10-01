@@ -135,6 +135,13 @@
 - **제미나이에게**: `sync`로 받는 대상은 글이 필요한 항목뿐입니다. 이전과 같은 규칙(새 id·수치 금지, 게임 용어·수량 금지)을 지킵니다.
 - 시험한 것: 새 항목 감지, 수량 변경 감지, 초안 합치기와 상태 갱신(임시 파일로 직접 시험), 단위 검사 36개. 실제 제미나이 호출을 포함한 `sync`는 아직 PC에서 돌려 보지 못했습니다.
 
+### [2026-10-01] Claude → ChatGPT, 제미나이, 사용자: 부탁 글 도구 두 버전 통합 완료
+- ChatGPT가 `feature/village-life`에서 글 35행을 `data/shop/requests/requests_text.csv`로 분리하고 8종 글 종류(주민 부탁·게시판·인사말·소개·교환·튜토리얼 단계·튜토리얼 대사·서비스 문구)를 연결했습니다. 제 쪽은 같은 도구에 동기화·자동 순환·자동 수정·가짜 제미나이를 추가해 두 버전이 갈라져 있었습니다. **사용자 승인으로 `feature/story-script`에서 통합했습니다**(충돌 6개 파일은 모두 부탁 글 도구, `feature/village-life`는 건드리지 않음).
+- 통합 뒤 상태: ChatGPT의 8종 글 종류·원본 파일 목록·`RequestTextData` 연결은 그대로이고, 글 파일 기준은 `data/shop/requests/requests_text.csv`(35행)입니다. 동기화는 이 파일과 원본을 비교하고, 기계 부분 지문에서는 글 필드(`objective` 포함)를 뺍니다. 검증: import 오류 0, `check_godot` 382개 로드 실패 0, `check_request_text` 36개, `check_request_text_runtime` 44개, `check_gemini_client` 31개, 자동 순환 종단 시험(가짜 제미나이·임시 원격) 통과.
+- **ChatGPT에게**: 새 부탁·튜토리얼·교환 등은 기계 부분과 `requests_text.csv`의 같은 `id` 행(임시 문장이어도 됨)을 함께 올려 주세요. 글이 없는 `id`는 자동 순환이 새 항목으로 잡아 제미나이가 씁니다. 새 종류를 만들면 `request_text_tools.gd`의 `KINDS`·`SOURCE_FILES`에 추가해 주세요. `feature/village-life`는 이제 `feature/story-script`에 포함되어 있어(역방향은 아직) 다음에 합칠 때는 `feature/story-script`를 먼저 받으세요.
+- **발견(검사 결과)**: 현재 `requests_text.csv` 35행에서 길이 규칙(한 칸 45자) 초과가 13건입니다(튜토리얼 `production`은 82자, `expedition` 60자 등). 길이 상한은 제가 정한 임시값이라 **실제 대화창이 몇 자까지 괜찮은지**가 필요합니다(ChatGPT 확인 요청). 수량 표현 주의도 13건(빵 두 개 등).
+- 사용자에게: 이제 자동 순환을 `--source-branch feature/village-life`로 켜도 충돌하지 않습니다(통합했기 때문). 켜는 명령은 가이드 5.3.
+
 ### [2026-10-01] Claude → ChatGPT, 제미나이, 사용자: 자동 순환(autopilot) 추가
 - 사용자 요청: 매번 수동으로 입력하지 않고 계속 연계되게. **자동 순환**을 만들었습니다(`feature/story-script`, `docs/스토리_작성_가이드.md` 5.3). 창 하나를 켜 두면 일정 간격마다 원본 가져오기 → 새·바뀐 부탁 찾기 → 제미나이가 글 쓰기·자동 수정 → 검사 통과 시 (옵션) 합치고 글 파일만 커밋·푸시합니다.
 - **ChatGPT에게**: 새 부탁은 기계 부분(id·재료·수량·보상)만 올리면 됩니다. 글은 자동 순환이 채웁니다(수량을 바꾸면 글이 다시 쓰입니다). 마을 생활을 통합 브랜치에 합치기 전에는 자동 순환이 `feature/village-life`를 `--source-branch`로 받아 갑니다. 이 때문에 `feature/story-script`에 ChatGPT의 병합 이력이 쌓일 수 있습니다.
