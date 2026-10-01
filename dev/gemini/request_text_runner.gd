@@ -299,8 +299,35 @@ func _autopilot() -> void:
 	get_tree().quit(0)
 
 
+# 풀리지 않은 병합(충돌) 상태가 남아 있으면 되돌린다. 이 폴더는 자동 순환 전용이라 병합 취소는 안전하다.
+# 반환: true = 깨끗함(계속 진행), false = 직접 확인이 필요함(이번 순환 건너뜀)
+func _ensure_clean_merge_state() -> bool:
+	var unmerged: Dictionary = _git(["diff", "--name-only", "--diff-filter=U"])
+
+	if str(unmerged["out"]).is_empty():
+		return true
+
+	print("[자동 순환] 풀리지 않은 병합 충돌이 남아 있습니다: ", str(unmerged["out"]).replace("\n", ", "))
+	var abort: Dictionary = _git(["merge", "--abort"])
+	var after: Dictionary = _git(["diff", "--name-only", "--diff-filter=U"])
+
+	if str(after["out"]).is_empty():
+		print("[자동 순환] 병합을 취소해 원래 상태로 되돌렸습니다.")
+		return true
+
+	print("[자동 순환] 자동으로 되돌리지 못했습니다(%s). 이 폴더(스토리 전용)에서 아래를 직접 실행하세요:" % str(abort["out"]).left(120))
+	print("    git status                     (무엇이 충돌인지 확인)")
+	print("    git merge --abort              (병합 중이면 취소)")
+	print("    git reset --hard origin/feature/story-script   (그래도 안 되면 원격 상태로 맞춤. 올리지 않은 변경은 사라짐)")
+	return false
+
+
 func _autopilot_round() -> void:
 	print("[자동 순환] --- %s ---" % Time.get_datetime_string_from_system())
+
+	if not _ensure_clean_merge_state():
+		return
+
 	var fetch: Dictionary = _git(["fetch", "origin"])
 
 	if int(fetch["code"]) != 0:
@@ -322,7 +349,8 @@ func _autopilot_round() -> void:
 
 		if int(merge["code"]) != 0:
 			_git(["merge", "--abort"])
-			print("[자동 순환] origin/%s 병합이 충돌해 취소했습니다. 이번 순환은 건너뜁니다: %s" % [source, str(merge["out"]).left(200)])
+			print("[자동 순환] origin/%s 병합이 충돌해 취소했습니다. 이번 순환은 건너뜁니다." % source)
+			print("    충돌 내용: ", str(merge["out"]).replace("\n", " / ").left(300))
 			return
 
 	var sources: Dictionary = Tools.load_sources()
