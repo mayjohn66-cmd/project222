@@ -52,6 +52,9 @@ const QUANTITY_PATTERN: String = "([0-9]+|한|두|세|네|다섯|여섯|일곱|�
 # AI가 쓴 티가 나는 상투 표현. 쓰면 "주의"로 알리고 자동 수정 때 다시 쓰게 한다. 새로 눈에 띄는 표현은 여기에 더한다.
 const CLICHE_PHRASES: PackedStringArray = ["덕분에", "정말 고마", "로구나", "말해 둘게", "말해 줄게", "소개해 줄게", "추천해 줄게", "소문도 내", "참 독특", "!!"]
 
+# 인물별 이름·말버릇. id(요청·인사·소개 id)로 찾는다. 열: id,name,voice
+const VOICES_PATH: String = "res://docs/drafts/story/character_voices.csv"
+
 # 여러 항목에서 같은 어구(어절 2개)가 이만큼 반복되면 주의한다. 플레이어 행동 안내("말을 걸") 칸은 세지 않는다.
 const REPEAT_ROWS: int = 3
 
@@ -124,6 +127,26 @@ static func row_from_source(kind: String, data: Dictionary) -> PackedStringArray
 			lines = "|".join(PackedStringArray(data.get("greetings", [])))
 
 	return PackedStringArray([str(data["id"]), kind, title, summary, lines, completion])
+
+
+# 반환: {id: {name, voice}}. 파일이 없으면 빈 Dictionary.
+static func load_voices(path: String = VOICES_PATH) -> Dictionary:
+	var voices: Dictionary = {}
+
+	if not FileAccess.file_exists(path):
+		return voices
+
+	var file := FileAccess.open(path, FileAccess.READ)
+	file.get_csv_line()
+
+	while not file.eof_reached():
+		var row: PackedStringArray = file.get_csv_line()
+
+		if row.size() >= 3 and not row[0].strip_edges().is_empty():
+			voices[row[0].strip_edges()] = {"name": row[1], "voice": row[2]}
+
+	file.close()
+	return voices
 
 
 # 한 줄 CSV를 칸으로 나눈다(큰따옴표 안의 쉼표와 ""를 처리).

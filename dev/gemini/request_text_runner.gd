@@ -34,6 +34,7 @@ const BASE_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임
 - 말투(반말/존댓말)는 "현재 문장"과 같게 하고, 한 문장 안에서 섞지 않는다.
 - 같은 종류의 항목들이 모두 같은 구조(감탄 → 부탁 → 소문)로 시작하지 않게 한다. 현대적인 것에 놀라는 반응은 항목 중 일부에만 넣고 나머지는 부탁과 사정을 자연스럽게 말한다.
 - 흔한 상투 표현을 피한다: "덕분에", "정말 고마워", "~로구나!", "~에게도 말해 줄게/소개해 줄게/추천해 줄게", 느낌표 연속. 감사는 그 사람이 처한 사정과 말버릇으로 다르게 표현한다(짧게 한마디, 퉁명스럽게, 걱정 섞어서 등).
+- 항목에 "말하는 사람"과 "말버릇"이 있으면 그 사람의 목소리로 쓴다. 이름은 "말하는 사람"에 적힌 것만 쓰고, 말버릇을 대사마다 억지로 드러내지 않는다(광부는 짧게, 치료사는 조심스럽게처럼 문장 호흡으로 보여 준다).
 - 같은 어구를 여러 항목에 되풀이하지 않는다. 항목마다 문장 길이와 마무리 방식을 다르게 한다."""
 
 
@@ -481,6 +482,7 @@ static func build_repair_prompt(csv_text: String, problems: Array[String]) -> St
 static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary = {}) -> String:
 	var out: PackedStringArray = ["kind = %s 인 항목들의 글을 새로 쓴다. 항목마다 한 행." % kind, ""]
 	var residents: Dictionary = (sources if not sources.is_empty() else targets).get(Tools.KIND_RESIDENT_GREETING, {})
+	var voices: Dictionary = Tools.load_voices()
 
 	for id in targets[kind].keys():
 		var d: Dictionary = targets[kind][id]
@@ -508,6 +510,11 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 				info = "부탁하는 주민: %s / 필요한 재료: %s / 완성되는 곳: %s" % [resident.get("name", d.get("resident", "")), ", ".join(names), d.get("landmark_name", "")]
 			Tools.KIND_RESIDENT_GREETING:
 				info = "이름: %s / 직업: %s / 건네는 물건: %s" % [d.get("name", ""), d.get("type", ""), _item_name(str(d.get("gift", "")))]
+
+		var voice: Dictionary = voices.get(id, {})
+
+		if not voice.is_empty():
+			info += " / 말하는 사람: %s / 말버릇: %s" % [voice["name"], voice["voice"]]
 
 		out.append("id=%s | %s" % [id, info])
 		out.append("현재 문장(참고, 같은 칸 수와 역할로 새로 쓴다): " + Tools.csv_line(current))
