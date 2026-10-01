@@ -1,6 +1,8 @@
 extends Node
 ## GeminiClient / 스토리 초안 생성기의 오프라인 검사(네트워크·API 키 불필요).
 
+const GeminiClient = preload("res://dev/gemini/gemini_client.gd")
+
 var failures: int = 0
 
 

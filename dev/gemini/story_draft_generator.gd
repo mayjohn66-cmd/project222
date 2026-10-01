@@ -7,6 +7,9 @@ extends Node
 ## 저장 뒤 반드시: python tools/validate_story.py . <저장된 파일>
 ## 형식과 규칙의 근거: docs/스토리_작성_가이드.md
 
+# class_name 등록(전역 캐시)에 기대지 않고 직접 불러온다. 새 파일은 에디터가 한 번 열기 전에는 전역 클래스로 안 잡힌다.
+const GeminiClient = preload("res://dev/gemini/gemini_client.gd")
+
 const OUT_DIR: String = "res://docs/drafts/story"
 const HEADER: String = "beat_id,npc_id,conditions,gifts,repeat_days,lines"
 

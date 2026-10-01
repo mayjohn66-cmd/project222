@@ -1,4 +1,3 @@
-class_name GeminiClient
 extends Node
 ## Google AI Studio(Gemini API) 호출 클라이언트. 개발 도구용이며 게임 본편에서는 쓰지 않는다.
 ##
