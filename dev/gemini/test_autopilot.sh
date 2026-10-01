@@ -21,6 +21,6 @@ PY
 git add -A && git commit -q -m "gpt: 새 부탁 추가" && git push -q origin gpt-sim && git switch -q feature/story-script
 "$GODOT" --headless --path . --import >/dev/null 2>&1; "$GODOT" --headless --path . --import >/dev/null 2>&1
 STORY_FAKE_GEMINI=1 "$GODOT" --headless --path . res://dev/gemini/request_text.tscn -- --mode autopilot --once --auto-accept --source-branch gpt-sim | grep "자동 순환\|검사 대상\|오류"
-git --git-dir="$TMP/origin.git" show feature/story-script:docs/drafts/story/requests_text_baseline.csv | grep -q smith_charcoal && echo "PASS: 새 부탁의 글이 원격에 올라갔다"
+git --git-dir="$TMP/origin.git" show feature/story-script:data/shop/requests/requests_text.csv | grep -q smith_charcoal && echo "PASS: 새 부탁의 글이 원격에 올라갔다"
 STORY_FAKE_GEMINI=1 "$GODOT" --headless --path . res://dev/gemini/request_text.tscn -- --mode autopilot --once --source-branch gpt-sim | grep -q "할 일이 없습니다" && echo "PASS: 두 번째 순환은 할 일이 없다"
 rm -rf "$TMP"
