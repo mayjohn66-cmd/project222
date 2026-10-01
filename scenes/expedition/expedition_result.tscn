@@ -1,20 +1,41 @@
 [gd_scene format=3 uid="uid://er61rd4wl0ei"]
 
+[ext_resource type="Script" path="res://script/ui/expedition/expedition_result_panel.gd" id="1_layout"]
+
 [node name="ResultPanel" type="PanelContainer" unique_id=387850777]
+z_index = 1001
 offset_right = 40.0
 offset_bottom = 40.0
+script = ExtResource("1_layout")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=94562516]
 layout_mode = 2
+theme_override_constants/separation = 12
 
 [node name="ResultTitleLabel" type="Label" parent="VBoxContainer" unique_id=176329148]
 layout_mode = 2
 text = "원정 결과"
+theme_override_font_sizes/font_size = 22
+horizontal_alignment = 1
 
-[node name="ResultInfoLabel" type="Label" parent="VBoxContainer" unique_id=765125406]
+[node name="ResultScroll" type="ScrollContainer" parent="VBoxContainer"]
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="ResultInfoLabel" type="Label" parent="VBoxContainer/ResultScroll" unique_id=765125406]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 18
 text = "결과"
+autowrap_mode = 3
 
 [node name="ResultConfirmButton" type="Button" parent="VBoxContainer" unique_id=1143639554]
 layout_mode = 2
+custom_minimum_size = Vector2(0, 48)
+theme_override_colors/font_color = Color(0.22, 0.13, 0.06, 1)
+theme_override_colors/font_hover_color = Color(0.22, 0.13, 0.06, 1)
+theme_override_colors/font_pressed_color = Color(0.22, 0.13, 0.06, 1)
+theme_override_colors/font_focus_color = Color(0.22, 0.13, 0.06, 1)
+theme_override_font_sizes/font_size = 20
 text = "확인"
