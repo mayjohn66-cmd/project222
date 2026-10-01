@@ -9,6 +9,7 @@ extends Node
 const Tools = preload("res://dev/gemini/request_text_tools.gd")
 const GeminiClient = preload("res://dev/gemini/gemini_client.gd")
 const StoryGen = preload("res://dev/gemini/story_draft_generator.gd")
+const FakeClient = preload("res://dev/gemini/fake_gemini_client.gd")
 
 const OUT_DIR: String = "res://docs/drafts/story"
 
@@ -45,6 +46,8 @@ func _run() -> void:
 			await _sync(sources)
 		"accept":
 			_accept(sources)
+		"autopilot":
+			await _autopilot()
 		_:
 			push_error("--mode 는 export, validate, draft 중 하나입니다.")
 			get_tree().quit(2)
@@ -83,9 +86,21 @@ func _validate(sources: Dictionary) -> void:
 
 
 func _draft(sources: Dictionary, targets: Dictionary) -> void:
-	var only_kind: String = _arg("--kind")
-	var client := GeminiClient.new()
+	var made: Dictionary = await _make_draft(sources, targets)
+	get_tree().quit(0 if bool(made["ok"]) else 1)
+
+
+func _new_client() -> Node:
+	var client: Node = FakeClient.new() if OS.get_environment("STORY_FAKE_GEMINI") == "1" else GeminiClient.new()
 	add_child(client)
+	return client
+
+
+# 대상 항목의 글 초안을 만들어 저장하고 검사·자동 수정까지 한다. 종료하지 않는다.
+# 반환: {ok(오류 없음), path, result(검사 결과), made(제미나이 호출 성공 여부)}
+func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
+	var only_kind: String = _arg("--kind")
+	var client: Node = _new_client()
 	var system_prompt: String = StoryGen.append_world_setting(
 		BASE_PROMPT,
 		FileAccess.get_file_as_string(StoryGen.WORLD_SETTING_PATH) if FileAccess.file_exists(StoryGen.WORLD_SETTING_PATH) else ""
@@ -105,8 +120,8 @@ func _draft(sources: Dictionary, targets: Dictionary) -> void:
 
 		if not bool(result["ok"]):
 			push_error("[부탁 글] 실패(%s): %s" % [kind, str(result["error"])])
-			get_tree().quit(1)
-			return
+			client.queue_free()
+			return {"ok": false, "path": "", "result": {}, "made": false}
 
 		rows_text.append(clean_rows(str(result["text"])))
 
@@ -116,7 +131,7 @@ func _draft(sources: Dictionary, targets: Dictionary) -> void:
 	_write(path, csv_text)
 	print("[부탁 글] 저장: ", path)
 
-	# 검사 → 문제가 있으면 제미나이에게 고치게 한다.
+	# 검사 → 문제가 있으면 제미나이에게 돌려보내 고치게 한다.
 	var result: Dictionary = Tools.validate_file(path, sources)
 
 	for round in range(1, MAX_REPAIRS + 1):
@@ -142,7 +157,22 @@ func _draft(sources: Dictionary, targets: Dictionary) -> void:
 		result = Tools.validate_file(path, sources)
 
 	_print_result(path, result)
-	get_tree().quit(1 if not result["errors"].is_empty() else 0)
+	client.queue_free()
+	return {"ok": result["errors"].is_empty(), "path": path, "result": result, "made": true}
+
+
+# 고치게 할 문제: 모든 오류와, 글이 틀려지기 쉬운 수량 표현 주의.
+static func _repairable(result: Dictionary) -> Array[String]:
+	var problems: Array[String] = []
+
+	for e in result["errors"]:
+		problems.append(str(e))
+
+	for w in result["warns"]:
+		if str(w).contains("수량 표현") or str(w).contains("한 칸이"):
+			problems.append(str(w))
+
+	return problems
 
 
 # 글이 없거나(새 항목) 기계 부분이 바뀐 항목을 찾아 보여 주고, --dry 가 아니면 그 항목만 제미나이에게 쓰게 한다.
@@ -191,16 +221,20 @@ func _accept(sources: Dictionary) -> void:
 		get_tree().quit(2)
 		return
 
-	var full: String = "res://" + path.trim_prefix("res://")
-	var check: Dictionary = Tools.validate_file(full, sources)
+	var done: Dictionary = _accept_file(sources, "res://" + path.trim_prefix("res://"), _arg("--into"))
+	get_tree().quit(0 if bool(done["ok"]) else 1)
+
+
+# 초안 파일을 글 CSV에 합친다. 오류가 있는 초안은 합치지 않는다. 반환: {ok, target, rows}
+func _accept_file(sources: Dictionary, full_path: String, into: String = "") -> Dictionary:
+	var check: Dictionary = Tools.validate_file(full_path, sources)
 
 	if not check["errors"].is_empty():
-		_print_result(path, check)
+		_print_result(full_path, check)
 		push_error("오류가 있는 초안은 합칠 수 없습니다.")
-		get_tree().quit(1)
-		return
+		return {"ok": false, "target": "", "rows": 0}
 
-	var file := FileAccess.open(full, FileAccess.READ)
+	var file := FileAccess.open(full_path, FileAccess.READ)
 	file.get_csv_line()
 	var rows: Array = []
 
@@ -212,35 +246,152 @@ func _accept(sources: Dictionary) -> void:
 
 	file.close()
 	var out: Dictionary = Tools.merge_draft(Tools.load_text_rows(Tools.text_path()), rows, sources, Tools.load_state())
-	var target: String = _arg("--into")
-
-	if target.is_empty():
-		target = Tools.text_path()
-	else:
-		target = "res://" + target.trim_prefix("res://")
-
+	var target: String = Tools.text_path() if into.is_empty() else "res://" + into.trim_prefix("res://")
 	_write(target, out["csv"])
 	_write(Tools.STATE_PATH, out["state_csv"])
 	print("[부탁 글] %d행을 합쳤습니다: %s (상태: %s)" % [rows.size(), target.trim_prefix("res://"), Tools.STATE_PATH.trim_prefix("res://")])
+	return {"ok": true, "target": target, "rows": rows.size()}
+
+
+# ---------- 자동 순환 ----------
+# 정해진 간격으로: 원본 가져오기 → 새·바뀐 항목 찾기 → 제미나이가 쓰기 → 검사 통과하면(옵션) 합치고 커밋·푸시.
+# 안전장치: feature/story-script 브랜치에서만 돌고, 커밋은 글 파일 3개만 지정해서 하며, 푸시는 같은 브랜치로만 한다.
+#   --interval N      순환 간격(초, 기본 600)
+#   --once            한 번만 하고 끝
+#   --auto-accept     검사를 통과한 초안을 사람 확인 없이 글 CSV에 합치고 커밋한다(기본: 초안만 만들고 알림)
+#   --no-push         커밋만 하고 푸시하지 않음
+#   --source-branch B 순환 때마다 origin/B 를 이 브랜치에 병합해 새 원본(ChatGPT 작업)을 가져온다(환경 변수 STORY_SOURCE_BRANCH 도 가능)
+const STORY_BRANCH: String = "feature/story-script"
+
+var _drafted_signature: String = ""
+
+
+func _git(args: Array) -> Dictionary:
+	var output: Array = []
+	var full_args: Array = ["-C", ProjectSettings.globalize_path("res://")]
+	full_args.append_array(args)
+	var code: int = OS.execute("git", full_args, output, true)
+	return {"code": code, "out": "".join(PackedStringArray(output)).strip_edges()}
+
+
+func _autopilot() -> void:
+	var branch: Dictionary = _git(["rev-parse", "--abbrev-ref", "HEAD"])
+
+	if branch["out"] != STORY_BRANCH:
+		push_error("자동 순환은 %s 브랜치에서만 돕니다(지금: %s). 스토리 전용 폴더에서 실행하세요." % [STORY_BRANCH, branch["out"]])
+		get_tree().quit(2)
+		return
+
+	var interval: float = float(_arg("--interval")) if not _arg("--interval").is_empty() else 600.0
+	var once: bool = _flag("--once")
+	print("[자동 순환] 시작: 간격 %.0f초, 자동 합치기 %s, 푸시 %s%s" % [interval, "켬" if _flag("--auto-accept") else "끔(초안만)", "끔" if _flag("--no-push") else "켬", " (한 번만)" if once else ""])
+
+	while true:
+		await _autopilot_round()
+
+		if once:
+			break
+
+		print("[자동 순환] %.0f초 뒤 다시 확인합니다. 멈추려면 Ctrl+C" % interval)
+		await get_tree().create_timer(interval).timeout
+
 	get_tree().quit(0)
+
+
+func _autopilot_round() -> void:
+	print("[자동 순환] --- %s ---" % Time.get_datetime_string_from_system())
+	var fetch: Dictionary = _git(["fetch", "origin"])
+
+	if int(fetch["code"]) != 0:
+		print("[자동 순환] git fetch 실패: ", fetch["out"])
+		return
+
+	var pull: Dictionary = _git(["merge", "--ff-only", "origin/" + STORY_BRANCH])
+
+	if int(pull["code"]) != 0 and not str(pull["out"]).contains("up to date") and not str(pull["out"]).contains("Already"):
+		print("[자동 순환] 스토리 브랜치를 최신으로 맞추지 못했습니다(직접 확인 필요): ", pull["out"])
+
+	var source: String = _arg("--source-branch")
+
+	if source.is_empty():
+		source = OS.get_environment("STORY_SOURCE_BRANCH")
+
+	if not source.is_empty():
+		var merge: Dictionary = _git(["merge", "--no-edit", "origin/" + source])
+
+		if int(merge["code"]) != 0:
+			_git(["merge", "--abort"])
+			print("[자동 순환] origin/%s 병합이 충돌해 취소했습니다. 이번 순환은 건너뜁니다: %s" % [source, str(merge["out"]).left(200)])
+			return
+
+	var sources: Dictionary = Tools.load_sources()
+	var todo: Dictionary = Tools.find_todo(sources, Tools.load_text_rows(Tools.text_path()), Tools.load_state())
+	var new_count: int = Tools.count_targets(todo["new"])
+	var changed_count: int = Tools.count_targets(todo["changed"])
+
+	if new_count + changed_count == 0:
+		print("[자동 순환] 할 일이 없습니다.")
+		_drafted_signature = ""
+		return
+
+	var targets: Dictionary = {}
+	var signature_parts: PackedStringArray = []
+
+	for kind in Tools.KINDS:
+		targets[kind] = {}
+		targets[kind].merge(todo["new"][kind])
+		targets[kind].merge(todo["changed"][kind])
+
+		for id in targets[kind].keys():
+			signature_parts.append(kind + ":" + id + ":" + Tools.fingerprint(targets[kind][id]))
+
+	var signature: String = ",".join(signature_parts)
+	print("[자동 순환] 새 항목 %d건, 바뀐 항목 %d건" % [new_count, changed_count])
+
+	if signature == _drafted_signature:
+		print("[자동 순환] 같은 항목의 초안을 이미 만들었습니다(사람의 확인을 기다리는 중). 건너뜁니다.")
+		return
+
+	var made: Dictionary = await _make_draft(sources, targets)
+
+	if not bool(made["made"]):
+		print("[자동 순환] 제미나이 호출이 실패했습니다. 다음 순환에 다시 시도합니다.")
+		return
+
+	_drafted_signature = signature
+
+	if not bool(made["ok"]):
+		print("[자동 순환] 검사 오류가 남아 있어 합치지 않았습니다. 초안을 직접 확인하세요: ", made["path"])
+		return
+
+	if not _flag("--auto-accept"):
+		print("[자동 순환] 초안이 준비됐습니다(검사 통과). 읽어 본 뒤 합치세요: run_request_text.bat accept %s" % str(made["path"]).trim_prefix("res://"))
+		return
+
+	var done: Dictionary = _accept_file(sources, str(made["path"]))
+
+	if not bool(done["ok"]):
+		return
+
+	var files: Array = [str(done["target"]).trim_prefix("res://"), Tools.STATE_PATH.trim_prefix("res://"), str(made["path"]).trim_prefix("res://")]
+	var add_args: Array = ["add", "--"]
+	add_args.append_array(files)
+	_git(add_args)
+	var commit_args: Array = ["commit", "-m", "[docs] 자동 동기화: 제미나이 글 %d건(검사 통과)" % int(done["rows"]), "--"]
+	commit_args.append_array(files)
+	var commit: Dictionary = _git(commit_args)
+	print("[자동 순환] 커밋: ", str(commit["out"]).left(160))
+
+	if _flag("--no-push") or int(commit["code"]) != 0:
+		return
+
+	var push: Dictionary = _git(["push", "origin", STORY_BRANCH])
+	print("[자동 순환] 푸시 ", "성공" if int(push["code"]) == 0 else "실패: " + str(push["out"]).left(200))
+	_drafted_signature = ""
 
 
 func _flag(name: String) -> bool:
 	return OS.get_cmdline_user_args().has(name)
-
-
-# 고치게 할 문제: 모든 오류와, 글이 틀려지기 쉬운 수량 표현 주의.
-static func _repairable(result: Dictionary) -> Array[String]:
-	var problems: Array[String] = []
-
-	for e in result["errors"]:
-		problems.append(str(e))
-
-	for w in result["warns"]:
-		if str(w).contains("수량 표현") or str(w).contains("한 칸이"):
-			problems.append(str(w))
-
-	return problems
 
 
 static func build_repair_prompt(csv_text: String, problems: Array[String]) -> String:
