@@ -126,6 +126,57 @@ static func row_from_source(kind: String, data: Dictionary) -> PackedStringArray
 	return PackedStringArray([str(data["id"]), kind, title, summary, lines, completion])
 
 
+# 한 줄 CSV를 칸으로 나눈다(큰따옴표 안의 쉼표와 ""를 처리).
+static func parse_csv_line(line: String) -> PackedStringArray:
+	var cells: PackedStringArray = []
+	var cur: String = ""
+	var quoted: bool = false
+	var i: int = 0
+
+	while i < line.length():
+		var c: String = line[i]
+
+		if quoted:
+			if c == "\"" and i + 1 < line.length() and line[i + 1] == "\"":
+				cur += "\""
+				i += 1
+			elif c == "\"":
+				quoted = false
+			else:
+				cur += c
+		elif c == "\"":
+			quoted = true
+		elif c == ",":
+			cells.append(cur)
+			cur = ""
+		else:
+			cur += c
+
+		i += 1
+
+	cells.append(cur)
+	return cells
+
+
+# 제미나이가 비워야 할 칸을 통째로 빼먹어 한 칸 모자란 행을 바로잡는다(resident_request: summary, community_request: lines).
+# 다른 경우(칸이 더 많거나 종류를 모를 때)는 건드리지 않고 검사가 오류로 알리게 둔다.
+static func fix_missing_empty_cell(cells: PackedStringArray) -> PackedStringArray:
+	if cells.size() != COLUMNS.size() - 1:
+		return cells
+
+	var fixed: PackedStringArray = cells.duplicate()
+
+	match cells[1].strip_edges():
+		KIND_RESIDENT_REQUEST:
+			fixed.insert(3, "")
+		KIND_COMMUNITY_REQUEST:
+			fixed.insert(4, "")
+		_:
+			return cells
+
+	return fixed
+
+
 static func csv_line(values: PackedStringArray) -> String:
 	var parts: PackedStringArray = []
 

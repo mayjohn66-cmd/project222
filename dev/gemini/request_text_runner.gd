@@ -533,7 +533,9 @@ static func clean_rows(text: String) -> String:
 		if line.is_empty() or line.begins_with("```") or line.begins_with("id,kind"):
 			continue
 
-		kept.append(line)
+		var cells: PackedStringArray = Tools.parse_csv_line(line)
+		var fixed: PackedStringArray = Tools.fix_missing_empty_cell(cells)
+		kept.append(Tools.csv_line(fixed) if fixed.size() != cells.size() else line)
 
 	return "\n".join(kept) + "\n" if not kept.is_empty() else ""
 
