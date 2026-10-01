@@ -83,6 +83,16 @@ func _run() -> void:
 		var r7: Dictionary = await client.generate("x")
 		_check(not r7["ok"] and "GEMINI_API_KEY" in r7["error"], "키 없으면 안내 오류(요청 안 보냄)")
 
+	# 시스템 프롬프트 조립(세계관 설정 문서 반영)
+	var gen = load("res://dev/gemini/story_draft_generator.gd")
+	var setting_text := FileAccess.get_file_as_string("res://docs/drafts/story/world_setting.md")
+	var full: String = gen.build_system_prompt(setting_text)
+	_check("이세계 숲 한가운데" in full and "24시 편의점" in full, "세계관 배경이 시스템 프롬프트에 들어감")
+	_check("1줄 이상" in full and "자동문" in full, "NPC 반응 지침이 들어감")
+	_check(not ("상태: 🟡" in full) and not ("이 파일의 내용은" in full), "안내용 인용문은 제외")
+	_check("beat_id,npc_id" in full and "neighbor" in full, "기본 지침도 그대로 유지")
+	_check(gen.build_system_prompt("") == gen.SYSTEM_PROMPT, "설정 문서가 없으면 기본 지침만")
+
 	# 재시도 규칙
 	_check(GeminiClient.is_retryable(503) and GeminiClient.is_retryable(429) and GeminiClient.is_retryable(500), "503·429·500은 재시도")
 	_check(not GeminiClient.is_retryable(404) and not GeminiClient.is_retryable(403) and not GeminiClient.is_retryable(200), "404·403은 재시도 안 함")
