@@ -4,7 +4,7 @@ extends Node
 ##
 ## 실행(프로젝트 폴더에서, 환경 변수 GEMINI_API_KEY 설정 후):
 ##   godot --headless --path . res://dev/gemini/story_draft.tscn -- --topic "첫 원정을 앞둔 날 이웃의 응원"
-## 저장 뒤 반드시: python tools/validate_story.py . <저장된 파일>
+## 저장 뒤 반드시 검사: godot --headless --path . res://dev/gemini/validate_story.tscn -- --file <저장된 파일>  (또는 python tools/validate_story.py)
 ## 형식과 규칙의 근거: docs/스토리_작성_가이드.md
 
 # class_name 등록(전역 캐시)에 기대지 않고 직접 불러온다. 새 파일은 에디터가 한 번 열기 전에는 전역 클래스로 안 잡힌다.
@@ -53,7 +53,7 @@ func _run() -> void:
 	var csv_text: String = clean_csv(str(result["text"]))
 	var path: String = _save(csv_text)
 	print("[스토리] 저장: ", path)
-	print("[스토리] 다음 단계: python tools/validate_story.py . ", path.replace("res://", ""))
+	print("[스토리] 다음 단계: 검사(파이썬 없이) godot --headless --path . res://dev/gemini/validate_story.tscn -- --file ", path.replace("res://", ""))
 	get_tree().quit(0)
 
 
