@@ -25,3 +25,4 @@ balance_baseline.md
 .env.*
 *.key
 gemini_*.json
+override.cfg
