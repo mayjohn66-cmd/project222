@@ -63,6 +63,7 @@ func run() -> void:
 	check(director.try_interact(), "E delivers stock and pays reward")
 	check(GameState.get_item_count("bread") == 0 and GameState.get_money() == money_before + int(request["money"]), "delivery removes requested items and pays exact reward")
 	check(ResidentRequestFlow.reputation() == 1, "delivery grants persistent reputation")
+	check(spawner.spawn_timer.wait_time < spawner.base_spawn_interval, "NPC delivery immediately refreshes visit frequency")
 	drain(director.dialogue)
 	check(ResidentRequestFlow.deliver(request).is_empty(), "completed request cannot pay twice")
 	for index in range(1,6):

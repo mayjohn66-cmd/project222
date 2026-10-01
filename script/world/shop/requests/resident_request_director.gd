@@ -19,7 +19,7 @@ func refresh() -> void:
 	var objective := "주민에게 말을 걸어 부탁을 받으세요. [E]"
 	if accepted:
 		objective = "%s %d/%d · 창고 물품 전달 [E]" % [ItemData.get_item_name(str(request["item"])), mini(GameState.get_item_count(str(request["item"])), int(request["amount"])), int(request["amount"])]
-		if ready: objective = "준비 완료! 주민에게 전달하세요. [E]"
+		if ready: objective = "준비 완료! 주민에게 전달 [E]"
 	objective += "\n보상: 평판 +%d · %d G\n주민 부탁 %d/%d 완료" % [int(request["reputation"]), int(request["money"]), ResidentRequestFlow.completed_count(), ResidentRequestFlow.SETTINGS.requests.size()]
 	panel.display("주민 부탁 · " + str(request["title"]) + "\n마을 평판 %d" % ResidentRequestFlow.reputation(), objective)
 	panel.root.visible = not talking and not _blocked()
@@ -50,6 +50,7 @@ func try_interact() -> bool:
 	elif ResidentRequestFlow.can_deliver(request):
 		var result := ResidentRequestFlow.deliver(request)
 		if result.is_empty(): return false
+		manager.customer_spawner.refresh_spawn_interval()
 		lines.assign(request["completion"])
 		lines.append("평판 +%d · 사례 %d G" % [result["reputation"], result["money"]])
 		for type_id in result["unlocked"]:
