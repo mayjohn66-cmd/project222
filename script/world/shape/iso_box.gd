@@ -4,10 +4,34 @@ extends StaticBody2D
 ## 발자국(칸 수)과 높이만 정하면 윗면·왼쪽 면·오른쪽 면과 충돌 영역이 한 번에 만들어지는 입체 상자.
 ## 그림은 면마다 씌운다(없으면 단색). 충돌 영역은 그림과 상관없이 발자국에서만 나온다.
 
-@export var footprint_size: Vector2i = Vector2i.ONE:
+# 칸 수(소수 가능: 얇은 기둥은 0.3처럼).
+@export var footprint_size: Vector2 = Vector2.ONE:
 	set(value):
-		footprint_size = Vector2i(maxi(value.x, 1), maxi(value.y, 1))
+		footprint_size = Vector2(maxf(value.x, 0.05), maxf(value.y, 0.05))
 		_refresh()
+
+# 부품 모드(조합 오브젝트용): 오브젝트 왼쪽 위 모서리 기준 칸 위치와 오브젝트 전체 크기.
+# object_size 가 (0,0)이고 cell_offset 도 (0,0)이면 단독 상자로 동작한다(옛 방식).
+@export var cell_offset: Vector2 = Vector2.ZERO:
+	set(value):
+		cell_offset = value
+		_refresh()
+@export var object_size: Vector2 = Vector2.ZERO:
+	set(value):
+		object_size = value
+		_refresh()
+
+# 바닥에서 이 부품이 떠 있는 높이(픽셀). 공중에 뜬 팔·처마·간판용. 보통 blocking = false.
+@export var elevation: float = 0.0:
+	set(value):
+		elevation = maxf(value, 0.0)
+		_refresh()
+
+# false 이면 면을 그리지 않는다(충돌·정렬 전용. 그림은 IsoObject가 따로 씌움).
+@export var shape_visible: bool = true:
+	set(value):
+		shape_visible = value
+		queue_redraw()
 
 # 바닥에서 윗면까지의 화면 높이(픽셀).
 @export var height: float = 48.0:
@@ -84,7 +108,7 @@ func _ready() -> void:
 
 
 func set_footprint(size_x: int, size_y: int) -> void:
-	footprint_size = Vector2i(size_x, size_y)
+	footprint_size = Vector2(size_x, size_y)
 
 
 func set_rotation_index(value: int) -> void:
@@ -93,7 +117,11 @@ func set_rotation_index(value: int) -> void:
 
 # 바닥 발자국 = 충돌 영역(월드 이동이 막히는 곳).
 func get_ground_polygon() -> PackedVector2Array:
-	return IsoGeometry.ground(footprint_size, rotation_index, depth_ratio)
+	if object_size == Vector2.ZERO and cell_offset == Vector2.ZERO:
+		return IsoGeometry.ground(Vector2i(footprint_size.round()), rotation_index, depth_ratio)
+
+	var rect := IsoGeometry.transform_rect(cell_offset, footprint_size, object_size, rotation_index)
+	return IsoGeometry.rect_ground(rect[0], rect[1])
 
 
 func get_collision_polygon() -> PackedVector2Array:
@@ -126,14 +154,17 @@ func _update_collision() -> void:
 
 func _draw() -> void:
 	var corners := get_ground_polygon()
-	_draw_face(IsoGeometry.left_face(corners, height), left_texture, left_color, true)
-	_draw_face(IsoGeometry.right_face(corners, height), right_texture, right_color, true)
-	_draw_top(IsoGeometry.top_face(corners, height))
+	var base := IsoGeometry.lift(corners, elevation)
+
+	if shape_visible:
+		_draw_face(IsoGeometry.left_face(base, height), left_texture, left_color, true)
+		_draw_face(IsoGeometry.right_face(base, height), right_texture, right_color, true)
+		_draw_top(IsoGeometry.top_face(base, height))
 
 	if show_outline:
 		var outline := PackedVector2Array(corners)
 		outline.append(corners[0])
-		draw_polyline(outline, Color.RED, 2.0)
+		draw_polyline(outline, Color.RED if blocking else Color.YELLOW, 2.0)
 
 
 func _draw_face(quad: PackedVector2Array, texture: Texture2D, color: Color, side: bool) -> void:
