@@ -31,6 +31,26 @@
 - 규칙서 최신: `docs/원정_v2_규칙서_초안.md` v0.34
 - Godot 4.7.1. 검증 방법: `AI_협업_규칙.md` 5장 (import 2회, `check_godot`, 원정을 바꿨으면 `check_expedition_run`)
 
+## 3.1 기능 브랜치 정의 (2026-10-01, Claude가 정함 · 사용자 결정: 브랜치는 기능별)
+
+규칙은 `AI_협업_규칙.md` 2장. 아래 표가 **지금 정의된 기능 브랜치와 담당**입니다. 작업을 시작하는 AI는 이 표를 먼저 읽고, 같은 기능의 브랜치가 있으면 그걸 씁니다. 새 기능이 생기면 이 표에 한 줄을 추가합니다(추가는 만든 AI가).
+
+| 기능 브랜치 | 범위 | 주 담당 | 기존 브랜치와의 관계 |
+|---|---|---|---|
+| `feature/world-doors` | 문 3종의 그림·크기·기울기(`door_visual.gd`), 문 이미지 규격 | Claude(코드 조절)·사용자(그림) | Claude 문 작업(`7129525`~`74582b8`)과 ChatGPT `081a158`(사용자 문 이미지 연결)이 여기 모임 |
+| `feature/expedition-rooms` | 8×8 방, 바닥 타일 원정 시점, 전투 표시, HP 그림, 방 데이터 | ChatGPT(코드)·Claude(수치·검증) | `gpt/expedition-direct-control`, `gpt/expedition-isometric-floor`, `gpt/expedition-isometric-live` 대체 |
+| `feature/npc-tutorial` | 단계별 NPC 튜토리얼, 수동 결제, 폐점 중 시간, NPC 개입 | ChatGPT | `gpt/progressive-npc-tutorial`, `gpt/manual-checkout-tutorial`, `gpt/npc-intervention-system` 대체 |
+| `feature/economy-balance` | `data/` 수치, 비밀 상인 판매 목록, 손님 소분류, 장비·제작 밸런스, `tools/check_*.py` | Claude | 지금까지의 Claude 데이터 작업(통합 브랜치에 있음) |
+| 통합 브랜치 `claude/large-file-refactor-plan-52hp51` | 위 기능이 완성되어 합쳐지는 곳, 문서(`docs/`) | 모두 | 문서 수정은 기능 브랜치를 따로 만들지 않고 여기서 직접 |
+
+**현재 상태(Claude 확인)**
+- ChatGPT의 `gpt/progressive-npc-tutorial`은 이전 `gpt/` 브랜치들(원정 타일, 수동 결제, 개입)을 이미 모두 포함한 **단일 통합 브랜치**입니다(커밋 20개, 통합 브랜치보다 앞섬).
+- 통합 브랜치에 시험 병합(커밋하지 않고 취소)을 해 보니 **충돌 없이 합쳐집니다**(`AI_소통.md`, `door_visual.gd` 자동 병합). 단 사용자 확인 전이라 **실제 병합은 하지 않았습니다**(합치는 것은 사용자 결정, 규칙 2장).
+- 병합 후 기능 브랜치를 만들면 네 브랜치가 모두 같은 지점에서 출발해 갈라질 일이 없습니다. 병합 전에 만들면 ChatGPT 작업이 빠진 채 갈라집니다. **그래서 기능 브랜치 생성은 병합 결정 뒤에 합니다.**
+- 병합 뒤 알려진 후속 작업(`feature/world-doors`): ChatGPT가 연결한 문 그림 `shop_entrance_door_iso.png`는 이미 기울어 있어서 코드가 기울이는 새 방식(`art_is_frontal` 기본 켬)과 겹칩니다. 같은 폴더의 `shop_entrance_door_front.png`(정면)를 쓰거나 `art_is_frontal`을 끄면 됩니다. 어느 쪽으로 할지는 문 담당이 정합니다.
+
+**ChatGPT에게**: 작업을 시작하기 전에 위 표에서 기능을 고르고(없으면 한 줄 추가), 5장 ChatGPT 항목에 `기능 브랜치` 이름을 적어 주세요. `gpt/…` 브랜치에는 더 올리지 말아 주세요. 정리(삭제)는 사용자 승인 후 Claude가 계획을 만들어 보여 줍니다.
+
 ## 4. 이미 있는 것 (새로 만들기 전에 확인)
 
 - 스토리 NPC 대화: `StoryDirector`, `StoryNpc`, `StoryDialoguePanel`(`script/world/shop/`, `script/actor/`, `script/ui/shop/`), 데이터 `data/story/`
