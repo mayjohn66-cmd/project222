@@ -34,4 +34,9 @@ STORY_FAKE_GEMINI=1 "$GODOT" --headless --path . res://dev/gemini/request_text.t
 git merge origin/conflict-sim >/dev/null 2>&1 || true
 [ -n "$(git diff --name-only --diff-filter=U)" ] && echo "(충돌 상태를 만들었다)"
 STORY_FAKE_GEMINI=1 "$GODOT" --headless --path . res://dev/gemini/request_text.tscn -- --mode autopilot --once | grep -q "병합을 취소해 원래 상태로 되돌렸습니다" && echo "PASS: 남은 충돌 상태를 스스로 되돌린다"
+# MERGE_HEAD 없이 충돌 흔적만 남은 상태(화면에서 본 경우)를 만들어 자동 복구를 본다.
+git merge origin/conflict-sim >/dev/null 2>&1 || true
+rm -f "$(git rev-parse --git-dir)/MERGE_HEAD"
+[ -n "$(git diff --name-only --diff-filter=U)" ] && echo "(MERGE_HEAD 없는 충돌 흔적을 만들었다)"
+STORY_FAKE_GEMINI=1 "$GODOT" --headless --path . res://dev/gemini/request_text.tscn -- --mode autopilot --once | grep -q "남은 충돌 흔적을 정리했습니다" && echo "PASS: MERGE_HEAD 없는 충돌 흔적도 정리한다"
 rm -rf "$TMP"

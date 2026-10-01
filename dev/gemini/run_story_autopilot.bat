@@ -24,5 +24,8 @@ if "%GEMINI_API_KEY%"=="" (
   echo [ERROR] GEMINI_API_KEY is not set. Run:  setx GEMINI_API_KEY "your-key"  then open a NEW terminal.
   exit /b 2
 )
+rem Refresh Godot's global class cache first (new class_name scripts pulled from git are unknown until then).
+echo Refreshing Godot project cache (first run takes a while)...
+"%GODOT_EXE%" --headless --path "%CD%" --import >nul 2>&1
 "%GODOT_EXE%" --headless --path "%CD%" res://dev/gemini/request_text.tscn -- --mode autopilot %*
 endlocal
