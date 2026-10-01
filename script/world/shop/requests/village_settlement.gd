@@ -17,6 +17,9 @@ static func apply_world(world: Node) -> void:
 	var editor := world.get_node_or_null("VillageMapEditor")
 	var editing: bool = editor != null and editor.active
 	var open_sites: Dictionary = {}
+	for path in CommunityRequestFlow.unlocked_paths():
+		var site := find_site(world, path)
+		if site != null: open_sites[site.get_instance_id()] = true
 	for landmark in ResidentStoryFlow.SETTINGS.landmarks:
 		if not ResidentRequestFlow.done(str(landmark["request"])): continue
 		var paths: Array = [str(landmark["path"])]

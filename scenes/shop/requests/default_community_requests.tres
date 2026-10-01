@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="CommunityRequestSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/community_request_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+requests = Array[Dictionary]([
+{"id":"path_light", "resident":"naru", "friendship":1, "title":"길목에 작은 등불", "summary":"노점 주변에 등불을 놓을 재료를 준비합니다.", "requirements":[{"item":"dry_branch", "amount":5}], "reputation":1, "money":40, "landmark":"VillageGathering/MarketLantern", "landmark_name":"길목 등불", "completion":"길목에 작은 등불을 마련했습니다."},
+{"id":"flower_corner", "resident":"doyun", "friendship":3, "after":"path_light", "title":"함께 꾸미는 꽃자리", "summary":"첫 집 주변에 작은 꽃자리를 꾸밀 재료를 준비합니다.", "requirements":[{"item":"forest_herb", "amount":3}], "reputation":1, "money":50, "landmark":"VillageGathering/EastFlowerBed", "landmark_name":"마을 꽃자리", "completion":"마을에 작은 꽃자리를 마련했습니다."}
+])
