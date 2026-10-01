@@ -9,10 +9,13 @@ var previous_paused := false
 var previous_physics := true
 var elapsed := 0.0
 
+func create_panel() -> CommunityBoardPanel: return CommunityBoardPanel.new()
+func modal_key() -> String: return "community_board_open"
+
 func _ready() -> void:
 	player = get_parent().get_node("Actors/Player")
 	manager = get_parent().get_node("DayManager")
-	panel = CommunityBoardPanel.new()
+	panel = create_panel()
 	add_child(panel)
 	panel.action_requested.connect(_on_action)
 	panel.closed.connect(_on_closed)
@@ -39,8 +42,11 @@ func _process(delta: float) -> void:
 	board.add_child(hint)
 
 func near_board() -> bool:
+	return CommunityRequestFlow.board_available() and can_open_at(CommunityRequestFlow.SETTINGS.board_path, CommunityRequestFlow.SETTINGS.interaction_distance)
+
+func can_open_at(path: String, distance: float) -> bool:
 	var world := get_parent()
-	if not CommunityRequestFlow.board_available() or world.get_node("WorldInteractions").blocked(): return false
+	if world.get_node("WorldInteractions").blocked(): return false
 	if player.in_production_room or player.in_warehouse_room or player.shelf_panel.visible or player.rumor_dialog.visible: return false
 	if is_instance_valid(player.facility_dialog) and player.facility_dialog.visible: return false
 	var editor = world.get_node_or_null("VillageMapEditor")
@@ -49,8 +55,8 @@ func near_board() -> bool:
 	var cashier = world.get_node_or_null("ManualCheckoutController")
 	if merchant != null and merchant.shopping: return false
 	if cashier != null and cashier.is_busy(): return false
-	var board := VillageSettlement.find_site(world, CommunityRequestFlow.SETTINGS.board_path)
-	return board != null and board.visible and player.global_position.distance_to(board.global_position) <= CommunityRequestFlow.SETTINGS.interaction_distance
+	var board := VillageSettlement.find_site(world, path)
+	return board != null and board.visible and player.global_position.distance_to(board.global_position) <= distance
 
 func interaction_hint() -> String:
 	return "[E] 마을 부탁 게시판 살펴보기" if near_board() else ""
@@ -63,7 +69,7 @@ func try_interact() -> bool:
 	manager.hour_timer.paused = true
 	player.set_physics_process(false)
 	player.velocity = Vector2.ZERO
-	get_parent().set_meta("community_board_open", true)
+	get_parent().set_meta(modal_key(), true)
 	panel.display()
 	return true
 
@@ -82,7 +88,7 @@ func _on_action(id: String) -> void:
 func _on_closed() -> void:
 	if not open: return
 	open = false
-	get_parent().remove_meta("community_board_open")
+	get_parent().remove_meta(modal_key())
 	if is_instance_valid(manager): manager.hour_timer.paused = previous_paused
 	if is_instance_valid(player): player.set_physics_process(previous_physics)
 

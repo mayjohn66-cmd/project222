@@ -10,6 +10,10 @@ var cards: Dictionary = {}
 var close_button: Button
 var backdrop: ColorRect
 
+func entries() -> Array[Dictionary]: return CommunityRequestFlow.SETTINGS.requests
+func panel_title() -> String: return "마을 부탁 게시판"
+func introduction() -> String: return "물품은 창고에서 전달합니다. 기한 없이 천천히 준비하세요."
+
 func _ready() -> void:
 	layer = 25
 	backdrop = ColorRect.new()
@@ -23,7 +27,7 @@ func _ready() -> void:
 	column.add_theme_constant_override("separation", 10)
 	root.add_child(column)
 	var title := Label.new()
-	title.text = "마을 부탁 게시판"
+	title.text = panel_title()
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.add_theme_font_size_override("font_size", 24)
 	column.add_child(title)
@@ -38,7 +42,7 @@ func _ready() -> void:
 	list.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	list.add_theme_constant_override("separation", 12)
 	scroll.add_child(list)
-	for entry in CommunityRequestFlow.SETTINGS.requests:
+	for entry in entries():
 		var id := str(entry["id"])
 		var card := VBoxContainer.new()
 		list.add_child(card)
@@ -82,7 +86,7 @@ func _fit_screen() -> void:
 	root.position = (screen - root.size) * 0.5
 
 func display() -> void:
-	message.text = "물품은 창고에서 전달합니다. 기한 없이 천천히 준비하세요."
+	message.text = introduction()
 	root.show()
 	backdrop.show()
 	_fit_screen()
