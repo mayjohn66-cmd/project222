@@ -116,8 +116,9 @@ func _ready() -> void:
 			var c: Vector2 = rect.position + rect.size * 0.5
 			plr3.global_position = ex3.to_global(Vector2((c.x - c.y) * 48.0, (c.x + c.y) * 24.0) + Vector2(0, 30))
 
-			for m in [["2d", StoreView3D.Mode.OFF], ["3d", StoreView3D.Mode.ON]]:
+			for m in [["2d", StoreView3D.Mode.OFF, 256.0], ["3d", StoreView3D.Mode.ON, 256.0], ["3d_post12", StoreView3D.Mode.ON, 12.0]]:
 				mirror.mode = m[1]
+				mirror.color_levels = m[2]
 
 				for i in range(20):
 					await get_tree().process_frame

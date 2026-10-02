@@ -55,6 +55,7 @@ var _id_viewport: SubViewport
 var _camera: Camera3D
 var _id_camera: Camera3D
 var _sun: DirectionalLight3D
+var _fill: DirectionalLight3D  # 보조광: 그림자 쪽 벽(+x 면)이 새까맣게 떨어지지 않게 반대편에서 약하게 비춘다(그림자 없음)
 var _post_material: ShaderMaterial
 var _ready_done: bool = false
 var _zoom_applied: bool = false
@@ -86,6 +87,13 @@ var day_manager: Node
 var exterior: Node2D
 ## 마을(매장 바깥)도 3D 로 그릴지. F9 로 켜고 끈다(매장만 3D / 마을 전체 3D 비교용).
 var village_enabled: bool = true
+## 색 단계 수(채널당). 256 = 제한 없음, 낮출수록 색이 뭉쳐서 도트 그림 같은 느낌(예: 12). 시험용 값.
+var color_levels: float = 256.0:
+	set(value):
+		color_levels = value
+
+		if _post_material != null:
+			_post_material.set_shader_parameter("levels", value)
 var village: VillageMirror
 ## 0 이상이면 게임 시계 대신 이 시각(0~24)을 쓴다(시험용). 음수면 DayManager 의 시각을 따른다.
 var forced_hour: float = -1.0
@@ -149,6 +157,10 @@ func _build_view() -> void:
 	_sun = DirectionalLight3D.new()
 	_sun.shadow_enabled = true
 	_viewport.add_child(_sun)
+	_fill = DirectionalLight3D.new()
+	_fill.shadow_enabled = false
+	_fill.rotation_degrees = Vector3(-38.0, 90.0, 0.0)
+	_viewport.add_child(_fill)
 
 	var env := Environment.new()
 	env.background_mode = Environment.BG_CLEAR_COLOR
@@ -166,6 +178,7 @@ func _build_view() -> void:
 	_post_material.shader = OUTLINE_SHADER
 	_post_material.set_shader_parameter("id_tex", _id_viewport.get_texture())
 	_container.material = _post_material
+	_post_material.set_shader_parameter("levels", color_levels)
 	if exterior != null:
 		village = VillageMirror.new(self, exterior)
 
@@ -325,7 +338,9 @@ func apply_hour(h: float) -> void:
 	_sun.light_color = tint
 	_sun.light_energy = lerpf(0.9, lerpf(0.8, 1.2, sun_curve), day_amt)
 	_env.ambient_light_color = Color(0.7, 0.72, 0.8) * tint
-	_env.ambient_light_energy = lerpf(0.9, 0.55, day_amt)
+	_env.ambient_light_energy = lerpf(0.9, 0.7, day_amt)
+	_fill.light_color = tint.lerp(Color(0.85, 0.9, 1.0), 0.35)
+	_fill.light_energy = lerpf(0.25, 0.5, day_amt)
 
 	for lamp in _lamps:
 		(lamp as OmniLight3D).light_energy = 2.4 * dark

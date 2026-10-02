@@ -814,7 +814,7 @@
     "label": "이끼 오두막",
     "notes": "이끼 낀 초록 지붕 오두막(가장 많이 놓임)",
     "roof_blocks": 1.4,
-    "roof_tint": "5a6e2e",
+    "roof_tint": "3f5420",
     "sprite": "res://art/world/village_houses_v2/moss_cottage_rear.png",
     "style": "",
     "tint": "d8cdb0",

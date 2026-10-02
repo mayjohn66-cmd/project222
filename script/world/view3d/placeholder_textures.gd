@@ -111,18 +111,24 @@ static func wall_facade(width_texels: int, height_texels: int, door: bool, windo
 	var glass := Color(0.45, 0.62, 0.78)
 	var door_color := Color(0.5, 0.3, 0.16)
 
+	# 회반죽: 단색 + 드문 어두운 점(무작위 노이즈로 색이 흔들리지 않게)
 	for y in range(h):
 		for x in range(w):
-			var shade: float = rng.randf_range(-0.03, 0.03)
-			img.set_pixel(x, y, Color(plaster.r + shade, plaster.g + shade, plaster.b + shade))
+			var speck: bool = rng.randf() < 0.035
+			img.set_pixel(x, y, plaster.darkened(0.08) if speck else plaster)
 
 	# 아래쪽 돌 기단 + 윗 가로 보 + 양 끝 세로 보
 	var base_h: int = clampi(int(float(h) * 0.16), 2, 6)
 
+	# 돌 기단: 3톤 블록(줄 높이 3px, 어긋난 세로 줄눈)
 	for y in range(h - base_h, h):
+		var srow: int = (y - (h - base_h)) / 3
+		var soff: int = (srow % 2) * 4
+
 		for x in range(w):
-			var stone: float = 0.55 + rng.randf_range(-0.05, 0.05)
-			img.set_pixel(x, y, Color(stone, stone, stone * 0.95))
+			var mortar_row: bool = (y - (h - base_h)) % 3 == 2
+			var mortar_col: bool = (x + soff) % 8 == 0
+			img.set_pixel(x, y, Color(0.4, 0.39, 0.37) if (mortar_row or mortar_col) else Color(0.6, 0.58, 0.54))
 
 	for x in range(w):
 		for y in range(0, 2):
@@ -165,43 +171,57 @@ static func wall_facade(width_texels: int, height_texels: int, door: bool, windo
 	return ImageTexture.create_from_image(img)
 
 
-# 기와 지붕 질감: 한 칸(size×size) 반복. 가로줄마다 어긋난 둥근 기와.
+# 기와 지붕 질감: 한 칸(size×size) 반복. 도트 느낌을 위해 **3톤만** 쓴다(윗줄 밝은 하이라이트 / 가운데 기본색 / 아랫줄 어두운 그림자 줄)
+# + 기와 사이 세로 틈. 부드러운 그라데이션과 무작위 노이즈는 쓰지 않는다. 기와 폭 = 한 칸의 3분의 1, 줄 높이 = 한 칸의 6분의 1(18 → 6×3).
 static func roof_tiles(size: int, base: Color) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
-	var rows: int = 3 if size % 3 == 0 else 2
-	var row_h: int = size / rows
 	var tile_w: int = maxi(size / 3, 3)
+	var row_h: int = maxi(size / 6, 2)
+	var light: Color = base.lightened(0.22)
+	var dark: Color = base.darkened(0.38)
+	var gap: Color = base.darkened(0.3)
 
 	for y in range(size):
 		var row: int = y / row_h
+		var ly: int = y % row_h
 		var offset: int = (row % 2) * (tile_w / 2)
 
 		for x in range(size):
-			var local_y: int = y % row_h
-			var edge: bool = local_y == 0 or ((x + offset) % tile_w) == 0
-			var c: Color = base.darkened(0.35) if edge else base.lightened(0.04 * float(local_y))
+			var lx: int = (x + offset) % tile_w
+			var c: Color = base
+
+			if ly == 0:
+				c = light
+			elif ly == row_h - 1:
+				c = dark
+
+			if lx == 0:
+				c = gap if ly > 0 else base
+
 			img.set_pixel(x, y, c)
 
 	return ImageTexture.create_from_image(img)
 
 
-# 기와 지붕 법선 맵: 기와 한 장마다 아래쪽이 불룩하게 겹친 느낌(roof_tiles 와 같은 줄 구조).
+# 기와 지붕 법선 맵: 기와 한 장마다 아래 끝이 불룩하게 겹친 느낌(roof_tiles 와 같은 줄·폭 구조).
 static func roof_normal(size: int) -> ImageTexture:
-	var rows: int = 3 if size % 3 == 0 else 2
-	var row_h: int = size / rows
 	var tile_w: int = maxi(size / 3, 3)
+	var row_h: int = maxi(size / 6, 2)
 	var heights: Array = []
 
 	for y in range(size):
 		var row_idx: int = y / row_h
+		var ly: int = y % row_h
 		var offset: int = (row_idx % 2) * (tile_w / 2)
 		var row: Array = []
 
 		for x in range(size):
-			var local_y: int = y % row_h
-			var local_x: int = (x + offset) % tile_w
-			var hgt: float = float(local_y) / float(row_h)  # 아래로 갈수록 올라오는 기와 끝
-			hgt *= 1.0 - 0.5 * absf(float(local_x) / float(tile_w) - 0.5) * 2.0 * 0.5
+			var lx: int = (x + offset) % tile_w
+			var hgt: float = float(ly) / float(maxi(row_h - 1, 1))
+
+			if lx == 0:
+				hgt *= 0.4
+
 			row.append(hgt)
 
 		heights.append(row)
