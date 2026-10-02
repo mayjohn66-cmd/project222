@@ -80,5 +80,15 @@ func _run() -> void:
 		if m != Sim.Model.CURRENT:
 			_check(s.stuck_agents > 0, "%s: 한 칸 폭에서 마주 오면 막힘이 생긴다(설계로 풀어야 하는 문제)" % ["칸예약", "연속+분리"][m - 1])
 
+	# 4) 조향 규칙 단위 검사(실제 게임이 쓰는 CrowdSteering)
+	var ahead: Dictionary = CrowdSteering.compute(Vector2(1, 0), [Vector2(0.52, 0.0)])
+	_check(ahead["slow"] < 0.3 and ahead["push"] == Vector2.ZERO, "바로 앞 가까운 사람이 있으면 거의 멈춤")
+	var far: Dictionary = CrowdSteering.compute(Vector2(1, 0), [Vector2(1.2, 0.0)])
+	_check(far["slow"] == 1.0 and far["push"] == Vector2.ZERO, "멀리 있는 사람은 신경 쓰지 않음")
+	var beside: Dictionary = CrowdSteering.compute(Vector2(1, 0), [Vector2(0.0, 0.3)])
+	_check(beside["slow"] == 1.0 and beside["push"].y < 0.0, "옆의 가까운 사람에게서 멀어지는 쪽으로 밀림")
+	var round_trip: Vector2 = CrowdSteering.screen_to_ground(CrowdSteering.ground_to_screen(Vector2(2.5, -1.0)))
+	_check(round_trip.is_equal_approx(Vector2(2.5, -1.0)), "바닥↔화면 좌표 변환이 서로 되돌려짐")
+
 	print("CHECK_CROWD failures=", failures)
 	get_tree().quit(1 if failures > 0 else 0)

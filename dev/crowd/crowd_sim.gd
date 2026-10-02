@@ -230,26 +230,18 @@ func _step_flow(a: Agent) -> void:
 		return
 
 	var heading: Vector2 = to_target.normalized()
-	var vel: Vector2 = heading * a.speed
-	var slow: float = 1.0
+	var offsets: Array = []
 
 	for other in agents:
 		if other == a or other.done or not other.started:
 			continue
 
-		var offset: Vector2 = other.pos - a.pos
-		var d: float = offset.length()
+		offsets.append(other.pos - a.pos)
 
-		if d >= KEEP_DISTANCE or d < 0.0001:
-			continue
-
-		# 앞에 있는 사람이면 멈추고(줄 서기), 옆이면 서로 밀어낸다.
-		var ahead: float = offset.normalized().dot(heading)
-
-		if ahead > 0.35:
-			slow = minf(slow, clampf((d - STOP_DISTANCE) / (KEEP_DISTANCE - STOP_DISTANCE), 0.0, 1.0))
-		else:
-			vel -= offset.normalized() * (KEEP_DISTANCE - d) * 3.0
+	# 실제 게임과 같은 규칙(CrowdSteering)을 쓴다.
+	var steer: Dictionary = CrowdSteering.compute(heading, offsets)
+	var slow: float = steer["slow"]
+	var vel: Vector2 = heading * a.speed + steer["push"]
 
 	var next_pos: Vector2 = a.pos + vel * slow * DT
 
