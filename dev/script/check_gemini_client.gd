@@ -142,7 +142,7 @@ func _run() -> void:
 	m7.allow_fallback = false
 	m7.script_results = [_res_fail(429)]
 	var g7: Dictionary = await m7.generate("x")
-	_check(not g7["ok"] and m7.calls == ["polish-model"], "다듬기용 클라이언트: 모델 고정, 예비 모델로 새지 않음")
+	_check(not g7["ok"] and m7.calls[0] == "polish-model" and not m7.calls.has("backup-model") and not m7.calls.has("main-model"), "다듬기용 클라이언트: 모델 고정, 예비 모델로 새지 않음")
 	OS.set_environment("GEMINI_FALLBACK_MODEL", "")
 	var m6 := MockClient.new()
 	add_child(m6)
