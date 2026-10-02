@@ -1,7 +1,7 @@
 extends Node3D
 ## 3D 도형 + 2D 그림 시험 방(실험). 건물·가구는 3D 상자에 기존 2D 질감을 씌우고, 캐릭터는 2D 도트를 판(Sprite3D)으로 세운다.
 ## 목적: 이 방식의 모양(도트 느낌, 앞뒤 정렬, 빛과 그림자)이 마음에 드는지 눈으로 확인한다. 게임 코드와 연결하지 않은 독립 장면이다.
-##   키: 1/2/3 = 화면 낮추기 배율(1배/2배/3배, 낮출수록 거칠고 도트 느낌이 강함) / L = 그림자 / T = 계단식 빛(툰) / P = 색 줄이기 / 방향키 = 캐릭터 이동
+##   키: 1/2/3 = 화면 낮추기 배율(1배/2배/3배, 낮출수록 거칠고 도트 느낌이 강함) / L = 그림자 / T = 계단식 빛(툰) / P = 색 줄이기 / S = 픽셀 스냅 / C = 카메라 천천히 흘리기 / 방향키 = 캐릭터 이동
 ## 실행: Godot 에서 dev/spike3d/iso_room_spike.tscn 열고 F6.
 
 const GRASS: String = "grass"
@@ -13,6 +13,10 @@ const PLAYER_SHEET: String = "res://art/characters/cozy_v1/player/sheet.png"
 const PITCH_DEG: float = 30.0
 const YAW_DEG: float = 45.0
 const TILE_PX: float = 96.0  # 한 칸 마름모의 폭(픽셀). 기존 게임과 같음.
+# 높이 한 칸 = 3배 낮춘 화면에서 정확히 20 픽셀(= 1배에서 60). 30도 기울기에서 세로 한 단위는 (칸폭/√2)·cos30° 픽셀이라 그냥 1.0 단위로 두면
+# 정수 픽셀이 되지 않아서, 높이를 이 단위로 센다(슬라이드: "블록 높이를 정수 픽셀로 맞춘다").
+const BLOCK_HEIGHT_LOW_PX: float = 20.0
+const LOW_TILE_PX: float = 32.0  # 3배 낮춘 화면에서 한 칸 마름모 폭
 
 var container: SubViewportContainer
 var viewport: SubViewport
@@ -23,6 +27,11 @@ var shrink: int = 1
 var shadows: bool = true
 var toon: bool = false
 var posterize: bool = false
+var snap: bool = true  # 카메라와 캐릭터를 화면 픽셀 단위로만 움직인다(Never's End 의 픽셀 스냅)
+var drift: bool = false  # 카메라를 일부러 소수 픽셀씩 흘려서 스냅 효과를 눈으로 본다
+var cam_target: Vector3 = Vector3(4, 0, 4)
+var actor_logic_pos: Vector3 = Vector3(3.6, 0.0, 5.4)
+var drift_time: float = 0.0
 var materials: Array[StandardMaterial3D] = []
 var post_material: ShaderMaterial
 var label: Label
@@ -63,12 +72,32 @@ func _build_view() -> void:
 	camera = Camera3D.new()
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	camera.rotation_degrees = Vector3(-PITCH_DEG, YAW_DEG, 0.0)
-	camera.position = Vector3(4, 0, 4) + camera.basis.z * 30.0
 	camera.near = 0.1
 	camera.far = 100.0
 	# 한 칸 마름모 폭 = TILE_PX → 한 단위(축 방향) = TILE_PX / sqrt(2) 픽셀. 화면 높이(648) 안에 보이는 세계 높이:
 	camera.size = 648.0 / (TILE_PX / sqrt(2.0))
 	viewport.add_child(camera)
+	_update_camera()
+
+
+# 화면 한 픽셀이 세계에서 차지하는 길이(카메라 오른쪽·위 방향). 낮춘 화면 기준.
+func pixel_world_size() -> float:
+	return 1.0 / ((TILE_PX / float(shrink)) / sqrt(2.0))
+
+
+# 세계 위치를 카메라 오른쪽·위 방향으로 화면 픽셀 격자에 맞춘다(깊이 방향은 그대로).
+func snap_to_pixels(p: Vector3) -> Vector3:
+	var px: float = pixel_world_size()
+	var right: Vector3 = camera.basis.x
+	var up: Vector3 = camera.basis.y
+	var r: float = p.dot(right)
+	var u: float = p.dot(up)
+	return p + (roundf(r / px) * px - r) * right + (roundf(u / px) * px - u) * up
+
+
+func _update_camera() -> void:
+	var pos: Vector3 = cam_target + camera.basis.z * 30.0
+	camera.position = snap_to_pixels(pos) if snap else pos
 
 
 # 시험용 도트 질감(코드로 만든 임시 그림). 실제로는 Pixel Lab 으로 만든 질감 한 장이 들어갈 자리다.
@@ -120,6 +149,12 @@ func _material(kind: String, tint: Color = Color.WHITE) -> StandardMaterial3D:
 	return m
 
 
+# 높이 "칸 수"(blocks)를 세계 높이로 바꾼다: 한 칸 = 3배 낮춘 화면의 20픽셀.
+static func block_height(blocks: float) -> float:
+	var px_per_unit_z: float = (LOW_TILE_PX / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))
+	return blocks * BLOCK_HEIGHT_LOW_PX / px_per_unit_z
+
+
 func _add_box(cell: Vector2, size: Vector2, height: float, material: Material, base_height: float = 0.0) -> MeshInstance3D:
 	var mesh := BoxMesh.new()
 	mesh.size = Vector3(size.x, height, size.y)
@@ -143,11 +178,11 @@ func _build_world() -> void:
 	viewport.add_child(floor_inst)
 
 	# 긴 벽, 기둥, 낮은 판, 상자 두 개(글의 장면과 비슷한 배치)
-	_add_box(Vector2(0, 0), Vector2(8, 1), 1.8, _material(PAVING))
-	_add_box(Vector2(5, 4), Vector2(1, 1), 2.6, _material(WOOD, Color(0.55, 0.95, 0.65)))
-	_add_box(Vector2(6, 4), Vector2(3, 1), 0.7, _material(WOOD, Color(0.95, 0.65, 0.75)))
-	_add_box(Vector2(2, 2), Vector2(1, 1), 0.9, _material(WOOD))
-	_add_box(Vector2(2, 5), Vector2(1, 1), 0.9, _material(WOOD))
+	_add_box(Vector2(0, 0), Vector2(8, 1), block_height(2.0), _material(PAVING))
+	_add_box(Vector2(5, 4), Vector2(1, 1), block_height(3.0), _material(WOOD, Color(0.55, 0.95, 0.65)))
+	_add_box(Vector2(6, 4), Vector2(3, 1), block_height(1.0), _material(WOOD, Color(0.95, 0.65, 0.75)))
+	_add_box(Vector2(2, 2), Vector2(1, 1), block_height(1.0), _material(WOOD))
+	_add_box(Vector2(2, 5), Vector2(1, 1), block_height(1.0), _material(WOOD))
 
 	# 캐릭터: 2D 도트 한 장을 세운 판. 항상 카메라를 향하되 위아래로는 눕지 않는다.
 	actor = Sprite3D.new()
@@ -160,7 +195,8 @@ func _build_world() -> void:
 	actor.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
 	actor.shaded = true
 	actor.pixel_size = (1.0 / (TILE_PX / sqrt(2.0)))  # 그림 한 픽셀 = 화면 한 픽셀
-	actor.position = Vector3(3.6, 32.0 * actor.pixel_size, 5.4)
+	actor_logic_pos = Vector3(3.6, 0.0, 5.4)
+	actor.position = actor_logic_pos + Vector3(0.0, 32.0 * actor.pixel_size, 0.0)
 	viewport.add_child(actor)
 
 	light = DirectionalLight3D.new()
@@ -203,7 +239,23 @@ func _process(delta: float) -> void:
 	if move != Vector3.ZERO and actor != null:
 		# 화면 기준 방향키를 바닥 평면 방향으로 바꾼다(카메라가 45도 돌아 있으므로).
 		var dir: Vector3 = Vector3(move.x + move.z, 0.0, move.z - move.x).normalized()
-		actor.position += dir * 2.2 * delta
+		actor_logic_pos += dir * 2.2 * delta
+
+	if drift:
+		drift_time += delta
+		cam_target = Vector3(4, 0, 4) + camera.basis.x * (sin(drift_time * 0.6) * 1.5) * 1.0 + camera.basis.y * 0.0
+
+	_update_camera()
+	_update_actor()
+
+
+# 캐릭터 그림 위치: 논리 위치(연속)를 스냅이 켜져 있으면 화면 픽셀 격자에 맞춘다(발이 땅에 붙도록 높이는 그대로).
+func _update_actor() -> void:
+	if actor == null:
+		return
+
+	var foot: Vector3 = snap_to_pixels(actor_logic_pos) if snap else actor_logic_pos
+	actor.position = foot + Vector3(0.0, 32.0 * actor.pixel_size, 0.0)
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -223,6 +275,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			toon = not toon
 		KEY_P:
 			posterize = not posterize
+		KEY_S:
+			snap = not snap
+		KEY_C:
+			drift = not drift
 		_:
 			return
 
@@ -231,4 +287,4 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _update_label() -> void:
-	label.text = "1/2/3 화면 낮추기 %d배 / L 그림자 %s / T 계단식 빛 %s / P 색 줄이기 %s / 방향키 이동" % [shrink, "켬" if shadows else "끔", "켬" if toon else "끔", "켬" if posterize else "끔"]
+	label.text = "1/2/3 낮추기 %d배 / L 그림자 %s / T 계단식 빛 %s / P 색 줄이기 %s / S 픽셀 스냅 %s / C 카메라 흘리기 %s" % [shrink, "켬" if shadows else "끔", "켬" if toon else "끔", "켬" if posterize else "끔", "켬" if snap else "끔", "켬" if drift else "끔"]
