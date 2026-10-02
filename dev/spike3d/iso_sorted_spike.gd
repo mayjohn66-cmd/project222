@@ -7,8 +7,15 @@ extends "res://dev/spike3d/iso_room_spike.gd"
 const SURFACE_SHADER: Shader = preload("res://dev/spike3d/sorted_surface.gdshader")
 const SPRITE_SHADER: Shader = preload("res://dev/spike3d/sorted_sprite.gdshader")
 const BaseSpike = preload("res://dev/spike3d/iso_room_spike.gd")
+const ID_SHADER: Shader = preload("res://dev/spike3d/sorted_id.gdshader")
+const ID_SPRITE_SHADER: Shader = preload("res://dev/spike3d/sorted_id_sprite.gdshader")
+const OUTLINE_SHADER: Shader = preload("res://dev/spike3d/outline_post.gdshader")
 
 var sorted_mode: bool = true
+var outline: bool = true
+var id_viewport: SubViewport
+var id_camera: Camera3D
+var id_pairs: Array = []  # [{src: Node3D, id_mesh: MeshInstance3D, material: ShaderMaterial, key: id}]
 var items: Array = []  # {id, cell, size, blocks, mesh, material}
 var sprite_material: ShaderMaterial
 var ground_material: ShaderMaterial
@@ -38,6 +45,7 @@ func _build_world() -> void:
 	floor_inst.material_override = ground_material
 	floor_inst.position = Vector3(5.0, 0.0, 4.0)
 	viewport.add_child(floor_inst)
+	ground_mesh_node = floor_inst
 
 	_add_item("wall", Vector2(0, 0), Vector2(8, 1), 2.0, PAVING)
 	_add_item("pillar", Vector2(5, 4), Vector2(1, 1), 3.0, WOOD, Color(0.55, 0.95, 0.65))
@@ -74,10 +82,65 @@ func _build_world() -> void:
 	var world_env := WorldEnvironment.new()
 	world_env.environment = env
 	viewport.add_child(world_env)
+	_build_outline_pass()
 	_update_sorting()
 
 
+# 윤곽선용 물체 번호 판: 같은 세계를 다른 카메라(층 2)로 한 번 더 그려서 번호만 얻는다.
+func _build_outline_pass() -> void:
+	id_viewport = SubViewport.new()
+	id_viewport.world_3d = viewport.world_3d
+	id_viewport.transparent_bg = false
+	id_viewport.msaa_3d = Viewport.MSAA_DISABLED
+	id_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	id_viewport.size = viewport.size
+	add_child(id_viewport)
+	id_camera = Camera3D.new()
+	id_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	id_camera.near = camera.near
+	id_camera.far = camera.far
+	id_camera.cull_mask = 2
+	id_viewport.add_child(id_camera)
+	camera.cull_mask = 1
+
+	var env := Environment.new()
+	env.background_mode = Environment.BG_COLOR
+	env.background_color = Color(0, 0, 0)
+	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+	var id_env := WorldEnvironment.new()
+	id_env.environment = env
+	id_viewport.add_child(id_env)
+
+	var floor_src: MeshInstance3D = ground_mesh_node
+	_add_id_pair(floor_src, "ground", false)
+
+	for it in items:
+		_add_id_pair(it["mesh"], it["id"], false)
+
+	_add_id_pair(actor_mesh, "actor", true)
+	post_material.shader = OUTLINE_SHADER
+	post_material.set_shader_parameter("id_tex", id_viewport.get_texture())
+
+
+func _add_id_pair(src: MeshInstance3D, key: String, is_sprite: bool) -> void:
+	var inst := MeshInstance3D.new()
+	inst.mesh = src.mesh
+	inst.layers = 2
+	inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var m := ShaderMaterial.new()
+	m.shader = ID_SPRITE_SHADER if is_sprite else ID_SHADER
+
+	if is_sprite:
+		m.set_shader_parameter("sheet", load(PLAYER_SHEET))
+		m.set_shader_parameter("region", Vector4(0.0, 0.0, 64.0 / 256.0, 64.0 / 320.0))
+
+	inst.material_override = m
+	viewport.add_child(inst)
+	id_pairs.append({"src": src, "id_mesh": inst, "material": m, "key": key})
+
+
 var actor_mesh: MeshInstance3D
+var ground_mesh_node: MeshInstance3D
 var actor_half: float = 0.12  # 캐릭터 정렬 상자의 반 폭(칸). 작을수록 벽에 바짝 붙을 수 있다.
 
 
@@ -131,6 +194,29 @@ func _update_sorting() -> void:
 	sprite_material.set_shader_parameter("rank", rank_of["actor"])
 	sprite_material.set_shader_parameter("rank_count", count)
 	sprite_material.set_shader_parameter("center_world", actor_mesh.position)
+	_sync_outline_pass(rank_of, count)
+
+
+# 번호 판의 카메라·물체 위치·순번을 본 장면에 맞춘다.
+func _sync_outline_pass(rank_of: Dictionary, count: float) -> void:
+	if id_viewport == null:
+		return
+
+	id_viewport.size = viewport.size
+	id_camera.global_transform = camera.global_transform
+	id_camera.size = camera.size
+	post_material.set_shader_parameter("outline_on", outline)
+
+	for pair in id_pairs:
+		var inst: MeshInstance3D = pair["id_mesh"]
+		var src: Node3D = pair["src"]
+		inst.global_transform = src.global_transform
+		var key: String = pair["key"]
+		var rank_value: float = -1.0 if key == "ground" else float(rank_of[key])
+		var m: ShaderMaterial = pair["material"]
+		m.set_shader_parameter("rank", rank_value)
+		m.set_shader_parameter("rank_count", count)
+		m.set_shader_parameter("id", (rank_value + 1.0) / (count + 1.0))
 
 
 func _apply_shrink() -> void:
@@ -144,6 +230,12 @@ func _apply_shrink() -> void:
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_U:
+		outline = not outline
+		_update_sorting()
+		_update_label()
+		return
+
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_O:
 		sorted_mode = not sorted_mode
 		_update_sorting()
@@ -155,4 +247,4 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 func _update_label() -> void:
 	super._update_label()
-	label.text += " / O 정렬 순서 깊이 %s" % ("켬" if sorted_mode else "끔(깊이 버퍼 그대로)")
+	label.text += " / O 정렬 순서 깊이 %s / U 윤곽선 %s" % ["켬" if sorted_mode else "끔", "켬" if outline else "끔"]
