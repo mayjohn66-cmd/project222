@@ -25,8 +25,8 @@ const USER_CONFIG: String = "user://gemini.cfg"
 const TIMEOUT_SEC: float = 60.0
 
 # 일시적 서버 오류(붐빔 503, 내부 오류 500, 한도 429)는 기다렸다가 다시 시도한다.
-const MAX_ATTEMPTS: int = 5
-const RETRY_BASE_SEC: float = 4.0     # 대기 = 4, 8, 16, 32초
+const MAX_ATTEMPTS: int = 6
+const RETRY_BASE_SEC: float = 6.0     # 대기 = 6, 12, 24, 48, 96초(최대 약 3분)
 const RETRYABLE_CODES: Array[int] = [429, 500, 502, 503, 504]
 # 모든 시도가 실패하면 이 모델로 한 번 더 시도한다(비워 두면 사용 안 함). 예: setx GEMINI_FALLBACK_MODEL "모델이름"
 const ENV_FALLBACK_MODEL: String = "GEMINI_FALLBACK_MODEL"
@@ -129,7 +129,7 @@ static func is_retryable(http_code: int) -> bool:
 	return RETRYABLE_CODES.has(http_code)
 
 
-# attempt = 1부터. 1회 실패 뒤 4초, 그다음 8, 16, 32초.
+# attempt = 1부터. 1회 실패 뒤 6초, 그다음 12, 24, 48, 96초.
 static func retry_delay_sec(attempt: int) -> float:
 	return RETRY_BASE_SEC * pow(2.0, float(maxi(attempt - 1, 0)))
 
@@ -147,19 +147,30 @@ func generate(
 	json_output: bool = false
 ) -> Dictionary:
 	var model: String = find_model()
-	var result: Dictionary = await _generate_with_retry(model, prompt, system_instruction, temperature, json_output)
 	var fallback: String = find_fallback_model()
+	var has_fallback: bool = not fallback.is_empty() and fallback != model
+
+	# 이 실행에서 기본 모델이 한도 초과·계속 실패였다면 남은 요청은 처음부터 예비 모델로 보낸다(같은 대기를 되풀이하지 않는다).
+	if has_fallback and _primary_failed:
+		return await _generate_with_retry(fallback, prompt, system_instruction, temperature, json_output)
+
+	# 예비 모델이 있으면 429(사용량 한도)는 기다려도 곧 풀리지 않으니 바로 넘어간다.
+	var result: Dictionary = await _generate_with_retry(model, prompt, system_instruction, temperature, json_output, has_fallback)
 
 	if (
 		not bool(result["ok"])
 		and is_retryable(int(result.get("http_code", 0)))
-		and not fallback.is_empty()
-		and fallback != model
+		and has_fallback
 	):
-		print("[제미나이] %s 가 계속 실패해 예비 모델 %s 로 시도합니다." % [model, fallback])
+		_primary_failed = true
+		print("[제미나이] %s 가 계속 실패해 예비 모델 %s 로 시도합니다(이번 실행의 남은 요청도 예비 모델로 보냅니다)." % [model, fallback])
 		result = await _generate_with_retry(fallback, prompt, system_instruction, temperature, json_output)
 
 	return result
+
+
+# 기본 모델이 실패해 예비 모델로 넘어간 뒤에는 true.
+var _primary_failed: bool = false
 
 
 # 시험용: 재시도 대기 시간 배율(1.0 = 실제 시간).
@@ -171,7 +182,8 @@ func _generate_with_retry(
 	prompt: String,
 	system_instruction: String,
 	temperature: float,
-	json_output: bool
+	json_output: bool,
+	fail_fast_on_quota: bool = false
 ) -> Dictionary:
 	var result: Dictionary = {}
 
@@ -179,6 +191,9 @@ func _generate_with_retry(
 		result = await _request_once(model, prompt, system_instruction, temperature, json_output)
 
 		if bool(result["ok"]) or not is_retryable(int(result.get("http_code", 0))):
+			return result
+
+		if fail_fast_on_quota and int(result.get("http_code", 0)) == 429:
 			return result
 
 		if attempt < MAX_ATTEMPTS:

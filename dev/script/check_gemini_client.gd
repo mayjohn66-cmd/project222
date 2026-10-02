@@ -96,7 +96,7 @@ func _run() -> void:
 	# 재시도 규칙
 	_check(GeminiClient.is_retryable(503) and GeminiClient.is_retryable(429) and GeminiClient.is_retryable(500), "503·429·500은 재시도")
 	_check(not GeminiClient.is_retryable(404) and not GeminiClient.is_retryable(403) and not GeminiClient.is_retryable(200), "404·403은 재시도 안 함")
-	_check(is_equal_approx(GeminiClient.retry_delay_sec(1), 4.0) and is_equal_approx(GeminiClient.retry_delay_sec(3), 16.0), "대기 4, 8, 16초")
+	_check(is_equal_approx(GeminiClient.retry_delay_sec(1), 6.0) and is_equal_approx(GeminiClient.retry_delay_sec(3), 24.0), "대기 6, 12, 24초")
 	var r8 := GeminiClient.parse_response(503, '{"error":{"message":"high demand"}}')
 	_check(not r8["ok"] and int(r8["http_code"]) == 503, "오류 결과에 http_code 포함")
 
@@ -118,17 +118,30 @@ func _run() -> void:
 	var m3 := MockClient.new()
 	add_child(m3)
 	m3.retry_wait_scale = 0.0
-	m3.script_results = [_res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503)]
+	m3.script_results = [_res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503)]
 	var g3: Dictionary = await m3.generate("x")
 	_check(not g3["ok"] and m3.calls.size() == GeminiClient.MAX_ATTEMPTS, "계속 503이면 최대 횟수에서 멈춤")
 	OS.set_environment("GEMINI_FALLBACK_MODEL", "backup-model")
 	var m4 := MockClient.new()
 	add_child(m4)
 	m4.retry_wait_scale = 0.0
-	m4.script_results = [_res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_ok()]
+	m4.script_results = [_res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_fail(503), _res_ok()]
 	var g4: Dictionary = await m4.generate("x")
-	_check(g4["ok"] and m4.calls.size() == 6 and m4.calls[5] == "backup-model" and m4.calls[0] == "main-model", "예비 모델로 넘어가 성공")
+	_check(g4["ok"] and m4.calls.size() == 7 and m4.calls[6] == "backup-model" and m4.calls[0] == "main-model", "예비 모델로 넘어가 성공")
+	var m5 := MockClient.new()
+	add_child(m5)
+	m5.retry_wait_scale = 0.0
+	m5.script_results = [_res_fail(429), _res_ok(), _res_ok()]
+	var g5: Dictionary = await m5.generate("x")
+	var g5b: Dictionary = await m5.generate("y")
+	_check(g5["ok"] and m5.calls == ["main-model", "backup-model", "backup-model"] and g5b["ok"], "429는 기다리지 않고 예비 모델로, 다음 요청도 처음부터 예비 모델")
 	OS.set_environment("GEMINI_FALLBACK_MODEL", "")
+	var m6 := MockClient.new()
+	add_child(m6)
+	m6.retry_wait_scale = 0.0
+	m6.script_results = [_res_fail(429), _res_ok()]
+	var g6: Dictionary = await m6.generate("x")
+	_check(g6["ok"] and m6.calls.size() == 2, "예비 모델이 없으면 429도 기다렸다가 다시 시도")
 	OS.set_environment("GEMINI_MODEL", "")
 
 	# CSV 정리

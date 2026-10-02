@@ -86,6 +86,139 @@ func _run() -> void:
 	_check("행상인 나루" in cprompt and "길목 등불" in cprompt, "게시판 프롬프트에 주민 이름과 완성 장소")
 	_check(Runner.clean_rows("```csv\nid,kind,title,summary,lines,completion\na,b,c,,d,e\n```\n") == "a,b,c,,d,e\n", "코드블록·머리글 제거")
 	_check(Runner.BASE_PROMPT.contains("새 id를 만들거나 빼지 않는다"), "기본 지침에 id 고정 규칙")
+	_check(Runner.BASE_PROMPT.contains("다시 말을 걸기") and Runner.BASE_PROMPT.contains("가지러 올게"), "기본 지침에 플레이어 행동 유지 규칙")
+	_check(Runner.BASE_PROMPT.contains("말투(반말/존댓말)"), "기본 지침에 말투 일관 규칙")
+	_check(Runner.BASE_PROMPT.contains("상투 표현") and Runner.BASE_PROMPT.contains("되풀이하지"), "기본 지침에 상투·반복 금지 규칙")
+	var slop_header: PackedStringArray = Tools.COLUMNS
+	var slop_rows: Array = []
 
+	for n in ["a", "b", "c"]:
+		slop_rows.append(PackedStringArray([n, "resident_request", "제목", "", "첫 줄 입니다|창고에 두고 다시 말을 걸어 줘", "무사히 끝났어 덕분에 편해졌어. 오늘 밤은 푹 자겠다"]))
+
+	var slop: Dictionary = Tools.validate_rows(slop_header, slop_rows, {}, "slop")
+	var slop_text: String = "\n".join(PackedStringArray(slop["warns"]))
+	_check(slop_text.contains("상투 표현 '덕분에'"), "상투 표현을 주의로 알림")
+	_check(slop_text.contains("반복 어구 '오늘 밤은'"), "여러 항목의 반복 어구를 주의로 알림")
+	_check(not slop_text.contains("말을 걸"), "행동 안내 칸은 반복 검사에서 제외")
+	_check(Runner._repairable(slop).size() >= 3, "상투·반복 주의는 자동 수정 대상")
+	var missing: String = Runner.clean_rows("a_id,resident_request,제목,\"한 줄, 두 줄|창고에 두고 다시 말을 걸어 줘\",끝")
+	var missing_cells: PackedStringArray = Tools.parse_csv_line(missing.strip_edges())
+	_check(missing_cells.size() == 6 and missing_cells[3] == "" and missing_cells[4].contains("한 줄, 두 줄"), "빠진 빈 칸(summary)을 채움")
+	_check(Tools.parse_csv_line("a,\"b,c\",\"d\"\"e\"") == PackedStringArray(["a", "b,c", "d\"e"]), "CSV 한 줄 나누기(따옴표·쉼표)")
+	var voices: Dictionary = Tools.load_voices()
+	_check(voices.has("miner_ore") and voices["miner_ore"]["name"] == "바르크", "인물별 말버릇 파일을 읽음")
+	_check(voices.has("settle_naru") and voices["settle_naru"]["name"] == "타블렌", "요청·인사 id도 같은 인물로 찾음")
+	var voice_prompt: String = Runner.build_prompt("resident_request", {"resident_request": {"miner_ore": {"id": "miner_ore", "npc": "광부", "item": "iron_ore", "amount": 3}}})
+	_check(voice_prompt.contains("말하는 사람: 바르크") and voice_prompt.contains("무뚝뚝"), "요청 글에 말하는 사람·말버릇이 붙음")
+	_check(Runner.BASE_PROMPT.contains("말하는 사람"), "기본 지침에 인물 목소리 규칙")
+	var tabbed: String = Runner.clean_rows("id\tkind\ttitle\tsummary\tlines\tcompletion\nz_id\tresident_request\t제목\t\t여기, 쉼표가 있어도 괜찮다|창고에 두고 다시 말을 걸어 줘\t끝, 정말.\n")
+	var tabbed_cells: PackedStringArray = Tools.parse_csv_line(tabbed.strip_edges())
+	_check(tabbed_cells.size() == 6 and tabbed_cells[4].contains("여기, 쉼표") and tabbed_cells[5] == "끝, 정말.", "탭으로 받은 줄은 쉼표가 있어도 6칸 CSV로 바뀜")
+	_check(Runner.csv_to_tsv("a,\"b,c\",d\n") == "a\tb,c\td", "CSV를 탭 구분으로 바꿈")
+	_check(Runner.BASE_PROMPT.contains("탭 문자"), "기본 지침이 탭 구분을 요청")
+	_check(Runner.BASE_PROMPT.contains("칸을 지우지 말고") and Runner.build_repair_prompt("id\tkind\n", ["x"]).contains("칸(줄)을 지우거나"), "지침과 수정 요청이 칸 수 유지를 요구")
+	var cnt_known: Dictionary = {"resident_request": {"cnt_id": {"id": "cnt_id", "lines": ["부탁", "말을 걸어 줘", "소문"], "completion": ["끝"]}}}
+	var cnt_rows: Array = [PackedStringArray(["cnt_id", "resident_request", "제목", "", "부탁|말을 걸어 줘", "끝"])]
+	var cnt: Dictionary = Tools.validate_rows(Tools.COLUMNS, cnt_rows, cnt_known, "cnt")
+	_check("\n".join(PackedStringArray(cnt["warns"])).contains("대사 줄 수가 현재와 다름(현재 3줄, 초안 2줄)"), "줄 수가 줄면 주의")
+	_check(Runner._repairable(cnt).size() == 1, "줄 수 주의는 자동 수정 대상")
+	var act_rows: Array = [PackedStringArray(["act_id", "resident_request", "제목", "", "부탁해.|창고에 두었으니 확인해 줘.", "끝"])]
+	var act: Dictionary = Tools.validate_rows(Tools.COLUMNS, act_rows, {}, "act")
+	_check("\n".join(PackedStringArray(act["warns"])).contains("플레이어 행동 안내가 없음"), "'말을 걸' 안내가 없으면 주의")
+	_check(Runner.filter_ids(["a", "b", "c"], PackedStringArray(["b", "c"])) == ["b", "c"] and Runner.filter_ids(["a"], PackedStringArray()) == ["a"], "--ids 로 고른 id만 남김")
+	var chunks: Array = Runner.chunk_ids(["a", "b", "c", "d", "e"], 2)
+	_check(chunks.size() == 3 and chunks[0] == ["a", "b"] and chunks[2] == ["e"], "항목을 2개씩 묶음")
+	_check(Runner.chunk_ids([], 2).is_empty() and Runner.chunk_ids(["a"], 0).size() == 1, "빈 목록·0 크기 처리")
+
+	# 수정 요청 조립
+	var result := {"errors": ["a.csv:2 [x] lines 한 칸이 48자(최대 45)"], "warns": ["a.csv:3 [y] 수량 표현 '한 병' 이 있음", "a.csv:4 [z] completion 한 칸이 46자(권장 45 이하)", "a.csv:5 [w] 원본 파일이 없어 id를 확인하지 못함"]}
+	var problems: Array[String] = Runner._repairable(result)
+	_check(problems.size() == 3, "고칠 문제: 오류 전부 + 수량·길이 주의, 그 밖의 주의는 제외")
+	var repair: String = Runner.build_repair_prompt("id,kind\nx,y\n", problems)
+	_check("48자" in repair and "한 병" in repair and "id\tkind" in repair, "수정 요청에 문제와 현재 표(탭 구분)가 들어감")
+	_check(Runner._repairable({"errors": [], "warns": ["a [x] 돈 선물"]}).is_empty(), "문제 없으면 수정 요청 안 함")
+
+	# ---- 동기화: 새 항목·바뀐 항목 탐지 ----
+	var src := {
+		Tools.KIND_RESIDENT_REQUEST: {
+			"a": {"id": "a", "npc": "이웃", "item": "bread", "amount": 2, "title": "t", "lines": ["x"]},
+			"b": {"id": "b", "npc": "광부", "item": "iron_ore", "amount": 3, "title": "t2", "lines": ["y"]},
+			"c": {"id": "c", "npc": "새 주민", "item": "water", "amount": 1},
+		},
+		Tools.KIND_COMMUNITY_REQUEST: {},
+		Tools.KIND_RESIDENT_GREETING: {},
+	}
+	_check(Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["a"]) == Tools.fingerprint({"id": "a", "npc": "이웃", "item": "bread", "amount": 2, "title": "완전히 다른 제목", "lines": ["다른 대사"]}), "글 필드가 바뀌어도 기계 지문은 같다")
+	_check(Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["a"]) != Tools.fingerprint({"id": "a", "npc": "이웃", "item": "bread", "amount": 3, "title": "t", "lines": ["x"]}), "수량이 바뀌면 지문이 달라진다")
+	var texts := {
+		"resident_request:a": PackedStringArray(["a", "resident_request", "t", "", "x", ""]),
+		"resident_request:b": PackedStringArray(["b", "resident_request", "t2", "", "y", ""]),
+		"resident_request:gone": PackedStringArray(["gone", "resident_request", "t3", "", "z", ""]),
+	}
+	var state := {
+		"resident_request:a": Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["a"]),
+		"resident_request:b": "old-hash",
+	}
+	var todo := Tools.find_todo(src, texts, state)
+	_check(todo["new"][Tools.KIND_RESIDENT_REQUEST].has("c") and todo["new"][Tools.KIND_RESIDENT_REQUEST].size() == 1, "글이 없는 c는 새 항목")
+	_check(todo["changed"][Tools.KIND_RESIDENT_REQUEST].has("b") and todo["changed"][Tools.KIND_RESIDENT_REQUEST].size() == 1, "지문이 달라진 b는 바뀐 항목")
+	_check(not todo["changed"][Tools.KIND_RESIDENT_REQUEST].has("a"), "지문이 같은 a는 할 일 없음")
+	_check(todo["orphan"] == ["resident_request:gone"], "원본이 사라진 글을 알려 줌")
+	_check(Tools.count_targets(todo["new"]) == 1, "새 항목 개수")
+	# 상태가 비어 있으면(처음) 글이 있는 항목은 바뀐 것으로 보지 않는다.
+	var first := Tools.find_todo(src, texts, {})
+	_check(Tools.count_targets(first["changed"]) == 0 and Tools.count_targets(first["new"]) == 1, "상태가 없으면 기존 글은 승인된 것으로 간주")
+	# 합치기: 초안이 기존 글을 덮어쓰고 새 id를 추가하며 상태를 갱신한다.
+	var merged := Tools.merge_draft(texts, [PackedStringArray(["b", "resident_request", "새 제목", "", "새 대사", ""]), PackedStringArray(["c", "resident_request", "c 제목", "", "c 대사", ""])], src, state)
+	_check("새 제목" in merged["csv"] and "c 제목" in merged["csv"] and not ("t2" in merged["csv"]), "합치면 덮어쓰고 추가한다")
+	_check(merged["csv"].begins_with("id,kind,title,summary,lines,completion\n"), "합친 CSV 머리글")
+	_check(merged["state_csv"].contains(Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["b"])), "합친 항목의 상태 지문 갱신")
+	_check(merged["state_csv"].contains(Tools.fingerprint(src[Tools.KIND_RESIDENT_REQUEST]["c"])), "새 항목 상태 지문 추가")
+
+	_check_content_registration(sources)
 	print("CHECK_REQUEST_TEXT failures=", failures)
 	get_tree().quit(1 if failures > 0 else 0)
+
+
+func _check_content_registration(sources: Dictionary) -> void:
+	var texts := Tools.load_text_rows(Tools.TEXT_PATH)
+	_check(Tools.count_targets(sources) == texts.size(), "모든 게임 문구를 최신 작성·동기화 도구가 인식")
+	var personal: Dictionary = sources[Tools.KIND_PERSONAL_REQUEST]
+	_check(personal.has("naru_provisions") and personal.has("doyun_water") and personal.has("sora_herbs"), "개인 부탁 3종의 원본 등록")
+	var services: Dictionary = sources[Tools.KIND_SERVICE_TEXT]
+	for id in ["well_evening_intro", "well_evening_naru", "well_evening_doyun", "well_evening_sora", "well_evening_end"]:
+		_check(services.has(id) and not services.has("landmark_" + id), "명시된 모임 ID는 landmark 접두어 없이 등록: " + id)
+	_check(services.has("landmark_settle_naru"), "기존 정착 시설의 landmark 접두어 유지")
+	var exported: Array = []
+	for kind in Tools.KINDS:
+		for id in sources[kind]:
+			var row := Tools.row_from_source(kind, sources[kind][id])
+			exported.append(row)
+			_check(row == texts.get(kind + ":" + id), "내보내기 시 현재 CSV 문구 보존: " + kind + "/" + id)
+	var validation := Tools.validate_rows(Tools.COLUMNS, exported, sources)
+	_check(validation["errors"].is_empty() and validation["warns"].is_empty(), "전체 내보내기 문구가 최신 엄격 검사 통과")
+	var voices := Tools.load_voices()
+	_check(voices.has("miner_ore") and voices.get("naru_provisions", {}).get("name") == "타블렌" and voices.get("well_evening_sora", {}).get("name") == "이세르", "공통 인물 말투와 추가 콘텐츠 말투 함께 읽기")
+	var personal_prompt := Runner.build_prompt(Tools.KIND_PERSONAL_REQUEST, sources, sources)
+	_check(personal_prompt.contains("게시판에서 직접 전달") and personal_prompt.contains("말하는 사람: 타블렌") and personal_prompt.contains("기한 없음"), "개인 부탁 프롬프트에 인물·실제 전달 방법·기한 포함")
+	var gathering_prompt := Runner.build_prompt(Tools.KIND_SERVICE_TEXT, sources, sources)
+	_check(gathering_prompt.contains("말하는 사람: 장면 서술") and gathering_prompt.contains("말하는 사람: 여행자 이세르") and gathering_prompt.contains("화자 이름은 대사에 쓰지 않음"), "모임 프롬프트에 서술·화자·표시 규칙 포함")
+	var action_bad := Tools.row_from_source(Tools.KIND_PERSONAL_REQUEST, personal["naru_provisions"])
+	action_bad[4] = "빵이 필요해.|내가 나중에 가지러 갈게."
+	var action_result := Tools.validate_rows(Tools.COLUMNS, [action_bad], sources)
+	_check(str(action_result["warns"]).contains("행동 안내가 없음") and not Runner._repairable(action_result).is_empty(), "개인 부탁의 직접 전달 안내 누락도 자동 수정 대상")
+	var todo := Tools.find_todo(sources, texts, {})
+	_check(todo["orphan"].is_empty() and Tools.count_targets(todo["new"]) == 0, "새 개인 부탁·모임을 포함해 미등록·누락 ID 없음")
+	var missing := texts.duplicate()
+	missing.erase("personal_request:naru_provisions")
+	var pending := Tools.find_todo(sources, missing, {})
+	_check(pending["new"][Tools.KIND_PERSONAL_REQUEST].has("naru_provisions"), "개인 부탁 글이 빠지면 동기화에서 새 글로 감지")
+	var draft := Tools.row_from_source(Tools.KIND_PERSONAL_REQUEST, personal["naru_provisions"])
+	draft[2] = "길을 위한 빵"
+	var accepted := Tools.merge_draft(texts, [draft], sources, {})
+	var preserves_rows: bool = accepted["csv"].contains(Tools.csv_line(draft))
+	for key in texts:
+		if key != "personal_request:naru_provisions":
+			preserves_rows = preserves_rows and accepted["csv"].contains(Tools.csv_line(texts[key]))
+	_check(preserves_rows, "개인 부탁 글 합치기는 모임 문구와 전체 행을 보존")
+	_check(accepted["state_csv"].contains(Tools.fingerprint(personal["naru_provisions"])), "개인 부탁 수량·조건도 승인 지문에 등록")

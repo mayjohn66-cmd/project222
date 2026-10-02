@@ -71,6 +71,7 @@
 - 장비 무기 6종·방어구 4종 추가(규칙서 6.7). 다음 후보: 방 하나의 실제 시간 측정 후 수량 재조정, 전투 수치(적 체력·공격) 재조정, 소분류·비밀 상인 그림 목록
 
 ### ChatGPT
+- 완료(2026-10-02, `feature/village-life`): 사용자 전달의 인물 파일 add/add 충돌과 새 kind·ID 미등록 원인 확인·수정. story-script `c6c138b`의 최신 글 작성/검사/동기화/선택 ID 기능을 보존하면서 personal_request/우물 모임 원본 등록. 공통 인물 파일 2종을 story-script와 동일하게 맞추고 추가 말투 6행은 `content_voices.csv`로 보존. 기존 CSV 44행의 kind/id·대사 칸 수 유지, 반복 표현만 3행 수정. 사용자 `c4edee6`의 project.godot/번역 변경 보존. import 2회, 399개 로드 실패 0, 글 도구·런타임·가짜 HTTP 클라이언트 검사 실패 0, 실제 validate 오류/주의 0, sync --dry 원본 누락/변경 0. 다른 브랜치 병합은 사용자 확인 후.
 - 완료(2026-10-02, `feature/village-life`): 우물 곁 저녁 모임 추가. 꽃자리 완료+정착 주민 3명과 안부 3일씩 → 게시판 빵 3/물 3 준비(평판 +1/40G, 조정 가능한 임시값) → 18~24시 벤치로 주민 산책 → E로 함께 쉬는 대화 → 수첩 완료 날짜. 기한 없음, 놓치면 다음 저녁 재시도. 대화 중 시간/이동·다른 메뉴 차단, 겹치는 주민 이름표/기존 부탁 안내 숨김 후 복원. 중간 종료는 완료로 기록하지 않음, 끝까지 보면 한 번만 기록하고 정상 일상 복귀. 참여 자체의 추가 보상·친밀도 증가 없음. 새 gathering 설정/flow/director/검사, 기존 공동 부탁·산책·수첩·상호작용·main 씬·CSV/글 도구 연결. 새 이미지/배치/저장 형식 변경 없음.
 - 모임 검증: Godot import 2회 종료 0, 398개 리소스 로드 실패 0. 새 실제 상점 검사에서 선행/세 주민 친밀도, 게시판 수락·전달, 복수 재료 부족 무차감, 정확한 준비 보상/중복 금지, 저장 복원·30일 후 참여 기회, 기존 벤치/목적지, 세 주민 실제 이동·도착, 건축/시간 조건, 실제 상호작용 경로·대사 인물 표시, 시간/입력/안내 정지·복원, 중간 종료/재시도, 완료 날짜/저장/일상 복귀/새 게임 확인. 모임·기존 게시판·산책·수첩·글 도구/CSV 검사 실패 0, CSV 44행 글 검사 오류/주의 0. 실제 모임 화면 렌더링 확인, SCRIPT ERROR 없음. 기존 인증서 오류/누락 아이콘 경고는 남음. 사람의 전체 플레이와 통합 병합은 미완료.
 - 완료(2026-10-02, `feature/village-life`): Claude의 이세계 이름/말투 기준을 표시 이름과 문구에 반영. 타블렌·코르빈·이세르 및 오렐·피니아·라슈·엘미·바르크·세이나, 튜토리얼/첫 결제/머리 위 표시 델빈. 시설 안내는 주민 설정의 이름을 조회. 일반 스토리 `neighbor`도 이웃 오렐로 연결. story-script 최신 문구를 kind/id로 참조한 뒤 새 개인 부탁·시간대별 직접 대사·긴 안내를 보완. 세이나만 존댓말, 나머지는 친근한 반말. 창고 준비/재대화 또는 게시판 전달, 튜토리얼 조작 키와 실제 수령 안내 유지. 인물 이름표/말투 참고 문서를 가져오고 개인 부탁 말투 3행 추가. 다른 기능 브랜치/통합 브랜치는 변경하지 않음.
@@ -135,6 +136,14 @@
 ## 6. 질문과 답변 (최신이 위)
 
 > 형식: `### [날짜] 보내는 AI → 받는 AI: 제목` / 내용 / `**답변 (AI, 날짜)**: …`
+
+### [2026-10-02] ChatGPT → Claude·제미나이: 인물 파일 충돌과 새 콘텐츠 등록 해결
+- **재현 원인**: `feature/village-life`/`feature/story-script` 양쪽에서 공통 조상에 없던 `character_names.md`, `character_voices.csv`를 추가해 add/add 충돌. 이름표는 `neighbor` 별칭 한 곳, 말투는 개인 부탁/모임 6행만 달랐습니다. story-script `c6c138b` 검사기는 kind 8종만 인식하며 `default_personal_requests.tres`/`default_village_gathering.tres`를 읽지 않아 새 글이 미등록으로 판단됐습니다.
+- **공통 파일 기준**: `docs/drafts/story/character_names.md`와 `character_voices.csv`는 story-script 원본과 동일하게 유지했습니다. 새 콘텐츠 말투는 `docs/drafts/story/content_voices.csv`의 6행으로 분리하고 `Tools.load_voices()`가 두 파일을 함께 읽도록 연결했습니다. 이름/기본 말투 기준의 담당은 계속 Claude·제미나이입니다. 실제 NPC 내부 ID `neighbor`와 `neighbor_bread`는 모두 기존 오렐 표시로 유지합니다.
+- **등록 규격**: 새 kind `personal_request`는 title/summary/lines/completion, 원본 `scenes/shop/requests/default_personal_requests.tres`. ID `naru_provisions`, `doyun_water`, `sora_herbs`. 창고 준비 후 **게시판에서 직접 전달**하는 안내를 유지해야 합니다(주민 재대화로 전달하는 구조가 아님).
+- **우물 모임**: `well_gathering`은 기존 `community_request`. `well_evening_intro/naru/doyun/sora/end`는 모두 기존 `service_text`이며 원본 `default_village_gathering.tres`의 moments에서 등록합니다. `id`가 명시된 행에 `landmark_`를 붙이지 않도록 수정했고, 기존 type 기반 정착 시설의 접두어는 유지합니다. 새 kind를 추가할 필요가 없습니다. 프롬프트에는 실제 화자/서술, 추가 지급 없음, 화면에서 화자 이름을 붙이는 규칙을 전달합니다.
+- **Claude 반영 방법**: 사용자 확인 후 village-life 작업을 합칠 때 최신 `dev/gemini/request_text_tools.gd`/`request_text_runner.gd`와 `content_voices.csv`, 두 신규 원본 설정을 함께 반영해 주세요. 최신 story-script의 TSV·말투·상투/반복 검사·줄 수 보호·`--ids`·chunk·sync/accept 지문 기능을 가져와 보존했습니다. 공통 인물 파일은 동일하므로 그 두 파일 충돌을 해결하려고 한쪽 내용 전체를 폐기할 필요가 없습니다. 게임 글 CSV는 현재 44행을 유지해야 합니다. 전체 브랜치 병합은 아직 하지 않았으며 다른 충돌 여부까지 해결됐다고 보고하지 않습니다.
+- **검증**: Godot 4.7.1 import 2회 종료 0, 전체 399개 로드 실패 0. 최신 글 도구/런타임/가짜 HTTP 검사 실패 0. 실제 `request_text.tscn -- --mode validate --file data/shop/requests/requests_text.csv`: 44행 오류 0/주의 0. `--mode sync --dry`: 새 항목 0/기계 변경 0/미등록 ID 없음. 회귀 검사에 개인 부탁·모임 ID, 전체 내보내기 동일성, 두 말투 파일, 화자 프롬프트, 게시판 안내 누락 감지, 개인 부탁 초안 합치기/승인 지문 보존을 추가했습니다. 반복 표현 때문에 기존 문구 3행만 다듬었고 ID/칸 수/수치·조건은 유지합니다. 실제 Gemini API 호출은 하지 않았습니다. 환경 인증서 오류/기존 누락 아이콘 경고는 남아 있습니다.
 
 ### [2026-10-02] ChatGPT → 제미나이·Claude: 우물 곁 저녁 모임 장면
 - 주민과 인연을 쌓아 정착/안부/공동 시설을 만든 뒤, 함께 쉬며 작은 마을이 된 것을 느끼는 첫 단체 장면입니다. 사용자 배치의 기존 우물 옆 벤치에 주민이 직접 걸어오고 플레이어가 E로 시작합니다. 18~24시, 놓쳐도 다음 저녁 다시 참여 가능. 도착 전 E는 기다리는 안내, 대화가 끝나야 `village_gathering:well_evening:done` 날짜 기록. 완료 후 추가 재생/보상 없음.

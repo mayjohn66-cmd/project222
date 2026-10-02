@@ -64,6 +64,8 @@ func _run() -> void:
 static func build_system_prompt(setting_text: String) -> String:
 	return append_world_setting(SYSTEM_PROMPT, setting_text)
 
+
+# 어떤 기본 지침에도 세계관 설정을 붙일 수 있게 분리(부탁 글 초안에서도 같이 쓴다).
 static func append_world_setting(base_prompt: String, setting_text: String) -> String:
 	var setting_lines: PackedStringArray = []
 
