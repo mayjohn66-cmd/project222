@@ -141,6 +141,8 @@ func _add_id_pair(src: MeshInstance3D, key: String, is_sprite: bool) -> void:
 
 var actor_mesh: MeshInstance3D
 var ground_mesh_node: MeshInstance3D
+var actor_art_px: int = 0  # 0 = 원본 64픽셀 그림 그대로, 그 외 = 이 키(픽셀)로 줄인 그림(낮은 해상도에서 새로 그린 캐릭터의 대용)
+var actor_art_method: String = "lanczos"  # "nearest" 또는 "lanczos"
 var actor_half: float = 0.12  # 캐릭터 정렬 상자의 반 폭(칸). 작을수록 벽에 바짝 붙을 수 있다.
 
 
@@ -150,7 +152,7 @@ func _update_actor() -> void:
 		return
 
 	var foot: Vector3 = snap_to_pixels(actor_logic_pos) if snap else actor_logic_pos
-	var half: float = 32.0 * (1.0 / (TILE_PX / sqrt(2.0)))
+	var half: float = (actor_mesh.mesh as QuadMesh).size.y * 0.5
 	actor_mesh.position = foot + Vector3(0.0, half, 0.0)
 	_update_sorting()
 
@@ -219,8 +221,58 @@ func _sync_outline_pass(rank_of: Dictionary, count: float) -> void:
 		m.set_shader_parameter("id", (rank_value + 1.0) / (count + 1.0))
 
 
+# 캐릭터 그림을 목표 키(픽셀)로 줄여서 판에 씌운다. 한 픽셀 = 낮춘 화면의 한 픽셀이 되도록 판 크기도 맞춘다.
+# 실제로는 낮은 해상도에서 처음부터 그린 그림이 들어갈 자리다(줄인 그림은 그 대용).
+func set_actor_art(size_px: int, method: String) -> void:
+	actor_art_px = size_px
+	actor_art_method = method
+	_apply_actor_art()
+
+
+func _apply_actor_art() -> void:
+	if sprite_material == null:
+		return
+
+	var tex: Texture2D
+	var region: Vector4
+	var world_per_px: float = pixel_world_size()
+	var side_px: float = 64.0 * (1.0 / float(shrink))  # 지금 비율 유지: 64픽셀 칸을 배율만큼 줄인 크기
+
+	if actor_art_px <= 0:
+		tex = load(PLAYER_SHEET)
+		region = Vector4(0.0, 0.0, 64.0 / 256.0, 64.0 / 320.0)
+		side_px = 64.0
+	else:
+		var sheet_img: Image = (load(PLAYER_SHEET) as Texture2D).get_image()
+		var frame: Image = sheet_img.get_region(Rect2i(0, 0, 64, 64))
+		var side: int = actor_art_px
+		frame.resize(side, side, Image.INTERPOLATE_NEAREST if actor_art_method == "nearest" else Image.INTERPOLATE_LANCZOS)
+
+		# 반투명 가장자리는 도트처럼 완전 투명/불투명 둘 중 하나로 만든다.
+		for y in range(side):
+			for x in range(side):
+				var c: Color = frame.get_pixel(x, y)
+				c.a = 1.0 if c.a >= 0.5 else 0.0
+				frame.set_pixel(x, y, c)
+
+		tex = ImageTexture.create_from_image(frame)
+		region = Vector4(0.0, 0.0, 1.0, 1.0)
+		side_px = float(side)
+
+	(actor_mesh.mesh as QuadMesh).size = Vector2(side_px, side_px) * world_per_px
+	sprite_material.set_shader_parameter("sheet", tex)
+	sprite_material.set_shader_parameter("region", region)
+
+	for pair in id_pairs:
+		if pair["key"] == "actor":
+			(pair["id_mesh"].mesh as QuadMesh).size = Vector2(side_px, side_px) * world_per_px
+			pair["material"].set_shader_parameter("sheet", tex)
+			pair["material"].set_shader_parameter("region", region)
+
+
 func _apply_shrink() -> void:
 	super._apply_shrink()
+	_apply_actor_art()
 
 	for it in items:
 		it["material"].set_shader_parameter("albedo_tex", BaseSpike.make_texture(str(it["kind"]), _texture_size()))
