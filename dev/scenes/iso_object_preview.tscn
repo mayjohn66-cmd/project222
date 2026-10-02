@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://dev/script/iso_object_preview.gd" id="1"]
+
+[node name="IsoObjectPreview" type="Node2D"]
+script = ExtResource("1")

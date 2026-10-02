@@ -63,25 +63,17 @@ func get_art_rect() -> Rect2:
 # 정면 그림: 문이 서는 벽면의 네 꼭짓점(왼쪽 위, 오른쪽 위, 오른쪽 아래, 왼쪽 아래).
 # 짝수 회전은 `\`(오른쪽이 낮음), 홀수 회전은 `/`(왼쪽이 낮음)로 기울고 그림은 뒤집지 않는다.
 func get_wall_quad() -> PackedVector2Array:
-	var half_w: float = door_width * 0.5
-	# 가로 door_width에 2:1 기울기를 맞춘 세로 이동량.
-	var drop: float = door_width * 0.5
-	var base_y: float = tile_height * 0.25
-	var left_bottom: float = base_y - drop * 0.5
-	var right_bottom: float = base_y + drop * 0.5
+	var quad := IsoGeometry.edge_plane(
+		door_width,
+		door_height,
+		tile_height * 0.25,
+		rotation_index % 2 == 0
+	)
 
-	if rotation_index % 2 == 1:
-		var swap: float = left_bottom
-		left_bottom = right_bottom
-		right_bottom = swap
+	for i in quad.size():
+		quad[i] += art_offset
 
-	var offset := art_offset
-	return PackedVector2Array([
-		Vector2(-half_w, left_bottom - door_height) + offset,
-		Vector2(half_w, right_bottom - door_height) + offset,
-		Vector2(half_w, right_bottom) + offset,
-		Vector2(-half_w, left_bottom) + offset,
-	])
+	return quad
 
 
 func _draw():
