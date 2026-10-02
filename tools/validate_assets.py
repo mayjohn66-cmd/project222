@@ -91,6 +91,21 @@ def check_image(path, rule):
     return fails, warns
 
 
+_FACES_CACHE = {}
+
+
+def _faces_expected():
+    """docs/drafts/art_requests/faces.csv → {(자산id, 면이름): (w, h)}"""
+    if not _FACES_CACHE:
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "drafts", "art_requests", "faces.csv")
+        if os.path.exists(path):
+            with open(path, encoding="utf-8-sig", newline="") as f:
+                for row in csv.DictReader(f):
+                    _FACES_CACHE[(row["asset"], row["face"])] = (int(row["width"]), int(row["height"]))
+        _FACES_CACHE[("", "")] = (0, 0)
+    return _FACES_CACHE
+
+
 def check_world3d(full, rel, rule):
     """3D 도트 질감 전용 검사. (FAIL 사유, WARN 사유)"""
     fails, warns = [], []
@@ -112,6 +127,12 @@ def check_world3d(full, rel, rule):
             a, b = Image.open(base).size, Image.open(full).size
             if a != b:
                 fails.append(f"알베도와 크기가 다름 ({b[0]}x{b[1]} / 알베도 {a[0]}x{a[1]})")
+    # 그림 요청서(faces.csv)의 크기와 같은지: art/world3d/<자산id>/<면이름>.png
+    parts = rel.split("/")
+    if len(parts) == 4 and kind in ("albedo", "normal"):
+        want = _faces_expected().get((parts[2], stem[:-2] if kind == "normal" else stem))
+        if want and Image.open(full).size != want:
+            warns.append("요청서 크기 %dx%d 와 다름(실제 %dx%d)" % (want[0], want[1], *Image.open(full).size))
     imp = full + ".import"
     if not os.path.exists(imp):
         warns.append(".import 없음(Godot 에서 한 번 열면 생김)")

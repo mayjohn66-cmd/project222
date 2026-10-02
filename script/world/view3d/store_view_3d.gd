@@ -245,6 +245,19 @@ func set_village_enabled(value: bool) -> void:
 	_apply_2d_hiding()
 
 
+# 마을 건물·소품을 다시 만든다(art/world3d/ 에 그림을 넣거나 바꾼 뒤 게임을 껐다 켜지 않고 확인할 때, F8).
+func reload_village_art() -> void:
+	if village == null:
+		return
+
+	for key in _items.keys():
+		if str(key).begins_with("vil"):
+			_remove_item(str(key))
+
+	village._keys.clear()
+	village.reset_signatures()
+
+
 func cycle_mode() -> void:
 	mode = ((int(mode) + 1) % 3) as Mode
 
@@ -252,6 +265,9 @@ func cycle_mode() -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
 		cycle_mode()
+
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F8:
+		reload_village_art()
 
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
 		set_village_enabled(not village_enabled)

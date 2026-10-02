@@ -18,8 +18,50 @@ static func block_h(blocks: float, p: Dictionary) -> float:
 	return blocks * float(p["block_px"]) / float(p["unit_px_z"])
 
 
-static func default_params(texture_size: int = 18, block_px: float = 22.0, tile_low: float = 36.0) -> Dictionary:
-	return {"ts": texture_size, "block_px": block_px, "unit_px_z": (tile_low / sqrt(2.0)) * cos(deg_to_rad(30.0))}
+# overrides: true 면 art/world3d/<자산id>/<면이름>.png 가 있을 때 임시 질감 대신 쓴다(그림 요청 내보내기는 false 로 임시 틀을 만든다).
+static func default_params(texture_size: int = 18, block_px: float = 22.0, tile_low: float = 36.0, overrides: bool = true) -> Dictionary:
+	return {"ts": texture_size, "block_px": block_px, "unit_px_z": (tile_low / sqrt(2.0)) * cos(deg_to_rad(30.0)), "overrides": overrides}
+
+
+const REAL_ART_DIR: String = "res://art/world3d/"
+static var _missing_report: Dictionary = {}  # 자산id → 아직 그림이 없는 면 이름 목록(한 번만 모음)
+
+
+# 실제 그림이 있으면 사양의 질감을 바꾼다: art/world3d/<자산id>/<면이름>.png (+ <면이름>_n.png 법선 맵).
+# 실제 그림에는 임시 색조(tint)를 곱하지 않는다. 크기가 임시 틀과 다르면 경고만 하고 그대로 쓴다(UV 가 면 전체에 늘어남).
+static func apply_overrides(specs: Array, asset_id: String, p: Dictionary) -> int:
+	if asset_id == "" or not bool(p.get("overrides", true)):
+		return 0
+
+	var used: int = 0
+
+	for s in specs:
+		var face: String = str(s["name"])
+		var path: String = "%s%s/%s.png" % [REAL_ART_DIR, asset_id, face]
+
+		if not ResourceLoader.exists(path):
+			continue
+
+		var tex: Texture2D = load(path)
+
+		if tex == null:
+			continue
+
+		var old: Texture2D = s["tex"]
+
+		if tex.get_width() != old.get_width() or tex.get_height() != old.get_height():
+			push_warning("[VillageAssets] %s/%s 크기 %dx%d (요청서 %dx%d) — 그대로 사용(늘어남)" % [asset_id, face, tex.get_width(), tex.get_height(), old.get_width(), old.get_height()])
+
+		s["tex"] = tex
+		s["tint"] = Color.WHITE
+		s["real"] = true
+		used += 1
+		var npath: String = "%s%s/%s_n.png" % [REAL_ART_DIR, asset_id, face]
+
+		if ResourceLoader.exists(npath):
+			s["normal"] = load(npath)
+
+	return used
 
 
 # 질감 한 칸 반복형은 이름+크기로 캐시한다(같은 모양 건물이 많아서).
@@ -316,7 +358,13 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		ext_lo = Vector2(minf(ext_lo.x, pre.min_pt.x), minf(ext_lo.y, pre.min_pt.z))
 		ext_hi = Vector2(maxf(ext_hi.x, pre.max_pt.x), maxf(ext_hi.y, pre.max_pt.z))
 
-	return {"mesh": mesh, "specs": pre_specs + specs + extra_specs, "apron": apron_info, "total_blocks": wall_blocks + roof_blocks, "lo": ext_lo, "hi": ext_hi}
+	var all_specs: Array = pre_specs + specs + extra_specs
+	apply_overrides(all_specs, str(rule.get("asset", "")), p)
+
+	if apron_info != null:
+		apply_overrides([apron_info["spec"]], str(rule.get("asset", "")), p)
+
+	return {"mesh": mesh, "specs": all_specs, "apron": apron_info, "total_blocks": wall_blocks + roof_blocks, "lo": ext_lo, "hi": ext_hi}
 
 
 # extras: "이름:dx:dz;..." — 건물 앞(+z)쪽 중심 기준 옆(dx)·앞(dz) 칸 위치에 작은 소품(통·상자·화분)
@@ -484,6 +532,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 		plo = Vector2(minf(lo.x, b.min_pt.x), minf(lo.y, b.min_pt.z))
 		phi = Vector2(maxf(hi.x, b.max_pt.x), maxf(hi.y, b.max_pt.z))
 
+	apply_overrides(specs, str(rule.get("asset", "")), p)
 	return {"mesh": mesh, "specs": specs, "apron": null, "total_blocks": total, "lo": plo, "hi": phi}
 
 

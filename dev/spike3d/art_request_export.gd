@@ -26,7 +26,7 @@ func _ready() -> void:
 
 	DirAccess.make_dir_recursive_absolute(out_dir)
 	var rules: Array = VillageMirror.load_rules()
-	var p: Dictionary = VillageAssets.default_params(18, 22.0, TILE_LOW)
+	var p: Dictionary = VillageAssets.default_params(18, 22.0, TILE_LOW, false)  # 임시 틀을 내보내므로 실제 그림 덮어쓰기는 끔
 	var assets: Array = _read_assets()
 	var result: Array = []
 
