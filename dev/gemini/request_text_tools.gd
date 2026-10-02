@@ -156,6 +156,32 @@ static func load_voices(path: String = VOICES_PATH) -> Dictionary:
 	return voices
 
 
+# 모델이 lines 칸을 비우고 대사 전체를 completion 칸에 넣은 행을 바로잡는다(연속된 빈 칸 탭을 세지 못해 생기는 실수).
+# 현재 글의 대사 줄 수(L)와 마무리 줄 수(C)를 알고, 비어 있는 lines 와 L+C 칸짜리 completion 이 맞아떨어질 때만 나눈다.
+static func fix_shifted_lines(cells: PackedStringArray, known: Dictionary) -> PackedStringArray:
+	if cells.size() != COLUMNS.size() or not cells[4].strip_edges().is_empty():
+		return cells
+
+	var kind: String = cells[1].strip_edges()
+	var id: String = cells[0].strip_edges()
+
+	if not known.get(kind, {}).has(id):
+		return cells
+
+	var current: PackedStringArray = row_from_source(kind, known[kind][id])
+	var want_lines: int = current[4].split("|", false).size()
+	var want_done: int = current[5].split("|", false).size()
+	var parts: PackedStringArray = cells[5].split("|", false)
+
+	if want_lines <= 0 or parts.size() != want_lines + want_done:
+		return cells
+
+	var fixed: PackedStringArray = cells.duplicate()
+	fixed[4] = "|".join(parts.slice(0, want_lines))
+	fixed[5] = "|".join(parts.slice(want_lines))
+	return fixed
+
+
 # 한 줄 CSV를 칸으로 나눈다(큰따옴표 안의 쉼표와 ""를 처리).
 static func parse_csv_line(line: String) -> PackedStringArray:
 	var cells: PackedStringArray = []

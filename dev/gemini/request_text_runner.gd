@@ -161,7 +161,7 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 				failed_ids.append_array(chunks[i])
 				continue
 
-			rows_text.append(clean_rows(str(result["text"])))
+			rows_text.append(fix_shifted_rows(clean_rows(str(result["text"])), sources))
 
 	if rows_text.is_empty():
 		_print_usage(client)
@@ -190,7 +190,7 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 			print("[부탁 글] 수정 요청 실패: ", fixed["error"], " — 현재 초안을 그대로 둡니다.")
 			break
 
-		var repaired: String = clean_rows(str(fixed["text"]))
+		var repaired: String = fix_shifted_rows(clean_rows(str(fixed["text"])), sources)
 
 		if repaired.is_empty():
 			break
@@ -383,7 +383,7 @@ func _polish(sources: Dictionary) -> void:
 				failed.append_array(chunk)
 				continue
 
-			for line in clean_rows(str(result["text"])).split("\n", false):
+			for line in fix_shifted_rows(clean_rows(str(result["text"])), sources).split("\n", false):
 				var cells: PackedStringArray = Tools.parse_csv_line(line)
 
 				if cells.size() == Tools.COLUMNS.size() and by_kind[kind].has(cells[0].strip_edges()):
@@ -724,6 +724,18 @@ static func csv_to_tsv(csv_text: String) -> String:
 		out.append("\t".join(Tools.parse_csv_line(line.strip_edges())))
 
 	return "\n".join(out)
+
+
+# 줄 단위로 fix_shifted_lines 를 적용한다.
+static func fix_shifted_rows(text: String, sources: Dictionary) -> String:
+	var out: PackedStringArray = []
+
+	for line in text.split("\n", false):
+		var cells: PackedStringArray = Tools.parse_csv_line(line)
+		var fixed: PackedStringArray = Tools.fix_shifted_lines(cells, sources)
+		out.append(Tools.csv_line(fixed) if fixed != cells else line)
+
+	return "\n".join(out) + "\n" if not out.is_empty() else ""
 
 
 static func clean_rows(text: String) -> String:
