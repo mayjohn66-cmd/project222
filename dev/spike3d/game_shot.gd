@@ -94,6 +94,22 @@ func _ready() -> void:
 	var restored_ok: bool = fl2.visible and scene.get_node("Objects").get_child(0).get_node("Visual").visible
 	print("hide2d hidden_in_ON=", hidden_ok, " restored_in_OFF=", restored_ok)
 
+	# 빵집 앞으로 이동해서 2D / 3D 를 같은 시각(낮 12시)으로 비교(박공 지붕 건물 시험)
+	if "--bakery" in args:
+		var ex2: Node2D = scene.get_node("StoreExterior")
+		var dm2: Node = scene.get_node("DayManager")
+		dm2.current_hour = 12
+		dm2.hour_timer.stop()
+		var plr2: Node2D = scene.get_node("Actors/Player")
+		plr2.global_position = ex2.to_global(ex2.grid_to_local(Vector2i(13, 2)))
+		mirror.forced_hour = 12.0
+
+		for m in [["2d", StoreView3D.Mode.OFF], ["3d", StoreView3D.Mode.ON]]:
+			mirror.mode = m[1]
+			for i in range(25):
+				await get_tree().process_frame
+			get_viewport().get_texture().get_image().save_png("%s/bakery_%s.png" % [out, m[0]])
+
 	# 마을 광장으로 이동해서 2D / 3D(마을 포함) / 3D(매장만) 를 같은 시각(낮 12시)으로 비교
 	if "--square" in args:
 		var ex: Node2D = scene.get_node("StoreExterior")

@@ -35,6 +35,7 @@ const ACTOR_HALF: float = 0.12
 const SURFACE_SHADER: Shader = preload("res://script/world/view3d/shader/sorted_surface.gdshader")
 const ID_SHADER: Shader = preload("res://script/world/view3d/shader/sorted_id.gdshader")
 const OUTLINE_SHADER: Shader = preload("res://script/world/view3d/shader/outline_post.gdshader")
+const FACADE_SHADER: Shader = preload("res://script/world/view3d/shader/facade.gdshader")
 
 var mode: Mode = Mode.OFF:
 	set(value):
@@ -723,7 +724,39 @@ func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, text
 	id_inst.material_override = id_material
 	id_inst.position = inst.position
 	_viewport.add_child(id_inst)
-	_items[key] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, base_blocks * block_px), "max": Vector3(hi.x, hi.y, (base_blocks + height_blocks) * block_px), "center": inst.position, "signature": signature}
+	_items[key] = {"mesh": inst, "material": material, "materials": [material], "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, base_blocks * block_px), "max": Vector3(hi.x, hi.y, (base_blocks + height_blocks) * block_px), "center": inst.position, "signature": signature}
+
+
+# 면마다 다른 재질을 쓰는 건물 메시 항목(박공 지붕 건물 등). materials 는 메시 면(surface) 순서대로.
+func _set_mesh_item(key: String, mesh: Mesh, materials: Array, lo: Vector2, hi: Vector2, total_blocks: float, signature: String) -> void:
+	_remove_item(key)
+	var inst := MeshInstance3D.new()
+	inst.mesh = mesh
+	inst.layers = 1
+
+	for i in range(materials.size()):
+		inst.set_surface_override_material(i, materials[i])
+
+	_viewport.add_child(inst)
+	var id_inst := MeshInstance3D.new()
+	id_inst.mesh = mesh
+	id_inst.layers = 2
+	id_inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var id_material := ShaderMaterial.new()
+	id_material.shader = ID_SHADER
+	id_inst.material_override = id_material
+	_viewport.add_child(id_inst)
+	var center := Vector3((lo.x + hi.x) * 0.5, 0.0, (lo.y + hi.y) * 0.5)
+	_items[key] = {"mesh": inst, "material": materials[0], "materials": materials, "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, 0.0), "max": Vector3(hi.x, hi.y, total_blocks * block_px), "center": center, "signature": signature}
+
+
+func _make_facade_material(texture: Texture2D, tint: Color = Color.WHITE, uv_scale: Vector2 = Vector2.ONE) -> ShaderMaterial:
+	var m := ShaderMaterial.new()
+	m.shader = FACADE_SHADER
+	m.set_shader_parameter("albedo_tex", texture)
+	m.set_shader_parameter("tint", tint)
+	m.set_shader_parameter("uv_scale", uv_scale)
+	return m
 
 
 func _remove_item(key: String) -> void:
@@ -816,10 +849,10 @@ func _sort_and_update() -> void:
 	for key in _sorted_keys:
 		var it: Dictionary = _items[key]
 		var rank: float = rank_of[key]
-		var m: ShaderMaterial = it["material"]
-		m.set_shader_parameter("rank", rank)
-		m.set_shader_parameter("rank_count", count)
-		m.set_shader_parameter("center_world", it["center"])
+		for m in it["materials"]:
+			(m as ShaderMaterial).set_shader_parameter("rank", rank)
+			(m as ShaderMaterial).set_shader_parameter("rank_count", count)
+			(m as ShaderMaterial).set_shader_parameter("center_world", it["center"])
 		var idm: ShaderMaterial = it["id_material"]
 		idm.set_shader_parameter("rank", rank)
 		idm.set_shader_parameter("rank_count", count)

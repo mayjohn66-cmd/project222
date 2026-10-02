@@ -6,10 +6,10 @@ uid="uid://b5ldy225hmxjt"
 
 [deps]
 
-files=["res://data/shop/catalogs/village_3d.kind.translation", "res://data/shop/catalogs/village_3d.height.translation", "res://data/shop/catalogs/village_3d.texture.translation", "res://data/shop/catalogs/village_3d.tint.translation"]
+files=["res://data/shop/catalogs/village_3d.kind.translation", "res://data/shop/catalogs/village_3d.height.translation", "res://data/shop/catalogs/village_3d.texture.translation", "res://data/shop/catalogs/village_3d.tint.translation", "res://data/shop/catalogs/village_3d.roof.translation", "res://data/shop/catalogs/village_3d.roof.translation"]
 
 source_file="res://data/shop/catalogs/village_3d.csv"
-dest_files=["res://data/shop/catalogs/village_3d.kind.translation", "res://data/shop/catalogs/village_3d.height.translation", "res://data/shop/catalogs/village_3d.texture.translation", "res://data/shop/catalogs/village_3d.tint.translation"]
+dest_files=["res://data/shop/catalogs/village_3d.kind.translation", "res://data/shop/catalogs/village_3d.height.translation", "res://data/shop/catalogs/village_3d.texture.translation", "res://data/shop/catalogs/village_3d.tint.translation", "res://data/shop/catalogs/village_3d.roof.translation", "res://data/shop/catalogs/village_3d.roof.translation"]
 
 [params]
 

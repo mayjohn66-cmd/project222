@@ -40,7 +40,7 @@ func _load_rules() -> void:
 		if cells.size() < header.size() or cells[0].strip_edges().is_empty():
 			continue
 
-		rules.append({"match": cells[0].strip_edges().to_lower(), "kind": cells[1].strip_edges(), "height_blocks": float(cells[2]), "texture": cells[3].strip_edges(), "tint": Color.html(cells[4].strip_edges())})
+		rules.append({"match": cells[0].strip_edges().to_lower(), "kind": cells[1].strip_edges(), "height_blocks": float(cells[2]), "texture": cells[3].strip_edges(), "tint": Color.html(cells[4].strip_edges()), "roof_blocks": float(cells[5]) if cells.size() > 5 else 0.0, "roof_tint": Color.html(cells[6].strip_edges()) if cells.size() > 6 else Color.WHITE})
 
 
 # 규칙 찾기: 노드 이름 + 스프라이트 그림 경로(소문자)에 match 글자가 들어 있는 첫 규칙. 먼저 나온 행이 우선(구체적인 것을 위에).
@@ -280,6 +280,10 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 		# 규칙이 없으면 2D 그림 높이로 추정: 낮은 해상도 px = 2D px × 36/96, 지붕·여백 몫을 빼고 0.6배
 		height = clampf(sprite_height_px * 0.375 * 0.6 / view.block_px, 0.6, 3.5)
 
+	if kind == "gable":
+		_create_gable(key, lo, hi, rule, sig)
+		return
+
 	if kind == "tree":
 		# 줄기(발자국) + 더 넓은 잎 덩어리
 		var c: Vector2 = (lo + hi) * 0.5
@@ -290,3 +294,23 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 	else:
 		view._set_item(key + "a", lo, hi, height, tex, tint, sig)
 		_keys[key + "a"] = true
+
+
+# 박공 지붕 건물: 벽(창문·문 임시 질감) + 기와 지붕 메시. 문은 카메라에 보이는 +z 면에 둔다(2D 그림의 문 방향은 반영하지 않음).
+func _create_gable(key: String, lo: Vector2, hi: Vector2, rule: Dictionary, sig: String) -> void:
+	var wall_blocks: float = float(rule["height_blocks"])
+	var roof_blocks: float = float(rule.get("roof_blocks", 1.0))
+	var built: Dictionary = BuildingMesh.build(lo, hi, view.block_height(wall_blocks), view.block_height(roof_blocks))
+	var ts: int = view.texture_size
+	var width: float = hi.x - lo.x
+	var depth: float = hi.y - lo.y
+	var h_texels: int = int(roundf(wall_blocks * view.block_px))
+	var plaster: Color = rule["tint"]
+	var timber := Color(0.34, 0.22, 0.14)
+	var tex_z: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(width * ts)), h_texels, true, maxi(int(roundf(width)), 1), plaster, timber)
+	var tex_x: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(depth * ts)), h_texels, false, maxi(int(roundf(depth)), 1), plaster, timber)
+	var tex_roof: ImageTexture = PlaceholderTextures.roof_tiles(ts, rule.get("roof_tint", Color(0.85, 0.44, 0.23)))
+	var tex_gable: ImageTexture = PlaceholderTextures.wall_facade(ts, ts, false, 1, plaster, timber)
+	var materials: Array = [view._make_facade_material(tex_z), view._make_facade_material(tex_x), view._make_facade_material(tex_roof), view._make_facade_material(tex_gable)]
+	view._set_mesh_item(key + "a", built["mesh"], materials, lo, hi, wall_blocks + roof_blocks, sig)
+	_keys[key + "a"] = true
