@@ -1,7 +1,7 @@
 extends "res://dev/spike3d/iso_sorted_spike.gd"
 ## 시험 방 3: 실제 매장 한 구석(진열대·계산대·문 2칸 폭)을 새 방식(낮은 해상도 3D + 정렬 순서 깊이 + 윤곽선)으로 그린다.
 ## 손님은 2.5등신 상자 캐릭터이고, 걷기는 CrowdSteering(겹침 허용 모드)으로 한다.
-##   1/2/3 = 낮추기 배율(기본 2배) / U 윤곽선 / O 정렬 순서 깊이 / K 군중 피하기 켬·끔 / SPACE 손님 한 명 더
+##   1/2/3 = 낮추기 배율(기본 3배) / U 윤곽선 / O 정렬 순서 깊이 / K 군중 피하기 켬·끔 / SPACE 손님 한 명 더
 ## 기존 매장 규격: 한 칸 96x48(2배 화면에서 48x24), 진열대는 2x1칸.
 
 const HEAD_RATIO: float = 2.5
@@ -25,7 +25,7 @@ var rng := RandomNumberGenerator.new()
 
 
 func _ready() -> void:
-	shrink = 2
+	shrink = 3
 	toon = true
 	cam_target = Vector3(4.0, 0.0, 3.0)
 	rng.seed = 7
