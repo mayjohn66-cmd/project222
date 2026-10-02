@@ -21,7 +21,7 @@ func _check(ok: bool, text: String) -> void:
 func _scenario(name: String, rows: Array, from: Vector2i, to: Vector2i, count: int, gap: float, dwell: float = 3.0) -> Dictionary:
 	var out: Dictionary = {}
 
-	for m in [Sim.Model.CURRENT, Sim.Model.RESERVE, Sim.Model.FLOW]:
+	for m in [Sim.Model.CURRENT, Sim.Model.RESERVE, Sim.Model.FLOW, Sim.Model.SOFT]:
 		var s := Sim.new()
 		s.load_map(rows)
 		var rng := RandomNumberGenerator.new()
@@ -32,7 +32,7 @@ func _scenario(name: String, rows: Array, from: Vector2i, to: Vector2i, count: i
 
 		s.run(m)
 		out[m] = s
-		print("  [%s] %s: %s" % [name, ["현재", "칸예약", "연속+분리"][m], s.summary()])
+		print("  [%s] %s: %s" % [name, ["현재", "칸예약", "연속+분리", "부드러운 분리"][m], s.summary()])
 
 	return out
 
@@ -45,6 +45,10 @@ func _run() -> void:
 	_check(s1[Sim.Model.CURRENT].overlap_ticks > 100, "현재 방식은 좁은 통로에서 오래 겹침(겹친 틱 100 초과)")
 	_check(s1[Sim.Model.RESERVE].overlap_ticks == 0 and s1[Sim.Model.RESERVE].finished == 15, "칸 예약은 겹침 0, 모두 도착")
 	_check(s1[Sim.Model.FLOW].overlap_ticks * 10 < s1[Sim.Model.CURRENT].overlap_ticks and s1[Sim.Model.FLOW].finished == 15, "연속+분리는 겹침이 현재의 10분의 1 미만, 모두 도착")
+
+	_check(s1[Sim.Model.SOFT].finished == 15, "부드러운 분리도 모두 도착")
+	_check(s1[Sim.Model.SOFT].last_finish_time < s1[Sim.Model.FLOW].last_finish_time, "부드러운 분리는 연속+분리보다 빨리 끝남(병목이 적음)")
+	_check(s1[Sim.Model.SOFT].overlap_ticks < s1[Sim.Model.CURRENT].overlap_ticks, "부드러운 분리는 현재보다 겹침이 적음")
 
 	# 2) 지그재그 미로(칸 하나 폭), 12명.
 	var maze: Array = [

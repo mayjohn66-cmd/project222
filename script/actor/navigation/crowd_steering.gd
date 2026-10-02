@@ -14,6 +14,9 @@ const STOP_DISTANCE: float = 0.5
 const AHEAD_DOT: float = 0.35
 const PUSH_GAIN: float = 3.0
 
+# 부드러운 분리: 걷는 동안 앞사람 때문에 줄어드는 속도의 하한(0이면 완전히 멈춤). 이 값만큼은 계속 걸어서 서로 겹쳐 지나간다.
+const SOFT_MIN_SLOW: float = 0.45
+
 
 static func screen_to_ground(p: Vector2, tile: Vector2 = TILE) -> Vector2:
 	var a: float = p.x / (tile.x * 0.5)
@@ -27,7 +30,7 @@ static func ground_to_screen(g: Vector2, tile: Vector2 = TILE) -> Vector2:
 
 # heading: 가려는 방향(바닥 평면, 길이 1). offsets: 다른 사람까지의 바닥 벡터(칸).
 # 반환: {"slow": 0~1 (앞사람 때문에 줄이는 비율), "push": 바닥 벡터(칸/초, 옆사람을 피하는 밀림)}
-static func compute(heading: Vector2, offsets: Array) -> Dictionary:
+static func compute(heading: Vector2, offsets: Array, soft: bool = false) -> Dictionary:
 	var slow: float = 1.0
 	var push := Vector2.ZERO
 
@@ -44,5 +47,9 @@ static func compute(heading: Vector2, offsets: Array) -> Dictionary:
 			slow = minf(slow, clampf((d - STOP_DISTANCE) / (KEEP_DISTANCE - STOP_DISTANCE), 0.0, 1.0))
 		else:
 			push -= direction * (KEEP_DISTANCE - d) * PUSH_GAIN
+
+	# 부드럽게: 완전히 멈추지 않고 하한 속도로 계속 걸어, 걷는 손님끼리는 막히지 않고 겹쳐 지나간다.
+	if soft:
+		slow = maxf(slow, SOFT_MIN_SLOW)
 
 	return {"slow": slow, "push": push}

@@ -6,9 +6,10 @@ extends RefCounted
 ##   CURRENT  현재 customer.gd 방식: 칸 중심 → 칸 중심으로 가고 도착하면 중심에 붙인다. 다른 손님은 보지 않는다.
 ##   RESERVE  다음 칸에 아무도 없을 때만 들어가고, 있으면 기다린다(칸 예약).
 ##   FLOW     칸 중심에 붙이지 않고 연속으로 이동. 앞 사람과 최소 거리를 지키고, 옆 사람은 밀어낸다(분리).
+##   SOFT     FLOW 와 같되 걷는 동안은 완전히 멈추지 않고 하한 속도로 계속 걸어 서로 겹쳐 지나간다(막힘이 적고 약간 겹침).
 ## 겹침 판정: 두 사람의 중심 거리가 OVERLAP_DISTANCE 미만이면 그림이 포개져 보인다고 센다.
 
-enum Model { CURRENT, RESERVE, FLOW }
+enum Model { CURRENT, RESERVE, FLOW, SOFT }
 
 const DT: float = 1.0 / 30.0
 const SPEED: float = 1.5
@@ -147,7 +148,7 @@ func _step() -> void:
 				_step_current(a)
 			Model.RESERVE:
 				_step_reserve(a)
-			Model.FLOW:
+			Model.FLOW, Model.SOFT:
 				_step_flow(a)
 
 
@@ -239,7 +240,7 @@ func _step_flow(a: Agent) -> void:
 		offsets.append(other.pos - a.pos)
 
 	# 실제 게임과 같은 규칙(CrowdSteering)을 쓴다.
-	var steer: Dictionary = CrowdSteering.compute(heading, offsets)
+	var steer: Dictionary = CrowdSteering.compute(heading, offsets, model == Model.SOFT)
 	var slow: float = steer["slow"]
 	var vel: Vector2 = heading * a.speed + steer["push"]
 

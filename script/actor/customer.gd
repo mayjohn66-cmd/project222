@@ -74,6 +74,9 @@ const WAYPOINT_RADIUS: float = 12.0
 # 연속 이동 + 분리(CrowdSteering). false 로 바꾸면 예전처럼 칸 중심에서 칸 중심으로 이동하고 서로 피하지 않는다(문제가 생길 때 되돌리는 스위치).
 const CROWD_STEERING: bool = true
 
+# true 이면 걷는 동안 앞사람 때문에 완전히 멈추지 않고 겹쳐 지나간다(막힘이 적음). false 이면 앞사람 뒤에서 멈추고 줄을 선다(겹침 0, 막힘 많음).
+const CROWD_SOFT: bool = true
+
 var carried_item_id: String = ""
 var carried_amount: int = 0
 
@@ -186,7 +189,8 @@ func _physics_process(
 
 	var steer: Dictionary = CrowdSteering.compute(
 		CrowdSteering.screen_to_ground(direction).normalized(),
-		_nearby_ground_offsets()
+		_nearby_ground_offsets(),
+		CROWD_SOFT
 	)
 
 	velocity = (

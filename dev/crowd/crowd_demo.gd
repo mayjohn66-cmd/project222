@@ -1,6 +1,6 @@
 extends Node2D
 ## 무리 이동 시뮬레이션을 눈으로 보는 데모(게임 없이). 통로를 지나가는 손님을 점으로 그린다.
-##   1 / 2 / 3 키: 이동 방식 전환(1 = 현재, 2 = 칸 예약, 3 = 연속 이동 + 분리). 바뀌면 처음부터 다시 시작한다.
+##   1 / 2 / 3 / 4 키: 이동 방식 전환(1 = 현재, 2 = 칸 예약, 3 = 연속 이동 + 분리, 4 = 부드러운 분리). 바뀌면 처음부터 다시 시작한다.
 ##   M 키: 통로 모양 전환(직선 ↔ 미로)
 ##   빨간 원 = 지금 다른 손님과 겹친 손님. 위쪽 글자에 겹친 쌍 수와 도착 인원이 나온다.
 ## 실행: Godot 에서 dev/crowd/crowd_demo.tscn 을 열고 F6.
@@ -65,7 +65,7 @@ func _process(delta: float) -> void:
 			sim._measure()
 			sim.time += Sim.DT
 
-	label.text = "1 현재 / 2 칸 예약 / 3 연속+분리 / M 미로\\n방식: %s   통로: %s   시간 %.1f초\\n%s" % [["현재(칸 중심 고정)", "칸 예약", "연속 이동 + 분리"][model], "미로" if use_maze else "직선", sim.time, sim.summary()]
+	label.text = "1 현재 / 2 칸 예약 / 3 연속+분리 / 4 부드러운 분리 / M 미로\\n방식: %s   통로: %s   시간 %.1f초\\n%s" % [["현재(칸 중심 고정)", "칸 예약", "연속 이동 + 분리", "부드러운 분리"][model], "미로" if use_maze else "직선", sim.time, sim.summary()]
 	queue_redraw()
 
 
@@ -80,6 +80,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			model = Sim.Model.RESERVE
 		KEY_3:
 			model = Sim.Model.FLOW
+		KEY_4:
+			model = Sim.Model.SOFT
 		KEY_M:
 			use_maze = not use_maze
 		_:
