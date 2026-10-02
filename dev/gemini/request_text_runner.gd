@@ -60,6 +60,8 @@ func _run() -> void:
 			await _sync(sources)
 		"accept":
 			_accept(sources)
+		"rebase-state":
+			_rebase_state(sources)
 		"autopilot":
 			await _autopilot()
 		_:
@@ -280,6 +282,15 @@ func _sync(sources: Dictionary) -> void:
 
 
 # 검토를 끝낸 초안을 글 CSV에 합치고, 기계 부분 지문(상태)을 갱신한다. 사용자가 승인한 뒤에만 쓴다.
+# 글이 있는 모든 항목의 상태를 지금 데이터 기준으로 다시 잡는다(글은 바꾸지 않는다). 인물 이름 교체 같은 변경 뒤에 쓴다.
+func _rebase_state(sources: Dictionary) -> void:
+	var texts: Dictionary = Tools.load_text_rows(Tools.text_path())
+	_write(Tools.STATE_PATH, Tools.rebase_state_csv(texts, sources))
+	var todo: Dictionary = Tools.find_todo(sources, texts, Tools.load_state())
+	print("[부탁 글] 상태를 다시 잡았습니다: %s (글 %d행). 새 항목 %d건, 바뀐 항목 %d건" % [Tools.STATE_PATH.trim_prefix("res://"), texts.size(), Tools.count_targets(todo["new"]), Tools.count_targets(todo["changed"])])
+	get_tree().quit(0)
+
+
 func _accept(sources: Dictionary) -> void:
 	var path: String = _arg("--file")
 

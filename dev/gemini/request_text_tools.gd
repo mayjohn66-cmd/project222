@@ -38,7 +38,7 @@ const TEXT_FALLBACK_PATH: String = "res://docs/drafts/story/requests_text_baseli
 const STATE_PATH: String = "res://docs/drafts/story/requests_text_state.csv"
 
 # 글에 해당하는 필드(이것들은 지문에 넣지 않는다. 나머지가 기계 부분이다).
-const TEXT_FIELDS: PackedStringArray = ["title", "summary", "lines", "completion", "greetings", "name", "objective"]
+const TEXT_FIELDS: PackedStringArray = ["title", "summary", "lines", "completion", "greetings", "name", "objective", "npc"]
 
 const MAX_TITLE: int = 20
 const MAX_SUMMARY: int = 60
@@ -518,6 +518,29 @@ static func count_targets(targets: Dictionary) -> int:
 
 
 # 초안 행들을 글 CSV에 합친다(같은 kind·id는 덮어쓰고 새 id는 추가). 합친 CSV 텍스트와 새 상태를 돌려준다.
+# 지금 글이 있는 모든 항목의 상태를 현재 기계 부분 기준으로 다시 잡는다("지금 글이 현재 데이터를 반영한다"고 선언).
+# 인물 이름 교체처럼 글에 영향이 없는 변경 뒤에 쓴다. 반환: 상태 CSV 글.
+static func rebase_state_csv(texts: Dictionary, sources: Dictionary) -> String:
+	var state: Dictionary = {}
+
+	for kind in KINDS:
+		for id in sources.get(kind, {}).keys():
+			var k: String = kind + ":" + id
+
+			if texts.has(k):
+				state[k] = fingerprint(sources[kind][id])
+
+	var lines: PackedStringArray = [csv_line(PackedStringArray(["id", "kind", "mech_hash"]))]
+	var keys: Array = state.keys()
+	keys.sort()
+
+	for key in keys:
+		var parts: PackedStringArray = str(key).split(":", true, 1)
+		lines.append(csv_line(PackedStringArray([parts[1], parts[0], state[key]])))
+
+	return "\n".join(lines) + "\n"
+
+
 static func merge_draft(texts: Dictionary, draft_rows: Array, sources: Dictionary, state: Dictionary) -> Dictionary:
 	var merged: Dictionary = texts.duplicate()
 	var new_state: Dictionary = state.duplicate()
