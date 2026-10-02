@@ -58,7 +58,7 @@ func _build_world() -> void:
 
 	# 캐릭터: 한 장짜리 판. 시트의 첫 칸(64x64)을 쓴다.
 	var quad := QuadMesh.new()
-	var world_per_px: float = 1.0 / ((TILE_PX / sqrt(2.0)))
+	var world_per_px: float = 1.0 / ((tile_px / sqrt(2.0)))
 	quad.size = Vector2(64.0, 64.0) * world_per_px
 	actor_mesh = MeshInstance3D.new()
 	actor_mesh.mesh = quad
@@ -171,13 +171,13 @@ func _update_sorting() -> void:
 	if items.is_empty() or actor_mesh == null:
 		return
 
-	var px_per_unit_z: float = (LOW_TILE_PX / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))
+	var px_per_unit_z: float = (low_tile_px / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))
 	var boxes: Array = []
 
 	for it in items:
 		var c: Vector2 = it["cell"]
 		var s: Vector2 = it["size"]
-		boxes.append({"id": it["id"], "min": Vector3(c.x, c.y, 0.0), "max": Vector3(c.x + s.x, c.y + s.y, it["blocks"] * BLOCK_HEIGHT_LOW_PX)})
+		boxes.append({"id": it["id"], "min": Vector3(c.x, c.y, 0.0), "max": Vector3(c.x + s.x, c.y + s.y, it["blocks"] * block_px)})
 
 	boxes.append({"id": "actor", "min": Vector3(actor_logic_pos.x - actor_half, actor_logic_pos.z - actor_half, 0.0), "max": Vector3(actor_logic_pos.x + actor_half, actor_logic_pos.z + actor_half, 21.0)})
 	var result: Dictionary = IsoSorter.sort_items(boxes)

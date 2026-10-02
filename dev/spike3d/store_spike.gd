@@ -1,10 +1,14 @@
 extends "res://dev/spike3d/iso_sorted_spike.gd"
 ## 시험 방 3: 실제 매장 한 구석(진열대·계산대·문 2칸 폭)을 새 방식(낮은 해상도 3D + 정렬 순서 깊이 + 윤곽선)으로 그린다.
-## 손님은 2.5등신 상자 캐릭터이고, 걷기는 CrowdSteering(겹침 허용 모드)으로 한다.
-##   1/2/3 = 낮추기 배율(기본 3배) / U 윤곽선 / O 정렬 순서 깊이 / K 군중 피하기 켬·끔 / SPACE 손님 한 명 더
-## 기존 매장 규격: 한 칸 96x48(2배 화면에서 48x24), 진열대는 2x1칸.
+## 손님은 3등신 상자 캐릭터(머리 크기는 2.5등신과 같고 팔다리만 긺)이고, 걷기는 CrowdSteering(겹침 허용 모드)으로 한다.
+##   1/2/3 = 낮추기 배율(기본 3배, 칸 36x18) / U 윤곽선 / O 정렬 순서 깊이 / K 군중 피하기 켬·끔 / SPACE 손님 한 명 더
+## 기존 매장 규격: 한 칸 96x48, 진열대는 2x1칸.
 
-const HEAD_RATIO: float = 2.5
+# 3등신: 머리는 기존 2.5등신 캐릭터와 같은 크기(0.38칸)로 두고 몸통도 그대로, 팔다리만 늘려서 키 1.14칸(36px 칸 기준 약 25px).
+const HEAD_RATIO: float = 3.0
+const ACTOR_TOTAL: float = 1.14
+const ACTOR_TORSO: float = 0.308
+const ACTOR_HEIGHT_PX: float = 25.0  # 정렬 상자 높이(블록 픽셀 단위)
 const MAX_CUSTOMERS: int = 9
 const SPAWN_EVERY: float = 2.2
 const WALK_SPEED: float = 1.6
@@ -26,6 +30,9 @@ var rng := RandomNumberGenerator.new()
 
 func _ready() -> void:
 	shrink = 3
+	tile_px = 108.0  # 3배에서 낮은 해상도 칸 36x18 (2.5배에 가까운 쪽)
+	low_tile_px = 36.0
+	block_px = 22.0
 	toon = true
 	cam_target = Vector3(4.0, 0.0, 3.0)
 	rng.seed = 7
@@ -109,7 +116,7 @@ func _build_outline_pass() -> void:
 
 func _add_actor(pos: Vector2, is_static: bool) -> Dictionary:
 	var node := BlockyActor.new()
-	node.build(viewport, viewport, HEAD_RATIO)
+	node.build(viewport, viewport, HEAD_RATIO, ACTOR_TOTAL, ACTOR_TORSO)
 	var a: Dictionary = {"id": "p%d" % next_id, "node": node, "pos": pos, "plan": [], "wait": 0.0, "blocked": 0.0, "speed": WALK_SPEED * rng.randf_range(0.85, 1.15), "static": is_static}
 	next_id += 1
 	actors.append(a)
@@ -242,7 +249,7 @@ func _update_sorting() -> void:
 
 	for a in actors:
 		var p: Vector2 = a["pos"]
-		boxes.append({"id": a["id"], "min": Vector3(p.x - actor_half, p.y - actor_half, 0.0), "max": Vector3(p.x + actor_half, p.y + actor_half, 21.0)})
+		boxes.append({"id": a["id"], "min": Vector3(p.x - actor_half, p.y - actor_half, 0.0), "max": Vector3(p.x + actor_half, p.y + actor_half, ACTOR_HEIGHT_PX)})
 
 	var result: Dictionary = IsoSorter.sort_items(boxes)
 	var rank_of: Dictionary = {}

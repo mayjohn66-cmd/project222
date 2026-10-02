@@ -77,15 +77,21 @@ func _face_textures() -> Dictionary:
 
 # head_ratio: 몇 등신인가(키 ÷ 머리 높이). 2 = 머리가 키의 절반(아주 아기자기), 3 = 키의 3분의 1.
 # 전체 키는 항상 같고(0.95칸 ≈ 2배 화면에서 32픽셀) 머리 비율에 따라 몸통·다리 길이가 달라진다.
-func build(parent: Node, id_parent: Node, head_ratio: float = 3.0) -> void:
+# total: 전체 키(칸). torso_fixed > 0 이면 몸통 길이를 그 값으로 고정하고 남는 길이를 다리에 준다(키가 커질 때 팔다리만 늘리는 방식).
+func build(parent: Node, id_parent: Node, head_ratio: float = 3.0, total: float = 0.95, torso_fixed: float = -1.0) -> void:
 	head_ratio_value = head_ratio
 	var t: Dictionary = _face_textures()
-	var total: float = 0.95
 	var head_h: float = total / head_ratio
 	var head_w: float = head_h * 1.1
 	var rest: float = total - head_h
 	var leg_h: float = rest * 0.46
 	var torso_h: float = rest - leg_h
+
+	if torso_fixed > 0.0:
+		torso_h = torso_fixed
+		leg_h = rest - torso_h
+
+	var arm_h: float = torso_h * 0.92 + maxf(total - 0.95, 0.0) * 0.45
 	var torso_w: float = clampf(head_w * 0.82, 0.22, 0.4)
 	var torso_d: float = torso_w * 0.55
 	var arm_w: float = clampf(torso_w * 0.28, 0.07, 0.11)
@@ -96,8 +102,8 @@ func build(parent: Node, id_parent: Node, head_ratio: float = 3.0) -> void:
 		{"name": "leg_l", "size": Vector3(leg_w, leg_h, leg_w), "pivot": Vector3(-torso_w * 0.24, leg_h, 0.0), "tex": ["leg", "leg", "leg"]},
 		{"name": "leg_r", "size": Vector3(leg_w, leg_h, leg_w), "pivot": Vector3(torso_w * 0.24, leg_h, 0.0), "tex": ["leg", "leg", "leg"]},
 		{"name": "torso", "size": Vector3(torso_w, torso_h, torso_d), "pivot": Vector3(0.0, neck_y, 0.0), "tex": ["torso_front", "torso_side", "torso_top"], "no_swing": true},
-		{"name": "arm_l", "size": Vector3(arm_w, torso_h * 0.92, arm_w), "pivot": Vector3(-(torso_w * 0.5 + arm_w * 0.5), neck_y - torso_h * 0.04, 0.0), "tex": ["arm", "arm", "arm"]},
-		{"name": "arm_r", "size": Vector3(arm_w, torso_h * 0.92, arm_w), "pivot": Vector3(torso_w * 0.5 + arm_w * 0.5, neck_y - torso_h * 0.04, 0.0), "tex": ["arm", "arm", "arm"]},
+		{"name": "arm_l", "size": Vector3(arm_w, arm_h, arm_w), "pivot": Vector3(-(torso_w * 0.5 + arm_w * 0.5), neck_y - torso_h * 0.04, 0.0), "tex": ["arm", "arm", "arm"]},
+		{"name": "arm_r", "size": Vector3(arm_w, arm_h, arm_w), "pivot": Vector3(torso_w * 0.5 + arm_w * 0.5, neck_y - torso_h * 0.04, 0.0), "tex": ["arm", "arm", "arm"]},
 		{"name": "head", "size": Vector3(head_w, head_h, head_h * 0.95), "pivot": Vector3(0.0, neck_y, 0.0), "tex": ["head_front", "head_side", "head_top"], "no_swing": true, "head": true},
 	]
 	_id_root = Node3D.new()

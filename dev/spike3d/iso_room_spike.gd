@@ -24,6 +24,9 @@ var camera: Camera3D
 var light: DirectionalLight3D
 var actor: Sprite3D
 var shrink: int = 1
+var tile_px: float = TILE_PX  # 화면에서 한 칸 마름모 폭(바꾸면 칸 크기가 변함: 108 = 3배에서 낮은 해상도 36)
+var low_tile_px: float = LOW_TILE_PX  # 3배 화면에서의 낮은 해상도 칸 폭(tile_px / 3 과 같게 둘 것)
+var block_px: float = BLOCK_HEIGHT_LOW_PX
 var shadows: bool = true
 var toon: bool = false
 var posterize: bool = false
@@ -75,14 +78,14 @@ func _build_view() -> void:
 	camera.near = 0.1
 	camera.far = 100.0
 	# 한 칸 마름모 폭 = TILE_PX → 한 단위(축 방향) = TILE_PX / sqrt(2) 픽셀. 화면 높이(648) 안에 보이는 세계 높이:
-	camera.size = 648.0 / (TILE_PX / sqrt(2.0))
+	camera.size = 648.0 / (tile_px / sqrt(2.0))
 	viewport.add_child(camera)
 	_update_camera()
 
 
 # 화면 한 픽셀이 세계에서 차지하는 길이(카메라 오른쪽·위 방향). 낮춘 화면 기준.
 func pixel_world_size() -> float:
-	return 1.0 / ((TILE_PX / float(shrink)) / sqrt(2.0))
+	return 1.0 / ((tile_px / float(shrink)) / sqrt(2.0))
 
 
 # 세계 위치를 카메라 오른쪽·위 방향으로 화면 픽셀 격자에 맞춘다(깊이 방향은 그대로).
@@ -150,9 +153,9 @@ func _material(kind: String, tint: Color = Color.WHITE) -> StandardMaterial3D:
 
 
 # 높이 "칸 수"(blocks)를 세계 높이로 바꾼다: 한 칸 = 3배 낮춘 화면의 20픽셀.
-static func block_height(blocks: float) -> float:
-	var px_per_unit_z: float = (LOW_TILE_PX / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))
-	return blocks * BLOCK_HEIGHT_LOW_PX / px_per_unit_z
+func block_height(blocks: float) -> float:
+	var px_per_unit_z: float = (low_tile_px / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))
+	return blocks * block_px / px_per_unit_z
 
 
 func _add_box(cell: Vector2, size: Vector2, height: float, material: Material, base_height: float = 0.0) -> MeshInstance3D:
@@ -194,7 +197,7 @@ func _build_world() -> void:
 	actor.billboard = BaseMaterial3D.BILLBOARD_FIXED_Y
 	actor.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
 	actor.shaded = true
-	actor.pixel_size = (1.0 / (TILE_PX / sqrt(2.0)))  # 그림 한 픽셀 = 화면 한 픽셀
+	actor.pixel_size = (1.0 / (tile_px / sqrt(2.0)))  # 그림 한 픽셀 = 화면 한 픽셀
 	actor_logic_pos = Vector3(3.6, 0.0, 5.4)
 	actor.position = actor_logic_pos + Vector3(0.0, 32.0 * actor.pixel_size, 0.0)
 	viewport.add_child(actor)
@@ -218,7 +221,7 @@ func _build_world() -> void:
 
 # 한 칸의 텍셀 수: 낮은 해상도일수록 적게(한 텍셀 ≈ 화면 한 픽셀이 되도록).
 func _texture_size() -> int:
-	return [48, 24, 16][clampi(shrink, 1, 3) - 1]
+	return int(roundf(tile_px / float(shrink) * 0.5))
 
 
 func _apply_shrink() -> void:
