@@ -233,3 +233,99 @@ static func flat_color(size: int, base: Color) -> ImageTexture:
 			img.set_pixel(x, y, Color(base.r + v, base.g + v, base.b + v))
 
 	return ImageTexture.create_from_image(img)
+
+
+# 나무 상자: 판자 + 가로 보강대 + 모서리 테두리
+static func crate(size: int, base: Color = Color(0.62, 0.45, 0.27)) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 4242
+
+	for y in range(size):
+		for x in range(size):
+			var v: float = rng.randf_range(-0.03, 0.03)
+			var c := Color(base.r + v, base.g + v, base.b + v)
+			var frame: bool = x < 2 or y < 2 or x >= size - 2 or y >= size - 2
+			var band: bool = absi(x - y) < 2 or absi(x - (size - 1 - y)) < 2
+			img.set_pixel(x, y, base.darkened(0.38) if (frame or band) else (base.darkened(0.15) if (y % 6 == 0) else c))
+
+	return ImageTexture.create_from_image(img)
+
+
+# 통(배럴): 세로 판자 + 쇠테 두 줄
+static func barrel(size: int, base: Color = Color(0.55, 0.36, 0.2)) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+
+	for y in range(size):
+		for x in range(size):
+			var hoop: bool = (y >= size / 5 and y < size / 5 + 2) or (y >= size * 4 / 5 - 2 and y < size * 4 / 5)
+			var seam: bool = x % 5 == 0
+			img.set_pixel(x, y, Color(0.3, 0.3, 0.34) if hoop else (base.darkened(0.3) if seam else base))
+
+	return ImageTexture.create_from_image(img)
+
+
+# 덤불/잎: 짙은 초록 + 밝은 점, flower 가 있으면 꽃 점
+static func foliage(size: int, base: Color, flower: Color = Color(0, 0, 0, 0)) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(base.g * 1000.0) + 17
+
+	for y in range(size):
+		for x in range(size):
+			var v: float = rng.randf_range(-0.07, 0.07)
+			var c := Color(base.r + v, base.g + v, base.b + v)
+
+			if rng.randf() < 0.1:
+				c = base.lightened(0.25)
+
+			if flower.a > 0.0 and rng.randf() < 0.08:
+				c = flower
+
+			img.set_pixel(x, y, c)
+
+	return ImageTexture.create_from_image(img)
+
+
+# 돌(낮은 담·우물): 회색 블록 줄눈
+static func stone(size: int, base: Color = Color(0.58, 0.56, 0.52)) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 909
+	var row_h: int = maxi(size / 3, 2)
+
+	for y in range(size):
+		var row: int = y / row_h
+		var offset: int = (row % 2) * (size / 4)
+
+		for x in range(size):
+			var v: float = rng.randf_range(-0.05, 0.05)
+			var mortar: bool = (y % row_h == 0) or ((x + offset) % (size / 2) == 0)
+			img.set_pixel(x, y, base.darkened(0.35) if mortar else Color(base.r + v, base.g + v, base.b + v))
+
+	return ImageTexture.create_from_image(img)
+
+
+# 게시판 종이/공지: 코르크 바탕에 종이 쪽지 몇 장
+static func notice_board(size: int) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+
+	for y in range(size):
+		for x in range(size):
+			var paper: bool = (x > 2 and x < size / 2 - 1 and y > 2 and y < size / 2) or (x > size / 2 + 1 and x < size - 3 and y > size / 3 and y < size - 3) or (x > 3 and x < size / 2 and y > size / 2 + 2 and y < size - 3)
+			img.set_pixel(x, y, Color(0.93, 0.88, 0.7) if paper else Color(0.55, 0.38, 0.22))
+
+	return ImageTexture.create_from_image(img)
+
+
+# 간판/표지판: 나무 판 + 테두리 + 흰 화살표
+static func sign_board(size: int) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+
+	for y in range(size):
+		for x in range(size):
+			var border: bool = x < 2 or y < 2 or x >= size - 2 or y >= size - 2
+			var arrow: bool = absi(y - size / 2) <= maxi(1, (size - x) / 6) and x > size / 5 and x < size * 4 / 5
+			img.set_pixel(x, y, Color(0.3, 0.2, 0.12) if border else (Color(0.95, 0.92, 0.85) if arrow else Color(0.6, 0.42, 0.26)))
+
+	return ImageTexture.create_from_image(img)

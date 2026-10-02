@@ -7,7 +7,7 @@ extends RefCounted
 
 const CONTAINERS: Array = ["NearbyHouses", "VillageExtraHouses", "VillageBlacksmith", "VillageToolShop", "VillageBuildings", "VillageDecor", "VillageGathering", "DungeonRoadside", "DungeonWall"]
 const RULES_PATH: String = "res://data/shop/catalogs/village_3d.csv"
-const GROUND_TEXTURES: Dictionary = {"grass": ["grass", Color(0.74, 0.68, 0.56)], "road": ["brick", Color(0.5, 0.46, 0.46)], "paving": ["brick", Color(0.82, 0.76, 0.68)]}
+const GROUND_TEXTURES: Dictionary = {"grass": ["grass", Color(0.62, 0.6, 0.46)], "road": ["brick", Color(0.5, 0.46, 0.46)], "paving": ["brick", Color(0.82, 0.76, 0.68)]}
 
 var view: Node  # StoreView3D
 var exterior: Node2D
@@ -40,7 +40,27 @@ func _load_rules() -> void:
 		if cells.size() < header.size() or cells[0].strip_edges().is_empty():
 			continue
 
-		rules.append({"match": cells[0].strip_edges().to_lower(), "kind": cells[1].strip_edges(), "height_blocks": float(cells[2]), "texture": cells[3].strip_edges(), "tint": Color.html(cells[4].strip_edges()), "roof_blocks": float(cells[5]) if cells.size() > 5 else 0.0, "roof_tint": Color.html(cells[6].strip_edges()) if cells.size() > 6 else Color.WHITE, "footprint_scale": float(cells[7]) if cells.size() > 7 else 1.0})
+		var r: Dictionary = {}
+
+		for i in range(header.size()):
+			var key: String = header[i].strip_edges()
+			var value: String = cells[i].strip_edges()
+
+			if value.is_empty():
+				continue
+
+			if key in ["height_blocks", "roof_blocks", "footprint_scale", "apron"]:
+				r[key] = float(value)
+			elif key in ["chimney", "awning", "step", "planters", "sign"]:
+				r[key] = value == "1" or value.to_lower() == "true"
+			elif key in ["tint", "roof_tint", "awning_tint", "goods_tint"]:
+				r[key] = Color.html(value)
+			elif key == "match":
+				r[key] = value.to_lower()
+			else:
+				r[key] = value
+
+		rules.append(r)
 
 
 # 규칙 찾기: 노드 이름 + 스프라이트 그림 경로(소문자)에 match 글자가 들어 있는 첫 규칙. 먼저 나온 행이 우선(구체적인 것을 위에).
@@ -256,83 +276,43 @@ func _remove_keys(base: String) -> void:
 		_keys.erase(base + suffix)
 
 
+func _params() -> Dictionary:
+	return {"ts": view.texture_size, "block_px": view.block_px, "unit_px_z": (view.tile_low / sqrt(2.0)) * cos(deg_to_rad(30.0))}
+
+
 func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px: float, sig: String) -> void:
 	var lo := rect.position
 	var hi := rect.position + rect.size
-
-	# 너무 얇은 발자국(나무 밑동 등)은 최소 크기를 준다.
-	if hi.x - lo.x < 0.3:
-		var cx: float = (lo.x + hi.x) * 0.5
-		lo.x = cx - 0.15
-		hi.x = cx + 0.15
-
-	if hi.y - lo.y < 0.3:
-		var cy: float = (lo.y + hi.y) * 0.5
-		lo.y = cy - 0.15
-		hi.y = cy + 0.15
-
 	var kind: String = str(rule.get("kind", "box"))
-	var tex: String = str(rule.get("texture", "plank"))
-	var tint: Color = rule.get("tint", Color(0.8, 0.8, 0.8))
-	var height: float = float(rule.get("height_blocks", 0.0))
 
-	if height <= 0.0:
-		# 규칙이 없으면 2D 그림 높이로 추정: 낮은 해상도 px = 2D px × 36/96, 지붕·여백 몫을 빼고 0.6배
-		height = clampf(sprite_height_px * 0.375 * 0.6 / view.block_px, 0.6, 3.5)
+	# 충돌 발자국은 그림보다 넓으므로 건물·소품 모양은 중심 기준으로 줄인다(footprint_scale).
+	var scale_f: float = float(rule.get("footprint_scale", 1.0))
+	var center: Vector2 = (lo + hi) * 0.5
+	var half: Vector2 = (hi - lo) * 0.5 * scale_f
+	half = Vector2(maxf(half.x, 0.15), maxf(half.y, 0.15))
+	lo = center - half
+	hi = center + half
 
-	if kind == "gable":
-		# 충돌 발자국은 그림보다 넓으므로 건물 모양은 중심 기준으로 줄인다(footprint_scale).
-		var scale_f: float = float(rule.get("footprint_scale", 1.0))
-		var center: Vector2 = (lo + hi) * 0.5
-		var half: Vector2 = (hi - lo) * 0.5 * scale_f
-		_create_gable(key, center - half, center + half, rule, sig)
+	if kind == "gable" or kind == "prop":
+		var built: Dictionary
+		var p: Dictionary = _params()
+
+		if kind == "gable":
+			built = VillageAssets.build_gable(lo, hi, rule, p)
+		else:
+			built = VillageAssets.build_prop(str(rule.get("style", "")), lo, hi, rule, p)
+
+		view._set_mesh_item(key + "a", built["mesh"], VillageAssets.make_materials(built["specs"]), built["lo"], built["hi"], float(built["total_blocks"]), sig)
+		_keys[key + "a"] = true
+
+		if built["apron"] != null:
+			var ap: Dictionary = built["apron"]
+			view._set_mesh_item(key + "b", ap["mesh"], [VillageAssets.make_material(ap["spec"])], lo, hi, 0.0, sig, -0.5)
+			_keys[key + "b"] = true
+
 		return
 
-	if kind == "tree":
-		# 줄기(발자국) + 더 넓은 잎 덩어리
-		var c: Vector2 = (lo + hi) * 0.5
-		view._set_item(key + "a", lo, hi, height * 0.45, "plank", Color(0.55, 0.38, 0.25), sig)
-		view._set_item(key + "b", c - Vector2(0.55, 0.55), c + Vector2(0.55, 0.55), height * 0.55, tex, tint, sig, height * 0.45)
-		_keys[key + "a"] = true
-		_keys[key + "b"] = true
-	else:
-		view._set_item(key + "a", lo, hi, height, tex, tint, sig)
-		_keys[key + "a"] = true
-
-
-# 박공 지붕 건물: 벽(창문·문 임시 질감) + 두께 있는 기와 지붕 + 용마루 덮개 + 굴뚝 + 차양 + 바닥 돌 마당.
-# 문은 카메라에 보이는 +z 면에 둔다(2D 그림의 문 방향은 반영하지 않음). 질감은 모두 코드로 칠한 임시 그림.
-func _create_gable(key: String, lo: Vector2, hi: Vector2, rule: Dictionary, sig: String) -> void:
-	var wall_blocks: float = float(rule["height_blocks"])
-	var roof_blocks: float = float(rule.get("roof_blocks", 1.0))
-	var options: Dictionary = {"chimney": true, "awning": true, "apron": 0.45}
-	var built: Dictionary = BuildingMesh.build(lo, hi, view.block_height(wall_blocks), view.block_height(roof_blocks), options)
-	var ts: int = view.texture_size
-	var width: float = hi.x - lo.x
-	var depth: float = hi.y - lo.y
-	var h_texels: int = int(roundf(wall_blocks * view.block_px))
-	var plaster: Color = rule["tint"]
-	var roof_tint: Color = rule.get("roof_tint", Color(0.85, 0.44, 0.23))
-	var timber := Color(0.34, 0.22, 0.14)
-	var tex_z: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(width * ts)), h_texels, true, maxi(int(roundf(width)), 1), plaster, timber)
-	var tex_x: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(depth * ts)), h_texels, false, maxi(int(roundf(depth)), 1), plaster, timber)
-	var roof_mat: ShaderMaterial = view._make_facade_material(PlaceholderTextures.roof_tiles(ts, roof_tint))
-	roof_mat.set_shader_parameter("normal_tex", PlaceholderTextures.roof_normal(ts))
-	roof_mat.set_shader_parameter("use_normal", true)
-	var materials: Array = [
-		view._make_facade_material(tex_z),
-		view._make_facade_material(tex_x),
-		roof_mat,
-		view._make_facade_material(PlaceholderTextures.wall_facade(ts, ts, false, 1, plaster, timber)),
-		view._make_facade_material(PlaceholderTextures.flat_color(ts, roof_tint.darkened(0.45))),
-		view._make_facade_material(PlaceholderTextures.albedo("brick", ts), Color(0.95, 0.78, 0.7)),
-		view._make_facade_material(PlaceholderTextures.awning_stripes(ts, Color(0.96, 0.9, 0.78), Color(0.88, 0.45, 0.22))),
-	]
-	view._set_mesh_item(key + "a", built["mesh"], materials, lo, hi, wall_blocks + roof_blocks, sig)
+	# 규칙이 없는 물체: 2D 그림 높이로 추정한 상자
+	var height: float = clampf(sprite_height_px * 0.375 * 0.6 / view.block_px, 0.6, 3.5)
+	view._set_item(key + "a", lo, hi, height, "plank", Color(0.75, 0.75, 0.75), sig)
 	_keys[key + "a"] = true
-
-	# 바닥 돌 마당: 정렬 없이 바닥(-1) 바로 위(-0.5)에 그린다.
-	if (built["apron_mesh"] as ArrayMesh).get_surface_count() > 0:
-		var apron_mat: ShaderMaterial = view._make_facade_material(PlaceholderTextures.albedo("brick", ts), Color(1.45, 1.35, 1.2))
-		view._set_mesh_item(key + "b", built["apron_mesh"], [apron_mat], lo, hi, 0.0, sig, -0.5)
-		_keys[key + "b"] = true

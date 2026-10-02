@@ -94,6 +94,36 @@ func _ready() -> void:
 	var restored_ok: bool = fl2.visible and scene.get_node("Objects").get_child(0).get_node("Visual").visible
 	print("hide2d hidden_in_ON=", hidden_ok, " restored_in_OFF=", restored_ok)
 
+	# 건물·소품 둘러보기: 각 대상의 중심으로 이동해서 2D / 3D 를 같은 시각(낮 12시)으로 저장
+	if "--tour" in args:
+		var ex3: Node2D = scene.get_node("StoreExterior")
+		var dm3: Node = scene.get_node("DayManager")
+		dm3.current_hour = 12
+		dm3.hour_timer.stop()
+		var plr3: Node2D = scene.get_node("Actors/Player")
+		mirror.forced_hour = 12.0
+		var targets: Array = [["VillageBuildings", "EditorObject1", "bakery"], ["VillageBlacksmith", "EditorObject1", "blacksmith"], ["VillageToolShop", "EditorObject1", "toolshop"], ["NearbyHouses", "EditorObject1", "redhouse"], ["VillageExtraHouses", "EditorObject1", "moss"], ["VillageBuildings", "EditorObject2", "stable"], ["VillageDecor", "EditorObject2", "well"], ["VillageDecor", "EditorObject28", "stall"], ["VillageDecor", "EditorObject5", "cart"], ["VillageGathering", "EditorObject1", "board"]]
+
+		for t in targets:
+			var holder: Node = scene.get_node_or_null(t[0])
+			var body: Node = holder.get_node_or_null(t[1]) if holder != null else null
+
+			if body == null:
+				print("tour missing ", t)
+				continue
+
+			var rect: Rect2 = mirror.village._footprint_cell_rect(body)
+			var c: Vector2 = rect.position + rect.size * 0.5
+			plr3.global_position = ex3.to_global(Vector2((c.x - c.y) * 48.0, (c.x + c.y) * 24.0) + Vector2(0, 30))
+
+			for m in [["2d", StoreView3D.Mode.OFF], ["3d", StoreView3D.Mode.ON]]:
+				mirror.mode = m[1]
+
+				for i in range(20):
+					await get_tree().process_frame
+
+				get_viewport().get_texture().get_image().save_png("%s/tour_%s_%s.png" % [out, t[2], m[0]])
+
 	# 빵집 앞으로 이동해서 2D / 3D 를 같은 시각(낮 12시)으로 비교(박공 지붕 건물 시험)
 	if "--bakery" in args:
 		var ex2: Node2D = scene.get_node("StoreExterior")
