@@ -86,7 +86,7 @@ func _build_world() -> void:
 	world_env.environment = env
 	viewport.add_child(world_env)
 	blocky = BlockyActor.new()
-	blocky.build(viewport, viewport)
+	blocky.build(viewport, viewport, 3.0)
 	blocky.visible = false
 	_build_outline_pass()
 	_update_sorting()
@@ -311,7 +311,24 @@ func _process(delta: float) -> void:
 			blocky.facing_yaw_deg = rad_to_deg(atan2(dir.x, dir.z))
 
 
+# 상자 캐릭터를 몇 등신으로 만들지 바꿔서 다시 만든다.
+func set_head_ratio(ratio: float) -> void:
+	if blocky != null:
+		blocky.destroy()
+
+	blocky = BlockyActor.new()
+	blocky.build(viewport, viewport, ratio)
+	blocky.visible = use_blocky
+	# 윤곽선 번호 판 그림은 새 캐릭터 부품을 따라가야 하므로 다음 동기화 때 위치를 맞춘다.
+	_update_actor()
+
+
 func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_R:
+		set_head_ratio(2.0 if blocky.head_ratio_value > 2.5 else 3.0)
+		_update_label()
+		return
+
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_B:
 		use_blocky = not use_blocky
 		_update_actor()
@@ -335,4 +352,4 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 func _update_label() -> void:
 	super._update_label()
-	label.text += " / O 정렬 순서 깊이 %s / U 윤곽선 %s / B 캐릭터 %s" % ["켬" if sorted_mode else "끔", "켬" if outline else "끔", "상자 3D" if use_blocky else "도트 판"]
+	label.text += " / O 정렬 순서 깊이 %s / U 윤곽선 %s / B 캐릭터 %s" % ["켬" if sorted_mode else "끔", "켬" if outline else "끔", "상자 3D %.0f등신(R 키로 변경)" % blocky.head_ratio_value if use_blocky else "도트 판"]

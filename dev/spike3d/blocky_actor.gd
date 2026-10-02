@@ -8,6 +8,7 @@ const PART_SHADER: Shader = preload("res://dev/spike3d/blocky_part.gdshader")
 const ID_SHADER: Shader = preload("res://dev/spike3d/blocky_id.gdshader")
 
 var parts: Array = []  # {node, pivot, material, id_node, id_material}
+var head_ratio_value: float = 3.0
 var walk_time: float = 0.0
 var walking: bool = false
 var facing_yaw_deg: float = 90.0  # 3/4 모습: 화면 오른쪽 아래를 본다(정면은 45, 화면 아래)
@@ -74,17 +75,30 @@ func _face_textures() -> Dictionary:
 	return tex
 
 
-func build(parent: Node, id_parent: Node, world_unit: float = 1.0) -> void:
+# head_ratio: 몇 등신인가(키 ÷ 머리 높이). 2 = 머리가 키의 절반(아주 아기자기), 3 = 키의 3분의 1.
+# 전체 키는 항상 같고(0.95칸 ≈ 2배 화면에서 32픽셀) 머리 비율에 따라 몸통·다리 길이가 달라진다.
+func build(parent: Node, id_parent: Node, head_ratio: float = 3.0) -> void:
+	head_ratio_value = head_ratio
 	var t: Dictionary = _face_textures()
-	var s: float = world_unit
-	# 부품: 이름, 크기, 몸 안 위치(발 바닥 기준), 관절 위치(회전 중심), 질감
+	var total: float = 0.95
+	var head_h: float = total / head_ratio
+	var head_w: float = head_h * 1.1
+	var rest: float = total - head_h
+	var leg_h: float = rest * 0.46
+	var torso_h: float = rest - leg_h
+	var torso_w: float = clampf(head_w * 0.82, 0.22, 0.4)
+	var torso_d: float = torso_w * 0.55
+	var arm_w: float = clampf(torso_w * 0.28, 0.07, 0.11)
+	var leg_w: float = clampf(torso_w * 0.38, 0.09, 0.15)
+	var neck_y: float = leg_h + torso_h
+
 	var specs: Array = [
-		{"name": "leg_l", "size": Vector3(0.14, 0.24, 0.14), "pivot": Vector3(-0.09, 0.24, 0.0), "tex": ["leg", "leg", "leg"]},
-		{"name": "leg_r", "size": Vector3(0.14, 0.24, 0.14), "pivot": Vector3(0.09, 0.24, 0.0), "tex": ["leg", "leg", "leg"]},
-		{"name": "torso", "size": Vector3(0.36, 0.30, 0.2), "pivot": Vector3(0.0, 0.54, 0.0), "tex": ["torso_front", "torso_side", "torso_top"], "no_swing": true},
-		{"name": "arm_l", "size": Vector3(0.1, 0.26, 0.1), "pivot": Vector3(-0.23, 0.52, 0.0), "tex": ["arm", "arm", "arm"]},
-		{"name": "arm_r", "size": Vector3(0.1, 0.26, 0.1), "pivot": Vector3(0.23, 0.52, 0.0), "tex": ["arm", "arm", "arm"]},
-		{"name": "head", "size": Vector3(0.44, 0.40, 0.4), "pivot": Vector3(0.0, 0.54, 0.0), "tex": ["head_front", "head_side", "head_top"], "no_swing": true, "head": true},
+		{"name": "leg_l", "size": Vector3(leg_w, leg_h, leg_w), "pivot": Vector3(-torso_w * 0.24, leg_h, 0.0), "tex": ["leg", "leg", "leg"]},
+		{"name": "leg_r", "size": Vector3(leg_w, leg_h, leg_w), "pivot": Vector3(torso_w * 0.24, leg_h, 0.0), "tex": ["leg", "leg", "leg"]},
+		{"name": "torso", "size": Vector3(torso_w, torso_h, torso_d), "pivot": Vector3(0.0, neck_y, 0.0), "tex": ["torso_front", "torso_side", "torso_top"], "no_swing": true},
+		{"name": "arm_l", "size": Vector3(arm_w, torso_h * 0.92, arm_w), "pivot": Vector3(-(torso_w * 0.5 + arm_w * 0.5), neck_y - torso_h * 0.04, 0.0), "tex": ["arm", "arm", "arm"]},
+		{"name": "arm_r", "size": Vector3(arm_w, torso_h * 0.92, arm_w), "pivot": Vector3(torso_w * 0.5 + arm_w * 0.5, neck_y - torso_h * 0.04, 0.0), "tex": ["arm", "arm", "arm"]},
+		{"name": "head", "size": Vector3(head_w, head_h, head_h * 0.95), "pivot": Vector3(0.0, neck_y, 0.0), "tex": ["head_front", "head_side", "head_top"], "no_swing": true, "head": true},
 	]
 	_id_root = Node3D.new()
 	id_parent.add_child(_id_root)
@@ -92,21 +106,16 @@ func build(parent: Node, id_parent: Node, world_unit: float = 1.0) -> void:
 	for sp in specs:
 		var pivot := Node3D.new()
 		pivot.name = sp["name"]
-		pivot.position = sp["pivot"] * s
+		pivot.position = sp["pivot"]
 		add_child(pivot)
-		var size: Vector3 = sp["size"] * s
+		var size: Vector3 = sp["size"]
 		var mesh := BoxMesh.new()
 		mesh.size = size
 		var inst := MeshInstance3D.new()
 		inst.mesh = mesh
 
-		# 상자 중심: 다리·팔은 관절 아래로 늘어지고, 몸통·머리는 위로 솟는다.
-		if sp.get("head", false):
-			inst.position = Vector3(0.0, size.y * 0.5, 0.0)
-		elif sp.get("no_swing", false):
-			inst.position = Vector3(0.0, -size.y * 0.5, 0.0)
-		else:
-			inst.position = Vector3(0.0, -size.y * 0.5, 0.0)
+		# 상자 중심: 다리·팔·몸통은 관절 아래로 늘어지고, 머리는 위로 솟는다.
+		inst.position = Vector3(0.0, size.y * 0.5, 0.0) if sp.get("head", false) else Vector3(0.0, -size.y * 0.5, 0.0)
 
 		var m := ShaderMaterial.new()
 		m.shader = PART_SHADER
@@ -125,9 +134,17 @@ func build(parent: Node, id_parent: Node, world_unit: float = 1.0) -> void:
 		idm.shader = ID_SHADER
 		id_inst.material_override = idm
 		_id_root.add_child(id_inst)
-		parts.append({"pivot": pivot, "inst": inst, "material": m, "id_inst": id_inst, "id_material": idm, "swing": not sp.get("no_swing", false), "left": str(sp["name"]).ends_with("_l"), "arm": str(sp["name"]).begins_with("arm")})
+		parts.append({"pivot": pivot, "inst": inst, "material": m, "id_inst": id_inst, "id_material": idm, "swing": not sp.get("no_swing", false), "left": str(sp["name"]).ends_with("_l"), "arm": str(sp["name"]).begins_with("arm"), "base_y": sp["pivot"].y})
 
 	parent.add_child(self)
+
+
+# 장면에서 치운다(비율을 바꿔 다시 만들 때).
+func destroy() -> void:
+	if _id_root != null:
+		_id_root.queue_free()
+
+	queue_free()
 
 
 # 걸음 단계(0~3)를 끊어서 팔다리를 흔든다. 보간 없이 몇 단계만(제한 애니메이션).
@@ -143,7 +160,7 @@ func animate(delta: float) -> void:
 		var pivot: Node3D = p["pivot"]
 
 		if not p["swing"]:
-			pivot.position.y = (0.54 + bob) if str(pivot.name) in ["torso", "head"] else pivot.position.y
+			pivot.position.y = float(p["base_y"]) + bob
 			continue
 
 		var dir: float = -1.0 if p["left"] else 1.0

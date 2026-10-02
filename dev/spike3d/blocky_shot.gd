@@ -21,22 +21,29 @@ func _ready() -> void:
 	scene.use_blocky = false
 	scene._update_actor()
 	for i in 8: await get_tree().process_frame
-	get_viewport().get_texture().get_image().save_png("%s/view_sprite.png" % out)
+	get_viewport().get_texture().get_image().save_png("%s/ratio_sprite.png" % out)
 	scene.use_blocky = true
-	# 8방향(화면 기준): 위 = 화면 위쪽(뒷모습) ... 아래 = 화면 아래(정면)
-	for yaw in [45.0, 90.0, 135.0, 180.0, 225.0, 270.0, 315.0, 0.0]:
-		scene.blocky.facing_yaw_deg = yaw
-		scene.blocky.walking = false
-		scene.blocky.walk_time = 0.0
-		scene._update_actor()
-		for i in 6: await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png("%s/view_yaw%d.png" % [out, int(yaw)])
-	scene.blocky.facing_yaw_deg = 90.0
-	scene.blocky.walking = true
-	for st in 4:
-		scene.blocky.walk_time = (float(st) + 0.5) / 8.0
-		scene.blocky.animate(0.0)
-		scene._update_actor()
-		for i in 6: await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png("%s/view_walk%d.png" % [out, st])
+
+	for ratio in [2.0, 3.0]:
+		scene.set_head_ratio(ratio)
+
+		for yaw in [90.0, 0.0, 45.0]:
+			scene.blocky.facing_yaw_deg = yaw
+			scene.blocky.walking = false
+			scene.blocky.walk_time = 0.0
+			scene._update_actor()
+			for i in 6: await get_tree().process_frame
+			get_viewport().get_texture().get_image().save_png("%s/ratio_%d_yaw%d.png" % [out, int(ratio), int(yaw)])
+
+		scene.blocky.facing_yaw_deg = 90.0
+		scene.blocky.walking = true
+
+		for st in 4:
+			scene.blocky.walk_time = (float(st) + 0.5) / 8.0
+			scene.blocky.animate(0.0)
+			scene._update_actor()
+			for i in 6: await get_tree().process_frame
+			get_viewport().get_texture().get_image().save_png("%s/ratio_%d_walk%d.png" % [out, int(ratio), st])
+
+	# 상자 옆에 세워서 키 비교(같은 장면에 둘 다 보이도록 각각 한 장씩)
 	get_tree().quit()
