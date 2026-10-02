@@ -69,6 +69,14 @@ var _ground_mesh: MeshInstance3D
 var _ground_id_mesh: MeshInstance3D
 var _ground_id_material: ShaderMaterial
 var _texture_cache: Dictionary = {}
+# 3D 만 보기(Mode.ON)일 때 숨긴 2D 노드와 원래 보이던 상태(끄면 복원): 인스턴스 id → [노드, 원래 visible]
+var _hidden_2d: Dictionary = {}
+var _env: Environment
+var _lamps: Array = []
+var _lamp_signature: String = ""
+var day_manager: Node
+## 0 이상이면 게임 시계 대신 이 시각(0~24)을 쓴다(시험용). 음수면 DayManager 의 시각을 따른다.
+var forced_hour: float = -1.0
 
 
 func _ready() -> void:
@@ -81,6 +89,7 @@ func _build_view() -> void:
 	floor_node = world.get_node_or_null("Floor")
 	objects_node = world.get_node_or_null("Objects")
 	player = world.get_node_or_null("Actors/Player")
+	day_manager = world.get_node_or_null("DayManager")
 
 	if floor_node == null or objects_node == null:
 		push_warning("[StoreView3D] Floor/Objects 를 찾지 못해 3D 층을 만들지 않음")
@@ -116,8 +125,6 @@ func _build_view() -> void:
 	_viewport.add_child(_camera)
 
 	_sun = DirectionalLight3D.new()
-	_sun.rotation_degrees = Vector3(-55, 25, 0)
-	_sun.light_energy = 1.1
 	_sun.shadow_enabled = true
 	_viewport.add_child(_sun)
 
@@ -126,9 +133,11 @@ func _build_view() -> void:
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	env.ambient_light_color = Color(0.7, 0.72, 0.8)
 	env.ambient_light_energy = 0.55
+	_env = env
 	var world_env := WorldEnvironment.new()
 	world_env.environment = env
 	_viewport.add_child(world_env)
+	apply_hour(12.0)
 
 	_build_id_pass()
 	_post_material = ShaderMaterial.new()
@@ -167,6 +176,7 @@ func _apply_mode() -> void:
 		return
 
 	_canvas.visible = mode != Mode.OFF
+	_apply_2d_hiding()
 
 	# 3D 칸 크기(화면 108px)와 2D 칸 크기를 맞추려고 2D 카메라 줌을 올린다(끄면 원래 값으로).
 	if camera2d != null:
@@ -189,6 +199,114 @@ func cycle_mode() -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
 		cycle_mode()
+
+
+# ---------------------------------------------------------------- 2D 그림 숨기기 (기존 게임 파일은 수정하지 않고 visible 만 바꿈)
+
+func _hide_2d_node(n: CanvasItem) -> void:
+	if n == null:
+		return
+
+	var id: int = n.get_instance_id()
+
+	if not _hidden_2d.has(id):
+		_hidden_2d[id] = [n, n.visible]
+
+	n.visible = false
+
+
+func _apply_2d_hiding() -> void:
+	if mode == Mode.ON:
+		_collect_2d_to_hide()
+	else:
+		for id in _hidden_2d.keys():
+			var entry: Array = _hidden_2d[id]
+
+			if is_instance_valid(entry[0]):
+				(entry[0] as CanvasItem).visible = entry[1]
+
+		_hidden_2d.clear()
+
+
+# 숨길 것: 바닥(그림만. 충돌 노드는 그대로), 판자 벽, 가구와 사람의 그림 노드(Visual). 글자 표시(재고 등)·건축 고스트·UI 는 그대로 둔다.
+func _collect_2d_to_hide() -> void:
+	_hide_2d_node(floor_node)
+	_hide_2d_node(world.get_node_or_null("WoodWalls") as CanvasItem)
+
+	for node in objects_node.get_children():
+		_hide_2d_node(node.get_node_or_null("Visual") as CanvasItem)
+
+	for n in _collect_actor_nodes():
+		_hide_2d_node(n.get_node_or_null("Visual") as CanvasItem)
+
+
+# ---------------------------------------------------------------- 시간대 빛
+
+# 게임 시각(시 + 이번 시의 진행률). day_night_tint.gd 와 같은 방식으로 계산한다.
+func _current_hour() -> float:
+	if forced_hour >= 0.0:
+		return forced_hour
+
+	if day_manager == null:
+		return 12.0
+
+	var hour: float = float(day_manager.current_hour)
+	var timer: Timer = day_manager.hour_timer
+
+	if timer != null and not timer.is_stopped() and timer.wait_time > 0.0:
+		hour += clampf(1.0 - timer.time_left / timer.wait_time, 0.0, 1.0)
+
+	return hour
+
+
+# 해/달 방향·색·세기, 환경광, 매장 등을 시각에 맞춘다. 색조는 data/shop/time_of_day.csv(2D 와 같은 표)에서 가져온다.
+func apply_hour(h: float) -> void:
+	if _env == null:
+		return
+
+	var hour: float = fposmod(h, 24.0)
+	var tint: Color = TimeOfDayData.get_tint(hour)
+	var luminance: float = tint.get_luminance()
+	var dark: float = 1.0 - clampf((luminance - 0.35) / 0.65, 0.0, 1.0)  # 0 = 낮, 1 = 한밤
+	var day_amt: float = smoothstep(5.0, 7.0, hour) * (1.0 - smoothstep(17.0, 19.0, hour))
+	var sun_curve: float = clampf(sin((hour - 6.0) / 12.0 * PI), 0.0, 1.0)
+	var elev: float = lerpf(42.0, lerpf(10.0, 62.0, sun_curve), day_amt)
+	var yaw: float = lerpf(-110.0, lerpf(-75.0, 75.0, clampf((hour - 6.0) / 12.0, 0.0, 1.0)), day_amt)
+	_sun.rotation_degrees = Vector3(-elev, yaw, 0.0)
+	_sun.light_color = tint
+	_sun.light_energy = lerpf(0.9, lerpf(0.8, 1.2, sun_curve), day_amt)
+	_env.ambient_light_color = Color(0.7, 0.72, 0.8) * tint
+	_env.ambient_light_energy = lerpf(0.9, 0.55, day_amt)
+
+	for lamp in _lamps:
+		(lamp as OmniLight3D).light_energy = 2.4 * dark
+		(lamp as OmniLight3D).visible = dark > 0.05
+
+
+# 매장 천장 등(밤에 켜짐): 매장 안을 격자로 4개
+func _sync_lamps(rect: Rect2i) -> void:
+	var sig: String = str(rect)
+
+	if sig == _lamp_signature:
+		return
+
+	_lamp_signature = sig
+
+	for lamp in _lamps:
+		(lamp as Node).queue_free()
+
+	_lamps.clear()
+
+	for fx in [0.28, 0.72]:
+		for fy in [0.28, 0.72]:
+			var lamp := OmniLight3D.new()
+			lamp.position = Vector3(float(rect.position.x) - 0.5 + float(rect.size.x) * fx, block_height(1.8), float(rect.position.y) - 0.5 + float(rect.size.y) * fy)
+			lamp.omni_range = 4.5
+			lamp.light_color = Color(1.0, 0.82, 0.5)
+			lamp.shadow_enabled = false
+			lamp.light_cull_mask = 1
+			_viewport.add_child(lamp)
+			_lamps.append(lamp)
 
 
 # ---------------------------------------------------------------- 좌표
@@ -225,6 +343,7 @@ func _process(delta: float) -> void:
 		return
 
 	_sync_camera()
+	apply_hour(_current_hour())
 	_wall_timer -= delta
 
 	if _wall_timer <= 0.0:
@@ -232,6 +351,9 @@ func _process(delta: float) -> void:
 		_sync_floor()
 		_sync_walls()
 		_sync_furniture()
+
+		if mode == Mode.ON:
+			_collect_2d_to_hide()
 
 	_sync_actors(delta)
 	_sort_and_update()
@@ -262,6 +384,7 @@ func _sync_floor() -> void:
 		return
 
 	_floor_signature = sig
+	_sync_lamps(rect)
 	var mesh := PlaneMesh.new()
 	mesh.size = Vector2(rect.size)
 

@@ -67,6 +67,30 @@ func _ready() -> void:
 			await get_tree().process_frame
 		get_viewport().get_texture().get_image().save_png("%s/game_%s.png" % [out, m[1]])
 
+	# 시간대별 3D 만(손님이 있으면 같이 찍힘)
+	if "--hours" in args:
+		mirror.mode = StoreView3D.Mode.ON
+
+		for h in [9.0, 12.0, 17.5, 19.0, 21.0, 2.0]:
+			mirror.forced_hour = h
+			for i in range(10):
+				await get_tree().process_frame
+			get_viewport().get_texture().get_image().save_png("%s/hour_%02d.png" % [out, int(h * 10)])
+
+	# 2D 숨김 확인: 3D 만 모드에서 2D 그림 노드가 정말 숨겨졌는지, 끄면 복원되는지
+	mirror.forced_hour = -1.0
+	mirror.mode = StoreView3D.Mode.ON
+	for i in range(30):
+		await get_tree().process_frame
+	var fl2: Node2D = scene.get_node("Floor")
+	var hidden_ok: bool = not fl2.visible and not scene.get_node("Objects").get_child(0).get_node("Visual").visible
+	get_viewport().get_texture().get_image().save_png("%s/game_3d_only_hidden2d.png" % out)
+	mirror.mode = StoreView3D.Mode.OFF
+	for i in range(5):
+		await get_tree().process_frame
+	var restored_ok: bool = fl2.visible and scene.get_node("Objects").get_child(0).get_node("Visual").visible
+	print("hide2d hidden_in_ON=", hidden_ok, " restored_in_OFF=", restored_ok)
+
 	print("walls3d=", mirror._items.keys().filter(func(k): return str(k).begins_with("wall")).size())
 	print("game_shot done; customers=", get_tree().get_nodes_in_group("customer").size(), " shelves=", get_tree().get_nodes_in_group("shelf").size(), " items3d=", mirror._items.size(), " actors3d=", mirror._actors.size())
 	get_tree().quit()
