@@ -70,6 +70,10 @@ static func normal(kind: String, size: int, levels: int = 2) -> ImageTexture:
 
 		heights.append(row)
 
+	return normal_from_heights(heights, size, levels)
+
+
+static func normal_from_heights(heights: Array, size: int, levels: int = 2) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
 
 	for y in range(size):
@@ -177,5 +181,55 @@ static func roof_tiles(size: int, base: Color) -> ImageTexture:
 			var edge: bool = local_y == 0 or ((x + offset) % tile_w) == 0
 			var c: Color = base.darkened(0.35) if edge else base.lightened(0.04 * float(local_y))
 			img.set_pixel(x, y, c)
+
+	return ImageTexture.create_from_image(img)
+
+
+# 기와 지붕 법선 맵: 기와 한 장마다 아래쪽이 불룩하게 겹친 느낌(roof_tiles 와 같은 줄 구조).
+static func roof_normal(size: int) -> ImageTexture:
+	var rows: int = 3 if size % 3 == 0 else 2
+	var row_h: int = size / rows
+	var tile_w: int = maxi(size / 3, 3)
+	var heights: Array = []
+
+	for y in range(size):
+		var row_idx: int = y / row_h
+		var offset: int = (row_idx % 2) * (tile_w / 2)
+		var row: Array = []
+
+		for x in range(size):
+			var local_y: int = y % row_h
+			var local_x: int = (x + offset) % tile_w
+			var hgt: float = float(local_y) / float(row_h)  # 아래로 갈수록 올라오는 기와 끝
+			hgt *= 1.0 - 0.5 * absf(float(local_x) / float(tile_w) - 0.5) * 2.0 * 0.5
+			row.append(hgt)
+
+		heights.append(row)
+
+	return normal_from_heights(heights, size, 2)
+
+
+# 차양: 세로 줄무늬(크림 / 주황)
+static func awning_stripes(size: int, a: Color, b: Color) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var stripe: int = maxi(size / 6, 2)
+
+	for y in range(size):
+		for x in range(size):
+			img.set_pixel(x, y, a if ((x / stripe) % 2 == 0) else b)
+
+	return ImageTexture.create_from_image(img)
+
+
+# 단색 한 장(지붕 두께·용마루 덮개 등). 살짝 결을 준다.
+static func flat_color(size: int, base: Color) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = int(base.r * 255.0) * 7919 + int(base.g * 255.0)
+
+	for y in range(size):
+		for x in range(size):
+			var v: float = rng.randf_range(-0.03, 0.03)
+			img.set_pixel(x, y, Color(base.r + v, base.g + v, base.b + v))
 
 	return ImageTexture.create_from_image(img)

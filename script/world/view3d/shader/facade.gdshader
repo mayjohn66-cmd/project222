@@ -10,9 +10,16 @@ uniform float rank = 0.0;
 uniform float rank_count = 1.0;
 uniform bool use_sort = true;
 uniform vec3 center_world = vec3(0.0);
+// 법선 맵(선택). 메시의 UV 와 접선(SurfaceTool.generate_tangents)을 따라 기와 요철 등을 낸다.
+uniform sampler2D normal_tex : hint_normal, filter_nearest, repeat_enable;
+uniform bool use_normal = false;
 
 void fragment() {
 	ALBEDO = texture(albedo_tex, UV * uv_scale).rgb * tint.rgb;
+
+	if (use_normal) {
+		NORMAL_MAP = texture(normal_tex, UV * uv_scale).rgb;
+	}
 
 	if (use_sort) {
 		float band = 1.0 / (rank_count + 1.0);

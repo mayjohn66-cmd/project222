@@ -77,6 +77,7 @@ var _hidden_2d: Dictionary = {}
 const VIEW_MARGIN: float = 15.0  # 정렬에 넣는 범위(카메라 중심 칸 ± 이 값)
 var _view_center: Vector2 = Vector2.ZERO
 var _sorted_keys: Array = []
+var _fixed_keys: Array = []  # 정렬 없이 고정 순번을 쓰는 항목(바닥 돌 마당 등: 바닥 바로 위, 모든 물체 뒤)
 var _sort_usec: int = 0
 var _env: Environment
 var _lamps: Array = []
@@ -728,7 +729,7 @@ func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, text
 
 
 # 면마다 다른 재질을 쓰는 건물 메시 항목(박공 지붕 건물 등). materials 는 메시 면(surface) 순서대로.
-func _set_mesh_item(key: String, mesh: Mesh, materials: Array, lo: Vector2, hi: Vector2, total_blocks: float, signature: String) -> void:
+func _set_mesh_item(key: String, mesh: Mesh, materials: Array, lo: Vector2, hi: Vector2, total_blocks: float, signature: String, fixed_rank: float = NAN) -> void:
 	_remove_item(key)
 	var inst := MeshInstance3D.new()
 	inst.mesh = mesh
@@ -747,7 +748,7 @@ func _set_mesh_item(key: String, mesh: Mesh, materials: Array, lo: Vector2, hi: 
 	id_inst.material_override = id_material
 	_viewport.add_child(id_inst)
 	var center := Vector3((lo.x + hi.x) * 0.5, 0.0, (lo.y + hi.y) * 0.5)
-	_items[key] = {"mesh": inst, "material": materials[0], "materials": materials, "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, 0.0), "max": Vector3(hi.x, hi.y, total_blocks * block_px), "center": center, "signature": signature}
+	_items[key] = {"mesh": inst, "material": materials[0], "materials": materials, "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, 0.0), "max": Vector3(hi.x, hi.y, total_blocks * block_px), "center": center, "signature": signature, "fixed_rank": fixed_rank}
 
 
 func _make_facade_material(texture: Texture2D, tint: Color = Color.WHITE, uv_scale: Vector2 = Vector2.ONE) -> ShaderMaterial:
@@ -823,12 +824,17 @@ func _sort_and_update() -> void:
 	# 카메라 주변(보이는 범위 + 여유)의 물체만 정렬에 넣는다(마을 전체를 매 프레임 정렬하면 느림).
 	var window := Rect2(_view_center - Vector2(VIEW_MARGIN, VIEW_MARGIN), Vector2(VIEW_MARGIN, VIEW_MARGIN) * 2.0)
 	_sorted_keys.clear()
+	_fixed_keys.clear()
 
 	for key in _items.keys():
 		var mn: Vector3 = _items[key]["min"]
 		var mx: Vector3 = _items[key]["max"]
 
 		if not window.intersects(Rect2(mn.x, mn.y, mx.x - mn.x, mx.y - mn.y)):
+			continue
+
+		if not is_nan(float(_items[key].get("fixed_rank", NAN))):
+			_fixed_keys.append(key)
 			continue
 
 		_sorted_keys.append(key)
@@ -865,6 +871,19 @@ func _sort_and_update() -> void:
 		_ground_id_material.set_shader_parameter("rank", -1.0)
 		_ground_id_material.set_shader_parameter("rank_count", count)
 		_ground_id_material.set_shader_parameter("id", 0.0)
+
+	for key in _fixed_keys:
+		var fit: Dictionary = _items[key]
+		var fr: float = float(fit["fixed_rank"])
+
+		for m in fit["materials"]:
+			(m as ShaderMaterial).set_shader_parameter("rank", fr)
+			(m as ShaderMaterial).set_shader_parameter("rank_count", count)
+
+		var fidm: ShaderMaterial = fit["id_material"]
+		fidm.set_shader_parameter("rank", fr)
+		fidm.set_shader_parameter("rank_count", count)
+		fidm.set_shader_parameter("id", 0.0)
 
 	if village != null:
 		village.update_ground_params(count)

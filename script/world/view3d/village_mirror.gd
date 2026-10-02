@@ -40,7 +40,7 @@ func _load_rules() -> void:
 		if cells.size() < header.size() or cells[0].strip_edges().is_empty():
 			continue
 
-		rules.append({"match": cells[0].strip_edges().to_lower(), "kind": cells[1].strip_edges(), "height_blocks": float(cells[2]), "texture": cells[3].strip_edges(), "tint": Color.html(cells[4].strip_edges()), "roof_blocks": float(cells[5]) if cells.size() > 5 else 0.0, "roof_tint": Color.html(cells[6].strip_edges()) if cells.size() > 6 else Color.WHITE})
+		rules.append({"match": cells[0].strip_edges().to_lower(), "kind": cells[1].strip_edges(), "height_blocks": float(cells[2]), "texture": cells[3].strip_edges(), "tint": Color.html(cells[4].strip_edges()), "roof_blocks": float(cells[5]) if cells.size() > 5 else 0.0, "roof_tint": Color.html(cells[6].strip_edges()) if cells.size() > 6 else Color.WHITE, "footprint_scale": float(cells[7]) if cells.size() > 7 else 1.0})
 
 
 # 규칙 찾기: 노드 이름 + 스프라이트 그림 경로(소문자)에 match 글자가 들어 있는 첫 규칙. 먼저 나온 행이 우선(구체적인 것을 위에).
@@ -281,7 +281,11 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 		height = clampf(sprite_height_px * 0.375 * 0.6 / view.block_px, 0.6, 3.5)
 
 	if kind == "gable":
-		_create_gable(key, lo, hi, rule, sig)
+		# 충돌 발자국은 그림보다 넓으므로 건물 모양은 중심 기준으로 줄인다(footprint_scale).
+		var scale_f: float = float(rule.get("footprint_scale", 1.0))
+		var center: Vector2 = (lo + hi) * 0.5
+		var half: Vector2 = (hi - lo) * 0.5 * scale_f
+		_create_gable(key, center - half, center + half, rule, sig)
 		return
 
 	if kind == "tree":
@@ -296,21 +300,39 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 		_keys[key + "a"] = true
 
 
-# 박공 지붕 건물: 벽(창문·문 임시 질감) + 기와 지붕 메시. 문은 카메라에 보이는 +z 면에 둔다(2D 그림의 문 방향은 반영하지 않음).
+# 박공 지붕 건물: 벽(창문·문 임시 질감) + 두께 있는 기와 지붕 + 용마루 덮개 + 굴뚝 + 차양 + 바닥 돌 마당.
+# 문은 카메라에 보이는 +z 면에 둔다(2D 그림의 문 방향은 반영하지 않음). 질감은 모두 코드로 칠한 임시 그림.
 func _create_gable(key: String, lo: Vector2, hi: Vector2, rule: Dictionary, sig: String) -> void:
 	var wall_blocks: float = float(rule["height_blocks"])
 	var roof_blocks: float = float(rule.get("roof_blocks", 1.0))
-	var built: Dictionary = BuildingMesh.build(lo, hi, view.block_height(wall_blocks), view.block_height(roof_blocks))
+	var options: Dictionary = {"chimney": true, "awning": true, "apron": 0.45}
+	var built: Dictionary = BuildingMesh.build(lo, hi, view.block_height(wall_blocks), view.block_height(roof_blocks), options)
 	var ts: int = view.texture_size
 	var width: float = hi.x - lo.x
 	var depth: float = hi.y - lo.y
 	var h_texels: int = int(roundf(wall_blocks * view.block_px))
 	var plaster: Color = rule["tint"]
+	var roof_tint: Color = rule.get("roof_tint", Color(0.85, 0.44, 0.23))
 	var timber := Color(0.34, 0.22, 0.14)
 	var tex_z: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(width * ts)), h_texels, true, maxi(int(roundf(width)), 1), plaster, timber)
 	var tex_x: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(depth * ts)), h_texels, false, maxi(int(roundf(depth)), 1), plaster, timber)
-	var tex_roof: ImageTexture = PlaceholderTextures.roof_tiles(ts, rule.get("roof_tint", Color(0.85, 0.44, 0.23)))
-	var tex_gable: ImageTexture = PlaceholderTextures.wall_facade(ts, ts, false, 1, plaster, timber)
-	var materials: Array = [view._make_facade_material(tex_z), view._make_facade_material(tex_x), view._make_facade_material(tex_roof), view._make_facade_material(tex_gable)]
+	var roof_mat: ShaderMaterial = view._make_facade_material(PlaceholderTextures.roof_tiles(ts, roof_tint))
+	roof_mat.set_shader_parameter("normal_tex", PlaceholderTextures.roof_normal(ts))
+	roof_mat.set_shader_parameter("use_normal", true)
+	var materials: Array = [
+		view._make_facade_material(tex_z),
+		view._make_facade_material(tex_x),
+		roof_mat,
+		view._make_facade_material(PlaceholderTextures.wall_facade(ts, ts, false, 1, plaster, timber)),
+		view._make_facade_material(PlaceholderTextures.flat_color(ts, roof_tint.darkened(0.45))),
+		view._make_facade_material(PlaceholderTextures.albedo("brick", ts), Color(0.95, 0.78, 0.7)),
+		view._make_facade_material(PlaceholderTextures.awning_stripes(ts, Color(0.96, 0.9, 0.78), Color(0.88, 0.45, 0.22))),
+	]
 	view._set_mesh_item(key + "a", built["mesh"], materials, lo, hi, wall_blocks + roof_blocks, sig)
 	_keys[key + "a"] = true
+
+	# 바닥 돌 마당: 정렬 없이 바닥(-1) 바로 위(-0.5)에 그린다.
+	if (built["apron_mesh"] as ArrayMesh).get_surface_count() > 0:
+		var apron_mat: ShaderMaterial = view._make_facade_material(PlaceholderTextures.albedo("brick", ts), Color(1.45, 1.35, 1.2))
+		view._set_mesh_item(key + "b", built["apron_mesh"], [apron_mat], lo, hi, 0.0, sig, -0.5)
+		_keys[key + "b"] = true
