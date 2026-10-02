@@ -14,6 +14,10 @@ uniform vec3 center_world = vec3(0.0);
 uniform float local_scale = 0.0;
 uniform bool use_sort = true;
 uniform float texel_per_unit = 1.0;
+// 법선 맵(OpenGL 방식: 초록 = 위쪽). 면마다 그림 방향(윗면 u=+x v=+z / +x 면 u=+z / +z 면 u=+x)에 맞춰 세계 좌표 법선으로 바꾼다.
+uniform sampler2D normal_tex : hint_normal, filter_nearest, repeat_enable;
+uniform bool use_normal = false;
+uniform float normal_strength = 1.0;
 
 varying vec3 world_pos;
 varying vec3 world_normal;
@@ -34,6 +38,28 @@ void fragment() {
 		uv = vec2(world_pos.x, -world_pos.y);
 	}
 	ALBEDO = texture(albedo_tex, uv * texel_per_unit).rgb * tint.rgb;
+
+	if (use_normal) {
+		vec3 t = texture(normal_tex, uv * texel_per_unit).rgb * 2.0 - 1.0;
+		vec3 tangent;
+		vec3 bitangent;
+		vec3 base_n;
+		if (n.y > 0.5) {
+			base_n = vec3(0.0, 1.0, 0.0);
+			tangent = vec3(1.0, 0.0, 0.0);
+			bitangent = vec3(0.0, 0.0, -1.0);
+		} else if (n.x > 0.5) {
+			base_n = vec3(1.0, 0.0, 0.0);
+			tangent = vec3(0.0, 0.0, 1.0);
+			bitangent = vec3(0.0, 1.0, 0.0);
+		} else {
+			base_n = vec3(0.0, 0.0, 1.0);
+			tangent = vec3(1.0, 0.0, 0.0);
+			bitangent = vec3(0.0, 1.0, 0.0);
+		}
+		vec3 wn = normalize(base_n * t.z + (tangent * t.x + bitangent * t.y) * normal_strength);
+		NORMAL = normalize((VIEW_MATRIX * vec4(wn, 0.0)).xyz);
+	}
 
 	if (use_sort) {
 		float cz = (VIEW_MATRIX * vec4(center_world, 1.0)).z;

@@ -105,6 +105,23 @@ func _update_camera() -> void:
 
 # 시험용 도트 질감(코드로 만든 임시 그림). 실제로는 Pixel Lab 으로 만든 질감 한 장이 들어갈 자리다.
 # 기존 art/world/cozy_v3 의 풀·돌·나무 그림은 64x64 단색이라 3D 에 씌워도 모양이 안 보여서 쓰지 않았다.
+# 줄눈(벽돌·판자 틈) 자리인지. 질감 크기가 3 또는 2의 배수면 이음매 없이 반복된다(18=3줄, 16=2줄).
+static func is_seam(kind: String, x: int, y: int, size: int) -> bool:
+	var rows: int = 3 if size % 3 == 0 else 2
+	var row_h: int = size / rows
+	var row: int = y / row_h
+
+	if kind == "brick":
+		var brick_w: int = size / 2
+		var offset: int = (row % 2) * (brick_w / 2)
+		return (y % row_h == 0) or ((x + offset) % brick_w == 0)
+
+	if kind == "plank":
+		return y % row_h == 0
+
+	return false
+
+
 static func make_texture(kind: String, size: int = 16) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
 	var rng := RandomNumberGenerator.new()
@@ -113,6 +130,7 @@ static func make_texture(kind: String, size: int = 16) -> ImageTexture:
 	for y in range(size):
 		for x in range(size):
 			var c: Color
+			var seam: bool = is_seam(kind, x, y, size)
 
 			match kind:
 				"grass":
@@ -122,19 +140,68 @@ static func make_texture(kind: String, size: int = 16) -> ImageTexture:
 					if rng.randf() < 0.05:
 						c = Color(0.5, 0.74, 0.36)
 				"brick":
-					var row: int = y / 8
-					var offset: int = (row % 2) * 8
-					var mortar: bool = (y % 8 == 0) or ((x + offset) % 16 == 0)
 					var tone: float = rng.randf_range(-0.04, 0.04)
-					c = Color(0.3, 0.3, 0.38) if mortar else Color(0.5 + tone, 0.5 + tone, 0.58 + tone)
+					c = Color(0.3, 0.3, 0.38) if seam else Color(0.5 + tone, 0.5 + tone, 0.58 + tone)
 				_:  # plank
-					var plank: bool = (y % 8 == 0)
 					var grain: float = rng.randf_range(-0.03, 0.03)
-					c = Color(0.3, 0.2, 0.12) if plank else Color(0.62 + grain, 0.43 + grain, 0.27 + grain)
+					c = Color(0.3, 0.2, 0.12) if seam else Color(0.62 + grain, 0.43 + grain, 0.27 + grain)
 
 			img.set_pixel(x, y, c)
 
 	return ImageTexture.create_from_image(img)
+
+
+# 높이 맵(줄눈 = 낮음, 벽돌·판자 = 높음, 판자는 가운데가 살짝 불룩) → 법선 맵. tools/height_to_normal.py 와 같은 계산(Sobel, 기울기를 levels 단계로 끊음).
+static func make_normal(kind: String, size: int = 16, levels: int = 2) -> ImageTexture:
+	var heights: Array = []
+
+	for y in range(size):
+		var row: Array = []
+
+		for x in range(size):
+			var hgt: float = 0.2 if is_seam(kind, x, y, size) else 0.8
+
+			if kind == "plank" and hgt > 0.5:
+				var rows: int = 3 if size % 3 == 0 else 2
+				var row_h: int = size / rows
+				var local: int = y % row_h
+				hgt += 0.12 if (local == 1 or local == row_h - 1) else 0.0
+
+			if kind == "grass":
+				hgt = 0.5 + 0.25 * sin(float(x) * 2.1 + float(y) * 1.3) * cos(float(y) * 1.7)
+
+			row.append(hgt)
+
+		heights.append(row)
+
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+
+	for y in range(size):
+		for x in range(size):
+			var gx: float = 0.0
+			var gy: float = 0.0
+
+			for dy in [-1, 0, 1]:
+				var weight: float = 2.0 if dy == 0 else 1.0
+				gx += weight * (float(heights[posmod(y + dy, size)][posmod(x + 1, size)]) - float(heights[posmod(y + dy, size)][posmod(x - 1, size)]))
+
+			for dx in [-1, 0, 1]:
+				var weight2: float = 2.0 if dx == 0 else 1.0
+				gy += weight2 * (float(heights[posmod(y + 1, size)][posmod(x + dx, size)]) - float(heights[posmod(y - 1, size)][posmod(x + dx, size)]))
+
+			var nx: float = _level(-gx * 0.25, levels)
+			var ny: float = _level(gy * 0.25, levels)
+			var nz: float = sqrt(maxf(0.0, 1.0 - minf(1.0, nx * nx + ny * ny)))
+			img.set_pixel(x, y, Color(nx * 0.5 + 0.5, ny * 0.5 + 0.5, nz * 0.5 + 0.5))
+
+	return ImageTexture.create_from_image(img)
+
+
+static func _level(v: float, levels: int) -> float:
+	if levels <= 0:
+		return v
+
+	return clampf(roundf(v * float(levels)) / float(levels), -1.0, 1.0)
 
 
 func _material(kind: String, tint: Color = Color.WHITE) -> StandardMaterial3D:

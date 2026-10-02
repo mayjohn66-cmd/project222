@@ -1,7 +1,7 @@
 extends "res://dev/spike3d/iso_sorted_spike.gd"
 ## 시험 방 3: 실제 매장 한 구석(진열대·계산대·문 2칸 폭)을 새 방식(낮은 해상도 3D + 정렬 순서 깊이 + 윤곽선)으로 그린다.
 ## 손님은 3등신 상자 캐릭터(머리 크기는 2.5등신과 같고 팔다리만 긺)이고, 걷기는 CrowdSteering(겹침 허용 모드)으로 한다.
-##   1/2/3 = 낮추기 배율(기본 3배, 칸 36x18) / U 윤곽선 / O 정렬 순서 깊이 / K 군중 피하기 켬·끔 / SPACE 손님 한 명 더
+##   N = 법선 맵 켜기/끄기 / [ ] = 시간 ∓1시간 / Y = 시간 자동 흐름(하루 16초) / U 윤곽선 / O 정렬 깊이 / K 군중 피하기 / SPACE 손님 추가 / 1·2·3 배율(기본 3배, 칸 36x18)
 ## 기존 매장 규격: 한 칸 96x48, 진열대는 2x1칸.
 
 # 3등신: 머리는 기존 2.5등신 캐릭터와 같은 크기(0.38칸)로 두고 몸통도 그대로, 팔다리만 늘려서 키 1.14칸(36px 칸 기준 약 25px).
@@ -26,6 +26,12 @@ var crowd_steering_on: bool = true
 var spawn_timer: float = 0.0
 var next_id: int = 0
 var rng := RandomNumberGenerator.new()
+var hour: float = 12.0  # 하루 시간(0~24)
+var auto_time: bool = false
+var freeze_crowd: bool = false
+var sun_light: DirectionalLight3D
+var scene_env: Environment
+var lamps: Array = []
 
 
 func _ready() -> void:
@@ -64,22 +70,31 @@ func _build_world() -> void:
 	_add_item("counter", Vector2(6.5, 3.5), Vector2(1.5, 1.0), 1.1, WOOD, Color(0.8, 1.0, 0.85))
 
 	light = DirectionalLight3D.new()
-	light.rotation_degrees = Vector3(-55, 25, 0)
 	light.shadow_enabled = true
-	light.light_energy = 1.1
 	viewport.add_child(light)
+	sun_light = light
 	var env := Environment.new()
 	env.background_mode = Environment.BG_COLOR
 	env.background_color = Color(0.12, 0.12, 0.16)
 	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(0.7, 0.72, 0.8)
-	env.ambient_light_energy = 0.55
+	scene_env = env
 	var world_env := WorldEnvironment.new()
 	world_env.environment = env
 	viewport.add_child(world_env)
 
+	# 매장 천장 등(밤에 켜짐): 진열대 앞, 테이블 위, 계산대 위
+	for pos in [Vector2(2.2, 2.0), Vector2(5.5, 2.0), Vector2(7.2, 4.0)]:
+		var lamp := OmniLight3D.new()
+		lamp.position = Vector3(pos.x, block_height(2.6), pos.y)
+		lamp.omni_range = 4.2
+		lamp.light_color = Color(1.0, 0.82, 0.5)
+		lamp.shadow_enabled = false
+		viewport.add_child(lamp)
+		lamps.append(lamp)
+
 	_add_actor(Vector2(7.25, 5.0), true)  # 계산대 뒤 점원
 	_build_outline_pass()
+	apply_time(hour)
 	_update_sorting()
 
 
@@ -221,8 +236,45 @@ func _step_crowd(delta: float) -> void:
 		_update_label()
 
 
+# 하루 시간(0~24)에 맞춰 해/달 방향·색·세기, 환경광, 매장 등을 정한다. 낮 6~18시, 5~7시와 17~19시는 서서히 바뀐다.
+func apply_time(h: float) -> void:
+	hour = fposmod(h, 24.0)
+	var day_amt: float = smoothstep(5.0, 7.0, hour) * (1.0 - smoothstep(17.0, 19.0, hour))
+	var sun_curve: float = clampf(sin((hour - 6.0) / 12.0 * PI), 0.0, 1.0)
+	var elev_sun: float = lerpf(10.0, 62.0, sun_curve)
+	var yaw_sun: float = lerpf(-75.0, 75.0, clampf((hour - 6.0) / 12.0, 0.0, 1.0))
+	var warm: Color = Color(1.0, 0.58, 0.32).lerp(Color(1.0, 0.96, 0.88), smoothstep(0.1, 0.55, sun_curve))
+	var sun_energy: float = lerpf(0.8, 1.2, sun_curve)
+	var moon_color := Color(0.38, 0.5, 1.0)
+	sun_light.rotation_degrees = Vector3(-lerpf(42.0, elev_sun, day_amt), lerpf(-110.0, yaw_sun, day_amt), 0.0)
+	sun_light.light_color = moon_color.lerp(warm, day_amt)
+	sun_light.light_energy = lerpf(0.4, sun_energy, day_amt)
+	sun_light.shadow_enabled = shadows
+	scene_env.ambient_light_color = Color(0.12, 0.16, 0.34).lerp(Color(0.7, 0.72, 0.8), day_amt)
+	scene_env.ambient_light_energy = lerpf(0.5, 0.55, day_amt)
+	scene_env.background_color = Color(0.04, 0.05, 0.1).lerp(Color(0.2, 0.24, 0.32), day_amt)
+
+	for lamp in lamps:
+		(lamp as OmniLight3D).light_energy = lerpf(2.2, 0.0, day_amt)
+		(lamp as OmniLight3D).visible = day_amt < 0.98
+
+
+func set_normal_map(on: bool) -> void:
+	use_normal_map = on
+
+	for it in items:
+		(it["material"] as ShaderMaterial).set_shader_parameter("use_normal", on)
+
+	ground_material.set_shader_parameter("use_normal", on)
+
+
 func _process(delta: float) -> void:
-	_step_crowd(delta)
+	if auto_time:
+		apply_time(hour + delta * 1.5)  # 1초에 1.5시간(하루 16초)
+
+	if not freeze_crowd:
+		_step_crowd(delta)
+
 	super._process(delta)
 
 
@@ -284,12 +336,28 @@ func _apply_shrink() -> void:
 
 	if ground_material != null:
 		ground_material.set_shader_parameter("albedo_tex", BaseSpike.make_texture(WOOD, _texture_size()))
+		ground_material.set_shader_parameter("normal_tex", BaseSpike.make_normal(WOOD, _texture_size()))
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
 			KEY_R, KEY_B:
+				return
+			KEY_N:
+				set_normal_map(not use_normal_map)
+				_update_label()
+				return
+			KEY_BRACKETLEFT:
+				apply_time(hour - 1.0)
+				_update_label()
+				return
+			KEY_BRACKETRIGHT:
+				apply_time(hour + 1.0)
+				_update_label()
+				return
+			KEY_Y:
+				auto_time = not auto_time
 				return
 			KEY_K:
 				crowd_steering_on = not crowd_steering_on
@@ -303,4 +371,4 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _update_label() -> void:
-	label.text = "1/2/3 낮추기 %d배 / U 윤곽선 %s / O 정렬 깊이 %s / K 군중 피하기 %s / SPACE 손님 추가 (손님 %d명)" % [shrink, "켬" if outline else "끔", "켬" if sorted_mode else "끔", "켬" if crowd_steering_on else "끔", actors.size() - 1]
+	label.text = "시간 %02d시 ([ ] 1시간, Y 자동) / N 법선 맵 %s / U 윤곽선 %s / O 정렬 깊이 %s / K 군중 피하기 %s / SPACE 손님 (%d명)" % [int(hour), "켬" if use_normal_map else "끔", "켬" if outline else "끔", "켬" if sorted_mode else "끔", "켬" if crowd_steering_on else "끔", actors.size() - 1]

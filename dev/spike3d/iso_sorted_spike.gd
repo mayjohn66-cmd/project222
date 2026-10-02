@@ -12,6 +12,7 @@ const ID_SPRITE_SHADER: Shader = preload("res://dev/spike3d/sorted_id_sprite.gds
 const OUTLINE_SHADER: Shader = preload("res://dev/spike3d/outline_post.gdshader")
 
 var sorted_mode: bool = true
+var use_normal_map: bool = false  # 법선 맵 켜기(시험 방 3 의 N 키)
 var use_blocky: bool = false  # true = 상자로 만든 3D 캐릭터, false = 2D 도트 판
 var blocky: BlockyActor
 var walk_demo: bool = false
@@ -28,6 +29,8 @@ func _surface_material(kind: String, tint: Color) -> ShaderMaterial:
 	var m := ShaderMaterial.new()
 	m.shader = SURFACE_SHADER
 	m.set_shader_parameter("albedo_tex", BaseSpike.make_texture(kind, _texture_size()))
+	m.set_shader_parameter("normal_tex", BaseSpike.make_normal(kind, _texture_size()))
+	m.set_shader_parameter("use_normal", use_normal_map)
 	m.set_shader_parameter("tint", tint)
 	m.set_shader_parameter("texel_per_unit", 1.0)
 	return m
@@ -292,6 +295,7 @@ func _apply_shrink() -> void:
 
 	for it in items:
 		it["material"].set_shader_parameter("albedo_tex", BaseSpike.make_texture(str(it["kind"]), _texture_size()))
+		it["material"].set_shader_parameter("normal_tex", BaseSpike.make_normal(str(it["kind"]), _texture_size()))
 
 	if ground_material != null:
 		ground_material.set_shader_parameter("albedo_tex", BaseSpike.make_texture(GRASS, _texture_size()))
