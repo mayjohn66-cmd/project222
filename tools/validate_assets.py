@@ -27,12 +27,17 @@ from PIL import Image
 #   multiple_of   : 가로·세로가 이 값의 배수가 아니면 WARN (UI 용)
 #   max_colors    : 불투명 픽셀의 서로 다른 색 수 상한
 #   no_partial_alpha : 알파가 0 또는 255 만 허용(안티앨리어싱 금지)
+#   source        : 게임에 넣지 않는 원본(높이 맵 등). 폴더에 .gdignore 가 있어야 하고 검사하지 않음
+#   world3d       : 3D 도트 질감(그림_규격서_3D도트). 이름 규칙: X.png(알베도) / X_n.png(법선) / X_e.png(발광).
+#                   법선·발광은 색 상한 없음, 법선은 알베도와 같은 크기, .import 는 무손실이어야 함(tools/fix_texture_import.py)
 # ---------------------------------------------------------------------------
 RULES = [
     ("legacy-world",        "art/world/",                {"legacy": True}),
     ("legacy-expedition",   "art/expedition/",           {"legacy": True}),
     ("legacy-characters",   "art/characters/",           {"legacy": True}),
     ("legacy-ui-reference", "art/ui/reference_theme/",   {"legacy": True}),
+    ("world3d-src",         "art/world3d/_src/",         {"source": True}),
+    ("world3d",             "art/world3d/",              {"world3d": True, "max_colors": 16, "no_partial_alpha": True}),
     ("ui",                  "art/ui/",                   {"multiple_of": 8}),
     ("item-icon",           "art/items/",                {"size": (64, 64), "max_colors": 32, "no_partial_alpha": True}),
     ("furniture",           "art/furniture/",            {"frame": 64, "max_colors": 48, "no_partial_alpha": True}),
@@ -40,6 +45,8 @@ RULES = [
     ("actor",               "art/monsters/",             {"frame": 64, "max_colors": 48, "no_partial_alpha": True}),
     ("tile",                "art/tiles/",                {"frame": 32, "max_colors": 32, "no_partial_alpha": True}),
 ]
+import fix_texture_import  # 같은 tools/ 폴더
+
 NAME_RE = re.compile(r"^[a-z0-9_]+\.png$")
 VERSION_DIR_RE = re.compile(r"(^|_)v\d+$")
 
@@ -84,6 +91,37 @@ def check_image(path, rule):
     return fails, warns
 
 
+def check_world3d(full, rel, rule):
+    """3D 도트 질감 전용 검사. (FAIL 사유, WARN 사유)"""
+    fails, warns = [], []
+    stem = os.path.splitext(os.path.basename(rel))[0]
+    kind = "normal" if stem.endswith("_n") else "emissive" if stem.endswith("_e") else "height" if stem.endswith("_h") else "albedo"
+    rule = dict(rule)
+    if kind != "albedo":
+        rule.pop("max_colors", None)
+    f, w = check_image(full, rule)
+    fails += f
+    warns += w
+    if kind == "height":
+        warns.append("높이 맵 원본은 art/world3d/_src/ (.gdignore 포함)에 두는 것을 권장")
+    if kind in ("normal", "emissive"):
+        base = os.path.join(os.path.dirname(full), stem[:-2] + ".png")
+        if not os.path.exists(base):
+            warns.append("짝이 되는 알베도 파일 없음")
+        else:
+            a, b = Image.open(base).size, Image.open(full).size
+            if a != b:
+                fails.append(f"알베도와 크기가 다름 ({b[0]}x{b[1]} / 알베도 {a[0]}x{a[1]})")
+    imp = full + ".import"
+    if not os.path.exists(imp):
+        warns.append(".import 없음(Godot 에서 한 번 열면 생김)")
+    else:
+        diffs = fix_texture_import.mismatches(imp)
+        if diffs:
+            fails.append("가져오기 설정이 손실 압축 위험: " + ", ".join(f"{k}={got}(필요 {want})" for k, got, want in diffs) + " → python tools/fix_texture_import.py")
+    return fails, warns
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("root")
@@ -120,11 +158,18 @@ def main():
             if rule.get("legacy"):
                 per_rule[name]["LEGACY"] += 1
                 continue
+            if rule.get("source"):
+                if not os.path.exists(os.path.join(os.path.dirname(full), ".gdignore")) and not os.path.exists(os.path.join(root, "art/world3d/_src/.gdignore")):
+                    fail_lines.append(f"- `{rel}` — 원본 폴더에 .gdignore 가 없어 Godot 가 가져옴")
+                    per_rule[name]["FAIL"] += 1
+                else:
+                    per_rule[name]["PASS"] += 1
+                continue
             fails, warns = [], []
             if not NAME_RE.match(fn):
                 fails.append("파일명은 소문자·숫자·밑줄만 (예: forest_herb.png)")
             try:
-                f2, w2 = check_image(full, rule)
+                f2, w2 = check_world3d(full, rel, rule) if rule.get("world3d") else check_image(full, rule)
                 fails += f2
                 warns += w2
             except Exception as e:  # 깨진 파일

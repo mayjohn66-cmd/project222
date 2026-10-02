@@ -8,7 +8,7 @@ func _ready() -> void:
 			out = args[i + 1]
 
 	# 1) 가져온 질감이 원본 PNG 와 픽셀 단위로 같은가(압축·흐림 없음)
-	for name in ["brick_18_a", "brick_18_n", "plank_18_a", "plank_18_n"]:
+	for name in ["brick_18", "brick_18_n", "plank_18", "plank_18_n"]:
 		var path: String = "res://dev/spike3d/textures/%s.png" % name
 		var src: Image = Image.load_from_file(ProjectSettings.globalize_path(path))
 		var tex: Texture2D = load(path)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bbd3vrh4ctifs"
-path="res://.godot/imported/plank_18_a.png-8bb0cd7af3e8ee5e385cf26afa4836aa.ctex"
+uid="uid://liebf4cri45i"
+path="res://.godot/imported/brick_18.png-ffcd5b3714b02c2541e8f2f747b41d1a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://dev/spike3d/textures/plank_18_a.png"
-dest_files=["res://.godot/imported/plank_18_a.png-8bb0cd7af3e8ee5e385cf26afa4836aa.ctex"]
+source_file="res://dev/spike3d/textures/brick_18.png"
+dest_files=["res://.godot/imported/brick_18.png-ffcd5b3714b02c2541e8f2f747b41d1a.ctex"]
 
 [params]
 

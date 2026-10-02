@@ -216,12 +216,12 @@ static func make_normal(kind: String, size: int = 16, levels: int = 2) -> ImageT
 	return ImageTexture.create_from_image(img)
 
 
-# PNG 로 만든 질감 한 벌(알베도 _a, 법선 _n)이 있으면 불러온다. 없으면 빈 딕셔너리.
+# PNG 로 만든 질감 한 벌(알베도 X.png, 법선 X_n.png)이 있으면 불러온다. 없으면 빈 딕셔너리.
 const TEXTURE_DIR: String = "res://dev/spike3d/textures/"
 
 
 static func load_png_pair(kind: String, size: int) -> Dictionary:
-	var albedo_path: String = "%s%s_%d_a.png" % [TEXTURE_DIR, kind, size]
+	var albedo_path: String = "%s%s_%d.png" % [TEXTURE_DIR, kind, size]
 	var normal_path: String = "%s%s_%d_n.png" % [TEXTURE_DIR, kind, size]
 
 	if not ResourceLoader.exists(albedo_path) or not ResourceLoader.exists(normal_path):
