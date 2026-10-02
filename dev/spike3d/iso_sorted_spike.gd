@@ -12,6 +12,9 @@ const ID_SPRITE_SHADER: Shader = preload("res://dev/spike3d/sorted_id_sprite.gds
 const OUTLINE_SHADER: Shader = preload("res://dev/spike3d/outline_post.gdshader")
 
 var sorted_mode: bool = true
+var use_blocky: bool = false  # true = 상자로 만든 3D 캐릭터, false = 2D 도트 판
+var blocky: BlockyActor
+var walk_demo: bool = false
 var outline: bool = true
 var id_viewport: SubViewport
 var id_camera: Camera3D
@@ -82,6 +85,9 @@ func _build_world() -> void:
 	var world_env := WorldEnvironment.new()
 	world_env.environment = env
 	viewport.add_child(world_env)
+	blocky = BlockyActor.new()
+	blocky.build(viewport, viewport)
+	blocky.visible = false
 	_build_outline_pass()
 	_update_sorting()
 
@@ -154,6 +160,9 @@ func _update_actor() -> void:
 	var foot: Vector3 = snap_to_pixels(actor_logic_pos) if snap else actor_logic_pos
 	var half: float = (actor_mesh.mesh as QuadMesh).size.y * 0.5
 	actor_mesh.position = foot + Vector3(0.0, half, 0.0)
+	actor_mesh.visible = not use_blocky
+	blocky.visible = use_blocky
+	blocky.position = foot
 	_update_sorting()
 
 
@@ -197,6 +206,13 @@ func _update_sorting() -> void:
 	sprite_material.set_shader_parameter("rank_count", count)
 	sprite_material.set_shader_parameter("center_world", actor_mesh.position)
 	_sync_outline_pass(rank_of, count)
+
+	if blocky != null:
+		blocky.sync_sort(rank_of["actor"], count, camera, (rank_of["actor"] + 1.0) / (count + 1.0))
+
+	for pair in id_pairs:
+		if pair["key"] == "actor":
+			pair["id_mesh"].visible = not use_blocky
 
 
 # 번호 판의 카메라·물체 위치·순번을 본 장면에 맞춘다.
@@ -281,7 +297,27 @@ func _apply_shrink() -> void:
 		ground_material.set_shader_parameter("albedo_tex", BaseSpike.make_texture(GRASS, _texture_size()))
 
 
+func _process(delta: float) -> void:
+	super._process(delta)
+
+	if blocky != null and use_blocky:
+		var moving: bool = Input.get_axis("ui_left", "ui_right") != 0.0 or Input.get_axis("ui_up", "ui_down") != 0.0
+		blocky.walking = moving or walk_demo
+		blocky.animate(delta)
+
+		if moving:
+			var mv := Vector3(Input.get_axis("ui_left", "ui_right"), 0.0, Input.get_axis("ui_up", "ui_down"))
+			var dir: Vector3 = Vector3(mv.x + mv.z, 0.0, mv.z - mv.x)
+			blocky.facing_yaw_deg = rad_to_deg(atan2(dir.x, dir.z))
+
+
 func _unhandled_key_input(event: InputEvent) -> void:
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_B:
+		use_blocky = not use_blocky
+		_update_actor()
+		_update_label()
+		return
+
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_U:
 		outline = not outline
 		_update_sorting()
@@ -299,4 +335,4 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 func _update_label() -> void:
 	super._update_label()
-	label.text += " / O 정렬 순서 깊이 %s / U 윤곽선 %s" % ["켬" if sorted_mode else "끔", "켬" if outline else "끔"]
+	label.text += " / O 정렬 순서 깊이 %s / U 윤곽선 %s / B 캐릭터 %s" % ["켬" if sorted_mode else "끔", "켬" if outline else "끔", "상자 3D" if use_blocky else "도트 판"]
