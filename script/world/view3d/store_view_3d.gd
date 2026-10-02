@@ -382,6 +382,10 @@ func _sync_furniture() -> void:
 		var build_id: String = str(node.get_meta("build_id"))
 		var row: Dictionary = Furniture3DData.get_row(build_id)
 
+		if row["kind"] == "door" or row["kind"] == "wall_plate":
+			_sync_wall_mounted(node, build_id, row, alive)
+			continue
+
 		if row["kind"] != "box":
 			continue
 
@@ -418,8 +422,92 @@ func _sync_furniture() -> void:
 		_set_item(key, lo, hi, height_blocks, str(row["texture"]), row["tint"], sig)
 
 	for key in _items.keys():
-		if str(key).begins_with("furn") and not alive.has(key):
+		if (str(key).begins_with("furn") or str(key).begins_with("wmount")) and not alive.has(key):
 			_remove_item(key)
+
+
+# 벽에 붙는 가구(문 틀, 포스터·지도·깃발 판). 앵커 칸과 회전으로 벽 변(가장자리)을 정한다.
+# 회전 0 = 뒤쪽 y 작은 변, 1 = x 큰 변, 2 = y 큰 변, 3 = x 작은 변(벽 선분 규칙 wood_walls.gd 와 같음).
+func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: Dictionary) -> void:
+	var anchor: Vector2i = node.get_meta("anchor", Vector2i.ZERO)
+	var rotation_index: int = posmod(int(node.get_meta("rotation_index", 0)), 4)
+	var visual: Node = node.get_node_or_null("Visual")
+
+	if visual != null and visual.get("rotation_index") != null:
+		rotation_index = posmod(int(visual.get("rotation_index")), 4)
+
+	var rect: Rect2i = floor_node.get_store_rect()
+	var base_key: String = "wmount%d" % node.get_instance_id()
+	var sig: String = "%s|%s|%d" % [build_id, str(anchor), rotation_index]
+	alive[base_key + "a"] = true
+	alive[base_key + "b"] = true
+	alive[base_key + "c"] = true
+
+	if _items.has(base_key + "a") and _items[base_key + "a"]["signature"] == sig:
+		return
+
+	for suffix in ["a", "b", "c"]:
+		_remove_item(base_key + suffix)
+
+	var along_x: bool = rotation_index == 0 or rotation_index == 2
+	var line: float = 0.0
+	var inward: float = 1.0
+
+	match rotation_index:
+		0:
+			line = -0.5
+			inward = 1.0
+		1:
+			line = float(rect.position.x + rect.size.x) - 0.5
+			inward = -1.0
+		2:
+			line = float(rect.position.y + rect.size.y) - 0.5
+			inward = -1.0
+		3:
+			line = -0.5
+			inward = 1.0
+
+	var center_along: float = float(anchor.x) if along_x else float(anchor.y)
+	var tint: Color = row["tint"]
+	var tex: String = str(row["texture"])
+
+	if row["kind"] == "door":
+		# 문 틀: 양쪽 기둥 + 윗 가로대(가운데는 비워 둠, 손님이 지나감)
+		var post: float = 0.12
+		var t: float = WALL_THICKNESS
+		var depth_lo: float = line - t * 0.5
+		var depth_hi: float = line + t * 0.5
+		var h: float = float(row["height_blocks"])
+
+		for k in [["a", -0.5, -0.5 + post], ["b", 0.5 - post, 0.5]]:
+			var lo_v: Vector2 = Vector2(center_along + k[1], depth_lo) if along_x else Vector2(depth_lo, center_along + k[1])
+			var hi_v: Vector2 = Vector2(center_along + k[2], depth_hi) if along_x else Vector2(depth_hi, center_along + k[2])
+			_set_item(base_key + k[0], lo_v, hi_v, h, tex, tint, sig)
+
+		var lo_c: Vector2 = Vector2(center_along - 0.5, depth_lo) if along_x else Vector2(depth_lo, center_along - 0.5)
+		var hi_c: Vector2 = Vector2(center_along + 0.5, depth_hi) if along_x else Vector2(depth_hi, center_along + 0.5)
+		_set_item(base_key + "c", lo_c, hi_c, 0.4, tex, tint, sig, h - 0.4)
+	else:
+		# 얇은 판: 벽 안쪽 면에 붙인다.
+		var thin: float = 0.06
+		var lo_p: Vector2
+		var hi_p: Vector2
+		var a0: float = line if inward > 0.0 else line - thin
+		var a1: float = a0 + thin
+
+		if along_x:
+			lo_p = Vector2(center_along - 0.4, a0)
+			hi_p = Vector2(center_along + 0.4, a1)
+		else:
+			lo_p = Vector2(a0, center_along - 0.4)
+			hi_p = Vector2(a1, center_along + 0.4)
+
+		_set_item(base_key + "a", lo_p, hi_p, float(row["height_blocks"]), tex, tint, sig, float(row["base_blocks"]))
+
+	# 정리: 쓰지 않은 키는 빈 항목 제거(문은 a·b·c 모두 쓰지만 판은 a 만 씀)
+	if row["kind"] != "door":
+		alive.erase(base_key + "b")
+		alive.erase(base_key + "c")
 
 
 # ---------------------------------------------------------------- 상자 만들기·지우기
@@ -438,9 +526,10 @@ func _make_surface_material(kind: String, tint: Color) -> ShaderMaterial:
 	return m
 
 
-func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, texture_kind: String, tint: Color, signature: String) -> void:
+func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, texture_kind: String, tint: Color, signature: String, base_blocks: float = 0.0) -> void:
 	_remove_item(key)
 	var h: float = block_height(height_blocks)
+	var base_h: float = block_height(base_blocks)
 	var mesh := BoxMesh.new()
 	mesh.size = Vector3(hi.x - lo.x, h, hi.y - lo.y)
 	var material: ShaderMaterial = _make_surface_material(texture_kind, tint)
@@ -448,7 +537,7 @@ func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, text
 	inst.mesh = mesh
 	inst.layers = 1
 	inst.material_override = material
-	inst.position = Vector3((lo.x + hi.x) * 0.5, h * 0.5, (lo.y + hi.y) * 0.5)
+	inst.position = Vector3((lo.x + hi.x) * 0.5, base_h + h * 0.5, (lo.y + hi.y) * 0.5)
 	_viewport.add_child(inst)
 	var id_inst := MeshInstance3D.new()
 	id_inst.mesh = mesh
@@ -459,7 +548,7 @@ func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, text
 	id_inst.material_override = id_material
 	id_inst.position = inst.position
 	_viewport.add_child(id_inst)
-	_items[key] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, 0.0), "max": Vector3(hi.x, hi.y, height_blocks * BLOCK_PX), "center": inst.position, "signature": signature}
+	_items[key] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, base_blocks * BLOCK_PX), "max": Vector3(hi.x, hi.y, (base_blocks + height_blocks) * BLOCK_PX), "center": inst.position, "signature": signature}
 
 
 func _remove_item(key: String) -> void:
