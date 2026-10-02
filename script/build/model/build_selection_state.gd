@@ -12,14 +12,6 @@ var rotation_index: int = 0
 var quick_slot_index: int = NO_QUICK_SLOT_INDEX
 
 
-func select_catalog(
-	new_catalog_index: int
-) -> void:
-	catalog_index = new_catalog_index
-	rotation_index = 0
-	quick_slot_index = NO_QUICK_SLOT_INDEX
-
-
 func select_quick_slot(
 	new_catalog_index: int,
 	new_quick_slot_index: int

@@ -306,56 +306,6 @@ func get_placement(
 
 
 # =========================
-# 특정 칸에 있는 아이템 검색
-# =========================
-
-func get_placement_at_cell(
-	cell: Vector2i
-) -> Dictionary:
-	for placement in placements:
-		var item_id: String = str(
-			placement.get(
-				"item_id",
-				""
-			)
-		)
-
-		var start_cell: Vector2i = (
-			placement.get(
-				"cell",
-				Vector2i.ZERO
-			)
-		)
-
-		var rotated: bool = bool(
-			placement.get(
-				"rotated",
-				false
-			)
-		)
-
-		var item_size: Vector2i = (
-			ItemData.get_bag_size(
-				item_id,
-				rotated
-			)
-		)
-
-		var occupied_cells: Array[Vector2i] = (
-			get_cells_for_item(
-				start_cell,
-				item_size
-			)
-		)
-
-		if occupied_cells.has(
-			cell
-		):
-			return placement
-
-	return {}
-
-# =========================
 # 크기만 알고 있을 때 배치 검사
 # =========================
 

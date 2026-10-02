@@ -106,7 +106,7 @@ static func load_data() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[ShelfData] 로드 완료 / 진열대 수: ",
 		shelves.size()
 	)

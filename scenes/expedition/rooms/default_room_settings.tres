@@ -1,0 +1,105 @@
+[gd_resource type="Resource" load_steps=13 format=3]
+
+[ext_resource type="Script" path="res://script/expedition/rooms/expedition_room_settings.gd" id="1"]
+[ext_resource type="Script" path="res://script/expedition/rooms/expedition_attack_profile.gd" id="2"]
+
+[sub_resource type="Resource" id="bare"]
+script = ExtResource("2")
+display_name = "찌르기"
+
+[sub_resource type="Resource" id="sword"]
+script = ExtResource("2")
+equipment_id = "rusty_sword"
+display_name = "검 휘두르기"
+reach = 1.55
+arc_degrees = 130.0
+max_targets = 3
+knockback = 0.35
+
+[sub_resource type="Resource" id="dagger"]
+script = ExtResource("2")
+equipment_id = "herb_dagger"
+display_name = "약초 단검 찌르기"
+cooldown = 0.25
+reach = 1.1
+arc_degrees = 90.0
+max_targets = 1
+heal_fraction = 0.08
+
+[sub_resource type="Resource" id="bow"]
+script = ExtResource("2")
+equipment_id = "hunting_bow"
+display_name = "활 쏘기"
+method = 1
+cooldown = 0.5
+reach = 5.5
+max_targets = 1
+projectile_speed = 9.0
+
+[sub_resource type="Resource" id="axe"]
+script = ExtResource("2")
+equipment_id = "hand_axe"
+display_name = "도끼 내려치기"
+cooldown = 0.6
+reach = 1.35
+arc_degrees = 110.0
+max_targets = 2
+knockback = 0.5
+
+[sub_resource type="Resource" id="spear"]
+script = ExtResource("2")
+equipment_id = "iron_spear"
+display_name = "창 찌르기"
+cooldown = 0.5
+reach = 2.3
+arc_degrees = 35.0
+max_targets = 2
+knockback = 0.2
+
+[sub_resource type="Resource" id="staff"]
+script = ExtResource("2")
+equipment_id = "crystal_staff"
+display_name = "수정탄"
+method = 1
+cooldown = 0.7
+reach = 4.5
+max_targets = 3
+knockback = 0.1
+projectile_speed = 7.0
+
+[sub_resource type="Resource" id="rune"]
+script = ExtResource("2")
+equipment_id = "rune_blade"
+display_name = "룬 베기"
+cooldown = 0.4
+reach = 1.7
+arc_degrees = 150.0
+max_targets = 4
+knockback = 0.5
+heal_fraction = 0.05
+
+[sub_resource type="Resource" id="shadow"]
+script = ExtResource("2")
+equipment_id = "shadow_dagger"
+display_name = "그림자 찌르기"
+cooldown = 0.22
+reach = 1.0
+arc_degrees = 90.0
+max_targets = 1
+heal_fraction = 0.12
+
+[sub_resource type="Resource" id="moon"]
+script = ExtResource("2")
+equipment_id = "moon_bow"
+display_name = "달빛 화살"
+method = 1
+cooldown = 0.55
+reach = 6.5
+max_targets = 2
+projectile_speed = 10.0
+
+[resource]
+script = ExtResource("1")
+default_attack = SubResource("bare")
+; 무기 공격 방식 목록. 방 안에서는 가방의 무기(최대 2개)를 ExpeditionWeaponLoadout이 id로 찾아 쓰고 순서는 상관없다.
+equipment_attacks = Array[ExtResource("2")]([SubResource("rune"), SubResource("staff"), SubResource("spear"), SubResource("axe"), SubResource("bow"), SubResource("sword"), SubResource("dagger"), SubResource("shadow"), SubResource("moon")])

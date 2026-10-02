@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://65ii5dh1581s"
+
+[deps]
+
+files=["res://data/expedition/expedition_difficulty.room.translation", "res://data/expedition/expedition_difficulty.monster.translation", "res://data/expedition/expedition_difficulty.monster.translation", "res://data/expedition/expedition_difficulty.reward.translation", "res://data/expedition/expedition_difficulty.rare.translation"]
+
+source_file="res://data/expedition/expedition_difficulty.csv"
+dest_files=["res://data/expedition/expedition_difficulty.room.translation", "res://data/expedition/expedition_difficulty.monster.translation", "res://data/expedition/expedition_difficulty.monster.translation", "res://data/expedition/expedition_difficulty.reward.translation", "res://data/expedition/expedition_difficulty.rare.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

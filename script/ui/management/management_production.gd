@@ -5,12 +5,6 @@ extends Control
 # 데이터에 맞춰 동적으로 갱신한다.
 
 
-@onready var recipe_content: Control = $MainHBox
-
-@onready var production_tab_bar: HBoxContainer = (
-	$ProductionTabBar
-)
-
 @onready var facility_status_button: Button = (
 	$ProductionTabBar/FacilityStatusButton
 )
@@ -89,7 +83,7 @@ func _ready() -> void:
 	refresh_recipe_list()
 	clear_recipe_detail()
 
-	print("[관리 생산] 준비 완료")
+	DebugLog.write("[관리 생산] 준비 완료")
 
 	amount_spin_box.min_value = 1
 	amount_spin_box.step = 1
@@ -119,13 +113,13 @@ func refresh_recipe_list() -> void:
 	clear_container(recipe_list)
 
 	var recipes: Array[Dictionary] = (
-		ProductRecipeData.get_all_recipes()
+		ProductRecipeData.get_learned_recipes()
 	)
 
 	for recipe in recipes:
 		create_recipe_button(recipe)
 
-	print(
+	DebugLog.write(
 		"[관리 생산] 레시피 목록 생성 / ",
 		recipes.size(),
 		"개"
@@ -195,7 +189,7 @@ func select_recipe(
 
 	refresh_recipe_detail()
 
-	print(
+	DebugLog.write(
 		"[관리 생산] 레시피 선택: ",
 		selected_recipe_id
 	)
@@ -495,44 +489,6 @@ func consume_ingredients(
 	return ProductionRecipeService.consume_ingredients(
 		recipe,
 		production_count
-	)
-
-func add_production_result(
-	recipe: Dictionary,
-	production_count: int
-) -> void:
-	var result_item_id: String = str(
-		recipe.get(
-			"result_item_id",
-			""
-		)
-	)
-
-	var result_amount: int = int(
-		recipe.get(
-			"result_amount",
-			1
-		)
-	)
-
-	var total_amount: int = (
-		result_amount
-		* production_count
-	)
-
-	if result_item_id.is_empty():
-		return
-
-	GameState.add_item(
-		result_item_id,
-		total_amount
-	)
-
-	print(
-		"[관리 생산] 완성품 획득 / ",
-		result_item_id,
-		" ×",
-		total_amount
 	)
 
 

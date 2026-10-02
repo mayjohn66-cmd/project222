@@ -10,6 +10,17 @@ enum Season {
 }
 
 
+enum Weekday {
+	MONDAY = 1,
+	TUESDAY = 2,
+	WEDNESDAY = 3,
+	THURSDAY = 4,
+	FRIDAY = 5,
+	SATURDAY = 6,
+	SUNDAY = 7
+}
+
+
 const DAYS_PER_WEEK: int = 7
 const DAYS_PER_SEASON: int = 28
 const SEASONS_PER_YEAR: int = 4

@@ -1,7 +1,8 @@
 """편의점 게임 밸런스 기준선 계산기 (CSV만 읽음, 게임 코드는 건드리지 않음).
 사용: python balance_baseline.py <프로젝트 루트>
 가정: 손님 1명 = 아이템 1개, 카테고리 안에서는 판매 가능 아이템을 균등 선택,
-      하루 = 영업 12시간 x 5초 = 60초, 스폰 타이머 5초, 입장 확률 0.65
+      하루 손님 수 = customer_arrival.csv의 시간당 도착률 합계(24시간),
+      손님은 대분류(customer_groups.csv) 기준 평균으로 계산(소분류 수정은 반영하지 않음)
 """
 import csv, sys, os
 root = sys.argv[1] if len(sys.argv) > 1 else "."
@@ -13,10 +14,9 @@ items = {r["id"]: r for r in rd("data/core/items.csv")}
 price = {k: int(v["price"]) for k, v in items.items()}
 sellable = {k for k, v in items.items() if v["sellable"] == "true"}
 demands = rd("data/shop/catalogs/customer_demands.csv")
-types = {r["customer_type_id"]: int(r["weight"]) for r in rd("data/shop/catalogs/customer_types.csv")}
+types = {r["group_id"]: int(r["weight"]) for r in rd("data/shop/catalogs/customer_groups.csv")}
 
-OPEN_HOURS, SEC_PER_HOUR, SPAWN_SEC, ENTER = 12, 5.0, 5.0, 0.65
-customers_per_day = OPEN_HOURS * SEC_PER_HOUR / SPAWN_SEC * ENTER
+customers_per_day = sum(float(r["rate"]) for r in rd("data/shop/customer_arrival.csv"))
 
 def avg_price(cat):
     ids = [i for i, v in items.items() if v["category"] == cat and i in sellable]
@@ -36,8 +36,8 @@ def type_stats(t):
 
 out = []
 out.append("# 밸런스 기준선 (현재 CSV 기준)\n")
-out.append(f"- 하루 손님 수(기대값): **{customers_per_day:.1f}명** (12시간 x 5초 / 스폰 5초 x 입장확률 0.65)\n")
-out.append("## 손님 유형별 평균 객단가\n")
+out.append(f"- 하루 손님 수(기대값): **{customers_per_day:.1f}명** (customer_arrival.csv 24시간 합계)\n")
+out.append("## 손님 대분류별 평균 객단가\n")
 out.append("| 유형 | 평균 객단가 | 유효 수요 가중치 | 무효 수요(판매 가능 아이템 없음) |\n|---|---|---|---|")
 mix = 0; wsum = sum(types.values())
 for t, w in types.items():

@@ -1,0 +1,175 @@
+[gd_resource type="Resource" script_class="TutorialSettings" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://script/world/shop/tutorial/tutorial_settings.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+steps = Array[Dictionary]([
+  {
+    "id": "setup",
+    "title": "가게 준비",
+    "goal": "fixtures",
+    "objective": "안내 NPC와 대화하세요. 문, 계산대, 진열대를 배치하세요.",
+    "lines": [
+      "개업 준비를 하나씩 해 보자. 먼저 문, 계산대, 진열대를 놓아 줘.",
+      "건축 모드에서 가구를 골라 바닥에 배치하면 돼. 빠진 가구가 있다면 내가 챙겨 줄게."
+    ],
+    "completion": [
+      "가게의 기본 준비가 끝났네! 이번에는 상품을 진열해 보자.",
+      "이 빵을 진열대에 넣어 줘. 창고에만 있으면 손님이 살 수 없어."
+    ],
+    "starter": [
+      {
+        "kind": "furniture",
+        "id": "door",
+        "amount": 1,
+        "missing_only": true
+      },
+      {
+        "kind": "furniture",
+        "id": "register",
+        "amount": 1,
+        "missing_only": true
+      },
+      {
+        "kind": "furniture",
+        "id": "shelf_1x1",
+        "amount": 1,
+        "missing_only": true
+      },
+      {
+        "kind": "item",
+        "id": "water",
+        "amount": 4
+      }
+    ],
+    "rewards": [
+      {
+        "kind": "item",
+        "id": "bread",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "stock",
+    "title": "상품 진열",
+    "goal": "stock",
+    "objective": "진열대 가까이에서 E를 눌러 판매할 상품을 넣으세요.",
+    "lines": [
+      "진열대 근처에서 E를 눌러 상품과 수량을 정해 줘.",
+      "물을 넣어도 좋고 방금 받은 빵을 넣어도 돼. 진열대에 재고가 생기면 준비 완료야."
+    ],
+    "completion": [
+      "상품이 보이네. 첫 손님이 되어 직접 계산하는 방법을 알려 줄게."
+    ],
+    "rewards": [
+      {
+        "kind": "item",
+        "id": "water",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "checkout",
+    "title": "첫 직접 계산",
+    "goal": "checkout",
+    "objective": "문에서 개점하세요. 첫 손님이 기다리면 표시된 계산 위치에서 E로 결제하세요.",
+    "lines": [
+      "문에서 E로 가게를 열어 줘. 내가 첫 손님으로 물건을 고를게.",
+      "직원이 없어도 계산대 뒤에서 E나 결제 버튼을 누르면 계산할 수 있어. 자리를 떠나면 취소돼."
+    ],
+    "completion": [
+      "첫 계산을 해냈네! 다음에는 원정에서 재료를 직접 구해 보자.",
+      "가방에 무기와 방어구를 챙겨 줘. 기본 공격만 사용하고 무기에 따라 공격 방식이 바뀌어."
+    ],
+    "rewards": [
+      {
+        "kind": "item",
+        "id": "rusty_sword",
+        "amount": 1,
+        "missing_only": true
+      },
+      {
+        "kind": "item",
+        "id": "leather_armor",
+        "amount": 1,
+        "missing_only": true
+      }
+    ]
+  },
+  {
+    "id": "expedition",
+    "title": "첫 원정 복귀",
+    "goal": "expedition",
+    "objective": "원정 출발 지점에서 E. 가방을 준비하고 한 번 탐험한 뒤 가게로 돌아오세요.",
+    "lines": [
+      "원정 출발 지점에서 E를 누르고 가방에 필요한 장비를 챙겨 줘.",
+      "방에서는 WASD로 움직이고 J·Space나 공격 버튼으로 싸워. E로 채집하고 출구로 다음 방에 가면 돼.",
+      "보스를 잡는 것이 목표야. 위험하면 철수해서 돌아와도 이번 연습은 마칠 수 있어."
+    ],
+    "completion": [
+      "무사히 돌아왔네! 구한 재료는 상품으로 만들어 판매할 수 있어.",
+      "작업대와 밀을 챙겨 줄게. 빵 두루마리가 있다면 먼저 사용해서 제작법을 배워 줘."
+    ],
+    "rewards": [
+      {
+        "kind": "furniture",
+        "id": "production_door",
+        "amount": 1,
+        "missing_only": true
+      },
+      {
+        "kind": "furniture",
+        "id": "magic_oven",
+        "amount": 1,
+        "missing_only": true
+      },
+      {
+        "kind": "item",
+        "id": "scroll_bake_bread",
+        "amount": 1,
+        "missing_only": true,
+        "recipe": "bake_bread"
+      },
+      {
+        "kind": "item",
+        "id": "wheat",
+        "amount": 4
+      }
+    ]
+  },
+  {
+    "id": "production",
+    "title": "첫 상품 제작",
+    "goal": "production",
+    "objective": "마법 오븐을 배치하고 빵을 만들어 완성품을 수령하세요.",
+    "lines": [
+      "먼저 문을 닫고 가구를 정비해 줘. 생산 구역 출입문을 놓고 들어가서 마법 오븐을 배치하면 돼.",
+      "빵 두루마리를 사용해 제작법을 배우고 밀로 빵 제작을 시작해 줘. 완성되면 수령하면 돼. 단순히 빵을 갖고 있는 것만으로는 이 연습이 끝나지 않아.",
+      "완성품은 다시 진열대에 넣어 팔면 돼."
+    ],
+    "completion": [
+      "가게 준비부터 계산, 원정, 제작까지 해냈네! 이제 재료를 구하고 상품을 만들어 가게를 운영해 보자.",
+      "필요한 다음 제작에 쓸 재료를 조금 더 챙겨 줄게."
+    ],
+    "rewards": [
+      {
+        "kind": "item",
+        "id": "wheat",
+        "amount": 4
+      },
+      {
+        "kind": "item",
+        "id": "iron_ore",
+        "amount": 4
+      },
+      {
+        "kind": "item",
+        "id": "mine_crystal",
+        "amount": 2
+      }
+    ]
+  }
+])

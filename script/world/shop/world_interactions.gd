@@ -24,8 +24,10 @@ func _ready() -> void:
 
 func blocked() -> bool:
  var world = get_parent()
+ if bool(world.get_meta("checkout_tutorial_dialogue",false)): return true
+ if bool(world.get_meta("progressive_tutorial_dialogue",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
- if manager.closing_shop or manager.summary_open or manager.night_auto_running or manager.fast_forwarding_to_morning: return true
+ if manager.closing_shop or manager.summary_open: return true
  var menu = world.get_node_or_null("UI/GameMenu")
  return (menu != null and (menu.menu_open or menu.settings_panel.visible or menu.save_slot_panel.visible or menu.quit_game_dialog.visible or menu.return_title_dialog.visible)) or manager.management_menu.visible
 
@@ -57,6 +59,12 @@ func _process(_delta: float) -> void:
 
 func try_interact() -> bool:
  if blocked(): return false
+ var tutorial = get_parent().get_node_or_null("TutorialDirector")
+ if tutorial != null and tutorial.try_interact(): return true
+ var requests = get_parent().get_node_or_null("ResidentRequestDirector")
+ if requests != null and requests.try_interact(): return true
+ var cashier = get_parent().get_node_or_null("ManualCheckoutController")
+ if cashier != null and cashier.try_interact(): return true
  if near_dungeon():
   manager.enter_expedition_scene()
   return true

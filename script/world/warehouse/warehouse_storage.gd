@@ -94,19 +94,6 @@ func get_storage_slots() -> Array[Dictionary]:
 	return result
 
 
-func get_storage_slot(
-	slot_index: int
-) -> Dictionary:
-	if not _is_valid_slot_index(
-		slot_index
-	):
-		return {}
-
-	return storage_slots[
-		slot_index
-	].duplicate(true)
-
-
 func get_slot_item_id(
 	slot_index: int
 ) -> String:
@@ -304,67 +291,6 @@ func find_empty_slot() -> int:
 # 입고 가능 여부
 # =========================================================
 
-func can_store_item(
-	item_id: String,
-	amount: int = 1
-) -> bool:
-	if item_id.is_empty():
-		return false
-
-	if not ItemData.has_item(
-		item_id
-	):
-		return false
-
-	if amount <= 0:
-		return false
-
-	if get_remaining_capacity() < amount:
-		return false
-
-	return (
-		find_item_slot(item_id) >= 0
-		or find_empty_slot() >= 0
-	)
-
-
-func can_store_item_in_slot(
-	slot_index: int,
-	item_id: String,
-	amount: int = 1
-) -> bool:
-	if not _is_valid_slot_index(
-		slot_index
-	):
-		return false
-
-	if item_id.is_empty():
-		return false
-
-	if not ItemData.has_item(
-		item_id
-	):
-		return false
-
-	if amount <= 0:
-		return false
-
-	if get_remaining_capacity() < amount:
-		return false
-
-	var current_item_id: String = (
-		get_slot_item_id(
-			slot_index
-		)
-	)
-
-	# 빈 슬롯 또는 같은 아이템 슬롯만 허용
-	return (
-		current_item_id.is_empty()
-		or current_item_id == item_id
-	)
-
-
 func get_max_deposit_amount_for_slot(
 	slot_index: int,
 	item_id: String
@@ -472,7 +398,7 @@ func deposit_from_inventory_to_slot(
 
 	_rebuild_stored_items()
 
-	print(
+	DebugLog.write(
 		"[창고 선반] 입고 / 슬롯 ",
 		slot_index,
 		" / ",
@@ -635,7 +561,7 @@ func move_item_between_slots(
 
 		_rebuild_stored_items()
 
-		print(
+		DebugLog.write(
 			"[창고 선반] 슬롯 교환 / ",
 			source_slot_index,
 			" ↔ ",
@@ -687,7 +613,7 @@ func move_item_between_slots(
 	_rebuild_stored_items()
 
 	if target_item_id == source_item_id:
-		print(
+		DebugLog.write(
 			"[창고 선반] 슬롯 합치기 / ",
 			source_slot_index,
 			" → ",
@@ -698,7 +624,7 @@ func move_item_between_slots(
 			moved_amount
 		)
 	else:
-		print(
+		DebugLog.write(
 			"[창고 선반] 빈 슬롯 이동 / ",
 			source_slot_index,
 			" → ",
@@ -781,7 +707,7 @@ func withdraw_slot_to_inventory(
 
 	_rebuild_stored_items()
 
-	print(
+	DebugLog.write(
 		"[창고 선반] 출고 / 슬롯 ",
 		slot_index,
 		" / ",
@@ -796,97 +722,6 @@ func withdraw_slot_to_inventory(
 # =========================================================
 # 기존 방식 출고
 # =========================================================
-
-func withdraw_to_inventory(
-	item_id: String,
-	requested_amount: int
-) -> int:
-	if item_id.is_empty():
-		return 0
-
-	if requested_amount <= 0:
-		return 0
-
-	_ensure_storage_slots()
-
-	var remaining_request: int = (
-		requested_amount
-	)
-
-	var total_moved: int = 0
-
-	for slot_index in range(
-		storage_slots.size()
-	):
-		if remaining_request <= 0:
-			break
-
-		if get_slot_item_id(
-			slot_index
-		) != item_id:
-			continue
-
-		var slot: Dictionary = (
-			storage_slots[
-				slot_index
-			].duplicate(true)
-		)
-
-		var slot_amount: int = maxi(
-			int(
-				slot.get(
-					"amount",
-					0
-				)
-			),
-			0
-		)
-
-		var moved_amount: int = mini(
-			remaining_request,
-			slot_amount
-		)
-
-		if moved_amount <= 0:
-			continue
-
-		var remaining_slot_amount: int = (
-			slot_amount - moved_amount
-		)
-
-		if remaining_slot_amount <= 0:
-			slot = _create_empty_slot()
-		else:
-			slot["amount"] = (
-				remaining_slot_amount
-			)
-
-		storage_slots[
-			slot_index
-		] = slot
-
-		total_moved += moved_amount
-		remaining_request -= moved_amount
-
-	if total_moved <= 0:
-		return 0
-
-	GameState.add_item(
-		item_id,
-		total_moved
-	)
-
-	_rebuild_stored_items()
-
-	print(
-		"[창고 선반] 출고 / ",
-		item_id,
-		" ×",
-		total_moved
-	)
-
-	return total_moved
-
 
 # =========================================================
 # 저장 데이터
@@ -1058,55 +893,3 @@ func apply_stored_slots(
 
 func can_remove_storage() -> bool:
 	return get_total_stored_amount() <= 0
-
-
-func get_storage_summary_text() -> String:
-	var lines: Array[String] = [
-		"창고 선반",
-		"보관량: %d / %d" % [
-			get_total_stored_amount(),
-			storage_capacity
-		]
-	]
-
-	if get_total_stored_amount() <= 0:
-		lines.append(
-			"보관 중인 아이템이 없습니다."
-		)
-
-		return "\n".join(lines)
-
-	lines.append("")
-
-	for slot_index in range(
-		storage_slots.size()
-	):
-		var item_id: String = (
-			get_slot_item_id(
-				slot_index
-			)
-		)
-
-		var amount: int = (
-			get_slot_item_count(
-				slot_index
-			)
-		)
-
-		if (
-			item_id.is_empty()
-			or amount <= 0
-		):
-			continue
-
-		lines.append(
-			"%d번 슬롯 · %s ×%d" % [
-				slot_index + 1,
-				ItemData.get_item_name(
-					item_id
-				),
-				amount
-			]
-		)
-
-	return "\n".join(lines)

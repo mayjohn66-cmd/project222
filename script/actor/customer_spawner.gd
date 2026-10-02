@@ -17,6 +17,7 @@ var base_store_interest_chance: float = 0.65
 @onready var build_manager = $"../BuildManager"
 @onready var spawn_timer: Timer = $SpawnTimer
 @onready var store_exterior: Node = $"../StoreExterior"
+@onready var day_manager: Node = get_node_or_null("../DayManager")
 
 var shop_open: bool = false
 var base_spawn_interval: float = 1.0
@@ -52,6 +53,10 @@ func _on_spawn_timer_timeout():
 	if build_manager.build_mode:
 		return
 
+	# 시간대별 도착률(customer_arrival.csv)에 따라 이번 틱에 행인이 나타날지 정한다.
+	if not roll_time_based_arrival():
+		return
+
 	var customers: Array = (
 		get_tree().get_nodes_in_group(
 			"customer"
@@ -68,6 +73,32 @@ func _on_spawn_timer_timeout():
 	if doors.is_empty():
 		return
 	spawn_customer()
+
+# 시간당 도착률 λ로 이번 생성 틱에 행인이 나타날 확률을 구한다.
+# 행인은 입장 확률(base_store_interest_chance)만큼만 들어오므로, 그 확률로 나눠서
+# 최종 입장 손님 수의 기대값이 λ가 되게 한다. 평판 보너스는 틱 빈도와 입장 확률로 따로 더해진다.
+func roll_time_based_arrival() -> bool:
+	if not is_instance_valid(day_manager):
+		return true
+
+	var hour_seconds: float = day_manager.hour_timer.wait_time
+
+	if hour_seconds <= 0.0:
+		return true
+
+	var rate: float = CustomerArrivalData.get_rate(
+		int(day_manager.current_hour)
+	)
+
+	var chance: float = (
+		rate
+		* base_spawn_interval
+		/ hour_seconds
+		/ maxf(base_store_interest_chance, 0.05)
+	)
+
+	return randf() < clampf(chance, 0.0, 1.0)
+
 
 # 설치가 완료된 일반 출입문만 가져온다.
 # 건축 미리보기 문이나 데이터가 없는 문은 제외한다.
@@ -181,6 +212,10 @@ func spawn_customer() -> void:
 	)
 	# Lock identity before the pedestrian appears; keep it throughout the visit.
 	customer.choose_customer_type()
+	var introduced_type := ResidentRequestFlow.pending_introduction()
+	if not introduced_type.is_empty():
+		customer.customer_type_id = introduced_type
+		customer.customer_group_id = CustomerTypeData.get_group_id(introduced_type)
 	customer.get_node("Visual").refresh_profile()
 
 	# 손님은 반드시 도로 양쪽 끝 중 한 곳에서 생성된다.
@@ -225,7 +260,7 @@ func spawn_customer() -> void:
 
 	# 입장 여부는 한 번만 판정한다.
 	var wants_to_enter: bool = (
-		should_pedestrian_enter_store()
+		not introduced_type.is_empty() or should_pedestrian_enter_store()
 	)
 
 	if not wants_to_enter:
@@ -303,6 +338,8 @@ func spawn_customer() -> void:
 	customer.call(
 		"start_shopping"
 	)
+	if customer.visit_recorded:
+		ResidentRequestFlow.record_visit(customer.get_customer_type_id())
 
 func set_shop_open(value: bool):
 	shop_open = value
@@ -314,21 +351,9 @@ func set_shop_open(value: bool):
 	else:
 		spawn_timer.stop()
 
-func start_spawning():
-	process_mode = Node.PROCESS_MODE_INHERIT
-
-	refresh_spawn_interval()
-
-	if spawn_timer.is_stopped():
-		spawn_timer.start()
-
-func stop_spawning():
-	if not spawn_timer.is_stopped():
-		spawn_timer.stop()
-
 func refresh_spawn_interval() -> void:
 	var reputation: float = maxf(
-		build_manager.get_decoration_effect("reputation"),
+		build_manager.get_decoration_effect("reputation") + ResidentRequestFlow.reputation(),
 		0.0
 	)
 
@@ -350,7 +375,7 @@ func should_pedestrian_enter_store() -> bool:
 	var reputation: float = maxf(
 		build_manager.get_decoration_effect(
 			"reputation"
-		),
+		) + ResidentRequestFlow.reputation(),
 		0.0
 	)
 

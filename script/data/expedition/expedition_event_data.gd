@@ -30,7 +30,7 @@ static func ensure_loaded() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[ExpeditionEventData] 로드 완료 / 이벤트: ",
 		events.size(),
 		" / 전리품 데이터: ",
@@ -183,7 +183,7 @@ static func _load_events() -> void:
 		if row.is_empty():
 			continue
 
-		var event_id := _get_cell(
+		var event_id := CsvReader.get_cell(
 			row,
 			indexes,
 			"event_id"
@@ -196,53 +196,53 @@ static func _load_events() -> void:
 			{
 				"event_id": event_id,
 
-				"region_id": _get_cell(
+				"region_id": CsvReader.get_cell(
 					row,
 					indexes,
 					"region_id"
 				),
 
-				"node_type": _get_cell(
+				"node_type": CsvReader.get_cell(
 					row,
 					indexes,
 					"node_type"
 				),
 
 				"weight": int(
-					_get_cell(
+					CsvReader.get_cell(
 						row,
 						indexes,
 						"weight"
 					)
 				),
 
-				"message": _get_cell(
+				"message": CsvReader.get_cell(
 					row,
 					indexes,
 					"message"
 				),
 
-				"result_type": _get_cell(
+				"result_type": CsvReader.get_cell(
 					row,
 					indexes,
 					"result_type"
 				),
 
-				"target_id": _get_cell(
+				"target_id": CsvReader.get_cell(
 					row,
 					indexes,
 					"target_id"
 				),
 
 				"value": int(
-					_get_cell(
+					CsvReader.get_cell(
 						row,
 						indexes,
 						"value"
 					)
 				),
 
-				"day_filter": _get_cell(
+				"day_filter": CsvReader.get_cell(
 					row,
 					indexes,
 					"day_filter"
@@ -408,13 +408,13 @@ static func _load_loot() -> void:
 		if row.is_empty():
 			continue
 
-		var table_id: String = _get_cell(
+		var table_id: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"table_id"
 		).strip_edges()
 
-		var item_id: String = _get_cell(
+		var item_id: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"item_id"
@@ -441,7 +441,7 @@ static func _load_loot() -> void:
 			"item_id": item_id,
 
 			"weight": int(
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"weight"
@@ -449,7 +449,7 @@ static func _load_loot() -> void:
 			),
 
 			"min_amount": int(
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"min_amount"
@@ -457,11 +457,30 @@ static func _load_loot() -> void:
 			),
 
 			"max_amount": int(
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"max_amount"
 				)
+			),
+
+			# 이 난이도 범위에서만 나오는 행. 비어 있으면 모든 난이도.
+			"min_difficulty": _get_difficulty_bound(
+				CsvReader.get_cell(
+					row,
+					indexes,
+					"min_difficulty"
+				),
+				1
+			),
+
+			"max_difficulty": _get_difficulty_bound(
+				CsvReader.get_cell(
+					row,
+					indexes,
+					"max_difficulty"
+				),
+				9999
 			)
 		}
 
@@ -473,6 +492,16 @@ static func _load_loot() -> void:
 # =========================
 # CSV 공통 처리
 # =========================
+
+static func _get_difficulty_bound(
+	text: String,
+	fallback: int
+) -> int:
+	if not text.is_valid_int():
+		return fallback
+
+	return int(text)
+
 
 static func _make_header_indexes(
 	header: PackedStringArray
@@ -509,27 +538,6 @@ static func _validate_headers(
 	return true
 
 
-static func _get_cell(
-	row: PackedStringArray,
-	indexes: Dictionary,
-	column_name: String
-) -> String:
-	if not indexes.has(
-		column_name
-	):
-		return ""
-
-	var index: int = int(
-		indexes[column_name]
-	)
-
-	if index < 0:
-		return ""
-
-	if index >= row.size():
-		return ""
-
-	return row[index].strip_edges()
 
 static func _matches_day_filter(
 	day_filter: String,
@@ -711,14 +719,35 @@ static func get_invalid_region_event_ids(
 
 	return invalid_event_ids
 
+# 희귀도 2 이상 재료의 가중치에 rare_chance_mult를 곱해서 추첨한다.
+# difficulty: 이 난이도에서 나올 수 있는 행(min~max 난이도 범위)만 후보로 쓴다.
 static func get_random_loot(
-	table_id: String
+	table_id: String,
+	rare_chance_mult: float = 1.0,
+	difficulty: int = 1
 ) -> Dictionary:
-	var candidates: Array[Dictionary] = (
+	var all_entries: Array[Dictionary] = (
 		get_loot_entries(
 			table_id
 		)
 	)
+
+	var candidates: Array[Dictionary] = []
+
+	for entry in all_entries:
+		if (
+			difficulty < int(entry.get("min_difficulty", 1))
+			or difficulty > int(entry.get("max_difficulty", 9999))
+		):
+			continue
+
+		# 이미 배웠거나 이미 가진 레시피 두루마리는 더 나오지 않는다.
+		if not RecipeUnlockData.is_scroll_worth_dropping(
+			str(entry.get("item_id", ""))
+		):
+			continue
+
+		candidates.append(entry)
 
 	if candidates.is_empty():
 		push_warning(
@@ -727,45 +756,44 @@ static func get_random_loot(
 		)
 		return {}
 
-	var total_weight: int = 0
+	var weights: Array[float] = []
+	var total_weight: float = 0.0
 
 	for entry in candidates:
-		total_weight += max(
-			0,
-			int(
-				entry.get(
-					"weight",
-					0
+		var weight: float = float(
+			max(
+				0,
+				int(
+					entry.get(
+						"weight",
+						0
+					)
 				)
 			)
 		)
 
-	if total_weight <= 0:
+		if ItemData.get_rarity(
+			str(entry.get("item_id", ""))
+		) >= 2:
+			weight *= maxf(rare_chance_mult, 0.0)
+
+		weights.append(weight)
+		total_weight += weight
+
+	if total_weight <= 0.0:
 		push_warning(
 			"[ExpeditionEventData] 전리품 가중치 합계가 0: "
 			+ table_id
 		)
 		return {}
 
-	var roll: int = randi_range(
-		1,
-		total_weight
-	)
+	var roll: float = randf() * total_weight
+	var accumulated: float = 0.0
 
-	var accumulated: int = 0
+	for index in range(candidates.size()):
+		accumulated += weights[index]
 
-	for entry in candidates:
-		accumulated += max(
-			0,
-			int(
-				entry.get(
-					"weight",
-					0
-				)
-			)
-		)
+		if roll < accumulated:
+			return candidates[index].duplicate(true)
 
-		if roll <= accumulated:
-			return entry.duplicate(true)
-
-	return {}
+	return candidates[candidates.size() - 1].duplicate(true)

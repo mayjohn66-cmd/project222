@@ -22,7 +22,7 @@ signal region_changed(region_id: String)
 	$SelectedRegionPanel/SelectedRegionLabel
 )
 
-var selected_region_id: String = "forest"
+var selected_region_id: String = GameConfig.DEFAULT_REGION_ID
 var region_buttons: Dictionary = {}
 
 
@@ -56,7 +56,7 @@ func _select_region(
 		selected_region_id
 	)
 
-	print(
+	DebugLog.write(
 		"[원정 준비] 지역 선택: ",
 		selected_region_id
 	)

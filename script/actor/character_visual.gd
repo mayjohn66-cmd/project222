@@ -21,6 +21,9 @@ func refresh_profile() -> void:
 	elif actor_role == "customer": wanted = str(get_parent().get("customer_type_id"))
 	if wanted == profile_id: return
 	var path := ROOT + wanted + "/frames.tres"
+	if not ResourceLoader.exists(path) and actor_role == "customer":
+		# 소분류 그림이 없으면 대분류 그림을 쓴다.
+		path = ROOT + str(get_parent().get("customer_group_id")) + "/frames.tres"
 	if not ResourceLoader.exists(path):
 		path = ROOT + ("normal" if actor_role == "customer" else "player") + "/frames.tres"
 	profile_id = wanted

@@ -12,6 +12,14 @@
 [ext_resource type="Script" uid="uid://cccklthrb0wx0" path="res://script/world/shop/day_manager.gd" id="13_a8y0u"]
 [ext_resource type="PackedScene" uid="uid://cjr6jutabrgkd" path="res://scenes/shop/ui/store_ui.tscn" id="15_jkv2x"]
 [ext_resource type="Script" path="res://script/world/shop/village_map_editor.gd" id="16_village_editor"]
+[ext_resource type="Script" path="res://script/world/shop/story_director.gd" id="17_story_director"]
+[ext_resource type="Script" path="res://script/world/shop/day_night_tint.gd" id="18_day_night_tint"]
+[ext_resource type="Script" path="res://script/world/shop/shop_speed_controller.gd" id="19_shop_speed"]
+[ext_resource type="Script" path="res://script/world/shop/secret_merchant_director.gd" id="20_secret_merchant"]
+[ext_resource type="Script" path="res://script/world/shop/manual_checkout_controller.gd" id="21_manual_checkout"]
+[ext_resource type="Script" path="res://script/world/shop/checkout_tutorial.gd" id="22_checkout_tutorial"]
+[ext_resource type="Script" path="res://script/world/shop/tutorial/tutorial_director.gd" id="23_tutorial"]
+[ext_resource type="Script" path="res://script/world/shop/requests/resident_request_director.gd" id="24_requests"]
 
 [node name="World" type="Node2D" unique_id=292224605]
 y_sort_enabled = true
@@ -55,9 +63,33 @@ script = ExtResource("13_a8y0u")
 
 [node name="HourTimer" type="Timer" parent="DayManager" unique_id=863735041]
 process_mode = 1
-wait_time = 5.0
+wait_time = 25.0
 
 [node name="UI" parent="." unique_id=1798152667 instance=ExtResource("15_jkv2x")]
 
 [node name="VillageMapEditor" type="Node2D" parent="."]
 script = ExtResource("16_village_editor")
+
+[node name="StoryDirector" type="Node" parent="."]
+script = ExtResource("17_story_director")
+
+[node name="DayNightTint" type="CanvasModulate" parent="."]
+script = ExtResource("18_day_night_tint")
+
+[node name="ShopSpeedController" type="Node" parent="."]
+script = ExtResource("19_shop_speed")
+
+[node name="SecretMerchantDirector" type="Node" parent="."]
+script = ExtResource("20_secret_merchant")
+
+[node name="ManualCheckoutController" type="Node" parent="."]
+script = ExtResource("21_manual_checkout")
+
+[node name="CheckoutTutorial" type="Node" parent="."]
+script = ExtResource("22_checkout_tutorial")
+
+[node name="TutorialDirector" type="Node" parent="."]
+script = ExtResource("23_tutorial")
+
+[node name="ResidentRequestDirector" type="Node" parent="."]
+script = ExtResource("24_requests")

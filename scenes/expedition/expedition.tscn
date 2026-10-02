@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://b21oveokrf4c" path="res://scenes/expedition/expedition_prep.tscn" id="5_7lfy2"]
 [ext_resource type="PackedScene" uid="uid://csyuipdt1v7ex" path="res://scenes/shared/ui/menu/game_menu.tscn" id="6_f1gbk"]
 [ext_resource type="PackedScene" uid="uid://coiv2sh2r2mcm" path="res://scenes/shared/ui/management/management_menu.tscn" id="7_t2lyr"]
+[ext_resource type="Script" path="res://script/expedition/expedition_clock.gd" id="99_expedition_clock"]
 
 [node name="Expedition" type="Node2D" unique_id=791438025]
 script = ExtResource("1_smfhe")
@@ -90,3 +91,6 @@ oversampling_override = 1.0
 oversampling_override = 1.0
 
 [node name="BattleTimer" type="Timer" parent="." unique_id=2007674434]
+
+[node name="ExpeditionClock" type="Node" parent="."]
+script = ExtResource("99_expedition_clock")

@@ -252,7 +252,7 @@ static func load_data() -> void:
 				)
 				return
 
-			if not CustomerTypeData.has_customer_type(effect_target):
+			if not CustomerTypeData.has_customer_target(effect_target):
 				file.close()
 				push_error(
 					"[FurnitureData] 등록되지 않은 대상 손님 / 가구: "
@@ -460,7 +460,7 @@ static func load_data() -> void:
 	furniture = loaded_data
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[FurnitureData] 로드 완료 / 가구 수: ",
 		furniture.size()
 	)

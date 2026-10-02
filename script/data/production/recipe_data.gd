@@ -18,7 +18,7 @@ static func ensure_loaded() -> void:
 	_loaded = _load_csv()
 
 	if _loaded:
-		print(
+		DebugLog.write(
 			"[RecipeData] 로드 완료 / 제작법: ",
 			recipes.size()
 		)
@@ -57,6 +57,19 @@ static func get_all_recipes() -> Array[Dictionary]:
 		result.append(recipe.duplicate(true))
 
 	return result
+
+# 배운 레시피(또는 잠금 대상이 아닌 레시피)만 돌려준다.
+static func get_learned_recipes() -> Array[Dictionary]:
+	var result: Array[Dictionary] = []
+
+	for recipe in get_all_recipes():
+		if RecipeUnlockData.is_recipe_available(
+			str(recipe.get("recipe_id", ""))
+		):
+			result.append(recipe)
+
+	return result
+
 
 static func get_recipe_by_result_item(
 	item_id: String
@@ -227,7 +240,7 @@ static func _load_csv() -> bool:
 	while file.get_position() < file.get_length():
 		var row: PackedStringArray = file.get_csv_line()
 
-		var recipe_id: String = _get_cell(
+		var recipe_id: String = CsvReader.get_cell(
 			row, indexes, "recipe_id"
 		)
 
@@ -240,11 +253,11 @@ static func _load_csv() -> bool:
 			)
 			continue
 
-		var result_item_id: String = _get_cell(
+		var result_item_id: String = CsvReader.get_cell(
 			row, indexes, "result_item_id"
 		)
 
-		var result_amount_text: String = _get_cell(
+		var result_amount_text: String = CsvReader.get_cell(
 			row, indexes, "result_amount"
 		)
 
@@ -263,13 +276,13 @@ static func _load_csv() -> bool:
 		var materials_valid: bool = true
 
 		for material_index in range(1, 3):
-			var item_id: String = _get_cell(
+			var item_id: String = CsvReader.get_cell(
 				row,
 				indexes,
 				"material_%d" % material_index
 			)
 
-			var amount_text: String = _get_cell(
+			var amount_text: String = CsvReader.get_cell(
 				row,
 				indexes,
 				"amount_%d" % material_index
@@ -397,7 +410,7 @@ static func get_missing_materials(
 
 static func craft(recipe_id: String) -> bool:
 	if not can_craft(recipe_id):
-		print(
+		DebugLog.write(
 			"[제작] 제작 불가 / 재료 또는 데이터 확인: ",
 			recipe_id
 		)
@@ -453,7 +466,7 @@ static func craft(recipe_id: String) -> bool:
 		result_amount
 	)
 
-	print(
+	DebugLog.write(
 		"[제작 성공] ",
 		ItemData.get_item_name(result_item_id),
 		" ×",
@@ -494,17 +507,3 @@ static func _add_material(
 	return true
 
 
-static func _get_cell(
-	row: PackedStringArray,
-	indexes: Dictionary,
-	column_name: String
-) -> String:
-	if not indexes.has(column_name):
-		return ""
-
-	var index: int = int(indexes[column_name])
-
-	if index < 0 or index >= row.size():
-		return ""
-
-	return row[index].strip_edges()

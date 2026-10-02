@@ -14,17 +14,32 @@ const NODE_BOSS: String = "boss"
 
 
 var layer_count: int = 6
+
+# 난이도 레벨(1~). 방 개수는 generate()에서 난이도 CSV로 정한다.
+var difficulty: int = ExpeditionDifficultyData.MIN_LEVEL
 var width: int = 3
 var layers: Array = []
 
 
-var region_id: String = "forest"
+var region_id: String = GameConfig.DEFAULT_REGION_ID
 
 
 
 
 func generate():
 	layers.clear()
+
+	difficulty = ExpeditionDifficultyData.clamp_level(
+		difficulty
+	)
+
+	# 시작 지점 층 + 방 개수(보스 방 포함)
+	layer_count = (
+		ExpeditionDifficultyData.get_room_count(
+			difficulty
+		)
+		+ 1
+	)
 
 	# 시작 지점
 	layers.append(

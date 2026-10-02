@@ -1,6 +1,8 @@
 class_name ProductionFacility
 extends StaticBody2D
 
+signal output_collected(item_id: String, amount: int)
+
 enum ProductionState {
 	IDLE,
 	PROCESSING,
@@ -344,21 +346,6 @@ func try_reserve_collector(
 	return true
 
 
-func is_reserved_for_other_collector(
-	worker: Node
-) -> bool:
-	if (
-		reserved_collector != null
-		and not is_instance_valid(reserved_collector)
-	):
-		reserved_collector = null
-
-	return (
-		is_instance_valid(reserved_collector)
-		and reserved_collector != worker
-	)
-
-
 func release_collector(
 	worker: Node
 ) -> void:
@@ -407,6 +394,7 @@ func collect_production() -> bool:
 		pending_item_id,
 		pending_amount
 	)
+	output_collected.emit(pending_item_id, pending_amount)
 
 
 	active_recipe_id = ""

@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://dlfc6yn4i736q"
+
+[deps]
+
+files=["res://data/story/story_beats.npc.translation", "res://data/story/story_beats.conditions.translation", "res://data/story/story_beats.gifts.translation", "res://data/story/story_beats.repeat.translation", "res://data/story/story_beats.lines.translation"]
+
+source_file="res://data/story/story_beats.csv"
+dest_files=["res://data/story/story_beats.npc.translation", "res://data/story/story_beats.conditions.translation", "res://data/story/story_beats.gifts.translation", "res://data/story/story_beats.repeat.translation", "res://data/story/story_beats.lines.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

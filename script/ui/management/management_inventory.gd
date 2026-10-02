@@ -32,6 +32,9 @@ var selected_inventory_group: String = (
 )
 
 
+var recipe_scroll_dialog: ConfirmationDialog = null
+var pending_scroll_item_id: String = ""
+
 var item_transfer_mode: bool = false
 var item_transfer_source: String = "player"
 var default_item_grid_columns: int = 1
@@ -86,7 +89,7 @@ func _ready() -> void:
 
 	refresh_inventory()
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리] 준비 완료"
 	)
 
@@ -125,7 +128,7 @@ func select_inventory_group(
 
 	refresh_inventory()
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리] 분류 변경: ",
 		selected_inventory_group
 	)
@@ -451,7 +454,7 @@ func get_expedition_bag_placements() -> Array[Dictionary]:
 			current_scene.name
 		)
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리 확인] 현재 씬: ",
 		current_scene_name
 	)
@@ -463,7 +466,7 @@ func get_expedition_bag_placements() -> Array[Dictionary]:
 		)
 	)
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리 확인] 실시간 가방 함수 존재: ",
 		has_active_bag_method
 	)
@@ -475,7 +478,7 @@ func get_expedition_bag_placements() -> Array[Dictionary]:
 			)
 		)
 
-		print(
+		DebugLog.write(
 			"[통합 인벤토리 확인] 전달받은 데이터: ",
 			active_placements
 		)
@@ -495,7 +498,7 @@ func get_expedition_bag_placements() -> Array[Dictionary]:
 		GameState.get_saved_expedition_bag()
 	)
 
-	print(
+	DebugLog.write(
 		"[통합 인벤토리 확인] 저장된 가방 사용: ",
 		saved_placements
 	)
@@ -666,6 +669,16 @@ func create_item_card(
 		displayed_count
 	)
 
+	# 레시피 두루마리는 눌러서 사용(습득)한다.
+	if (
+		not item_transfer_mode
+		and stored_count > 0
+		and RecipeUnlockData.is_scroll(item_id)
+	):
+		card.item_selected.connect(
+			_on_recipe_scroll_selected
+		)
+
 	if (
 		item_transfer_mode
 		and stored_count > 0
@@ -674,6 +687,75 @@ func create_item_card(
 			item_transfer_source,
 			stored_count
 		)
+
+func _on_recipe_scroll_selected(
+	item_id: String
+) -> void:
+	var recipe_id: String = (
+		RecipeUnlockData.get_recipe_id_for_scroll(
+			item_id
+		)
+	)
+
+	if recipe_id.is_empty():
+		return
+
+	if recipe_scroll_dialog == null:
+		recipe_scroll_dialog = ConfirmationDialog.new()
+		recipe_scroll_dialog.title = "레시피 두루마리"
+		recipe_scroll_dialog.ok_button_text = "배우기"
+		recipe_scroll_dialog.cancel_button_text = "취소"
+		recipe_scroll_dialog.confirmed.connect(
+			_on_recipe_scroll_confirmed
+		)
+		add_child(recipe_scroll_dialog)
+
+	pending_scroll_item_id = item_id
+
+	if PlayerProgress.is_recipe_learned(recipe_id):
+		recipe_scroll_dialog.dialog_text = (
+			"이미 배운 레시피입니다.\n"
+			+ "이 두루마리는 사용해도 얻는 것이 없습니다."
+		)
+		recipe_scroll_dialog.ok_button_text = "확인"
+		pending_scroll_item_id = ""
+	else:
+		recipe_scroll_dialog.dialog_text = (
+			"이 두루마리("
+			+ ItemData.get_item_name(item_id)
+			+ ")를 사용해서 레시피를 배우시겠습니까?\n"
+			+ "두루마리 1개가 사라집니다."
+		)
+		recipe_scroll_dialog.ok_button_text = "배우기"
+
+	recipe_scroll_dialog.popup_centered()
+
+
+func _on_recipe_scroll_confirmed() -> void:
+	if pending_scroll_item_id.is_empty():
+		return
+
+	var item_id: String = pending_scroll_item_id
+	pending_scroll_item_id = ""
+
+	var recipe_id: String = (
+		RecipeUnlockData.get_recipe_id_for_scroll(
+			item_id
+		)
+	)
+
+	if GameState.remove_item(item_id, 1) < 1:
+		return
+
+	PlayerProgress.learn_recipe(recipe_id)
+
+	DebugLog.write(
+		"[레시피] 습득: ",
+		recipe_id
+	)
+
+	refresh_inventory()
+
 
 func clear_item_grid() -> void:
 	for child in item_grid.get_children():

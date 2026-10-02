@@ -23,7 +23,7 @@ static func ensure_loaded() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[StoreEventData] 로드 완료 / 이벤트: ",
 		events.size()
 	)
@@ -292,7 +292,7 @@ static func _load_csv() -> void:
 		if row.is_empty():
 			continue
 
-		var event_id: String = _get_cell(
+		var event_id: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"event_id"
@@ -310,7 +310,7 @@ static func _load_csv() -> void:
 			continue
 
 		var discovery_start_day: int = int(
-			_get_cell(
+			CsvReader.get_cell(
 				row,
 				indexes,
 				"discovery_start_day"
@@ -318,7 +318,7 @@ static func _load_csv() -> void:
 		)
 
 		var discovery_end_day: int = int(
-			_get_cell(
+			CsvReader.get_cell(
 				row,
 				indexes,
 				"discovery_end_day"
@@ -326,7 +326,7 @@ static func _load_csv() -> void:
 		)
 
 		var start_day: int = int(
-			_get_cell(
+			CsvReader.get_cell(
 				row,
 				indexes,
 				"start_day"
@@ -334,7 +334,7 @@ static func _load_csv() -> void:
 		)
 
 		var end_day: int = int(
-			_get_cell(
+			CsvReader.get_cell(
 				row,
 				indexes,
 				"end_day"
@@ -359,7 +359,7 @@ static func _load_csv() -> void:
 		events[event_id] = {
 			"event_id": event_id,
 
-			"title": _get_cell(
+			"title": CsvReader.get_cell(
 				row,
 				indexes,
 				"title"
@@ -377,20 +377,20 @@ static func _load_csv() -> void:
 			"end_day": end_day,
 
 			"rumor_customer_type_id": (
-				_get_cell(
+				CsvReader.get_cell(
 					row,
 					indexes,
 					"rumor_customer_type_id"
 				)
 			),
 
-			"dialogue_id": _get_cell(
+			"dialogue_id": CsvReader.get_cell(
 				row,
 				indexes,
 				"dialogue_id"
 			),
 
-			"description": _get_cell(
+			"description": CsvReader.get_cell(
 				row,
 				indexes,
 				"description"
@@ -402,22 +402,3 @@ static func _load_csv() -> void:
 # CSV 셀 읽기
 # =========================================================
 
-static func _get_cell(
-	row: PackedStringArray,
-	indexes: Dictionary,
-	column_name: String
-) -> String:
-	if not indexes.has(column_name):
-		return ""
-
-	var index: int = int(
-		indexes[column_name]
-	)
-
-	if index < 0:
-		return ""
-
-	if index >= row.size():
-		return ""
-
-	return row[index].strip_edges()

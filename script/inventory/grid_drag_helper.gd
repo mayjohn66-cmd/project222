@@ -36,21 +36,6 @@ static func get_grab_offset_from_local(
 
 
 # =========================
-# 격자의 특정 칸을 잡았을 때
-# 아이템 시작 칸 기준 오프셋
-# =========================
-
-static func get_grab_offset_from_grid(
-	grabbed_cell: Vector2i,
-	start_cell: Vector2i
-) -> Vector2i:
-	return (
-		grabbed_cell
-		- start_cell
-	)
-
-
-# =========================
 # 드롭할 아이템의 실제 시작 칸
 # =========================
 

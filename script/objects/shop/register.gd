@@ -58,10 +58,6 @@ func get_checkout_cells() -> Array[Vector2i]:
 	)
 
 
-func get_cashier_cells() -> Array[Vector2i]:
-	return get_worker_cells()
-
-
 func offsets_to_world_cells(
 	offsets: Array[Vector2i]
 ) -> Array[Vector2i]:
@@ -137,6 +133,22 @@ var waiting_customer = null
 var reserved_worker = null
 var worker_cell_users: Dictionary = {}
 
+func reserve_tutorial_cashier(player_node: Node, cell: Vector2i) -> bool:
+	if has_waiting_customer() or not get_worker_cells().has(cell): return false
+	# 연습은 도착률이나 직원 대기 자리 예약 때문에 무기한 미뤄지면 안 된다.
+	for worker in worker_cell_users.values().duplicate():
+		if not is_instance_valid(worker) or worker == player_node: continue
+		if worker.has_method("release_worker_position"): worker.release_worker_position()
+		else: release_worker_cell(worker)
+	if is_instance_valid(reserved_worker) and reserved_worker != player_node:
+		var previous = reserved_worker
+		if previous.has_method("release_register_reservation"):
+			previous.release_register_reservation()
+			previous.pending_register = null
+			previous.finish_current_work()
+		reserved_worker = null
+	return try_reserve_worker(player_node) and try_reserve_worker_cell(cell, player_node)
+
 
 func request_checkout(customer) -> bool:
 	if has_waiting_customer():
@@ -144,7 +156,7 @@ func request_checkout(customer) -> bool:
 
 	waiting_customer = customer
 
-	print("계산 대기 손님 등록")
+	DebugLog.write("계산 대기 손님 등록")
 
 	return true
 
@@ -169,23 +181,28 @@ func finish_checkout():
 
 
 func debug_service_cells():
-	print(
+	DebugLog.write(
 		"계산대 본체: ",
 		get_body_cells()
 	)
 
-	print(
+	DebugLog.write(
 		"직원 위치: ",
 		get_worker_cells()
 	)
 
-	print(
+	DebugLog.write(
 		"손님 위치: ",
 		get_checkout_cells()
 	)
 
 
 func try_reserve_worker(worker_node) -> bool:
+	# 첫 손님 튜토리얼은 플레이어의 결제를 기다린다.
+	var customer = get_waiting_customer()
+	if customer != null and customer.has_method("can_be_checked_out_by") \
+			and not customer.can_be_checked_out_by(worker_node):
+		return false
 	if is_instance_valid(reserved_worker):
 		return reserved_worker == worker_node
 

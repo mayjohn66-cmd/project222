@@ -93,7 +93,7 @@ static func calculate(
 					effect.get("effect_target", "")
 				)
 
-				if not CustomerTypeData.has_customer_type(target):
+				if not CustomerTypeData.has_customer_target(target):
 					continue
 
 				raw_customer_bonuses[target] = (

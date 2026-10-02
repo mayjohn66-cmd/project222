@@ -568,7 +568,7 @@ func rotate_furniture() -> void:
 		return
 
 	if not is_selected_furniture_rotatable():
-		print(
+		DebugLog.write(
 			"[건축] 회전할 수 없는 가구: ",
 			get_selected_build_id()
 		)
@@ -1178,7 +1178,7 @@ func remove_furniture() -> void:
 				"can_remove_storage"
 			)
 		):
-			print(
+			DebugLog.write(
 				"[건축] 아이템을 모두 출고한 뒤 창고 선반을 철거할 수 있습니다."
 			)
 			return
@@ -1192,7 +1192,7 @@ func remove_furniture() -> void:
 		)
 
 		if not facility.can_remove_facility():
-			print(
+			DebugLog.write(
 				"[건축] 가공을 마치고 완성품을 회수한 뒤 철거할 수 있습니다."
 			)
 			return
@@ -1788,7 +1788,7 @@ func escape_player_if_blocked():
 	)
 
 	if safe_cell == Vector2i(-1, -1):
-		print(
+		DebugLog.write(
 			"[건축] 플레이어 탈출 위치를 찾지 못함"
 		)
 		return
@@ -2051,7 +2051,7 @@ func _on_build_quick_slot_pressed(
 		if BuildObjectData.get_build_type(build_id) != (
 			BuildObjectData.BUILD_TYPE_PRODUCTION_FACILITY
 		):
-			print(
+			DebugLog.write(
 				"[건축] 생산실에는 생산 설비를 배치할 수 있습니다."
 			)
 			return
@@ -2060,7 +2060,7 @@ func _on_build_quick_slot_pressed(
 		if BuildObjectData.get_build_type(
 			build_id
 		) != BuildObjectData.BUILD_TYPE_WAREHOUSE_STORAGE:
-			print(
+			DebugLog.write(
 				"[건축] 창고에는 창고 전용 보관 설비만 배치할 수 있습니다."
 			)
 			return
@@ -2068,7 +2068,7 @@ func _on_build_quick_slot_pressed(
 	elif BuildObjectData.get_build_type(
 		build_id
 	) == BuildObjectData.BUILD_TYPE_WAREHOUSE_STORAGE:
-		print(
+		DebugLog.write(
 			"[건축] 창고 선반은 창고 내부에만 배치할 수 있습니다."
 		)
 		return
@@ -2093,7 +2093,7 @@ func _on_build_quick_slot_pressed(
 	if GameState.get_furniture_count(
 		build_id
 	) <= 0:
-		print(
+		DebugLog.write(
 			"[건축 퀵슬롯] 보유 수량 없음: ",
 			build_id
 		)
@@ -2591,7 +2591,7 @@ func _relocate_customer_doors_to_current_boundary() -> void:
 		if move_succeeded:
 			moved_count += 1
 
-			print(
+			DebugLog.write(
 				"[매장 확장] 출입문 이전 / ",
 				old_anchor,
 				" → ",
@@ -2614,7 +2614,7 @@ func _relocate_customer_doors_to_current_boundary() -> void:
 			"request_boundary_rebuild"
 		)
 
-	print(
+	DebugLog.write(
 		"[매장 확장] 출입문 자동 이전 완료 / ",
 		moved_count,
 		"개"

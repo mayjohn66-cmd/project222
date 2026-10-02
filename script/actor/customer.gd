@@ -56,6 +56,7 @@ enum CustomerState {
 
 
 var customer_type_id: String = "normal"
+var customer_group_id: String = "normal"
 var customer_type_selected: bool = false
 
 var state: int = CustomerState.IDLE
@@ -189,10 +190,23 @@ func choose_customer_type() -> void:
 				"get_customer_weight_bonuses"
 			)
 
+	# 시간대는 DayManager의 현재 시각으로 정한다(없으면 시간대를 보지 않는다).
+	var current_period: String = ""
+	var scene: Node = get_tree().current_scene
+	var day_manager: Node = (
+		scene.get_node_or_null("DayManager")
+		if scene != null
+		else null
+	)
+
+	if is_instance_valid(day_manager) and day_manager.has_method("get_period"):
+		current_period = str(day_manager.call("get_period"))
+
 	var type_data: Dictionary = (
 		CustomerTypeData.get_random_customer_type(
 			GameState.total_day,
-			decoration_bonuses
+			decoration_bonuses,
+			current_period
 		)
 	)
 
@@ -234,6 +248,9 @@ func choose_customer_type() -> void:
 		return
 
 	customer_type_id = selected_type_id
+	customer_group_id = CustomerTypeData.get_group_id(
+		selected_type_id
+	)
 
 func choose_wanted_item() -> String:
 	wanted_amount = 1
@@ -242,7 +259,8 @@ func choose_wanted_item() -> String:
 	var request: Dictionary = (
 		CustomerDemandData.get_random_wanted_request(
 			get_customer_type_id(),
-			GameState.total_day
+			GameState.total_day,
+			ShopStock.get_stocked_item_ids(get_tree())
 		)
 	)
 
@@ -373,7 +391,7 @@ func start_shopping():
 
 
 	if show_movement_debug:
-		print(
+		DebugLog.write(
 			"진열대 접근 셀: ",
 			shelf_cell
 		)
@@ -542,7 +560,7 @@ func arrive_at_target():
 				return
 
 			if show_movement_debug:
-				print(
+				DebugLog.write(
 					"계산대 접근 셀: ",
 					register_cell
 				)
@@ -552,7 +570,7 @@ func arrive_at_target():
 			move_to_cell(register_cell)
 
 		CustomerState.WANDER:
-			print("구경 위치 도착")
+			DebugLog.write("구경 위치 도착")
 
 			velocity = Vector2.ZERO
 
@@ -647,7 +665,7 @@ func arrive_at_target():
 			retry_previous_target()
 
 		CustomerState.GO_TO_EXIT:
-			print("출구 도착")
+			DebugLog.write("출구 도착")
 			finish_exit()
 
 
@@ -999,7 +1017,7 @@ func create_astar_grid_path(
 	)
 
 	if show_movement_debug:
-		print(
+		DebugLog.write(
 			"A* 경로: ",
 			start_cell,
 			" → ",
@@ -1065,7 +1083,7 @@ func move_to_cell(
 
 	if target_cell == start_cell:
 		if show_movement_debug:
-			print(
+			DebugLog.write(
 				"이미 목표 셀에 도착: ",
 				start_cell
 			)
@@ -1081,7 +1099,7 @@ func move_to_cell(
 	moving = not grid_path.is_empty()
 
 	if show_movement_debug:
-		print(
+		DebugLog.write(
 			"셀 이동: ",
 			start_cell,
 			" → ",
@@ -1178,7 +1196,7 @@ func move_to_next_wander_cell():
 		return
 
 	if show_movement_debug:
-		print(
+		DebugLog.write(
 			"구경 위치: ",
 			target_cell
 		)

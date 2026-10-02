@@ -4,7 +4,7 @@ extends Node2D
 const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
 const TILE_GRID_OVERLAY = preload("res://script/world/shop/tile_grid_overlay.gd")
 const VILLAGE_LAYOUT_PATH := "res://data/village_map_layout.json"
-const VILLAGE_LAYOUT_FALLBACK := "user://village_map_layout.json"
+const VILLAGE_LAYOUT_FALLBACK := GameConfig.VILLAGE_LAYOUT_USER_PATH
 
 var _layout_objects: Dictionary = {}
 var _layout_tiles: Dictionary = {}
@@ -712,7 +712,7 @@ func _add_cell_boundary(
 	if not is_exterior_cell(
 		cell + Vector2i(1, 0)
 	):
-		_add_boundary_segment(
+		BoundarySegment.add(
 			boundary,
 			right,
 			bottom
@@ -721,7 +721,7 @@ func _add_cell_boundary(
 	if not is_exterior_cell(
 		cell + Vector2i(-1, 0)
 	):
-		_add_boundary_segment(
+		BoundarySegment.add(
 			boundary,
 			left,
 			top
@@ -730,7 +730,7 @@ func _add_cell_boundary(
 	if not is_exterior_cell(
 		cell + Vector2i(0, 1)
 	):
-		_add_boundary_segment(
+		BoundarySegment.add(
 			boundary,
 			bottom,
 			left
@@ -739,30 +739,12 @@ func _add_cell_boundary(
 	if not is_exterior_cell(
 		cell + Vector2i(0, -1)
 	):
-		_add_boundary_segment(
+		BoundarySegment.add(
 			boundary,
 			top,
 			right
 		)
 
-
-func _add_boundary_segment(
-	boundary: StaticBody2D,
-	point_a: Vector2,
-	point_b: Vector2
-) -> void:
-	var segment := SegmentShape2D.new()
-
-	segment.a = point_a
-	segment.b = point_b
-
-	var collision := CollisionShape2D.new()
-
-	collision.shape = segment
-
-	boundary.add_child(
-		collision
-	)
 
 # =========================
 # 도로와 보도 설정
@@ -861,7 +843,7 @@ func _apply_store_size_to_exterior() -> void:
 		+ front_space
 	)
 
-	print(
+	DebugLog.write(
 		"[외부 부지] 매장 크기: ",
 		store_size,
 		" / 외부 크기: ",
@@ -1250,7 +1232,7 @@ func _on_store_expansion_changed(
 		"_create_boundary_collision"
 	)
 
-	print(
+	DebugLog.write(
 		"[매장 외부] 확장 적용 / 단계: ",
 		new_level,
 		" / 외부 크기: ",

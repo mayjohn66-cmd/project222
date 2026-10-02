@@ -216,7 +216,7 @@ static func load_data() -> void:
 	_loaded = true
 
 
-	print(
+	DebugLog.write(
 		"[BuildObjectData] 로드 완료 / 건축물 수: ",
 		objects.size()
 	)

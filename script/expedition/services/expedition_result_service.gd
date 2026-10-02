@@ -157,7 +157,7 @@ func deposit_items(
 
 		deposited_amount += amount
 
-		print(
+		DebugLog.write(
 			"[원정 정산] 자동 보관 / ",
 			item_id,
 			" ×",

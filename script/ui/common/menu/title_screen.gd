@@ -50,10 +50,6 @@ var entering_game: bool = false
 	$CenterContainer
 )
 
-@onready var load_slot_vbox: VBoxContainer = (
-	$LoadSlotPanel/LoadSlotVBox
-)
-
 @onready var load_slot_title_label: Label = (
 	$LoadSlotPanel/LoadSlotVBox/LoadSlotTitleLabel
 )
@@ -132,8 +128,6 @@ func _ready() -> void:
 	load_slot_close_button.pressed.connect(
 		close_load_slot_panel
 	)
-
-
 
 
 func refresh_continue_button() -> void:
@@ -472,92 +466,6 @@ func close_load_slot_panel() -> void:
 
 	status_label.text = ""
 
-
-func _setup_load_slot_panel_style() -> void:
-	load_slot_panel.set_anchors_preset(
-		Control.PRESET_CENTER
-	)
-
-	load_slot_panel.offset_left = -260
-	load_slot_panel.offset_top = -190
-	load_slot_panel.offset_right = 260
-	load_slot_panel.offset_bottom = 190
-
-	var panel_style := StyleBoxFlat.new()
-
-	panel_style.bg_color = Color(
-		0.06,
-		0.07,
-		0.09,
-		0.98
-	)
-
-	panel_style.border_color = Color(
-		0.35,
-		0.65,
-		1.0,
-		1.0
-	)
-
-	for side in [
-		SIDE_LEFT,
-		SIDE_TOP,
-		SIDE_RIGHT,
-		SIDE_BOTTOM
-	]:
-		panel_style.set_border_width(
-			side,
-			3
-		)
-
-		panel_style.set_content_margin(
-			side,
-			24.0
-		)
-
-	panel_style.corner_radius_top_left = 12
-	panel_style.corner_radius_top_right = 12
-	panel_style.corner_radius_bottom_left = 12
-	panel_style.corner_radius_bottom_right = 12
-
-	load_slot_panel.add_theme_stylebox_override(
-		"panel",
-		panel_style
-	)
-
-	load_slot_vbox.add_theme_constant_override(
-		"separation",
-		10
-	)
-
-	load_slot_title_label.text = "불러오기"
-	load_slot_title_label.horizontal_alignment = (
-		HORIZONTAL_ALIGNMENT_CENTER
-	)
-
-	load_slot_title_label.add_theme_font_size_override(
-		"font_size",
-		30
-	)
-
-	for button in [
-		auto_save_button,
-		load_slot_1_button,
-		load_slot_2_button
-	]:
-		button.custom_minimum_size.y = 90
-
-		button.add_theme_font_size_override(
-			"font_size",
-			20
-		)
-
-	load_slot_close_button.custom_minimum_size.y = 50
-
-	load_slot_close_button.add_theme_font_size_override(
-		"font_size",
-		20
-	)
 
 func _on_slot_entry_pressed(
 	path: String,

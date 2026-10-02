@@ -39,15 +39,17 @@ func set_rotation_index(
 	queue_redraw()
 
 
-const VIEWS = [
-	preload("res://art/world/cozy_v6/rack_front.png"),
-	preload("res://art/world/cozy_v6/rack_front_flipped.png"),
-	preload("res://art/world/cozy_v8/rack_back.png"),
-	preload("res://art/world/cozy_v8/rack_back_flipped.png")
+static var VIEWS: Array = [
+	ArtLoader.load_texture("res://art/world/cozy_v6/rack_front.png"),
+	ArtLoader.load_texture("res://art/world/cozy_v6/rack_front_flipped.png"),
+	ArtLoader.load_texture("res://art/world/cozy_v8/rack_back.png"),
+	ArtLoader.load_texture("res://art/world/cozy_v8/rack_back_flipped.png")
 ]
 
 func _draw() -> void:
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if VIEWS[rotation_index] == null:
+		return
 	var contact := FurnitureFootprint.polygon(Vector2i(footprint_width,footprint_height),1.0,rotation_index,Vector2(tile_width,tile_height))[2]
 	var foot_pixel := Vector2(96,128) if rotation_index%2==0 else Vector2(48,128)
 	if rotation_index>=2: foot_pixel = Vector2(101, 128) if rotation_index==2 else Vector2(38, 128)

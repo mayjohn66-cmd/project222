@@ -269,15 +269,28 @@ func _on_item_pressed(
 			ExpeditionEquipmentData.get_max_enhancement_level(item_id)
 		)
 
-		description += "\n\n[도구 효과]"
+		match effect_id:
+			"attack":
+				# 공격력 숫자는 보이지 않고 공격 방식만 보인다.
+				description += (
+					"\n\n[공격 방식]\n"
+					+ ExpeditionWeaponLoadout.get_style_text(item_id)
+				)
 
-		description += (
-			"\n"
-			+ _get_tool_effect_text(
-				effect_id,
-				base_power
-			)
-		)
+			"defense":
+				# 방어력 숫자는 보이지 않는다.
+				pass
+
+			_:
+				description += "\n\n[도구 효과]"
+
+				description += (
+					"\n"
+					+ _get_tool_effect_text(
+						effect_id,
+						base_power
+					)
+				)
 
 		description += (
 			"\n최대 강화: +"
@@ -306,16 +319,13 @@ func _on_item_pressed(
 			description += "\n"
 
 		if attack_bonus != 0:
+			# 공격력 숫자는 보이지 않고 공격 방식만 보인다.
 			description += (
-				"\n공격력 %+d"
-				% attack_bonus
+				"\n공격 방식: "
+				+ ExpeditionWeaponLoadout.get_style_text(item_id)
 			)
 
-		if defense_bonus != 0:
-			description += (
-				"\n방어력 %+d"
-				% defense_bonus
-			)
+		# 방어력 숫자는 보이지 않는다.
 
 	item_description_label.text = description
 
@@ -551,7 +561,7 @@ func _on_buy_pressed() -> void:
 		or _is_unique_tool_owned(item_id)
 	)
 
-	print(
+	DebugLog.write(
 		"[원정 상점] 구매 완료 / ",
 		item_name,
 		" / 가격: ",

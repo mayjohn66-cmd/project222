@@ -274,7 +274,7 @@ static func enhance_equipment(
 		)
 	)
 
-	print(
+	DebugLog.write(
 		"[장비 강화] 완료 / ",
 		ItemData.get_item_name(
 			item_id

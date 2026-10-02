@@ -71,7 +71,7 @@ func _ready():
 	var valid := validate_all_items()
 
 	if valid:
-		print(
+		DebugLog.write(
 			"[ItemData] 데이터 검증 완료 / 아이템 수: ",
 			items.size()
 		)
@@ -106,6 +106,23 @@ func get_item_name(
 		data.get(
 			"name",
 			item_id
+		)
+	)
+
+
+# 재료 희귀도(1 흔함, 2 드묾, 3 매우 드묾). 재료가 아니면 0.
+func get_rarity(
+	item_id: String
+) -> int:
+	var data: Dictionary = get_item(item_id)
+
+	if data.is_empty():
+		return 0
+
+	return int(
+		data.get(
+			"rarity",
+			0
 		)
 	)
 

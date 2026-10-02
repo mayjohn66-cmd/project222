@@ -39,7 +39,7 @@ func remove_furniture(
 
 		# 마지막 한 층도 상품이 남아 있으면 철거 금지
 		if furniture.top_level_has_items():
-			print(
+			DebugLog.write(
 				"[건축] 진열대의 상품을 먼저 비워주세요."
 			)
 			return false
@@ -56,7 +56,7 @@ func remove_shelf_level(
 ) -> bool:
 	# 위층에 상품이 있으면 철거하지 않음
 	if furniture.top_level_has_items():
-		print(
+		DebugLog.write(
 			"[건축] 상품이 있는 진열대 층은 철거할 수 없음"
 		)
 		return false
@@ -71,7 +71,7 @@ func remove_shelf_level(
 		1
 	)
 
-	print(
+	DebugLog.write(
 		"[건축] 진열대 한 층 철거 / ",
 		build_id,
 		" / 남은 층: ",
@@ -100,7 +100,7 @@ func remove_entire_furniture(
 	# 생산 중이거나 완성품이 남아 있는 설비는 철거 금지
 	if furniture is ProductionFacility:
 		if not furniture.can_remove_facility():
-			print(
+			DebugLog.write(
 				"[건축] 가공을 마치고 완성품을 회수한 뒤 "
 				+ "철거할 수 있습니다."
 			)
@@ -115,7 +115,7 @@ func remove_entire_furniture(
 		1
 	)
 
-	print(
+	DebugLog.write(
 		"[건축] 가구 철거 / ",
 		build_id,
 		" / 보유 수량: ",

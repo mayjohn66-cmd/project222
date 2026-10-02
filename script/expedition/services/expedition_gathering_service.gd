@@ -5,7 +5,8 @@ extends RefCounted
 func resolve_gathering(
 	loot_table_id: String,
 	expedition_bag,
-	loot_service
+	loot_service,
+	difficulty: int = 1
 ) -> Dictionary:
 	ExpeditionGatheringData.ensure_loaded()
 
@@ -84,7 +85,7 @@ func resolve_gathering(
 
 	var roll: float = randf()
 
-	print(
+	DebugLog.write(
 		"[채집 판정]"
 		+ " / 테이블: ",
 		loot_table_id,
@@ -122,7 +123,8 @@ func resolve_gathering(
 
 	var loot_result: Dictionary = (
 		loot_service.roll_loot_table(
-			loot_table_id
+			loot_table_id,
+			difficulty
 		)
 	)
 

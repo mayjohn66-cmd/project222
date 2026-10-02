@@ -147,12 +147,6 @@ func enable_item_drag(
 	)
 
 
-func disable_item_drag() -> void:
-	item_drag_enabled = false
-	item_drag_source = ""
-	item_drag_amount = 0
-
-
 # 가구 보관함 항목
 # 가구의 보관 수량과 배치 수량을 함께 표시한다.
 func setup_furniture(
@@ -357,16 +351,12 @@ func get_equipment_effect_text(
 ) -> String:
 	match effect_id:
 		"attack":
-			return (
-				"공격력: +"
-				+ str(effect_value)
-			)
+			# 공격력 숫자는 보이지 않는다(무기 종류가 공격 방식을 정한다).
+			return "무기"
 
 		"defense":
-			return (
-				"방어력: +"
-				+ str(effect_value)
-			)
+			# 방어력 숫자는 보이지 않는다.
+			return "방어구"
 
 		_:
 			if effect_id.is_empty():

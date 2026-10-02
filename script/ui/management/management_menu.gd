@@ -249,7 +249,7 @@ func open_menu(
 	else:
 		_paused_by_menu = false
 
-	print("[관리 메뉴] 열기")
+	DebugLog.write("[관리 메뉴] 열기")
 
 
 func close_menu() -> void:
@@ -268,7 +268,7 @@ func close_menu() -> void:
 		get_tree().paused = false
 		_paused_by_menu = false
 
-	print("[관리 메뉴] 닫기")
+	DebugLog.write("[관리 메뉴] 닫기")
 
 
 func select_tab(
@@ -989,12 +989,13 @@ func get_schedule_effect_text(
 ) -> String:
 	var effect_lines: Array[String] = []
 
+	# 이벤트 효과는 대분류 기준으로 정해진다.
 	for customer_data in (
-		CustomerTypeData.get_all_customer_types()
+		CustomerTypeData.get_all_customer_groups()
 	):
 		var customer_type_id: String = str(
 			customer_data.get(
-				"customer_type_id",
+				"group_id",
 				""
 			)
 		)
@@ -1738,11 +1739,12 @@ func _show_store_decoration_info() -> void:
 	var reputation: float = float(
 		manager.call("get_decoration_effect", "reputation")
 	)
+	var resident_reputation: int = ResidentRequestFlow.reputation()
 
 	# 평판만 원래 점수로 보관하므로 방문 보너스로 변환
 	var visit_bonus: float = (
 		DecorationEffectService.get_reputation_visit_bonus(
-			reputation
+			reputation + resident_reputation
 		)
 	)
 
@@ -1758,6 +1760,7 @@ func _show_store_decoration_info() -> void:
 	var lines: Array[String] = [
 		"[매장 치장 효과]",
 		"치장 평판: %.1f" % reputation,
+		"주민 부탁 평판: %d" % resident_reputation,
 		"평판에 따른 방문 빈도 보너스: +%.1f%%" % (
 			visit_bonus * 100.0
 		),

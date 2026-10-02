@@ -3,12 +3,27 @@ extends RefCounted
 
 func prepare_departure(
 	region_id: String,
-	current_day: int
+	current_day: int,
+	difficulty: int = 1
 ) -> Dictionary:
 	if region_id.is_empty():
 		return _failure(
 			"출발할 지역을 선택해주세요.",
 			"[원정 출발] 지역 ID가 비어 있습니다."
+		)
+
+	if not PlayerProgress.is_difficulty_unlocked(
+		region_id,
+		difficulty
+	):
+		return _failure(
+			"아직 열리지 않은 난이도입니다. 이전 난이도를 먼저 클리어해주세요.",
+			(
+				"[원정 출발] 잠긴 난이도 / 지역: "
+				+ region_id
+				+ " / 난이도: "
+				+ str(difficulty)
+			)
 		)
 
 	if not ExpeditionMapData.has_valid_region_nodes(
@@ -88,6 +103,8 @@ func prepare_departure(
 	prepared_map.set_region(
 		region_id
 	)
+
+	prepared_map.difficulty = difficulty
 
 	prepared_map.generate()
 

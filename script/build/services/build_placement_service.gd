@@ -79,7 +79,7 @@ func place_furniture(
 		build_id,
 		1
 	):
-		print(
+		DebugLog.write(
 			"[건축 설치] 보유한 가구가 없음: ",
 			build_id
 		)
@@ -165,7 +165,7 @@ func place_furniture(
 		build_id
 	)
 
-	print(
+	DebugLog.write(
 		"[건축 설치] 완료 / ",
 		build_id,
 		" / 위치: ",

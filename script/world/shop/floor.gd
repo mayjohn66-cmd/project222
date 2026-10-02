@@ -1,6 +1,7 @@
 @tool
 extends Node2D
 const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
+const GRID = preload("res://script/world/shared/isometric_grid.gd")
 
 
 # 기존 매장 크기
@@ -129,25 +130,12 @@ func _draw_region(region: Rect2i, _fill_color: Color) -> void:
 
 
 func grid_to_local(cell: Vector2i) -> Vector2:
-	return Vector2(
-		(cell.x - cell.y) * tile_width * 0.5,
-		(cell.x + cell.y) * tile_height * 0.5
-	)
+	return GRID.project(Vector2(cell), Vector2(tile_width, tile_height))
 
 
 func local_to_grid(pos: Vector2) -> Vector2i:
-	var column: float = (
-		pos.x / tile_width + pos.y / tile_height
-	)
-
-	var row: float = (
-		pos.y / tile_height - pos.x / tile_width
-	)
-
-	return Vector2i(
-		roundi(column),
-		roundi(row)
-	)
+	var cell := GRID.unproject(pos, Vector2(tile_width, tile_height))
+	return Vector2i(roundi(cell.x), roundi(cell.y))
 
 
 # 기존 호출과의 호환성: 매장 범위
@@ -156,14 +144,6 @@ func is_cell_inside(cell: Vector2i) -> bool:
 
 func is_store_cell(cell: Vector2i) -> bool:
 	return get_store_rect().has_point(cell)
-
-
-func is_production_cell(cell: Vector2i) -> bool:
-	return get_production_rect().has_point(cell)
-
-
-func is_corridor_cell(cell: Vector2i) -> bool:
-	return get_corridor_rect().has_point(cell)
 
 
 # 플레이어 이동 등에 사용할 전체 바닥 범위
@@ -244,7 +224,7 @@ func _apply_saved_expansion_size() -> void:
 	columns = store_size.x
 	rows = store_size.y
 
-	print(
+	DebugLog.write(
 		"[매장 확장] 단계: ",
 		expansion_level,
 		" / 내부 크기: ",
@@ -272,7 +252,7 @@ func _on_store_expansion_changed(
 	# 바뀐 크기를 기준으로 벽 충돌을 다시 만든다.
 	request_boundary_rebuild()
 
-	print(
+	DebugLog.write(
 		"[매장 바닥] 확장 적용 / 단계: ",
 		new_level,
 		" / 크기: ",
@@ -482,7 +462,7 @@ func _add_cell_boundary(
 			cell,
 			1
 		):
-			_add_boundary_segment(
+			BoundarySegment.add(
 				boundary,
 				right,
 				bottom
@@ -496,7 +476,7 @@ func _add_cell_boundary(
 			cell,
 			3
 		):
-			_add_boundary_segment(
+			BoundarySegment.add(
 				boundary,
 				left,
 				top
@@ -510,7 +490,7 @@ func _add_cell_boundary(
 			cell,
 			2
 		):
-			_add_boundary_segment(
+			BoundarySegment.add(
 				boundary,
 				bottom,
 				left
@@ -524,33 +504,8 @@ func _add_cell_boundary(
 			cell,
 			0
 		):
-			_add_boundary_segment(
+			BoundarySegment.add(
 				boundary,
 				top,
 				right
 			)
-
-
-func _add_boundary_segment(
-	boundary: StaticBody2D,
-	point_a: Vector2,
-	point_b: Vector2
-) -> void:
-	var segment := SegmentShape2D.new()
-	segment.a = point_a
-	segment.b = point_b
-
-	var collision := CollisionShape2D.new()
-	collision.shape = segment
-
-	boundary.add_child(collision)
-
-func get_production_entry_cell() -> Vector2i:
-	var region: Rect2i = get_production_rect()
-
-	return Vector2i(
-		region.position.x,
-		region.position.y + floori(
-			float(region.size.y) / 2.0
-		)
-	)

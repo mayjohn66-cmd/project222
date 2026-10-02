@@ -1,0 +1,5 @@
+beat_id,npc_id,conditions,gifts,repeat_days,lines
+welcome_oven,neighbor,day>=2;expedition_done;furniture_missing:magic_oven,furniture:magic_oven:1,0,개업 축하해요!|마을 사람들이 조금씩 모아서 만들었어요.|잘 써 줘요.
+help_no_stock,neighbor,day>=3;expedition_done;product_stock_empty,item:water:4;item:bread:4,3,가게가 텅 비었네요.|이거라도 진열해 봐요.
+help_no_ore,neighbor,day>=3;expedition_done;item_below:iron_ore:2,item:iron_ore:8;item:mine_crystal:2,4,재료가 떨어졌다면서요?|조금이지만 가져왔어요.
+help_broke,neighbor,day>=3;expedition_done;money<300,money::500,5,요즘 힘들어 보여서요.|이건 그냥 응원이에요.

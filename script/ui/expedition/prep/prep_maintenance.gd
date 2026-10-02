@@ -193,7 +193,7 @@ func _refresh_recipe_list() -> void:
 	_clear_item_list()
 
 	var recipes: Array[Dictionary] = (
-		RecipeData.get_all_recipes()
+		RecipeData.get_learned_recipes()
 	)
 
 	for recipe in recipes:
@@ -379,7 +379,7 @@ func _craft_selected_recipe() -> void:
 		)
 	)
 
-	print(
+	DebugLog.write(
 		"[정비] 제작 완료 / ",
 		item_name,
 		" ×",
@@ -738,7 +738,7 @@ func _enhance_selected_equipment() -> void:
 		)
 	)
 
-	print(
+	DebugLog.write(
 		"[정비] 장비 강화 완료 / ",
 		item_id,
 		" / ID: ",

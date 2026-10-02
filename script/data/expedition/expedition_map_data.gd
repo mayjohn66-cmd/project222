@@ -30,7 +30,7 @@ static func ensure_loaded() -> void:
 
 	_loaded = true
 
-	print(
+	DebugLog.write(
 		"[ExpeditionMapData] 로드 완료 / 노드 데이터: ",
 		node_entries.size()
 	)
@@ -212,19 +212,19 @@ static func _load_csv() -> void:
 		if row.size() == 0:
 			continue
 
-		var region_id: String = _get_cell(
+		var region_id: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"region_id"
 		)
 
-		var node_type: String = _get_cell(
+		var node_type: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"node_type"
 		)
 
-		var weight_text: String = _get_cell(
+		var weight_text: String = CsvReader.get_cell(
 			row,
 			indexes,
 			"weight"
@@ -261,27 +261,6 @@ static func _load_csv() -> void:
 # CSV 셀 읽기
 # =========================
 
-static func _get_cell(
-	row: PackedStringArray,
-	indexes: Dictionary,
-	column_name: String
-) -> String:
-	if not indexes.has(
-		column_name
-	):
-		return ""
-
-	var index: int = int(
-		indexes[column_name]
-	)
-
-	if index < 0:
-		return ""
-
-	if index >= row.size():
-		return ""
-
-	return row[index].strip_edges()
 
 # =========================
 # 지역 정보
@@ -329,26 +308,26 @@ static func _load_regions() -> bool:
 	while file.get_position() < file.get_length():
 		var row: PackedStringArray = file.get_csv_line()
 
-		var region_id: String = _get_cell(
+		var region_id: String = CsvReader.get_cell(
 			row, indexes, "region_id"
 		)
 
 		if region_id.is_empty():
 			continue
 
-		var region_name: String = _get_cell(
+		var region_name: String = CsvReader.get_cell(
 			row, indexes, "name"
 		)
 
-		var item_id: String = _get_cell(
+		var item_id: String = CsvReader.get_cell(
 			row, indexes, "entry_item_id"
 		)
 
-		var amount_text: String = _get_cell(
+		var amount_text: String = CsvReader.get_cell(
 			row, indexes, "entry_amount"
 		)
 
-		var consume_text: String = _get_cell(
+		var consume_text: String = CsvReader.get_cell(
 			row, indexes, "consume_on_entry"
 		).to_lower()
 
@@ -393,13 +372,13 @@ static func _load_regions() -> bool:
 
 			"name": region_name,
 
-			"difficulty": _get_cell(
+			"difficulty": CsvReader.get_cell(
 				row,
 				indexes,
 				"difficulty"
 			),
 
-			"description": _get_cell(
+			"description": CsvReader.get_cell(
 				row,
 				indexes,
 				"description"

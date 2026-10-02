@@ -1,23 +1,21 @@
 @tool
 extends Node2D
 
-const VIEWS = [
-	preload("res://art/world/cozy_v6/counter_front.png"),
-	preload("res://art/world/cozy_v6/counter_front_flipped.png"),
-	preload("res://art/world/cozy_v6/counter_back.png"),
-	preload("res://art/world/cozy_v6/counter_back_flipped.png")
+static var VIEWS: Array = [
+	ArtLoader.load_texture("res://art/world/cozy_v6/counter_front.png"),
+	ArtLoader.load_texture("res://art/world/cozy_v6/counter_front_flipped.png"),
+	ArtLoader.load_texture("res://art/world/cozy_v6/counter_back.png"),
+	ArtLoader.load_texture("res://art/world/cozy_v6/counter_back_flipped.png")
 ]
-const POS_BACK = preload("res://art/world/cozy_v5/pos_back.png")
-const POS_FRONT = preload("res://art/world/cozy_v5/pos_front.png")
-const POS_BACK_FLIPPED = preload("res://art/world/cozy_v5/pos_back_flipped.png")
-const POS_FRONT_FLIPPED = preload("res://art/world/cozy_v5/pos_front_flipped.png")
+static var POS_BACK: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v5/pos_back.png")
+static var POS_FRONT: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v5/pos_front.png")
+static var POS_BACK_FLIPPED: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v5/pos_back_flipped.png")
+static var POS_FRONT_FLIPPED: Texture2D = ArtLoader.load_texture("res://art/world/cozy_v5/pos_front_flipped.png")
 
 var rotation_index: int = 0
 func set_rotation_index(value: int) -> void:
 	rotation_index = posmod(value,4)
 	queue_redraw()
-
-const ART = preload("res://art/world/cozy_v5/counter.png")
 
 @export var tile_width: float = 96.0:
 	set(value):
@@ -65,10 +63,13 @@ func get_art_rect() -> Rect2:
 
 func _draw():
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	draw_texture_rect(VIEWS[rotation_index],get_art_rect(),false)
+	if VIEWS[rotation_index] != null:
+		draw_texture_rect(VIEWS[rotation_index],get_art_rect(),false)
 	# Terminal is a separate upright sprite seated on the counter surface.
 	# Directions 0/1 show its rear to customers; 2/3 show the screen.
 	var terminal: Texture2D = [POS_BACK,POS_BACK_FLIPPED,POS_FRONT,POS_FRONT_FLIPPED][rotation_index]
+	if terminal == null:
+		return
 	var along: float = 1.15 if rotation_index < 2 else -0.15
 	var across: float = -0.25 if rotation_index<2 else 0.25
 	var p := grid_point(along,across) if rotation_index % 2 == 0 else grid_point(across,along)
