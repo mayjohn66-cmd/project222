@@ -135,6 +135,14 @@ func _run() -> void:
 	var g5: Dictionary = await m5.generate("x")
 	var g5b: Dictionary = await m5.generate("y")
 	_check(g5["ok"] and m5.calls == ["main-model", "backup-model", "backup-model"] and g5b["ok"], "429는 기다리지 않고 예비 모델로, 다음 요청도 처음부터 예비 모델")
+	var m7 := MockClient.new()
+	add_child(m7)
+	m7.retry_wait_scale = 0.0
+	m7.model_override = "polish-model"
+	m7.allow_fallback = false
+	m7.script_results = [_res_fail(429)]
+	var g7: Dictionary = await m7.generate("x")
+	_check(not g7["ok"] and m7.calls == ["polish-model"], "다듬기용 클라이언트: 모델 고정, 예비 모델로 새지 않음")
 	OS.set_environment("GEMINI_FALLBACK_MODEL", "")
 	var m6 := MockClient.new()
 	add_child(m6)

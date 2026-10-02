@@ -62,6 +62,8 @@ func _run() -> void:
 			_accept(sources)
 		"rebase-state":
 			_rebase_state(sources)
+		"polish":
+			await _polish(sources)
 		"autopilot":
 			await _autopilot()
 		_:
@@ -284,6 +286,132 @@ func _sync(sources: Dictionary) -> void:
 
 
 # 검토를 끝낸 초안을 글 CSV에 합치고, 기계 부분 지문(상태)을 갱신한다. 사용자가 승인한 뒤에만 쓴다.
+const POLISH_PROMPT: String = """
+[지금은 다듬기 단계] 아래 "다듬을 초안"은 가벼운 모델이 쓴 초안이다. 이것을 사람이 쓴 것처럼 다듬는다.
+- 초안이 이미 자연스러운 줄은 그대로 둔다. 어색한 표현, 상투적인 말, 말투가 섞인 곳, 인물 말버릇과 안 맞는 곳만 고친다.
+- id, title, 칸 수, 칸별 역할(부탁 / 플레이어 행동 안내 / 소문 / 마무리)은 바꾸지 않는다. 플레이어 행동 안내("다시 말을 걸...")는 반드시 남긴다.
+- 한 칸의 길이 제한과 금지어, 수량 표현 금지는 그대로 지킨다."""
+
+# 초안 파일을 본 모델로 다듬어 <이름>_polished.csv 로 저장한다. 기본 모델 gemini-3.8-flash(--model 또는 GEMINI_POLISH_MODEL 로 바꿈), 예비 모델 없이 호출한다.
+#   --file <초안 경로> [--chunk N(기본 5)] [--model 이름]
+func _polish(sources: Dictionary) -> void:
+	var path: String = _arg("--file")
+
+	if path.is_empty():
+		push_error("--file 이 필요합니다.")
+		get_tree().quit(2)
+		return
+
+	var full: String = "res://" + path.trim_prefix("res://")
+
+	if not FileAccess.file_exists(full):
+		push_error("파일이 없습니다: " + full)
+		get_tree().quit(2)
+		return
+
+	var file := FileAccess.open(full, FileAccess.READ)
+	file.get_csv_line()
+	var by_kind: Dictionary = {}
+	var order: Array = []
+
+	while not file.eof_reached():
+		var row: PackedStringArray = file.get_csv_line()
+
+		if row.size() != Tools.COLUMNS.size():
+			continue
+
+		var kind: String = row[1].strip_edges()
+
+		if not by_kind.has(kind):
+			by_kind[kind] = {}
+
+		by_kind[kind][row[0].strip_edges()] = row
+		order.append([kind, row[0].strip_edges()])
+
+	file.close()
+
+	var model: String = _arg("--model")
+
+	if model.is_empty():
+		model = OS.get_environment("GEMINI_POLISH_MODEL").strip_edges()
+
+	if model.is_empty():
+		model = "gemini-3.8-flash"
+
+	var client: Node = _new_client()
+	client.model_override = model
+	client.allow_fallback = false
+	var system_prompt: String = StoryGen.append_world_setting(
+		BASE_PROMPT + "\n" + POLISH_PROMPT,
+		FileAccess.get_file_as_string(StoryGen.WORLD_SETTING_PATH) if FileAccess.file_exists(StoryGen.WORLD_SETTING_PATH) else ""
+	)
+	var chunk_size: int = maxi(1, int(_arg("--chunk")) if not _arg("--chunk").is_empty() else 5)
+	var polished: Dictionary = {}
+	var failed: Array = []
+	print("[다듬기] 초안 %d행을 %s 로 다듬습니다(묶음 %d개씩)" % [order.size(), model, chunk_size])
+
+	for kind in Tools.KINDS:
+		if not by_kind.has(kind):
+			continue
+
+		var targets: Dictionary = {}
+
+		for k in Tools.KINDS:
+			targets[k] = {}
+
+		var ids: Array = []
+
+		for id in by_kind[kind].keys():
+			if sources.get(kind, {}).has(id):
+				targets[kind][id] = sources[kind][id]
+				ids.append(id)
+
+		for chunk in chunk_ids(ids, chunk_size):
+			var part: Dictionary = targets.duplicate()
+			part[kind] = {}
+			var draft_rows: Dictionary = {}
+
+			for id in chunk:
+				part[kind][id] = targets[kind][id]
+				draft_rows[id] = by_kind[kind][id]
+
+			print("[다듬기] %s: %s" % [kind, ", ".join(chunk)])
+			var result: Dictionary = await client.generate(build_prompt(kind, part, sources, draft_rows), system_prompt)
+
+			if not bool(result["ok"]):
+				push_error("[다듬기] 실패(%s): %s" % [", ".join(chunk), str(result["error"])])
+				failed.append_array(chunk)
+				continue
+
+			for line in clean_rows(str(result["text"])).split("\n", false):
+				var cells: PackedStringArray = Tools.parse_csv_line(line)
+
+				if cells.size() == Tools.COLUMNS.size() and by_kind[kind].has(cells[0].strip_edges()):
+					polished[kind + ":" + cells[0].strip_edges()] = cells
+
+	# 다듬기에 실패했거나 빠진 행은 초안 그대로 둔다.
+	var out_lines: PackedStringArray = [Tools.csv_line(Tools.COLUMNS)]
+	var kept: int = 0
+
+	for pair in order:
+		var key: String = pair[0] + ":" + pair[1]
+
+		if polished.has(key):
+			out_lines.append(Tools.csv_line(polished[key]))
+		else:
+			out_lines.append(Tools.csv_line(by_kind[pair[0]][pair[1]]))
+			kept += 1
+
+	var out_path: String = full.trim_suffix(".csv") + "_polished.csv"
+	_write(out_path, "\n".join(out_lines) + "\n")
+	print("[다듬기] 저장: ", out_path, " (다듬은 행 %d, 초안 그대로 %d)" % [polished.size(), kept])
+	var check: Dictionary = Tools.validate_file(out_path, sources)
+	_print_result(out_path, check)
+	_print_usage(client)
+	client.queue_free()
+	get_tree().quit(0 if check["errors"].is_empty() and failed.is_empty() else 1)
+
+
 # 글이 있는 모든 항목의 상태를 지금 데이터 기준으로 다시 잡는다(글은 바꾸지 않는다). 인물 이름 교체 같은 변경 뒤에 쓴다.
 func _rebase_state(sources: Dictionary) -> void:
 	var texts: Dictionary = Tools.load_text_rows(Tools.text_path())
@@ -516,8 +644,13 @@ static func build_repair_prompt(csv_text: String, problems: Array[String]) -> St
 
 
 # kind별 요청 글. 현재 문장(참고용)과 기계 정보 중 글에 도움이 되는 것만 준다.
-static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary = {}) -> String:
-	var out: PackedStringArray = ["kind = %s 인 항목들의 글을 새로 쓴다. 항목마다 한 행." % kind, ""]
+static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary = {}, drafts: Dictionary = {}) -> String:
+	var head: String = "kind = %s 인 항목들의 글을 새로 쓴다. 항목마다 한 행." % kind
+
+	if not drafts.is_empty():
+		head = "kind = %s 인 항목들의 초안을 다듬는다. 항목마다 한 행. 초안의 뜻·칸 수·칸별 역할·id·title 은 그대로 두고 문장만 고친다." % kind
+
+	var out: PackedStringArray = [head, ""]
 	var residents: Dictionary = (sources if not sources.is_empty() else targets).get(Tools.KIND_RESIDENT_GREETING, {})
 	var voices: Dictionary = Tools.load_voices()
 
@@ -564,6 +697,9 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 
 		out.append("id=%s | %s" % [id, info])
 		out.append("현재 문장(참고, 같은 칸 수와 역할로 새로 쓴다): " + "\t".join(current))
+
+		if drafts.has(id):
+			out.append("다듬을 초안: " + "\t".join(drafts[id]))
 		out.append("")
 
 	return "\n".join(out)

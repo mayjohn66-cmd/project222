@@ -146,9 +146,9 @@ func generate(
 	temperature: float = 0.8,
 	json_output: bool = false
 ) -> Dictionary:
-	var model: String = find_model()
+	var model: String = model_override if not model_override.is_empty() else find_model()
 	var fallback: String = find_fallback_model()
-	var has_fallback: bool = not fallback.is_empty() and fallback != model
+	var has_fallback: bool = allow_fallback and not fallback.is_empty() and fallback != model
 
 	# 이 실행에서 기본 모델이 한도 초과·계속 실패였다면 남은 요청은 처음부터 예비 모델로 보낸다(같은 대기를 되풀이하지 않는다).
 	if has_fallback and _primary_failed:
@@ -168,6 +168,11 @@ func generate(
 
 	return result
 
+
+# 이 클라이언트만 쓸 모델(비우면 환경 변수·기본 모델). 다듬기 단계에서 본 모델을 고정할 때 쓴다.
+var model_override: String = ""
+# false 이면 실패해도 예비 모델로 넘어가지 않는다(다듬기를 가벼운 모델 글로 새지 않게).
+var allow_fallback: bool = true
 
 # 이번 실행에서 보낸 요청 기록: {"모델|결과코드": 횟수}. 무료 한도(요청 횟수)를 가늠하는 데 쓴다.
 var request_log: Dictionary = {}
