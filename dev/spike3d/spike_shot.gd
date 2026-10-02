@@ -8,12 +8,14 @@ func _ready() -> void:
 			out = args[i + 1]
 	var scene = load("res://dev/spike3d/iso_room_spike.tscn").instantiate()
 	add_child(scene)
-	for cfg in [[1, true], [3, true], [1, false]]:
+	for cfg in [[1, true, false, false], [2, true, true, false], [3, true, true, true], [3, true, false, false]]:
 		scene.shrink = cfg[0]
 		scene.shadows = cfg[1]
+		scene.toon = cfg[2]
+		scene.posterize = cfg[3]
 		scene._apply_shrink()
 		for i in 6:
 			await get_tree().process_frame
 		var img: Image = get_viewport().get_texture().get_image()
-		img.save_png("%s/spike_shrink%d_shadow%s.png" % [out, cfg[0], str(cfg[1])])
+		img.save_png("%s/look_%dx_toon%s_post%s.png" % [out, cfg[0], str(cfg[2]), str(cfg[3])])
 	get_tree().quit()

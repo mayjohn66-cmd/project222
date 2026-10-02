@@ -1,7 +1,7 @@
 extends Node3D
 ## 3D 도형 + 2D 그림 시험 방(실험). 건물·가구는 3D 상자에 기존 2D 질감을 씌우고, 캐릭터는 2D 도트를 판(Sprite3D)으로 세운다.
 ## 목적: 이 방식의 모양(도트 느낌, 앞뒤 정렬, 빛과 그림자)이 마음에 드는지 눈으로 확인한다. 게임 코드와 연결하지 않은 독립 장면이다.
-##   키: 1/2/3 = 화면 낮추기 배율(1배/2배/3배, 낮출수록 거칠고 도트 느낌이 강함) / L = 빛·그림자 켜기·끄기 / 방향키 = 캐릭터 이동
+##   키: 1/2/3 = 화면 낮추기 배율(1배/2배/3배, 낮출수록 거칠고 도트 느낌이 강함) / L = 그림자 / T = 계단식 빛(툰) / P = 색 줄이기 / 방향키 = 캐릭터 이동
 ## 실행: Godot 에서 dev/spike3d/iso_room_spike.tscn 열고 F6.
 
 const GRASS: String = "grass"
@@ -21,6 +21,10 @@ var light: DirectionalLight3D
 var actor: Sprite3D
 var shrink: int = 1
 var shadows: bool = true
+var toon: bool = false
+var posterize: bool = false
+var materials: Array[StandardMaterial3D] = []
+var post_material: ShaderMaterial
 var label: Label
 
 
@@ -51,6 +55,11 @@ func _build_view() -> void:
 	viewport.msaa_3d = Viewport.MSAA_DISABLED
 	viewport.canvas_item_default_texture_filter = Viewport.DEFAULT_CANVAS_ITEM_TEXTURE_FILTER_NEAREST
 	container.add_child(viewport)
+	var shader := Shader.new()
+	shader.code = "shader_type canvas_item;\nuniform float levels = 256.0;\nvoid fragment() {\n\tvec4 c = texture(TEXTURE, UV);\n\tCOLOR = vec4(floor(c.rgb * levels + 0.5) / levels, c.a);\n}\n"
+	post_material = ShaderMaterial.new()
+	post_material.shader = shader
+	container.material = post_material
 	camera = Camera3D.new()
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	camera.rotation_degrees = Vector3(-PITCH_DEG, YAW_DEG, 0.0)
@@ -64,7 +73,7 @@ func _build_view() -> void:
 
 # 시험용 도트 질감(코드로 만든 임시 그림). 실제로는 Pixel Lab 으로 만든 질감 한 장이 들어갈 자리다.
 # 기존 art/world/cozy_v3 의 풀·돌·나무 그림은 64x64 단색이라 3D 에 씌워도 모양이 안 보여서 쓰지 않았다.
-static func make_texture(kind: String, size: int = 32) -> ImageTexture:
+static func make_texture(kind: String, size: int = 16) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = hash(kind)
@@ -98,13 +107,16 @@ static func make_texture(kind: String, size: int = 32) -> ImageTexture:
 
 func _material(kind: String, tint: Color = Color.WHITE) -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()
-	m.albedo_texture = make_texture(kind)
+	m.set_meta("kind", kind)
+	m.albedo_texture = make_texture(kind, _texture_size())
 	m.albedo_color = tint
 	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 	m.uv1_triplanar = true
 	m.uv1_world_triplanar = true
 	m.uv1_scale = Vector3(1, 1, 1)  # 한 칸에 그림 한 장
 	m.roughness = 1.0
+	m.specular_mode = BaseMaterial3D.SPECULAR_DISABLED
+	materials.append(m)
 	return m
 
 
@@ -168,9 +180,21 @@ func _build_world() -> void:
 	viewport.add_child(world_env)
 
 
+# 한 칸의 텍셀 수: 낮은 해상도일수록 적게(한 텍셀 ≈ 화면 한 픽셀이 되도록).
+func _texture_size() -> int:
+	return [48, 24, 16][clampi(shrink, 1, 3) - 1]
+
+
 func _apply_shrink() -> void:
 	container.stretch_shrink = shrink
 	light.shadow_enabled = shadows
+
+	for m in materials:
+		m.albedo_texture = make_texture(str(m.get_meta("kind")), _texture_size())
+		m.diffuse_mode = BaseMaterial3D.DIFFUSE_TOON if toon else BaseMaterial3D.DIFFUSE_LAMBERT
+
+	if post_material != null:
+		post_material.set_shader_parameter("levels", 8.0 if posterize else 256.0)
 
 
 func _process(delta: float) -> void:
@@ -195,6 +219,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			shrink = 3
 		KEY_L:
 			shadows = not shadows
+		KEY_T:
+			toon = not toon
+		KEY_P:
+			posterize = not posterize
 		_:
 			return
 
@@ -203,4 +231,4 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _update_label() -> void:
-	label.text = "1/2/3: 화면 낮추기 %d배 / L: 그림자 %s / 방향키: 캐릭터 이동" % [shrink, "켬" if shadows else "끔"]
+	label.text = "1/2/3 화면 낮추기 %d배 / L 그림자 %s / T 계단식 빛 %s / P 색 줄이기 %s / 방향키 이동" % [shrink, "켬" if shadows else "끔", "켬" if toon else "끔", "켬" if posterize else "끔"]
