@@ -855,10 +855,18 @@ func _sort_and_update() -> void:
 	for key in _sorted_keys:
 		var it: Dictionary = _items[key]
 		var rank: float = rank_of[key]
+		# 순번·개수가 그대로면 셰이더 값을 다시 넣지 않는다(재질이 많아서 비용이 큼).
+		if it.get("last_rank", -99.0) == rank and it.get("last_count", -1.0) == count:
+			continue
+
+		it["last_rank"] = rank
+		it["last_count"] = count
+
 		for m in it["materials"]:
 			(m as ShaderMaterial).set_shader_parameter("rank", rank)
 			(m as ShaderMaterial).set_shader_parameter("rank_count", count)
 			(m as ShaderMaterial).set_shader_parameter("center_world", it["center"])
+
 		var idm: ShaderMaterial = it["id_material"]
 		idm.set_shader_parameter("rank", rank)
 		idm.set_shader_parameter("rank_count", count)

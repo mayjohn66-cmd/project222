@@ -19,14 +19,15 @@ const SURFACE_COUNT: int = 7
 
 
 # options: overhang(처마 내밀기), thickness(지붕 두께), ridge_cap(용마루 덮개 높이), chimney(굴뚝 유무), awning(차양 유무), apron(마당 여백, 0 이면 없음)
-static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, options: Dictionary = {}) -> Dictionary:
+# into: 이미 부품(돌 기단 등 건물 뒤에 그릴 것)이 담긴 메시에 이어서 만들고 싶을 때 넘긴다.
+static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, options: Dictionary = {}, into: ArrayMesh = null) -> Dictionary:
 	var overhang: float = options.get("overhang", 0.14)
 	var t: float = options.get("thickness", 0.07)
 	var cap: float = options.get("ridge_cap", 0.1)
 	var w: float = hi.x - lo.x
 	var d: float = hi.y - lo.y
 	var ridge_x: bool = w >= d
-	var mesh := ArrayMesh.new()
+	var mesh: ArrayMesh = into if into != null else ArrayMesh.new()
 	var peak: float = wall_h + roof_h
 	# 용마루 축(u)과 가로(v) 좌표: 용마루가 x 방향이면 u=x, v=z / 아니면 u=z, v=x
 	var u0: float = (lo.x if ridge_x else lo.y)

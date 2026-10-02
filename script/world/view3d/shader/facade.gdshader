@@ -10,6 +10,8 @@ uniform float rank = 0.0;
 uniform float rank_count = 1.0;
 uniform bool use_sort = true;
 uniform vec3 center_world = vec3(0.0);
+// 같은 물체 안의 부품 순서(0 = 가장 뒤, 1 = 가장 앞). 순번 칸 안에서 아주 조금 깊이를 달리해, 그리는 순서에 기대지 않고 부품끼리 가린다.
+uniform float sub = 0.5;
 // 법선 맵(선택). 메시의 UV 와 접선(SurfaceTool.generate_tangents)을 따라 기와 요철 등을 낸다.
 uniform sampler2D normal_tex : hint_normal, filter_nearest, repeat_enable;
 uniform bool use_normal = false;
@@ -23,7 +25,7 @@ void fragment() {
 
 	if (use_sort) {
 		float band = 1.0 / (rank_count + 1.0);
-		DEPTH = 0.1 + 0.8 * ((rank + 1.5) * band);
+		DEPTH = 0.1 + 0.8 * ((rank + 1.5) * band + (sub - 0.5) * 0.8 * band);
 	} else {
 		DEPTH = FRAGCOORD.z;
 	}

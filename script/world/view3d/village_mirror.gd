@@ -26,11 +26,16 @@ func _init(owner_view: Node, exterior_node: Node2D) -> void:
 
 
 func _load_rules() -> void:
-	rules.clear()
+	rules = load_rules()
+
+
+# 규칙 표(CSV)를 읽는다. 마을 거울과 그림 요청 내보내기가 같이 쓴다.
+static func load_rules() -> Array:
+	var result: Array = []
 	var file := FileAccess.open(RULES_PATH, FileAccess.READ)
 
 	if file == null:
-		return
+		return result
 
 	var header: PackedStringArray = file.get_csv_line()
 
@@ -49,9 +54,9 @@ func _load_rules() -> void:
 			if value.is_empty():
 				continue
 
-			if key in ["height_blocks", "roof_blocks", "footprint_scale", "apron"]:
+			if key in ["height_blocks", "roof_blocks", "footprint_scale", "apron", "canon_w", "canon_d"]:
 				r[key] = float(value)
-			elif key in ["chimney", "awning", "step", "planters", "sign"]:
+			elif key in ["chimney", "awning", "step", "planters", "sign", "plinth", "shutters"]:
 				r[key] = value == "1" or value.to_lower() == "true"
 			elif key in ["tint", "roof_tint", "awning_tint", "goods_tint"]:
 				r[key] = Color.html(value)
@@ -60,12 +65,18 @@ func _load_rules() -> void:
 			else:
 				r[key] = value
 
-		rules.append(r)
+		result.append(r)
+
+	return result
 
 
 # 규칙 찾기: 노드 이름 + 스프라이트 그림 경로(소문자)에 match 글자가 들어 있는 첫 규칙. 먼저 나온 행이 우선(구체적인 것을 위에).
 func _find_rule(text: String) -> Dictionary:
-	for r in rules:
+	return find_rule(rules, text)
+
+
+static func find_rule(rule_list: Array, text: String) -> Dictionary:
+	for r in rule_list:
 		if text.find(r["match"]) >= 0:
 			return r
 
@@ -289,6 +300,19 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 	var scale_f: float = float(rule.get("footprint_scale", 1.0))
 	var center: Vector2 = (lo + hi) * 0.5
 	var half: Vector2 = (hi - lo) * 0.5 * scale_f
+
+	# 규칙에 기준 크기(canon_w × canon_d, 칸)가 있으면 발자국 대신 그 크기를 쓴다 → 면 질감(그림) 크기가 종류마다 고정된다.
+	# 긴 쪽 방향은 발자국의 긴 쪽에 맞춘다.
+	if rule.has("canon_w") and rule.has("canon_d"):
+		var cw: float = float(rule["canon_w"])
+		var cd: float = float(rule["canon_d"])
+
+		if ((hi.x - lo.x) >= (hi.y - lo.y)) != (cw >= cd):
+			var tmp: float = cw
+			cw = cd
+			cd = tmp
+
+		half = Vector2(cw, cd) * 0.5
 	half = Vector2(maxf(half.x, 0.15), maxf(half.y, 0.15))
 	lo = center - half
 	hi = center + half

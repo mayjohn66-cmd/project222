@@ -17,5 +17,5 @@ func _ready() -> void:
 				continue
 			var rect: Rect2 = village._footprint_cell_rect(body)
 			var info: Dictionary = village._sprite_info(body)
-			print("OBJ|", cname, "|", body.name, "|", str(info["path"]).get_file(), "|size=", snappedf(rect.size.x, 0.01), "x", snappedf(rect.size.y, 0.01), "|sprite_h=", snappedf(info["height_px"], 1.0), "|vis=", body.visible)
+			print("OBJ|", cname, "|", body.name, "|", str(info["path"]), "|size=", snappedf(rect.size.x, 0.01), "x", snappedf(rect.size.y, 0.01), "|sprite_h=", snappedf(info["height_px"], 1.0), "|vis=", body.visible)
 	get_tree().quit()

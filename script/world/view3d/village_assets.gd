@@ -67,11 +67,15 @@ static func make_material(spec: Dictionary) -> ShaderMaterial:
 	return m
 
 
+# 부품(면)마다 재질을 따로 만들고, 면 순서(= 먼 것부터)에 따라 sub(0~1)를 매겨 부품끼리의 앞뒤를 깊이로 정한다.
 static func make_materials(specs: Array) -> Array:
 	var out: Array = []
+	var n: int = specs.size()
 
-	for s in specs:
-		out.append(make_material(s))
+	for i in range(n):
+		var m: ShaderMaterial = make_material(specs[i])
+		m.set_shader_parameter("sub", float(i) / float(maxi(n - 1, 1)))
+		out.append(m)
 
 	return out
 
@@ -80,46 +84,46 @@ static func make_materials(specs: Array) -> Array:
 
 class PartBuilder:
 	extends RefCounted
-	var surfaces: Dictionary = {}
-	var specs: Dictionary = {}
-	var order: Array = []
+	## 부품마다 면(surface) 하나. 한 물체 안은 깊이가 같아서(순번 깊이) 겹침은 **그리는 순서**로만 정해지므로,
+	## 부품을 카메라에서 먼 것부터(x+z 가 작은 것부터, 같으면 낮은 것부터) 순서대로 면으로 만든다.
+	var parts: Array = []
 	var min_pt: Vector3 = Vector3(INF, INF, INF)
 	var max_pt: Vector3 = Vector3(-INF, -INF, -INF)
 
-	func use(key: String, spec: Dictionary) -> SurfaceTool:
-		if not surfaces.has(key):
-			var st := SurfaceTool.new()
-			st.begin(Mesh.PRIMITIVE_TRIANGLES)
-			surfaces[key] = st
-			specs[key] = spec
-			order.append(key)
+	func new_part(spec: Dictionary, a: Vector3, b: Vector3) -> SurfaceTool:
+		var st := SurfaceTool.new()
+		st.begin(Mesh.PRIMITIVE_TRIANGLES)
+		var c: Vector3 = (a + b) * 0.5
+		parts.append({"depth": c.x + c.z + c.y * 0.02, "spec": spec, "st": st})
+		min_pt = Vector3(minf(min_pt.x, minf(a.x, b.x)), minf(min_pt.y, minf(a.y, b.y)), minf(min_pt.z, minf(a.z, b.z)))
+		max_pt = Vector3(maxf(max_pt.x, maxf(a.x, b.x)), maxf(max_pt.y, maxf(a.y, b.y)), maxf(max_pt.z, maxf(a.z, b.z)))
+		return st
 
-		return surfaces[key]
-
-	func grow(a: Vector3, b: Vector3) -> void:
+	func new_part_bounds(a: Vector3, b: Vector3) -> void:
 		min_pt = Vector3(minf(min_pt.x, minf(a.x, b.x)), minf(min_pt.y, minf(a.y, b.y)), minf(min_pt.z, minf(a.z, b.z)))
 		max_pt = Vector3(maxf(max_pt.x, maxf(a.x, b.x)), maxf(max_pt.y, maxf(a.y, b.y)), maxf(max_pt.z, maxf(a.z, b.z)))
 
-	# 모은 면들을 mesh 에 덧붙이고, 붙인 순서대로 재질 사양 목록을 돌려준다.
+	# 모은 부품을 먼 것부터 mesh 에 덧붙이고, 붙인 순서대로 재질 사양 목록을 돌려준다.
 	func commit_into(mesh: ArrayMesh) -> Array:
 		var out: Array = []
+		var ordered: Array = parts.duplicate()
+		ordered.sort_custom(func(x, y): return x["depth"] < y["depth"])
 
-		for key in order:
-			var st: SurfaceTool = surfaces[key]
+		for part in ordered:
+			var st: SurfaceTool = part["st"]
 
-			if specs[key].get("normal", null) != null:
+			if part["spec"].get("normal", null) != null:
 				st.generate_tangents()
 
 			st.commit(mesh)
-			out.append(specs[key])
+			out.append(part["spec"])
 
 		return out
 
 
 # 축에 맞춘 상자(밑면 제외). UV 는 세계 길이(칸) 단위, 질감 한 장 = 한 칸.
 static func box(b: PartBuilder, key: String, spec: Dictionary, lo: Vector3, hi: Vector3) -> void:
-	var st: SurfaceTool = b.use(key, spec)
-	b.grow(lo, hi)
+	var st: SurfaceTool = b.new_part(spec, lo, hi)
 	var dx: float = hi.x - lo.x
 	var dy: float = hi.y - lo.y
 	var dz: float = hi.z - lo.z
@@ -133,8 +137,7 @@ static func box(b: PartBuilder, key: String, spec: Dictionary, lo: Vector3, hi: 
 
 # 팔각 기둥(통·줄기·잎 덩어리). 옆면 UV 는 둘레 길이 기준.
 static func oct(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: float, r: float, y0: float, y1: float, r_top: float = -1.0) -> void:
-	var st: SurfaceTool = b.use(key, spec)
-	b.grow(Vector3(cx - r, y0, cz - r), Vector3(cx + r, y1, cz + r))
+	var st: SurfaceTool = b.new_part(spec, Vector3(cx - r, y0, cz - r), Vector3(cx + r, y1, cz + r))
 	var rt: float = r if r_top < 0.0 else r_top
 	var seg: float = TAU * r / 8.0
 	var dy: float = y1 - y0
@@ -159,8 +162,7 @@ static func oct(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: fl
 
 # 삼각 기둥 지붕(얇은 면, 두께 없음): 기둥·차양·작은 지붕용. ridge_x 면 용마루가 x 방향.
 static func roof_prism(b: PartBuilder, key: String, spec: Dictionary, x0: float, x1: float, z0: float, z1: float, y0: float, peak_h: float, ridge_x: bool) -> void:
-	var st: SurfaceTool = b.use(key, spec)
-	b.grow(Vector3(x0, y0, z0), Vector3(x1, y0 + peak_h, z1))
+	var st: SurfaceTool = b.new_part(spec, Vector3(x0, y0, z0), Vector3(x1, y0 + peak_h, z1))
 	var zc: float = (z0 + z1) * 0.5
 	var xc: float = (x0 + x1) * 0.5
 	var yp: float = y0 + peak_h
@@ -185,9 +187,8 @@ static func roof_prism(b: PartBuilder, key: String, spec: Dictionary, x0: float,
 
 # 비스듬한 면 하나(차양 등): 위쪽 모서리 a→b, 아래쪽 모서리 d→c 가 같은 방향
 static func slope(b: PartBuilder, key: String, spec: Dictionary, a: Vector3, bb: Vector3, c: Vector3, d: Vector3, n: Vector3, u_len: float, v_len: float) -> void:
-	var st: SurfaceTool = b.use(key, spec)
-	b.grow(a, c)
-	b.grow(bb, d)
+	var st: SurfaceTool = b.new_part(spec, a, c)
+	b.new_part_bounds(bb, d)
 	BuildingMesh._quad(st, a, bb, c, d, n, Vector2(0, 0), Vector2(u_len, 0), Vector2(u_len, v_len), Vector2(0, v_len))
 
 
@@ -219,8 +220,15 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var roof_tint: Color = rule.get("roof_tint", Color(0.85, 0.44, 0.23))
 	var awning_tint: Color = rule.get("awning_tint", Color(0.88, 0.45, 0.22))
 	var options: Dictionary = {"chimney": bool(rule.get("chimney", true)), "awning": bool(rule.get("awning", false)), "apron": float(rule.get("apron", 0.4))}
-	var built: Dictionary = BuildingMesh.build(lo, hi, wall_h, roof_h, options)
-	var mesh: ArrayMesh = built["mesh"]
+	# 돌 기단은 벽보다 먼저(뒤에) 그린다: 윗면이 벽 아래를 덮지 않도록 건물 면들보다 앞서 mesh 에 넣는다.
+	var mesh := ArrayMesh.new()
+	var pre := PartBuilder.new()
+
+	if bool(rule.get("plinth", false)):
+		box(pre, "plinth", stone_spec(p, Color(1.1, 1.05, 1.0), "plinth_stone"), Vector3(lo.x - 0.08, 0.0, lo.y - 0.08), Vector3(hi.x + 0.08, 0.2, hi.y + 0.08))
+
+	var pre_specs: Array = pre.commit_into(mesh)
+	var built: Dictionary = BuildingMesh.build(lo, hi, wall_h, roof_h, options, mesh)
 	var width: float = hi.x - lo.x
 	var depth: float = hi.y - lo.y
 	var h_texels: int = int(roundf(wall_blocks * float(p["block_px"])))
@@ -247,6 +255,29 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var door_cell: int = cells / 2
 	var door_cx: float = lo.x + (float(door_cell) + 0.5) * width / float(cells)
 	var win_bottom: float = wall_h * 0.42
+
+	# 덧문: 창 양옆 얇은 나무판(+z 앞벽과 +x 옆벽)
+	if bool(rule.get("shutters", false)):
+		var shut: Dictionary = wood(p, Color(0.35, 0.5, 0.4), "shutter_wood")
+		var win_w: float = clampf(width / float(cells_z) * 0.4, 4.0, 12.0) / float(ts)
+		var win_top: float = wall_h * 0.78
+
+		for k in range(cells_z):
+			if k == cells_z / 2:
+				continue
+
+			var scx: float = lo.x + (float(k) + 0.5) * width / float(cells_z)
+			var dxs: float = win_w * 0.5 + 0.08
+			box(b, "shutter", shut, Vector3(scx - dxs - 0.1, win_bottom, hi.y), Vector3(scx - dxs, win_top, hi.y + 0.05))
+			box(b, "shutter", shut, Vector3(scx + dxs, win_bottom, hi.y), Vector3(scx + dxs + 0.1, win_top, hi.y + 0.05))
+
+		var win_w_x: float = clampf(depth / float(cells_x) * 0.4, 4.0, 12.0) / float(ts)
+
+		for k in range(cells_x):
+			var scz: float = hi.y - (float(k) + 0.5) * depth / float(cells_x)
+			var dzs: float = win_w_x * 0.5 + 0.08
+			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz - dzs - 0.1), Vector3(hi.x + 0.05, win_top, scz - dzs))
+			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz + dzs), Vector3(hi.x + 0.05, win_top, scz + dzs + 0.1))
 
 	if bool(rule.get("step", true)):
 		box(b, "step", stone_spec(p, Color(1.15, 1.1, 1.0), "step"), Vector3(door_cx - 0.3, 0.0, hi.y), Vector3(door_cx + 0.3, 0.14, hi.y + 0.28))
@@ -281,7 +312,11 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	if apron_mesh.get_surface_count() > 0:
 		apron_info = {"mesh": apron_mesh, "spec": spec(_tex("stone", ts), Color(1.5, 1.4, 1.25), "apron_stone", "건물 둘레 돌 마당 %d×%d 반복(위에서 본 면)" % [ts, ts])}
 
-	return {"mesh": mesh, "specs": specs + extra_specs, "apron": apron_info, "total_blocks": wall_blocks + roof_blocks, "lo": ext_lo, "hi": ext_hi}
+	if pre.min_pt.x != INF:
+		ext_lo = Vector2(minf(ext_lo.x, pre.min_pt.x), minf(ext_lo.y, pre.min_pt.z))
+		ext_hi = Vector2(maxf(ext_hi.x, pre.max_pt.x), maxf(ext_hi.y, pre.max_pt.z))
+
+	return {"mesh": mesh, "specs": pre_specs + specs + extra_specs, "apron": apron_info, "total_blocks": wall_blocks + roof_blocks, "lo": ext_lo, "hi": ext_hi}
 
 
 # extras: "이름:dx:dz;..." — 건물 앞(+z)쪽 중심 기준 옆(dx)·앞(dz) 칸 위치에 작은 소품(통·상자·화분)
