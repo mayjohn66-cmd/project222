@@ -12,6 +12,7 @@ const ID_SPRITE_SHADER: Shader = preload("res://dev/spike3d/sorted_id_sprite.gds
 const OUTLINE_SHADER: Shader = preload("res://dev/spike3d/outline_post.gdshader")
 
 var sorted_mode: bool = true
+var use_png_textures: bool = false  # true = PNG 파일(dev/spike3d/textures)이 있으면 그걸 쓴다
 var use_normal_map: bool = false  # 법선 맵 켜기(시험 방 3 의 N 키)
 var use_blocky: bool = false  # true = 상자로 만든 3D 캐릭터, false = 2D 도트 판
 var blocky: BlockyActor
@@ -25,11 +26,25 @@ var sprite_material: ShaderMaterial
 var ground_material: ShaderMaterial
 
 
+# 질감 한 벌(알베도·법선). PNG 사용이 켜져 있고 파일이 있으면 PNG, 아니면 코드로 만든 임시 질감.
+func _texture_pair(kind: String) -> Dictionary:
+	var size: int = _texture_size()
+
+	if use_png_textures:
+		var png: Dictionary = BaseSpike.load_png_pair(kind, size)
+
+		if not png.is_empty():
+			return png
+
+	return {"albedo": BaseSpike.make_texture(kind, size), "normal": BaseSpike.make_normal(kind, size)}
+
+
 func _surface_material(kind: String, tint: Color) -> ShaderMaterial:
 	var m := ShaderMaterial.new()
 	m.shader = SURFACE_SHADER
-	m.set_shader_parameter("albedo_tex", BaseSpike.make_texture(kind, _texture_size()))
-	m.set_shader_parameter("normal_tex", BaseSpike.make_normal(kind, _texture_size()))
+	var tex: Dictionary = _texture_pair(kind)
+	m.set_shader_parameter("albedo_tex", tex["albedo"])
+	m.set_shader_parameter("normal_tex", tex["normal"])
 	m.set_shader_parameter("use_normal", use_normal_map)
 	m.set_shader_parameter("tint", tint)
 	m.set_shader_parameter("texel_per_unit", 1.0)
@@ -294,8 +309,9 @@ func _apply_shrink() -> void:
 	_apply_actor_art()
 
 	for it in items:
-		it["material"].set_shader_parameter("albedo_tex", BaseSpike.make_texture(str(it["kind"]), _texture_size()))
-		it["material"].set_shader_parameter("normal_tex", BaseSpike.make_normal(str(it["kind"]), _texture_size()))
+		var pair: Dictionary = _texture_pair(str(it["kind"]))
+		it["material"].set_shader_parameter("albedo_tex", pair["albedo"])
+		it["material"].set_shader_parameter("normal_tex", pair["normal"])
 
 	if ground_material != null:
 		ground_material.set_shader_parameter("albedo_tex", BaseSpike.make_texture(GRASS, _texture_size()))

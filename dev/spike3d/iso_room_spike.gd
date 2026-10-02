@@ -151,8 +151,8 @@ static func make_texture(kind: String, size: int = 16) -> ImageTexture:
 	return ImageTexture.create_from_image(img)
 
 
-# 높이 맵(줄눈 = 낮음, 벽돌·판자 = 높음, 판자는 가운데가 살짝 불룩) → 법선 맵. tools/height_to_normal.py 와 같은 계산(Sobel, 기울기를 levels 단계로 끊음).
-static func make_normal(kind: String, size: int = 16, levels: int = 2) -> ImageTexture:
+# 높이 맵(줄눈 = 낮음, 벽돌·판자 = 높음, 판자는 가장자리가 살짝 불룩). 0~1 값의 2차원 배열.
+static func make_heights(kind: String, size: int) -> Array:
 	var heights: Array = []
 
 	for y in range(size):
@@ -174,6 +174,25 @@ static func make_normal(kind: String, size: int = 16, levels: int = 2) -> ImageT
 
 		heights.append(row)
 
+	return heights
+
+
+# 높이 맵을 회색조 이미지로(밝을수록 높음). tools/height_to_normal.py 의 입력과 같은 형식.
+static func make_height_image(kind: String, size: int) -> Image:
+	var heights: Array = make_heights(kind, size)
+	var img := Image.create(size, size, false, Image.FORMAT_L8)
+
+	for y in range(size):
+		for x in range(size):
+			var v: float = float(heights[y][x])
+			img.set_pixel(x, y, Color(v, v, v))
+
+	return img
+
+
+# 높이 맵 → 법선 맵. tools/height_to_normal.py 와 같은 계산(Sobel, 기울기를 levels 단계로 끊음).
+static func make_normal(kind: String, size: int = 16, levels: int = 2) -> ImageTexture:
+	var heights: Array = make_heights(kind, size)
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
 
 	for y in range(size):
@@ -195,6 +214,20 @@ static func make_normal(kind: String, size: int = 16, levels: int = 2) -> ImageT
 			img.set_pixel(x, y, Color(nx * 0.5 + 0.5, ny * 0.5 + 0.5, nz * 0.5 + 0.5))
 
 	return ImageTexture.create_from_image(img)
+
+
+# PNG 로 만든 질감 한 벌(알베도 _a, 법선 _n)이 있으면 불러온다. 없으면 빈 딕셔너리.
+const TEXTURE_DIR: String = "res://dev/spike3d/textures/"
+
+
+static func load_png_pair(kind: String, size: int) -> Dictionary:
+	var albedo_path: String = "%s%s_%d_a.png" % [TEXTURE_DIR, kind, size]
+	var normal_path: String = "%s%s_%d_n.png" % [TEXTURE_DIR, kind, size]
+
+	if not ResourceLoader.exists(albedo_path) or not ResourceLoader.exists(normal_path):
+		return {}
+
+	return {"albedo": load(albedo_path), "normal": load(normal_path)}
 
 
 static func _level(v: float, levels: int) -> float:

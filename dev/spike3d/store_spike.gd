@@ -259,6 +259,12 @@ func apply_time(h: float) -> void:
 		(lamp as OmniLight3D).visible = day_amt < 0.98
 
 
+# 질감을 PNG 파일 ↔ 코드로 만든 임시 질감으로 바꾼다.
+func set_png_textures(on: bool) -> void:
+	use_png_textures = on
+	_apply_shrink()
+
+
 func set_normal_map(on: bool) -> void:
 	use_normal_map = on
 
@@ -335,14 +341,19 @@ func _apply_shrink() -> void:
 	super._apply_shrink()
 
 	if ground_material != null:
-		ground_material.set_shader_parameter("albedo_tex", BaseSpike.make_texture(WOOD, _texture_size()))
-		ground_material.set_shader_parameter("normal_tex", BaseSpike.make_normal(WOOD, _texture_size()))
+		var ground_pair: Dictionary = _texture_pair(WOOD)
+		ground_material.set_shader_parameter("albedo_tex", ground_pair["albedo"])
+		ground_material.set_shader_parameter("normal_tex", ground_pair["normal"])
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
 		match event.keycode:
 			KEY_R, KEY_B:
+				return
+			KEY_G:
+				set_png_textures(not use_png_textures)
+				_update_label()
 				return
 			KEY_N:
 				set_normal_map(not use_normal_map)
@@ -371,4 +382,4 @@ func _unhandled_key_input(event: InputEvent) -> void:
 
 
 func _update_label() -> void:
-	label.text = "시간 %02d시 ([ ] 1시간, Y 자동) / N 법선 맵 %s / U 윤곽선 %s / O 정렬 깊이 %s / K 군중 피하기 %s / SPACE 손님 (%d명)" % [int(hour), "켬" if use_normal_map else "끔", "켬" if outline else "끔", "켬" if sorted_mode else "끔", "켬" if crowd_steering_on else "끔", actors.size() - 1]
+	label.text = "시간 %02d시 ([ ] 1시간, Y 자동) / N 법선 맵 %s / G PNG 질감 %s / U 윤곽선 %s / O 정렬 깊이 %s / K 군중 피하기 %s / SPACE 손님 (%d명)" % [int(hour), "켬" if use_normal_map else "끔", "켬" if use_png_textures else "끔", "켬" if outline else "끔", "켬" if sorted_mode else "끔", "켬" if crowd_steering_on else "끔", actors.size() - 1]
