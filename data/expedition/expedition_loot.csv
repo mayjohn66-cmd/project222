@@ -179,3 +179,11 @@ ruins_boss,sealed_scroll,15,2,3,,
 ruins_boss,ancient_relic,55,1,1,,
 ruins_boss,scroll_rune_blade,20,1,1,3,3
 ruins_boss,scroll_rune_mail,20,1,1,2,2
+choice_forest_herb,forest_herb,100,1,2,,
+choice_wild_berry,wild_berry,100,1,2,,
+choice_iron_ore,iron_ore,100,1,2,,
+choice_stone_shard,stone_shard,100,1,2,,
+choice_swamp_moss,swamp_moss,100,1,2,,
+choice_marsh_reed,marsh_reed,100,1,2,,
+choice_ancient_fragment,ancient_fragment,100,1,2,,
+choice_rune_dust,rune_dust,100,1,2,,

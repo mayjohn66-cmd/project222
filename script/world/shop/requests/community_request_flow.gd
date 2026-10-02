@@ -21,6 +21,7 @@ static func accepted(id: String) -> bool:
 static func locked_reason(entry: Dictionary) -> String:
 	if not board_available(): return "첫 주민의 정착을 기다리고 있어요."
 	if entry.has("after") and not done(str(entry["after"])): return "앞선 공동 부탁을 완료하면 열려요."
+	if bool(entry.get("after_gathering", false)) and not PlayerProgress.story_beat_days.has("village_gathering:well_evening:done"): return "우물 곁 저녁 모임에 참여하면 열려요."
 	var resident := VillageLifeFlow.resident(str(entry["resident"]))
 	if not VillageLifeFlow.available(resident): return "%s의 정착을 기다리고 있어요." % str(resident.get("name", "주민"))
 	var required := int(entry["friendship"])
@@ -49,6 +50,7 @@ static func required_items(entry: Dictionary) -> Dictionary:
 static func can_deliver(id: String) -> bool:
 	var entry := request(id)
 	if entry.is_empty() or not board_available() or not accepted(id) or done(id): return false
+	if not locked_reason(entry).is_empty(): return false
 	var totals := required_items(entry)
 	if totals.is_empty(): return false
 	for item in totals:
@@ -72,6 +74,11 @@ static func completed_count() -> int:
 	for entry in SETTINGS.requests:
 		if done(str(entry["id"])): count += 1
 	return count
+
+static func landmark_site(world: Node, entry: Dictionary) -> StaticBody2D:
+	var site := VillageSettlement.find_site(world, str(entry["landmark"]))
+	if site != null or not entry.has("landmark_fallback"): return site
+	return VillageSettlement.find_site_copy(world, str(entry["landmark_fallback"]), int(entry.get("landmark_slot", 0)))
 
 static func unlocked_paths() -> Array[String]:
 	var paths: Array[String] = []

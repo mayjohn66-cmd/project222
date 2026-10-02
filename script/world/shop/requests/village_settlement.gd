@@ -20,6 +20,10 @@ static func apply_world(world: Node) -> void:
 	for path in CommunityRequestFlow.unlocked_paths():
 		var site := find_site(world, path)
 		if site != null: open_sites[site.get_instance_id()] = true
+	for entry in CommunityRequestFlow.SETTINGS.requests:
+		if not CommunityRequestFlow.done(str(entry["id"])): continue
+		var site := CommunityRequestFlow.landmark_site(world, entry)
+		if site != null: open_sites[site.get_instance_id()] = true
 	for landmark in ResidentStoryFlow.SETTINGS.landmarks:
 		if not ResidentRequestFlow.done(str(landmark["request"])): continue
 		var paths: Array = [str(landmark["path"])]
@@ -62,3 +66,19 @@ static func find_site(world: Node, source_path: String) -> StaticBody2D:
 			best_distance = distance
 			best = object
 	return best
+
+# Respect the user's removed originals and select one surviving copy, never all duplicates.
+static func find_site_copy(world: Node, source_path: String, index: int) -> StaticBody2D:
+	var group := world.get_node_or_null(NodePath(source_path.get_slice("/", 0)))
+	if group == null: return null
+	var floor_node := world.get_node_or_null("Floor") as Node2D
+	var origin := floor_node.global_position if floor_node != null else Vector2.ZERO
+	var candidates: Array[StaticBody2D] = []
+	for object in group.get_children():
+		if not object is StaticBody2D or bool(object.get_meta("settlement_layout_removed", false)): continue
+		if str(object.get_meta("settlement_source", str(group.name) + "/" + str(object.name))) == source_path: candidates.append(object)
+	candidates.sort_custom(func(a: StaticBody2D, b: StaticBody2D) -> bool:
+		var da := a.global_position.distance_squared_to(origin)
+		var db := b.global_position.distance_squared_to(origin)
+		return str(a.name) < str(b.name) if is_equal_approx(da, db) else da < db)
+	return candidates[clampi(index, 0, candidates.size() - 1)] if not candidates.is_empty() else null

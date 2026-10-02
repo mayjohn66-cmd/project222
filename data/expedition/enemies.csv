@@ -9,3 +9,7 @@ swamp_queen_slime,늪의 여왕 슬라임,105,15,7,swamp_boss
 
 ruins_sentinel,유적 수호병,65,12,5,ruins_enemy
 ancient_guardian,고대 수호자,95,13,6,ruins_boss
+forest_thornling,숲 가시덩굴,40,8,2,forest_enemy
+mine_shardling,돌조각 정령,55,9,4,mine_enemy
+swamp_reedling,늪 갈대괴물,50,9,3,swamp_enemy
+ruins_wisp,유적 잔불,50,10,3,ruins_enemy

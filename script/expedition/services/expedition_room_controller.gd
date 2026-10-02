@@ -53,6 +53,7 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	host.apply_bag_equipment_stats()
 	var result_type: String = str(event.get("result_type", "none"))
 	var enemy: Dictionary = EnemyData.get_enemy(str(event.get("target_id", ""))) if result_type == "battle" else {}
+	if not enemy.is_empty(): enemy["id"] = str(event.get("target_id", ""))
 	var kind: String = ""
 	if result_type == "loot": kind = "gather" if room_type == ExpeditionMap.NODE_GATHER else "chest"
 	if result_type == "heal": kind = "heal"
@@ -62,12 +63,13 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	model.setup(SETTINGS, loadout.active_profile(), host.combat_player_hp,
 		host.combat_player_max_hp, host.BASE_PLAYER_ATTACK + loadout.active_bonus(), host.combat_player_defense,
 		enemy, host.get_run_difficulty(), boss, kind, loadout)
+	model.configure_gathering(model.CONTENT.gathering(str(event.get("event_id", ""))))
 	model.object_used.connect(_object_used)
 	model.enemies_cleared.connect(_enemies_cleared)
 	model.exited.connect(_exit)
 	model.defeated.connect(_defeat)
 	view.model = model
-	view.notice = ""
+	view.notice = "두 지점 중 한 곳에서 [E] · 한 방에서 한 곳만 채집할 수 있어요." if not model.gathering_sites.is_empty() else ""
 	view.title_label.text = "%s · %s" % [str(ExpeditionMapData.get_region_data(host.current_region_id).get("name", host.current_region_id)),
 		host.get_map_node_display_name(room_type)]
 	view.floor_color = {"forest": Color("253e32"), "mine": Color("343d49"),
@@ -99,6 +101,7 @@ func _object_used() -> void:
 		view.notice = "체력을 회복했다" if healed > 0 else "체력이 가득 차 있다"
 		return
 	var table_id: String = str(event.get("target_id", ""))
+	if not model.selected_loot_table.is_empty(): table_id = model.selected_loot_table
 	var result: Dictionary = host.expedition_gathering_service.resolve_gathering(table_id,
 		host.expedition_bag, host.expedition_loot_service, host.get_run_difficulty())
 	if not bool(result.get("handled", false)):

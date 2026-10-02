@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="VillageVisitorSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_visitor_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+visitors = Array[Dictionary]([
+{"type":"orchard_keeper","kind":"community","request":"welcome_garden","condition":"길손맞이 꽃자리 부탁 완료"},
+{"type":"trail_courier","kind":"community","request":"welcome_garden","condition":"길손맞이 꽃자리 부탁 완료"},
+{"type":"field_cook","kind":"personal","request":"naru_neighbor_basket","condition":"타블렌의 이웃 간식 부탁 완료"},
+{"type":"stone_mason","kind":"personal","request":"doyun_tool_care","condition":"코르빈의 도구 손질 부탁 완료"}
+])

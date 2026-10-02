@@ -75,6 +75,7 @@ func try_interact() -> bool:
 
 func _on_action(id: String) -> void:
 	if not open: return
+	var previous_visitors := VillageVisitorFlow.available_types()
 	if id.begins_with("personal:"):
 		var personal_id := id.trim_prefix("personal:")
 		if not PersonalRequestFlow.accepted(personal_id):
@@ -84,6 +85,7 @@ func _on_action(id: String) -> void:
 			if not result.is_empty():
 				panel.message.text = "%s 평판 +%d · %d G" % [result["completion"],result["reputation"],result["money"]]
 				manager.customer_spawner.refresh_spawn_interval()
+		_announce_visitors(previous_visitors)
 		panel.refresh()
 		return
 	if not CommunityRequestFlow.accepted(id):
@@ -94,7 +96,14 @@ func _on_action(id: String) -> void:
 			panel.message.text = "%s 평판 +%d · %d G" % [result["completion"], result["reputation"], result["money"]]
 			VillageSettlement.apply_world(get_parent())
 			manager.customer_spawner.refresh_spawn_interval()
+	_announce_visitors(previous_visitors)
 	panel.refresh()
+
+func _announce_visitors(previous: Array[String]) -> void:
+	var names := PackedStringArray()
+	for type_id in VillageVisitorFlow.available_types():
+		if not previous.has(type_id): names.append(VillageVisitorFlow.name_for(type_id))
+	if not names.is_empty(): panel.message.text += "\n새 손님: " + " · ".join(names) + " · 개점하면 찾아와요."
 
 func _on_closed() -> void:
 	if not open: return

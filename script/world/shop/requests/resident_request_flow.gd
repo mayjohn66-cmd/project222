@@ -60,14 +60,14 @@ static func customer_available(type_id: String) -> bool:
 	for milestone in SETTINGS.customer_milestones:
 		if str(milestone["type"]) == type_id:
 			return completed_count() >= int(milestone["completed"])
-	return true
+	return VillageVisitorFlow.available(type_id)
 
 static func pending_introduction() -> String:
 	for milestone in SETTINGS.customer_milestones:
 		var type_id := str(milestone["type"])
 		if customer_available(type_id) and not PlayerProgress.story_beat_days.has(PREFIX + "visited:" + type_id):
 			return type_id
-	return ""
+	return VillageVisitorFlow.pending_visit()
 
 static func record_visit(type_id: String) -> void:
 	if type_id == pending_introduction():

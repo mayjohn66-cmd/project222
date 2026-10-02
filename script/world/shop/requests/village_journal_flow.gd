@@ -14,10 +14,14 @@ static func entries() -> Array[Dictionary]:
 		var id := str(request["id"])
 		result.append({"id":"community:" + id, "title":RequestTextData.text("community_request",id,"title","마을 부탁")})
 	for request in PersonalRequestFlow.entries(): result.append({"id":"personal:" + str(request["id"]),"title":str(request["title"])})
+	for visitor in VillageVisitorFlow.SETTINGS.visitors:
+		var type_id := str(visitor["type"])
+		result.append({"id":"visitor:" + type_id,"title":VillageVisitorFlow.name_for(type_id)})
 	result.append({"id":"gathering:well_evening","title":VillageGatheringFlow.title()})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with("visitor:"): return VillageVisitorFlow.information(id.trim_prefix("visitor:"))
 	if id == "gathering:well_evening": return VillageGatheringFlow.information()
 	if id.begins_with("personal:"):
 		var entry := PersonalRequestFlow.request(id.trim_prefix("personal:"))
@@ -76,7 +80,9 @@ static func destination(world: Node, id: String) -> Node2D:
 		var request_id := id.trim_prefix("community:")
 		var request := CommunityRequestFlow.request(request_id)
 		if request.is_empty(): return null
-		if CommunityRequestFlow.done(request_id): path = str(request["landmark"])
+		if CommunityRequestFlow.done(request_id):
+			var landmark := CommunityRequestFlow.landmark_site(world, request)
+			return landmark if landmark != null and landmark.visible else null
 		elif CommunityRequestFlow.locked_reason(request).is_empty(): path = CommunityRequestFlow.SETTINGS.board_path
 	if path.is_empty(): return null
 	var site := VillageSettlement.find_site(world,path)
