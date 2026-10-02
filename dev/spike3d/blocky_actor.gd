@@ -10,7 +10,7 @@ const ID_SHADER: Shader = preload("res://dev/spike3d/blocky_id.gdshader")
 var parts: Array = []  # {node, pivot, material, id_node, id_material}
 var walk_time: float = 0.0
 var walking: bool = false
-var facing_yaw_deg: float = 45.0
+var facing_yaw_deg: float = 90.0  # 3/4 모습: 화면 오른쪽 아래를 본다(정면은 45, 화면 아래)
 var _id_root: Node3D
 
 
@@ -25,32 +25,52 @@ static func _make_tex(w: int, h: int, painter: Callable) -> ImageTexture:
 
 
 # 임시 도트 질감. 실제로는 Pixel Lab 으로 만든 작은 그림이 이 자리에 들어간다.
+# 카메라가 위에서 30도로 내려다보므로 머리 윗면이 크게 보인다(앞면 높이의 약 40%) → 윗면에 가르마와 머리카락 결을 그리고,
+# 얼굴은 앞면 아래쪽 3분의 2에 두며 앞머리가 이마를 덮는다. 색은 밝은 빛에서 하얗게 날아가지 않게 조금 어둡게 잡았다.
 func _face_textures() -> Dictionary:
-	var skin := Color(0.96, 0.78, 0.65)
-	var hair := Color(0.42, 0.26, 0.2)
-	var shirt := Color(0.95, 0.95, 0.9)
-	var apron := Color(0.16, 0.38, 0.28)
-	var pants := Color(0.34, 0.24, 0.2)
+	var skin := Color(0.80, 0.56, 0.42)
+	var skin_shade := Color(0.72, 0.49, 0.37)
+	var hair := Color(0.30, 0.18, 0.13)
+	var hair_hi := Color(0.40, 0.25, 0.18)
+	var shirt := Color(0.78, 0.78, 0.74)
+	var apron := Color(0.14, 0.34, 0.25)
+	var pants := Color(0.30, 0.22, 0.20)
+	var shoe := Color(0.20, 0.14, 0.12)
 	var tex: Dictionary = {}
-	tex["head_front"] = _make_tex(8, 8, func(x, y):
-		if y < 2:
-			return hair
-		if (x == 2 or x == 5) and y == 4:
-			return Color(0.15, 0.1, 0.1)
-		if x in [3, 4] and y == 6:
-			return Color(0.78, 0.4, 0.4)
+	tex["head_front"] = _make_tex(14, 13, func(x, y):
+		var u: float = (float(x) + 0.5) / 14.0
+		var v: float = (float(y) + 0.5) / 13.0
+		if v < 0.30 or (v < 0.42 and (u < 0.18 or u > 0.82 or (int(u * 14.0) % 3 == 0))):
+			return hair if int(u * 14.0 + v * 13.0) % 4 != 0 else hair_hi
+		if v > 0.45 and v < 0.62 and (absf(u - 0.30) < 0.09 or absf(u - 0.70) < 0.09):
+			return Color(0.10, 0.07, 0.07)
+		if v > 0.78 and v < 0.88 and absf(u - 0.5) < 0.12:
+			return Color(0.62, 0.28, 0.26)
 		return skin)
-	tex["head_side"] = _make_tex(8, 8, func(x, y):
-		return hair if (y < 3 or x > 4) else skin)
-	tex["head_top"] = _make_tex(8, 8, func(_x, _y): return hair)
-	tex["torso_front"] = _make_tex(8, 8, func(x, y):
-		if y >= 3 and x in [2, 3, 4, 5]:
+	tex["head_side"] = _make_tex(13, 13, func(x, y):
+		var u: float = (float(x) + 0.5) / 13.0
+		var v: float = (float(y) + 0.5) / 13.0
+		if v < 0.33 or u > 0.62:
+			return hair if int(u * 13.0 + v * 13.0) % 4 != 0 else hair_hi
+		if u < 0.10 and v > 0.5 and v < 0.6:
+			return skin_shade
+		return skin)
+	tex["head_top"] = _make_tex(14, 13, func(x, y):
+		var u: float = (float(x) + 0.5) / 14.0
+		var v: float = (float(y) + 0.5) / 13.0
+		if absf(u - 0.38) < 0.04 and v < 0.7:
+			return hair_hi  # 가르마
+		return hair if int(u * 14.0 * 1.0 + v * 13.0) % 3 != 0 else hair_hi)
+	tex["torso_front"] = _make_tex(12, 10, func(x, y):
+		var u: float = (float(x) + 0.5) / 12.0
+		var v: float = (float(y) + 0.5) / 10.0
+		if v > 0.30 and u > 0.22 and u < 0.78:
 			return apron
 		return shirt)
-	tex["torso_side"] = _make_tex(8, 8, func(_x, y): return shirt if y < 3 else apron)
-	tex["torso_top"] = _make_tex(8, 8, func(_x, _y): return shirt)
-	tex["arm"] = _make_tex(4, 8, func(_x, y): return shirt if y < 5 else skin)
-	tex["leg"] = _make_tex(4, 8, func(_x, y): return pants if y < 6 else Color(0.25, 0.17, 0.14))
+	tex["torso_side"] = _make_tex(8, 10, func(_x, y): return shirt if float(y) / 10.0 < 0.3 else apron)
+	tex["torso_top"] = _make_tex(12, 8, func(_x, _y): return shirt)
+	tex["arm"] = _make_tex(4, 10, func(_x, y): return shirt if float(y) / 10.0 < 0.65 else skin)
+	tex["leg"] = _make_tex(4, 10, func(_x, y): return pants if float(y) / 10.0 < 0.75 else shoe)
 	return tex
 
 
