@@ -17,6 +17,7 @@ const BASE_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임
 - 준 항목마다 정확히 한 행. id와 kind는 내가 준 그대로 쓴다. 새 id를 만들거나 빼지 않는다.
 - kind별로 채울 열: resident_request = title, lines, completion / community_request = title, summary, completion / resident_greeting = lines 만. 나머지 열은 비운다.
 - 추가 종류: resident_introduction / tutorial_dialogue = lines; trade_offer = title; tutorial_step = title, summary, lines, completion; service_text = 현재 행에서 채워진 글 열만. 기능 안내와 조작 키의 의미는 유지한다.
+- personal_request = title, summary, lines, completion. 창고에 준비한 뒤 게시판에서 전달한다는 행동 안내를 유지한다.
 - lines와 completion의 여러 칸은 | 로 나눈다. 칸 수와 역할(예: 인사말은 아침·안부·하루 이야기·밤 순서)은 "현재 문장"과 같게 맞춘다.
 - 길이: title 20자 이내, summary 60자 이내, lines·completion 한 칸 45자 이내, lines는 6칸 이하.
 - 쓰지 않는 말: 퀘스트, 의뢰, 보상, 레벨, 경험치, 미션, 임무, 스탯, 수락, 클리어. 사람이 하는 자연스러운 부탁으로 말한다.

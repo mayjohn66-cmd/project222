@@ -5,12 +5,12 @@
 [resource]
 script = ExtResource("1")
 requests = Array[Dictionary]([
-{"id":"neighbor_bread","npc":"이웃 주민","item":"bread","amount":2,"reputation":1,"money":30},
-{"id":"traveler_water","npc":"마을 여행자","item":"water","amount":2,"reputation":1,"money":30},
-{"id":"gatherer_herbs","npc":"마을 채집가","item":"forest_herb","amount":3,"reputation":1,"money":40},
-{"id":"miner_ore","npc":"마을 광부","item":"iron_ore","amount":3,"reputation":1,"money":40},
-{"id":"child_berries","npc":"이웃 주민","item":"wild_berry","amount":3,"reputation":1,"money":50},
-{"id":"healer_moss","npc":"늪 치료사","item":"swamp_moss","amount":3,"reputation":1,"money":60}
+{"id":"neighbor_bread","npc":"이웃 오렐","item":"bread","amount":2,"reputation":1,"money":30},
+{"id":"traveler_water","npc":"여행자 라슈","item":"water","amount":2,"reputation":1,"money":30},
+{"id":"gatherer_herbs","npc":"채집가 엘미","item":"forest_herb","amount":3,"reputation":1,"money":40},
+{"id":"miner_ore","npc":"광부 바르크","item":"iron_ore","amount":3,"reputation":1,"money":40},
+{"id":"child_berries","npc":"이웃 피니아","item":"wild_berry","amount":3,"reputation":1,"money":50},
+{"id":"healer_moss","npc":"치료사 세이나","item":"swamp_moss","amount":3,"reputation":1,"money":60}
 ])
 customer_milestones = Array[Dictionary]([
 {"completed":2, "type":"peddler"},

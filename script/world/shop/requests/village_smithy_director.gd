@@ -29,7 +29,7 @@ func near_board() -> bool:
 	return VillageSmithyFlow.available() and can_open_at(VillageSmithyFlow.SITE, VillageSmithyFlow.INTERACTION_DISTANCE)
 
 func interaction_hint() -> String:
-	return "[E] 도윤의 대장간에서 장비 제작" if near_board() else ""
+	return "[E] %s의 대장간에서 장비 제작" % VillageLifeFlow.resident("doyun")["name"] if near_board() else ""
 
 func _on_action(id: String) -> void:
 	if not open: return

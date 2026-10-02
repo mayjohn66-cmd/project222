@@ -116,7 +116,7 @@ func _show_dialogue(lines: Array[String]) -> void:
 	previous_player_physics = player.is_physics_processing()
 	player.set_physics_process(false)
 	player.velocity = Vector2.ZERO
-	dialogue.start("이웃 주민", ArtLoader.load_texture("res://art/npc/npc_placeholder.png"), lines)
+	dialogue.start(TutorialDirector.SETTINGS.guide_name, ArtLoader.load_texture("res://art/npc/npc_placeholder.png"), lines)
 
 func _restore_dialogue_state() -> void:
 	if not dialogue_open: return

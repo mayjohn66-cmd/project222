@@ -4,6 +4,7 @@
 
 [resource]
 script = ExtResource("1")
+guide_name = "안내인 델빈"
 steps = Array[Dictionary]([
 {"id":"setup","goal":"fixtures","starter":[{"kind":"furniture","id":"door","amount":1,"missing_only":true},{"kind":"furniture","id":"register","amount":1,"missing_only":true},{"kind":"furniture","id":"shelf_1x1","amount":1,"missing_only":true},{"kind":"item","id":"water","amount":4}],"rewards":[{"kind":"item","id":"bread","amount":4}]},
 {"id":"stock","goal":"stock","rewards":[{"kind":"item","id":"water","amount":4}]},

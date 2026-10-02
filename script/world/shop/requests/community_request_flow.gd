@@ -25,7 +25,7 @@ static func locked_reason(entry: Dictionary) -> String:
 	if not VillageLifeFlow.available(resident): return "%s의 정착을 기다리고 있어요." % str(resident.get("name", "주민"))
 	var required := int(entry["friendship"])
 	if VillageLifeFlow.friendship(str(entry["resident"])) < required:
-		return "%s와 안부 나누기 %d/%d일" % [resident["name"], VillageLifeFlow.friendship(str(entry["resident"])), required]
+		return "%s · 안부 나누기 %d/%d일" % [resident["name"], VillageLifeFlow.friendship(str(entry["resident"])), required]
 	return ""
 
 static func accept(id: String) -> bool:
