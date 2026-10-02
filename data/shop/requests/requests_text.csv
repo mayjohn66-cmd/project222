@@ -1,4 +1,10 @@
 id,kind,title,summary,lines,completion
+well_gathering,community_request,우물 곁 모임 준비,이세르의 제안으로 이웃들과 나눌 빵과 물을 준비합니다.,,준비를 마쳤습니다. 저녁에 우물 옆 벤치로 오세요.
+well_evening_intro,service_text,우물 곁 저녁 모임,,우물 곁 벤치에 이웃들이 모였습니다.,
+well_evening_naru,service_text,,,오늘은 보따리 대신 빵을 나눠 보자.|좋은 길 얘기는 배가 든든해야 더 잘 나오거든.,
+well_evening_doyun,service_text,,,오늘 일은 끝났어. 잠깐 앉아 있지.|이렇게 쉬는 것도 나쁘지 않군.,
+well_evening_sora,service_text,,,처음엔 길 끝에 불빛만 있었는데 이제 얼굴이 보여.|오늘 이야기도 이 우물 곁에 남겠네.,
+well_evening_end,service_text,,이웃들과 우물 곁에서 빵과 이야기를 나눴습니다.,잠시 일을 내려놓고 함께 쉬었습니다.,
 naru_provisions,personal_request,타블렌의 길 위 식량,타블렌이 다음 여행에 가져갈 빵을 준비합니다.,빈 보따리로 길을 나서면 배부터 투덜대더라.|빵을 창고에 챙겨 줘. 게시판에서 전달하면 돼.,보따리는 가벼워도 속은 든든하겠네.
 doyun_water,personal_request,코르빈의 작업용 물,코르빈이 작업 중 마실 물을 준비합니다.,일하다 보니 물통이 비었어. 물이 필요해.|창고에 준비하고 게시판에서 전달해 줘.,이제 손을 멈출 일은 없겠어.
 sora_herbs,personal_request,이세르의 약초 꾸러미,이세르가 길에서 사용할 약초를 준비합니다.,오래 걷다 보면 작은 약초 꾸러미가 아쉬워져.|숲 약초를 창고에 두고 게시판에서 전달해 줘.,길 위에서 이 꾸러미를 열면 여기가 떠오르겠네.

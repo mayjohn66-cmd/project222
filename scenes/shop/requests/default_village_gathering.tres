@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="VillageGatheringSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_gathering_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+moments = Array[Dictionary]([
+{"id":"well_evening_intro","speaker":""},
+{"id":"well_evening_naru","speaker":"naru"},
+{"id":"well_evening_doyun","speaker":"doyun"},
+{"id":"well_evening_sora","speaker":"sora"},
+{"id":"well_evening_end","speaker":""}
+])

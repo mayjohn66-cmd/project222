@@ -20,6 +20,7 @@ const TextData = preload("res://script/data/production/request_text_data.gd")
 
 # 원본(기계 부분이 들어 있는) 파일. 없는 파일은 건너뛴다.
 const SOURCE_FILES: Dictionary = {
+	"res://scenes/shop/requests/default_village_gathering.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_personal_requests.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_resident_requests.tres": KIND_RESIDENT_REQUEST,
 	"res://scenes/shop/requests/default_community_requests.tres": KIND_COMMUNITY_REQUEST,
@@ -76,7 +77,7 @@ static func load_sources() -> Dictionary:
 			var id := str(data.get("id", data.get("type", data.get("request", ""))))
 			if not data.has("id") and kind == KIND_RESIDENT_REQUEST: continue
 			if id.is_empty(): continue
-			if kind == KIND_SERVICE_TEXT: id = "landmark_" + id
+			if kind == KIND_SERVICE_TEXT and not data.has("id"): id = "landmark_" + id
 			data["id"] = id
 			result[kind][id] = TextData.enrich(data,kind)
 	for id in ["trade_panel", "smithy_panel", "trade_first_greeting"]:

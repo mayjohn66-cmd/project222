@@ -143,6 +143,9 @@ static func build_prompt(kind: String, sources: Dictionary) -> String:
 				info = "안내 목표: %s" % d.get("goal","")
 			Tools.KIND_TUTORIAL_DIALOGUE, Tools.KIND_SERVICE_TEXT:
 				info = "기존 기능 안내를 유지하는 문장: " + id
+				if d.has("speaker"):
+					var speaker := str(d["speaker"])
+					info = "우물 곁에서 이웃들이 쉬는 저녁 모임 / 말하는 사람: %s / 준비한 빵과 물을 함께 나눔 / 새 물품이나 돈을 약속하지 않음" % ("장면 서술" if speaker.is_empty() else str(residents.get(speaker,{}).get("name",speaker)))
 			Tools.KIND_RESIDENT_REQUEST:
 				info = "인물: %s / 필요한 재료: %s" % [d.get("npc", ""), _item_name(str(d.get("item", "")))]
 			Tools.KIND_COMMUNITY_REQUEST:

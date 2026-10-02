@@ -14,9 +14,11 @@ static func entries() -> Array[Dictionary]:
 		var id := str(request["id"])
 		result.append({"id":"community:" + id, "title":RequestTextData.text("community_request",id,"title","마을 부탁")})
 	for request in PersonalRequestFlow.entries(): result.append({"id":"personal:" + str(request["id"]),"title":str(request["title"])})
+	result.append({"id":"gathering:well_evening","title":VillageGatheringFlow.title()})
 	return result
 
 static func information(id: String) -> String:
+	if id == "gathering:well_evening": return VillageGatheringFlow.information()
 	if id.begins_with("personal:"):
 		var entry := PersonalRequestFlow.request(id.trim_prefix("personal:"))
 		if entry.is_empty(): return ""
@@ -50,6 +52,9 @@ static func information(id: String) -> String:
 
 static func destination(world: Node, id: String) -> Node2D:
 	if not available(): return null
+	if id == "gathering:well_evening":
+		if VillageGatheringFlow.pending() or VillageGatheringFlow.completed(): return VillageGatheringFlow.site(world)
+		return destination(world,"community:" + VillageGatheringFlow.SETTINGS.preparation)
 	if id.begins_with("personal:"):
 		var entry := PersonalRequestFlow.request(id.trim_prefix("personal:"))
 		if entry.is_empty() or not PersonalRequestFlow.locked_reason(entry).is_empty(): return null
