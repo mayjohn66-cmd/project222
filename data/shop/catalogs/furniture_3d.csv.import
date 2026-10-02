@@ -6,10 +6,10 @@ uid="uid://dnnmm40pmw5ka"
 
 [deps]
 
-files=["res://data/shop/catalogs/furniture_3d.kind.translation", "res://data/shop/catalogs/furniture_3d.height.translation", "res://data/shop/catalogs/furniture_3d.depth.translation", "res://data/shop/catalogs/furniture_3d.stack.translation", "res://data/shop/catalogs/furniture_3d.texture.translation", "res://data/shop/catalogs/furniture_3d.tint.translation"]
+files=["res://data/shop/catalogs/furniture_3d.kind.translation", "res://data/shop/catalogs/furniture_3d.height.translation", "res://data/shop/catalogs/furniture_3d.depth.translation", "res://data/shop/catalogs/furniture_3d.stack.translation", "res://data/shop/catalogs/furniture_3d.texture.translation", "res://data/shop/catalogs/furniture_3d.tint.translation", "res://data/shop/catalogs/furniture_3d.base.translation"]
 
 source_file="res://data/shop/catalogs/furniture_3d.csv"
-dest_files=["res://data/shop/catalogs/furniture_3d.kind.translation", "res://data/shop/catalogs/furniture_3d.height.translation", "res://data/shop/catalogs/furniture_3d.depth.translation", "res://data/shop/catalogs/furniture_3d.stack.translation", "res://data/shop/catalogs/furniture_3d.texture.translation", "res://data/shop/catalogs/furniture_3d.tint.translation"]
+dest_files=["res://data/shop/catalogs/furniture_3d.kind.translation", "res://data/shop/catalogs/furniture_3d.height.translation", "res://data/shop/catalogs/furniture_3d.depth.translation", "res://data/shop/catalogs/furniture_3d.stack.translation", "res://data/shop/catalogs/furniture_3d.texture.translation", "res://data/shop/catalogs/furniture_3d.tint.translation", "res://data/shop/catalogs/furniture_3d.base.translation"]
 
 [params]
 
