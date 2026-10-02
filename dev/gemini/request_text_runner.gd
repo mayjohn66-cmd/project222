@@ -162,6 +162,7 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 			rows_text.append(clean_rows(str(result["text"])))
 
 	if rows_text.is_empty():
+		_print_usage(client)
 		client.queue_free()
 		return {"ok": false, "path": "", "result": {}, "made": false}
 
@@ -201,6 +202,7 @@ func _make_draft(sources: Dictionary, targets: Dictionary) -> Dictionary:
 	if not failed_ids.is_empty():
 		print("[부탁 글] 실패한 항목(초안에 없음, 나중에 다시 실행): ", ", ".join(failed_ids))
 
+	_print_usage(client)
 	client.queue_free()
 	return {"ok": result["errors"].is_empty() and failed_ids.is_empty(), "path": path, "result": result, "made": true}
 
@@ -612,6 +614,12 @@ static func clean_rows(text: String) -> String:
 		kept.append(Tools.csv_line(fixed) if (is_tsv or fixed.size() != cells.size()) else line)
 
 	return "\n".join(kept) + "\n" if not kept.is_empty() else ""
+
+
+# 이번 실행에서 구글에 보낸 요청 횟수(실패·재시도 포함). 무료 한도는 요청 횟수로 세므로 참고용.
+func _print_usage(client: Node) -> void:
+	if client.has_method("request_summary") and not str(client.request_summary()).is_empty():
+		print("[제미나이] 이번 실행의 요청 횟수: ", client.request_summary(), " (무료 한도는 모델마다 하루 20회 안팎이며, 실패한 재시도도 세어질 수 있음)")
 
 
 func _print_result(path: String, result: Dictionary) -> void:

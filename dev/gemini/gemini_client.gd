@@ -169,6 +169,38 @@ func generate(
 	return result
 
 
+# 이번 실행에서 보낸 요청 기록: {"모델|결과코드": 횟수}. 무료 한도(요청 횟수)를 가늠하는 데 쓴다.
+var request_log: Dictionary = {}
+
+
+func _log_request(model: String, http_code: int) -> void:
+	var key: String = "%s|%d" % [model, http_code]
+	request_log[key] = int(request_log.get(key, 0)) + 1
+
+
+# 예: "gemini-3.8-flash 3회(성공 1, 503 오류 2) / gemini-3.5-flash-lite 1회(성공 1)". 요청이 없으면 빈 글.
+func request_summary() -> String:
+	var per_model: Dictionary = {}
+
+	for key in request_log.keys():
+		var parts: PackedStringArray = str(key).split("|")
+		var model: String = parts[0]
+		var code: int = int(parts[1])
+
+		if not per_model.has(model):
+			per_model[model] = {"total": 0, "detail": PackedStringArray()}
+
+		per_model[model]["total"] += int(request_log[key])
+		per_model[model]["detail"].append("%s %d" % ["성공" if code == 200 else "HTTP %d" % code, int(request_log[key])])
+
+	var out: PackedStringArray = []
+
+	for model in per_model.keys():
+		out.append("%s %d회(%s)" % [model, per_model[model]["total"], ", ".join(per_model[model]["detail"])])
+
+	return " / ".join(out)
+
+
 # 기본 모델이 실패해 예비 모델로 넘어간 뒤에는 true.
 var _primary_failed: bool = false
 
@@ -189,6 +221,7 @@ func _generate_with_retry(
 
 	for attempt in range(1, MAX_ATTEMPTS + 1):
 		result = await _request_once(model, prompt, system_instruction, temperature, json_output)
+		_log_request(model, int(result.get("http_code", 0)))
 
 		if bool(result["ok"]) or not is_retryable(int(result.get("http_code", 0))):
 			return result

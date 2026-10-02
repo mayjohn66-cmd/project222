@@ -142,6 +142,7 @@ func _run() -> void:
 	m6.script_results = [_res_fail(429), _res_ok()]
 	var g6: Dictionary = await m6.generate("x")
 	_check(g6["ok"] and m6.calls.size() == 2, "예비 모델이 없으면 429도 기다렸다가 다시 시도")
+	_check(m4.request_summary().contains("main-model 6회(HTTP 503 6)") and m4.request_summary().contains("backup-model 1회(성공 1)"), "요청 횟수 요약")
 	OS.set_environment("GEMINI_MODEL", "")
 
 	# CSV 정리
