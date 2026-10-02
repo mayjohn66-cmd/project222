@@ -22,6 +22,9 @@ func _ready() -> void:
 	var scene = load("res://scenes/shop/main.tscn").instantiate()
 	add_child(scene)
 	var mirror := StoreView3D.new()
+	for i in range(args.size()):
+		if args[i] == "--scale" and i + 1 < args.size():
+			mirror.configure_scale(int(args[i + 1]))
 	scene.add_child(mirror)
 	for i in range(60):
 		await get_tree().process_frame

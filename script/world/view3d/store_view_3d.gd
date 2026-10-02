@@ -10,13 +10,16 @@ extends Node
 enum Mode { OFF, OVERLAY, ON }  # 끔 / 반투명 겹침(2D 와 위치 비교) / 3D 만 불투명(2D 는 3D 가 안 덮는 곳에만 보임)
 
 const GAME_TILE: Vector2 = Vector2(96.0, 48.0)  # 2D 게임의 칸 크기
-const TILE_LOW: float = 36.0  # 낮은 해상도에서 한 칸 마름모 폭
-const BLOCK_PX: float = 22.0  # 1블록 = 낮은 해상도 세로 22픽셀
-const SHRINK: int = 3  # 낮은 해상도 → 화면 3배 확대
-const MATCH_ZOOM: float = TILE_LOW * SHRINK / 96.0  # 1.125: 2D 카메라가 이 줌일 때 3D 와 2D 칸 크기가 같다
+# 확대 배율(shrink)에 따라 정해지는 값. 기본 3배: 낮은 해상도 칸 36×18, 블록 22px, 질감 18, 2D 줌 1.125.
+# configure_scale(n) 으로 1·2·3배를 고를 수 있다(시험·비교용, 노드를 장면에 넣기 전에 호출).
+var shrink: int = 3  # 낮은 해상도 → 화면 확대 배율
+var tile_low: float = 36.0  # 낮은 해상도에서 한 칸 마름모 폭
+var block_px: float = 22.0  # 1블록 = 낮은 해상도 세로 px
+var match_zoom: float = 1.125  # 2D 카메라가 이 줌일 때 3D 와 2D 칸 크기가 같다
+var texture_size: int = 18  # 질감 한 변 = 칸 폭의 절반
+var actor_height_px: float = 25.0  # 캐릭터 정렬 상자 높이(블록 px 단위)
 const PITCH_DEG: float = 30.0
 const YAW_DEG: float = 45.0
-const TEXTURE_SIZE: int = 18  # 질감 한 변 = 칸 폭의 절반
 
 const WALL_THICKNESS: float = 0.3
 # 2D 벽 높이(96칸 기준 px)를 낮은 해상도 px 로: ×36/96. 120px → 45px ≈ 2.0블록, 75px → 28px ≈ 1.3블록 (캐릭터 25px 와의 비율도 같음)
@@ -27,7 +30,6 @@ const WALL_TALL_PX: float = 100.0  # 이보다 높은 2D 벽 = 안쪽 벽
 const ACTOR_HEAD_RATIO: float = 3.0
 const ACTOR_TOTAL: float = 1.14
 const ACTOR_TORSO: float = 0.308
-const ACTOR_HEIGHT_PX: float = 25.0
 const ACTOR_HALF: float = 0.12
 
 const SURFACE_SHADER: Shader = preload("res://script/world/view3d/shader/sorted_surface.gdshader")
@@ -79,6 +81,15 @@ var day_manager: Node
 var forced_hour: float = -1.0
 
 
+func configure_scale(n: int) -> void:
+	shrink = clampi(n, 1, 3)
+	match_zoom = 1.125 if shrink == 3 else 1.0
+	tile_low = 96.0 * match_zoom / float(shrink)
+	block_px = roundf(tile_low * 22.0 / 36.0)
+	texture_size = int(roundf(tile_low * 0.5))
+	actor_height_px = tile_low * 25.0 / 36.0
+
+
 func _ready() -> void:
 	process_priority = 200  # 2D 노드들이 움직인 다음에 읽는다
 	world = get_parent() as Node2D
@@ -103,7 +114,7 @@ func _build_view() -> void:
 	add_child(_canvas)
 	_container = SubViewportContainer.new()
 	_container.stretch = true
-	_container.stretch_shrink = SHRINK
+	_container.stretch_shrink = shrink
 	_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_container.set_anchors_preset(Control.PRESET_FULL_RECT)
@@ -182,7 +193,7 @@ func _apply_mode() -> void:
 	if camera2d != null:
 		if mode != Mode.OFF and not _zoom_applied:
 			_saved_zoom = camera2d.zoom
-			camera2d.zoom = Vector2.ONE * MATCH_ZOOM
+			camera2d.zoom = Vector2.ONE * match_zoom
 			_zoom_applied = true
 		elif mode == Mode.OFF and _zoom_applied:
 			camera2d.zoom = _saved_zoom
@@ -319,8 +330,8 @@ func world_to_cell(global_pos: Vector2) -> Vector2:
 
 
 func block_height(blocks: float) -> float:
-	var px_per_unit_z: float = (TILE_LOW / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))
-	return blocks * BLOCK_PX / px_per_unit_z
+	var px_per_unit_z: float = (tile_low / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))
+	return blocks * block_px / px_per_unit_z
 
 
 func _pixel_world_size() -> float:
@@ -361,7 +372,7 @@ func _process(delta: float) -> void:
 
 func _sync_camera() -> void:
 	var base_size: Vector2 = get_viewport().get_visible_rect().size
-	_viewport.size = Vector2i(ceili(base_size.x / SHRINK), ceili(base_size.y / SHRINK))
+	_viewport.size = Vector2i(ceili(base_size.x / shrink), ceili(base_size.y / shrink))
 	_id_viewport.size = _viewport.size
 	var zoom: float = camera2d.zoom.x if camera2d != null else 1.0
 	_camera.size = base_size.y / (GAME_TILE.x * zoom / sqrt(2.0))
@@ -637,7 +648,7 @@ func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: 
 
 func _make_surface_material(kind: String, tint: Color) -> ShaderMaterial:
 	if not _texture_cache.has(kind):
-		_texture_cache[kind] = {"albedo": PlaceholderTextures.albedo(kind, TEXTURE_SIZE), "normal": PlaceholderTextures.normal(kind, TEXTURE_SIZE)}
+		_texture_cache[kind] = {"albedo": PlaceholderTextures.albedo(kind, texture_size), "normal": PlaceholderTextures.normal(kind, texture_size)}
 
 	var m := ShaderMaterial.new()
 	m.shader = SURFACE_SHADER
@@ -671,7 +682,7 @@ func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, text
 	id_inst.material_override = id_material
 	id_inst.position = inst.position
 	_viewport.add_child(id_inst)
-	_items[key] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, base_blocks * BLOCK_PX), "max": Vector3(hi.x, hi.y, (base_blocks + height_blocks) * BLOCK_PX), "center": inst.position, "signature": signature}
+	_items[key] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, base_blocks * block_px), "max": Vector3(hi.x, hi.y, (base_blocks + height_blocks) * block_px), "center": inst.position, "signature": signature}
 
 
 func _remove_item(key: String) -> void:
@@ -740,7 +751,7 @@ func _sort_and_update() -> void:
 
 	for id in _actors.keys():
 		var cell: Vector2 = _actors[id]["cell"]
-		boxes.append({"id": "a%d" % id, "min": Vector3(cell.x - ACTOR_HALF, cell.y - ACTOR_HALF, 0.0), "max": Vector3(cell.x + ACTOR_HALF, cell.y + ACTOR_HALF, ACTOR_HEIGHT_PX)})
+		boxes.append({"id": "a%d" % id, "min": Vector3(cell.x - ACTOR_HALF, cell.y - ACTOR_HALF, 0.0), "max": Vector3(cell.x + ACTOR_HALF, cell.y + ACTOR_HALF, actor_height_px)})
 
 	var result: Dictionary = IsoSorter.sort_items(boxes)
 	var rank_of: Dictionary = {}
