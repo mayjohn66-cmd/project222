@@ -94,6 +94,51 @@ func _ready() -> void:
 	var restored_ok: bool = fl2.visible and scene.get_node("Objects").get_child(0).get_node("Visual").visible
 	print("hide2d hidden_in_ON=", hidden_ok, " restored_in_OFF=", restored_ok)
 
+	# 마을 광장으로 이동해서 2D / 3D(마을 포함) / 3D(매장만) 를 같은 시각(낮 12시)으로 비교
+	if "--square" in args:
+		var ex: Node2D = scene.get_node("StoreExterior")
+		var dm: Node = scene.get_node("DayManager")
+		dm.current_hour = 12
+		dm.hour_timer.stop()
+		var plr: Node2D = scene.get_node("Actors/Player")
+		var sq: Vector2i = ex.get_village_square_cell()
+		plr.global_position = ex.to_global(ex.grid_to_local(sq))
+		mirror.forced_hour = 12.0
+
+		for m in [["2d", StoreView3D.Mode.OFF, true], ["3d_village", StoreView3D.Mode.ON, true], ["3d_store_only", StoreView3D.Mode.ON, false]]:
+			mirror.mode = m[1]
+			mirror.set_village_enabled(m[2])
+			for i in range(25):
+				await get_tree().process_frame
+			get_viewport().get_texture().get_image().save_png("%s/square_%s.png" % [out, m[0]])
+
+		print("square sort_usec=", mirror._sort_usec, " items=", mirror._items.size(), " sorted=", mirror._sorted_keys.size())
+
+	# 마을 3D 켬/끔 비교 + 정렬 시간
+	if "--village" in args:
+		mirror.mode = StoreView3D.Mode.ON
+		mirror.forced_hour = 12.0
+		for i in range(20):
+			await get_tree().process_frame
+		var total: int = 0
+		var peak: int = 0
+
+		for i in range(60):
+			await get_tree().process_frame
+			total += mirror._sort_usec
+			peak = maxi(peak, mirror._sort_usec)
+
+		print("village sort_usec avg=", total / 60, " peak=", peak, " items=", mirror._items.size(), " sorted=", mirror._sorted_keys.size())
+		get_viewport().get_texture().get_image().save_png("%s/village_3d.png" % out)
+		mirror.set_village_enabled(false)
+		for i in range(10):
+			await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png("%s/village_store_only.png" % out)
+		mirror.mode = StoreView3D.Mode.OFF
+		for i in range(10):
+			await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png("%s/village_2d.png" % out)
+
 	print("walls3d=", mirror._items.keys().filter(func(k): return str(k).begins_with("wall")).size())
 	print("game_shot done; customers=", get_tree().get_nodes_in_group("customer").size(), " shelves=", get_tree().get_nodes_in_group("shelf").size(), " items3d=", mirror._items.size(), " actors3d=", mirror._actors.size())
 	get_tree().quit()

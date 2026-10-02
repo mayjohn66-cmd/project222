@@ -73,10 +73,18 @@ var _ground_id_material: ShaderMaterial
 var _texture_cache: Dictionary = {}
 # 3D 만 보기(Mode.ON)일 때 숨긴 2D 노드와 원래 보이던 상태(끄면 복원): 인스턴스 id → [노드, 원래 visible]
 var _hidden_2d: Dictionary = {}
+const VIEW_MARGIN: float = 15.0  # 정렬에 넣는 범위(카메라 중심 칸 ± 이 값)
+var _view_center: Vector2 = Vector2.ZERO
+var _sorted_keys: Array = []
+var _sort_usec: int = 0
 var _env: Environment
 var _lamps: Array = []
 var _lamp_signature: String = ""
 var day_manager: Node
+var exterior: Node2D
+## 마을(매장 바깥)도 3D 로 그릴지. F9 로 켜고 끈다(매장만 3D / 마을 전체 3D 비교용).
+var village_enabled: bool = true
+var village: VillageMirror
 ## 0 이상이면 게임 시계 대신 이 시각(0~24)을 쓴다(시험용). 음수면 DayManager 의 시각을 따른다.
 var forced_hour: float = -1.0
 
@@ -101,6 +109,7 @@ func _build_view() -> void:
 	objects_node = world.get_node_or_null("Objects")
 	player = world.get_node_or_null("Actors/Player")
 	day_manager = world.get_node_or_null("DayManager")
+	exterior = world.get_node_or_null("StoreExterior")
 
 	if floor_node == null or objects_node == null:
 		push_warning("[StoreView3D] Floor/Objects 를 찾지 못해 3D 층을 만들지 않음")
@@ -155,6 +164,9 @@ func _build_view() -> void:
 	_post_material.shader = OUTLINE_SHADER
 	_post_material.set_shader_parameter("id_tex", _id_viewport.get_texture())
 	_container.material = _post_material
+	if exterior != null:
+		village = VillageMirror.new(self, exterior)
+
 	_ready_done = true
 	_apply_mode()
 
@@ -203,6 +215,21 @@ func _apply_mode() -> void:
 	set_process(mode != Mode.OFF)
 
 
+func set_village_enabled(value: bool) -> void:
+	village_enabled = value
+
+	if not value and village != null:
+		for key in _items.keys():
+			if str(key).begins_with("vil"):
+				_remove_item(str(key))
+
+		village.clear_ground()
+		village.reset_signatures()
+		village._keys.clear()
+
+	_apply_2d_hiding()
+
+
 func cycle_mode() -> void:
 	mode = ((int(mode) + 1) % 3) as Mode
 
@@ -210,6 +237,9 @@ func cycle_mode() -> void:
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
 		cycle_mode()
+
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
+		set_village_enabled(not village_enabled)
 
 
 # ---------------------------------------------------------------- 2D 그림 숨기기 (기존 게임 파일은 수정하지 않고 visible 만 바꿈)
@@ -241,6 +271,12 @@ func _apply_2d_hiding() -> void:
 
 # 숨길 것: 바닥(그림만. 충돌 노드는 그대로), 판자 벽, 가구와 사람의 그림 노드(Visual). 글자 표시(재고 등)·건축 고스트·UI 는 그대로 둔다.
 func _collect_2d_to_hide() -> void:
+	if village_enabled and exterior != null:
+		_hide_2d_node(exterior)
+
+		for container_name in VillageMirror.CONTAINERS:
+			_hide_2d_node(world.get_node_or_null(container_name) as CanvasItem)
+
 	_hide_2d_node(floor_node)
 	_hide_2d_node(world.get_node_or_null("WoodWalls") as CanvasItem)
 
@@ -363,6 +399,10 @@ func _process(delta: float) -> void:
 		_sync_walls()
 		_sync_furniture()
 
+		if village != null and village_enabled:
+			village.sync_ground()
+			village.sync_objects(world)
+
 		if mode == Mode.ON:
 			_collect_2d_to_hide()
 
@@ -378,6 +418,7 @@ func _sync_camera() -> void:
 	_camera.size = base_size.y / (GAME_TILE.x * zoom / sqrt(2.0))
 	var center_world: Vector2 = camera2d.get_screen_center_position() if camera2d != null else floor_node.global_position
 	var c: Vector2 = world_to_cell(center_world)
+	_view_center = c
 	var target := Vector3(c.x, 0.0, c.y)
 	var pos: Vector3 = target + _camera.basis.z * 30.0
 	_camera.position = _snap(pos)
@@ -744,10 +785,21 @@ func _sync_actors(delta: float) -> void:
 # ---------------------------------------------------------------- 정렬·깊이 순서
 
 func _sort_and_update() -> void:
+	var t0: int = Time.get_ticks_usec()
 	var boxes: Array = []
+	# 카메라 주변(보이는 범위 + 여유)의 물체만 정렬에 넣는다(마을 전체를 매 프레임 정렬하면 느림).
+	var window := Rect2(_view_center - Vector2(VIEW_MARGIN, VIEW_MARGIN), Vector2(VIEW_MARGIN, VIEW_MARGIN) * 2.0)
+	_sorted_keys.clear()
 
 	for key in _items.keys():
-		boxes.append({"id": key, "min": _items[key]["min"], "max": _items[key]["max"]})
+		var mn: Vector3 = _items[key]["min"]
+		var mx: Vector3 = _items[key]["max"]
+
+		if not window.intersects(Rect2(mn.x, mn.y, mx.x - mn.x, mx.y - mn.y)):
+			continue
+
+		_sorted_keys.append(key)
+		boxes.append({"id": key, "min": mn, "max": mx})
 
 	for id in _actors.keys():
 		var cell: Vector2 = _actors[id]["cell"]
@@ -761,7 +813,7 @@ func _sort_and_update() -> void:
 
 	var count: float = float(boxes.size())
 
-	for key in _items.keys():
+	for key in _sorted_keys:
 		var it: Dictionary = _items[key]
 		var rank: float = rank_of[key]
 		var m: ShaderMaterial = it["material"]
@@ -781,6 +833,9 @@ func _sort_and_update() -> void:
 		_ground_id_material.set_shader_parameter("rank_count", count)
 		_ground_id_material.set_shader_parameter("id", 0.0)
 
+	if village != null:
+		village.update_ground_params(count)
+
 	for id in _actors.keys():
 		var entry: Dictionary = _actors[id]
 		var figure: BlockyFigure = entry["figure"]
@@ -789,3 +844,4 @@ func _sort_and_update() -> void:
 		figure.position = _snap(foot)
 		var r: float = rank_of["a%d" % id]
 		figure.sync_sort(r, count, _camera, (r + 1.0) / (count + 1.0))
+	_sort_usec = Time.get_ticks_usec() - t0

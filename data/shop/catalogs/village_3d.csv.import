@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://b5ldy225hmxjt"
+
+[deps]
+
+files=["res://data/shop/catalogs/village_3d.kind.translation", "res://data/shop/catalogs/village_3d.height.translation", "res://data/shop/catalogs/village_3d.texture.translation", "res://data/shop/catalogs/village_3d.tint.translation"]
+
+source_file="res://data/shop/catalogs/village_3d.csv"
+dest_files=["res://data/shop/catalogs/village_3d.kind.translation", "res://data/shop/catalogs/village_3d.height.translation", "res://data/shop/catalogs/village_3d.texture.translation", "res://data/shop/catalogs/village_3d.tint.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true
