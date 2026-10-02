@@ -6,7 +6,7 @@ func panel_title() -> String: return RequestTextData.text("service_text", "smith
 func introduction() -> String: return RequestTextData.text("service_text", "smithy_panel", "summary")
 
 func refresh() -> void:
-	count_label.text = "도윤의 대장간 · " + VillageLifeFlow.friendship_name("doyun")
+	count_label.text = "%s의 대장간 · %s" % [VillageLifeFlow.resident("doyun")["name"],VillageLifeFlow.friendship_name("doyun")]
 	for entry in entries():
 		var id := str(entry["id"])
 		var card: Dictionary = cards[id]

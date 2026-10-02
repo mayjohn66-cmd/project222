@@ -28,7 +28,7 @@ func near_board() -> bool:
 	return ResidentTradeFlow.available() and can_open_at(ResidentTradeFlow.SETTINGS.site, ResidentTradeFlow.SETTINGS.interaction_distance)
 
 func interaction_hint() -> String:
-	return "[E] 나루의 노점에서 재료 교환" if near_board() else ""
+	return "[E] %s의 노점에서 재료 교환" % VillageLifeFlow.resident("naru")["name"] if near_board() else ""
 
 func _on_action(id: String) -> void:
 	if not open: return

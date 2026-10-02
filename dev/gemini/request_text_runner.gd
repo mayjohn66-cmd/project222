@@ -24,6 +24,8 @@ const BASE_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임
 - 열: id, kind, title, summary, lines, completion 을 **탭 문자**로 구분한다(쉼표로 구분하지 않는다). 칸 안에는 쉼표를 써도 되지만 탭과 줄바꿈은 쓰지 않고, 따옴표로 감싸지 않는다. 비우는 칸은 탭 사이를 비워 둔다(칸 수는 항상 6개).
 - 준 항목마다 정확히 한 행. id와 kind는 내가 준 그대로 쓴다. 새 id를 만들거나 빼지 않는다.
 - kind별로 채울 열: resident_request = title, lines, completion / community_request = title, summary, completion / resident_greeting = lines 만. 나머지 열은 비운다.
+- 개인 부탁: personal_request = title, summary, lines, completion. 창고에 물품을 준비한 뒤 게시판에서 직접 전달하는 안내를 유지한다.
+- 우물 저녁 모임(service_text)의 화자와 장면 순서를 유지한다. 화자 이름은 화면에서 붙이므로 대사에 중복 쓰지 않고, 새 물품·돈·친밀도 지급을 약속하지 않는다.
 - 추가 종류: resident_introduction / tutorial_dialogue = lines; trade_offer = title; tutorial_step = title, summary, lines, completion; service_text = 현재 행에서 채워진 글 열만. 기능 안내와 조작 키의 의미는 유지한다.
 - lines와 completion의 여러 칸은 | 로 나눈다. 칸 수와 역할(예: 인사말은 아침·안부·하루 이야기·밤 순서)은 "현재 문장"과 같게 맞춘다.
 - 칸(줄) 수는 "현재 문장"과 항상 같다. 부탁하는 말, 플레이어 행동 안내, 소문·마무리처럼 칸마다 맡은 역할을 하나도 빼지 않는다. 길이가 넘으면 칸을 지우지 말고 그 칸의 문장을 짧게 쓴다.
@@ -512,6 +514,12 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 		var info: String = ""
 
 		match kind:
+			Tools.KIND_PERSONAL_REQUEST:
+				var resident: Dictionary = residents.get(str(d.get("resident", "")), {})
+				var items: PackedStringArray = []
+				for requirement in d.get("requirements", []):
+					items.append(_item_name(str(requirement["item"])))
+				info = "인물: %s / 필요한 물건: %s / 정착 뒤 안부를 나눈 이웃의 개인 부탁 / 기한 없음 / 창고 준비 후 게시판에서 직접 전달" % [resident.get("name", d.get("resident", "")), "·".join(items)]
 			Tools.KIND_RESIDENT_INTRODUCTION:
 				info = "인물: %s / 손님 유형: %s" % [d.get("npc",""), d.get("type","")]
 			Tools.KIND_TRADE_OFFER:
@@ -520,6 +528,9 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 				info = "안내 목표: %s" % d.get("goal","")
 			Tools.KIND_TUTORIAL_DIALOGUE, Tools.KIND_SERVICE_TEXT:
 				info = "기존 기능 안내를 유지하는 문장: " + id
+				if d.has("speaker"):
+					var speaker := str(d["speaker"])
+					info = "우물 곁 저녁 모임 / 말하는 사람: %s / 준비한 빵과 물을 함께 나눔 / 새 물품이나 돈을 약속하지 않음 / 화자 이름은 대사에 쓰지 않음" % ("장면 서술" if speaker.is_empty() else str(residents.get(speaker, {}).get("name", speaker)))
 			Tools.KIND_RESIDENT_REQUEST:
 				info = "인물: %s / 필요한 재료: %s" % [d.get("npc", ""), _item_name(str(d.get("item", "")))]
 			Tools.KIND_COMMUNITY_REQUEST:

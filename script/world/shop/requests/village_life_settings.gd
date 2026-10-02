@@ -7,3 +7,6 @@ extends Resource
 @export var well_item: String = "water"
 @export var well_amount: int = 1
 @export var interaction_distance: float = 64.0
+@export var walk_speed: float = 70.0
+@export var resident_radius: float = 12.0
+@export var route_retry_seconds: float = 3.0

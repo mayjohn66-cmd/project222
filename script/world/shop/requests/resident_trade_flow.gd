@@ -22,9 +22,9 @@ static func remaining(id: String) -> int:
 static func blocked_reason(id: String) -> String:
 	var entry := offer(id)
 	if entry.is_empty(): return "교환 품목을 찾지 못했어요."
-	if not available(): return "나루가 정착한 뒤 먼저 안부를 나눠 주세요."
+	if not available(): return "%s의 정착 후 먼저 안부를 나눠 주세요." % VillageLifeFlow.resident("naru")["name"]
 	if VillageLifeFlow.friendship("naru") < int(entry["friendship"]):
-		return "나루와 안부 나누기 %d/%d일" % [VillageLifeFlow.friendship("naru"), entry["friendship"]]
+		return "%s · 안부 나누기 %d/%d일" % [VillageLifeFlow.resident("naru")["name"],VillageLifeFlow.friendship("naru"), entry["friendship"]]
 	if int(entry["give_amount"]) <= 0 or int(entry["receive_amount"]) <= 0 or int(entry["daily_limit"]) <= 0 \
 		or not ItemData.has_item(str(entry["give"])) or not ItemData.has_item(str(entry["receive"])): return "이 교환은 준비 중입니다."
 	if remaining(id) <= 0: return "오늘 준비한 수량이 끝났어요. 다음 날 다시 만나요."

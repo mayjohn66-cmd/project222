@@ -16,7 +16,10 @@ func _ready() -> void:
 		for id in sources[kind]:
 			count += 1
 			check(rows.has(kind + ":" + id), "known content has CSV text: " + kind + "/" + id)
-	check(rows.size() == 35 and count == 35, "all migrated rows are known to writer tools")
+	check(rows.size() == count, "all content rows are known to writer tools")
+	var validation := Tools.validate_file(RequestTextData.CSV_PATH,sources)
+	check(validation["errors"].is_empty(), "all game prose passes writer rules: " + str(validation["errors"]))
+	check(validation["warns"].is_empty(), "game prose avoids obsolete quantities and long completion text: " + str(validation["warns"]))
 	var resident := RequestTextData.enrich(ResidentRequestFlow.SETTINGS.requests[0], "resident_request")
 	check(resident["id"] == "neighbor_bread" and resident["item"] == "bread" and resident["amount"] == 2 and resident["money"] == 30, "enrichment preserves gameplay fields")
 	var original: String = resident["title"]

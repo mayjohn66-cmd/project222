@@ -31,6 +31,7 @@ func blocked() -> bool:
  if bool(world.get_meta("resident_trade_open",false)): return true
  if bool(world.get_meta("village_smithy_open",false)): return true
  if bool(world.get_meta("village_journal_open",false)): return true
+ if bool(world.get_meta("village_gathering_open",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
  if manager.closing_shop or manager.summary_open: return true
  var menu = world.get_node_or_null("UI/GameMenu")
@@ -56,6 +57,10 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var gathering = get_parent().get_node_or_null("VillageGatheringDirector")
+ if gathering != null and not gathering.interaction_hint().is_empty():
+  prompt.text = gathering.interaction_hint()
+  return
  var board = get_parent().get_node_or_null("CommunityBoardDirector")
  if board != null and not board.interaction_hint().is_empty():
   prompt.text = board.interaction_hint()
@@ -79,6 +84,8 @@ func _process(_delta: float) -> void:
  else: prompt.text = ""
 
 func try_interact() -> bool:
+ var gathering = get_parent().get_node_or_null("VillageGatheringDirector")
+ if gathering != null and gathering.try_interact(): return true
  if blocked(): return false
  var tutorial = get_parent().get_node_or_null("TutorialDirector")
  if tutorial != null and tutorial.try_interact(): return true

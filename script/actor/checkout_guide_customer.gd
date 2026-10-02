@@ -10,7 +10,7 @@ func _ready() -> void:
 	rumor_checked = true
 	super._ready()
 	var label := Label.new()
-	label.text = "이웃 주민"
+	label.text = TutorialDirector.SETTINGS.guide_name
 	label.position = Vector2(-65, -95)
 	label.size = Vector2(130, 30)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER

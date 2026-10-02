@@ -47,8 +47,19 @@ func refresh() -> void:
 			npc.customer_group_id = str(entry["group"])
 			world.get_node("Actors").add_child(npc)
 			residents[id] = npc
+			npc.global_position = position
 		npc.visible = true
-		npc.global_position = position
+		var routine := VillageRoutine.location(entry,manager.current_hour)
+		var destination_site := VillageSettlement.find_site(world,str(routine["path"]))
+		if destination_site == null or not destination_site.visible: destination_site = site
+		var target := _approach_position(destination_site)
+		if target != Vector2.INF:
+			# Offset neighbors sharing a landmark onto separate clear standing places.
+			var offset := Vector2(32 * VillageLifeFlow.SETTINGS.residents.find(entry),0)
+			var shape := CircleShape2D.new()
+			shape.radius = VillageLifeFlow.SETTINGS.resident_radius
+			if VillageRoutine.clear(world.get_world_2d().direct_space_state,shape,target + offset): target += offset
+			npc.set_destination(target,str(routine["label"]))
 		npc.refresh_title(entry)
 
 # Keep a clear standing spot on an existing exterior tile, outside the building footprint.
@@ -126,6 +137,10 @@ func try_interact() -> bool:
 		elif not result["first"]: lines.append("오늘은 이미 안부를 나눴어요. 내일 또 만나요.")
 		if target["id"] == "naru" and result["first"] and VillageLifeFlow.friendship("naru") == 1:
 			lines.append_array(RequestTextData.lines("service_text", "trade_first_greeting"))
+		for request in PersonalRequestFlow.entries():
+			if request["resident"] != target["id"] or PersonalRequestFlow.done(str(request["id"])) or not PersonalRequestFlow.locked_reason(request).is_empty(): continue
+			lines.append_array(RequestTextData.lines("personal_request",str(request["id"])))
+			lines.append("마을 게시판에서 개인 부탁을 맡거나 준비한 물품을 전달할 수 있어요.")
 	talking = true
 	previous_paused = manager.hour_timer.paused
 	previous_physics = player.is_physics_processing()

@@ -30,8 +30,9 @@ window/stretch/aspect="expand"
 folder_colors={
 "res://art/": "red",
 "res://data/": "orange",
-"res://scenes/": "yellow",
-"res://script/": "green"
+"res://dev/": "yellow",
+"res://scenes/": "green",
+"res://script/": "teal"
 }
 
 [gui]

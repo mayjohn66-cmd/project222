@@ -14,7 +14,8 @@ const KIND_TRADE_OFFER := "trade_offer"
 const KIND_TUTORIAL_STEP := "tutorial_step"
 const KIND_TUTORIAL_DIALOGUE := "tutorial_dialogue"
 const KIND_SERVICE_TEXT := "service_text"
-const KINDS: PackedStringArray = [KIND_RESIDENT_REQUEST, KIND_COMMUNITY_REQUEST, KIND_RESIDENT_GREETING, KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT]
+const KIND_PERSONAL_REQUEST := "personal_request"
+const KINDS: PackedStringArray = [KIND_RESIDENT_REQUEST, KIND_COMMUNITY_REQUEST, KIND_RESIDENT_GREETING, KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT, KIND_PERSONAL_REQUEST]
 const TextData = preload("res://script/data/production/request_text_data.gd")
 
 # 원본(기계 부분이 들어 있는) 파일. 없는 파일은 건너뛴다.
@@ -25,6 +26,8 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/requests/default_resident_story.tres": KIND_RESIDENT_REQUEST,
 	"res://scenes/shop/requests/default_resident_trade.tres": KIND_TRADE_OFFER,
 	"res://scenes/shop/tutorial/default_tutorial.tres": KIND_TUTORIAL_STEP,
+	"res://scenes/shop/requests/default_personal_requests.tres": KIND_PERSONAL_REQUEST,
+	"res://scenes/shop/requests/default_village_gathering.tres": KIND_SERVICE_TEXT,
 }
 
 
@@ -54,6 +57,8 @@ const CLICHE_PHRASES: PackedStringArray = ["덕분에", "정말 고마", "로구
 
 # 인물별 이름·말버릇. id(요청·인사·소개 id)로 찾는다. 열: id,name,voice
 const VOICES_PATH: String = "res://docs/drafts/story/character_voices.csv"
+# 공통 인물 기준은 그대로 두고, 새 콘텐츠별 말투는 별도 파일에서 보완한다.
+const CONTENT_VOICES_PATH: String = "res://docs/drafts/story/content_voices.csv"
 
 # 여러 항목에서 같은 어구(어절 2개)가 이만큼 반복되면 주의한다. 플레이어 행동 안내("말을 걸") 칸은 세지 않는다.
 const REPEAT_ROWS: int = 3
@@ -93,7 +98,7 @@ static func load_sources() -> Dictionary:
 			var id := str(data.get("id", data.get("type", data.get("request", ""))))
 			if not data.has("id") and kind == KIND_RESIDENT_REQUEST: continue
 			if id.is_empty(): continue
-			if kind == KIND_SERVICE_TEXT: id = "landmark_" + id
+			if kind == KIND_SERVICE_TEXT and not data.has("id"): id = "landmark_" + id
 			data["id"] = id
 			result[kind][id] = TextData.enrich(data,kind)
 	for id in ["trade_panel", "smithy_panel", "trade_first_greeting"]:
@@ -112,7 +117,7 @@ static func row_from_source(kind: String, data: Dictionary) -> PackedStringArray
 	var completion: String = ""
 
 	match kind:
-		KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT:
+		KIND_PERSONAL_REQUEST, KIND_RESIDENT_INTRODUCTION, KIND_TRADE_OFFER, KIND_TUTORIAL_STEP, KIND_TUTORIAL_DIALOGUE, KIND_SERVICE_TEXT:
 			var prose := TextData.entry(kind, str(data["id"]))
 			return PackedStringArray([str(data["id"]),kind,str(prose.get("title","")),str(prose.get("summary","")),str(prose.get("lines","")),str(prose.get("completion",""))])
 		KIND_RESIDENT_REQUEST:
@@ -134,7 +139,7 @@ static func load_voices(path: String = VOICES_PATH) -> Dictionary:
 	var voices: Dictionary = {}
 
 	if not FileAccess.file_exists(path):
-		return voices
+		return load_voices(CONTENT_VOICES_PATH) if path == VOICES_PATH else voices
 
 	var file := FileAccess.open(path, FileAccess.READ)
 	file.get_csv_line()
@@ -146,6 +151,8 @@ static func load_voices(path: String = VOICES_PATH) -> Dictionary:
 			voices[row[0].strip_edges()] = {"name": row[1], "voice": row[2]}
 
 	file.close()
+	if path == VOICES_PATH:
+		voices.merge(load_voices(CONTENT_VOICES_PATH), true)
 	return voices
 
 
@@ -258,6 +265,13 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 			errors.append("%s 원본에 없는 id입니다. 제미나이는 새 id를 만들 수 없습니다" % tag)
 
 		match kind:
+			KIND_PERSONAL_REQUEST:
+				_need(errors, tag, "title", title, MAX_TITLE)
+				_need(errors, tag, "summary", summary, MAX_SUMMARY)
+				_need_lines(errors, warns, tag, lines)
+				_need(errors, tag, "completion", completion, MAX_COMPLETION)
+				if not "|".join(lines).contains("게시판") or not "|".join(lines).contains("전달"):
+					warns.append("%s 플레이어 행동 안내가 없음: 창고에 준비한 뒤 게시판에서 직접 전달하도록 안내하세요" % tag)
 			KIND_RESIDENT_INTRODUCTION, KIND_TUTORIAL_DIALOGUE:
 				_need_lines(errors,warns,tag,lines)
 			KIND_TRADE_OFFER:
@@ -342,7 +356,7 @@ static func _flavor_cells(lines: PackedStringArray, completion: String) -> Packe
 	var cells: PackedStringArray = []
 
 	for cell in lines:
-		if not cell.contains("말을 걸"):
+		if not cell.contains("말을 걸") and not (cell.contains("게시판") and cell.contains("전달")):
 			cells.append(cell)
 
 	for cell in completion.split("|", false):
