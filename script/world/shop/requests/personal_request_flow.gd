@@ -26,6 +26,17 @@ static func locked_reason(entry: Dictionary) -> String:
 	if not CommunityRequestFlow.board_available() or not VillageLifeFlow.available(resident): return "주민의 정착을 기다리고 있어요."
 	var friendship := VillageLifeFlow.friendship(str(entry["resident"]))
 	if friendship < int(entry["friendship"]): return "%s · 안부 나누기 %d/%d일" % [resident["name"],friendship,entry["friendship"]]
+	var after := str(entry.get("after", ""))
+	var last_day := -1
+	if not after.is_empty():
+		if not done(after): return "앞선 개인 부탁 '%s'을 마치면 이야기가 이어져요." % RequestTextData.text("personal_request",after,"title",after)
+		last_day = int(PlayerProgress.story_beat_days[PREFIX + after + ":done"])
+	if bool(entry.get("after_gathering", false)):
+		if not VillageGatheringFlow.completed(): return "우물 곁 첫 저녁 모임을 마치면 이야기가 이어져요."
+		last_day = maxi(last_day,int(PlayerProgress.story_beat_days[VillageGatheringFlow.COMPLETED]))
+	var wait_days := maxi(0,int(entry.get("days_after",0)))
+	if last_day >= 0 and GameState.total_day < last_day + wait_days:
+		return "앞선 이야기를 마친 뒤 %d일 후부터 부탁을 들을 수 있어요." % wait_days
 	return ""
 
 static func accept(id: String) -> bool:

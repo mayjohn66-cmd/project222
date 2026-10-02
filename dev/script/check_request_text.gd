@@ -202,6 +202,7 @@ func _check_content_registration(sources: Dictionary) -> void:
 	_check(Tools.count_targets(sources) == texts.size(), "모든 게임 문구를 최신 작성·동기화 도구가 인식")
 	var personal: Dictionary = sources[Tools.KIND_PERSONAL_REQUEST]
 	_check(personal.has("naru_provisions") and personal.has("doyun_water") and personal.has("sora_herbs"), "개인 부탁 3종의 원본 등록")
+	_check(personal.has("naru_neighbor_basket") and personal.has("doyun_tool_care") and personal.has("sora_well_notes"), "후속 개인 부탁 3종의 원본 자동 등록")
 	var services: Dictionary = sources[Tools.KIND_SERVICE_TEXT]
 	for id in ["well_evening_intro", "well_evening_naru", "well_evening_doyun", "well_evening_sora", "well_evening_end"]:
 		_check(services.has(id) and not services.has("landmark_" + id), "명시된 모임 ID는 landmark 접두어 없이 등록: " + id)
@@ -218,6 +219,8 @@ func _check_content_registration(sources: Dictionary) -> void:
 	_check(voices.has("miner_ore") and voices.get("naru_provisions", {}).get("name") == "타블렌" and voices.get("well_evening_sora", {}).get("name") == "이세르", "공통 인물 말투와 추가 콘텐츠 말투 함께 읽기")
 	var personal_prompt := Runner.build_prompt(Tools.KIND_PERSONAL_REQUEST, sources, sources)
 	_check(personal_prompt.contains("게시판에서 직접 전달") and personal_prompt.contains("말하는 사람: 타블렌") and personal_prompt.contains("기한 없음"), "개인 부탁 프롬프트에 인물·실제 전달 방법·기한 포함")
+	_check(personal_prompt.contains("앞선 개인 부탁: " + RequestTextData.text("personal_request","naru_provisions","title")) and personal_prompt.contains("첫 저녁 모임 뒤"), "후속 부탁 프롬프트에 실제 선행 이야기 제목·모임 맥락 포함")
+	_check(voices.get("sora_well_notes", {}).get("name") == "이세르", "후속 부탁은 추가 말투 CSV로 연결")
 	var gathering_prompt := Runner.build_prompt(Tools.KIND_SERVICE_TEXT, sources, sources)
 	_check(gathering_prompt.contains("말하는 사람: 장면 서술") and gathering_prompt.contains("말하는 사람: 여행자 이세르") and gathering_prompt.contains("화자 이름은 대사에 쓰지 않음"), "모임 프롬프트에 서술·화자·표시 규칙 포함")
 	var action_bad := Tools.row_from_source(Tools.KIND_PERSONAL_REQUEST, personal["naru_provisions"])

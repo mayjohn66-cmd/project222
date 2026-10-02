@@ -5,5 +5,8 @@ script = ExtResource("1")
 requests = Array[Dictionary]([
 {"id":"naru_provisions","resident":"naru","friendship":3,"requirements":[{"item":"bread","amount":3}],"reputation":1,"money":30},
 {"id":"doyun_water","resident":"doyun","friendship":3,"requirements":[{"item":"water","amount":3}],"reputation":1,"money":30},
-{"id":"sora_herbs","resident":"sora","friendship":3,"requirements":[{"item":"forest_herb","amount":2}],"reputation":1,"money":30}
+{"id":"sora_herbs","resident":"sora","friendship":3,"requirements":[{"item":"forest_herb","amount":2}],"reputation":1,"money":30},
+{"id":"naru_neighbor_basket","resident":"naru","friendship":7,"after":"naru_provisions","after_gathering":true,"days_after":1,"requirements":[{"item":"wild_berry","amount":3},{"item":"bread","amount":2}],"reputation":1,"money":30},
+{"id":"doyun_tool_care","resident":"doyun","friendship":7,"after":"doyun_water","after_gathering":true,"days_after":1,"requirements":[{"item":"iron_ore","amount":2},{"item":"stone_shard","amount":3}],"reputation":1,"money":30},
+{"id":"sora_well_notes","resident":"sora","friendship":7,"after":"sora_herbs","after_gathering":true,"days_after":1,"requirements":[{"item":"amber_sap","amount":1},{"item":"dry_branch","amount":2}],"reputation":1,"money":30}
 ])

@@ -666,6 +666,11 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 				for requirement in d.get("requirements", []):
 					items.append(_item_name(str(requirement["item"])))
 				info = "인물: %s / 필요한 물건: %s / 정착 뒤 안부를 나눈 이웃의 개인 부탁 / 기한 없음 / 창고 준비 후 게시판에서 직접 전달" % [resident.get("name", d.get("resident", "")), "·".join(items)]
+				var after := str(d.get("after", ""))
+				if not after.is_empty():
+					info += " / 앞선 개인 부탁: " + Tools.row_from_source(Tools.KIND_PERSONAL_REQUEST, {"id":after})[2]
+				if bool(d.get("after_gathering",false)):
+					info += " / 우물 곁 첫 저녁 모임 뒤 이웃이 된 관계의 후속 이야기 / 새 건물·장비·책 지급이나 별도 기능을 약속하지 않음"
 			Tools.KIND_RESIDENT_INTRODUCTION:
 				info = "인물: %s / 손님 유형: %s" % [d.get("npc",""), d.get("type","")]
 			Tools.KIND_TRADE_OFFER:
