@@ -1,0 +1,25 @@
+id,label,kind_group,sprite,notes
+bakery,빵집,building,res://art/world/village_buildings_v1/bakery.png,마을 건물. 앞 차양·창 화분·통과 상자가 붙음
+granary,곡물창고,building,res://art/world/village_buildings_v1/granary.png,높고 창이 적은 창고. 앞에 자루와 건초
+stable,마구간,building,res://art/world/village_buildings_v1/stable.png,낮고 넓은 건물. 앞에 건초와 통
+red_house,빨간 지붕 집,building,res://art/world/houses_v1/red_house_quarter_turn.png,마을 주택. 창 화분과 덤불
+ochre_townhouse,황토 타운하우스,building,res://art/world/village_houses_v2/ochre_townhouse_rear_aligned.png,키가 큰 연립주택
+moss_cottage,이끼 오두막,building,res://art/world/village_houses_v2/moss_cottage_rear.png,이끼 낀 초록 지붕 오두막(가장 많이 놓임)
+blacksmith,대장간,building,res://art/world/blacksmith_v2/blacksmith_iso.png,돌벽과 어두운 슬레이트 지붕. 간판
+tool_shop,도구점,building,res://art/world/tool_shop_v1/tool_shop.png,앞 차양과 간판
+apple_tree,사과나무,prop,res://art/world/village_decor_v1/apple_tree.png,줄기 + 잎 3단 + 열매
+village_well,우물,prop,res://art/world/village_decor_v1/village_well.png,돌 우물 + 작은 지붕
+stall_bakery,빵 가판대,prop,res://art/world/market_stalls_v3/bakery_front.png,주황 줄무늬 차양
+stall_fish,생선 가판대,prop,res://art/world/market_stalls_v3/fish_front.png,파랑 줄무늬 차양
+stall_cloth,옷감 가판대,prop,res://art/world/market_stalls_v3/cloth_front.png,보라 줄무늬 차양
+stall_herb,약초 가판대,prop,res://art/world/plaza_props_v1/herb_stall_roof_diamond_v6.png,초록 줄무늬 차양
+stall_market,시장 가판대,prop,res://art/world/village_decor_v6/market_stall_quarter_turn.png,붉은 줄무늬 차양
+low_wall,낮은 돌담,prop,res://art/world/village_decor_v1/low_wall.png,돌담 + 머릿돌
+supply_cart,짐수레,prop,res://art/world/plaza_props_v1/supply_cart_tile_aligned_v3.png,수레 + 바퀴 + 상자
+plaza_crates,광장 상자,prop,res://art/world/plaza_props_v1/plaza_crates.png,상자 3개 쌓임
+noticeboard,게시판,prop,res://art/world/village_gathering_v1/village_noticeboard.png,기둥 둘 + 판 + 작은 지붕
+oak_bench,참나무 벤치,prop,res://art/world/village_gathering_v1/oak_bench.png,의자 + 등받이
+street_lantern,가로등,prop,res://art/world/village_gathering_v1/street_lantern.png,철 기둥 + 유리 등(밤에 빛남)
+flower_bush,꽃 덤불,prop,res://art/world/route_props_v1/flower_bush.png,초록 덤불 + 분홍 꽃
+road_sign,표지판,prop,res://art/world/route_props_v1/road_sign.png,나무 기둥 + 화살표 판
+wood_fence,나무 울타리,prop,res://art/world/route_props_v1/wood_fence.png,기둥 + 가로대 둘

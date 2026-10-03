@@ -68,6 +68,15 @@ var target_register = null
 var grid_path: Array[Vector2i] = []
 var grid_path_index: int = 0
 
+# 중간 칸을 지나갔다고 보는 거리(픽셀). 칸 중심에 붙지 않고 연속으로 걷기 위한 값.
+const WAYPOINT_RADIUS: float = 12.0
+
+# 연속 이동 + 분리(CrowdSteering). false 로 바꾸면 예전처럼 칸 중심에서 칸 중심으로 이동하고 서로 피하지 않는다(문제가 생길 때 되돌리는 스위치).
+const CROWD_STEERING: bool = true
+
+# true 이면 걷는 동안 앞사람 때문에 완전히 멈추지 않고 겹쳐 지나간다(막힘이 적음). false 이면 앞사람 뒤에서 멈추고 줄을 선다(겹침 0, 막힘 많음).
+const CROWD_SOFT: bool = true
+
 var carried_item_id: String = ""
 var carried_amount: int = 0
 
@@ -136,9 +145,16 @@ func _physics_process(
 		)
 	)
 
-	var arrival_distance: float = maxf(
-		speed * delta,
-		4.0
+	# 칸 중심에 붙지 않고 연속으로 걷는다. 중간 칸은 가까이 지나가면 넘어가고,
+	# 마지막 칸만 정확한 위치로 맞춘다(진열대·계산대 앞 자리 판정이 그대로 유지되도록).
+	var is_last_cell: bool = (
+		not CROWD_STEERING
+		or grid_path_index >= grid_path.size() - 1
+	)
+	var arrival_distance: float = (
+		maxf(speed * delta, 4.0)
+		if is_last_cell
+		else maxf(speed * delta, WAYPOINT_RADIUS)
 	)
 
 	if (
@@ -147,7 +163,9 @@ func _physics_process(
 		)
 		<= arrival_distance
 	):
-		global_position = next_position
+		if is_last_cell:
+			global_position = next_position
+
 		velocity = Vector2.ZERO
 
 		grid_path_index += 1
@@ -162,14 +180,45 @@ func _physics_process(
 
 		return
 
-	velocity = (
-		global_position.direction_to(
-			next_position
-		)
-		* speed
+	var direction: Vector2 = global_position.direction_to(next_position)
+
+	if not CROWD_STEERING:
+		velocity = direction * speed
+		move_and_slide()
+		return
+
+	var steer: Dictionary = CrowdSteering.compute(
+		CrowdSteering.screen_to_ground(direction).normalized(),
+		_nearby_ground_offsets(),
+		CROWD_SOFT
 	)
 
+	velocity = (
+		direction * speed * float(steer["slow"])
+		+ CrowdSteering.ground_to_screen(steer["push"])
+	)
+
+	# 앞사람 때문에 서 있는 동안은 정체 시간을 거의 세지 않는다(줄을 서다 포기하고 나가지 않게).
+	if float(steer["slow"]) < 0.5:
+		move_elapsed -= delta * 0.75
+
 	move_and_slide()
+
+
+# 주변 손님까지의 바닥 벡터(칸). 가까운 사람만 모은다.
+func _nearby_ground_offsets() -> Array:
+	var offsets: Array = []
+
+	for other in get_tree().get_nodes_in_group("customer"):
+		if other == self or not is_instance_valid(other) or not (other is Node2D):
+			continue
+
+		var offset: Vector2 = CrowdSteering.screen_to_ground(other.global_position - global_position)
+
+		if offset.length() < CrowdSteering.KEEP_DISTANCE:
+			offsets.append(offset)
+
+	return offsets
 
 # =========================
 # 손님 유형과 구매 목표

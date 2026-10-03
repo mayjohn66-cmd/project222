@@ -28,6 +28,7 @@
 [ext_resource type="Script" path="res://script/world/shop/requests/village_journal_director.gd" id="30_journal"]
 [ext_resource type="Script" path="res://script/world/shop/requests/village_gathering_director.gd" id="31_gathering"]
 [ext_resource type="Script" path="res://script/world/shop/requests/lantern_wayfarer_director.gd" id="32_wayfarer"]
+[ext_resource type="Script" uid="uid://cfl2v2qhwns1q" path="res://script/world/view3d/store_view_3d.gd" id="25_view3d"]
 
 [node name="World" type="Node2D" unique_id=292224605]
 y_sort_enabled = true
@@ -125,3 +126,5 @@ script = ExtResource("31_gathering")
 
 [node name="LanternWayfarerDirector" type="Node" parent="."]
 script = ExtResource("32_wayfarer")
+[node name="StoreView3D" type="Node" parent="."]
+script = ExtResource("25_view3d")

@@ -1,0 +1,2039 @@
+[
+  {
+    "awning_tint": "d9503c",
+    "canon_d": 2.2,
+    "canon_w": 4.0,
+    "faces": [
+      {
+        "file": "bakery__plinth_stone.png",
+        "h": 18,
+        "name": "plinth_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__wall_front.png",
+        "h": 46,
+        "name": "wall_front",
+        "normal_file": "",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 72×46 px: 문 1(가운데), 창 3, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 72
+      },
+      {
+        "file": "bakery__wall_side.png",
+        "h": 46,
+        "name": "wall_side",
+        "normal_file": "",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 40×46 px: 창 2, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 40
+      },
+      {
+        "file": "bakery__roof_tiles.png",
+        "h": 18,
+        "name": "roof_tiles",
+        "normal_file": "bakery__roof_tiles_n.png",
+        "note": "지붕 기와 18×18 한 칸 반복(이음매 없이). 법선 맵 별도",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__gable_wall.png",
+        "h": 18,
+        "name": "gable_wall",
+        "normal_file": "",
+        "note": "박공(지붕 끝 삼각형) 벽 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__roof_trim.png",
+        "h": 18,
+        "name": "roof_trim",
+        "normal_file": "",
+        "note": "지붕 두께·처마 단면·용마루 덮개 18×18 어두운 목재/기와",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__chimney_stone.png",
+        "h": 18,
+        "name": "chimney_stone",
+        "normal_file": "",
+        "note": "굴뚝 돌 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__eave_tile.png",
+        "h": 18,
+        "name": "eave_tile",
+        "normal_file": "",
+        "note": "처마 끝 기와 조각 단색 18×18 (지붕보다 한 톤 어둡게)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__cloth_awning.png",
+        "h": 18,
+        "name": "cloth_awning",
+        "normal_file": "",
+        "note": "천 차양 줄무늬 18×18 반복(크림 + 가게 색)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__smoke.png",
+        "h": 18,
+        "name": "smoke",
+        "normal_file": "",
+        "note": "굴뚝 연기 단색 18×18 연한 회백색",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__step.png",
+        "h": 18,
+        "name": "step",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__sign_frame.png",
+        "h": 18,
+        "name": "sign_frame",
+        "normal_file": "",
+        "note": "간판 뒤판·테두리 어두운 나무 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "bakery__bakery_fascia.png",
+        "h": 14,
+        "name": "bakery_fascia",
+        "normal_file": "",
+        "note": "가게 간판 69×14 (BAKERY 글자 + 양끝 그림), 한 장 전체",
+        "tileable": false,
+        "w": 69
+      },
+      {
+        "file": "bakery__apron_stone.png",
+        "h": 18,
+        "name": "apron_stone",
+        "normal_file": "",
+        "note": "건물 둘레 돌 마당 18×18 반복(위에서 본 면)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "building",
+    "has_apron": true,
+    "id": "bakery",
+    "kind": "gable",
+    "label": "빵집",
+    "notes": "마을 건물. 앞 차양·창 화분·통과 상자가 붙음",
+    "roof_blocks": 0.5,
+    "roof_tint": "d9503c",
+    "sprite": "res://art/world/village_buildings_v1/bakery.png",
+    "style": "shop",
+    "tint": "f3ead2",
+    "total_blocks": 2.6,
+    "wall_blocks": 2.1
+  },
+  {
+    "awning_tint": "e0702a",
+    "canon_d": 4.0,
+    "canon_w": 3.0,
+    "faces": [
+      {
+        "file": "granary__plinth_stone.png",
+        "h": 18,
+        "name": "plinth_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "granary__wall_front.png",
+        "h": 48,
+        "name": "wall_front",
+        "normal_file": "",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 54×48 px: 문 1(가운데), 창 2, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 54
+      },
+      {
+        "file": "granary__wall_side.png",
+        "h": 48,
+        "name": "wall_side",
+        "normal_file": "",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 72×48 px: 창 4, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 72
+      },
+      {
+        "file": "granary__roof_tiles.png",
+        "h": 18,
+        "name": "roof_tiles",
+        "normal_file": "granary__roof_tiles_n.png",
+        "note": "지붕 기와 18×18 한 칸 반복(이음매 없이). 법선 맵 별도",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "granary__gable_wall.png",
+        "h": 18,
+        "name": "gable_wall",
+        "normal_file": "",
+        "note": "박공(지붕 끝 삼각형) 벽 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "granary__roof_trim.png",
+        "h": 18,
+        "name": "roof_trim",
+        "normal_file": "",
+        "note": "지붕 두께·처마 단면·용마루 덮개 18×18 어두운 목재/기와",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "granary__eave_tile.png",
+        "h": 18,
+        "name": "eave_tile",
+        "normal_file": "",
+        "note": "처마 끝 기와 조각 단색 18×18 (지붕보다 한 톤 어둡게)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "granary__sack.png",
+        "h": 18,
+        "name": "sack",
+        "normal_file": "",
+        "note": "자루 18×18 베이지",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "granary__hay.png",
+        "h": 18,
+        "name": "hay",
+        "normal_file": "",
+        "note": "건초 18×18 노랑",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "granary__apron_stone.png",
+        "h": 18,
+        "name": "apron_stone",
+        "normal_file": "",
+        "note": "건물 둘레 돌 마당 18×18 반복(위에서 본 면)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "building",
+    "has_apron": true,
+    "id": "granary",
+    "kind": "gable",
+    "label": "곡물창고",
+    "notes": "높고 창이 적은 창고. 앞에 자루와 건초",
+    "roof_blocks": 1.7,
+    "roof_tint": "9a8a62",
+    "sprite": "res://art/world/village_buildings_v1/granary.png",
+    "style": "barn",
+    "tint": "ffffff",
+    "total_blocks": 3.9,
+    "wall_blocks": 2.2
+  },
+  {
+    "awning_tint": "e0702a",
+    "canon_d": 2.4,
+    "canon_w": 4.5,
+    "faces": [
+      {
+        "file": "stable__plinth_stone.png",
+        "h": 18,
+        "name": "plinth_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stable__wall_front.png",
+        "h": 37,
+        "name": "wall_front",
+        "normal_file": "",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 81×37 px: 문 1(가운데), 창 4, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 81
+      },
+      {
+        "file": "stable__wall_side.png",
+        "h": 37,
+        "name": "wall_side",
+        "normal_file": "",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 43×37 px: 창 2, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 43
+      },
+      {
+        "file": "stable__roof_tiles.png",
+        "h": 18,
+        "name": "roof_tiles",
+        "normal_file": "stable__roof_tiles_n.png",
+        "note": "지붕 기와 18×18 한 칸 반복(이음매 없이). 법선 맵 별도",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stable__gable_wall.png",
+        "h": 18,
+        "name": "gable_wall",
+        "normal_file": "",
+        "note": "박공(지붕 끝 삼각형) 벽 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stable__roof_trim.png",
+        "h": 18,
+        "name": "roof_trim",
+        "normal_file": "",
+        "note": "지붕 두께·처마 단면·용마루 덮개 18×18 어두운 목재/기와",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stable__eave_tile.png",
+        "h": 18,
+        "name": "eave_tile",
+        "normal_file": "",
+        "note": "처마 끝 기와 조각 단색 18×18 (지붕보다 한 톤 어둡게)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stable__hay.png",
+        "h": 18,
+        "name": "hay",
+        "normal_file": "",
+        "note": "건초 18×18 노랑",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stable__barrel.png",
+        "h": 18,
+        "name": "barrel",
+        "normal_file": "",
+        "note": "통(배럴) 옆면 18×18: 세로 판자 + 쇠테 2줄",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stable__apron_stone.png",
+        "h": 18,
+        "name": "apron_stone",
+        "normal_file": "",
+        "note": "건물 둘레 돌 마당 18×18 반복(위에서 본 면)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "building",
+    "has_apron": true,
+    "id": "stable",
+    "kind": "gable",
+    "label": "마구간",
+    "notes": "낮고 넓은 건물. 앞에 건초와 통",
+    "roof_blocks": 0.9,
+    "roof_tint": "8a6a4a",
+    "sprite": "res://art/world/village_buildings_v1/stable.png",
+    "style": "stable",
+    "tint": "ffffff",
+    "total_blocks": 2.6,
+    "wall_blocks": 1.7
+  },
+  {
+    "awning_tint": "e0702a",
+    "canon_d": 3.5,
+    "canon_w": 3.5,
+    "faces": [
+      {
+        "file": "red_house__plinth_stone.png",
+        "h": 18,
+        "name": "plinth_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__wall_front.png",
+        "h": 55,
+        "name": "wall_front",
+        "normal_file": "",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 63×55 px: 문 1(가운데), 창 3, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 63
+      },
+      {
+        "file": "red_house__wall_side.png",
+        "h": 55,
+        "name": "wall_side",
+        "normal_file": "",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 63×55 px: 창 4, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 63
+      },
+      {
+        "file": "red_house__roof_tiles.png",
+        "h": 18,
+        "name": "roof_tiles",
+        "normal_file": "red_house__roof_tiles_n.png",
+        "note": "지붕 기와 18×18 한 칸 반복(이음매 없이). 법선 맵 별도",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__gable_wall.png",
+        "h": 18,
+        "name": "gable_wall",
+        "normal_file": "",
+        "note": "박공(지붕 끝 삼각형) 벽 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__roof_trim.png",
+        "h": 18,
+        "name": "roof_trim",
+        "normal_file": "",
+        "note": "지붕 두께·처마 단면·용마루 덮개 18×18 어두운 목재/기와",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__chimney_stone.png",
+        "h": 18,
+        "name": "chimney_stone",
+        "normal_file": "",
+        "note": "굴뚝 돌 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__shutter_wood.png",
+        "h": 18,
+        "name": "shutter_wood",
+        "normal_file": "",
+        "note": "덧문 18×18 가로 살(청록 계열, 가게마다 색)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__eave_tile.png",
+        "h": 18,
+        "name": "eave_tile",
+        "normal_file": "",
+        "note": "처마 끝 기와 조각 단색 18×18 (지붕보다 한 톤 어둡게)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__planter_box.png",
+        "h": 18,
+        "name": "planter_box",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__planter_flowers.png",
+        "h": 18,
+        "name": "planter_flowers",
+        "normal_file": "",
+        "note": "창 아래 화분 꽃·풀 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__bush.png",
+        "h": 18,
+        "name": "bush",
+        "normal_file": "",
+        "note": "덤불 18×18 반복(꽃 점)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__smoke.png",
+        "h": 18,
+        "name": "smoke",
+        "normal_file": "",
+        "note": "굴뚝 연기 단색 18×18 연한 회백색",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__step.png",
+        "h": 18,
+        "name": "step",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "red_house__apron_stone.png",
+        "h": 18,
+        "name": "apron_stone",
+        "normal_file": "",
+        "note": "건물 둘레 돌 마당 18×18 반복(위에서 본 면)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "building",
+    "has_apron": true,
+    "id": "red_house",
+    "kind": "gable",
+    "label": "빨간 지붕 집",
+    "notes": "마을 주택. 창 화분과 덤불",
+    "roof_blocks": 1.5,
+    "roof_tint": "c0462f",
+    "sprite": "res://art/world/houses_v1/red_house_quarter_turn.png",
+    "style": "",
+    "tint": "eadfc8",
+    "total_blocks": 4.0,
+    "wall_blocks": 2.5
+  },
+  {
+    "awning_tint": "e0702a",
+    "canon_d": 3.5,
+    "canon_w": 3.5,
+    "faces": [
+      {
+        "file": "ochre_townhouse__plinth_stone.png",
+        "h": 18,
+        "name": "plinth_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__wall_front.png",
+        "h": 70,
+        "name": "wall_front",
+        "normal_file": "",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 63×70 px: 문 1(가운데), 창 3, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 63
+      },
+      {
+        "file": "ochre_townhouse__wall_side.png",
+        "h": 70,
+        "name": "wall_side",
+        "normal_file": "",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 63×70 px: 창 4, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 63
+      },
+      {
+        "file": "ochre_townhouse__roof_tiles.png",
+        "h": 18,
+        "name": "roof_tiles",
+        "normal_file": "ochre_townhouse__roof_tiles_n.png",
+        "note": "지붕 기와 18×18 한 칸 반복(이음매 없이). 법선 맵 별도",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__gable_wall.png",
+        "h": 18,
+        "name": "gable_wall",
+        "normal_file": "",
+        "note": "박공(지붕 끝 삼각형) 벽 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__roof_trim.png",
+        "h": 18,
+        "name": "roof_trim",
+        "normal_file": "",
+        "note": "지붕 두께·처마 단면·용마루 덮개 18×18 어두운 목재/기와",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__chimney_stone.png",
+        "h": 18,
+        "name": "chimney_stone",
+        "normal_file": "",
+        "note": "굴뚝 돌 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__shutter_wood.png",
+        "h": 18,
+        "name": "shutter_wood",
+        "normal_file": "",
+        "note": "덧문 18×18 가로 살(청록 계열, 가게마다 색)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__eave_tile.png",
+        "h": 18,
+        "name": "eave_tile",
+        "normal_file": "",
+        "note": "처마 끝 기와 조각 단색 18×18 (지붕보다 한 톤 어둡게)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__planter_box.png",
+        "h": 18,
+        "name": "planter_box",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__planter_flowers.png",
+        "h": 18,
+        "name": "planter_flowers",
+        "normal_file": "",
+        "note": "창 아래 화분 꽃·풀 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__smoke.png",
+        "h": 18,
+        "name": "smoke",
+        "normal_file": "",
+        "note": "굴뚝 연기 단색 18×18 연한 회백색",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__step.png",
+        "h": 18,
+        "name": "step",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "ochre_townhouse__apron_stone.png",
+        "h": 18,
+        "name": "apron_stone",
+        "normal_file": "",
+        "note": "건물 둘레 돌 마당 18×18 반복(위에서 본 면)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "building",
+    "has_apron": true,
+    "id": "ochre_townhouse",
+    "kind": "gable",
+    "label": "황토 타운하우스",
+    "notes": "키가 큰 연립주택",
+    "roof_blocks": 1.2,
+    "roof_tint": "b8784d",
+    "sprite": "res://art/world/village_houses_v2/ochre_townhouse_rear_aligned.png",
+    "style": "",
+    "tint": "d9b46a",
+    "total_blocks": 4.4,
+    "wall_blocks": 3.2
+  },
+  {
+    "awning_tint": "e0702a",
+    "canon_d": 3.5,
+    "canon_w": 3.5,
+    "faces": [
+      {
+        "file": "moss_cottage__plinth_stone.png",
+        "h": 18,
+        "name": "plinth_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__wall_front.png",
+        "h": 51,
+        "name": "wall_front",
+        "normal_file": "",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 63×51 px: 문 1(가운데), 창 3, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 63
+      },
+      {
+        "file": "moss_cottage__wall_side.png",
+        "h": 51,
+        "name": "wall_side",
+        "normal_file": "",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 63×51 px: 창 4, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 63
+      },
+      {
+        "file": "moss_cottage__roof_tiles.png",
+        "h": 18,
+        "name": "roof_tiles",
+        "normal_file": "moss_cottage__roof_tiles_n.png",
+        "note": "지붕 기와 18×18 한 칸 반복(이음매 없이). 법선 맵 별도",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__gable_wall.png",
+        "h": 18,
+        "name": "gable_wall",
+        "normal_file": "",
+        "note": "박공(지붕 끝 삼각형) 벽 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__roof_trim.png",
+        "h": 18,
+        "name": "roof_trim",
+        "normal_file": "",
+        "note": "지붕 두께·처마 단면·용마루 덮개 18×18 어두운 목재/기와",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__chimney_stone.png",
+        "h": 18,
+        "name": "chimney_stone",
+        "normal_file": "",
+        "note": "굴뚝 돌 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__shutter_wood.png",
+        "h": 18,
+        "name": "shutter_wood",
+        "normal_file": "",
+        "note": "덧문 18×18 가로 살(청록 계열, 가게마다 색)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__eave_tile.png",
+        "h": 18,
+        "name": "eave_tile",
+        "normal_file": "",
+        "note": "처마 끝 기와 조각 단색 18×18 (지붕보다 한 톤 어둡게)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__planter_box.png",
+        "h": 18,
+        "name": "planter_box",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__planter_flowers.png",
+        "h": 18,
+        "name": "planter_flowers",
+        "normal_file": "",
+        "note": "창 아래 화분 꽃·풀 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__smoke.png",
+        "h": 18,
+        "name": "smoke",
+        "normal_file": "",
+        "note": "굴뚝 연기 단색 18×18 연한 회백색",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__bush.png",
+        "h": 18,
+        "name": "bush",
+        "normal_file": "",
+        "note": "덤불 18×18 반복(꽃 점)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__step.png",
+        "h": 18,
+        "name": "step",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "moss_cottage__apron_stone.png",
+        "h": 18,
+        "name": "apron_stone",
+        "normal_file": "",
+        "note": "건물 둘레 돌 마당 18×18 반복(위에서 본 면)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "building",
+    "has_apron": true,
+    "id": "moss_cottage",
+    "kind": "gable",
+    "label": "이끼 오두막",
+    "notes": "이끼 낀 초록 지붕 오두막(가장 많이 놓임)",
+    "roof_blocks": 1.4,
+    "roof_tint": "5f9e48",
+    "sprite": "res://art/world/village_houses_v2/moss_cottage_rear.png",
+    "style": "",
+    "tint": "d8cdb0",
+    "total_blocks": 3.7,
+    "wall_blocks": 2.3
+  },
+  {
+    "awning_tint": "5a6a8a",
+    "canon_d": 2.4,
+    "canon_w": 3.2,
+    "faces": [
+      {
+        "file": "blacksmith__plinth_stone.png",
+        "h": 18,
+        "name": "plinth_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__wall_front.png",
+        "h": 44,
+        "name": "wall_front",
+        "normal_file": "",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 58×44 px: 문 1(가운데), 창 2, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 58
+      },
+      {
+        "file": "blacksmith__wall_side.png",
+        "h": 44,
+        "name": "wall_side",
+        "normal_file": "",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 43×44 px: 창 2, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 43
+      },
+      {
+        "file": "blacksmith__roof_tiles.png",
+        "h": 18,
+        "name": "roof_tiles",
+        "normal_file": "blacksmith__roof_tiles_n.png",
+        "note": "지붕 기와 18×18 한 칸 반복(이음매 없이). 법선 맵 별도",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__gable_wall.png",
+        "h": 18,
+        "name": "gable_wall",
+        "normal_file": "",
+        "note": "박공(지붕 끝 삼각형) 벽 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__roof_trim.png",
+        "h": 18,
+        "name": "roof_trim",
+        "normal_file": "",
+        "note": "지붕 두께·처마 단면·용마루 덮개 18×18 어두운 목재/기와",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__chimney_stone.png",
+        "h": 18,
+        "name": "chimney_stone",
+        "normal_file": "",
+        "note": "굴뚝 돌 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__eave_tile.png",
+        "h": 18,
+        "name": "eave_tile",
+        "normal_file": "",
+        "note": "처마 끝 기와 조각 단색 18×18 (지붕보다 한 톤 어둡게)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__stump_wood.png",
+        "h": 18,
+        "name": "stump_wood",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__anvil_iron.png",
+        "h": 18,
+        "name": "anvil_iron",
+        "normal_file": "",
+        "note": "모루 쇠 단색 18×18 푸른 회색",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__anvil_top.png",
+        "h": 18,
+        "name": "anvil_top",
+        "normal_file": "",
+        "note": "모루 윗판 단색 18×18 밝은 회색",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__smoke.png",
+        "h": 18,
+        "name": "smoke",
+        "normal_file": "",
+        "note": "굴뚝 연기 단색 18×18 연한 회백색",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__iron.png",
+        "h": 18,
+        "name": "iron",
+        "normal_file": "",
+        "note": "검은 쇠(기둥·테두리) 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__log_wood.png",
+        "h": 18,
+        "name": "log_wood",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__sign_frame.png",
+        "h": 18,
+        "name": "sign_frame",
+        "normal_file": "",
+        "note": "간판 뒤판·테두리 어두운 나무 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__anvil_sign.png",
+        "h": 12,
+        "name": "anvil_sign",
+        "normal_file": "",
+        "note": "걸이 간판 그림 16×12 (anvil), +x 쪽 면 한 장",
+        "tileable": false,
+        "w": 16
+      },
+      {
+        "file": "blacksmith__apron_stone.png",
+        "h": 18,
+        "name": "apron_stone",
+        "normal_file": "",
+        "note": "건물 둘레 돌 마당 18×18 반복(위에서 본 면)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "building",
+    "has_apron": true,
+    "id": "blacksmith",
+    "kind": "gable",
+    "label": "대장간",
+    "notes": "돌벽과 어두운 슬레이트 지붕. 간판",
+    "roof_blocks": 0.9,
+    "roof_tint": "4e5668",
+    "sprite": "res://art/world/blacksmith_v2/blacksmith_iso.png",
+    "style": "forge",
+    "tint": "b8bcd0",
+    "total_blocks": 2.9,
+    "wall_blocks": 2.0
+  },
+  {
+    "awning_tint": "3a8a7a",
+    "canon_d": 3.8,
+    "canon_w": 2.8,
+    "faces": [
+      {
+        "file": "tool_shop__plinth_stone.png",
+        "h": 18,
+        "name": "plinth_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__wall_front.png",
+        "h": 57,
+        "name": "wall_front",
+        "normal_file": "",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 50×57 px: 문 1(가운데), 창 2, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 50
+      },
+      {
+        "file": "tool_shop__wall_side.png",
+        "h": 57,
+        "name": "wall_side",
+        "normal_file": "",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 68×57 px: 창 4, 나무 뼈대, 아래 돌 기단",
+        "tileable": false,
+        "w": 68
+      },
+      {
+        "file": "tool_shop__roof_tiles.png",
+        "h": 18,
+        "name": "roof_tiles",
+        "normal_file": "tool_shop__roof_tiles_n.png",
+        "note": "지붕 기와 18×18 한 칸 반복(이음매 없이). 법선 맵 별도",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__gable_wall.png",
+        "h": 18,
+        "name": "gable_wall",
+        "normal_file": "",
+        "note": "박공(지붕 끝 삼각형) 벽 18×18 반복",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__roof_trim.png",
+        "h": 18,
+        "name": "roof_trim",
+        "normal_file": "",
+        "note": "지붕 두께·처마 단면·용마루 덮개 18×18 어두운 목재/기와",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__eave_tile.png",
+        "h": 18,
+        "name": "eave_tile",
+        "normal_file": "",
+        "note": "처마 끝 기와 조각 단색 18×18 (지붕보다 한 톤 어둡게)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__log_wood.png",
+        "h": 18,
+        "name": "log_wood",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__step.png",
+        "h": 18,
+        "name": "step",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__iron.png",
+        "h": 18,
+        "name": "iron",
+        "normal_file": "",
+        "note": "검은 쇠(기둥·테두리) 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__sign_frame.png",
+        "h": 18,
+        "name": "sign_frame",
+        "normal_file": "",
+        "note": "간판 뒤판·테두리 어두운 나무 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__tools_sign.png",
+        "h": 12,
+        "name": "tools_sign",
+        "normal_file": "",
+        "note": "걸이 간판 그림 16×12 (tools), +x 쪽 면 한 장",
+        "tileable": false,
+        "w": 16
+      },
+      {
+        "file": "tool_shop__apron_stone.png",
+        "h": 18,
+        "name": "apron_stone",
+        "normal_file": "",
+        "note": "건물 둘레 돌 마당 18×18 반복(위에서 본 면)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "building",
+    "has_apron": true,
+    "id": "tool_shop",
+    "kind": "gable",
+    "label": "도구점",
+    "notes": "앞 차양과 간판",
+    "roof_blocks": 1.5,
+    "roof_tint": "3a8a7a",
+    "sprite": "res://art/world/tool_shop_v1/tool_shop.png",
+    "style": "workshop",
+    "tint": "ffffff",
+    "total_blocks": 4.1,
+    "wall_blocks": 2.6
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 1.0,
+    "canon_w": 1.0,
+    "faces": [
+      {
+        "file": "apple_tree__bark.png",
+        "h": 18,
+        "name": "bark",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "apple_tree__tree_foliage.png",
+        "h": 18,
+        "name": "tree_foliage",
+        "normal_file": "",
+        "note": "나뭇잎 18×18 반복(짙은 초록 + 밝은 점 + 빨간 열매 점)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "apple_tree",
+    "kind": "prop",
+    "label": "사과나무",
+    "notes": "줄기 + 잎 3단 + 열매",
+    "roof_blocks": 0.0,
+    "roof_tint": "ffffff",
+    "sprite": "res://art/world/village_decor_v1/apple_tree.png",
+    "style": "tree",
+    "tint": "ffffff",
+    "total_blocks": 2.25,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 1.5,
+    "canon_w": 1.5,
+    "faces": [
+      {
+        "file": "village_well__bark.png",
+        "h": 18,
+        "name": "bark",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "village_well__well_stone.png",
+        "h": 18,
+        "name": "well_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "village_well__well_water.png",
+        "h": 18,
+        "name": "well_water",
+        "normal_file": "",
+        "note": "우물 물 단색 18×18 어두운 파랑",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "village_well__small_roof_tiles.png",
+        "h": 18,
+        "name": "small_roof_tiles",
+        "normal_file": "village_well__small_roof_tiles_n.png",
+        "note": "작은 지붕 기와 18×18 반복",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "village_well",
+    "kind": "prop",
+    "label": "우물",
+    "notes": "돌 우물 + 작은 지붕",
+    "roof_blocks": 0.0,
+    "roof_tint": "8a5a3a",
+    "sprite": "res://art/world/village_decor_v1/village_well.png",
+    "style": "well",
+    "tint": "ffffff",
+    "total_blocks": 1.95,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 1.0,
+    "canon_w": 2.0,
+    "faces": [
+      {
+        "file": "stall_bakery__bark.png",
+        "h": 18,
+        "name": "bark",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_bakery__basket.png",
+        "h": 18,
+        "name": "basket",
+        "normal_file": "",
+        "note": "바구니 옆면 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_bakery__stall_cloth_stripe.png",
+        "h": 18,
+        "name": "stall_cloth_stripe",
+        "normal_file": "",
+        "note": "가판대 줄무늬 천 18×18 (가판대마다 색 다름)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_bakery__stall_valance.png",
+        "h": 18,
+        "name": "stall_valance",
+        "normal_file": "",
+        "note": "가판대 처마 단 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_bakery__stall_counter.png",
+        "h": 18,
+        "name": "stall_counter",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_bakery__sack.png",
+        "h": 18,
+        "name": "sack",
+        "normal_file": "",
+        "note": "자루 18×18 베이지",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_bakery__goods_loaf.png",
+        "h": 10,
+        "name": "goods_loaf",
+        "normal_file": "",
+        "note": "가판대 상품 카드 loaf (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 12
+      },
+      {
+        "file": "stall_bakery__goods_baguette.png",
+        "h": 18,
+        "name": "goods_baguette",
+        "normal_file": "",
+        "note": "가판대 상품 카드 baguette (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 7
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "stall_bakery",
+    "kind": "prop",
+    "label": "빵 가판대",
+    "notes": "주황 줄무늬 차양",
+    "roof_blocks": 0.0,
+    "roof_tint": "e0702a",
+    "sprite": "res://art/world/market_stalls_v3/bakery_front.png",
+    "style": "stall",
+    "tint": "ffffff",
+    "total_blocks": 1.8,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 1.0,
+    "canon_w": 2.0,
+    "faces": [
+      {
+        "file": "stall_fish__bark.png",
+        "h": 18,
+        "name": "bark",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_fish__barrel.png",
+        "h": 18,
+        "name": "barrel",
+        "normal_file": "",
+        "note": "통(배럴) 옆면 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_fish__stall_cloth_stripe.png",
+        "h": 18,
+        "name": "stall_cloth_stripe",
+        "normal_file": "",
+        "note": "가판대 줄무늬 천 18×18 (가판대마다 색 다름)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_fish__stall_valance.png",
+        "h": 18,
+        "name": "stall_valance",
+        "normal_file": "",
+        "note": "가판대 처마 단 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_fish__stall_counter.png",
+        "h": 18,
+        "name": "stall_counter",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_fish__crate.png",
+        "h": 18,
+        "name": "crate",
+        "normal_file": "",
+        "note": "나무 상자 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_fish__goods_fish.png",
+        "h": 10,
+        "name": "goods_fish",
+        "normal_file": "",
+        "note": "가판대 상품 카드 fish (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "stall_fish",
+    "kind": "prop",
+    "label": "생선 가판대",
+    "notes": "파랑 줄무늬 차양",
+    "roof_blocks": 0.0,
+    "roof_tint": "4a86c0",
+    "sprite": "res://art/world/market_stalls_v3/fish_front.png",
+    "style": "stall",
+    "tint": "ffffff",
+    "total_blocks": 1.8,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 1.0,
+    "canon_w": 2.0,
+    "faces": [
+      {
+        "file": "stall_cloth__bark.png",
+        "h": 18,
+        "name": "bark",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__sack.png",
+        "h": 18,
+        "name": "sack",
+        "normal_file": "",
+        "note": "자루 18×18 베이지",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__stall_cloth_solid.png",
+        "h": 18,
+        "name": "stall_cloth_solid",
+        "normal_file": "",
+        "note": "가판대 단색 천 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__stall_valance.png",
+        "h": 18,
+        "name": "stall_valance",
+        "normal_file": "",
+        "note": "가판대 처마 단 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__stall_counter.png",
+        "h": 18,
+        "name": "stall_counter",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__stall_skirt.png",
+        "h": 18,
+        "name": "stall_skirt",
+        "normal_file": "",
+        "note": "가판대 카운터 앞 천 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__basket.png",
+        "h": 18,
+        "name": "basket",
+        "normal_file": "",
+        "note": "바구니 옆면 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__goods_cloth.png",
+        "h": 10,
+        "name": "goods_cloth",
+        "normal_file": "",
+        "note": "가판대 상품 카드 cloth (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "stall_cloth",
+    "kind": "prop",
+    "label": "옷감 가판대",
+    "notes": "보라 줄무늬 차양",
+    "roof_blocks": 0.0,
+    "roof_tint": "a050c0",
+    "sprite": "res://art/world/market_stalls_v3/cloth_front.png",
+    "style": "stall",
+    "tint": "ffffff",
+    "total_blocks": 1.8,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 1.0,
+    "canon_w": 2.0,
+    "faces": [
+      {
+        "file": "stall_herb__bark.png",
+        "h": 18,
+        "name": "bark",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_herb__basket.png",
+        "h": 18,
+        "name": "basket",
+        "normal_file": "",
+        "note": "바구니 옆면 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_herb__stall_shingle.png",
+        "h": 18,
+        "name": "stall_shingle",
+        "normal_file": "",
+        "note": "가판대 나무 지붕 기와 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_herb__stall_counter.png",
+        "h": 18,
+        "name": "stall_counter",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_herb__stall_skirt.png",
+        "h": 18,
+        "name": "stall_skirt",
+        "normal_file": "",
+        "note": "가판대 카운터 앞 천 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_herb__barrel.png",
+        "h": 18,
+        "name": "barrel",
+        "normal_file": "",
+        "note": "통(배럴) 옆면 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_herb__goods_herb.png",
+        "h": 10,
+        "name": "goods_herb",
+        "normal_file": "",
+        "note": "가판대 상품 카드 herb (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      },
+      {
+        "file": "stall_herb__goods_flower.png",
+        "h": 10,
+        "name": "goods_flower",
+        "normal_file": "",
+        "note": "가판대 상품 카드 flower (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "stall_herb",
+    "kind": "prop",
+    "label": "약초 가판대",
+    "notes": "초록 줄무늬 차양",
+    "roof_blocks": 0.0,
+    "roof_tint": "4a9a4a",
+    "sprite": "res://art/world/plaza_props_v1/herb_stall_roof_diamond_v6.png",
+    "style": "stall",
+    "tint": "ffffff",
+    "total_blocks": 1.85,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 1.0,
+    "canon_w": 2.0,
+    "faces": [
+      {
+        "file": "stall_market__bark.png",
+        "h": 18,
+        "name": "bark",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_market__crate.png",
+        "h": 18,
+        "name": "crate",
+        "normal_file": "",
+        "note": "나무 상자 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_market__stall_cloth_stripe.png",
+        "h": 18,
+        "name": "stall_cloth_stripe",
+        "normal_file": "",
+        "note": "가판대 줄무늬 천 18×18 (가판대마다 색 다름)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_market__stall_valance.png",
+        "h": 18,
+        "name": "stall_valance",
+        "normal_file": "",
+        "note": "가판대 처마 단 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_market__stall_counter.png",
+        "h": 18,
+        "name": "stall_counter",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_market__barrel.png",
+        "h": 18,
+        "name": "barrel",
+        "normal_file": "",
+        "note": "통(배럴) 옆면 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_market__goods_apple.png",
+        "h": 10,
+        "name": "goods_apple",
+        "normal_file": "",
+        "note": "가판대 상품 카드 apple (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      },
+      {
+        "file": "stall_market__goods_orange.png",
+        "h": 10,
+        "name": "goods_orange",
+        "normal_file": "",
+        "note": "가판대 상품 카드 orange (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      },
+      {
+        "file": "stall_market__goods_lemon.png",
+        "h": 10,
+        "name": "goods_lemon",
+        "normal_file": "",
+        "note": "가판대 상품 카드 lemon (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      },
+      {
+        "file": "stall_market__goods_grape.png",
+        "h": 10,
+        "name": "goods_grape",
+        "normal_file": "",
+        "note": "가판대 상품 카드 grape (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "stall_market",
+    "kind": "prop",
+    "label": "시장 가판대",
+    "notes": "붉은 줄무늬 차양",
+    "roof_blocks": 0.0,
+    "roof_tint": "d05a3a",
+    "sprite": "res://art/world/village_decor_v6/market_stall_quarter_turn.png",
+    "style": "stall",
+    "tint": "ffffff",
+    "total_blocks": 1.8,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 0.5,
+    "canon_w": 4.0,
+    "faces": [
+      {
+        "file": "low_wall__low_wall_stone.png",
+        "h": 18,
+        "name": "low_wall_stone",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "low_wall__low_wall_cap.png",
+        "h": 18,
+        "name": "low_wall_cap",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "low_wall",
+    "kind": "prop",
+    "label": "낮은 돌담",
+    "notes": "돌담 + 머릿돌",
+    "roof_blocks": 0.0,
+    "roof_tint": "ffffff",
+    "sprite": "res://art/world/village_decor_v1/low_wall.png",
+    "style": "low_wall",
+    "tint": "ffffff",
+    "total_blocks": 0.65,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 1.5,
+    "canon_w": 1.5,
+    "faces": [
+      {
+        "file": "supply_cart__cart_handle.png",
+        "h": 18,
+        "name": "cart_handle",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "supply_cart__iron.png",
+        "h": 18,
+        "name": "iron",
+        "normal_file": "",
+        "note": "검은 쇠(기둥·테두리) 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "supply_cart__cart_side.png",
+        "h": 18,
+        "name": "cart_side",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "supply_cart__crate.png",
+        "h": 18,
+        "name": "crate",
+        "normal_file": "",
+        "note": "나무 상자 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "supply_cart__cart_bed.png",
+        "h": 18,
+        "name": "cart_bed",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "supply_cart",
+    "kind": "prop",
+    "label": "짐수레",
+    "notes": "수레 + 바퀴 + 상자",
+    "roof_blocks": 0.0,
+    "roof_tint": "ffffff",
+    "sprite": "res://art/world/plaza_props_v1/supply_cart_tile_aligned_v3.png",
+    "style": "cart",
+    "tint": "ffffff",
+    "total_blocks": 1.0,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 1.0,
+    "canon_w": 1.0,
+    "faces": [
+      {
+        "file": "plaza_crates__crate.png",
+        "h": 18,
+        "name": "crate",
+        "normal_file": "",
+        "note": "나무 상자 18×18: 판자 + 모서리 틀 + 가로 보강",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "plaza_crates",
+    "kind": "prop",
+    "label": "광장 상자",
+    "notes": "상자 3개 쌓임",
+    "roof_blocks": 0.0,
+    "roof_tint": "ffffff",
+    "sprite": "res://art/world/plaza_props_v1/plaza_crates.png",
+    "style": "crates",
+    "tint": "ffffff",
+    "total_blocks": 0.8,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 0.5,
+    "canon_w": 1.0,
+    "faces": [
+      {
+        "file": "noticeboard__bark.png",
+        "h": 18,
+        "name": "bark",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "noticeboard__noticeboard_face.png",
+        "h": 18,
+        "name": "noticeboard_face",
+        "normal_file": "",
+        "note": "게시판 면 18×18: 코르크 바탕 + 종이 쪽지",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "noticeboard__small_roof_tiles.png",
+        "h": 18,
+        "name": "small_roof_tiles",
+        "normal_file": "noticeboard__small_roof_tiles_n.png",
+        "note": "작은 지붕 기와 18×18 반복",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "noticeboard",
+    "kind": "prop",
+    "label": "게시판",
+    "notes": "기둥 둘 + 판 + 작은 지붕",
+    "roof_blocks": 0.0,
+    "roof_tint": "a05a30",
+    "sprite": "res://art/world/village_gathering_v1/village_noticeboard.png",
+    "style": "noticeboard",
+    "tint": "ffffff",
+    "total_blocks": 1.8,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 0.5,
+    "canon_w": 1.0,
+    "faces": [
+      {
+        "file": "oak_bench__bench_wood.png",
+        "h": 18,
+        "name": "bench_wood",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "oak_bench",
+    "kind": "prop",
+    "label": "참나무 벤치",
+    "notes": "의자 + 등받이",
+    "roof_blocks": 0.0,
+    "roof_tint": "ffffff",
+    "sprite": "res://art/world/village_gathering_v1/oak_bench.png",
+    "style": "bench",
+    "tint": "ffffff",
+    "total_blocks": 0.65,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 0.5,
+    "canon_w": 0.5,
+    "faces": [
+      {
+        "file": "street_lantern__iron.png",
+        "h": 18,
+        "name": "iron",
+        "normal_file": "",
+        "note": "검은 쇠(기둥·테두리) 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "street_lantern__lantern_glass.png",
+        "h": 18,
+        "name": "lantern_glass",
+        "normal_file": "",
+        "note": "가로등 유리 단색 18×18 따뜻한 노랑(밤에 빛남)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "street_lantern",
+    "kind": "prop",
+    "label": "가로등",
+    "notes": "철 기둥 + 유리 등(밤에 빛남)",
+    "roof_blocks": 0.0,
+    "roof_tint": "ffffff",
+    "sprite": "res://art/world/village_gathering_v1/street_lantern.png",
+    "style": "lantern",
+    "tint": "ffffff",
+    "total_blocks": 1.95,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 0.6,
+    "canon_w": 0.6,
+    "faces": [
+      {
+        "file": "flower_bush__flower_bush.png",
+        "h": 18,
+        "name": "flower_bush",
+        "normal_file": "",
+        "note": "꽃 덤불 18×18 반복(짙은 초록 + 분홍 꽃 점)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "flower_bush",
+    "kind": "prop",
+    "label": "꽃 덤불",
+    "notes": "초록 덤불 + 분홍 꽃",
+    "roof_blocks": 0.0,
+    "roof_tint": "ffffff",
+    "sprite": "res://art/world/route_props_v1/flower_bush.png",
+    "style": "flower_bush",
+    "tint": "ffffff",
+    "total_blocks": 0.45,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 0.5,
+    "canon_w": 0.5,
+    "faces": [
+      {
+        "file": "road_sign__bark.png",
+        "h": 18,
+        "name": "bark",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "road_sign__road_sign_board.png",
+        "h": 18,
+        "name": "road_sign_board",
+        "normal_file": "",
+        "note": "표지판 18×18 나무 판 + 흰 화살표",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "road_sign",
+    "kind": "prop",
+    "label": "표지판",
+    "notes": "나무 기둥 + 화살표 판",
+    "roof_blocks": 0.0,
+    "roof_tint": "ffffff",
+    "sprite": "res://art/world/route_props_v1/road_sign.png",
+    "style": "sign",
+    "tint": "ffffff",
+    "total_blocks": 1.45,
+    "wall_blocks": 0.0
+  },
+  {
+    "awning_tint": "ffffff",
+    "canon_d": 2.0,
+    "canon_w": 0.3,
+    "faces": [
+      {
+        "file": "wood_fence__fence_wood.png",
+        "h": 18,
+        "name": "fence_wood",
+        "normal_file": "",
+        "note": "나무 판(가로 판자 결)",
+        "tileable": true,
+        "w": 18
+      }
+    ],
+    "group": "prop",
+    "has_apron": false,
+    "id": "wood_fence",
+    "kind": "prop",
+    "label": "나무 울타리",
+    "notes": "기둥 + 가로대 둘",
+    "roof_blocks": 0.0,
+    "roof_tint": "ffffff",
+    "sprite": "res://art/world/route_props_v1/wood_fence.png",
+    "style": "fence",
+    "tint": "ffffff",
+    "total_blocks": 0.75,
+    "wall_blocks": 0.0
+  }
+]

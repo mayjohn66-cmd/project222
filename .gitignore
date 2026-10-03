@@ -26,3 +26,6 @@ balance_baseline.md
 *.key
 gemini_*.json
 override.cfg
+# Python 캐시
+__pycache__/
+*.pyc
