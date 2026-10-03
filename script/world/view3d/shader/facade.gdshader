@@ -15,9 +15,14 @@ uniform float sub = 0.5;
 // 법선 맵(선택). 메시의 UV 와 접선(SurfaceTool.generate_tangents)을 따라 기와 요철 등을 낸다.
 uniform sampler2D normal_tex : hint_normal, filter_nearest, repeat_enable;
 uniform bool use_normal = false;
+// 따뜻한 밝은 색 픽셀(가게 진열창 안쪽의 빛)만 스스로 빛나게 하는 정도. 0 이면 끔. 그림자(차양 그늘)가 져도 창 안이 어둡게 죽지 않게 한다.
+uniform float emit_strength = 0.0;
 
 void fragment() {
-	ALBEDO = texture(albedo_tex, UV * uv_scale).rgb * tint.rgb;
+	vec3 albedo_rgb = texture(albedo_tex, UV * uv_scale).rgb;
+	ALBEDO = albedo_rgb * tint.rgb;
+	float warm = step(0.85, albedo_rgb.r) * step(0.7, albedo_rgb.g) * (1.0 - step(0.8, albedo_rgb.b));
+	EMISSION = albedo_rgb * emit_strength * warm;
 
 	if (use_normal) {
 		NORMAL_MAP = texture(normal_tex, UV * uv_scale).rgb;

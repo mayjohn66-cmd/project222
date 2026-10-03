@@ -104,6 +104,9 @@ static func make_material(spec: Dictionary) -> ShaderMaterial:
 	m.set_shader_parameter("tint", spec.get("tint", Color.WHITE))
 	m.set_shader_parameter("uv_scale", spec.get("uv_scale", Vector2.ONE))
 
+	if spec.has("emit"):
+		m.set_shader_parameter("emit_strength", float(spec["emit"]))
+
 	if spec.get("normal", null) != null and not bool(spec.get("cutout", false)):
 		m.set_shader_parameter("normal_tex", spec["normal"])
 		m.set_shader_parameter("use_normal", true)
@@ -171,8 +174,8 @@ class PartBuilder:
 
 
 # 축에 맞춘 상자(밑면 제외). UV 는 세계 길이(칸) 단위, 질감 한 장 = 한 칸.
-static func box(b: PartBuilder, key: String, spec: Dictionary, lo: Vector3, hi: Vector3) -> void:
-	var st: SurfaceTool = b.new_part(spec, lo, hi)
+static func box(b: PartBuilder, key: String, spec: Dictionary, lo: Vector3, hi: Vector3, bias: float = 0.0) -> void:
+	var st: SurfaceTool = b.new_part(spec, lo, hi, bias)
 	var dx: float = hi.x - lo.x
 	var dy: float = hi.y - lo.y
 	var dz: float = hi.z - lo.z
@@ -340,6 +343,9 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	# 지붕 기와는 flat_color 대신 기와 질감을 쓰도록 교체(법선 맵과 짝)
 	specs[2]["tex"] = PlaceholderTextures.roof_tiles(ts, roof_tint)
 
+	if is_shop:
+		specs[0]["emit"] = 0.8  # 진열창 안쪽(따뜻한 밝은 색) 픽셀이 차양 그늘에서도 빛나게
+
 	# --- 부속: 현관 계단, 창 아래 화분, 간판, 건물 앞 소품(extras)
 	var b := PartBuilder.new()
 	var cells: int = cells_z
@@ -398,7 +404,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var display: PartBuilder = null
 
 	if is_shop:
-		_add_fascia(b, p, lo, hi, wall_h, h_texels)
+		_add_fascia(b, p, lo, hi, wall_h, h_texels, str(rule.get("sign_text", "BAKERY")))
 		_add_cloth_awning(b, p, lo, hi, wall_h, cells_z, cells_z / 2, awning_tint)
 		display = PartBuilder.new()
 
@@ -562,20 +568,21 @@ static func _add_cloth_awning(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Ve
 
 
 # 가게 이름 간판(앞벽 맨 위): 가로로 긴 판, 정면(+z)에 한 장 그림.
-static func _add_fascia(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Vector2, wall_h: float, h_texels: int) -> void:
+static func _add_fascia(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Vector2, wall_h: float, h_texels: int, text: String = "BAKERY") -> void:
 	var ts: int = p["ts"]
-	var sign_h: float = 11.0 * wall_h / float(h_texels)
+	var sign_px: int = 14
+	var sign_h: float = float(sign_px) * wall_h / float(h_texels)
 	var x0: float = lo.x + 0.08
 	var x1: float = hi.x - 0.08
-	# 지붕 처마(0.14)와 처마 끝 조각(0.09)보다 앞으로 내밀어야 지붕에 가려지지 않는다.
-	var y1: float = wall_h - 0.06
-	var y0: float = y1 - sign_h
+	# 지붕 처마선 위로 솟게: 아래 끝은 처마 조금 아래, 위는 처마 위로 올라온다(처마 0.14 + 조각 0.09 보다 앞에 둔다).
+	var y0: float = wall_h - 0.2
+	var y1: float = y0 + sign_h
 	var z: float = hi.y + 0.28
-	var tex: ImageTexture = PlaceholderTextures.bakery_fascia(int(roundf((x1 - x0) * float(ts))), 11)
-	var board: Dictionary = spec(tex, Color.WHITE, "bakery_fascia", "빵집 간판 %d×11 (BAKERY 글자 + 양끝 빵), 한 장 전체" % tex.get_width())
+	var tex: ImageTexture = PlaceholderTextures.bakery_fascia(int(roundf((x1 - x0) * float(ts))), sign_px, text)
+	var board: Dictionary = spec(tex, Color.WHITE, "bakery_fascia", "가게 간판 %d×%d (%s 글자 + 양끝 그림), 한 장 전체" % [tex.get_width(), sign_px, text])
 	var back: Dictionary = spec(_tex("flat", ts, Color(0.36, 0.22, 0.12)), Color.WHITE, "sign_frame", "간판 뒤판·테두리 어두운 나무 단색 %d×%d" % [ts, ts])
-	box(b, "fascia_back", back, Vector3(x0 - 0.02, y0 - 0.02, hi.y + 0.1), Vector3(x1 + 0.02, y1 + 0.02, z - 0.01))
-	var st: SurfaceTool = b.new_part(board, Vector3(x0, y0, z), Vector3(x1, y1, z + 0.01))
+	box(b, "fascia_back", back, Vector3(x0 - 0.02, y0 - 0.02, hi.y + 0.1), Vector3(x1 + 0.02, y1 + 0.02, z - 0.01), 40.0)
+	var st: SurfaceTool = b.new_part(board, Vector3(x0, y0, z), Vector3(x1, y1, z + 0.01), 41.0)
 	BuildingMesh._quad(st, Vector3(x0, y0, z), Vector3(x1, y0, z), Vector3(x1, y1 - 0.01, z), Vector3(x0, y1 - 0.01, z), Vector3(0, 0, 1), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
 
 
