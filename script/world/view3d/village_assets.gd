@@ -957,6 +957,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 	var sz: float = hi.y - lo.y
 	var along_x: bool = sx >= sz
 	var total: float = 1.0
+	var anim_parts: Array = []  # 돌아가는 부품: {mesh, specs, pos, speed(rad/s)}
 	var roof_tint: Color = rule.get("roof_tint", Color(0.8, 0.42, 0.25))
 	var tint: Color = rule.get("tint", Color(1, 1, 1))
 	var bark: Dictionary = wood(p, Color(0.42, 0.3, 0.2), "bark")
@@ -1058,7 +1059,12 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			# 날개: 카메라를 보는 평면 컷아웃. 중심 축은 탑 앞 위쪽
 			var blades: Dictionary = spec(PlaceholderTextures.windmill_blades(), Color.WHITE, "mill_blades", "풍차 날개 24×24 (투명 배경 컷아웃, 십자 뼈대와 격자 천)")
 			blades["cutout"] = true
-			_card(b, blades, c.x + 0.55, 1.45, c.y + 0.55, 3.0, 3.0)
+			# 날개는 돌려야 하므로 건물 mesh 에 넣지 않고 따로 만든다(중심이 원점, 위치는 anim 의 pos). 카메라를 보는 평면이라 그 축으로 돌려도 정면 그대로다.
+			var ab := PartBuilder.new()
+			_card(ab, blades, 0.0, -1.3, 0.0, 2.6, 2.6)
+			var amesh := ArrayMesh.new()
+			var aspecs: Array = ab.commit_into(amesh)
+			anim_parts.append({"mesh": amesh, "specs": aspecs, "pos": Vector3(c.x + 0.5, 2.7, c.y + 0.5), "speed": 0.9})
 			total = 3.5
 		"low_wall":
 			box(b, "stone", stone_spec(p, Color(1, 1, 1), "low_wall_stone"), Vector3(lo.x, 0.0, lo.y), Vector3(hi.x, 0.55, hi.y))
@@ -1146,7 +1152,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 		phi = Vector2(maxf(hi.x, b.max_pt.x), maxf(hi.y, b.max_pt.z))
 
 	apply_overrides(specs, str(rule.get("asset", "")), p)
-	return {"mesh": mesh, "specs": specs, "apron": null, "total_blocks": total, "lo": plo, "hi": phi}
+	return {"mesh": mesh, "specs": specs, "apron": null, "anim": anim_parts, "total_blocks": total, "lo": plo, "hi": phi}
 
 
 # l(길이 방향)·w(폭 방향) 좌표로 상자를 놓는다(along_x 면 l=x, w=z / 아니면 l=z, w=x).

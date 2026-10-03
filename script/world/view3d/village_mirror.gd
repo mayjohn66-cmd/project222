@@ -45,6 +45,7 @@ var _ground_signature: String = ""
 var _object_signature: String = ""
 var _keys: Dictionary = {}  # 이번에 만든 항목 키 → true
 var _tuft_keys: Array = []  # 풀 다발 항목 키(물체 정리 대상이 아니라 따로 관리)
+var _anims: Dictionary = {}  # 돌아가는 부품 항목 키 → {speed}
 
 
 func _init(owner_view: Node, exterior_node: Node2D) -> void:
@@ -209,6 +210,20 @@ func clear_ground() -> void:
 		(_ground[kind]["id_mesh"] as Node).queue_free()
 
 	_ground.clear()
+
+
+# 돌아가는 부품(풍차 날개 등)을 돌린다. 날개는 카메라를 보는 평면이므로 그 평면의 수직 축(카메라 방향)으로 돌린다.
+func tick(delta: float) -> void:
+	var axis := Vector3(0.7071, 0.0, 0.7071)
+
+	for k in _anims.keys():
+		if not view._items.has(k):
+			continue
+
+		var inst: Node3D = view._items[k]["mesh"]
+
+		if is_instance_valid(inst):
+			inst.rotate(axis, float(_anims[k]["speed"]) * delta)
 
 
 func reset_signatures() -> void:
@@ -428,15 +443,18 @@ func sync_objects(world: Node) -> void:
 
 	# 사라진 물체 정리
 	for k in _keys.keys():
-		var base: String = str(k).substr(0, str(k).length() - 1)
+		var kk: String = str(k)
+		var base: String = kk.substr(0, kk.rfind("d")) if kk.rfind("d") > 3 and kk.substr(kk.rfind("d") + 1).is_valid_int() else kk.substr(0, kk.length() - 1)
 
 		if not seen.has(base):
 			view._remove_item(str(k))
+			_anims.erase(str(k))
 			_keys.erase(k)
 
 
 func _remove_keys(base: String) -> void:
-	for suffix in ["a", "b", "c"]:
+	for suffix in ["a", "b", "c", "d0", "d1", "d2", "d3"]:
+		_anims.erase(base + suffix)
 		view._remove_item(base + suffix)
 		_keys.erase(base + suffix)
 
@@ -501,6 +519,19 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 			(view._items[key + "a"]["mesh"] as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 		_keys[key + "a"] = true
+
+		var anims: Array = built.get("anim", [])
+
+		for ai in range(anims.size()):
+			var an: Dictionary = anims[ai]
+			var akey: String = key + "d%d" % ai
+			var pos: Vector3 = an["pos"]
+			view._set_mesh_item(akey, an["mesh"], VillageAssets.make_materials(an["specs"]), Vector2(pos.x - 1.5, pos.z - 1.5), Vector2(pos.x + 1.5, pos.z + 1.5), pos.y + 1.5, sig, NAN, false)
+			var ainst: MeshInstance3D = view._items[akey]["mesh"]
+			ainst.position = pos
+			ainst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			_anims[akey] = {"speed": float(an["speed"])}
+			_keys[akey] = true
 
 		if built.get("display", null) != null:
 			var dp: Dictionary = built["display"]

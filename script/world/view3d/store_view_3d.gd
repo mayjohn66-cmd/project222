@@ -450,6 +450,10 @@ func _process(delta: float) -> void:
 			_collect_2d_to_hide()
 
 	_sync_actors(delta)
+
+	if village != null and village_enabled:
+		village.tick(delta)
+
 	_sort_and_update()
 
 
