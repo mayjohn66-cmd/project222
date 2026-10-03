@@ -1,12 +1,23 @@
 extends Node
 ## 건물·가판대를 한 화면에 나열해 직접 돌려 보는 시험 장면(종료하지 않음). 인자 없이 F6 으로 실행한다.
-## 1 = 마을 건물·가게, 2 = 새 건물 종류(돌탑·돔·풍차·헛간·마구간, 풍차 날개가 돈다), 3 = 가판대 12종   [ ] = 한 화면 안에서 해(시각) 바꾸기 아님(고정)
+## 1 = 마을 건물·가게, 2 = 새 건물 종류(돌탑·돔·풍차·헛간·마구간, 풍차 날개가 돈다), 3 = 가판대 12종,
+## 4 = 새 집 모양 12가지(지붕 종류·포치·지붕창·돌출 창·별채·탑·2층), 5 = 나무 변형과 소품(건초·통·우물·수레)
 ## 방향키 = 화면 이동, +/- = 확대·축소, R = 색·지붕 조합 다시 뽑기
 
 const PAGES: Array = [
 	{"title": "마을 건물·가게", "names": ["bakery", "blacksmith", "tool_shop", "red_house", "moss_cottage", "house", "ochre_townhouse", "red_house", "house"], "cols": 3, "kind": "building"},
 	{"title": "새 건물 종류 (풍차 날개가 돕니다)", "names": ["tower_house", "dome_hall", "windmill", "granary", "stable", "granary"], "cols": 3, "kind": "building"},
 	{"title": "가판대 12종", "names": [], "cols": 4, "kind": "stall"},
+	{"title": "새 집 모양 12가지 (지붕 종류 / 포치·지붕창·돌출 창·별채·탑·2층)", "cols": 4, "kind": "shape", "cases": [
+		["house", "gable", "porch"], ["house", "gable", "porch;dormer:2"], ["house", "gambrel", "bay;dormer:1"], ["house", "mansard", "porch;dormer:2"],
+		["house", "half_hip", "annex;porch"], ["house", "hip", "tower;porch"], ["house", "gable", "jetty;dormer:2"], ["house", "cross", "bay;annex"],
+		["house", "gambrel", "jetty;porch"], ["ochre_townhouse", "mansard", "jetty;dormer:2"], ["moss_cottage", "half_hip", "porch;bay;dormer:1"], ["red_house", "gable", "annex;dormer:1"],
+	]},
+	{"title": "나무 변형과 소품 (둥근·소나무·자작·큰 참나무·가을 / 건초·통·우물·수레)", "cols": 3, "kind": "propvar", "cases": [
+		["apple_tree", "round", "tree"], ["apple_tree", "pine", "tree"], ["apple_tree", "birch", "tree"],
+		["apple_tree", "big_oak", "tree"], ["apple_tree", "autumn", "tree"], ["apple_tree", "", "hay"],
+		["apple_tree", "", "barrels"], ["village_well", "", "well"], ["supply_cart", "", "cart"],
+	]},
 ]
 
 var vp: SubViewport
@@ -75,7 +86,7 @@ func _ready() -> void:
 
 
 func _shoot(out: String) -> void:
-	for pg in range(3):
+	for pg in range(PAGES.size()):
 		_show_page(pg)
 
 		for f in range(10):
@@ -118,6 +129,10 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_show_page(1)
 		KEY_3:
 			_show_page(2)
+		KEY_4:
+			_show_page(3)
+		KEY_5:
+			_show_page(4)
 		KEY_EQUAL, KEY_KP_ADD:
 			cam_zoom = maxf(cam_zoom - 1.5, 5.0)
 			_place_camera()
@@ -132,7 +147,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _place_camera() -> void:
 	var pg: Dictionary = PAGES[page]
 	var cols: int = int(pg["cols"])
-	var count: int = VillageAssets.STALL_TYPES.size() if str(pg["kind"]) == "stall" else (pg["names"] as Array).size()
+	var count: int = VillageAssets.STALL_TYPES.size() if str(pg["kind"]) == "stall" else ((pg["cases"] as Array).size() if pg.has("cases") else (pg["names"] as Array).size())
 	var rows: int = int(ceil(float(count) / float(cols)))
 	var step: Vector2 = _step(pg)
 	var cx: float = float(cols - 1) * step.x * 0.5 + cam_pan.x
@@ -142,13 +157,25 @@ func _place_camera() -> void:
 
 
 func _step(pg: Dictionary) -> Vector2:
-	return Vector2(3.4, 2.9) if str(pg["kind"]) == "stall" else Vector2(7.5, 7.5)
+	var kind: String = str(pg["kind"])
+
+	if kind == "stall":
+		return Vector2(3.4, 2.9)
+
+	if kind == "shape":
+		return Vector2(8.5, 8.5)
+
+	if kind == "propvar":
+		return Vector2(4.2, 4.2)
+
+	return Vector2(7.5, 7.5)
 
 
 func _show_page(i: int) -> void:
 	page = i
 	cam_pan = Vector2.ZERO
-	cam_zoom = 11.0 if str(PAGES[i]["kind"]) == "stall" else 15.0
+	var zk: String = str(PAGES[i]["kind"])
+	cam_zoom = 11.0 if zk == "stall" else (24.0 if zk == "shape" else (12.0 if zk == "propvar" else 15.0))
 	spinners.clear()
 
 	if holder != null:
@@ -161,7 +188,47 @@ func _show_page(i: int) -> void:
 	var step: Vector2 = _step(pg)
 	var cols: int = int(pg["cols"])
 
-	if str(pg["kind"]) == "stall":
+	if str(pg["kind"]) == "shape" or str(pg["kind"]) == "propvar":
+		var rules0: Array = VillageMirror.load_rules()
+		var cases: Array = pg["cases"]
+
+		for k in range(cases.size()):
+			var rule0: Dictionary = VillageMirror.find_rule(rules0, str(cases[k][0]))
+			var center0 := Vector2(float(k % cols) * step.x, float(k / cols) * step.y)
+			var cw0: float = float(rule0.get("canon_w", 3.0))
+			var cd0: float = float(rule0.get("canon_d", 3.0))
+			rule0 = VillageMirror.apply_variation(rule0, absi(hash("s%d_%d_%d" % [i, k, seed_shift])) % 100003)
+
+			if str(pg["kind"]) == "shape":
+				rule0["roof_kind"] = cases[k][1]
+				rule0["shape"] = cases[k][2]
+				rule0["floors"] = 2 if "jetty" in str(cases[k][2]) else 1
+
+				if int(rule0["floors"]) == 2:
+					rule0["height_blocks"] = maxf(float(rule0.get("height_blocks", 2.2)), 3.3)
+			else:
+				rule0["variant"] = cases[k][1]
+				rule0["style"] = cases[k][2]
+				rule0["kind"] = "prop"
+
+			var lo0: Vector2 = center0 - Vector2(cw0, cd0) * 0.5
+			var hi0: Vector2 = center0 + Vector2(cw0, cd0) * 0.5
+			var built0: Dictionary = VillageAssets.build_gable(lo0, hi0, rule0, p) if str(rule0.get("kind", "gable")) == "gable" else VillageAssets.build_prop(str(rule0.get("style", "")), lo0, hi0, rule0, p)
+			_add_mesh(built0["mesh"], built0["specs"], Vector3.ZERO)
+
+			if built0.get("display", null) != null:
+				_add_mesh(built0["display"]["mesh"], built0["display"]["specs"], Vector3.ZERO)
+
+			if built0.get("apron", null) != null:
+				var ap0: Dictionary = built0["apron"]
+				var m0 := VillageAssets.make_material(ap0["spec"])
+				m0.set_shader_parameter("use_sort", false)
+				var mi0 := MeshInstance3D.new()
+				mi0.mesh = ap0["mesh"]
+				mi0.material_override = m0
+				mi0.position.y = 0.01
+				holder.add_child(mi0)
+	elif str(pg["kind"]) == "stall":
 		var kinds: Array = VillageAssets.STALL_TYPES.keys()
 
 		for k in range(kinds.size()):
@@ -212,7 +279,7 @@ func _show_page(i: int) -> void:
 				var node := _add_mesh(an["mesh"], an["specs"], an["pos"])
 				spinners.append({"node": node, "speed": float(an["speed"])})
 
-	label.text = "%d) %s   — 1·2·3 쪽 전환 / 방향키 이동 / +- 확대 / R 색 다시 뽑기" % [i + 1, str(pg["title"])]
+	label.text = "%d) %s   — 1~5 쪽 전환 / 방향키 이동 / +- 확대 / R 색 다시 뽑기" % [i + 1, str(pg["title"])]
 	_place_camera()
 
 
