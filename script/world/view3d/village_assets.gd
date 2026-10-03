@@ -509,28 +509,26 @@ static func _card_spec(kind: String, p: Dictionary) -> Dictionary:
 static func _add_bread_bin(b: PartBuilder, p: Dictionary, x: float, z: float, kind: String) -> void:
 	var plank: Dictionary = wood(p, Color(1.0, 0.84, 0.6), "bin_wood")
 	var inner: Dictionary = spec(_tex("flat", p["ts"], Color(0.42, 0.26, 0.14)), Color.WHITE, "bin_inner", "빵 상자 안쪽 어두운 갈색 단색 %d×%d" % [p["ts"], p["ts"]])
-	var hx: float = 0.42
-	var hz: float = 0.22
-	var rim: float = 0.34
+	var hx: float = 0.4
+	var hz: float = 0.2
+	var rim: float = 0.3
 	box(b, "bin_bottom", inner, Vector3(x - hx, 0.0, z - hz), Vector3(x + hx, 0.05, z + hz))
 	box(b, "bin_back", plank, Vector3(x - hx, 0.0, z - hz), Vector3(x + hx, rim, z - hz + 0.04))
 	box(b, "bin_left", plank, Vector3(x - hx, 0.0, z - hz), Vector3(x - hx + 0.04, rim, z + hz))
 
 	var card: Dictionary = _card_spec(kind, p)
 
+	# 간략화: 크게, 세 장만(겹치지 않게 간격을 둠). 상자 밖으로 충분히 솟아서 한눈에 읽히게.
 	if kind == "baguette":
-		var xs: Array = [-0.3, -0.15, 0.0, 0.15, 0.3]
-		var hs: Array = [0.74, 0.86, 0.78, 0.9, 0.72]
+		var xs: Array = [-0.24, 0.0, 0.24]
+		var hs: Array = [0.95, 1.1, 0.98]
 
-		for i in range(xs.size()):
-			_card(b, card, x + float(xs[i]) * 0.9, 0.08, z - 0.04 + 0.03 * float(i % 2), 0.24, float(hs[i]))
+		for i2 in range(xs.size()):
+			_card(b, card, x + float(xs[i2]), 0.08, z - 0.02, 0.4, float(hs[i2]))
 	else:
-		# 둥근 빵은 앞뒤 두 줄(뒤는 높게)
-		for i in range(3):
-			_card(b, card, x + (float(i) - 1.0) * 0.27, 0.2, z - 0.1, 0.34, 0.3)
-
-		for i in range(2):
-			_card(b, card, x + (float(i) - 0.5) * 0.3, 0.1, z + 0.06, 0.34, 0.3)
+		_card(b, card, x - 0.26, 0.12, z + 0.0, 0.56, 0.5)
+		_card(b, card, x + 0.26, 0.12, z + 0.0, 0.56, 0.5)
+		_card(b, card, x, 0.2, z - 0.1, 0.56, 0.5)
 
 	box(b, "bin_right", plank, Vector3(x + hx - 0.04, 0.0, z - hz), Vector3(x + hx, rim, z + hz))
 	box(b, "bin_front", plank, Vector3(x - hx, 0.0, z + hz - 0.04), Vector3(x + hx, rim, z + hz))
