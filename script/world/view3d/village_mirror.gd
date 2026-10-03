@@ -12,7 +12,7 @@ const GROUND_TEXTURES: Dictionary = {"grass": ["grass", Color(0.62, 0.6, 0.46)],
 const GROUND_TEXTURES_CLEAN: Dictionary = {"grass": ["grass", Color(1.0, 1.0, 1.0)], "road": ["brick", Color(0.96, 0.96, 0.98)], "paving": ["brick", Color(1.0, 0.93, 0.8)]}
 
 # 같은 규칙을 쓰는 집(vary=1)마다 다르게 보이게 하는 색 조합(건물 번호로 정해져서 다시 만들어도 같다).
-const ROOF_PALETTE: Array = ["c0462f", "3f8a58", "3a6fb0", "d8a030", "7a4a9a", "b8704a", "4a8a8a", "a03a52"]
+const ROOF_PALETTE: Array = ["b8503c", "4a8a5a", "5a80ac", "c8a450", "8068a0", "b0784e", "58908c", "a04c5c"]
 const WALL_PALETTE: Array = ["eadfc8", "f2e6c0", "dcc8a0", "e8d0c0", "d8e0d0", "e0d8e8"]
 const TRIM_PALETTE: Array = ["5c8a7a", "9a5a3a", "4a6a9a", "7a9a4a", "8a5a8a", "c08a3a"]
 

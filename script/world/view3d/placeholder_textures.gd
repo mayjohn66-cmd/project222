@@ -38,7 +38,7 @@ static func albedo(kind: String, size: int) -> ImageTexture:
 				"grass":
 					if clean:
 						var dot: bool = (x * 7 + y * 13) % 41 == 0
-						c = Color(0.56, 0.74, 0.42) if dot else Color(0.48, 0.68, 0.36)
+						c = Color(0.56, 0.72, 0.44) if dot else Color(0.5, 0.67, 0.4)
 					else:
 						var shade: float = rng.randf_range(-0.07, 0.07)
 						c = Color(0.36 + shade, 0.6 + shade, 0.3 + shade)
@@ -304,7 +304,15 @@ static func wall_facade(width_texels: int, height_texels: int, door: bool, windo
 
 # 기와 지붕 질감: 한 칸(size×size) 반복. 도트 느낌을 위해 **3톤만** 쓴다(윗줄 밝은 하이라이트 / 가운데 기본색 / 아랫줄 어두운 그림자 줄)
 # + 기와 사이 세로 틈. 부드러운 그라데이션과 무작위 노이즈는 쓰지 않는다. 기와 폭 = 한 칸의 3분의 1, 줄 높이 = 한 칸의 6분의 1(18 → 6×3).
-static func roof_tiles(size: int, base: Color) -> ImageTexture:
+# 채도를 낮춘 색(형광 느낌 줄이기): 채도 ×scale 후 상한 sat_max, 밝기는 살짝 눌러 눈부심을 막는다. 지붕·천 같은 큰 색 면에 쓴다.
+static func soften(c: Color, scale: float = 0.68, sat_max: float = 0.5, val_max: float = 0.9) -> Color:
+	var s: float = minf(c.s * scale, sat_max)
+	var v: float = minf(c.v, val_max)
+	return Color.from_hsv(c.h, s, v, c.a)
+
+
+static func roof_tiles(size: int, base_in: Color) -> ImageTexture:
+	var base: Color = soften(base_in)
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
 
 	if clean:
@@ -386,7 +394,9 @@ static func roof_normal(size: int) -> ImageTexture:
 
 
 # 차양: 세로 줄무늬(크림 / 주황)
-static func awning_stripes(size: int, a: Color, b: Color) -> ImageTexture:
+static func awning_stripes(size_in: int, a: Color, b_in: Color) -> ImageTexture:
+	var size: int = size_in
+	var b: Color = soften(b_in)
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
 	var stripe: int = maxi(size / 6, 2)
 

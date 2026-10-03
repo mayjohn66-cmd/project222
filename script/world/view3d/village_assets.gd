@@ -344,7 +344,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		spec(tex_x, Color.WHITE, "wall_side", "카메라 오른쪽 아래를 보는 옆벽 %d×%d px: 창 %d, 나무 뼈대, 아래 돌 기단" % [tex_x.get_width(), tex_x.get_height(), cells_x]),
 		spec(_tex("flat", ts, roof_tint), Color.WHITE, "roof_tiles", "지붕 기와 %d×%d 한 칸 반복(이음매 없이). 법선 맵 별도" % [ts, ts], PlaceholderTextures.roof_normal(ts)),
 		spec(PlaceholderTextures.wall_facade(ts, ts, false, 1, plaster, timber), Color.WHITE, "gable_wall", "박공(지붕 끝 삼각형) 벽 %d×%d 반복" % [ts, ts]),
-		spec(PlaceholderTextures.flat_color(ts, roof_tint.darkened(0.45)), Color.WHITE, "roof_trim", "지붕 두께·처마 단면·용마루 덮개 %d×%d 어두운 목재/기와" % [ts, ts]),
+		spec(PlaceholderTextures.flat_color(ts, PlaceholderTextures.soften(roof_tint).darkened(0.45)), Color.WHITE, "roof_trim", "지붕 두께·처마 단면·용마루 덮개 %d×%d 어두운 목재/기와" % [ts, ts]),
 		spec(_tex("stone", ts), Color(1.0, 0.82, 0.74), "chimney_stone", "굴뚝 돌 %d×%d 반복" % [ts, ts]),
 		spec(PlaceholderTextures.roof_tiles(ts, awning_tint.darkened(0.12)), Color.WHITE, "awning", "차양 기와 %d×%d 반복(지붕 기와와 같은 구조, 색은 가게마다)" % [ts, ts], PlaceholderTextures.roof_normal(ts)),
 	]
@@ -472,7 +472,7 @@ static func _add_eave_nubs(b: PartBuilder, lo: Vector2, hi: Vector2, wall_h: flo
 	var ts: int = p["ts"]
 	var overhang: float = 0.14
 	var ridge_x: bool = (hi.x - lo.x) >= (hi.y - lo.y)
-	var cap: Dictionary = spec(PlaceholderTextures.flat_color(ts, roof_tint.darkened(0.12)), Color.WHITE, "eave_tile", "처마 끝 기와 조각 단색 %d×%d (지붕보다 한 톤 어둡게)" % [ts, ts])
+	var cap: Dictionary = spec(PlaceholderTextures.flat_color(ts, PlaceholderTextures.soften(roof_tint).darkened(0.12)), Color.WHITE, "eave_tile", "처마 끝 기와 조각 단색 %d×%d (지붕보다 한 톤 어둡게)" % [ts, ts])
 	var u0: float = (lo.x if ridge_x else lo.y) - overhang
 	var u1: float = (hi.x if ridge_x else hi.y) + overhang
 	var v_edge: float = (hi.y if ridge_x else hi.x) + overhang
@@ -775,10 +775,10 @@ static func pyramid(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz
 static func _build_stall(b: PartBuilder, lo: Vector2, hi: Vector2, kind: String, p: Dictionary) -> float:
 	var ts: int = p["ts"]
 	var d: Dictionary = STALL_TYPES[kind]
-	var c1: Color = Color.html(str(d["c1"]))
+	var c1: Color = PlaceholderTextures.soften(Color.html(str(d["c1"])))
 	var c2: Color = Color.html(str(d["c2"])) if str(d["c2"]) != "" else c1.lightened(0.35)
 	var counter_c: Color = Color.html(str(d["counter"]))
-	var skirt_c: Color = Color.html(str(d["skirt"]))
+	var skirt_c: Color = PlaceholderTextures.soften(Color.html(str(d["skirt"])))
 	var bark: Dictionary = wood(p, Color(0.42, 0.3, 0.2), "bark")
 	var canopy_kind: String = str(d["canopy"])
 	var stripes: Dictionary = spec(PlaceholderTextures.awning_stripes(ts, c2, c1), Color.WHITE, "stall_cloth_stripe", "가판대 줄무늬 천 %d×%d (가판대마다 색 다름)" % [ts, ts])
