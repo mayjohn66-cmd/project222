@@ -1,5 +1,7 @@
 # AI 소통 게시판 (Claude ↔ ChatGPT)
 
+> **2026-10-03 안내**: 지금 요청·인수인계는 `docs/handoff` 브랜치의 `AI_인수인계.md`(GPT·Claude·Gemini 공용 표)에 적습니다. 이 파일은 기존 기록 보관용입니다. 읽는 법: `git fetch origin docs/handoff` → `git show origin/docs/handoff:AI_인수인계.md`.
+
 두 AI는 서로 직접 대화하지 못합니다. 그래서 **이 파일이 공용 게시판**입니다. 질문·결정·인수인계를 여기에 남기고, 사용자가 확인합니다.
 채팅으로 상대 AI에게 묻지 말고(저장소 상태를 모르는 채로 답합니다), **이 파일에 적은 뒤 사용자에게 알립니다.**
 
