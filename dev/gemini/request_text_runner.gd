@@ -691,13 +691,15 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 			Tools.KIND_RESIDENT_REQUEST:
 				info = "인물: %s / 필요한 재료: %s" % [d.get("npc", ""), _item_name(str(d.get("item", "")))]
 			Tools.KIND_COMMUNITY_REQUEST:
+				if bool(d.get("after_afterglow", false)):
+					info += "첫 장터 뒤 먹거리 후일담 세 개를 듣고 다음 날부터 준비 / 재료는 게시판에서 전달 / 다음 오후 새 벤치에 모여 쉬기 / 반복 보상·체력 회복 없음 / "
 				var names: PackedStringArray = []
 
 				for req in d.get("requirements", []):
 					names.append(_item_name(str(req.get("item", ""))))
 
 				var resident: Dictionary = residents.get(str(d.get("resident", "")), {})
-				info = "부탁하는 주민: %s / 필요한 재료: %s / 완성되는 곳: %s" % [resident.get("name", d.get("resident", "")), ", ".join(names), d.get("landmark_name", "")]
+				info += "부탁하는 주민: %s / 필요한 재료: %s / 완성되는 곳: %s" % [resident.get("name", d.get("resident", "")), ", ".join(names), d.get("landmark_name", "")]
 			Tools.KIND_RESIDENT_GREETING:
 				info = "이름: %s / 직업: %s / 건네는 물건: %s" % [d.get("name", ""), d.get("type", ""), _item_name(str(d.get("gift", "")))]
 

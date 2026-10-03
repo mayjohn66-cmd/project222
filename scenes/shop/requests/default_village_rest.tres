@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="VillageRestSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_rest_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+moments = Array[Dictionary]([
+{"id":"trail_rest_open","npc":"코르빈","speaker":"doyun","stage":"먹거리 후일담 세 개를 듣고 공동 부탁으로 벤치를 마련한 다음 날 오후. 실제 세 주민이 새 길목 벤치에 도착한 뒤 첫 쉼터 장면. 기존 벤치 이미지를 재사용. 추가 물품 소비 없음"},
+{"id":"trail_rest_naru","npc":"타블렌","speaker":"naru","stage":"길목 벤치의 첫 모임에서 보따리를 내려놓고 쉬는 이야기. 노점 행사·새 손님 해금·판매 장면이 아님"},
+{"id":"trail_rest_sora","npc":"이세르","speaker":"sora","stage":"처음 함께 쉬는 길목에서 생활 소리를 듣는 이야기. 새 책 아이템을 주거나 미래 건물을 약속하지 않음"},
+{"id":"trail_rest_end","npc":"코르빈","speaker":"doyun","stage":"첫 쉼터 대화 완독 후 평판 한 번 지급. 이후 플레이어가 혼자 벤치에서 다시 쉬어 갈 수 있음. 체력·피로 회복·물품 지급 없음"},
+{"id":"trail_rest_quiet","npc":"장면 서술","stage":"첫 모임 완료 이후 벤치 E 재방문. 바람과 마을 소리를 듣는 짧은 정적 장면. 오늘 들른 날짜만 기록하고 반복 보상·시간 건너뛰기·체력 회복 없음. 일인칭 NPC 대사가 아닌 장면 묘사"}
+])

@@ -3,6 +3,8 @@ extends RefCounted
 
 static func location(entry: Dictionary, hour: int) -> Dictionary:
 	var home := {"path":str(entry["site"]), "label":"머무는 곳"}
+	if VillageRestFlow.active(hour) and str(entry["id"]) in VillageRestFlow.SETTINGS.participants:
+		return {"path":VillageRestFlow.SETTINGS.site_path, "label":"길목 쉼터 첫 모임"}
 	if VillageMarketFlow.active(hour) and str(entry["id"]) in VillageMarketFlow.SETTINGS.participants:
 		return {"path":VillageMarketFlow.SETTINGS.site_path, "label":"첫 장터"}
 	if VillageGatheringFlow.active(hour): return {"path":VillageGatheringFlow.SETTINGS.site_path,"label":"저녁 모임"}

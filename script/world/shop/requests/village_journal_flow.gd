@@ -21,9 +21,11 @@ static func entries() -> Array[Dictionary]:
 	result.append({"id":LanternWayfarerFlow.JOURNAL_ID,"title":LanternWayfarerFlow.title()})
 	result.append({"id":VillageStoryFlow.JOURNAL_ID,"title":VillageStoryFlow.title()})
 	result.append({"id":VillageMarketFlow.JOURNAL_ID,"title":VillageMarketFlow.title()})
+	result.append({"id":VillageRestFlow.JOURNAL_ID,"title":"쉼터에서 처음 함께 쉬기"})
 	return result
 
 static func information(id: String) -> String:
+	if id == VillageRestFlow.JOURNAL_ID: return VillageRestFlow.information()
 	if id == VillageMarketFlow.JOURNAL_ID: return VillageMarketFlow.information()
 	if id == VillageStoryFlow.JOURNAL_ID: return VillageStoryFlow.information()
 	if id == LanternWayfarerFlow.JOURNAL_ID: return LanternWayfarerFlow.information()
@@ -62,6 +64,9 @@ static func information(id: String) -> String:
 
 static func destination(world: Node, id: String) -> Node2D:
 	if not available(): return null
+	if id == VillageRestFlow.JOURNAL_ID:
+		if VillageRestFlow.prepared(): return VillageRestFlow.site(world)
+		return destination(world, "community:" + VillageRestFlow.SETTINGS.preparation)
 	if id == VillageMarketFlow.JOURNAL_ID:
 		if not VillageMarketFlow.locked_reason().is_empty(): return null
 		return VillageMarketFlow.site(world) if VillageMarketFlow.prepared() else destination(world, "resident:" + VillageMarketFlow.SETTINGS.giver)

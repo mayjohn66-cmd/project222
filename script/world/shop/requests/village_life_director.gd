@@ -26,6 +26,9 @@ func _ready() -> void:
 	var market := VillageMarketDirector.new()
 	market.name = "VillageMarketDirector"
 	add_child(market)
+	var rest := VillageRestDirector.new()
+	rest.name = "VillageRestDirector"
+	add_child(rest)
 	call_deferred("refresh")
 
 func _process(delta: float) -> void:

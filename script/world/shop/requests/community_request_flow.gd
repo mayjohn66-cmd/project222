@@ -32,6 +32,9 @@ static func locked_reason(entry: Dictionary) -> String:
 		if not VillageLifeFlow.available(participant): return "%s의 정착을 기다리고 있어요." % participant.get("name","주민")
 		var minimum := int(entry.get("participant_friendship",0))
 		if VillageLifeFlow.friendship(str(id)) < minimum: return "%s · 안부 나누기 %d/%d일" % [participant["name"],VillageLifeFlow.friendship(str(id)),minimum]
+	if bool(entry.get("after_afterglow", false)):
+		var reason := VillageRestFlow.locked_reason()
+		if not reason.is_empty(): return reason
 	return ""
 
 static func accept(id: String) -> bool:
