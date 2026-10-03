@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="SeasonalVillageSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/seasonal_village_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+events = Array[Dictionary]([
+{"id":"spring_flower_walk","season":"spring","giver":"doyun","mode":"observe","after":"flower_corner","site":"VillageGathering/EastFlowerBed","site_name":"마을 꽃자리","start_hour":0,"end_hour":24,"gifts":[{"item":"forest_herb","amount":2}],"reputation":1},
+{"id":"summer_water_break","season":"summer","giver":"naru","mode":"delivery","requirements":[{"item":"water","amount":2}],"gifts":[{"item":"wild_berry","amount":2}],"reputation":1},
+{"id":"autumn_neighbor_notes","season":"autumn","giver":"sora","mode":"neighbors","participants":["naru","doyun","sora"],"gifts":[{"item":"wheat","amount":2}],"reputation":1},
+{"id":"winter_lantern_round","season":"winter","giver":"doyun","mode":"observe","after":"path_light","site":"VillageGathering/MarketLantern","site_name":"길목 등불","start_hour":18,"end_hour":24,"gifts":[{"item":"coal","amount":2}],"reputation":1}
+])
+moments = Array[Dictionary]([
+{"id":"spring_flower_walk_intro","npc":"코르빈","stage":"봄에 마을 꽃자리 준비 뒤 제안. 기존 꽃자리로 직접 이동해 E로 현장 묘사를 완독하고 돌아오기. 날씨·새 식물·물품 준비 없음"},
+{"id":"spring_flower_walk_observe","npc":"장면 서술","stage":"봄에 제안을 들은 후 기존 꽃자리에서 E로 현장 장면 완독. 봄의 흙과 새 잎을 묘사. 실제 새 꽃 그림·채집물 지급 없음. 읽고 코르빈에게 돌아가기"},
+{"id":"spring_flower_walk_wait","npc":"코르빈","stage":"아직 봄 꽃자리를 직접 살피지 않음. 수첩 목적지로 걸어가 E 완독 안내"},
+{"id":"spring_flower_walk_finish","npc":"코르빈","stage":"봄 꽃자리 현장 완독 뒤 코르빈에게 돌아와 최종 E 대화 완독. 기존 약초를 창고에 일회성 지급. 수량·평판 숫자 없음. completion은 수첩 기억"},
+{"id":"summer_water_break_intro","npc":"타블렌","stage":"여름에 정착한 타블렌이 노점을 쉬며 물을 나누자고 제안. 소개 완독으로 시작. 창고 물을 준비해 타블렌에게 직접 E로 전달. 게시판 전달 아님"},
+{"id":"summer_water_break_wait","npc":"타블렌","stage":"여름에 창고의 물이 부족함. 창고 준비 후 타블렌에게 다시 E. 가방·진열대 물은 세지 않음. 기다리면 자동 소비되는 방식 아님"},
+{"id":"summer_water_break_finish","npc":"타블렌","stage":"여름에 창고 물을 준비해 타블렌에게 E 최종 대화 완독 시 물을 소비하고 기존 열매 답례를 창고로 일회성 지급. 중단·계절 변경·물 부족은 소비·지급 없음. 실제 더위 수치·갈증·회복 효과 없음"},
+{"id":"autumn_neighbor_notes_intro","npc":"이세르","stage":"가을에 정착 주민들의 지난 계절 이야기를 직접 들으라는 제안. 소개 완독 후 타블렌·코르빈·이세르 모두 E로 완독. 순서 자유"},
+{"id":"autumn_neighbor_notes_naru","npc":"타블렌","stage":"가을에 제안 이후 타블렌의 머문 날과 보따리 이야기. 완독으로 안부 기록. 중간 지급 없음"},
+{"id":"autumn_neighbor_notes_doyun","npc":"코르빈","stage":"가을에 제안 이후 코르빈의 일을 줄이고 이웃 얼굴을 기억하게 된 이야기. 완독 기록. 새 건물·장비 없음"},
+{"id":"autumn_neighbor_notes_sora","npc":"이세르","stage":"가을에 소개 뒤 본인에게 별도로 E로 기록 이야기 완독. 소개와 본인 이야기는 별도. 다른 이웃 방문 순서 자유"},
+{"id":"autumn_neighbor_notes_wait","npc":"이세르","stage":"가을에 아직 못 들은 주민이 있음. 수첩으로 남은 주민 확인하고 E 완독 안내"},
+{"id":"autumn_neighbor_notes_finish","npc":"이세르","stage":"가을에 세 주민 안부를 모두 완독하고 이세르에게 돌아옴. 최종 E 완독 시 밀을 창고에 일회성 지급. 새 책·편지 아이템 없음"},
+{"id":"winter_lantern_round_intro","npc":"코르빈","stage":"겨울에 이미 준비한 길목 등불을 저녁에 직접 살펴 보자는 제안. 18시 이상 24시 미만 기존 등불에서 E 완독 후 코르빈에게 돌아오기. 연료 준비·시설 수리 없음"},
+{"id":"winter_lantern_round_observe","npc":"장면 서술","stage":"겨울 18~24시에 실제 기존 길목 등불에서 E로 현장 장면 완독. 긴 밤의 빛과 집으로 돌아가는 발걸음. 실제 눈·날씨·새 조명·장비 변경 없음"},
+{"id":"winter_lantern_round_wait","npc":"코르빈","stage":"겨울에 아직 등불을 살피지 않음. 저녁 18~24시에 수첩 목적지로 가서 E 완독. 낮에는 진행 완료하지 않음"},
+{"id":"winter_lantern_round_finish","npc":"코르빈","stage":"겨울 저녁 등불을 직접 살핀 후 코르빈에게 E 최종 대화 완독. 기존 석탄을 창고에 일회성 지급. 연료 소모·새 건물·추위 효과 없음. completion은 수첩 기억"}
+])

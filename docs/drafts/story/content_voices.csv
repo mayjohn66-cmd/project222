@@ -53,3 +53,20 @@ goodwill_doyun,코르빈,짧고 담담한 반말. 일을 마치고 돌아갈 때
 goodwill_sora,이세르,차분한 반말. 이름만 적던 기록에 이웃의 안부가 늘어남. 제안 시작 후 본인도 별도로 E 완독. 누구부터 듣든 가능. 새 책·편지 아이템·추가 보상 없음. completion은 수첩 기억
 goodwill_wait,이세르,아직 듣지 못한 주민을 수첩에서 찾아 실제 E로 끝까지 듣도록 안내하는 차분한 반말. 특정 순서를 강제하지 않음. 재료 준비나 날짜 제한 없음
 goodwill_finish,이세르,이웃 세 명의 안부를 완독하고 돌아온 플레이어에게 기존 밀과 약초를 창고로 일회성 전달. 최종 대화 중단 시 지급하지 않고 재시도 가능. 수량·평판 숫자는 쓰지 않음. 상자·편지·새 고객·시설·그림 배치 없음. completion은 실제 수첩의 공동 기억
+spring_flower_walk_intro,코르빈,짧고 담담한 반말. 봄의 기존 꽃자리를 직접 살피도록 권함. 새 건물·채집물·그림 변경 없음
+spring_flower_walk_observe,장면 서술,봄 꽃자리 현장 E 완독. 계절 감각과 새 잎은 묘사이며 실제 새 식물이나 날씨 변화 없음
+spring_flower_walk_wait,코르빈,수첩에 표시한 꽃자리로 걸어가 E로 살피는 행동 유지. 숫자·물품 요구 없음
+spring_flower_walk_finish,코르빈,꽃자리 완독 뒤 실제 E 마무리. 기존 약초를 창고에 한 번 나눔. 계절당 반복 보상 없음. completion은 수첩 기억
+summer_water_break_intro,타블렌,친근한 반말. 여름에 물을 창고에 준비하고 본인에게 직접 E 전달. 게시판 전달 아님. 실제 갈증·더위 수치 없음
+summer_water_break_wait,타블렌,창고의 물이 부족한 상태. 가방과 진열대 재고는 세지 않음. 준비 후 실제 E 재방문 안내
+summer_water_break_finish,타블렌,최종 완독 때 물을 소비하고 열매를 창고로 한 번 나눔. 부분 읽기에는 소비 없음. 숫자·회복 효과·반복 지급 약속 없음
+autumn_neighbor_notes_intro,이세르,차분한 반말. 가을에 기존 세 주민을 순서 자유로 찾아가 실제 E 완독. 소개와 본인 이야기는 별도
+autumn_neighbor_notes_naru,타블렌,머문 자리와 보따리를 떠올리는 친근한 반말. 가을 이야기 중간에는 지급 없음
+autumn_neighbor_notes_doyun,코르빈,일과 마주친 얼굴을 돌아보는 짧은 반말. 새 도구·장비·시설 지급 없음
+autumn_neighbor_notes_sora,이세르,사람과 기록을 살피는 차분한 반말. 앞선 여름 이벤트 완료를 요구하지 않으므로 그 특정 사건을 이미 함께했다고 쓰지 않음
+autumn_neighbor_notes_wait,이세르,남은 주민을 수첩에서 확인하고 실제 E로 만나는 안내. 방문 순서 강제 없음
+autumn_neighbor_notes_finish,이세르,가을 안부 모두 완독 후 최종 E로 밀을 창고에 한 번 나눔. 실제 책 아이템 없음. completion은 이후 계절에도 수첩에서 읽음
+winter_lantern_round_intro,코르빈,겨울에 준비된 길목 등불을 저녁에 살피도록 제안. 새 조명·연료 소모·추위 효과 없음
+winter_lantern_round_observe,장면 서술,겨울 18시 이상 자정 미만 기존 등불 현장 E 완독. 실제 눈·날씨 시스템 추가 없음
+winter_lantern_round_wait,코르빈,저녁 여섯 시부터 자정 전이라는 행동 시간 유지. 수량·보상 숫자가 아닌 시각 안내. 낮에는 현장 완료 안 됨
+winter_lantern_round_finish,코르빈,등불 완독 뒤 본인에게 E로 돌아와 마무리. 석탄을 창고로 한 번 나눔. 새 난방 시설·연료 기능 없음

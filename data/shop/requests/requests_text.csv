@@ -91,3 +91,20 @@ goodwill_doyun,service_text,,,도구를 놓고 돌아갈 때 가게 창을 봐.|
 goodwill_sora,service_text,,,처음엔 여길 지나간 사람 이름만 적었어.|다시 만날수록 이름 옆에 안부가 길어지네.|이제 빈칸을 남겨 두는 게 더 자연스러워.,이세르는 다시 만날 이웃의 다음 안부를 기다립니다.
 goodwill_wait,service_text,,,아직 못 들은 이웃의 말이 남아 있네.|수첩에서 확인하고 천천히 다녀와.|돌아오면 나머지 이야기를 이어 보자.,
 goodwill_finish,service_text,,,이웃들이 가게에 둘 밀과 약초를 모았어.|이번엔 우리가 네 하루에 마음을 보태고 싶었지.|창고에 챙겨 둘게. 다음 먹거리에 보태도 좋겠네.,이웃들의 안부를 들었습니다. 밀과 약초를 받아 창고에 두었습니다.
+spring_flower_walk_intro,service_text,봄바람 따라 꽃자리로,,꽃자리 흙이 겨울 끝보다 부드러워졌어.|가까이 서면 새 잎이 보일지도 모르겠네.|꽃자리를 직접 살펴보고 나한테 들러 줘.,
+spring_flower_walk_observe,service_text,,,낮은 꽃자리 사이로 작은 잎이 올라옵니다.|바람이 지나가자 흙 냄새가 가까워집니다.|겨우내 밟던 길 옆에도 봄이 머무릅니다.,
+spring_flower_walk_wait,service_text,,,꽃자리는 서두르지 않아도 돼.|수첩에 표시한 자리에서 천천히 살펴봐.,
+spring_flower_walk_finish,service_text,,,늘 지나던 곳에 새 잎이 있었지.|잠깐 몸을 낮춰야 보이는 것도 있더라.|나도 둘러보며 챙긴 약초를 나누고 싶었어.,봄 꽃자리를 살피고 코르빈과 새 잎 이야기를 나눴습니다.
+summer_water_break_intro,service_text,물 한 모금의 여름,,노점을 펴니 햇볕이 어깨까지 따라오네.|손님이 뜸할 때 물을 나누며 쉬려고 해.|물을 창고에 준비한 뒤 내게 건네면 돼.,
+summer_water_break_wait,service_text,,,나눌 물은 창고 쪽에 두면 돼.|준비되면 여기서 마시며 쉬자.,
+summer_water_break_finish,service_text,,,병을 내려놓으니 그늘 소리가 들리네.|바쁘게 넘긴 낮을 오늘은 조금 쉬었어.|입가심할 열매는 내가 챙겼지. 함께 가져가.,타블렌에게 물을 나누고 여름 낮의 그늘에서 쉬었습니다.
+autumn_neighbor_notes_intro,service_text,가을에 돌아보는 발걸음,,가을이 오니 지나온 날들을 적고 싶어져.|타블렌과 코르빈이 기억하는 날도 궁금해.|그들의 이야기를 듣고 내 안부도 물어봐 줘.,
+autumn_neighbor_notes_naru,service_text,,,보따리에 담을 것보다 내려놓은 게 떠오르네.|서두르던 길과 오래 앉아 있던 자리가 섞여 있어.|올해는 머문 날이 짐보다 더 많이 쌓였어.,타블렌은 떠난 길보다 머문 자리를 먼저 떠올렸습니다.
+autumn_neighbor_notes_doyun,service_text,,,손질한 도구는 셀 수 있는데 인사는 어렵네.|누가 다녀갔는지 자꾸 얼굴부터 떠올라.|올해 일은 그런 기억까지 남겼어.,코르빈은 일을 하며 마주친 이웃의 얼굴을 돌아봤습니다.
+autumn_neighbor_notes_sora,service_text,,,봄에 적었던 이름 옆에 말을 덧붙여 봤어.|여름의 짧은 인사가 생각보다 길게 남았네.|계절을 적으려다 사람들부터 적고 있어.,이세르는 계절 기록 곁에 이웃들과 나눈 말을 보탰습니다.
+autumn_neighbor_notes_wait,service_text,,,가을 기록에 비어 있는 목소리가 있네.|수첩을 보고 아직 못 만난 이웃에게 가 봐.,
+autumn_neighbor_notes_finish,service_text,,,들려준 말은 가을 기록에 남겨 뒀어.|이웃이 건넨 밀도 네 창고에 보태고 싶네.|겨울이 와도 오늘 말은 다시 읽을 수 있을 거야.,가을의 안부를 모아 이세르와 지난 계절을 돌아봤습니다.
+winter_lantern_round_intro,service_text,긴 밤의 등불 한 바퀴,,겨울에는 돌아오는 길이 금세 어두워져.|저녁에 길목 등불 곁에서 잠깐 멈춰 봐.|불빛을 살펴보고 와서 본 걸 들려줘.,
+winter_lantern_round_observe,service_text,,,길목 등불 아래로 익숙한 길이 드러납니다.|밝은 자리와 어두운 자리 사이에 발을 멈춥니다.|집으로 향하는 발소리가 불빛 곁을 지나갑니다.,
+winter_lantern_round_wait,service_text,,,등불은 저녁 여섯 시부터 자정 전에 살펴봐.|길목에서 멈춘 뒤 돌아오면 이야기를 듣겠어.,
+winter_lantern_round_finish,service_text,,,익숙한 길도 밤에 보면 다르게 느껴지지.|등불 곁에 발소리가 남아 있어서 좋더라.|겨울에 쓸 석탄을 조금 나눌게. 창고에 챙겨 둬.,겨울 저녁 등불을 살피고 코르빈과 돌아오는 길을 이야기했습니다.

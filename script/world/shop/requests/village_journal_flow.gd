@@ -23,9 +23,12 @@ static func entries() -> Array[Dictionary]:
 	result.append({"id":VillageMarketFlow.JOURNAL_ID,"title":VillageMarketFlow.title()})
 	result.append({"id":VillageRestFlow.JOURNAL_ID,"title":"쉼터에서 처음 함께 쉬기"})
 	result.append({"id":VillageGoodwillFlow.JOURNAL_ID,"title":VillageGoodwillFlow.title()})
+	for event in SeasonalVillageFlow.SETTINGS.events:
+		result.append({"id":SeasonalVillageFlow.JOURNAL_PREFIX + str(event["id"]), "title":SeasonalVillageFlow.title(str(event["id"]))})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with(SeasonalVillageFlow.JOURNAL_PREFIX): return SeasonalVillageFlow.information(id.trim_prefix(SeasonalVillageFlow.JOURNAL_PREFIX))
 	if id == VillageGoodwillFlow.JOURNAL_ID: return VillageGoodwillFlow.information()
 	if id == VillageRestFlow.JOURNAL_ID: return VillageRestFlow.information()
 	if id == VillageMarketFlow.JOURNAL_ID: return VillageMarketFlow.information()
@@ -66,6 +69,12 @@ static func information(id: String) -> String:
 
 static func destination(world: Node, id: String) -> Node2D:
 	if not available(): return null
+	if id.begins_with(SeasonalVillageFlow.JOURNAL_PREFIX):
+		var event_id := id.trim_prefix(SeasonalVillageFlow.JOURNAL_PREFIX)
+		var event := SeasonalVillageFlow.event(event_id)
+		if event.is_empty() or SeasonalVillageFlow.completed(event_id) or not SeasonalVillageFlow.locked_reason(event).is_empty(): return null
+		if SeasonalVillageFlow.accepted(event_id) and event["mode"] == "observe" and not SeasonalVillageFlow.observed(event_id): return SeasonalVillageFlow.site(world, event_id)
+		return destination(world, "resident:" + SeasonalVillageFlow.next_resident(event_id))
 	if id == VillageGoodwillFlow.JOURNAL_ID:
 		var resident_id := VillageGoodwillFlow.next_resident()
 		return destination(world, "resident:" + resident_id) if not resident_id.is_empty() else null
