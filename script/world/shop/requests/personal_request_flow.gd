@@ -8,6 +8,7 @@ static func entries() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
 	var all_requests: Array[Dictionary] = SETTINGS.requests.duplicate(true)
 	all_requests.append_array(MarketAfterglowFlow.SETTINGS.requests)
+	all_requests.append_array(MarketAfterglowFlow.FOLLOWUPS.requests)
 	for data in all_requests:
 		var entry: Dictionary = data.duplicate(true)
 		for field in ["title","summary","completion"]:
@@ -39,6 +40,12 @@ static func locked_reason(entry: Dictionary) -> String:
 	if bool(entry.get("after_market", false)):
 		if not VillageMarketFlow.completed(): return "작은 노점의 첫 장터를 함께 마치면 부탁이 이어져요."
 		last_day = maxi(last_day, int(PlayerProgress.story_beat_days[VillageMarketFlow.PREFIX + "done"]))
+	if bool(entry.get("after_rest", false)):
+		if not VillageRestFlow.completed(): return "길목 쉼터의 첫 모임을 끝까지 함께하면 부탁이 이어져요."
+		last_day = maxi(last_day, int(PlayerProgress.story_beat_days[VillageRestFlow.PREFIX + "done"]))
+	if bool(entry.get("after_heard", false)):
+		if not MarketAfterglowFlow.heard(after): return "앞선 부탁을 전한 뒤 주민에게 후일담을 끝까지 들어 주세요."
+		last_day = maxi(last_day, int(PlayerProgress.story_beat_days[MarketAfterglowFlow.PREFIX + after + ":heard"]))
 	var wait_days := maxi(0,int(entry.get("days_after",0)))
 	if last_day >= 0 and GameState.total_day < last_day + wait_days:
 		return "앞선 이야기를 마친 뒤 %d일 후부터 부탁을 들을 수 있어요." % wait_days

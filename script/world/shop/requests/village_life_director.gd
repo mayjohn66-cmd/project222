@@ -126,7 +126,7 @@ func interaction_hint() -> String:
 	var target := nearest()
 	if target.is_empty(): return ""
 	if target["id"] == "well": return "[E] 공동 우물 · 오늘 물을 길었어요" if VillageLifeFlow.well_used_today() else "[E] 공동 우물에서 물 긷기"
-	if not MarketAfterglowFlow.pending(str(target["id"])).is_empty(): return "[E] %s · 장터 뒤 후일담" % target["name"]
+	if not MarketAfterglowFlow.pending(str(target["id"])).is_empty(): return "[E] %s · 부탁 뒤 후일담" % target["name"]
 	var action := VillageStoryFlow.action(str(target["id"]))
 	if not action.is_empty():
 		var labels := {"introduction":"마을 이야기 시작", "listen":"마을 이야기 듣기", "choose":"남길 기억 고르기", "finish":"기록 마치기", "reminder":"남은 이야기 확인", "memory":"남긴 기억 다시 듣기"}

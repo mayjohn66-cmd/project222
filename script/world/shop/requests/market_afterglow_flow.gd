@@ -2,17 +2,23 @@ class_name MarketAfterglowFlow
 extends RefCounted
 
 const SETTINGS = preload("res://scenes/shop/requests/default_market_afterglow.tres")
+const FOLLOWUPS = preload("res://scenes/shop/requests/default_trail_errands.tres")
 const PREFIX := "market_afterglow:"
 
+static func moments() -> Array[Dictionary]:
+	var entries: Array[Dictionary] = SETTINGS.moments.duplicate(true)
+	entries.append_array(FOLLOWUPS.moments)
+	return entries
+
 static func moment(request_id: String) -> Dictionary:
-	for entry in SETTINGS.moments:
+	for entry in moments():
 		if str(entry["request"]) == request_id: return entry
 	return {}
 static func heard(request_id: String) -> bool:
 	return PlayerProgress.story_beat_days.has(PREFIX + request_id + ":heard")
 static func pending(resident_id: String) -> String:
 	if not ResidentRequestFlow.tutorial_finished() or not VillageMarketFlow.completed(): return ""
-	for entry in SETTINGS.moments:
+	for entry in moments():
 		var id := str(entry["request"])
 		if str(entry["resident"]) == resident_id and PersonalRequestFlow.done(id) and not heard(id): return id
 	return ""

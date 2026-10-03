@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MarketAfterglowSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/market_afterglow_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+requests = Array[Dictionary]([
+{"id":"naru_bundle_mending","resident":"naru","friendship":7,"after":"naru_market_juice","after_rest":true,"after_heard":true,"days_after":1,"requirements":[{"item":"marsh_reed","amount":2},{"item":"amber_sap","amount":1}],"reputation":1,"money":30},
+{"id":"doyun_handle_mending","resident":"doyun","friendship":7,"after":"doyun_market_soup","after_rest":true,"after_heard":true,"days_after":1,"requirements":[{"item":"dry_branch","amount":3},{"item":"amber_sap","amount":1}],"reputation":1,"money":30},
+{"id":"sora_page_weights","resident":"sora","friendship":7,"after":"sora_market_drink","after_rest":true,"after_heard":true,"days_after":1,"requirements":[{"item":"stone_shard","amount":2},{"item":"dry_branch","amount":2}],"reputation":1,"money":30}
+])
+moments = Array[Dictionary]([
+{"id":"trail_afterglow_naru","npc":"타블렌","resident":"naru","request":"naru_bundle_mending","stage":"쉼터 첫 모임 다음 날 이후. 갈대와 수액을 창고에서 게시판으로 전달하여 보따리 끈 손질을 도왔다. 타블렌에게 직접 E로 손질 뒤 이야기를 끝까지 듣고 수첩에 남김. 추가 답례·가방 확장·새 장비 지급 없음"},
+{"id":"trail_afterglow_doyun","npc":"코르빈","resident":"doyun","request":"doyun_handle_mending","stage":"쉼터 첫 모임 다음 날 이후. 가지와 수액을 게시판에서 전달하여 공구 손잡이 손질을 도왔다. 기존 코르빈에게 E로 대화를 완독하면 수첩 기억. 실제 새 장비 제작·능력치 개선·추가 보상 없음"},
+{"id":"trail_afterglow_sora","npc":"이세르","resident":"sora","request":"sora_page_weights","stage":"쉼터 첫 모임 다음 날 이후. 돌 조각과 가지를 게시판에서 전달하여 젖은 기록을 펼쳐 말릴 받침을 마련했다. 이세르에게 E로 대화 완독 후 수첩 기록. 비나 젖은 종이는 대사의 사건 배경이며 실제 날씨 시스템·책 아이템·추가 보상 없음"}
+])

@@ -675,6 +675,8 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 					info += " / 첫 장터를 함께 마친 다음 날 이후 / 배운 레시피의 완제품을 전달하고 주민에게 E로 후일담을 끝까지 듣기 / 후일담에 추가 답례 없음"
 				if d.has("recipe"):
 					info += " / 기존 레시피: " + _item_name(str(d["recipe"]))
+				if bool(d.get("after_rest", false)):
+					info += " / 길목 쉼터 첫 모임을 끝까지 함께한 다음 날 이후 / 앞선 먹거리 부탁의 후일담도 완독 / 원정 재료를 창고에 준비해 게시판에서 전달하고 주민에게 E로 후일담 듣기 / 가방·장비·날씨·능력치 변경 없음 / 추가 답례 없음"
 			Tools.KIND_RESIDENT_INTRODUCTION:
 				info = "인물: %s / 손님 유형: %s" % [d.get("npc",""), d.get("type","")]
 			Tools.KIND_TRADE_OFFER:

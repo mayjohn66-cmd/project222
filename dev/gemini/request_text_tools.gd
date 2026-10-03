@@ -28,6 +28,7 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/tutorial/default_tutorial.tres": KIND_TUTORIAL_STEP,
 	"res://scenes/shop/requests/default_personal_requests.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_market_afterglow.tres": KIND_PERSONAL_REQUEST,
+	"res://scenes/shop/requests/default_trail_errands.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_village_gathering.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_lantern_wayfarer.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_village_story.tres": KIND_SERVICE_TEXT,
@@ -86,7 +87,7 @@ static func load_sources() -> Dictionary:
 
 		for raw_line in FileAccess.get_file_as_string(path).split("\n"):
 			var line: String = raw_line.strip_edges().trim_suffix(",")
-			if path.ends_with("default_market_afterglow.tres"):
+			if path.ends_with("default_market_afterglow.tres") or path.ends_with("default_trail_errands.tres"):
 				if line.begins_with("requests ="): kind = KIND_PERSONAL_REQUEST
 				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT
 			if path.ends_with("default_resident_story.tres"):
