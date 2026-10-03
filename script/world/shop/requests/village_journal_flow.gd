@@ -20,9 +20,11 @@ static func entries() -> Array[Dictionary]:
 	result.append({"id":"gathering:well_evening","title":VillageGatheringFlow.title()})
 	result.append({"id":LanternWayfarerFlow.JOURNAL_ID,"title":LanternWayfarerFlow.title()})
 	result.append({"id":VillageStoryFlow.JOURNAL_ID,"title":VillageStoryFlow.title()})
+	result.append({"id":VillageMarketFlow.JOURNAL_ID,"title":VillageMarketFlow.title()})
 	return result
 
 static func information(id: String) -> String:
+	if id == VillageMarketFlow.JOURNAL_ID: return VillageMarketFlow.information()
 	if id == VillageStoryFlow.JOURNAL_ID: return VillageStoryFlow.information()
 	if id == LanternWayfarerFlow.JOURNAL_ID: return LanternWayfarerFlow.information()
 	if id.begins_with("visitor:"): return VillageVisitorFlow.information(id.trim_prefix("visitor:"))
@@ -60,6 +62,9 @@ static func information(id: String) -> String:
 
 static func destination(world: Node, id: String) -> Node2D:
 	if not available(): return null
+	if id == VillageMarketFlow.JOURNAL_ID:
+		if not VillageMarketFlow.locked_reason().is_empty(): return null
+		return VillageMarketFlow.site(world) if VillageMarketFlow.prepared() else destination(world, "resident:" + VillageMarketFlow.SETTINGS.giver)
 	if id == VillageStoryFlow.JOURNAL_ID:
 		var resident_id := VillageStoryFlow.SETTINGS.giver if VillageStoryFlow.completed() else VillageStoryFlow.next_resident()
 		return destination(world, "resident:" + resident_id) if not resident_id.is_empty() else null

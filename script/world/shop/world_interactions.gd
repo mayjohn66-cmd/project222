@@ -32,6 +32,7 @@ func blocked() -> bool:
  if bool(world.get_meta("village_smithy_open",false)): return true
  if bool(world.get_meta("village_journal_open",false)): return true
  if bool(world.get_meta("village_gathering_open",false)): return true
+ if bool(world.get_meta("village_market_open",false)): return true
  if bool(world.get_meta("lantern_wayfarer_open",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
  if manager.closing_shop or manager.summary_open: return true
@@ -58,6 +59,10 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var market = get_parent().get_node_or_null("VillageLifeDirector/VillageMarketDirector")
+ if market != null and not market.interaction_hint().is_empty():
+  prompt.text = market.interaction_hint()
+  return
  var wayfarer = get_parent().get_node_or_null("LanternWayfarerDirector")
  if wayfarer != null and not wayfarer.interaction_hint().is_empty():
   prompt.text = wayfarer.interaction_hint()
@@ -90,6 +95,8 @@ func _process(_delta: float) -> void:
 
 func try_interact() -> bool:
  if blocked(): return false
+ var market = get_parent().get_node_or_null("VillageLifeDirector/VillageMarketDirector")
+ if market != null and market.try_interact(): return true
  var wayfarer = get_parent().get_node_or_null("LanternWayfarerDirector")
  if wayfarer != null and wayfarer.try_interact(): return true
  var gathering = get_parent().get_node_or_null("VillageGatheringDirector")

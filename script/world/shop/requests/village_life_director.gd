@@ -22,6 +22,9 @@ func _ready() -> void:
 	add_child(story_panel)
 	story_panel.closed.connect(_end_talk)
 	story_panel.action_requested.connect(_select_memory)
+	var market := VillageMarketDirector.new()
+	market.name = "VillageMarketDirector"
+	add_child(market)
 	call_deferred("refresh")
 
 func _process(delta: float) -> void:

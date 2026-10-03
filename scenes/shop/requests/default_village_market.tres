@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="VillageMarketSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_market_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+requirements = Array[Dictionary]([{"item":"bread","amount":2},{"item":"wild_berry","amount":3}])
+gifts = Array[Dictionary]([{"item":"wheat","amount":3}])
+moments = Array[Dictionary]([
+{"id":"first_market_intro","npc":"타블렌","stage":"이세르의 마을 이야기 완료 뒤 기존 노점에서 첫 장터 제안. 끝까지 대화하면 준비를 시작. 새 건물·새 손님 해금 없음"},
+{"id":"first_market_preparation","npc":"타블렌","stage":"빵과 야생 열매를 창고에서 함께 한 번 전달. 별도 전달 버튼으로 확인하며 부족하면 소비하지 않음. 기한 없음"},
+{"id":"first_market_wait","npc":"타블렌","stage":"전달한 다음 날부터 낮 시간에 기존 노점에서 참여. 놓쳐도 다음 낮에 다시 열림. 주민 도착을 기다림"},
+{"id":"first_market_open","npc":"타블렌","speaker":"naru","stage":"기존 세 이웃이 실제 노점에 모인 뒤 플레이어가 E로 참여. 준비 물품을 펼치는 첫 장터 시작"},
+{"id":"first_market_doyun","npc":"코르빈","speaker":"doyun","stage":"장터에서 이웃이 만든 진열을 살피고 함께 먹을 빵을 고름. 별도 판매·재료 소비를 약속하지 않음"},
+{"id":"first_market_sora","npc":"이세르","speaker":"sora","stage":"장터에 모인 얼굴과 소리를 기억. 새로운 이야기 책 아이템이나 건물 해금 없음"},
+{"id":"first_market_end","npc":"타블렌","speaker":"naru","stage":"함께 장터를 마침. 끝까지 들으면 밀·소량 판매 정산·평판을 한 번 지급. 반복 거래 화면이 아니며 새 고객 해금 없음"}
+])
