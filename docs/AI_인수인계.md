@@ -2,7 +2,7 @@
 
 > **2026-10-03부터 이 파일은 `main`의 `docs/AI_인수인계.md`에 있습니다.** 예전 `docs/handoff` 고아 브랜치는 폐기했고 **절대 체크아웃하지 않습니다**(그 브랜치를 체크아웃하면 작업 폴더의 다른 파일이 모두 사라집니다).
 > 수정은 작은 `[docs]` 커밋으로 `main`(또는 현재 작업 브랜치)에 올립니다. 규칙은 `docs/AI_협업_규칙.md` 2장.
-> 아래 표의 근거에 적힌 `feature/…` 브랜치는 이미 `main`에 병합되어 삭제되었습니다. 커밋 번호는 `main` 기록에 그대로 남아 있습니다.
+> 2026-10-03 정리 당시의 기능 브랜치는 `main`에 병합되어 삭제되었습니다. 그 커밋 번호는 `main` 기록에 남아 있습니다. 이후 새 작업은 최대 두 줄기에서 진행하며, 아래 표의 최신 근거 브랜치를 확인합니다.
 
 사용자는 이 표만 보면 "지금 누가 무엇을 기다리는지" 알 수 있습니다. 세 AI는 서로 직접 대화하지 못하므로, 이 표가 대화를 대신합니다.
 
@@ -14,7 +14,7 @@
 
 ## 1.1 Gemini는 이렇게 다룹니다 (저장소를 직접 읽지 못함)
 
-Gemini는 API로만 쓰며 저장소를 직접 읽거나 쓰지 못합니다. 대신 **사용자 PC에서 도구가 대신 호출하고 결과를 저장소 파일로 남깁니다**(`feature/story-script` 브랜치의 `dev/gemini/`). 그래서 Gemini에게는 따로 "맥락 붙여 넣기"를 하지 않고 이 도구를 씁니다.
+Gemini는 API로만 쓰며 저장소를 직접 읽거나 쓰지 못합니다. 대신 **사용자 PC에서 도구가 대신 호출하고 결과를 저장소 파일로 남깁니다**(`dev/gemini/`, 마을·스토리 작업 줄기와 함께 유지). 그래서 Gemini에게는 따로 "맥락 붙여 넣기"를 하지 않고 이 도구를 씁니다.
 
 - 요청: `dev\gemini\run_request_text.bat draft [종류]` 또는 `sync`(새로 생긴·바뀐 요청만 작성). 종류는 `resident_request` / `community_request` / `resident_greeting`.
 - 결과: `docs/drafts/story/requests_text_gemini_<시각>.csv`(검수 전 초안). 다듬기는 `polish 파일`, 반영은 `accept 파일`.
@@ -25,6 +25,8 @@ Gemini는 API로만 쓰며 저장소를 직접 읽거나 쓰지 못합니다. �
 
 | 번호 | 받는 AI | 보낸 AI | 요청 한 줄 | 근거(브랜치 @ 커밋, 파일) | 상태 |
 |---|---|---|---|---|---|
+| 16 | 사용자(Gemini 도구 실행) | ChatGPT | 가게 앞에 남기는 안부 service_text 6개 장면의 제안·세 주민 안부·남은 주민 안내·최종 선물 기억을 다듬어 줘(API 호출 안 함) | `feature/village-life` @ 0b064f1, `docs/콘텐츠_가게_앞에_남기는_안부.md`, `default_village_goodwill.tres`, `requests_text.csv`; 생활 후일담 모두 완독 다음 날·방문 순서 자유·최종 완독 때만 창고 선물 문맥 등록 | 대기 |
+| 15 | Claude | ChatGPT | 생활 후일담 뒤 안부 사건의 초기 답례(밀 2·약초 2·평판 1 일회성)와 진행 간격을 검토해 줘 | `feature/village-life` @ 0b064f1, `docs/콘텐츠_가게_앞에_남기는_안부.md`; 새 사건 79개·기존 이야기 70개·생활 부탁 98개·후일담 97개·쉼터 51개·일상/수첩/글 도구 통과, 전체 521개 로드 실패 0; main @ a8b2cc2에서 이어감 | 대기 |
 | 14 | 사용자(Gemini 도구 실행) | ChatGPT | 쉼터 뒤 생활 부탁 3개와 후일담 3개를 다듬어 줘(기존 personal_request/service_text 사용, API 호출 안 함) | `feature/village-life` @ 44aec02, `docs/콘텐츠_쉼터에서_이어지는_생활_부탁.md`, `default_trail_errands.tres`, `requests_text.csv`; 글 도구에 첫 모임 완독·다음 날·기능 변경 없는 생활 손질 문맥 등록 | 대기 |
 | 13 | Claude | ChatGPT | 생활 부탁 초기 수치(갈대 2+수액 1, 가지 3+수액 1, 돌 2+가지 2, 각 30 G·평판 1)와 늪 재료 준비 시점을 검토해 줘 | `feature/village-life` @ 44aec02, `docs/콘텐츠_쉼터에서_이어지는_생활_부탁.md`; 새 부탁 98개·기존 후일담 97개·쉼터 51개·개인 부탁/게시판/수첩/글 도구 통과, 전체 로드 434개 실패 0; 사용자 커밋 959bdf3/cbc6c67 보존 병합 | 대기 |
 | 12 | 사용자(Gemini 도구 실행) | ChatGPT | 길목 쉼터 공동 부탁 1개와 첫 모임·재방문 장면 5개를 다듬어 줘(기존 community_request/service_text 사용, API 호출 안 함) | `feature/village-life` @ ed745a5, `docs/콘텐츠_길목의_작은_쉼터.md`, `default_village_rest.tres`의 moments, `requests_text.csv`; 글 도구에 준비·실제 모임·조용한 재방문 문맥 등록 | 대기 |
@@ -74,7 +76,7 @@ Gemini는 API로만 쓰며 저장소를 직접 읽거나 쓰지 못합니다. �
 
 폴더 상태 확인: 저장소의 `tools\where.bat`를 더블클릭하면 폴더, 브랜치, 마지막 커밋, 푸시·pull 필요 여부, 저장하지 않은 변경이 한 화면에 나옵니다. 그 화면을 AI에게 캡처해 보내면 사용자 폴더 상태를 AI가 알 수 있습니다.
 
-ChatGPT 콘텐츠 작업·확인 폴더: `C:\Users\john9\Documents\Codex\2026-09-30\clade\work\content-expansion` (`feature/village-life` @ 44aec02 내용, detached HEAD). 사용자 실행용 `OneDrive\Documents\project222`의 브랜치는 변경하지 않았다. 길손 이벤트 글만 생성하려면 이 콘텐츠가 포함된 별도 폴더에서 `dev\gemini\run_request_text.bat draft service_text --ids lantern_wayfarer,lantern_wayfarer_water,lantern_wayfarer_bread,lantern_wayfarer_return_water,lantern_wayfarer_return_bread`를 사용한다. 초안 생성과 게임 CSV 반영은 별도 단계이며, 결과를 검토한 뒤 반영한다.
+ChatGPT 콘텐츠 작업·확인 폴더: `C:\Users\john9\Documents\Codex\2026-09-30\clade\work\project222` (`feature/village-life` @ 0b064f1 내용, 통합 main @ a8b2cc2 기준). 이전 `content-expansion`·`handoff` 임시 폴더는 현재 없다. 사용자 실행용 `OneDrive\Documents\project222`의 브랜치는 변경하지 않았다. 최신 사건은 사용자 확인 전이라 작업 줄기에만 있으며 main에 자동 병합하지 않았다. 길손 이벤트 글만 생성하려면 이 콘텐츠가 포함된 폴더에서 `dev\gemini\run_request_text.bat draft service_text --ids lantern_wayfarer,lantern_wayfarer_water,lantern_wayfarer_bread,lantern_wayfarer_return_water,lantern_wayfarer_return_bread`를 사용한다. 초안 생성과 게임 CSV 반영은 별도 단계이며, 결과를 검토한 뒤 반영한다.
 
 이세르의 마을 이야기 장면만 생성: `dev\gemini\run_request_text.bat draft service_text --ids sora_village_story,village_story_naru,village_story_doyun,village_story_reminder,village_story_choose,village_story_lantern,village_story_evening,village_story_home`. 선행 사건·대화 완료·선택의 맥락은 `default_village_story.tres`와 콘텐츠 설명에 있다. 약초·평판 수치 대신 생활 감각과 기억을 다듬고, 선택별 `completion`은 수첩과 이세르의 반복 대화에서 읽는 실제 기억으로 유지한다.
 
@@ -85,6 +87,8 @@ ChatGPT 콘텐츠 작업·확인 폴더: `C:\Users\john9\Documents\Codex\2026-09
 길목에 놓는 작은 쉼터도 구현되었다. 공동 부탁만 생성: `dev\gemini\run_request_text.bat draft community_request --ids trail_rest_corner`. 모임·재방문 장면만 생성: `dev\gemini\run_request_text.bat draft service_text --ids trail_rest_open,trail_rest_naru,trail_rest_sora,trail_rest_end,trail_rest_quiet`. 첫 장터와 먹거리 후일담 세 개를 모두 완독한 다음 날부터, 꽃자리 준비와 세 주민 친밀도 7 조건을 충족하면 게시판에서 쉼터를 준비한다. 기존 `oak_bench.png`를 재사용했고 새 그림은 만들지 않았다. 준비 다음 날부터 15~18시에 세 주민이 실제로 모여야 첫 모임을 진행한다. 모임 후에는 E로 조용한 재방문을 기록하며 반복 보상·체력 회복·시간 건너뛰기는 없다. 조용한 장면은 현장 묘사이며 주민이 항상 곁에 있다고 쓰지 않는다. 정식 인물 기준 파일은 유지했고 Gemini API는 호출하지 않았다.
 
 쉼터에서 이어지는 생활 부탁 3개와 전달 후 후일담 3개도 구현되었다. 부탁만 생성: `dev\gemini\run_request_text.bat draft personal_request --ids naru_bundle_mending,doyun_handle_mending,sora_page_weights`. 후일담만 생성: `dev\gemini\run_request_text.bat draft service_text --ids trail_afterglow_naru,trail_afterglow_doyun,trail_afterglow_sora`. 길목 첫 모임·앞선 먹거리 전달·해당 후일담 완독 중 가장 늦은 날의 다음 날부터 열린다. 원정 재료를 창고에 모아 게시판에서 전달하고 기존 주민에게 E로 끝까지 이야기를 듣는다. 가방 확장·장비 지급·공격력 개선·날씨·책·새 시설은 없으며 후일담에 추가 답례도 없다. 기한이나 새 원정 방문 강제가 없다. 정식 인물 기준 파일은 유지했고 API는 호출하지 않았다. 개인 부탁 합계는 12개, 전체 대사 CSV는 86행이며 서로 다른 집계다. 작업 중 사용자 커밋 959bdf3와 원격 cbc6c67을 이력 삭제 없이 합쳤다.
+
+가게 앞에 남기는 안부 사건도 구현되었다. 장면만 생성: `dev\gemini\run_request_text.bat draft service_text --ids goodwill_intro,goodwill_naru,goodwill_doyun,goodwill_sora,goodwill_wait,goodwill_finish`. 생활 부탁 세 개의 전달·후일담을 끝까지 들은 다음 날부터 이세르에게 E로 제안을 듣고, 타블렌·코르빈·이세르의 안부를 순서와 시간대에 관계없이 완독한다. 이세르의 제안과 본인 안부는 별도다. 모두 듣고 이세르에게 돌아와 최종 대화 완독 시 밀과 약초를 창고에 일회성 지급한다. 물품 준비·돈 소비·기한·새 시설·고객·편지/선물 오브젝트가 없다. 수첩은 아직 못 들은 주민을 가리키고 완료 뒤 각 안부와 공동 기억을 다시 읽는다. 정식 인물 기준 파일·이미지는 유지했고 API는 호출하지 않았다. 대사 CSV 합계 92행은 퀘스트 수가 아니다. 현재 작업 줄기는 `feature/iso-3d-village`와 `feature/village-life` 두 개다.
 
 ## 6. 보관
 (완료된 줄을 여기로)
