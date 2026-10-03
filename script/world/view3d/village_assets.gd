@@ -309,7 +309,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var plaster: Color = rule["tint"]
 	var roof_tint: Color = rule.get("roof_tint", Color(0.85, 0.44, 0.23))
 	var awning_tint: Color = rule.get("awning_tint", Color(0.88, 0.45, 0.22))
-	var options: Dictionary = {"chimney": bool(rule.get("chimney", true)), "awning": bool(rule.get("awning", false)), "apron": float(rule.get("apron", 0.4)), "chimney_big": str(rule.get("style", "")) == "forge"}
+	var options: Dictionary = {"chimney": bool(rule.get("chimney", true)), "awning": bool(rule.get("awning", false)), "apron": float(rule.get("apron", 0.4)), "chimney_big": str(rule.get("style", "")) == "forge", "hip": str(rule.get("roof_kind", "")) == "hip"}
 	# 돌 기단은 벽보다 먼저(뒤에) 그린다: 윗면이 벽 아래를 덮지 않도록 건물 면들보다 앞서 mesh 에 넣는다.
 	var mesh := ArrayMesh.new()
 	var pre := PartBuilder.new()
@@ -373,7 +373,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 
 	# 덧문: 창 양옆에 창과 같은 높이로, 칸에 들어가는 만큼만(너무 넓으면 뼈대와 겹치므로 줄임). 살(루버) 질감을 쓴다.
 	if bool(rule.get("shutters", false)):
-		var shut: Dictionary = spec(PlaceholderTextures.shutter(ts, Color(0.36, 0.52, 0.48)), Color.WHITE, "shutter_wood", "덧문 %d×%d 가로 살(청록 계열, 가게마다 색)" % [ts, ts])
+		var shut: Dictionary = spec(PlaceholderTextures.shutter(ts, rule.get("shutter_tint", Color(0.36, 0.52, 0.48))), Color.WHITE, "shutter_wood", "덧문 %d×%d 가로 살(청록 계열, 가게마다 색)" % [ts, ts])
 		var sw_z: float = clampf((cell_w_z - win_w) * 0.5 * 0.75, 0.05, 0.2)
 		var sw_x: float = clampf((cell_w_x - win_w_x) * 0.5 * 0.75, 0.05, 0.2)
 

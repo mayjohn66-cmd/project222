@@ -47,6 +47,11 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 	# 경사면의 바깥쪽 법선(v 방향 성분 nv, 위 성분 ny)
 	var nv: float = roof_h / slope_len
 	var ny: float = hs / slope_len
+	# 사방 경사(모임지붕): 용마루를 양 끝에서 hs 만큼 줄이고, 양 끝에도 경사면을 둔다(박공 삼각형 없음).
+	var hip: bool = bool(options.get("hip", false))
+	var mid: float = (ua + ub) * 0.5
+	var r0: float = minf(ua + hs, mid)
+	var r1: float = maxf(ub - hs, mid)
 
 	# --- 0, 1: 벽 (+z 면, +x 면)
 	var st := _begin()
@@ -64,9 +69,20 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 		var eave_v: float = vc + side * hs
 		var q_a: Vector3 = _p(ridge_x, ua, eave_v, wall_h)
 		var q_b: Vector3 = _p(ridge_x, ub, eave_v, wall_h)
-		var r_b: Vector3 = _p(ridge_x, ub, vc, peak)
-		var r_a: Vector3 = _p(ridge_x, ua, vc, peak)
-		_quad(st, q_a, q_b, r_b, r_a, n, Vector2(0, slope_len), Vector2(ub - ua, slope_len), Vector2(ub - ua, 0), Vector2(0, 0))
+		var r_b: Vector3 = _p(ridge_x, (r1 if hip else ub), vc, peak)
+		var r_a: Vector3 = _p(ridge_x, (r0 if hip else ua), vc, peak)
+
+		if hip:
+			_quad(st, q_a, q_b, r_b, r_a, n, Vector2(0, slope_len), Vector2(ub - ua, slope_len), Vector2(r1 - ua, 0), Vector2(r0 - ua, 0))
+		else:
+			_quad(st, q_a, q_b, r_b, r_a, n, Vector2(0, slope_len), Vector2(ub - ua, slope_len), Vector2(ub - ua, 0), Vector2(0, 0))
+
+	if hip:
+		for end_side in [1.0, -1.0]:
+			var ue: float = ub if end_side > 0.0 else ua
+			var ur: float = r1 if end_side > 0.0 else r0
+			var ne: Vector3 = _n(ridge_x, end_side * nv, 0.0, ny)
+			_tri(st, _p(ridge_x, ue, vc + hs, wall_h), _p(ridge_x, ue, vc - hs, wall_h), _p(ridge_x, ur, vc, peak), ne, Vector2(0, slope_len), Vector2(hs * 2.0, slope_len), Vector2(hs, 0))
 
 	st.generate_tangents()
 	present.append(_commit(st, mesh))
@@ -74,7 +90,7 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 	# --- 3: 박공 삼각형 둘 + 뒷벽 둘(그림자·가림용)
 	st = _begin()
 
-	for end_sign in [1.0, -1.0]:
+	for end_sign in ([] if hip else [1.0, -1.0]):
 		var uu: float = u1 if end_sign > 0.0 else u0
 		_tri(st, _p(ridge_x, uu, v1, wall_h), _p(ridge_x, uu, v0, wall_h), _p(ridge_x, uu, vc, peak), _n(ridge_x, end_sign, 0.0, 0.0), Vector2(0, 1), Vector2(v1 - v0, 1), Vector2((v1 - v0) * 0.5, 1.0 - roof_h))
 
@@ -99,15 +115,24 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 		var bot_ridge_b: Vector3 = top_ridge_b + down
 		# 처마 단면(경사 아래 끝): 바깥 방향(v) 법선
 		_quad(st, top_eave_a, top_eave_b, bot_eave_b, bot_eave_a, _n(ridge_x, 0.0, side, 0.0), Vector2(0, 0), Vector2(ub - ua, 0), Vector2(ub - ua, 1), Vector2(0, 1))
+		if hip:
+			continue
+
 		# 박공 가장자리 둘(경사를 따라 달리는 두께 면): 용마루 축 바깥 방향 법선
 		_quad(st, top_eave_b, top_ridge_b, bot_ridge_b, bot_eave_b, _n(ridge_x, 1.0, 0.0, 0.0), Vector2(0, 0), Vector2(slope_len, 0), Vector2(slope_len, 1), Vector2(0, 1))
 		_quad(st, top_ridge_a, top_eave_a, bot_eave_a, bot_ridge_a, _n(ridge_x, -1.0, 0.0, 0.0), Vector2(0, 0), Vector2(slope_len, 0), Vector2(slope_len, 1), Vector2(0, 1))
 		# 밑면
 		_quad(st, bot_eave_a, bot_eave_b, bot_ridge_b, bot_ridge_a, -n_roof, Vector2(0, 0), Vector2(ub - ua, 0), Vector2(ub - ua, slope_len), Vector2(0, slope_len))
 
+	if hip:
+		# 양 끝 처마 단면(두께)
+		for end_side2 in [1.0, -1.0]:
+			var ue2: float = ub if end_side2 > 0.0 else ua
+			_quad(st, _p(ridge_x, ue2, vc + hs, wall_h), _p(ridge_x, ue2, vc - hs, wall_h), _p(ridge_x, ue2, vc - hs, wall_h - t), _p(ridge_x, ue2, vc + hs, wall_h - t), _n(ridge_x, end_side2, 0.0, 0.0), Vector2(0, 0), Vector2(hs * 2.0, 0), Vector2(hs * 2.0, 1), Vector2(0, 1))
+
 	# 용마루 덮개: 길이 ua..ub, 폭 0.16, 높이 cap (윗면 + 양쪽 옆 + 양 끝)
 	var cw: float = 0.08
-	_box_uv(st, ridge_x, ua, ub, vc - cw, vc + cw, peak - 0.02, peak + cap)
+	_box_uv(st, ridge_x, (r0 - 0.04 if hip else ua), (r1 + 0.04 if hip else ub), vc - cw, vc + cw, peak - 0.02, peak + cap)
 	present.append(_commit(st, mesh))
 
 	# --- 5: 굴뚝 (돌 질감 칸당 반복 UV). 지붕 먼 쪽 경사 위, 용마루 끝 가까이

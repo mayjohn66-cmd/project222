@@ -1240,20 +1240,29 @@
         "w": 18
       },
       {
-        "file": "stall_bakery__stall_goods.png",
+        "file": "stall_bakery__basket.png",
         "h": 18,
-        "name": "stall_goods",
+        "name": "basket",
         "normal_file": "",
-        "note": "가판대 상품 단색 18×18(빵·생선·옷감·약초 중 하나)",
+        "note": "바구니 옆면 18×18",
         "tileable": true,
         "w": 18
       },
       {
-        "file": "stall_bakery__stall_awning.png",
+        "file": "stall_bakery__stall_cloth_stripe.png",
         "h": 18,
-        "name": "stall_awning",
+        "name": "stall_cloth_stripe",
         "normal_file": "",
-        "note": "가판대 차양 줄무늬 18×18 반복(가게마다 색 다름)",
+        "note": "가판대 줄무늬 천 18×18 (가판대마다 색 다름)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_bakery__stall_valance.png",
+        "h": 18,
+        "name": "stall_valance",
+        "normal_file": "",
+        "note": "가판대 처마 단 단색 18×18",
         "tileable": true,
         "w": 18
       },
@@ -1265,6 +1274,33 @@
         "note": "나무 판(가로 판자 결)",
         "tileable": true,
         "w": 18
+      },
+      {
+        "file": "stall_bakery__sack.png",
+        "h": 18,
+        "name": "sack",
+        "normal_file": "",
+        "note": "자루 18×18 베이지",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_bakery__goods_loaf.png",
+        "h": 10,
+        "name": "goods_loaf",
+        "normal_file": "",
+        "note": "가판대 상품 카드 loaf (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 12
+      },
+      {
+        "file": "stall_bakery__goods_baguette.png",
+        "h": 18,
+        "name": "goods_baguette",
+        "normal_file": "",
+        "note": "가판대 상품 카드 baguette (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 7
       }
     ],
     "group": "prop",
@@ -1296,20 +1332,29 @@
         "w": 18
       },
       {
-        "file": "stall_fish__stall_goods.png",
+        "file": "stall_fish__barrel.png",
         "h": 18,
-        "name": "stall_goods",
+        "name": "barrel",
         "normal_file": "",
-        "note": "가판대 상품 단색 18×18(빵·생선·옷감·약초 중 하나)",
+        "note": "통(배럴) 옆면 18×18",
         "tileable": true,
         "w": 18
       },
       {
-        "file": "stall_fish__stall_awning.png",
+        "file": "stall_fish__stall_cloth_stripe.png",
         "h": 18,
-        "name": "stall_awning",
+        "name": "stall_cloth_stripe",
         "normal_file": "",
-        "note": "가판대 차양 줄무늬 18×18 반복(가게마다 색 다름)",
+        "note": "가판대 줄무늬 천 18×18 (가판대마다 색 다름)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_fish__stall_valance.png",
+        "h": 18,
+        "name": "stall_valance",
+        "normal_file": "",
+        "note": "가판대 처마 단 단색 18×18",
         "tileable": true,
         "w": 18
       },
@@ -1321,6 +1366,24 @@
         "note": "나무 판(가로 판자 결)",
         "tileable": true,
         "w": 18
+      },
+      {
+        "file": "stall_fish__crate.png",
+        "h": 18,
+        "name": "crate",
+        "normal_file": "",
+        "note": "나무 상자 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_fish__goods_fish.png",
+        "h": 10,
+        "name": "goods_fish",
+        "normal_file": "",
+        "note": "가판대 상품 카드 fish (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
       }
     ],
     "group": "prop",
@@ -1352,20 +1415,29 @@
         "w": 18
       },
       {
-        "file": "stall_cloth__stall_goods.png",
+        "file": "stall_cloth__sack.png",
         "h": 18,
-        "name": "stall_goods",
+        "name": "sack",
         "normal_file": "",
-        "note": "가판대 상품 단색 18×18(빵·생선·옷감·약초 중 하나)",
+        "note": "자루 18×18 베이지",
         "tileable": true,
         "w": 18
       },
       {
-        "file": "stall_cloth__stall_awning.png",
+        "file": "stall_cloth__stall_cloth_solid.png",
         "h": 18,
-        "name": "stall_awning",
+        "name": "stall_cloth_solid",
         "normal_file": "",
-        "note": "가판대 차양 줄무늬 18×18 반복(가게마다 색 다름)",
+        "note": "가판대 단색 천 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__stall_valance.png",
+        "h": 18,
+        "name": "stall_valance",
+        "normal_file": "",
+        "note": "가판대 처마 단 단색 18×18",
         "tileable": true,
         "w": 18
       },
@@ -1377,6 +1449,33 @@
         "note": "나무 판(가로 판자 결)",
         "tileable": true,
         "w": 18
+      },
+      {
+        "file": "stall_cloth__stall_skirt.png",
+        "h": 18,
+        "name": "stall_skirt",
+        "normal_file": "",
+        "note": "가판대 카운터 앞 천 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__basket.png",
+        "h": 18,
+        "name": "basket",
+        "normal_file": "",
+        "note": "바구니 옆면 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_cloth__goods_cloth.png",
+        "h": 10,
+        "name": "goods_cloth",
+        "normal_file": "",
+        "note": "가판대 상품 카드 cloth (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
       }
     ],
     "group": "prop",
@@ -1408,20 +1507,20 @@
         "w": 18
       },
       {
-        "file": "stall_herb__stall_goods.png",
+        "file": "stall_herb__basket.png",
         "h": 18,
-        "name": "stall_goods",
+        "name": "basket",
         "normal_file": "",
-        "note": "가판대 상품 단색 18×18(빵·생선·옷감·약초 중 하나)",
+        "note": "바구니 옆면 18×18",
         "tileable": true,
         "w": 18
       },
       {
-        "file": "stall_herb__stall_awning.png",
+        "file": "stall_herb__stall_shingle.png",
         "h": 18,
-        "name": "stall_awning",
+        "name": "stall_shingle",
         "normal_file": "",
-        "note": "가판대 차양 줄무늬 18×18 반복(가게마다 색 다름)",
+        "note": "가판대 나무 지붕 기와 18×18",
         "tileable": true,
         "w": 18
       },
@@ -1433,6 +1532,42 @@
         "note": "나무 판(가로 판자 결)",
         "tileable": true,
         "w": 18
+      },
+      {
+        "file": "stall_herb__stall_skirt.png",
+        "h": 18,
+        "name": "stall_skirt",
+        "normal_file": "",
+        "note": "가판대 카운터 앞 천 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_herb__barrel.png",
+        "h": 18,
+        "name": "barrel",
+        "normal_file": "",
+        "note": "통(배럴) 옆면 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_herb__goods_herb.png",
+        "h": 10,
+        "name": "goods_herb",
+        "normal_file": "",
+        "note": "가판대 상품 카드 herb (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      },
+      {
+        "file": "stall_herb__goods_flower.png",
+        "h": 10,
+        "name": "goods_flower",
+        "normal_file": "",
+        "note": "가판대 상품 카드 flower (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
       }
     ],
     "group": "prop",
@@ -1446,7 +1581,7 @@
     "sprite": "res://art/world/plaza_props_v1/herb_stall_roof_diamond_v6.png",
     "style": "stall",
     "tint": "ffffff",
-    "total_blocks": 1.8,
+    "total_blocks": 1.85,
     "wall_blocks": 0.0
   },
   {
@@ -1464,20 +1599,29 @@
         "w": 18
       },
       {
-        "file": "stall_market__stall_goods.png",
+        "file": "stall_market__crate.png",
         "h": 18,
-        "name": "stall_goods",
+        "name": "crate",
         "normal_file": "",
-        "note": "가판대 상품 단색 18×18(빵·생선·옷감·약초 중 하나)",
+        "note": "나무 상자 18×18",
         "tileable": true,
         "w": 18
       },
       {
-        "file": "stall_market__stall_awning.png",
+        "file": "stall_market__stall_cloth_stripe.png",
         "h": 18,
-        "name": "stall_awning",
+        "name": "stall_cloth_stripe",
         "normal_file": "",
-        "note": "가판대 차양 줄무늬 18×18 반복(가게마다 색 다름)",
+        "note": "가판대 줄무늬 천 18×18 (가판대마다 색 다름)",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_market__stall_valance.png",
+        "h": 18,
+        "name": "stall_valance",
+        "normal_file": "",
+        "note": "가판대 처마 단 단색 18×18",
         "tileable": true,
         "w": 18
       },
@@ -1489,6 +1633,51 @@
         "note": "나무 판(가로 판자 결)",
         "tileable": true,
         "w": 18
+      },
+      {
+        "file": "stall_market__barrel.png",
+        "h": 18,
+        "name": "barrel",
+        "normal_file": "",
+        "note": "통(배럴) 옆면 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "stall_market__goods_apple.png",
+        "h": 10,
+        "name": "goods_apple",
+        "normal_file": "",
+        "note": "가판대 상품 카드 apple (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      },
+      {
+        "file": "stall_market__goods_orange.png",
+        "h": 10,
+        "name": "goods_orange",
+        "normal_file": "",
+        "note": "가판대 상품 카드 orange (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      },
+      {
+        "file": "stall_market__goods_lemon.png",
+        "h": 10,
+        "name": "goods_lemon",
+        "normal_file": "",
+        "note": "가판대 상품 카드 lemon (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
+      },
+      {
+        "file": "stall_market__goods_grape.png",
+        "h": 10,
+        "name": "goods_grape",
+        "normal_file": "",
+        "note": "가판대 상품 카드 grape (투명 배경 컷아웃, 어두운 윤곽선)",
+        "tileable": false,
+        "w": 10
       }
     ],
     "group": "prop",

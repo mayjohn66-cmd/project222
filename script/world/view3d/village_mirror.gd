@@ -11,6 +11,26 @@ const GROUND_TEXTURES: Dictionary = {"grass": ["grass", Color(0.62, 0.6, 0.46)],
 # 깔끔한 스타일(PlaceholderTextures.clean)용: 질감 자체가 이미 밝은 색이라 곱하는 색을 거의 1 로 둔다.
 const GROUND_TEXTURES_CLEAN: Dictionary = {"grass": ["grass", Color(1.0, 1.0, 1.0)], "road": ["brick", Color(0.96, 0.96, 0.98)], "paving": ["brick", Color(1.0, 0.93, 0.8)]}
 
+# 같은 규칙을 쓰는 집(vary=1)마다 다르게 보이게 하는 색 조합(건물 번호로 정해져서 다시 만들어도 같다).
+const ROOF_PALETTE: Array = ["c0462f", "3f8a58", "3a6fb0", "d8a030", "7a4a9a", "b8704a", "4a8a8a", "a03a52"]
+const WALL_PALETTE: Array = ["eadfc8", "f2e6c0", "dcc8a0", "e8d0c0", "d8e0d0", "e0d8e8"]
+const TRIM_PALETTE: Array = ["5c8a7a", "9a5a3a", "4a6a9a", "7a9a4a", "8a5a8a", "c08a3a"]
+
+
+static func apply_variation(rule: Dictionary, seed_value: int) -> Dictionary:
+	if not bool(rule.get("vary", false)):
+		return rule
+
+	var r: Dictionary = rule.duplicate()
+	var h: int = absi(seed_value * 2654435761) % 1000003
+	r["roof_tint"] = Color.html(ROOF_PALETTE[h % ROOF_PALETTE.size()])
+	r["tint"] = Color.html(WALL_PALETTE[(h / 8) % WALL_PALETTE.size()])
+	r["shutter_tint"] = Color.html(TRIM_PALETTE[(h / 64) % TRIM_PALETTE.size()])
+	r["roof_kind"] = "hip" if (h / 512) % 3 == 0 else "gable"
+	r["roof_blocks"] = float(rule.get("roof_blocks", 1.4)) * (0.85 + float((h / 4096) % 5) * 0.1)
+	return r
+
+
 var view: Node  # StoreView3D
 var exterior: Node2D
 var enabled: bool = true
@@ -59,9 +79,9 @@ static func load_rules() -> Array:
 
 			if key in ["height_blocks", "roof_blocks", "footprint_scale", "apron", "canon_w", "canon_d"]:
 				r[key] = float(value)
-			elif key in ["chimney", "awning", "step", "planters", "sign", "plinth", "shutters"]:
+			elif key in ["chimney", "awning", "step", "planters", "sign", "plinth", "shutters", "vary"]:
 				r[key] = value == "1" or value.to_lower() == "true"
-			elif key in ["tint", "roof_tint", "awning_tint", "goods_tint"]:
+			elif key in ["tint", "roof_tint", "awning_tint", "goods_tint", "shutter_tint"]:
 				r[key] = Color.html(value)
 			elif key == "match":
 				r[key] = value.to_lower()
@@ -389,7 +409,7 @@ func sync_objects(world: Node) -> void:
 
 			var sprite_info: Dictionary = _sprite_info(body)
 			var text: String = (str(body.name) + " " + str(sprite_info["path"])).to_lower()
-			var rule: Dictionary = _find_rule(text)
+			var rule: Dictionary = apply_variation(_find_rule(text), absi(hash(container_name + "/" + str(body.name))) % 100003)
 			var key: String = "vil%d" % body.get_instance_id()
 			var sig: String = "%s|%s|%s" % [str(rect.position.snapped(Vector2(0.02, 0.02))), str(rect.size.snapped(Vector2(0.02, 0.02))), text]
 			seen[key] = true
