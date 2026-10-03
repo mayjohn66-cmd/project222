@@ -102,6 +102,20 @@ static func _level(v: float, levels: int) -> float:
 
 
 # 건물 벽 면 질감(코드로 칠한 임시 그림): 회반죽 + 나무 뼈대 + 창문 + (선택) 문. 크기는 면의 칸 폭 × 18, 높이(블록) × 블록 px.
+# 벽 질감과 3D 부속(덧문·화분·계단)이 같은 창·문 크기를 쓰도록 한 곳에서 계산한다(픽셀 단위).
+# 문은 캐릭터(약 24px)보다 확실히 크게(약 1.4배), 창은 한눈에 창으로 읽히게 키웠다.
+static func window_layout(w: int, h: int, cells: int) -> Dictionary:
+	var cell_px: float = float(w) / float(maxi(cells, 1))
+	return {
+		"base_h": clampi(int(float(h) * 0.16), 2, 6),
+		"dw": clampi(int(cell_px * 0.5), 5, 16),
+		"dh": clampi(int(float(h) * 0.66), 6, 46),
+		"ww": clampi(int(cell_px * 0.46), 5, 14),
+		"wh": clampi(int(float(h) * 0.36), 4, 18),
+		"wy": int(float(h) * 0.2),
+	}
+
+
 static func wall_facade(width_texels: int, height_texels: int, door: bool, window_count: int, plaster: Color, timber: Color) -> ImageTexture:
 	var w: int = maxi(width_texels, 4)
 	var h: int = maxi(height_texels, 4)
@@ -118,7 +132,8 @@ static func wall_facade(width_texels: int, height_texels: int, door: bool, windo
 			img.set_pixel(x, y, plaster.darkened(0.08) if speck else plaster)
 
 	# 아래쪽 돌 기단 + 윗 가로 보 + 양 끝 세로 보
-	var base_h: int = clampi(int(float(h) * 0.16), 2, 6)
+	var lay: Dictionary = window_layout(w, h, window_count)
+	var base_h: int = lay["base_h"]
 
 	# 돌 기단: 3톤 블록(줄 높이 3px, 어긋난 세로 줄눈)
 	for y in range(h - base_h, h):
@@ -156,8 +171,8 @@ static func wall_facade(width_texels: int, height_texels: int, door: bool, windo
 		var cx: int = int((float(k) + 0.5) * float(w) / float(cells))
 
 		if k == door_cell:
-			var dw: int = clampi(int(float(w) / float(cells) * 0.45), 4, 14)
-			var dh: int = clampi(int(float(h) * 0.62), 6, 40)
+			var dw: int = lay["dw"]
+			var dh: int = lay["dh"]
 
 			for y in range(h - base_h - dh, h - base_h):
 				for x in range(cx - dw / 2, cx - dw / 2 + dw):
@@ -167,16 +182,22 @@ static func wall_facade(width_texels: int, height_texels: int, door: bool, windo
 			if cx + 2 < w and h - base_h - dh / 2 >= 0:
 				img.set_pixel(cx + dw / 4, h - base_h - dh / 2, Color(0.9, 0.8, 0.3))
 		else:
-			var ww: int = clampi(int(float(w) / float(cells) * 0.4), 4, 12)
-			var wh: int = clampi(int(float(h) * 0.36), 4, 14)
-			var wy: int = int(float(h) * 0.22)
+			var ww: int = lay["ww"]
+			var wh: int = lay["wh"]
+			var wy: int = lay["wy"]
 
 			for y in range(wy, wy + wh):
 				for x in range(cx - ww / 2, cx - ww / 2 + ww):
 					if x >= 0 and x < w and y >= 0 and y < h:
 						var edge: bool = x == cx - ww / 2 or x == cx - ww / 2 + ww - 1 or y == wy or y == wy + wh - 1
 						var bar: bool = x == cx or y == wy + wh / 2
-						img.set_pixel(x, y, timber if (edge or bar) else glass)
+						var shine: bool = (not edge) and (not bar) and ((x - (cx - ww / 2)) + (y - wy)) % 7 == 0
+						img.set_pixel(x, y, timber if (edge or bar) else (glass.lightened(0.28) if shine else glass))
+
+			# 창턱(창 아래 한 줄 밝은 돌/나무)
+			for x in range(cx - ww / 2 - 1, cx - ww / 2 + ww + 1):
+				if x >= 0 and x < w and wy + wh < h:
+					img.set_pixel(x, wy + wh, beam_hi)
 
 	# 바닥·처마 아래 접지 그림자(환경 가림 근사): 기단 바로 위 2줄과 위쪽 보 아래 3줄을 어둡게
 	for x in range(w):
@@ -265,6 +286,20 @@ static func awning_stripes(size: int, a: Color, b: Color) -> ImageTexture:
 	for y in range(size):
 		for x in range(size):
 			img.set_pixel(x, y, a if ((x / stripe) % 2 == 0) else b)
+
+	return ImageTexture.create_from_image(img)
+
+
+# 덧문(겉창): 가로 살(루버) 줄무늬. 밝은 줄과 어두운 줄이 두 픽셀씩 번갈아.
+static func shutter(size: int, base: Color) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+
+	for y in range(size):
+		for x in range(size):
+			var c: Color = base.lightened(0.12) if (y / 2) % 2 == 0 else base.darkened(0.12)
+			if x == 0 or x == size - 1:
+				c = base.darkened(0.35)
+			img.set_pixel(x, y, c)
 
 	return ImageTexture.create_from_image(img)
 

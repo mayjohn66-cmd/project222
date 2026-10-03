@@ -338,33 +338,39 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var cells: int = cells_z
 	var door_cell: int = cells / 2
 	var door_cx: float = lo.x + (float(door_cell) + 0.5) * width / float(cells)
-	var win_bottom: float = wall_h * 0.42
+	var lay_z: Dictionary = PlaceholderTextures.window_layout(int(roundf(width * ts)), h_texels, cells_z)
+	var lay_x: Dictionary = PlaceholderTextures.window_layout(int(roundf(depth * ts)), h_texels, cells_x)
+	var win_top: float = wall_h * (1.0 - float(lay_z["wy"]) / float(h_texels))
+	var win_bottom: float = wall_h * (1.0 - float(lay_z["wy"] + lay_z["wh"]) / float(h_texels))
+	var win_w: float = float(lay_z["ww"]) / float(ts)
+	var win_w_x: float = float(lay_x["ww"]) / float(ts)
+	var cell_w_z: float = width / float(cells_z)
+	var cell_w_x: float = depth / float(cells_x)
 
-	# 덧문: 창 양옆 얇은 나무판(+z 앞벽과 +x 옆벽)
+	# 덧문: 창 양옆에 창과 같은 높이로, 칸에 들어가는 만큼만(너무 넓으면 뼈대와 겹치므로 줄임). 살(루버) 질감을 쓴다.
 	if bool(rule.get("shutters", false)):
-		var shut: Dictionary = wood(p, Color(0.35, 0.5, 0.4), "shutter_wood")
-		var win_w: float = clampf(width / float(cells_z) * 0.4, 4.0, 12.0) / float(ts)
-		var win_top: float = wall_h * 0.78
+		var shut: Dictionary = spec(PlaceholderTextures.shutter(ts, Color(0.36, 0.52, 0.48)), Color.WHITE, "shutter_wood", "덧문 %d×%d 가로 살(청록 계열, 가게마다 색)" % [ts, ts])
+		var sw_z: float = clampf((cell_w_z - win_w) * 0.5 * 0.75, 0.05, 0.2)
+		var sw_x: float = clampf((cell_w_x - win_w_x) * 0.5 * 0.75, 0.05, 0.2)
 
 		for k in range(cells_z):
 			if k == cells_z / 2:
 				continue
 
-			var scx: float = lo.x + (float(k) + 0.5) * width / float(cells_z)
-			var dxs: float = win_w * 0.5 + 0.08
-			box(b, "shutter", shut, Vector3(scx - dxs - 0.1, win_bottom, hi.y), Vector3(scx - dxs, win_top, hi.y + 0.05))
-			box(b, "shutter", shut, Vector3(scx + dxs, win_bottom, hi.y), Vector3(scx + dxs + 0.1, win_top, hi.y + 0.05))
-
-		var win_w_x: float = clampf(depth / float(cells_x) * 0.4, 4.0, 12.0) / float(ts)
+			var scx: float = lo.x + (float(k) + 0.5) * cell_w_z
+			var half: float = win_w * 0.5 + 0.02
+			box(b, "shutter", shut, Vector3(scx - half - sw_z, win_bottom, hi.y), Vector3(scx - half, win_top, hi.y + 0.05))
+			box(b, "shutter", shut, Vector3(scx + half, win_bottom, hi.y), Vector3(scx + half + sw_z, win_top, hi.y + 0.05))
 
 		for k in range(cells_x):
-			var scz: float = hi.y - (float(k) + 0.5) * depth / float(cells_x)
-			var dzs: float = win_w_x * 0.5 + 0.08
-			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz - dzs - 0.1), Vector3(hi.x + 0.05, win_top, scz - dzs))
-			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz + dzs), Vector3(hi.x + 0.05, win_top, scz + dzs + 0.1))
+			var scz: float = hi.y - (float(k) + 0.5) * cell_w_x
+			var halfx: float = win_w_x * 0.5 + 0.02
+			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz - halfx - sw_x), Vector3(hi.x + 0.05, win_top, scz - halfx))
+			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz + halfx), Vector3(hi.x + 0.05, win_top, scz + halfx + sw_x))
 
 	if bool(rule.get("step", true)):
-		box(b, "step", stone_spec(p, Color(1.15, 1.1, 1.0), "step"), Vector3(door_cx - 0.3, 0.0, hi.y), Vector3(door_cx + 0.3, 0.14, hi.y + 0.28))
+		var door_w: float = float(lay_z["dw"]) / float(ts)
+		box(b, "step", stone_spec(p, Color(1.15, 1.1, 1.0), "step"), Vector3(door_cx - door_w * 0.5 - 0.12, 0.0, hi.y), Vector3(door_cx + door_w * 0.5 + 0.12, 0.14, hi.y + 0.3))
 
 	if bool(rule.get("planters", true)):
 		for k in range(cells):
@@ -372,8 +378,9 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 				continue
 
 			var cx: float = lo.x + (float(k) + 0.5) * width / float(cells)
-			box(b, "planter", wood(p, Color(0.62, 0.42, 0.28), "planter_box"), Vector3(cx - 0.26, win_bottom - 0.13, hi.y), Vector3(cx + 0.26, win_bottom, hi.y + 0.14))
-			box(b, "flowers", spec(_tex("foliage", ts, Color(0.95, 0.4, 0.55)), Color.WHITE, "planter_flowers", "창 아래 화분 꽃·풀 %d×%d 반복" % [ts, ts]), Vector3(cx - 0.24, win_bottom, hi.y + 0.01), Vector3(cx + 0.24, win_bottom + 0.1, hi.y + 0.13))
+			var half_p: float = win_w * 0.5 + 0.04
+			box(b, "planter", wood(p, Color(0.62, 0.42, 0.28), "planter_box"), Vector3(cx - half_p, win_bottom - 0.13, hi.y), Vector3(cx + half_p, win_bottom, hi.y + 0.14))
+			box(b, "flowers", spec(_tex("foliage", ts, Color(0.95, 0.4, 0.55)), Color.WHITE, "planter_flowers", "창 아래 화분 꽃·풀 %d×%d 반복" % [ts, ts]), Vector3(cx - half_p + 0.02, win_bottom, hi.y + 0.01), Vector3(cx + half_p - 0.02, win_bottom + 0.1, hi.y + 0.13))
 
 	if bool(rule.get("sign", false)):
 		var sx: float = lo.x + 0.18
