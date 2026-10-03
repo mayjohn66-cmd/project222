@@ -860,10 +860,17 @@ static func forge_front_wall(w: int, h: int, cells: int, stone_tint: Color) -> I
 			img.set_pixel(x, y, mortar if m else (a if ((x + off) / 8 + row) % 2 == 0 else b))
 
 	# 화덕 칸(아치): 가운데 폭 약 44%
-	var bw: int = int(float(w) * 0.44)
+	var bw: int = int(float(w) * 0.3)
 	var bx0: int = (w - bw) / 2
 	var bx1: int = bx0 + bw
-	var by0: int = int(float(h) * 0.2)
+	var by0: int = int(float(h) * 0.34)
+
+	# 양옆 작은 창(석조 벽에 유리창 + 흰 틀)
+	for wx_c in [int(float(w) * 0.17), int(float(w) * 0.83)]:
+		for yy in range(int(float(h) * 0.3), int(float(h) * 0.62)):
+			for xx in range(wx_c - 4, wx_c + 5):
+				var win_edge: bool = xx == wx_c - 4 or xx == wx_c + 4 or yy == int(float(h) * 0.3) or yy == int(float(h) * 0.62) - 1
+				_px(img, xx, yy, Color(0.86, 0.86, 0.92) if win_edge else (Color(0.5, 0.74, 0.92) if xx != wx_c else Color(0.86, 0.86, 0.92)))
 	var by1: int = h
 	var frame := Color(0.8, 0.8, 0.88)
 

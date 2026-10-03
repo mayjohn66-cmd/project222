@@ -473,7 +473,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 			"b": b, "p": p, "lo": lo, "hi": hi, "wall_h": wall_h_low, "wall_h_total": wall_h, "roof_h": roof_h, "ridge_x": ridge_x,
 			"hs": hs_roof, "vc": ((lo.y + hi.y) * 0.5 if ridge_x else (lo.x + hi.x) * 0.5), "levels": levels, "plaster": plaster, "timber": timber,
 			"story_frac": story_frac, "roof_spec": (specs[2] as Dictionary).duplicate(), "trim_spec": (specs[4] as Dictionary).duplicate(), "wall_spec": (specs[3] as Dictionary).duplicate(),
-			"door_cx": door_cx, "door_w": float(lay_z["dw"]) / float(ts), "cells": cells_z, "door_cell": door_cell,
+			"door_cx": door_cx, "door_w": (width * 0.3 if is_forge else float(lay_z["dw"]) / float(ts)), "cells": cells_z, "door_cell": door_cell,
 		})
 
 	var extra_specs: Array = b.commit_into(mesh)
@@ -618,16 +618,19 @@ static func _add_cloth_awning(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Ve
 	var cloth: Dictionary = spec(PlaceholderTextures.awning_stripes(ts, Color(0.98, 0.95, 0.86), tint), Color.WHITE, "cloth_awning", "천 차양 줄무늬 %d×%d 반복(크림 + 가게 색)" % [ts, ts])
 	var width: float = hi.x - lo.x
 	var cell_w: float = width / float(cells)
-	var y_top: float = wall_h - 0.72
-	var y_bot: float = y_top - 0.34
-	var out: float = 0.55
+	# 차양 윗변은 진열창 윗변(shop_front_wall 의 win_top = 높이의 28%)에 붙이고, 가로는 창 폭(칸 왼쪽 3px ~ 오른쪽 2px 안쪽)보다 조금 넓게 한다.
+	var y_top: float = wall_h * 0.72 + 0.03
+	var y_bot: float = y_top - 0.3
+	var out: float = 0.5
+	var win_l: float = 3.0 / float(ts)
+	var win_r: float = 2.0 / float(ts)
 
 	for k in range(cells):
 		if k == door_cell:
 			continue
 
-		var x0: float = lo.x + float(k) * cell_w + 0.04
-		var x1: float = lo.x + float(k + 1) * cell_w - 0.04
+		var x0: float = lo.x + float(k) * cell_w + win_l - 0.06
+		var x1: float = lo.x + float(k + 1) * cell_w - win_r + 0.06
 		slope(b, "awning", cloth, Vector3(x0, y_top, hi.y), Vector3(x1, y_top, hi.y), Vector3(x1, y_bot, hi.y + out), Vector3(x0, y_bot, hi.y + out), Vector3(0, out, (y_top - y_bot)).normalized(), x1 - x0, 1.0)
 		var tooth: int = maxi(int(roundf((x1 - x0) / 0.2)), 2)
 		var tw: float = (x1 - x0) / float(tooth)
