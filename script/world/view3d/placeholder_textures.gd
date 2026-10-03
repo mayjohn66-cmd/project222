@@ -50,8 +50,12 @@ static func albedo(kind: String, size: int) -> ImageTexture:
 						var tone: float = rng.randf_range(-0.04, 0.04)
 						c = Color(0.3, 0.3, 0.38) if seam else Color(0.5 + tone, 0.5 + tone, 0.58 + tone)
 				_:
-					var grain: float = rng.randf_range(-0.03, 0.03)
-					c = Color(0.3, 0.2, 0.12) if seam else Color(0.62 + grain, 0.43 + grain, 0.27 + grain)
+					if clean:
+						# 깔끔한 나무판: 밝은 갈색 면 + 판 사이 한 줄 어두운 선(잡음 없음)
+						c = Color(0.62, 0.42, 0.26) if seam else Color(0.84, 0.64, 0.42)
+					else:
+						var grain: float = rng.randf_range(-0.03, 0.03)
+						c = Color(0.3, 0.2, 0.12) if seam else Color(0.62 + grain, 0.43 + grain, 0.27 + grain)
 
 			img.set_pixel(x, y, c)
 

@@ -486,7 +486,7 @@ func _sync_floor() -> void:
 	if _ground_mesh == null:
 		_ground_mesh = MeshInstance3D.new()
 		_ground_mesh.layers = 1
-		_ground_material = _make_surface_material("plank", Color(0.62, 0.38, 0.28))
+		_ground_material = _make_surface_material("plank", Color(1.0, 0.92, 0.8) if PlaceholderTextures.clean else Color(0.62, 0.38, 0.28))
 		_ground_mesh.material_override = _ground_material
 		_viewport.add_child(_ground_mesh)
 		_ground_id_mesh = MeshInstance3D.new()
@@ -584,7 +584,7 @@ func _sync_walls() -> void:
 			lo_v = Vector2(x0, r["lo"])
 			hi_v = Vector2(x0 + WALL_THICKNESS, r["hi"])
 
-		_set_item("wall%d" % index, lo_v, hi_v, WALL_TALL_BLOCKS if r["tall"] else WALL_LOW_BLOCKS, "brick", Color(0.85, 0.7, 0.55), "")
+		_set_item("wall%d" % index, lo_v, hi_v, WALL_TALL_BLOCKS if r["tall"] else WALL_LOW_BLOCKS, "brick", Color(1.2, 1.08, 0.92) if PlaceholderTextures.clean else Color(0.85, 0.7, 0.55), "")
 		index += 1
 
 
