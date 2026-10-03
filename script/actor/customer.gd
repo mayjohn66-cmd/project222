@@ -408,6 +408,7 @@ func start_shopping():
 			wanted_item_id,
 			wanted_amount
 		)
+		StoreEventRemark.tell(self, "missing", wanted_item_id)
 
 		start_wandering()
 		return
@@ -772,6 +773,7 @@ func checkout_item() -> void:
 		carried_item_id,
 		carried_amount
 	)
+	StoreEventRemark.tell(self, "bought", carried_item_id)
 
 	# 결제 완료 상품은 더 이상 미결제 상태가 아님
 	carried_item_id = ""

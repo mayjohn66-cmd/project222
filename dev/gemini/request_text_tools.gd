@@ -36,6 +36,7 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/requests/default_village_rest.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_village_goodwill.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_seasonal_village.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/events/default_store_event_story.tres": KIND_SERVICE_TEXT,
 }
 
 
@@ -323,6 +324,13 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 				_need_lines(errors,warns,tag,lines)
 			KIND_SERVICE_TEXT:
 				if title.is_empty() and summary.is_empty() and lines.is_empty(): errors.append("%s 안내 글이 비어 있음" % tag)
+				var source: Dictionary = known.get(kind, {}).get(id, {})
+				if source.has("event_id"):
+					_need(errors, tag, "title", title, MAX_TITLE)
+					_need_lines(errors, warns, tag, lines)
+					if summary.length() > MAX_SUMMARY: errors.append("%s summary가 너무 김" % tag)
+					if str(source.get("context", "")).contains("{item}") and not "|".join(lines).contains("{item}"):
+						errors.append("%s 실제 상품 이름을 표시하는 {item}을 유지하세요" % tag)
 			KIND_RESIDENT_REQUEST:
 				_need(errors, tag, "title", title, MAX_TITLE)
 				_need_lines(errors, warns, tag, lines)

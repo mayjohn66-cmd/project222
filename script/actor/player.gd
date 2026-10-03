@@ -430,50 +430,8 @@ func show_rumor_dialog(
 	if not is_instance_valid(rumor_dialog):
 		return
 
-	var title: String = str(
-		event_data.get(
-			"title",
-			"알 수 없는 일정"
-		)
-	)
-
-	var description: String = str(
-		event_data.get(
-			"description",
-			""
-		)
-	)
-
-	var start_day: int = int(
-		event_data.get(
-			"start_day",
-			0
-		)
-	)
-
-	var end_day: int = int(
-		event_data.get(
-			"end_day",
-			start_day
-		)
-	)
-
-	rumor_dialog.dialog_text = (
-		"“이런 이야기를 들었는데 말이야.”"
-		+ "\n\n"
-		+ title
-		+ "\n"
-		+ description
-		+ "\n\n예정 기간: "
-		+ CalendarData.get_display_date(
-			start_day
-		)
-		+ " ~ "
-		+ CalendarData.get_display_date(
-			end_day
-		)
-		+ "\n\n새로운 일정이 관리 메뉴에 기록되었습니다."
-	)
+	rumor_dialog.title = "가게에서 들은 이야기"
+	rumor_dialog.dialog_text = StoreEventStory.rumor_text(event_data, GameState.total_day)
 
 	rumor_dialog.popup_centered(
 		Vector2i(
