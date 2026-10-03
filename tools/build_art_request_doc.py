@@ -63,6 +63,8 @@ PHRASE = {
     "flower_bush": "seamless green bush with pink flowers texture",
     "road_sign_board": "wooden road sign board: brown planks, dark border, white arrow pointing right",
     "fence_wood": "seamless light brown wooden fence planks texture",
+    "plinth_stone": "seamless grey stone foundation block texture, three-tone blocks with dark mortar lines",
+    "shutter_wood": "seamless window shutter wood texture, green-painted vertical planks",
     "wood": "seamless brown wood planks texture",
     "stone": "seamless grey stone texture",
 }
@@ -164,6 +166,8 @@ def main():
     A("")
     A("> 이 문서는 `tools/build_art_request_doc.py` 가 만든다. 직접 고치지 말고 `data/shop/catalogs/village_3d.csv`·`village_3d_assets.csv` 를 고친 뒤 다시 생성한다.")
     A("> 각 자산 폴더(`docs/drafts/art_requests/<id>/`)에 **면 질감 틀 PNG(정확한 크기, 임시 그림)**, 3D 미리보기(`preview.png`), 요약 시트(`sheet.png`, 2D 원본 그림 포함)가 있다. 2D 원본은 각 자산의 `art/…` 경로에 있다.")
+    A("")
+    A("> **터미널 도우미**: `python tools/world3d_menu.py` (Windows: `tools\\run_world3d.bat`) — 진행 현황, 다음에 그릴 면의 크기·프롬프트(클립보드 복사), 그림 넣기, 가져오기 설정·검증을 번호 메뉴로 진행한다.")
     A("")
     A("## 0. 한눈에")
     A("")
