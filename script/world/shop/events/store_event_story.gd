@@ -10,6 +10,7 @@ static func moment(event_id: String, stage: String) -> Dictionary:
 	return {}
 
 static func phase(event: Dictionary, day: int) -> String:
+	if not event.has("occurrence_id"): event = StoreEventSchedule.occurrence(event, day)
 	if day < int(event.get("start_day", 0)): return "rumor"
 	if day > int(event.get("end_day", 0)): return "finished"
 	if day == int(event.get("end_day", 0)): return "closing"
@@ -20,6 +21,7 @@ static func prose(event: Dictionary, day: int) -> Dictionary:
 	return RequestTextData.entry("service_text", str(entry.get("id", "")))
 
 static func timing(event: Dictionary, day: int) -> String:
+	if not event.has("occurrence_id"): event = StoreEventSchedule.occurrence(event, day)
 	match phase(event, day):
 		"rumor":
 			return "내일을 앞둔 이야기" if int(event.get("start_day", 0)) - day == 1 else "머지않아 있을 일"
@@ -33,11 +35,11 @@ static func title(event: Dictionary, day: int) -> String:
 static func rumor_text(event: Dictionary, day: int) -> String:
 	var text := prose(event, day)
 	var lines := str(text.get("lines", event.get("description", ""))).replace("|", "\n")
-	return "%s\n%s\n\n%s\n\n들은 이야기는 관리 메뉴의 일정 탭에 적어 두었습니다." % [title(event, day), timing(event, day), lines]
+	return "%s\n%s · %s\n\n%s\n\n들은 이야기는 관리 메뉴의 일정 탭에 적어 두었습니다." % [title(event, day), StoreEventSchedule.category_label(event), timing(event, day), lines]
 
 static func note_text(event: Dictionary, day: int) -> String:
 	var text := prose(event, day)
-	return "[%s] %s\n\n%s\n\n%s" % [timing(event, day), title(event, day), str(text.get("lines", event.get("description", ""))).replace("|", "\n"), str(text.get("summary", ""))]
+	return "[%s]\n[%s] %s\n\n%s\n\n%s" % [StoreEventSchedule.category_label(event), timing(event, day), title(event, day), str(text.get("lines", event.get("description", ""))).replace("|", "\n"), str(text.get("summary", ""))]
 
 # 배율과 수량의 원본은 기존 수요 CSV. 반응은 그 수요가 실제 선택된 구매에만 붙인다.
 static func reaction(event_id: String, customer_type: String, item_id: String, stage: String, day: int) -> String:

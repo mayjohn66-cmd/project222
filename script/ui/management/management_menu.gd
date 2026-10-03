@@ -426,8 +426,8 @@ func refresh_schedule() -> void:
 
 	for event_id in discovered_ids:
 		var event_data: Dictionary = (
-			StoreEventData.get_event(
-				event_id
+			StoreEventData.get_event_occurrence(
+				event_id, GameState.get_store_event_discovery_day(event_id)
 			)
 		)
 
@@ -471,10 +471,16 @@ func refresh_schedule() -> void:
 
 		return
 
-	for event_data in discovered_events:
-		_create_schedule_entry(
-			event_data
-		)
+	for kind in ["common", "seasonal"]:
+		var entries: Array[Dictionary] = []
+		for event in discovered_events:
+			if str(event.get("event_kind", "common")) == kind: entries.append(event)
+		if entries.is_empty(): continue
+		var heading := Label.new()
+		heading.text = "공용 이벤트" if kind == "common" else "계절 이벤트"
+		heading.add_theme_font_size_override("font_size", 20)
+		schedule_list.add_child(heading)
+		for event in entries: _create_schedule_entry(event)
 
 
 func _sort_events_by_start_day(

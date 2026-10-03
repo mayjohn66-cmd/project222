@@ -1,4 +1,7 @@
-event_id,title,discovery_start_day,discovery_end_day,start_day,end_day,rumor_customer_type_id,dialogue_id,description
-dungeon_raid,대규모 던전 공략,2,3,4,6,traveler,dungeon_raid_rumor,모험가들의 대규모 던전 공략으로 포션 수요가 증가합니다.
-spring_market,봄맞이 장터,8,12,15,19,any,spring_market_rumor,봄맞이 장터를 준비하는 주민들로 인해 음식 수요가 증가합니다.
-trail_supplies,길손들의 여행 준비,18,21,22,24,any,trail_supplies_rumor,멀리 떠나는 길손들이 물과 빵을 준비합니다. 여행자들의 방문과 여행 식량 수요가 잠시 늘어납니다.
+event_id,title,discovery_start_day,discovery_end_day,start_day,end_day,rumor_customer_type_id,dialogue_id,description,event_kind,season_id,repeat_days
+dungeon_raid,대규모 던전 공략,2,3,4,6,traveler,dungeon_raid_rumor,모험가들이 공략을 준비하며 동료 몫의 포션을 찾습니다.,common,,28
+spring_market,봄맞이 장터,8,12,15,19,any,spring_market_rumor,이웃들이 봄 장터에 나눠 먹을 빵과 열매 주스를 챙깁니다.,seasonal,spring,0
+trail_supplies,길손들의 여행 준비,18,21,22,24,any,trail_supplies_rumor,길손들이 보따리에 넣을 빵과 물을 찾습니다.,common,,28
+summer_cool_break,여름 길목의 쉼,4,7,8,12,any,summer_cool_break_rumor,잠깐 쉬어 가려는 이웃들이 물과 열매 주스를 챙깁니다.,seasonal,summer,0
+autumn_shared_table,가을 먹거리 나눔,8,11,12,16,any,autumn_shared_table_rumor,함께 먹을 자리를 준비하는 이웃들이 빵과 버섯 스튜를 찾습니다.,seasonal,autumn,0
+winter_evening_warmth,겨울 밤길의 온기,11,14,15,19,any,winter_evening_warmth_rumor,긴 저녁길을 준비하는 이웃들이 약초 음료와 손난로를 챙깁니다.,seasonal,winter,0

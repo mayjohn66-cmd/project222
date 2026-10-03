@@ -14,12 +14,15 @@ func sample(type_id: String, day: int) -> Dictionary:
 	seed(5091)
 	var units := 0
 	var event_units := 0
+	var item_units: Dictionary = {}
 	var stocked: Array[String] = ["potion", "bread", "water"]
 	for i in range(1000):
 		var request := CustomerDemandData.get_random_wanted_request(type_id, day, stocked)
 		units += int(request.get("amount", 0))
+		var item_id := str(request.get("item_id", ""))
+		item_units[item_id] = int(item_units.get(item_id, 0)) + int(request.get("amount", 0))
 		if not str(request.get("event_id", "")).is_empty(): event_units += int(request["amount"])
-	return {"units":units, "event_units":event_units}
+	return {"units":units, "event_units":event_units, "item_units":item_units}
 func label_text(node: Node) -> String:
 	var result: String = (node.text + "\n") if node is Label else ""
 	for child in node.get_children(): result += label_text(child)
@@ -38,7 +41,7 @@ func run() -> void:
 	var menu = world.get_node("UI/ManagementMenu")
 	var sources := Tools.load_sources()
 	var prose := RequestTextData.read_file(RequestTextData.CSV_PATH)
-	check(StoreEventStory.SETTINGS.moments.size() == 18, "three existing events have six narrative stages each")
+	check(StoreEventStory.SETTINGS.moments.size() == 36, "six common/seasonal events have six narrative stages each")
 	var token_id := "store_trail_bought"
 	var bad_token := PackedStringArray([token_id, "service_text", "길손의 말", "", "준비를 다 했어.", ""])
 	check(not Tools.validate_rows(Tools.COLUMNS, [bad_token], sources)["errors"].is_empty(), "Gemini cannot remove actual purchased item token")
@@ -65,8 +68,8 @@ func run() -> void:
 		player.show_rumor_dialog(event)
 		check(player.rumor_dialog.dialog_text == StoreEventStory.rumor_text(event, start - 1), "actual rumor dialog uses narrative: " + id)
 		player.rumor_dialog.hide()
-		var type_id: String = "villager" if id == "spring_market" else "backpacker"
-		var item_id: String = "potion" if id == "dungeon_raid" else "bread"
+		var type_id: String = "backpacker" if id in ["dungeon_raid", "trail_supplies"] else "villager"
+		var item_id: String = str(rumor["cue_items"][0])
 		check(not StoreEventStory.reaction(id, type_id, item_id, "bought", start).is_empty(), "genuine event purchase gets reaction: " + id)
 		check(not StoreEventStory.reaction(id, type_id, item_id, "missing", start).is_empty(), "genuine event stockout gets reaction: " + id)
 		check(StoreEventStory.reaction(id, type_id, "iron_ore", "bought", start).is_empty(), "unrelated item gets no event praise: " + id)
@@ -76,6 +79,8 @@ func run() -> void:
 		var ended := sample(type_id, end + 1)
 		check(normal["event_units"] == 0 and ended["event_units"] == 0, "event demand absent outside dates: " + id)
 		check(active["event_units"] > 0 and active["units"] > normal["units"], "actual request generator increases purchased units: " + id)
+		for cue in rumor["cue_items"]:
+			check(int(active["item_units"].get(cue, 0)) > int(normal["item_units"].get(cue, 0)), "each advertised item gets more requested units: " + id + ":" + str(cue))
 		print("DEMAND_SAMPLE ", id, " before=", normal["units"], " active=", active["units"], " after=", ended["units"])
 
 	# 실제 손님 쇼핑의 품절 경로와 진열대 -> 결제 -> 기록 경로를 확인한다.
