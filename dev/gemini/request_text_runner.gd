@@ -671,6 +671,10 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 					info += " / 앞선 개인 부탁: " + Tools.row_from_source(Tools.KIND_PERSONAL_REQUEST, {"id":after})[2]
 				if bool(d.get("after_gathering",false)):
 					info += " / 우물 곁 첫 저녁 모임 뒤 이웃이 된 관계의 후속 이야기 / 새 건물·장비·책 지급이나 별도 기능을 약속하지 않음"
+				if bool(d.get("after_market", false)):
+					info += " / 첫 장터를 함께 마친 다음 날 이후 / 배운 레시피의 완제품을 전달하고 주민에게 E로 후일담을 끝까지 듣기 / 후일담에 추가 답례 없음"
+				if d.has("recipe"):
+					info += " / 기존 레시피: " + _item_name(str(d["recipe"]))
 			Tools.KIND_RESIDENT_INTRODUCTION:
 				info = "인물: %s / 손님 유형: %s" % [d.get("npc",""), d.get("type","")]
 			Tools.KIND_TRADE_OFFER:
@@ -681,7 +685,7 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 				info = "기존 기능 안내를 유지하는 문장: " + id
 				if d.has("stage"):
 					info = "마을 이야기·이벤트 / 말하는 사람: %s / 장면: %s / 새 정착·구매·해금을 약속하지 않음" % [d.get("npc", ""), d["stage"]]
-				if d.has("speaker"):
+				if d.has("speaker") and not d.has("stage"):
 					var speaker := str(d["speaker"])
 					info = "우물 곁 저녁 모임 / 말하는 사람: %s / 준비한 빵과 물을 함께 나눔 / 새 물품이나 돈을 약속하지 않음 / 화자 이름은 대사에 쓰지 않음" % ("장면 서술" if speaker.is_empty() else str(residents.get(speaker, {}).get("name", speaker)))
 			Tools.KIND_RESIDENT_REQUEST:

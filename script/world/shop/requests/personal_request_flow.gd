@@ -6,7 +6,9 @@ const PREFIX := "personal_request:"
 
 static func entries() -> Array[Dictionary]:
 	var result: Array[Dictionary] = []
-	for data in SETTINGS.requests:
+	var all_requests: Array[Dictionary] = SETTINGS.requests.duplicate(true)
+	all_requests.append_array(MarketAfterglowFlow.SETTINGS.requests)
+	for data in all_requests:
 		var entry: Dictionary = data.duplicate(true)
 		for field in ["title","summary","completion"]:
 			entry[field] = RequestTextData.text("personal_request",str(entry["id"]),field,str(entry.get(field,"")))
@@ -34,9 +36,15 @@ static func locked_reason(entry: Dictionary) -> String:
 	if bool(entry.get("after_gathering", false)):
 		if not VillageGatheringFlow.completed(): return "우물 곁 첫 저녁 모임을 마치면 이야기가 이어져요."
 		last_day = maxi(last_day,int(PlayerProgress.story_beat_days[VillageGatheringFlow.COMPLETED]))
+	if bool(entry.get("after_market", false)):
+		if not VillageMarketFlow.completed(): return "작은 노점의 첫 장터를 함께 마치면 부탁이 이어져요."
+		last_day = maxi(last_day, int(PlayerProgress.story_beat_days[VillageMarketFlow.PREFIX + "done"]))
 	var wait_days := maxi(0,int(entry.get("days_after",0)))
 	if last_day >= 0 and GameState.total_day < last_day + wait_days:
 		return "앞선 이야기를 마친 뒤 %d일 후부터 부탁을 들을 수 있어요." % wait_days
+	var recipe_id := str(entry.get("recipe", ""))
+	if not recipe_id.is_empty() and not RecipeUnlockData.is_recipe_available(recipe_id):
+		return "%s 레시피를 배우면 준비할 수 있어요. 원정에서 두루마리를 찾아 사용해 주세요." % ItemData.get_item_name(recipe_id)
 	return ""
 
 static func accept(id: String) -> bool:
@@ -66,7 +74,10 @@ static func deliver(id: String) -> Dictionary:
 
 static func information(entry: Dictionary) -> String:
 	var id := str(entry["id"])
-	if done(id): return "%s\n함께 완료한 날: %d일차" % [entry["completion"],int(PlayerProgress.story_beat_days[PREFIX + id + ":done"])]
+	if done(id):
+		var result := "%s\n함께 완료한 날: %d일차" % [entry["completion"],int(PlayerProgress.story_beat_days[PREFIX + id + ":done"])]
+		var afterglow := MarketAfterglowFlow.information(id)
+		return result + ("\n" + afterglow if not afterglow.is_empty() else "")
 	var text := str(entry["summary"]) + "\n"
 	var totals := CommunityRequestFlow.required_items(entry)
 	for item in totals:

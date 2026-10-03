@@ -102,6 +102,7 @@ func _check_followups(world: Node) -> void:
 	var player = world.get_node("Actors/Player")
 	for entry in PersonalRequestFlow.entries():
 		if not entry.has("after"): continue
+		if bool(entry.get("after_market", false)): continue # 장터·레시피·후일담 조건은 check_market_afterglow에서 별도 검사.
 		PlayerProgress.load_save_data(saved)
 		GameState.total_day = initial_day
 		var id := str(entry["id"])

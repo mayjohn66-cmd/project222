@@ -11,6 +11,7 @@ var previous_physics := true
 var elapsed := 0.0
 var story_panel: VillageStoryPanel
 var story_action: Dictionary = {}
+var afterglow_action := ""
 
 func _ready() -> void:
 	player = get_parent().get_node("Actors/Player")
@@ -122,6 +123,7 @@ func interaction_hint() -> String:
 	var target := nearest()
 	if target.is_empty(): return ""
 	if target["id"] == "well": return "[E] 공동 우물 · 오늘 물을 길었어요" if VillageLifeFlow.well_used_today() else "[E] 공동 우물에서 물 긷기"
+	if not MarketAfterglowFlow.pending(str(target["id"])).is_empty(): return "[E] %s · 장터 뒤 후일담" % target["name"]
 	var action := VillageStoryFlow.action(str(target["id"]))
 	if not action.is_empty():
 		var labels := {"introduction":"마을 이야기 시작", "listen":"마을 이야기 듣기", "choose":"남길 기억 고르기", "finish":"기록 마치기", "reminder":"남은 이야기 확인", "memory":"남긴 기억 다시 듣기"}
@@ -132,6 +134,7 @@ func try_interact() -> bool:
 	var target := nearest()
 	if target.is_empty(): return false
 	story_action = {}
+	afterglow_action = ""
 	var lines: Array[String] = []
 	if target["id"] == "well":
 		var obtained := VillageLifeFlow.draw_water()
@@ -155,7 +158,9 @@ func try_interact() -> bool:
 			if request["resident"] != target["id"] or PersonalRequestFlow.done(str(request["id"])) or not PersonalRequestFlow.locked_reason(request).is_empty(): continue
 			lines.append_array(RequestTextData.lines("personal_request",str(request["id"])))
 			lines.append("마을 게시판에서 개인 부탁을 맡거나 준비한 물품을 전달할 수 있어요.")
-		story_action = VillageStoryFlow.action(str(target["id"]))
+		afterglow_action = MarketAfterglowFlow.pending(str(target["id"]))
+		if not afterglow_action.is_empty(): lines.append_array(MarketAfterglowFlow.lines(afterglow_action))
+		story_action = VillageStoryFlow.action(str(target["id"])) if afterglow_action.is_empty() else {}
 		if not story_action.is_empty():
 			lines.append_array(RequestTextData.lines("service_text", str(story_action["id"]), str(story_action.get("field", "lines"))))
 			if story_action["stage"] == "finish": lines.append("답례: " + VillageStoryFlow.reward_description())
@@ -172,6 +177,7 @@ func try_interact() -> bool:
 func _end_talk() -> void:
 	if not talking: return
 	if dialogue.line_index >= dialogue.lines.size():
+		if not afterglow_action.is_empty(): MarketAfterglowFlow.listen(afterglow_action)
 		match str(story_action.get("stage", "")):
 			"introduction": VillageStoryFlow.accept()
 			"listen": VillageStoryFlow.listen(str(story_action["resident"]))
@@ -183,6 +189,7 @@ func _end_talk() -> void:
 			"finish":
 				if VillageStoryFlow.finish(): manager.customer_spawner.refresh_spawn_interval()
 	story_action = {}
+	afterglow_action = ""
 	talking = false
 	get_parent().remove_meta("village_life_dialogue")
 	if is_instance_valid(manager): manager.hour_timer.paused = previous_paused
@@ -201,4 +208,5 @@ func _select_memory(id: String) -> void:
 func _exit_tree() -> void:
 	# Leaving a scene is not proof that its conversation was fully read.
 	story_action = {}
+	afterglow_action = ""
 	_end_talk()

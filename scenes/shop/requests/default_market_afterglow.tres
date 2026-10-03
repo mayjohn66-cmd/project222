@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MarketAfterglowSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/market_afterglow_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+requests = Array[Dictionary]([
+{"id":"naru_market_juice","resident":"naru","friendship":7,"after":"naru_neighbor_basket","after_gathering":true,"after_market":true,"days_after":1,"recipe":"berry_juice","requirements":[{"item":"berry_juice","amount":2}],"reputation":1,"money":30},
+{"id":"doyun_market_soup","resident":"doyun","friendship":7,"after":"doyun_tool_care","after_gathering":true,"after_market":true,"days_after":1,"recipe":"mushroom_stew","requirements":[{"item":"mushroom_stew","amount":1}],"reputation":1,"money":30},
+{"id":"sora_market_drink","resident":"sora","friendship":7,"after":"sora_well_notes","after_gathering":true,"after_market":true,"days_after":1,"recipe":"herb_drink","requirements":[{"item":"herb_drink","amount":2}],"reputation":1,"money":30}
+])
+moments = Array[Dictionary]([
+{"id":"market_afterglow_naru","npc":"타블렌","resident":"naru","request":"naru_market_juice","stage":"첫 장터 뒤 열매 주스 부탁 전달 완료. 기존 타블렌에게 직접 E로 안부를 나누며 주스를 마신 후일담. 끝까지 들으면 수첩에 남김. 추가 물품 소비·보상·새 고객 해금 없음"},
+{"id":"market_afterglow_doyun","npc":"코르빈","resident":"doyun","request":"doyun_market_soup","stage":"첫 장터 뒤 버섯 수프 부탁 전달 완료. 기존 코르빈이 일을 마친 식사와 이웃을 떠올림. 실제 E 대화 완독 시 수첩 기록. 추가 물품 소비·보상·건물 해금 없음"},
+{"id":"market_afterglow_sora","npc":"이세르","resident":"sora","request":"sora_market_drink","stage":"첫 장터 뒤 약초 음료 부탁 전달 완료. 기존 이세르가 마신 음료와 정리한 기억 이야기. 실제 E 대화 완독 시 수첩 기록. 새 책 아이템·추가 답례 없음"}
+])
