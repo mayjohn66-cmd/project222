@@ -335,6 +335,10 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		tex_z = PlaceholderTextures.forge_front_wall(int(roundf(width * ts)), h_texels, cells_z, plaster)
 	elif is_workshop:
 		tex_z = PlaceholderTextures.workshop_front_wall(int(roundf(width * ts)), h_texels, cells_z, plaster)
+	elif str(rule.get("style", "")) == "barn":
+		tex_z = PlaceholderTextures.barn_front_wall(int(roundf(width * ts)), h_texels, cells_z, plaster)
+	elif str(rule.get("style", "")) == "stable":
+		tex_z = PlaceholderTextures.stable_front_wall(int(roundf(width * ts)), h_texels, cells_z, plaster)
 
 	if is_shop:
 		tex_z = PlaceholderTextures.shop_front_wall(int(roundf(width * ts)), h_texels, cells_z, plaster, timber, rule.get("goods_tint", Color(0.88, 0.56, 0.22)))
@@ -356,6 +360,27 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 
 	if is_shop:
 		specs[0]["emit"] = 0.8  # 진열창 안쪽(따뜻한 밝은 색) 픽셀이 차양 그늘에서도 빛나게
+
+	# ㄱ자(교차 박공): 앞쪽 왼쪽 끝에 용마루가 앞뒤로 달리는 작은 날개를 붙인다. 같은 mesh 에 면 일곱 개를 더 붙이므로 재질도 한 벌 더 만든다.
+	var wing_w: float = 0.0
+	var wing_specs: Array = []
+	var wing_present: Array = []
+
+	if str(rule.get("roof_kind", "")) == "cross" and depth >= 1.6:
+		wing_w = clampf(width * 0.38, 1.3, 2.0)
+		var wing_d: float = clampf(depth * 0.62, 1.2, 2.0)
+		var wopts: Dictionary = {"chimney": false, "awning": false, "apron": 0.0, "hip": false}
+		var wbuilt: Dictionary = BuildingMesh.build(Vector2(lo.x, hi.y), Vector2(lo.x + wing_w, hi.y + wing_d), wall_h, roof_h * 0.95, wopts, mesh)
+		wing_present = wbuilt["present"]
+		var wtex_f: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(wing_w * float(ts))), h_texels, false, 1, plaster, timber)
+		var wtex_s: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(wing_d * float(ts))), h_texels, false, maxi(int(roundf(wing_d)), 1), plaster, timber)
+
+		for sp in specs:
+			wing_specs.append((sp as Dictionary).duplicate())
+
+		wing_specs[0]["tex"] = wtex_f
+		wing_specs[1]["tex"] = wtex_s
+		wing_specs[0].erase("emit")
 
 	# --- 부속: 현관 계단, 창 아래 화분, 간판, 건물 앞 소품(extras)
 	var b := PartBuilder.new()
@@ -382,6 +407,10 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 				continue
 
 			var scx: float = lo.x + (float(k) + 0.5) * cell_w_z
+
+			if wing_w > 0.0 and scx - win_w < lo.x + wing_w:
+				continue
+
 			var half: float = win_w * 0.5 + 0.02
 			box(b, "shutter", shut, Vector3(scx - half - sw_z, win_bottom, hi.y), Vector3(scx - half, win_top, hi.y + 0.05))
 			box(b, "shutter", shut, Vector3(scx + half, win_bottom, hi.y), Vector3(scx + half + sw_z, win_top, hi.y + 0.05))
@@ -402,6 +431,10 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 				continue
 
 			var cx: float = lo.x + (float(k) + 0.5) * width / float(cells)
+
+			if wing_w > 0.0 and cx - win_w < lo.x + wing_w:
+				continue
+
 			var half_p: float = win_w * 0.5 + 0.04
 			box(b, "planter", wood(p, Color(0.62, 0.42, 0.28), "planter_box"), Vector3(cx - half_p, win_bottom - 0.13, hi.y), Vector3(cx + half_p, win_bottom, hi.y + 0.14))
 			box(b, "flowers", spec(_tex("foliage", ts, Color(0.95, 0.4, 0.55)), Color.WHITE, "planter_flowers", "창 아래 화분 꽃·풀 %d×%d 반복" % [ts, ts]), Vector3(cx - half_p + 0.02, win_bottom, hi.y + 0.01), Vector3(cx + half_p - 0.02, win_bottom + 0.1, hi.y + 0.13))
@@ -414,10 +447,11 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	_add_eave_nubs(b, lo, hi, wall_h, roof_tint, p)
 	var display: PartBuilder = null
 
+	display = PartBuilder.new()  # 덩굴 같은 투명 컷아웃·진열 소품은 그림자 없는 별도 묶음으로
+
 	if is_shop:
 		_add_fascia(b, p, lo, hi, wall_h, h_texels, str(rule.get("sign_text", "BAKERY")), str(rule.get("sign_icon", "bread")))
 		_add_cloth_awning(b, p, lo, hi, wall_h, cells_z, cells_z / 2, awning_tint)
-		display = PartBuilder.new()
 
 	if bool(rule.get("chimney", true)):
 		_add_smoke(b, lo, hi, wall_h + roof_h, p, is_forge)
@@ -457,7 +491,13 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		if i >= present.size() or present[i]:
 			kept.append(specs[i])
 
-	var all_specs: Array = pre_specs + kept + extra_specs
+	var wing_kept: Array = []
+
+	for i in range(wing_specs.size()):
+		if i >= wing_present.size() or wing_present[i]:
+			wing_kept.append(wing_specs[i])
+
+	var all_specs: Array = pre_specs + kept + wing_kept + extra_specs
 	apply_overrides(all_specs, str(rule.get("asset", "")), p)
 
 	if apron_info != null:
@@ -622,6 +662,38 @@ static func _add_counter(b: PartBuilder, p: Dictionary, x: float, z: float) -> v
 	box(b, "counter_top", top, Vector3(x - 0.48, 0.5, z - 0.22), Vector3(x + 0.48, 0.55, z + 0.22))
 
 
+# 덩굴: 벽에 붙는 투명 컷아웃 카드(잎 + 분홍 꽃)를 위아래로 여러 장. front=true 면 앞벽(+z, x 가운데 값), 아니면 옆벽(+x, z 가운데 값).
+static func _wall_card(b: PartBuilder, spec: Dictionary, a: float, y0: float, c: float, w: float, h: float, front: bool) -> void:
+	var up := Vector3(0, h, 0)
+	var pa: Vector3
+	var pb: Vector3
+	var n: Vector3
+
+	if front:
+		pa = Vector3(a - w * 0.5, y0, c)
+		pb = Vector3(a + w * 0.5, y0, c)
+		n = Vector3(0, 0, 1)
+	else:
+		pa = Vector3(a, y0, c + w * 0.5)
+		pb = Vector3(a, y0, c - w * 0.5)
+		n = Vector3(1, 0, 0)
+
+	var st: SurfaceTool = b.new_part(spec, pa, pb + up, 45.0)
+	BuildingMesh._quad(st, pa, pb, pb + up, pa + up, n, Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
+
+
+static func _add_vines(b: PartBuilder, p: Dictionary, a: float, c: float, wall_h: float, width: float, front: bool) -> void:
+	var sp: Dictionary = spec(PlaceholderTextures.vine_card(), Color.WHITE, "vine", "덩굴 카드 (투명 배경 컷아웃, 잎 + 분홍 꽃)")
+	sp["cutout"] = true
+	var n: int = maxi(int(roundf(wall_h / 0.55)), 2)
+	var cw: float = width
+
+	for i in range(n):
+		var jitter: float = (0.12 if i % 2 == 0 else -0.1) * width
+		var y0: float = wall_h - 0.55 * float(i + 1)
+		_wall_card(b, sp, a + jitter * (1.0 if front else 0.0), maxf(y0, 0.05), c + (0.0 if front else jitter), cw * (1.0 - 0.08 * float(i)), 0.62, front)
+
+
 # 모루: 나무 그루터기 위에 쇠 모루(받침·허리·윗판·뿔).
 static func _add_anvil(b: PartBuilder, p: Dictionary, x: float, z: float) -> void:
 	var ts: int = p["ts"]
@@ -683,7 +755,7 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 		# 상자·카운터·간판처럼 앞에 놓는 진열 소품은 따로 그림자 없는 묶음(display)에 넣는다(투명 컷아웃이 섞여 있어서).
 		var tb: PartBuilder = b
 
-		if display != null and f[0] in ["counter", "hang_sign", "basket", "bin_baguette", "bin_loaf", "long_counter"]:
+		if display != null and f[0] in ["counter", "hang_sign", "basket", "bin_baguette", "bin_loaf", "long_counter", "vine", "vine_side"]:
 			tb = display
 
 		match f[0]:
@@ -703,6 +775,10 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 				oct(tb, "basket", spec(PlaceholderTextures.crate(p["ts"], Color(0.62, 0.42, 0.22)), Color.WHITE, "basket", "바구니 옆면 %d×%d 갈색 엮음" % [p["ts"], p["ts"]]), x, z, 0.19, 0.0, 0.26, 0.17)
 				_card(tb, _card_spec("loaf", p), x - 0.05, 0.16, z, 0.28, 0.25)
 				_card(tb, _card_spec("loaf", p), x + 0.07, 0.2, z - 0.03, 0.26, 0.23)
+			"vine":
+				_add_vines(tb, p, x, hi.y + 0.03, wall_h, float(f[3]) if f.size() > 3 else 0.8, true)
+			"vine_side":
+				_add_vines(tb, p, hi.x + 0.03, lo.y + (hi.y - lo.y) * 0.5 + float(f[1]), wall_h, float(f[3]) if f.size() > 3 else 0.8, false)
 			"anvil":
 				_add_anvil(b, p, x, z)
 			"logs":
@@ -925,6 +1001,65 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 					gx += 0.26
 
 				total = 1.8
+		"tower":
+			var stone_t: Dictionary = stone_spec(p, Color(1.05, 1.0, 0.95), "tower_stone")
+			var band: Dictionary = stone_spec(p, Color(0.8, 0.78, 0.74), "tower_band")
+			var dark: Dictionary = spec(_tex("flat", ts, Color(0.16, 0.14, 0.18)), Color.WHITE, "tower_dark", "탑 창·문 안쪽 어두운 단색 %d×%d" % [ts, ts])
+			var door_c: Dictionary = spec(_tex("flat", ts, Color(0.5, 0.32, 0.18)), Color.WHITE, "tower_door", "탑 문 갈색 단색 %d×%d" % [ts, ts])
+			var hx: float = minf(sx, sz) * 0.5
+			var wall_top: float = 3.7
+			box(b, "tower_base", band, Vector3(c.x - hx - 0.06, 0.0, c.y - hx - 0.06), Vector3(c.x + hx + 0.06, 0.35, c.y + hx + 0.06))
+			box(b, "tower_body", stone_t, Vector3(c.x - hx, 0.35, c.y - hx), Vector3(c.x + hx, wall_top, c.y + hx))
+			box(b, "tower_band", band, Vector3(c.x - hx - 0.05, 2.5, c.y - hx - 0.05), Vector3(c.x + hx + 0.05, 2.65, c.y + hx + 0.05))
+			box(b, "tower_band", band, Vector3(c.x - hx - 0.08, wall_top - 0.15, c.y - hx - 0.08), Vector3(c.x + hx + 0.08, wall_top, c.y + hx + 0.08))
+			# 앞(+z)면: 문 + 창 슬릿 둘, 옆(+x)면: 창 슬릿 둘
+			box(b, "tower_door", door_c, Vector3(c.x - 0.22, 0.35, c.y + hx), Vector3(c.x + 0.22, 1.2, c.y + hx + 0.03))
+			box(b, "tower_door_top", dark, Vector3(c.x - 0.16, 1.2, c.y + hx), Vector3(c.x + 0.16, 1.32, c.y + hx + 0.03))
+
+			for yy in [1.8, 3.0]:
+				box(b, "slit", dark, Vector3(c.x - 0.05, yy, c.y + hx), Vector3(c.x + 0.05, yy + 0.4, c.y + hx + 0.03))
+				box(b, "slit", dark, Vector3(c.x + hx, yy, c.y - 0.05), Vector3(c.x + hx + 0.03, yy + 0.4, c.y + 0.05))
+
+			var roof_tw: Dictionary = spec(PlaceholderTextures.roof_tiles(ts, rule.get("roof_tint", Color(0.36, 0.5, 0.66))), Color.WHITE, "tower_roof", "탑 지붕 기와 %d×%d" % [ts, ts], PlaceholderTextures.roof_normal(ts))
+			pyramid(b, "tower_roof", roof_tw, c.x, c.y, hx + 0.25, hx + 0.25, wall_top, wall_top + 1.7)
+			oct(b, "finial", bark, c.x, c.y, 0.03, wall_top + 1.7, wall_top + 2.2, 0.02)
+			dome(b, "finial_ball", spec(_tex("flat", ts, Color(0.96, 0.8, 0.3)), Color.WHITE, "finial_gold", "탑 꼭대기 장식 금색 단색 %d×%d" % [ts, ts]), c.x, c.y, 0.07, wall_top + 2.18, wall_top + 2.3, 2, 8)
+			total = 2.6
+		"dome":
+			var wall_d: Dictionary = stone_spec(p, Color(1.15, 1.1, 1.0), "dome_stone")
+			var trim_d: Dictionary = stone_spec(p, Color(0.85, 0.83, 0.8), "dome_trim")
+			var glass_d: Dictionary = spec(_tex("flat", ts, Color(0.5, 0.7, 0.9)), Color.WHITE, "dome_glass", "둥근 건물 창 하늘색 단색 %d×%d" % [ts, ts])
+			var door_d: Dictionary = spec(_tex("flat", ts, Color(0.5, 0.32, 0.18)), Color.WHITE, "dome_door", "둥근 건물 문 갈색 단색 %d×%d" % [ts, ts])
+			var r0: float = minf(sx, sz) * 0.5 - 0.1
+			oct(b, "dome_steps", trim_d, c.x, c.y, r0 + 0.15, 0.0, 0.18)
+			oct(b, "dome_drum", wall_d, c.x, c.y, r0, 0.18, 2.0)
+			oct(b, "dome_band", trim_d, c.x, c.y, r0 + 0.05, 1.9, 2.05)
+			box(b, "dome_door", door_d, Vector3(c.x - 0.22, 0.18, c.y + r0 * 0.92), Vector3(c.x + 0.22, 1.1, c.y + r0 * 0.92 + 0.05))
+
+			for sd in [-1.0, 1.0]:
+				box(b, "dome_win", glass_d, Vector3(c.x + sd * 0.55 - 0.1, 0.8, c.y + r0 * 0.9), Vector3(c.x + sd * 0.55 + 0.1, 1.45, c.y + r0 * 0.9 + 0.04))
+				box(b, "dome_win", glass_d, Vector3(c.x + r0 * 0.9, 0.8, c.y + sd * 0.55 - 0.1), Vector3(c.x + r0 * 0.9 + 0.04, 1.45, c.y + sd * 0.55 + 0.1))
+
+			var dome_tex: Dictionary = spec(PlaceholderTextures.roof_tiles(ts, rule.get("roof_tint", Color(0.42, 0.4, 0.68))), Color.WHITE, "dome_roof", "둥근 지붕 기와 %d×%d" % [ts, ts])
+			dome(b, "dome", dome_tex, c.x, c.y, r0 + 0.1, 2.0, 3.3, 4, 12)
+			oct(b, "finial", bark, c.x, c.y, 0.03, 3.3, 3.8, 0.02)
+			dome(b, "finial_ball", spec(_tex("flat", ts, Color(0.96, 0.8, 0.3)), Color.WHITE, "finial_gold", "꼭대기 장식 금색 단색 %d×%d" % [ts, ts]), c.x, c.y, 0.07, 3.78, 3.9, 2, 8)
+			total = 2.8
+		"windmill":
+			var body_w: Dictionary = stone_spec(p, Color(1.2, 1.15, 1.05), "mill_stone")
+			var roof_m: Dictionary = spec(PlaceholderTextures.roof_tiles(ts, rule.get("roof_tint", Color(0.7, 0.36, 0.28))), Color.WHITE, "mill_roof", "풍차 지붕 기와 %d×%d" % [ts, ts])
+			var door_m: Dictionary = spec(_tex("flat", ts, Color(0.5, 0.32, 0.18)), Color.WHITE, "mill_door", "풍차 문 갈색 단색 %d×%d" % [ts, ts])
+			var dark_m: Dictionary = spec(_tex("flat", ts, Color(0.16, 0.14, 0.18)), Color.WHITE, "mill_dark", "풍차 창 어두운 단색 %d×%d" % [ts, ts])
+			var r1: float = minf(sx, sz) * 0.5 - 0.35
+			oct(b, "mill_body", body_w, c.x, c.y, r1, 0.0, 2.6, r1 * 0.7)
+			oct(b, "mill_roof", roof_m, c.x, c.y, r1 * 0.78, 2.6, 3.5, 0.05)
+			box(b, "mill_door", door_m, Vector3(c.x - 0.2, 0.0, c.y + r1 - 0.05), Vector3(c.x + 0.2, 0.9, c.y + r1 + 0.02))
+			box(b, "mill_win", dark_m, Vector3(c.x - 0.08, 1.4, c.y + r1 * 0.9), Vector3(c.x + 0.08, 1.8, c.y + r1 * 0.9 + 0.05))
+			# 날개: 카메라를 보는 평면 컷아웃. 중심 축은 탑 앞 위쪽
+			var blades: Dictionary = spec(PlaceholderTextures.windmill_blades(), Color.WHITE, "mill_blades", "풍차 날개 24×24 (투명 배경 컷아웃, 십자 뼈대와 격자 천)")
+			blades["cutout"] = true
+			_card(b, blades, c.x + 0.55, 1.45, c.y + 0.55, 3.0, 3.0)
+			total = 3.5
 		"low_wall":
 			box(b, "stone", stone_spec(p, Color(1, 1, 1), "low_wall_stone"), Vector3(lo.x, 0.0, lo.y), Vector3(hi.x, 0.55, hi.y))
 			box(b, "cap", stone_spec(p, Color(1.25, 1.2, 1.1), "low_wall_cap"), Vector3(lo.x - 0.03, 0.55, lo.y - 0.03), Vector3(hi.x + 0.03, 0.64, hi.y + 0.03))

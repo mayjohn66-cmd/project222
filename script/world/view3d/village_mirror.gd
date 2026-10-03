@@ -26,7 +26,12 @@ static func apply_variation(rule: Dictionary, seed_value: int) -> Dictionary:
 	r["roof_tint"] = Color.html(ROOF_PALETTE[h % ROOF_PALETTE.size()])
 	r["tint"] = Color.html(WALL_PALETTE[(h / 8) % WALL_PALETTE.size()])
 	r["shutter_tint"] = Color.html(TRIM_PALETTE[(h / 64) % TRIM_PALETTE.size()])
-	r["roof_kind"] = "hip" if (h / 512) % 3 == 0 else "gable"
+	var kinds: Array = ["gable", "hip", "cross", "gable", "cross"]
+	r["roof_kind"] = kinds[(h / 512) % kinds.size()]
+
+	if (h / 2048) % 3 == 0:
+		var half_w: float = float(rule.get("canon_w", 3.0)) * 0.5
+		r["extras"] = (str(rule.get("extras", "")) + ";" if str(rule.get("extras", "")) != "" else "") + "vine:%s:0.0:0.8;vine_side:0.0:0.0:0.9" % str(-half_w + 0.5)
 	r["roof_blocks"] = float(rule.get("roof_blocks", 1.4)) * (0.85 + float((h / 4096) % 5) * 0.1)
 	return r
 

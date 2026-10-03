@@ -1,4 +1,7 @@
 match,kind,height_blocks,texture,tint,roof_blocks,roof_tint,footprint_scale,chimney,awning,awning_tint,apron,step,planters,sign,style,goods_tint,extras,canon_w,canon_d,plinth,shutters,asset,axis,sign_text,sign_icon,variant,vary,roof_kind,shutter_tint
+windmill,prop,0,plank,ffffff,0,b0784e,1,,,,,,,,windmill,,,2.8,2.8,,,windmill,,,,,,,
+dome_hall,prop,0,plank,ffffff,0,8068a0,1,,,,,,,,dome,,,3.0,3.0,,,dome_hall,,,,,,,
+tower_house,prop,0,plank,ffffff,0,5a80ac,1,,,,,,,,tower,,,2.2,2.2,,,tower_house,,,,,,,
 bakery_front,prop,0,plank,ffffff,0,e0702a,0.9,,,,,,,,stall,c88a40,,2.0,1.0,,,stall_bakery,,,,bread,,,
 fish_front,prop,0,plank,ffffff,0,4a86c0,0.9,,,,,,,,stall,8aa8c0,,2.0,1.0,,,stall_fish,,,,fish,,,
 cloth_front,prop,0,plank,ffffff,0,a050c0,0.9,,,,,,,,stall,d05080,,2.0,1.0,,,stall_cloth,,,,cloth,,,
@@ -12,8 +15,8 @@ pottery_stall,prop,0,plank,ffffff,0,e0702a,0.9,,,,,,,,stall,c88a40,,2.0,1.0,,,st
 flower_stall,prop,0,plank,ffffff,0,e0702a,0.9,,,,,,,,stall,c88a40,,2.0,1.0,,,stall_flower,,,,flower,,,
 potion_stall,prop,0,plank,ffffff,0,e0702a,0.9,,,,,,,,stall,c88a40,,2.0,1.0,,,stall_potion,,,,potion,,,
 bakery,gable,2.1,plank,f3ead2,0.5,d9503c,0.78,1,0,d9503c,0.45,1,0,0,shop,,long_counter:-0.95:0.85:1.8,4.0,2.2,1,0,bakery,x,BAKERY,bread,,,,
-granary,gable,2.9,plank,d6b98a,1.6,b88d58,0.8,0,0,e0702a,0.3,0,0,0,,,sack:-0.8:0.3;sack:-0.45:0.35;hay:0.9:0.3,2.5,2.5,1,,granary,,,,,,,
-stable,gable,2.3,plank,b88c5c,1.2,b09a58,0.85,0,0,e0702a,0.3,0,0,0,,,hay:-1.0:0.3;barrel:1.0:0.3,3.0,3.0,1,,stable,,,,,,,
+granary,gable,2.2,plank,ffffff,1.7,9a8a62,0.8,0,0,e0702a,0.3,0,0,0,barn,,sack:-1.5:0.4;hay:1.45:0.45,3.0,4.0,1,,granary,y,,,,,,
+stable,gable,1.7,plank,ffffff,0.9,8a6a4a,0.85,0,0,e0702a,0.3,0,0,0,stable,,hay:-2.2:0.45;barrel:2.2:0.4,4.5,2.4,1,,stable,x,,,,,,
 red_house,gable,2.5,plank,eadfc8,1.5,c0462f,0.85,1,0,e0702a,0.35,1,1,0,,,bush:-1.1:0.3;bush:1.1:0.3,3.5,3.5,1,1,red_house,,,,,1,,
 ochre_townhouse,gable,3.2,plank,d9b46a,1.2,b8784d,0.85,1,0,e0702a,0.3,1,1,0,,,,3.5,3.5,1,1,ochre_townhouse,,,,,1,,
 moss_cottage,gable,2.3,plank,d8cdb0,1.4,5f9e48,0.85,1,0,e0702a,0.35,1,1,0,,,bush:-0.9:0.3,3.5,3.5,1,1,moss_cottage,,,,,1,,

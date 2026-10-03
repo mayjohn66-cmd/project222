@@ -147,8 +147,8 @@
   },
   {
     "awning_tint": "e0702a",
-    "canon_d": 2.5,
-    "canon_w": 2.5,
+    "canon_d": 4.0,
+    "canon_w": 3.0,
     "faces": [
       {
         "file": "granary__plinth_stone.png",
@@ -161,21 +161,21 @@
       },
       {
         "file": "granary__wall_front.png",
-        "h": 64,
+        "h": 48,
         "name": "wall_front",
         "normal_file": "",
-        "note": "카메라 왼쪽 아래를 보는 앞벽 45×64 px: 문 1(가운데), 창 2, 나무 뼈대, 아래 돌 기단",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 54×48 px: 문 1(가운데), 창 2, 나무 뼈대, 아래 돌 기단",
         "tileable": false,
-        "w": 45
+        "w": 54
       },
       {
         "file": "granary__wall_side.png",
-        "h": 64,
+        "h": 48,
         "name": "wall_side",
         "normal_file": "",
-        "note": "카메라 오른쪽 아래를 보는 옆벽 45×64 px: 창 3, 나무 뼈대, 아래 돌 기단",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 72×48 px: 창 4, 나무 뼈대, 아래 돌 기단",
         "tileable": false,
-        "w": 45
+        "w": 72
       },
       {
         "file": "granary__roof_tiles.png",
@@ -247,18 +247,18 @@
     "kind": "gable",
     "label": "곡물창고",
     "notes": "높고 창이 적은 창고. 앞에 자루와 건초",
-    "roof_blocks": 1.6,
-    "roof_tint": "b88d58",
+    "roof_blocks": 1.7,
+    "roof_tint": "9a8a62",
     "sprite": "res://art/world/village_buildings_v1/granary.png",
-    "style": "",
-    "tint": "d6b98a",
-    "total_blocks": 4.5,
-    "wall_blocks": 2.9
+    "style": "barn",
+    "tint": "ffffff",
+    "total_blocks": 3.9,
+    "wall_blocks": 2.2
   },
   {
     "awning_tint": "e0702a",
-    "canon_d": 3.0,
-    "canon_w": 3.0,
+    "canon_d": 2.4,
+    "canon_w": 4.5,
     "faces": [
       {
         "file": "stable__plinth_stone.png",
@@ -271,21 +271,21 @@
       },
       {
         "file": "stable__wall_front.png",
-        "h": 51,
+        "h": 37,
         "name": "wall_front",
         "normal_file": "",
-        "note": "카메라 왼쪽 아래를 보는 앞벽 54×51 px: 문 1(가운데), 창 2, 나무 뼈대, 아래 돌 기단",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 81×37 px: 문 1(가운데), 창 4, 나무 뼈대, 아래 돌 기단",
         "tileable": false,
-        "w": 54
+        "w": 81
       },
       {
         "file": "stable__wall_side.png",
-        "h": 51,
+        "h": 37,
         "name": "wall_side",
         "normal_file": "",
-        "note": "카메라 오른쪽 아래를 보는 옆벽 54×51 px: 창 3, 나무 뼈대, 아래 돌 기단",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 43×37 px: 창 2, 나무 뼈대, 아래 돌 기단",
         "tileable": false,
-        "w": 54
+        "w": 43
       },
       {
         "file": "stable__roof_tiles.png",
@@ -357,13 +357,13 @@
     "kind": "gable",
     "label": "마구간",
     "notes": "낮고 넓은 건물. 앞에 건초와 통",
-    "roof_blocks": 1.2,
-    "roof_tint": "b09a58",
+    "roof_blocks": 0.9,
+    "roof_tint": "8a6a4a",
     "sprite": "res://art/world/village_buildings_v1/stable.png",
-    "style": "",
-    "tint": "b88c5c",
-    "total_blocks": 3.5,
-    "wall_blocks": 2.3
+    "style": "stable",
+    "tint": "ffffff",
+    "total_blocks": 2.6,
+    "wall_blocks": 1.7
   },
   {
     "awning_tint": "e0702a",

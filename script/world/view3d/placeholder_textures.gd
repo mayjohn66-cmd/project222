@@ -1202,6 +1202,183 @@ static func goods_card(kind: String, color: Color = Color(0.85, 0.25, 0.25)) -> 
 	return ImageTexture.create_from_image(img)
 
 
+# 덩굴 카드(벽에 붙임, 투명 배경): 위에서 아래로 늘어진 잎 덩어리 + 군데군데 분홍·흰 꽃. 14×16.
+static func vine_card() -> ImageTexture:
+	var img := Image.create(14, 16, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 4242
+	var greens: Array = [Color(0.3, 0.52, 0.26), Color(0.42, 0.66, 0.34), Color(0.56, 0.78, 0.42)]
+
+	for y in range(16):
+		for x in range(14):
+			var edge: float = absf(float(x) - 6.5) / 6.5
+			var chance: float = 0.78 - edge * 0.5 - float(y) / 40.0
+
+			if rng.randf() < chance:
+				img.set_pixel(x, y, greens[rng.randi() % 3])
+
+	for k in range(5):
+		var fx: int = rng.randi_range(1, 12)
+		var fy: int = rng.randi_range(1, 13)
+		img.set_pixel(fx, fy, Color(1.0, 0.82, 0.88) if k % 2 == 0 else Color(0.96, 0.55, 0.7))
+
+	_add_outline(img, Color(0.18, 0.3, 0.14))
+	return ImageTexture.create_from_image(img)
+
+
+# 풍차 날개(투명 배경 컷아웃): 십자 뼈대 + 네 날개 격자. 24×24.
+static func windmill_blades() -> ImageTexture:
+	var img := Image.create(24, 24, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var wood := Color(0.55, 0.38, 0.22)
+	var wood_dk := Color(0.36, 0.24, 0.14)
+	var cloth := Color(0.96, 0.92, 0.82)
+	var cloth_dk := Color(0.82, 0.76, 0.64)
+
+	# 날개 네 개: 가운데에서 뻗는 폭 5 의 격자 판(뼈대 선 + 천)
+	for arm in range(4):
+		for d in range(3, 12):
+			for w in range(-3, 4):
+				var x: int
+				var y: int
+
+				match arm:
+					0:
+						x = 12 + w
+						y = 12 - d
+					1:
+						x = 12 + d
+						y = 12 + w
+					2:
+						x = 12 + w
+						y = 12 + d
+					_:
+						x = 12 - d
+						y = 12 - w
+
+				var edge: bool = absi(w) == 3 or d == 11
+				var bar: bool = (d % 3 == 0)
+				_px(img, x, y, wood_dk if edge else (wood if bar else (cloth if (w + d) % 2 == 0 else cloth_dk)))
+
+	# 중심 축
+	for dx in range(-2, 3):
+		for dy in range(-2, 3):
+			if absi(dx) + absi(dy) <= 3:
+				_px(img, 12 + dx, 12 + dy, wood_dk if (absi(dx) == 2 or absi(dy) == 2) else wood)
+
+	return ImageTexture.create_from_image(img)
+
+
+# 헛간(곳간) 앞벽: 세로 널판(붉은 갈색) + 큰 쌍여닫이문(흰 틀, X 보강) + 위쪽 건초 다락 문.
+static func barn_front_wall(w: int, h: int, cells: int, tint: Color) -> ImageTexture:
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var pa: Color = soften(Color(0.72, 0.36, 0.28)) * tint
+	var pb: Color = pa.darkened(0.1)
+	var seam: Color = pa.darkened(0.4)
+	var white := Color(0.95, 0.92, 0.84)
+	var base_h: int = clampi(int(float(h) * 0.08), 2, 4)
+
+	for y in range(h):
+		for x in range(w):
+			img.set_pixel(x, y, seam if x % 4 == 0 else (pa if (x / 4) % 2 == 0 else pb))
+
+	var dw: int = int(float(w) * 0.5)
+	var dh: int = int(float(h) * 0.55)
+	var dcx: int = w / 2
+	var dx0: int = dcx - dw / 2
+	var dy0: int = h - base_h - dh
+
+	for y in range(dy0, h - base_h):
+		for x in range(dx0, dx0 + dw):
+			var edge: bool = x == dx0 or x == dx0 + dw - 1 or y == dy0 or x == dcx or x == dcx - 1
+			_px(img, x, y, white if edge else pa.darkened(0.08))
+
+	for half in range(2):
+		var hx0: int = dx0 + half * (dw / 2)
+		var hwid: int = dw / 2
+
+		for k in range(hwid):
+			var yy: int = dy0 + 1 + int(float(k) * float(dh - 2) / float(maxi(hwid, 1)))
+			_px(img, hx0 + k, yy, white)
+			_px(img, hx0 + hwid - 1 - k, yy, white)
+
+	# 건초 다락 문(위쪽 가운데): 흰 틀 + 노란 건초
+	var lw: int = int(float(w) * 0.24)
+	var lh: int = int(float(h) * 0.2)
+	var lx0: int = dcx - lw / 2
+	var ly0: int = int(float(h) * 0.12)
+
+	for y in range(ly0, ly0 + lh):
+		for x in range(lx0, lx0 + lw):
+			var ledge: bool = x == lx0 or x == lx0 + lw - 1 or y == ly0 or y == ly0 + lh - 1
+			_px(img, x, y, white if ledge else (Color(0.86, 0.72, 0.3) if (x + y) % 3 != 0 else Color(0.7, 0.55, 0.2)))
+
+	for y in range(h - base_h, h):
+		for x in range(w):
+			_px(img, x, y, Color(0.5, 0.48, 0.44))
+
+	return ImageTexture.create_from_image(img)
+
+
+# 마구간 앞벽: 가로 널판 + 칸마다 위가 열린 반문(말 머리가 내다봄) + 아래는 닫힌 널판.
+static func stable_front_wall(w: int, h: int, cells: int, tint: Color) -> ImageTexture:
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var pa: Color = Color(0.74, 0.56, 0.36) * tint
+	var seam: Color = pa.darkened(0.35)
+	var trim := Color(0.95, 0.92, 0.84)
+	var base_h: int = clampi(int(float(h) * 0.1), 2, 4)
+
+	for y in range(h):
+		for x in range(w):
+			img.set_pixel(x, y, seam if y % 4 == 0 else (pa if (y / 4) % 2 == 0 else pa.darkened(0.06)))
+
+	var n: int = maxi(cells, 2)
+	var cell_px: float = float(w) / float(n)
+
+	for k in range(n):
+		var x0: int = int(float(k) * cell_px) + 3
+		var x1: int = int(float(k + 1) * cell_px) - 3
+		var top: int = int(float(h) * 0.26)
+		var bot: int = h - base_h
+		var mid: int = top + (bot - top) / 2
+
+		# 위쪽 열린 부분(어두운 안쪽) + 말 머리
+		for y in range(top, mid):
+			for x in range(x0, x1):
+				var edge: bool = x == x0 or x == x1 - 1 or y == top
+				_px(img, x, y, trim if edge else Color(0.16, 0.12, 0.1))
+
+		var hx: int = (x0 + x1) / 2 - 3
+		var brown := Color(0.5, 0.32, 0.18)
+		var mane := Color(0.28, 0.16, 0.1)
+
+		for dy in range(0, 6):
+			for dx in range(0, 6):
+				if dy < 2 and dx > 3:
+					continue
+
+				_px(img, hx + dx, mid - 7 + dy, brown if dx > 0 else mane)
+
+		_px(img, hx + 5, mid - 3, Color(0.95, 0.9, 0.8))
+		_px(img, hx + 1, mid - 6, Color(0.1, 0.08, 0.08))
+		_px(img, hx, mid - 5, mane)
+		_px(img, hx, mid - 4, mane)
+
+		# 아래쪽 닫힌 판
+		for y in range(mid, bot):
+			for x in range(x0, x1):
+				var edge2: bool = x == x0 or x == x1 - 1 or y == mid or y == bot - 1
+				var brace: bool = (x - x0) == (y - mid) * (x1 - x0) / maxi(bot - mid, 1)
+				_px(img, x, y, trim if edge2 else (trim.darkened(0.25) if brace else pa.lightened(0.05)))
+
+	for y in range(h - base_h, h):
+		for x in range(w):
+			_px(img, x, y, Color(0.5, 0.48, 0.44))
+
+	return ImageTexture.create_from_image(img)
+
+
 # 덧문(겉창): 가로 살(루버) 줄무늬. 밝은 줄과 어두운 줄이 두 픽셀씩 번갈아.
 static func shutter(size: int, base: Color) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)

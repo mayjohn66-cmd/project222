@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://dev/spike3d/building_gallery.gd" id="1"]
+
+[node name="BuildingGallery" type="Node"]
+script = ExtResource("1")
