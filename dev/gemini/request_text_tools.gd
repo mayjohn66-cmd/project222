@@ -28,6 +28,7 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/tutorial/default_tutorial.tres": KIND_TUTORIAL_STEP,
 	"res://scenes/shop/requests/default_personal_requests.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_village_gathering.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/requests/default_lantern_wayfarer.tres": KIND_SERVICE_TEXT,
 }
 
 

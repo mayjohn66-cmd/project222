@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="LanternWayfarerSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/lantern_wayfarer_settings.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+gifts = Array[Dictionary]([{"item":"wheat","amount":2}])
+choices = Array[Dictionary]([{"id":"water","item":"water","amount":1},{"id":"bread","item":"bread","amount":1}])
+moments = Array[Dictionary]([
+{"id":"lantern_wayfarer","npc":"불빛을 따라온 길손","stage":"등불을 설치한 뒤 저녁에 만남. 물이나 빵 중 하나를 플레이어가 선택해 창고에서 전달. 기한 없음"},
+{"id":"lantern_wayfarer_water","npc":"불빛을 따라온 길손","stage":"플레이어가 물을 건넨 직후. 길손이 쉬어 간 뒤 다음 날 다시 찾아옴"},
+{"id":"lantern_wayfarer_bread","npc":"불빛을 따라온 길손","stage":"플레이어가 빵을 건넨 직후. 길손이 쉬어 간 뒤 다음 날 다시 찾아옴"},
+{"id":"lantern_wayfarer_return_water","npc":"불빛을 따라온 길손","stage":"물로 갈증을 달랜 길손이 다음 날 돌아와 밀을 나눔. 반복 지급하지 않음"},
+{"id":"lantern_wayfarer_return_bread","npc":"불빛을 따라온 길손","stage":"빵으로 허기를 달랜 길손이 다음 날 돌아와 밀을 나눔. 반복 지급하지 않음"}
+])
