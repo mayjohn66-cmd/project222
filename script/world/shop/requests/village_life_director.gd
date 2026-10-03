@@ -9,6 +9,8 @@ var talking := false
 var previous_paused := false
 var previous_physics := true
 var elapsed := 0.0
+var story_panel: VillageStoryPanel
+var story_action: Dictionary = {}
 
 func _ready() -> void:
 	player = get_parent().get_node("Actors/Player")
@@ -16,6 +18,10 @@ func _ready() -> void:
 	dialogue = StoryDialoguePanel.new()
 	add_child(dialogue)
 	dialogue.finished.connect(_end_talk)
+	story_panel = VillageStoryPanel.new()
+	add_child(story_panel)
+	story_panel.closed.connect(_end_talk)
+	story_panel.action_requested.connect(_select_memory)
 	call_deferred("refresh")
 
 func _process(delta: float) -> void:
@@ -113,11 +119,16 @@ func interaction_hint() -> String:
 	var target := nearest()
 	if target.is_empty(): return ""
 	if target["id"] == "well": return "[E] 공동 우물 · 오늘 물을 길었어요" if VillageLifeFlow.well_used_today() else "[E] 공동 우물에서 물 긷기"
+	var action := VillageStoryFlow.action(str(target["id"]))
+	if not action.is_empty():
+		var labels := {"introduction":"마을 이야기 시작", "listen":"마을 이야기 듣기", "choose":"남길 기억 고르기", "finish":"기록 마치기", "reminder":"남은 이야기 확인", "memory":"남긴 기억 다시 듣기"}
+		return "[E] %s · %s" % [target["name"], labels[action["stage"]]]
 	return "[E] %s · %s" % [target["name"], "다시 이야기하기" if VillageLifeFlow.greeted_today(target["id"]) else "오늘의 안부 나누기"]
 
 func try_interact() -> bool:
 	var target := nearest()
 	if target.is_empty(): return false
+	story_action = {}
 	var lines: Array[String] = []
 	if target["id"] == "well":
 		var obtained := VillageLifeFlow.draw_water()
@@ -141,6 +152,10 @@ func try_interact() -> bool:
 			if request["resident"] != target["id"] or PersonalRequestFlow.done(str(request["id"])) or not PersonalRequestFlow.locked_reason(request).is_empty(): continue
 			lines.append_array(RequestTextData.lines("personal_request",str(request["id"])))
 			lines.append("마을 게시판에서 개인 부탁을 맡거나 준비한 물품을 전달할 수 있어요.")
+		story_action = VillageStoryFlow.action(str(target["id"]))
+		if not story_action.is_empty():
+			lines.append_array(RequestTextData.lines("service_text", str(story_action["id"]), str(story_action.get("field", "lines"))))
+			if story_action["stage"] == "finish": lines.append("답례: " + VillageStoryFlow.reward_description())
 	talking = true
 	previous_paused = manager.hour_timer.paused
 	previous_physics = player.is_physics_processing()
@@ -153,11 +168,34 @@ func try_interact() -> bool:
 
 func _end_talk() -> void:
 	if not talking: return
+	if dialogue.line_index >= dialogue.lines.size():
+		match str(story_action.get("stage", "")):
+			"introduction": VillageStoryFlow.accept()
+			"listen": VillageStoryFlow.listen(str(story_action["resident"]))
+			"choose":
+				if VillageStoryFlow.ready() and VillageStoryFlow.chosen().is_empty():
+					story_action = {}
+					story_panel.display()
+					return
+			"finish":
+				if VillageStoryFlow.finish(): manager.customer_spawner.refresh_spawn_interval()
+	story_action = {}
 	talking = false
 	get_parent().remove_meta("village_life_dialogue")
 	if is_instance_valid(manager): manager.hour_timer.paused = previous_paused
 	if is_instance_valid(player): player.set_physics_process(previous_physics)
 	call_deferred("refresh")
 
+func _select_memory(id: String) -> void:
+	if not talking or not story_panel.root.visible or not VillageStoryFlow.select(id): return
+	story_panel.root.hide()
+	story_panel.backdrop.hide()
+	story_action = {"stage":"finish", "id":"village_story_" + id}
+	var lines := RequestTextData.lines("service_text", str(story_action["id"]))
+	lines.append("답례: " + VillageStoryFlow.reward_description())
+	dialogue.start(str(VillageLifeFlow.resident(VillageStoryFlow.SETTINGS.giver)["name"]), null, lines)
+
 func _exit_tree() -> void:
+	# Leaving a scene is not proof that its conversation was fully read.
+	story_action = {}
 	_end_talk()

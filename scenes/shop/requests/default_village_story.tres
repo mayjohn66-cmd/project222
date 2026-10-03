@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="VillageStorySettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_story_settings.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+gifts = Array[Dictionary]([{"item":"forest_herb","amount":2}])
+choices = Array[Dictionary]([{"id":"lantern"},{"id":"evening"},{"id":"home"}])
+moments = Array[Dictionary]([
+{"id":"sora_village_story","npc":"이세르","stage":"우물 곁 기록 부탁과 길손 재회 뒤 시작. 이웃들의 이야기를 직접 들은 뒤 기록할 기억을 선택. 재료 전달이나 기한 없음"},
+{"id":"village_story_naru","npc":"타블렌","stage":"새 부탁을 들은 뒤 노점에 정착한 마음을 이야기함. 끝까지 들으면 타블렌 이야기를 들은 것으로 기록"},
+{"id":"village_story_doyun","npc":"코르빈","stage":"새 부탁을 들은 뒤 머물 집과 일상을 이야기함. 끝까지 들으면 코르빈 이야기를 들은 것으로 기록"},
+{"id":"village_story_reminder","npc":"이세르","stage":"아직 이야기를 못 들은 이웃에게 다녀오도록 기다림. 기한이나 물품 전달 없음"},
+{"id":"village_story_choose","npc":"이세르","stage":"이웃들의 말을 듣고 돌아온 플레이어가 남길 기억을 선택. 불빛·저녁 모임·정착 중 하나. 우열·추가 고객 해금 없음"},
+{"id":"village_story_lantern","npc":"이세르","stage":"플레이어가 길손을 도운 불빛을 기록하기로 선택. 끝까지 대화하면 기록을 완료하고 작은 약초 답례"},
+{"id":"village_story_evening","npc":"이세르","stage":"플레이어가 우물 곁 저녁 모임을 기록하기로 선택. 끝까지 대화하면 기록을 완료하고 작은 약초 답례"},
+{"id":"village_story_home","npc":"이세르","stage":"플레이어가 이웃들의 정착을 기록하기로 선택. 끝까지 대화하면 기록을 완료하고 작은 약초 답례"}
+])

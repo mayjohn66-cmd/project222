@@ -680,7 +680,7 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 			Tools.KIND_TUTORIAL_DIALOGUE, Tools.KIND_SERVICE_TEXT:
 				info = "기존 기능 안내를 유지하는 문장: " + id
 				if d.has("stage"):
-					info = "마을 이벤트 / 말하는 사람: %s / 장면: %s / 새 정착·구매·해금을 약속하지 않음" % [d.get("npc", ""), d["stage"]]
+					info = "마을 이야기·이벤트 / 말하는 사람: %s / 장면: %s / 새 정착·구매·해금을 약속하지 않음" % [d.get("npc", ""), d["stage"]]
 				if d.has("speaker"):
 					var speaker := str(d["speaker"])
 					info = "우물 곁 저녁 모임 / 말하는 사람: %s / 준비한 빵과 물을 함께 나눔 / 새 물품이나 돈을 약속하지 않음 / 화자 이름은 대사에 쓰지 않음" % ("장면 서술" if speaker.is_empty() else str(residents.get(speaker, {}).get("name", speaker)))

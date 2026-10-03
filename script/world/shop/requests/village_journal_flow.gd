@@ -19,9 +19,11 @@ static func entries() -> Array[Dictionary]:
 		result.append({"id":"visitor:" + type_id,"title":VillageVisitorFlow.name_for(type_id)})
 	result.append({"id":"gathering:well_evening","title":VillageGatheringFlow.title()})
 	result.append({"id":LanternWayfarerFlow.JOURNAL_ID,"title":LanternWayfarerFlow.title()})
+	result.append({"id":VillageStoryFlow.JOURNAL_ID,"title":VillageStoryFlow.title()})
 	return result
 
 static func information(id: String) -> String:
+	if id == VillageStoryFlow.JOURNAL_ID: return VillageStoryFlow.information()
 	if id == LanternWayfarerFlow.JOURNAL_ID: return LanternWayfarerFlow.information()
 	if id.begins_with("visitor:"): return VillageVisitorFlow.information(id.trim_prefix("visitor:"))
 	if id == "gathering:well_evening": return VillageGatheringFlow.information()
@@ -58,6 +60,9 @@ static func information(id: String) -> String:
 
 static func destination(world: Node, id: String) -> Node2D:
 	if not available(): return null
+	if id == VillageStoryFlow.JOURNAL_ID:
+		var resident_id := VillageStoryFlow.SETTINGS.giver if VillageStoryFlow.completed() else VillageStoryFlow.next_resident()
+		return destination(world, "resident:" + resident_id) if not resident_id.is_empty() else null
 	if id == LanternWayfarerFlow.JOURNAL_ID:
 		var wayfarer = world.get_node_or_null("LanternWayfarerDirector")
 		if wayfarer != null and is_instance_valid(wayfarer.npc) and wayfarer.npc.visible and not wayfarer.npc.is_queued_for_deletion(): return wayfarer.npc
