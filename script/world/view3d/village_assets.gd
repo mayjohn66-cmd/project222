@@ -1001,25 +1001,25 @@ static func _build_stall(b: PartBuilder, lo: Vector2, hi: Vector2, kind: String,
 			kinds.append(str(g))
 
 	if kinds.size() > 0:
-		var span_g: float = x1 - x0 - 0.4
-		var n_g: int = maxi(int(span_g / 0.3) + 1, 2)
+		var span_g: float = x1 - x0 - 0.6  # 카운터 양 끝에서 0.3 씩 안쪽(카드가 비스듬히 튀어나와도 카운터 위에 남게)
+		var n_g: int = maxi(int(span_g / 0.32) + 1, 2)
 		var step_g: float = span_g / float(n_g - 1)
 
 		for gi in range(n_g):
 			var tok: String = kinds[mini(gi * kinds.size() / n_g, kinds.size() - 1)]
-			_card(b, _goods_spec(tok, ts), x0 + 0.2 + step_g * float(gi), 0.65, z1 - 0.2, 0.28, 0.28)
+			_card(b, _goods_spec(tok, ts), x0 + 0.3 + step_g * float(gi), 0.65, z1 - 0.23, 0.24, 0.24)
 
-	# 매다는 상품(차양 앞 가장자리 아래): 한 종류를 균등 간격으로
+	# 매다는 상품(차양 앞 가장자리 아래): 가운데 몇 개만 균등 간격
 	var hang: Array = d["hang"]
 
 	if hang.size() > 0:
-		var span_h: float = x1 - x0 - 0.3
-		var n_h: int = maxi(int(span_h / 0.36) + 1, 2)
+		var span_h: float = x1 - x0 - 0.8
+		var n_h: int = maxi(int(span_h / 0.5) + 1, 2)
 		var step_h: float = span_h / float(n_h - 1)
 		var htok: String = str(hang[0])
 
 		for hi_idx in range(n_h):
-			_card(b, _goods_spec(htok, ts), x0 + 0.15 + step_h * float(hi_idx), 1.0, z1 + 0.14, 0.2, 0.26)
+			_card(b, _goods_spec(htok, ts), x0 + 0.4 + step_h * float(hi_idx), 1.0, z1 + 0.1, 0.18, 0.24)
 
 	# 양옆 소품
 	var props: Array = d["props"]
@@ -1080,9 +1080,10 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 				total = 2.3
 			elif variant == "big_oak":
 				oct(b, "bark", bark, c.x, c.y, 0.2, 0.0, 1.1, 0.14)
+				# 같은 부품은 중심 x+z 가 큰 것이 나중(앞)에 그려진다. 위로 쌓이는 덩어리일수록 x+z 가 커지게 놓아 큰 덩어리가 작은 덩어리를 파먹지 않게 한다.
 				dome(b, "leaf", leaf, c.x, c.y, 0.95, 0.9, 1.85, 3, 14)
-				dome(b, "leaf", leaf, c.x - 0.1, c.y + 0.05, 0.68, 1.55, 2.45, 3, 12)
-				dome(b, "leaf", leaf, c.x + 0.25, c.y - 0.2, 0.4, 2.1, 2.65, 2, 10)
+				dome(b, "leaf", leaf, c.x + 0.06, c.y + 0.04, 0.68, 1.55, 2.45, 3, 12)
+				dome(b, "leaf", leaf, c.x + 0.14, c.y + 0.08, 0.4, 2.1, 2.65, 2, 10)
 				total = 2.7
 			elif variant == "autumn":
 				var fall: Dictionary = spec(_tex("foliage", ts, Color(0.9, 0.5, 0.2)), Color(1.6, 0.8, 0.4), "autumn_foliage", "가을 잎 %d×%d (주황 계열)" % [ts, ts])
@@ -1175,12 +1176,17 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			oct(b, "dome_band", trim_d, c.x, c.y, r0 + 0.05, 1.9, 2.05)
 			add_door_z(b, p, c.x, 0.18, c.y + r0 * 0.9239, 0.46, 0.95, true)
 
-			var dwp: Dictionary = HouseShapes.win_parts(b, p, Vector3(c.x - r0, 0.2, c.y - r0), Vector3(c.x + r0 + 0.12, 2.0, c.y + r0 + 0.12))
-			var ap_d: float = r0 * 0.9239
-
-			for sd in [-1.0, 1.0]:
-				HouseShapes.win_on_z(dwp, c.x + sd * 0.55, 0.85, 1.5, 0.12, c.y + ap_d)
-				HouseShapes.win_on_x(dwp, c.y + sd * 0.55, 0.85, 1.5, 0.12, c.x + ap_d)
+			var ap_d: float = r0 * 0.9239  # 팔각형 변 중심까지 거리(면 평면 위치)
+			# 면 하나에 창 하나씩, 면 가운데에: +x 면은 창 부품, 카메라를 보는 대각선 면은 카드(틀·유리·창살)
+			var dwp: Dictionary = HouseShapes.win_parts(b, p, Vector3(c.x + ap_d - 0.05, 0.8, c.y - 0.4), Vector3(c.x + ap_d + 0.15, 1.7, c.y + 0.4))
+			HouseShapes.win_on_x(dwp, c.y, 0.85, 1.55, 0.14, c.x + ap_d)
+			var dd: float = 0.7071
+			var frame_dc: Dictionary = spec(PlaceholderTextures.flat_color(ts, Color(0.95, 0.92, 0.84)), Color.WHITE, "dome_win_frame", "돔 창틀 크림 단색 %d×%d" % [ts, ts])
+			var glass_dc: Dictionary = spec(PlaceholderTextures.flat_color(ts, Color(0.5, 0.74, 0.92)), Color.WHITE, "dome_win_glass", "돔 창 유리 단색 %d×%d" % [ts, ts])
+			_card(b, frame_dc, c.x + dd * (ap_d + 0.02), 0.82, c.y + dd * (ap_d + 0.02), 0.36, 0.76)
+			_card(b, glass_dc, c.x + dd * (ap_d + 0.035), 0.88, c.y + dd * (ap_d + 0.035), 0.28, 0.64)
+			_card(b, frame_dc, c.x + dd * (ap_d + 0.05), 0.88, c.y + dd * (ap_d + 0.05), 0.03, 0.64)
+			_card(b, frame_dc, c.x + dd * (ap_d + 0.05), 1.19, c.y + dd * (ap_d + 0.05), 0.28, 0.03)
 
 			var dome_tex: Dictionary = spec(PlaceholderTextures.roof_tiles(ts, rule.get("roof_tint", Color(0.42, 0.4, 0.68))), Color.WHITE, "dome_roof", "둥근 지붕 기와 %d×%d" % [ts, ts])
 			dome(b, "dome", dome_tex, c.x, c.y, r0 + 0.1, 2.0, 3.3, 4, 12)
