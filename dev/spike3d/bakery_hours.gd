@@ -1,7 +1,7 @@
 extends Node
 ## 빵집 앞에서 시각별로 2D(지금 게임) / 3D 를 같은 구도로 저장한다(개발용 비교). 인자: --out <폴더>
 
-const HOURS: Array = [9.0, 12.0, 17.5, 19.0, 21.0]
+const HOURS: Array = [12.0]
 
 
 func _ready() -> void:
@@ -22,6 +22,7 @@ func _ready() -> void:
 	dm.hour_timer.stop()
 	var plr: Node2D = scene.get_node("Actors/Player")
 	plr.global_position = ex.to_global(ex.grid_to_local(Vector2i(13, 2)))
+	plr.visible = false
 
 	for h in HOURS:
 		dm.current_hour = int(h)

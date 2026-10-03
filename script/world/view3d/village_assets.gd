@@ -435,7 +435,7 @@ static func _add_eave_nubs(b: PartBuilder, lo: Vector2, hi: Vector2, wall_h: flo
 	var ts: int = p["ts"]
 	var overhang: float = 0.14
 	var ridge_x: bool = (hi.x - lo.x) >= (hi.y - lo.y)
-	var cap: Dictionary = spec(PlaceholderTextures.roof_tiles(ts, roof_tint.lightened(0.04)), Color.WHITE, "eave_tile", "처마 끝 기와 조각 %d×%d 반복(지붕 기와와 같은 구조)" % [ts, ts], PlaceholderTextures.roof_normal(ts))
+	var cap: Dictionary = spec(PlaceholderTextures.flat_color(ts, roof_tint.darkened(0.12)), Color.WHITE, "eave_tile", "처마 끝 기와 조각 단색 %d×%d (지붕보다 한 톤 어둡게)" % [ts, ts])
 	var u0: float = (lo.x if ridge_x else lo.y) - overhang
 	var u1: float = (hi.x if ridge_x else hi.y) + overhang
 	var v_edge: float = (hi.y if ridge_x else hi.x) + overhang
@@ -495,7 +495,7 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 				box(b, "hay", spec(_tex("flat", p["ts"], Color(0.85, 0.72, 0.3)), Color.WHITE, "hay", "건초 %d×%d 노랑" % [p["ts"], p["ts"]]), Vector3(x - 0.3, 0.0, z - 0.22), Vector3(x + 0.3, 0.38, z + 0.22))
 			"basket":
 				oct(b, "basket", spec(PlaceholderTextures.crate(p["ts"], Color(0.62, 0.42, 0.22)), Color.WHITE, "basket", "바구니 옆면 %d×%d 갈색 엮음" % [p["ts"], p["ts"]]), x, z, 0.19, 0.0, 0.26, 0.17)
-				dome(b, "bread", spec(_tex("flat", p["ts"], Color(0.9, 0.55, 0.2)), Color.WHITE, "bread", "빵 %d×%d 노릇한 주황" % [p["ts"], p["ts"]]), x, z, 0.17, 0.26, 0.4, 2, 8)
+				dome(b, "bread", spec(_tex("flat", p["ts"], Color(0.74, 0.42, 0.16)), Color.WHITE, "bread", "빵 %d×%d 노릇한 주황" % [p["ts"], p["ts"]]), x, z, 0.17, 0.26, 0.4, 2, 8)
 			"bush":
 				dome(b, "bush", spec(_tex("foliage", p["ts"], Color(0.95, 0.4, 0.55)), Color.WHITE, "bush", "덤불 %d×%d 반복(꽃 점)" % [p["ts"], p["ts"]]), x, z, 0.27, 0.0, 0.34)
 

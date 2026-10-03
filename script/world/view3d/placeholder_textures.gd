@@ -238,9 +238,9 @@ static func roof_tiles(size: int, base: Color) -> ImageTexture:
 			var c: Color = variants[(row * 5 + col * 3 + row / 2) % 3]
 
 			if ly == 0:
-				c = c.lightened(0.26)  # 윗줄 하이라이트
+				c = c.lightened(0.16)  # 윗줄 하이라이트
 			elif ly == row_h - 1:
-				c = c.darkened(0.42)  # 아랫줄 그림자(겹친 기와 아래)
+				c = c.darkened(0.34)  # 아랫줄 그림자(겹친 기와 아래)
 			elif lx == 1:
 				c = c.lightened(0.1)  # 왼쪽 가장자리 약한 하이라이트
 
