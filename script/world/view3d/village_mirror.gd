@@ -17,7 +17,15 @@ const WALL_PALETTE: Array = ["eadfc8", "f2e6c0", "dcc8a0", "e8d0c0", "d8e0d0", "
 const TRIM_PALETTE: Array = ["5c8a7a", "9a5a3a", "4a6a9a", "7a9a4a", "8a5a8a", "c08a3a"]
 
 
+const TREE_VARIANTS: Array = ["round", "pine", "birch", "big_oak", "round", "autumn", "pine", "birch"]
+
+
 static func apply_variation(rule: Dictionary, seed_value: int) -> Dictionary:
+	if str(rule.get("style", "")) == "tree" and str(rule.get("variant", "")) == "":
+		var tr: Dictionary = rule.duplicate()
+		tr["variant"] = TREE_VARIANTS[(absi(seed_value * 2654435761) % 1000003 / 16) % TREE_VARIANTS.size()]
+		return tr
+
 	if not bool(rule.get("vary", false)):
 		return rule
 
@@ -26,8 +34,19 @@ static func apply_variation(rule: Dictionary, seed_value: int) -> Dictionary:
 	r["roof_tint"] = Color.html(ROOF_PALETTE[h % ROOF_PALETTE.size()])
 	r["tint"] = Color.html(WALL_PALETTE[(h / 8) % WALL_PALETTE.size()])
 	r["shutter_tint"] = Color.html(TRIM_PALETTE[(h / 64) % TRIM_PALETTE.size()])
-	var kinds: Array = ["gable", "hip", "cross", "gable", "cross"]
+	var kinds: Array = ["gable", "hip", "cross", "gambrel", "mansard", "half_hip", "gable", "cross"]
 	r["roof_kind"] = kinds[(h / 512) % kinds.size()]
+	# 모양 묶음(포치·지붕창·돌출 창·별채·탑·2층 허리 보)을 집마다 다르게. CSV 에 shape 가 이미 있으면 그대로 둔다.
+	var shape: String = str(rule.get("shape", ""))
+
+	if shape == "" or shape == "auto":
+		shape = HouseShapes.COMBOS[(h / 1024) % HouseShapes.COMBOS.size()]
+
+	r["shape"] = shape
+
+	if HouseShapes.has(PackedStringArray(shape.split(";", false)), "jetty"):
+		r["floors"] = 2
+		r["height_blocks"] = maxf(float(rule.get("height_blocks", 2.2)), 3.3)
 
 	if (h / 2048) % 3 == 0:
 		var half_w: float = float(rule.get("canon_w", 3.0)) * 0.5

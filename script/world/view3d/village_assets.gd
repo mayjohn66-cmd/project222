@@ -309,7 +309,10 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var plaster: Color = rule["tint"]
 	var roof_tint: Color = rule.get("roof_tint", Color(0.85, 0.44, 0.23))
 	var awning_tint: Color = rule.get("awning_tint", Color(0.88, 0.45, 0.22))
-	var options: Dictionary = {"chimney": bool(rule.get("chimney", true)), "awning": bool(rule.get("awning", false)), "apron": float(rule.get("apron", 0.4)), "chimney_big": str(rule.get("style", "")) == "forge", "hip": str(rule.get("roof_kind", "")) == "hip"}
+	var roof_kind: String = str(rule.get("roof_kind", ""))
+	var shape_tokens: PackedStringArray = PackedStringArray(str(rule.get("shape", "")).split(";", false))
+	var floors: int = int(rule.get("floors", 1))
+	var options: Dictionary = {"chimney": bool(rule.get("chimney", true)), "awning": bool(rule.get("awning", false)), "apron": float(rule.get("apron", 0.4)), "chimney_big": str(rule.get("style", "")) == "forge", "hip": roof_kind == "hip", "roof_style": roof_kind}
 	# 돌 기단은 벽보다 먼저(뒤에) 그린다: 윗면이 벽 아래를 덮지 않도록 건물 면들보다 앞서 mesh 에 넣는다.
 	var mesh := ArrayMesh.new()
 	var pre := PartBuilder.new()
@@ -326,7 +329,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var cells_z: int = maxi(int(roundf(width)), 1)
 	var cells_x: int = maxi(int(roundf(depth)), 1)
 	var is_shop: bool = str(rule.get("style", "")) == "shop"
-	var tex_z: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(width * ts)), h_texels, true, cells_z, plaster, timber)
+	var tex_z: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(width * ts)), h_texels, true, cells_z, plaster, timber, floors)
 
 	var is_forge: bool = str(rule.get("style", "")) == "forge"
 	var is_workshop: bool = str(rule.get("style", "")) == "workshop"
@@ -342,7 +345,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 
 	if is_shop:
 		tex_z = PlaceholderTextures.shop_front_wall(int(roundf(width * ts)), h_texels, cells_z, plaster, timber, rule.get("goods_tint", Color(0.88, 0.56, 0.22)))
-	var tex_x: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(depth * ts)), h_texels, false, cells_x, plaster, timber)
+	var tex_x: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(depth * ts)), h_texels, false, cells_x, plaster, timber, floors)
 	var specs: Array = [
 		spec(tex_z, Color.WHITE, "wall_front", "카메라 왼쪽 아래를 보는 앞벽 %d×%d px: 문 1(가운데), 창 %d, 나무 뼈대, 아래 돌 기단" % [tex_z.get_width(), tex_z.get_height(), cells_z - 1]),
 		spec(tex_x, Color.WHITE, "wall_side", "카메라 오른쪽 아래를 보는 옆벽 %d×%d px: 창 %d, 나무 뼈대, 아래 돌 기단" % [tex_x.get_width(), tex_x.get_height(), cells_x]),
@@ -387,10 +390,13 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var cells: int = cells_z
 	var door_cell: int = cells / 2
 	var door_cx: float = lo.x + (float(door_cell) + 0.5) * width / float(cells)
-	var lay_z: Dictionary = PlaceholderTextures.window_layout(int(roundf(width * ts)), h_texels, cells_z)
-	var lay_x: Dictionary = PlaceholderTextures.window_layout(int(roundf(depth * ts)), h_texels, cells_x)
-	var win_top: float = wall_h * (1.0 - float(lay_z["wy"]) / float(h_texels))
-	var win_bottom: float = wall_h * (1.0 - float(lay_z["wy"] + lay_z["wh"]) / float(h_texels))
+	var story_frac: float = 0.58 if floors >= 2 and h_texels >= 24 else 1.0
+	var h_low: int = int(float(h_texels) * story_frac)
+	var wall_h_low: float = wall_h * story_frac
+	var lay_z: Dictionary = PlaceholderTextures.window_layout(int(roundf(width * ts)), h_low, cells_z)
+	var lay_x: Dictionary = PlaceholderTextures.window_layout(int(roundf(depth * ts)), h_low, cells_x)
+	var win_top: float = wall_h_low * (1.0 - float(lay_z["wy"]) / float(h_low))
+	var win_bottom: float = wall_h_low * (1.0 - float(lay_z["wy"] + lay_z["wh"]) / float(h_low))
 	var win_w: float = float(lay_z["ww"]) / float(ts)
 	var win_w_x: float = float(lay_x["ww"]) / float(ts)
 	var cell_w_z: float = width / float(cells_z)
@@ -421,7 +427,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz - halfx - sw_x), Vector3(hi.x + 0.05, win_top, scz - halfx))
 			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz + halfx), Vector3(hi.x + 0.05, win_top, scz + halfx + sw_x))
 
-	if bool(rule.get("step", true)):
+	if bool(rule.get("step", true)) and not HouseShapes.has(shape_tokens, "porch"):
 		var door_w: float = float(lay_z["dw"]) / float(ts)
 		box(b, "step", stone_spec(p, Color(1.15, 1.1, 1.0), "step"), Vector3(door_cx - door_w * 0.5 - 0.12, 0.0, hi.y), Vector3(door_cx + door_w * 0.5 + 0.12, 0.14, hi.y + 0.3))
 
@@ -457,6 +463,19 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		_add_smoke(b, lo, hi, wall_h + roof_h, p, is_forge)
 
 	_add_extras(b, str(rule.get("extras", "")), lo, hi, p, wall_h, display)
+
+	if not shape_tokens.is_empty():
+		var ridge_x: bool = width >= depth
+		var hs_roof: float = (depth if ridge_x else width) * 0.5 + 0.14
+		var len_u: float = (width if ridge_x else depth) + 0.28
+		var levels: Array = BuildingMesh.roof_levels(roof_kind if BuildingMesh.LAYERED_KINDS.has(roof_kind) else "", wall_h, roof_h, hs_roof, len_u)
+		HouseShapes.apply(shape_tokens, {
+			"b": b, "p": p, "lo": lo, "hi": hi, "wall_h": wall_h_low, "wall_h_total": wall_h, "roof_h": roof_h, "ridge_x": ridge_x,
+			"hs": hs_roof, "vc": ((lo.y + hi.y) * 0.5 if ridge_x else (lo.x + hi.x) * 0.5), "levels": levels, "plaster": plaster, "timber": timber,
+			"story_frac": story_frac, "roof_spec": (specs[2] as Dictionary).duplicate(), "trim_spec": (specs[4] as Dictionary).duplicate(), "wall_spec": (specs[3] as Dictionary).duplicate(),
+			"door_cx": door_cx, "door_w": float(lay_z["dw"]) / float(ts), "cells": cells_z, "door_cell": door_cell,
+		})
+
 	var extra_specs: Array = b.commit_into(mesh)
 	var display_info: Variant = null
 
@@ -967,11 +986,55 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 	match style:
 		"tree":
 			var leaf: Dictionary = spec(_tex("foliage", ts, Color(0.9, 0.3, 0.3)), tint, "tree_foliage", "나뭇잎 %d×%d 반복(짙은 초록 + 밝은 점 + 빨간 열매 점)" % [ts, ts])
-			oct(b, "bark", bark, c.x, c.y, 0.13, 0.0, 1.0, 0.1)
-			dome(b, "leaf", leaf, c.x, c.y, 0.66, 0.85, 1.55, 3, 12)
-			dome(b, "leaf", leaf, c.x, c.y, 0.5, 1.4, 2.0, 3, 12)
-			dome(b, "leaf", leaf, c.x, c.y, 0.3, 1.9, 2.35, 2, 10)
-			total = 2.25
+			var variant: String = str(rule.get("variant", "round"))
+
+			if variant == "pine":
+				var pine: Dictionary = spec(_tex("foliage", ts, Color(0.2, 0.3, 0.25)), Color(0.55, 0.8, 0.65), "pine_foliage", "침엽수 잎 %d×%d (어두운 초록)" % [ts, ts])
+				oct(b, "bark", bark, c.x, c.y, 0.12, 0.0, 0.8, 0.1)
+				oct(b, "cone", pine, c.x, c.y, 0.66, 0.5, 1.35, 0.2)
+				oct(b, "cone", pine, c.x, c.y, 0.52, 1.1, 1.95, 0.15)
+				oct(b, "cone", pine, c.x, c.y, 0.38, 1.7, 2.6, 0.03)
+				total = 2.65
+			elif variant == "birch":
+				var white: Dictionary = spec(_tex("flat", ts, Color(0.9, 0.9, 0.84)), Color.WHITE, "birch_bark", "자작나무 줄기 흰 단색 %d×%d" % [ts, ts])
+				var light_leaf: Dictionary = spec(_tex("foliage", ts, Color(0.95, 0.85, 0.4)), Color(0.95, 1.1, 0.8), "birch_foliage", "자작나무 잎 %d×%d (연한 초록)" % [ts, ts])
+				oct(b, "bark", white, c.x, c.y, 0.09, 0.0, 1.55, 0.07)
+				dome(b, "leaf", light_leaf, c.x, c.y, 0.55, 1.15, 2.1, 3, 12)
+				dome(b, "leaf", light_leaf, c.x + 0.18, c.y - 0.1, 0.34, 1.6, 2.3, 2, 10)
+				total = 2.3
+			elif variant == "big_oak":
+				oct(b, "bark", bark, c.x, c.y, 0.2, 0.0, 1.1, 0.14)
+				dome(b, "leaf", leaf, c.x, c.y, 0.95, 0.9, 1.85, 3, 14)
+				dome(b, "leaf", leaf, c.x - 0.1, c.y + 0.05, 0.68, 1.55, 2.45, 3, 12)
+				dome(b, "leaf", leaf, c.x + 0.25, c.y - 0.2, 0.4, 2.1, 2.65, 2, 10)
+				total = 2.7
+			elif variant == "autumn":
+				var fall: Dictionary = spec(_tex("foliage", ts, Color(0.9, 0.5, 0.2)), Color(1.6, 0.8, 0.4), "autumn_foliage", "가을 잎 %d×%d (주황 계열)" % [ts, ts])
+				oct(b, "bark", bark, c.x, c.y, 0.13, 0.0, 1.0, 0.1)
+				dome(b, "leaf", fall, c.x, c.y, 0.66, 0.85, 1.55, 3, 12)
+				dome(b, "leaf", fall, c.x, c.y, 0.5, 1.4, 2.0, 3, 12)
+				dome(b, "leaf", fall, c.x, c.y, 0.3, 1.9, 2.35, 2, 10)
+				total = 2.25
+			else:
+				oct(b, "bark", bark, c.x, c.y, 0.13, 0.0, 1.0, 0.1)
+				dome(b, "leaf", leaf, c.x, c.y, 0.66, 0.85, 1.55, 3, 12)
+				dome(b, "leaf", leaf, c.x, c.y, 0.5, 1.4, 2.0, 3, 12)
+				dome(b, "leaf", leaf, c.x, c.y, 0.3, 1.9, 2.35, 2, 10)
+				total = 2.25
+		"hay":
+			var hay: Dictionary = spec(_tex("plank", ts), Color(1.1, 0.95, 0.5), "hay_bale", "건초 단 %d×%d (노란 결)" % [ts, ts])
+			box(b, "bale", hay, Vector3(c.x - 0.5, 0.0, c.y - 0.3), Vector3(c.x + 0.0, 0.4, c.y + 0.3))
+			box(b, "bale", hay, Vector3(c.x + 0.05, 0.0, c.y - 0.28), Vector3(c.x + 0.5, 0.4, c.y + 0.3))
+			box(b, "bale", hay, Vector3(c.x - 0.3, 0.4, c.y - 0.25), Vector3(c.x + 0.2, 0.8, c.y + 0.25))
+			dome(b, "stack", spec(_tex("foliage", ts, Color(0.9, 0.8, 0.3)), Color(1.1, 1.0, 0.55), "hay_stack", "건초 더미 %d×%d" % [ts, ts]), c.x + 0.6, c.y + 0.35, 0.34, 0.0, 0.52, 2, 8)
+			total = 0.85
+		"barrels":
+			var barrel: Dictionary = spec(_tex("barrel", ts), Color.WHITE, "barrel", "통 %d×%d" % [ts, ts])
+			oct(b, "barrel", barrel, c.x - 0.3, c.y - 0.1, 0.24, 0.0, 0.5, 0.2)
+			oct(b, "barrel", barrel, c.x + 0.22, c.y - 0.15, 0.24, 0.0, 0.5, 0.2)
+			oct(b, "barrel", barrel, c.x - 0.05, c.y + 0.28, 0.24, 0.0, 0.5, 0.2)
+			oct(b, "barrel", barrel, c.x - 0.05, c.y + 0.02, 0.22, 0.5, 0.95, 0.18)
+			total = 1.0
 		"well":
 			oct(b, "stone", stone_spec(p, Color(1, 1, 1), "well_stone"), c.x, c.y, 0.58, 0.0, 0.55)
 			oct(b, "water", spec(_tex("flat", ts, Color(0.18, 0.3, 0.5)), Color.WHITE, "well_water", "우물 물 단색 %d×%d 어두운 파랑" % [ts, ts]), c.x, c.y, 0.44, 0.5, 0.53)

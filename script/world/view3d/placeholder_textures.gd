@@ -136,10 +136,10 @@ static func window_layout(w: int, h: int, cells: int) -> Dictionary:
 
 
 # 깔끔한 스타일 벽: 평면 회반죽 + 얇은 보 + 밝은 파랑 유리창(흰 틀) + 갈색 문. 잡음·그림자 줄 없음.
-static func _wall_facade_clean(w: int, h: int, door: bool, window_count: int, plaster: Color, timber: Color) -> ImageTexture:
+static func _wall_facade_clean(w: int, h: int, door: bool, window_count: int, plaster: Color, timber: Color, no_base: bool = false) -> ImageTexture:
 	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
 	var lay: Dictionary = window_layout(w, h, window_count)
-	var base_h: int = lay["base_h"]
+	var base_h: int = 0 if no_base else lay["base_h"]
 	var glass := Color(0.5, 0.74, 0.92)
 	var frame := Color(0.92, 0.88, 0.8)
 	var door_color := Color(0.64, 0.38, 0.22)
@@ -223,9 +223,21 @@ static func _wall_facade_clean(w: int, h: int, door: bool, window_count: int, pl
 	return ImageTexture.create_from_image(img)
 
 
-static func wall_facade(width_texels: int, height_texels: int, door: bool, window_count: int, plaster: Color, timber: Color) -> ImageTexture:
+static func wall_facade(width_texels: int, height_texels: int, door: bool, window_count: int, plaster: Color, timber: Color, floors: int = 1) -> ImageTexture:
 	var w: int = maxi(width_texels, 4)
 	var h: int = maxi(height_texels, 4)
+
+	if clean and floors >= 2 and h >= 24:
+		# 2층: 위층(창만) + 아래층(문·창·돌 기단). 사이 허리 보는 아래층 맨 위의 목재 띠가 대신한다.
+		var low_h: int = int(float(h) * 0.58)
+		var up_h: int = h - low_h
+		var low_img: Image = _wall_facade_clean(w, low_h, door, window_count, plaster, timber).get_image()
+		var up_img: Image = _wall_facade_clean(w, up_h, false, window_count, plaster, timber, true).get_image()
+		var img2 := Image.create(w, h, false, Image.FORMAT_RGBA8)
+		img2.blit_rect(up_img, Rect2i(0, 0, w, up_h), Vector2i(0, 0))
+		img2.blit_rect(low_img, Rect2i(0, 0, w, low_h), Vector2i(0, up_h))
+		img2.fill_rect(Rect2i(0, up_h - 1, w, 3), timber)
+		return ImageTexture.create_from_image(img2)
 
 	if clean:
 		return _wall_facade_clean(w, h, door, window_count, plaster, timber)
