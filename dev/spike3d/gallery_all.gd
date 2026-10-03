@@ -160,7 +160,7 @@ func _step(pg: Dictionary) -> Vector2:
 	var kind: String = str(pg["kind"])
 
 	if kind == "stall":
-		return Vector2(3.4, 2.9)
+		return Vector2(4.6, 3.6)
 
 	if kind == "shape":
 		return Vector2(8.5, 8.5)
@@ -175,7 +175,7 @@ func _show_page(i: int) -> void:
 	page = i
 	cam_pan = Vector2.ZERO
 	var zk: String = str(PAGES[i]["kind"])
-	cam_zoom = 11.0 if zk == "stall" else (24.0 if zk == "shape" else (12.0 if zk == "propvar" else 15.0))
+	cam_zoom = 14.0 if zk == "stall" else (24.0 if zk == "shape" else (12.0 if zk == "propvar" else 15.0))
 	spinners.clear()
 
 	if holder != null:
@@ -233,7 +233,7 @@ func _show_page(i: int) -> void:
 
 		for k in range(kinds.size()):
 			var origin := Vector2(float(k % cols) * step.x, float(k / cols) * step.y)
-			var built: Dictionary = VillageAssets.build_prop("stall", origin - Vector2(1.0, 0.5), origin + Vector2(1.0, 0.5), {"variant": kinds[k]}, p)
+			var built: Dictionary = VillageAssets.build_prop("stall", origin - Vector2(1.5, 0.7), origin + Vector2(1.5, 0.7), {"variant": kinds[k]}, p)
 			_add_mesh(built["mesh"], built["specs"], Vector3.ZERO)
 	else:
 		var rules: Array = VillageMirror.load_rules()

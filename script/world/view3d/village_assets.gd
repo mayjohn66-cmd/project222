@@ -221,6 +221,11 @@ static func add_door_z(b: PartBuilder, p: Dictionary, cx: float, base_y: float, 
 # 팔각 기둥(통·줄기·잎 덩어리). 옆면 UV 는 둘레 길이 기준.
 static func oct(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: float, r: float, y0: float, y1: float, r_top: float = -1.0) -> void:
 	var st: SurfaceTool = b.new_part(spec, Vector3(cx - r, y0, cz - r), Vector3(cx + r, y1, cz + r))
+	oct_st(st, cx, cz, r, y0, y1, r_top)
+
+
+# 이미 만든 부품(SurfaceTool)에 팔각 기둥 하나를 더한다.
+static func oct_st(st: SurfaceTool, cx: float, cz: float, r: float, y0: float, y1: float, r_top: float = -1.0) -> void:
 	var rt: float = r if r_top < 0.0 else r_top
 	var seg: float = TAU * r / 8.0
 	var dy: float = y1 - y0
@@ -247,6 +252,11 @@ static func oct(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: fl
 # 면마다 법선을 구면 기준으로 정해 톤이 둥글게 번진다. UV 는 둘레 길이 기준(반복 질감).
 static func dome(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: float, r: float, y0: float, y1: float, rings: int = 3, segs: int = 10) -> void:
 	var st: SurfaceTool = b.new_part(spec, Vector3(cx - r, y0, cz - r), Vector3(cx + r, y1, cz + r))
+	dome_st(st, cx, cz, r, y0, y1, rings, segs)
+
+
+# 이미 만든 부품(SurfaceTool)에 둥근 덩어리 하나를 더한다.
+static func dome_st(st: SurfaceTool, cx: float, cz: float, r: float, y0: float, y1: float, rings: int = 3, segs: int = 10) -> void:
 	var h: float = y1 - y0
 	var seg_len: float = TAU * r / float(segs)
 	var ring_pts: Array = []
@@ -917,6 +927,105 @@ static func _goods_spec(token: String, ts: int) -> Dictionary:
 	return sp
 
 
+# ---------------------------------------------------------------- 가판대 상품(3D 오브젝트)
+
+# 색별로 부품 하나(SurfaceTool)를 모아 쓴다(같은 색은 면 하나). cache: 색 문자열 → SurfaceTool. 만든 순서대로 나중에 그려진다(bias).
+static func _goods_st(b: PartBuilder, cache: Dictionary, color: Color, ts: int, a: Vector3, c: Vector3) -> SurfaceTool:
+	var key: String = color.to_html(false)
+
+	if cache.has(key):
+		return cache[key]
+
+	var sp: Dictionary = spec(PlaceholderTextures.flat_color(ts, color), Color.WHITE, "goods_" + key, "가판대 상품 단색 %d×%d" % [ts, ts])
+	var st: SurfaceTool = b.new_part(sp, a, c, 45.0 + float(cache.size()) * 0.05)
+	cache[key] = st
+	return st
+
+
+# 상품 하나를 (x, y, z) 바닥 중심에 세운다. token: "이름" 또는 "이름:#색". 높이는 대략 0.1~0.2.
+static func _goods_obj(b: PartBuilder, cache: Dictionary, token: String, x: float, y: float, z: float, ts: int, a: Vector3, c: Vector3) -> void:
+	var parts: PackedStringArray = token.split(":")
+	var name: String = parts[0]
+	var col: Color = Color.html(parts[1]) if parts.size() > 1 else Color(0.85, 0.25, 0.25)
+	col = PlaceholderTextures.soften(col) if PlaceholderTextures.clean else col
+	var gs := func(cl: Color) -> SurfaceTool: return _goods_st(b, cache, cl, ts, a, c)
+
+	match name:
+		"apple", "orange", "lemon":
+			var fc: Color = {"apple": Color(0.82, 0.22, 0.2), "orange": Color(0.95, 0.56, 0.16), "lemon": Color(0.96, 0.86, 0.24)}[name]
+			var st_f: SurfaceTool = gs.call(fc)
+			dome_st(st_f, x - 0.075, z, 0.075, y, y + 0.12, 2, 8)
+			dome_st(st_f, x + 0.075, z, 0.075, y, y + 0.12, 2, 8)
+			dome_st(st_f, x, z - 0.01, 0.075, y + 0.08, y + 0.2, 2, 8)
+		"grape":
+			var st_g: SurfaceTool = gs.call(Color(0.5, 0.25, 0.62))
+
+			for gp in [Vector2(-0.07, 0.0), Vector2(0.07, 0.0), Vector2(0.0, 0.0)]:
+				dome_st(st_g, x + gp.x, z + gp.y, 0.06, y + (0.07 if gp.x == 0.0 else 0.0), y + (0.17 if gp.x == 0.0 else 0.1), 2, 8)
+		"loaf":
+			var st_l: SurfaceTool = gs.call(Color(0.8, 0.52, 0.24))
+			dome_st(st_l, x, z, 0.11, y, y + 0.12, 2, 8)
+			var st_l2: SurfaceTool = gs.call(Color(0.92, 0.7, 0.4))
+			dome_st(st_l2, x, z, 0.06, y + 0.09, y + 0.14, 2, 8)
+		"baguette":
+			var st_b: SurfaceTool = gs.call(Color(0.86, 0.62, 0.3))
+			box_st(st_b, Vector3(x - 0.17, y, z - 0.07), Vector3(x + 0.17, y + 0.06, z - 0.02))
+			box_st(st_b, Vector3(x - 0.17, y, z + 0.02), Vector3(x + 0.17, y + 0.06, z + 0.07))
+			box_st(st_b, Vector3(x - 0.15, y + 0.06, z - 0.025), Vector3(x + 0.15, y + 0.11, z + 0.025))
+		"fish":
+			var st_fi: SurfaceTool = gs.call(Color(0.62, 0.74, 0.84))
+			var st_ft: SurfaceTool = gs.call(Color(0.42, 0.56, 0.74))
+
+			for fz in [-0.07, 0.07]:
+				box_st(st_fi, Vector3(x - 0.12, y, z + fz - 0.035), Vector3(x + 0.07, y + 0.055, z + fz + 0.035))
+				box_st(st_ft, Vector3(x + 0.07, y, z + fz - 0.05), Vector3(x + 0.14, y + 0.05, z + fz + 0.05))
+		"ham":
+			var st_h: SurfaceTool = gs.call(Color(0.8, 0.4, 0.36))
+			oct_st(st_h, x, z, 0.085, y, y + 0.13, 0.06)
+			var st_hb: SurfaceTool = gs.call(Color(0.94, 0.9, 0.82))
+			box_st(st_hb, Vector3(x - 0.02, y + 0.13, z - 0.02), Vector3(x + 0.02, y + 0.19, z + 0.02))
+		"cloth":
+			var st_c: SurfaceTool = gs.call(col)
+			box_st(st_c, Vector3(x - 0.11, y, z - 0.08), Vector3(x + 0.11, y + 0.04, z + 0.08))
+			var st_c2: SurfaceTool = gs.call(col.lightened(0.18))
+			box_st(st_c2, Vector3(x - 0.1, y + 0.04, z - 0.07), Vector3(x + 0.1, y + 0.08, z + 0.07))
+			var st_c3: SurfaceTool = gs.call(col.darkened(0.12))
+			box_st(st_c3, Vector3(x - 0.11, y + 0.08, z - 0.08), Vector3(x + 0.11, y + 0.12, z + 0.08))
+		"herb":
+			var st_hr: SurfaceTool = gs.call(Color(0.34, 0.6, 0.3))
+			oct_st(st_hr, x, z, 0.04, y, y + 0.16, 0.085)
+			var st_ht: SurfaceTool = gs.call(Color(0.62, 0.44, 0.26))
+			oct_st(st_ht, x, z, 0.048, y + 0.02, y + 0.05, 0.048)
+		"flower":
+			var st_fs: SurfaceTool = gs.call(Color(0.36, 0.6, 0.3))
+			var st_fh: SurfaceTool = gs.call(col)
+
+			for fo in [Vector2(-0.07, 0.0), Vector2(0.0, 0.03), Vector2(0.07, 0.0)]:
+				oct_st(st_fs, x + fo.x, z + fo.y, 0.012, y, y + 0.12 + fo.y, 0.012)
+				dome_st(st_fh, x + fo.x, z + fo.y, 0.05, y + 0.1 + fo.y, y + 0.17 + fo.y, 2, 8)
+		"bottle":
+			var st_bo: SurfaceTool = gs.call(col)
+			oct_st(st_bo, x, z, 0.05, y, y + 0.12, 0.05)
+			oct_st(st_bo, x, z, 0.022, y + 0.12, y + 0.18, 0.022)
+			var st_bc: SurfaceTool = gs.call(Color(0.7, 0.52, 0.3))
+			box_st(st_bc, Vector3(x - 0.018, y + 0.18, z - 0.018), Vector3(x + 0.018, y + 0.21, z + 0.018))
+		"jar":
+			var st_j: SurfaceTool = gs.call(Color(0.74, 0.46, 0.28))
+			oct_st(st_j, x, z, 0.075, y, y + 0.12, 0.068)
+			var st_jl: SurfaceTool = gs.call(Color(0.5, 0.3, 0.2))
+			oct_st(st_jl, x, z, 0.06, y + 0.12, y + 0.15, 0.06)
+		"book":
+			var st_k1: SurfaceTool = gs.call(col)
+			box_st(st_k1, Vector3(x - 0.1, y, z - 0.07), Vector3(x - 0.055, y + 0.2, z + 0.07))
+			var st_k2: SurfaceTool = gs.call(col.lightened(0.25))
+			box_st(st_k2, Vector3(x - 0.05, y, z - 0.07), Vector3(x - 0.005, y + 0.17, z + 0.07))
+			var st_k3: SurfaceTool = gs.call(col.darkened(0.2))
+			box_st(st_k3, Vector3(x + 0.0, y, z - 0.07), Vector3(x + 0.045, y + 0.19, z + 0.07))
+		_:
+			var st_d: SurfaceTool = gs.call(col)
+			dome_st(st_d, x, z, 0.08, y, y + 0.14, 2, 8)
+
+
 # 천막/지붕 네 면(사방으로 경사진 피라미드): 중심 (cx, cz), 반폭 (hx, hz), 아래 y0(처마), 꼭대기 y1.
 static func pyramid(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: float, hx: float, hz: float, y0: float, y1: float) -> void:
 	var st: SurfaceTool = b.new_part(spec, Vector3(cx - hx, y0, cz - hz), Vector3(cx + hx, y1, cz + hz))
@@ -959,7 +1068,8 @@ static func _build_stall(b: PartBuilder, lo: Vector2, hi: Vector2, kind: String,
 	var top: float = 2.0
 
 	# 카운터와 앞 천(스커트)
-	box(b, "counter", wood(p, counter_c, "stall_counter"), Vector3(x0, 0.0, z1 - 0.45), Vector3(x1, 0.65, z1))
+	var counter_d: float = clampf((z1 - z0) * 0.5, 0.45, 0.7)
+	box(b, "counter", wood(p, counter_c, "stall_counter"), Vector3(x0, 0.0, z1 - counter_d), Vector3(x1, 0.65, z1))
 	box(b, "skirt", stripes if canopy_kind == "stripe" else spec(_tex("flat", ts, skirt_c), Color.WHITE, "stall_skirt", "가판대 카운터 앞 천 단색 %d×%d" % [ts, ts]), Vector3(x0 - 0.02, 0.05, z1), Vector3(x1 + 0.02, 0.62, z1 + 0.03))
 
 	# 기둥
@@ -992,7 +1102,7 @@ static func _build_stall(b: PartBuilder, lo: Vector2, hi: Vector2, kind: String,
 			dome(b, "umbrella", stripes, cx, cz - 0.05, 0.9, 1.55, 2.05, 3, 12)
 			top = 2.1
 
-	# 상품 카드: 카운터 위 한 줄, 같은 종류끼리 묶어서(AABBCC) 균등 간격으로 놓는다.
+	# 상품 오브젝트: 카운터 위 한 줄, 같은 종류끼리 묶어서(AABBCC) 균등 간격
 	var goods: Array = d["goods"]
 	var kinds: Array = []
 
@@ -1000,26 +1110,32 @@ static func _build_stall(b: PartBuilder, lo: Vector2, hi: Vector2, kind: String,
 		if not kinds.has(str(g)):
 			kinds.append(str(g))
 
+	var gcache: Dictionary = {}
+	var ga := Vector3(x0, 0.6, z0)
+	var gc := Vector3(x1, 1.4, z1)
+
 	if kinds.size() > 0:
-		var span_g: float = x1 - x0 - 0.6  # 카운터 양 끝에서 0.3 씩 안쪽(카드가 비스듬히 튀어나와도 카운터 위에 남게)
-		var n_g: int = maxi(int(span_g / 0.32) + 1, 2)
+		var span_g: float = x1 - x0 - 0.7  # 카운터 양 끝에서 0.35 씩 안쪽
+		var n_g: int = maxi(int(span_g / 0.42) + 1, 2)
 		var step_g: float = span_g / float(n_g - 1)
 
 		for gi in range(n_g):
 			var tok: String = kinds[mini(gi * kinds.size() / n_g, kinds.size() - 1)]
-			_card(b, _goods_spec(tok, ts), x0 + 0.3 + step_g * float(gi), 0.65, z1 - 0.23, 0.24, 0.24)
+			_goods_obj(b, gcache, tok, x0 + 0.35 + step_g * float(gi), 0.65, z1 - counter_d * 0.5, ts, ga, gc)
 
-	# 매다는 상품(차양 앞 가장자리 아래): 가운데 몇 개만 균등 간격
+	# 매다는 상품(차양 앞 가장자리 아래): 가운데 몇 개만 균등 간격, 가는 줄로 처마에 매단다
 	var hang: Array = d["hang"]
 
 	if hang.size() > 0:
-		var span_h: float = x1 - x0 - 0.8
-		var n_h: int = maxi(int(span_h / 0.5) + 1, 2)
+		var span_h: float = x1 - x0 - 1.0
+		var n_h: int = maxi(int(span_h / 0.6) + 1, 2)
 		var step_h: float = span_h / float(n_h - 1)
-		var htok: String = str(hang[0])
+		var hstring: Dictionary = spec(PlaceholderTextures.flat_color(ts, Color(0.3, 0.22, 0.14)), Color.WHITE, "goods_string", "상품 매단 줄 단색 %d×%d" % [ts, ts])
 
 		for hi_idx in range(n_h):
-			_card(b, _goods_spec(htok, ts), x0 + 0.4 + step_h * float(hi_idx), 1.0, z1 + 0.1, 0.18, 0.24)
+			var hx: float = x0 + 0.5 + step_h * float(hi_idx)
+			_goods_obj(b, gcache, str(hang[0]), hx, 1.0, z1 + 0.12, ts, ga, gc)
+			box(b, "string", hstring, Vector3(hx - 0.006, 1.2, z1 + 0.115), Vector3(hx + 0.006, 1.36, z1 + 0.125), 46.0)
 
 	# 양옆 소품
 	var props: Array = d["props"]
@@ -1206,11 +1322,19 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			oct(b, "mill_roof", roof_m, c.x, c.y, r1 * 0.74, 3.05, 3.95, 0.05)
 			# 문·창·날개는 다른 건물 앞면과 같은 +z 면(화면 좌측 하단을 보는 면)을 바라본다. 몸체가 위로 갈수록 좁아지므로 높이별 면 위치를 계산한다.
 			var apothem_k: float = 0.9239  # 팔각형 변 중심까지 거리 / 꼭짓점 반지름
-			var ap_door: float = r1 * (1.0 - 0.38 * (0.5 / 3.0)) * apothem_k
-			var ap_win: float = r1 * (1.0 - 0.38 * (1.9 / 3.0)) * apothem_k
-			add_door_z(b, p, c.x, 0.0, c.y + ap_door - 0.04, 0.46, 1.0)
-			var mwp: Dictionary = HouseShapes.win_parts(b, p, Vector3(c.x - 0.3, 1.6, c.y + ap_win - 0.1), Vector3(c.x + 0.3, 2.2, c.y + ap_win + 0.2))
-			HouseShapes.win_on_z(mwp, c.x, 1.72, 2.1, 0.13, c.y + ap_win - 0.03)
+			# 몸체가 위로 갈수록 좁아져 문을 세로로 세울 수 없으므로, 문 쪽에만 수직 벽 덩어리(출입구)를 붙여 문이 똑바로 서게 한다(문 쪽 벽을 수직으로 깎은 모양).
+			var ap0: float = r1 * apothem_k  # 바닥 쪽 벽 위치(가장 넓음)
+			var zf: float = c.y + ap0 + 0.08  # 출입구 앞면
+			var ap_top: float = r1 * (1.0 - 0.38 * (1.7 / 3.0)) * apothem_k  # 출입구 지붕이 닿는 높이의 벽 위치
+			var entry_h: float = 1.4
+			box(b, "mill_entry", body_w, Vector3(c.x - 0.52, 0.0, c.y + ap_top - 0.1), Vector3(c.x + 0.52, entry_h, zf))
+			box(b, "mill_entry_base", stone_spec(p, Color(0.95, 0.92, 0.88), "mill_entry_base"), Vector3(c.x - 0.56, 0.0, c.y + ap_top - 0.1), Vector3(c.x + 0.56, 0.12, zf + 0.04))
+			var eroof_top: float = entry_h + 0.3
+			slope(b, "mill_entry_roof", roof_m, Vector3(c.x - 0.62, eroof_top, c.y + ap_top - 0.02), Vector3(c.x + 0.62, eroof_top, c.y + ap_top - 0.02), Vector3(c.x + 0.62, entry_h + 0.02, zf + 0.12), Vector3(c.x - 0.62, entry_h + 0.02, zf + 0.12), Vector3(0.0, zf + 0.12 - (c.y + ap_top), eroof_top - entry_h).normalized(), 1.24, 1.0)
+			add_door_z(b, p, c.x, 0.12, zf, 0.46, 1.0)
+			var ap_win: float = r1 * (1.0 - 0.38 * (2.3 / 3.0)) * apothem_k
+			var mwp: Dictionary = HouseShapes.win_parts(b, p, Vector3(c.x - 0.3, 1.9, c.y + ap_win - 0.1), Vector3(c.x + 0.3, 2.6, c.y + ap_win + 0.2))
+			HouseShapes.win_on_z(mwp, c.x, 2.05, 2.45, 0.13, c.y + ap_win - 0.03)
 			# 날개 축(몸체 앞 위쪽에서 카메라 쪽으로 튀어나온 나무 토막)과 날개: 날개는 카메라를 보는 평면 컷아웃이라 그 축으로 돌려도 정면 그대로다.
 			var ap_hub: float = r1 * (1.0 - 0.38 * (2.55 / 3.0)) * apothem_k
 			var hub := Vector3(c.x, 2.55, c.y + ap_hub + 0.28)
