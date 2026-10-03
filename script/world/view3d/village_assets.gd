@@ -187,6 +187,19 @@ static func box(b: PartBuilder, key: String, spec: Dictionary, lo: Vector3, hi: 
 	q.call(st, Vector3(lo.x, lo.y, lo.z), Vector3(lo.x, lo.y, hi.z), Vector3(lo.x, hi.y, hi.z), Vector3(lo.x, hi.y, lo.z), Vector3(-1, 0, 0), Vector2(0, dy), Vector2(dz, dy), Vector2(dz, 0), Vector2(0, 0))
 
 
+# 이미 만든 부품(SurfaceTool)에 상자 하나를 더한다(같은 재질의 작은 상자를 한 면으로 모을 때). 윗면·네 옆면, 밑면 없음.
+static func box_st(st: SurfaceTool, lo: Vector3, hi: Vector3) -> void:
+	var dx: float = hi.x - lo.x
+	var dy: float = hi.y - lo.y
+	var dz: float = hi.z - lo.z
+	var q := BuildingMesh._quad
+	q.call(st, Vector3(lo.x, hi.y, lo.z), Vector3(hi.x, hi.y, lo.z), Vector3(hi.x, hi.y, hi.z), Vector3(lo.x, hi.y, hi.z), Vector3.UP, Vector2(0, 0), Vector2(dx, 0), Vector2(dx, dz), Vector2(0, dz))
+	q.call(st, Vector3(lo.x, lo.y, hi.z), Vector3(hi.x, lo.y, hi.z), Vector3(hi.x, hi.y, hi.z), Vector3(lo.x, hi.y, hi.z), Vector3(0, 0, 1), Vector2(0, dy), Vector2(dx, dy), Vector2(dx, 0), Vector2(0, 0))
+	q.call(st, Vector3(hi.x, lo.y, hi.z), Vector3(hi.x, lo.y, lo.z), Vector3(hi.x, hi.y, lo.z), Vector3(hi.x, hi.y, hi.z), Vector3(1, 0, 0), Vector2(0, dy), Vector2(dz, dy), Vector2(dz, 0), Vector2(0, 0))
+	q.call(st, Vector3(hi.x, lo.y, lo.z), Vector3(lo.x, lo.y, lo.z), Vector3(lo.x, hi.y, lo.z), Vector3(hi.x, hi.y, lo.z), Vector3(0, 0, -1), Vector2(0, dy), Vector2(dx, dy), Vector2(dx, 0), Vector2(0, 0))
+	q.call(st, Vector3(lo.x, lo.y, lo.z), Vector3(lo.x, lo.y, hi.z), Vector3(lo.x, hi.y, hi.z), Vector3(lo.x, hi.y, lo.z), Vector3(-1, 0, 0), Vector2(0, dy), Vector2(dz, dy), Vector2(dz, 0), Vector2(0, 0))
+
+
 # 팔각 기둥(통·줄기·잎 덩어리). 옆면 UV 는 둘레 길이 기준.
 static func oct(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: float, r: float, y0: float, y1: float, r_top: float = -1.0) -> void:
 	var st: SurfaceTool = b.new_part(spec, Vector3(cx - r, y0, cz - r), Vector3(cx + r, y1, cz + r))
@@ -402,48 +415,76 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var cell_w_z: float = width / float(cells_z)
 	var cell_w_x: float = depth / float(cells_x)
 
-	# 덧문: 창 양옆에 창과 같은 높이로, 칸에 들어가는 만큼만(너무 넓으면 뼈대와 겹치므로 줄임). 살(루버) 질감을 쓴다.
+	# 창문: 벽 질감에는 창을 그리지 않고, 창 자리마다 틀·유리·창살·창턱 부품을 따로 붙인다(PlaceholderTextures.window_objects).
+	var plain_style: bool = str(rule.get("style", "")) == ""
+	var skip_front: Array = []
+	var skip_side: Array = []
+	var cell_w_door: float = width / float(cells_z)
+
+	if HouseShapes.has(shape_tokens, "bay"):
+		var bk: int = door_cell + 1 if door_cell + 1 < cells_z else door_cell - 1
+		var bcx: float = lo.x + (float(bk) + 0.5) * cell_w_door
+		skip_front.append([bcx - 0.75, bcx + 0.75])
+
+	if HouseShapes.has(shape_tokens, "tower"):
+		skip_front.append([lo.x - 0.7, lo.x + 1.1])
+
+	if HouseShapes.has(shape_tokens, "annex"):
+		var az1: float = hi.y - 0.7
+		skip_side.append([maxf(lo.y + 0.5, az1 - 2.2) - 0.3, az1 + 0.3])
+
+	var slots: Dictionary = {"z": [], "x": []}
+
+	if PlaceholderTextures.window_objects:
+		slots = HouseShapes.window_slots(lo, hi, wall_h, story_frac, floors, plain_style, skip_front, skip_side, wing_w)
+		var attic: Dictionary = {}
+
+		if plain_style and not ["hip", "mansard"].has(roof_kind):
+			var ridge_x0: bool = width >= depth
+			var ay0: float = wall_h + roof_h * 0.2
+			var ay1: float = ay0 + 0.34
+
+			if ridge_x0:
+				attic = {"face": "x", "c": (lo.y + hi.y) * 0.5, "y0": ay0, "y1": ay1, "w": 0.3}
+			else:
+				attic = {"face": "z", "c": (lo.x + hi.x) * 0.5, "y0": ay0, "y1": ay1, "w": 0.3}
+
+		HouseShapes.add_windows(b, p, lo, hi, wall_h, slots, attic)
+
+	# 덧문: 창 양옆에 창과 같은 높이로. 살(루버) 질감을 쓴다.
 	if bool(rule.get("shutters", false)):
 		var shut: Dictionary = spec(PlaceholderTextures.shutter(ts, rule.get("shutter_tint", Color(0.36, 0.52, 0.48))), Color.WHITE, "shutter_wood", "덧문 %d×%d 가로 살(청록 계열, 가게마다 색)" % [ts, ts])
-		var sw_z: float = clampf((cell_w_z - win_w) * 0.5 * 0.75, 0.05, 0.2)
-		var sw_x: float = clampf((cell_w_x - win_w_x) * 0.5 * 0.75, 0.05, 0.2)
 
-		for k in range(cells_z):
-			if k == cells_z / 2:
+		for sl in slots["z"]:
+			if bool(sl["upper"]):
 				continue
 
-			var scx: float = lo.x + (float(k) + 0.5) * cell_w_z
+			var half: float = float(sl["w"]) * 0.5 + 0.07
+			box(b, "shutter", shut, Vector3(float(sl["c"]) - half - 0.12, sl["y0"], hi.y), Vector3(float(sl["c"]) - half, sl["y1"], hi.y + 0.05))
+			box(b, "shutter", shut, Vector3(float(sl["c"]) + half, sl["y0"], hi.y), Vector3(float(sl["c"]) + half + 0.12, sl["y1"], hi.y + 0.05))
 
-			if wing_w > 0.0 and scx - win_w < lo.x + wing_w:
+		for sx_slot in slots["x"]:
+			if bool(sx_slot["upper"]):
 				continue
 
-			var half: float = win_w * 0.5 + 0.02
-			box(b, "shutter", shut, Vector3(scx - half - sw_z, win_bottom, hi.y), Vector3(scx - half, win_top, hi.y + 0.05))
-			box(b, "shutter", shut, Vector3(scx + half, win_bottom, hi.y), Vector3(scx + half + sw_z, win_top, hi.y + 0.05))
-
-		for k in range(cells_x):
-			var scz: float = hi.y - (float(k) + 0.5) * cell_w_x
-			var halfx: float = win_w_x * 0.5 + 0.02
-			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz - halfx - sw_x), Vector3(hi.x + 0.05, win_top, scz - halfx))
-			box(b, "shutter", shut, Vector3(hi.x, win_bottom, scz + halfx), Vector3(hi.x + 0.05, win_top, scz + halfx + sw_x))
+			var halfx: float = float(sx_slot["w"]) * 0.5 + 0.07
+			box(b, "shutter", shut, Vector3(hi.x, sx_slot["y0"], float(sx_slot["c"]) - halfx - 0.12), Vector3(hi.x + 0.05, sx_slot["y1"], float(sx_slot["c"]) - halfx))
+			box(b, "shutter", shut, Vector3(hi.x, sx_slot["y0"], float(sx_slot["c"]) + halfx), Vector3(hi.x + 0.05, sx_slot["y1"], float(sx_slot["c"]) + halfx + 0.12))
 
 	if bool(rule.get("step", true)) and not HouseShapes.has(shape_tokens, "porch"):
 		var door_w: float = float(lay_z["dw"]) / float(ts)
 		box(b, "step", stone_spec(p, Color(1.15, 1.1, 1.0), "step"), Vector3(door_cx - door_w * 0.5 - 0.12, 0.0, hi.y), Vector3(door_cx + door_w * 0.5 + 0.12, 0.14, hi.y + 0.3))
 
 	if bool(rule.get("planters", true)):
-		for k in range(cells):
-			if k == door_cell:
+		for pl in slots["z"]:
+			if bool(pl["upper"]):
 				continue
 
-			var cx: float = lo.x + (float(k) + 0.5) * width / float(cells)
-
-			if wing_w > 0.0 and cx - win_w < lo.x + wing_w:
-				continue
-
-			var half_p: float = win_w * 0.5 + 0.04
-			box(b, "planter", wood(p, Color(0.62, 0.42, 0.28), "planter_box"), Vector3(cx - half_p, win_bottom - 0.13, hi.y), Vector3(cx + half_p, win_bottom, hi.y + 0.14))
-			box(b, "flowers", spec(_tex("foliage", ts, Color(0.95, 0.4, 0.55)), Color.WHITE, "planter_flowers", "창 아래 화분 꽃·풀 %d×%d 반복" % [ts, ts]), Vector3(cx - half_p + 0.02, win_bottom, hi.y + 0.01), Vector3(cx + half_p - 0.02, win_bottom + 0.1, hi.y + 0.13))
+			var half_p: float = float(pl["w"]) * 0.5 + 0.08
+			var pcx: float = pl["c"]
+			var py0: float = float(pl["y0"])
+			box(b, "planter", wood(p, Color(0.62, 0.42, 0.28), "planter_box"), Vector3(pcx - half_p, py0 - 0.2, hi.y), Vector3(pcx + half_p, py0 - 0.06, hi.y + 0.14))
+			box(b, "flowers", spec(_tex("foliage", ts, Color(0.95, 0.4, 0.55)), Color.WHITE, "planter_flowers", "창 아래 화분 꽃·풀 %d×%d 반복" % [ts, ts]), Vector3(pcx - half_p + 0.02, py0 - 0.06, hi.y + 0.01), Vector3(pcx + half_p - 0.02, py0 + 0.04, hi.y + 0.13))
 
 	if bool(rule.get("sign", false)):
 		var sx: float = lo.x + 0.18

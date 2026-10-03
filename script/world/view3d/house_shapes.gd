@@ -252,3 +252,117 @@ static func _dormers(c: Dictionary, count: int) -> void:
 			VillageAssets.roof_prism(b, "dormer_roof", rt, a0, a1, vc + wb, vc + wf, yr, ph, false)
 		else:
 			VillageAssets.roof_prism(b, "dormer_roof", rt, vc + wb, vc + wf, a0, a1, yr, ph, true)
+
+
+# ---------------------------------------------------------------- 창문 부품(벽 질감에 창을 그리지 않고 따로 붙인다)
+
+const WIN_W: float = 0.46
+const WIN_FRAME: float = 0.045
+
+
+static func _fractions_front(width: float, upper: bool) -> Array:
+	if upper:
+		return [0.2, 0.5, 0.8] if width < 5.4 else [0.13, 0.37, 0.63, 0.87]
+
+	return [0.2, 0.8] if width < 5.4 else [0.13, 0.31, 0.69, 0.87]
+
+
+static func _fractions_side(depth: float) -> Array:
+	if depth < 3.2:
+		return [0.5]
+
+	return [0.3, 0.7] if depth < 5.2 else [0.18, 0.5, 0.82]
+
+
+# 창 자리 목록. 반환: {"z": [{c,y0,y1,w,upper}], "x": [...]}  (z: 앞벽(+z)면의 x 위치, x: 옆벽(+x)면의 z 위치)
+# front: 앞벽에 창을 놓을지(가게 앞벽은 질감에 진열창이 있으므로 false), skip_front/skip_side: 건너뛸 구간(포치·돌출 창·탑·별채가 있는 곳)
+static func window_slots(lo: Vector2, hi: Vector2, wall_h: float, story_frac: float, floors: int, front: bool, skip_front: Array, skip_side: Array, wing_w: float) -> Dictionary:
+	var width: float = hi.x - lo.x
+	var depth: float = hi.y - lo.y
+	var h_low: float = wall_h * story_frac
+	var out: Dictionary = {"z": [], "x": []}
+	var stories: Array = [{"y0": h_low * 0.44, "y1": h_low * 0.8, "upper": false}]
+
+	if floors >= 2:
+		var up_h: float = wall_h - h_low
+		stories.append({"y0": h_low + up_h * 0.3, "y1": h_low + up_h * 0.8, "upper": true})
+
+	for st in stories:
+		if front:
+			for f in _fractions_front(width, bool(st["upper"])):
+				var cx: float = lo.x + width * float(f)
+
+				if wing_w > 0.0 and cx < lo.x + wing_w + 0.3:
+					continue
+
+				if _in_ranges(cx, skip_front) and not bool(st["upper"]):
+					continue
+
+				out["z"].append({"c": cx, "y0": st["y0"], "y1": st["y1"], "w": WIN_W, "upper": st["upper"]})
+
+		for f2 in _fractions_side(depth):
+			var cz: float = hi.y - depth * float(f2)
+
+			if _in_ranges(cz, skip_side) and not bool(st["upper"]):
+				continue
+
+			out["x"].append({"c": cz, "y0": st["y0"], "y1": st["y1"], "w": WIN_W, "upper": st["upper"]})
+
+	return out
+
+
+static func _in_ranges(v: float, ranges: Array) -> bool:
+	for r in ranges:
+		if v >= float(r[0]) and v <= float(r[1]):
+			return true
+
+	return false
+
+
+# 창 부품을 만든다: 틀(크림) + 유리(파랑) + 창살(크림 십자) + 창턱(돌). 같은 재질은 면 하나로 모아 면 수를 줄인다.
+# attic: 박공 끝벽 가운데의 작은 창 {face: "x"|"z", c, y0, y1, w}
+static func add_windows(b, p: Dictionary, lo: Vector2, hi: Vector2, wall_h: float, slots: Dictionary, attic: Dictionary) -> void:
+	var ts: int = p["ts"]
+	var frame_spec: Dictionary = VillageAssets.spec(PlaceholderTextures.flat_color(ts, Color(0.95, 0.92, 0.84)), Color.WHITE, "window_frame", "창틀·창살 크림 단색 %d×%d" % [ts, ts])
+	var glass_spec: Dictionary = VillageAssets.spec(PlaceholderTextures.flat_color(ts, Color(0.5, 0.74, 0.92)), Color.WHITE, "window_glass", "창 유리 하늘색 단색 %d×%d" % [ts, ts])
+	var mull_spec: Dictionary = VillageAssets.spec(PlaceholderTextures.flat_color(ts, Color(0.95, 0.92, 0.84)), Color.WHITE, "window_mullion", "창살 크림 단색 %d×%d" % [ts, ts])
+	var sill_spec: Dictionary = VillageAssets.spec(PlaceholderTextures.flat_color(ts, Color(0.84, 0.8, 0.74)), Color.WHITE, "window_sill", "창턱 돌 단색 %d×%d" % [ts, ts])
+	var a := Vector3(lo.x, 0.0, lo.y)
+	var c := Vector3(hi.x + 0.12, wall_h, hi.y + 0.12)
+	var st_sill: SurfaceTool = b.new_part(sill_spec, a, c, 0.0)
+	var st_frame: SurfaceTool = b.new_part(frame_spec, a, c, 0.3)
+	var st_glass: SurfaceTool = b.new_part(glass_spec, a, c, 0.6)
+	var st_mull: SurfaceTool = b.new_part(mull_spec, a, c, 0.9)
+	var all: Array = []
+
+	for s in slots["z"]:
+		all.append({"face": "z", "c": s["c"], "y0": s["y0"], "y1": s["y1"], "w": s["w"]})
+
+	for s2 in slots["x"]:
+		all.append({"face": "x", "c": s2["c"], "y0": s2["y0"], "y1": s2["y1"], "w": s2["w"]})
+
+	if not attic.is_empty():
+		all.append(attic)
+
+	for wdef in all:
+		var cc: float = wdef["c"]
+		var y0: float = wdef["y0"]
+		var y1: float = wdef["y1"]
+		var hw: float = float(wdef["w"]) * 0.5
+		var fw: float = WIN_FRAME
+		var ym: float = (y0 + y1) * 0.5
+
+		if wdef["face"] == "z":
+			var z0: float = hi.y
+			VillageAssets.box_st(st_frame, Vector3(cc - hw - fw, y0 - fw, z0), Vector3(cc + hw + fw, y1 + fw, z0 + 0.05))
+			VillageAssets.box_st(st_glass, Vector3(cc - hw, y0, z0), Vector3(cc + hw, y1, z0 + 0.065))
+			VillageAssets.box_st(st_mull, Vector3(cc - 0.014, y0, z0), Vector3(cc + 0.014, y1, z0 + 0.08))
+			VillageAssets.box_st(st_mull, Vector3(cc - hw, ym - 0.014, z0), Vector3(cc + hw, ym + 0.014, z0 + 0.08))
+			VillageAssets.box_st(st_sill, Vector3(cc - hw - fw - 0.05, y0 - fw - 0.05, z0), Vector3(cc + hw + fw + 0.05, y0 - fw, z0 + 0.11))
+		else:
+			var x0: float = hi.x
+			VillageAssets.box_st(st_frame, Vector3(x0, y0 - fw, cc - hw - fw), Vector3(x0 + 0.05, y1 + fw, cc + hw + fw))
+			VillageAssets.box_st(st_glass, Vector3(x0, y0, cc - hw), Vector3(x0 + 0.065, y1, cc + hw))
+			VillageAssets.box_st(st_mull, Vector3(x0, y0, cc - 0.014), Vector3(x0 + 0.08, y1, cc + 0.014))
+			VillageAssets.box_st(st_mull, Vector3(x0, ym - 0.014, cc - hw), Vector3(x0 + 0.08, ym + 0.014, cc + hw))
+			VillageAssets.box_st(st_sill, Vector3(x0, y0 - fw - 0.05, cc - hw - fw - 0.05), Vector3(x0 + 0.11, y0 - fw, cc + hw + fw + 0.05))

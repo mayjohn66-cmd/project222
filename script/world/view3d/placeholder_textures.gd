@@ -119,6 +119,10 @@ static func _level(v: float, levels: int) -> float:
 # 건물 벽 면 질감(코드로 칠한 임시 그림): 회반죽 + 나무 뼈대 + 창문 + (선택) 문. 크기는 면의 칸 폭 × 18, 높이(블록) × 블록 px.
 # 벽 질감과 3D 부속(덧문·화분·계단)이 같은 창·문 크기를 쓰도록 한 곳에서 계산한다(픽셀 단위).
 # 문은 캐릭터(약 24px)보다 확실히 크게(약 1.4배), 창은 한눈에 창으로 읽히게 키웠다.
+# true 면 벽 질감에는 창을 그리지 않는다(창은 건물 코드가 따로 3D 부품으로 붙인다). 문은 그대로 그린다.
+static var window_objects: bool = true
+
+
 static func window_layout(w: int, h: int, cells: int) -> Dictionary:
 	var cell_px: float = float(w) / float(maxi(cells, 1))
 	var dh: int = clampi(int(float(h) * 0.72), 6, 46)
@@ -202,7 +206,7 @@ static func _wall_facade_clean(w: int, h: int, door: bool, window_count: int, pl
 
 			if x0 + dw - 3 < w:
 				img.set_pixel(x0 + dw - 3, y0 + dh / 2 + 3, Color(0.98, 0.84, 0.3))
-		else:
+		elif not window_objects:
 			var ww: int = lay["ww"]
 			var wh: int = lay["wh"]
 			var wy: int = lay["wy"]
