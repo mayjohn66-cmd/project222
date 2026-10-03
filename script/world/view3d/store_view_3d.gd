@@ -88,6 +88,10 @@ var exterior: Node2D
 ## 마을(매장 바깥)도 3D 로 그릴지. F9 로 켜고 끈다(매장만 3D / 마을 전체 3D 비교용).
 var village_enabled: bool = true
 ## 색 단계 수(채널당). 256 = 제한 없음, 낮출수록 색이 뭉쳐서 도트 그림 같은 느낌(예: 12). 시험용 값.
+# 빛 세기 배율(낮 해·환경광). 참조 화면보다 밝게 날아갈 때 낮춘다. 후처리의 knee(하이라이트 눌림)와 같이 쓴다.
+var light_scale: float = 0.82
+# 시간대 색을 빛에 반영하는 정도(1 = 그대로, 0 = 색 없음).
+var tint_strength: float = 0.7
 var color_levels: float = 256.0:
 	set(value):
 		color_levels = value
@@ -343,8 +347,10 @@ func apply_hour(h: float) -> void:
 		return
 
 	var hour: float = fposmod(h, 24.0)
-	var tint: Color = TimeOfDayData.get_tint(hour)
-	var luminance: float = tint.get_luminance()
+	var raw_tint: Color = TimeOfDayData.get_tint(hour)
+	var luminance: float = raw_tint.get_luminance()
+	# 해·환경광 색은 시간대 색을 그대로 쓰지 않고 흰색 쪽으로 당겨(저녁·새벽이 붉게 쏠리지 않게) 쓴다.
+	var tint: Color = Color.WHITE.lerp(raw_tint, tint_strength)
 	var dark: float = 1.0 - clampf((luminance - 0.35) / 0.65, 0.0, 1.0)  # 0 = 낮, 1 = 한밤
 	var day_amt: float = smoothstep(5.0, 7.0, hour) * (1.0 - smoothstep(17.0, 19.0, hour))
 	var sun_curve: float = clampf(sin((hour - 6.0) / 12.0 * PI), 0.0, 1.0)
@@ -352,14 +358,14 @@ func apply_hour(h: float) -> void:
 	var yaw: float = lerpf(-110.0, lerpf(-75.0, 75.0, clampf((hour - 6.0) / 12.0, 0.0, 1.0)), day_amt)
 	_sun.rotation_degrees = Vector3(-elev, yaw, 0.0)
 	_sun.light_color = tint
-	_sun.light_energy = lerpf(0.9, lerpf(0.8, 1.2, sun_curve), day_amt)
+	_sun.light_energy = light_scale * lerpf(0.9, lerpf(0.8, 1.2, sun_curve), day_amt)
 	_env.ambient_light_color = Color(0.7, 0.72, 0.8) * tint
-	_env.ambient_light_energy = lerpf(0.9, 0.7, day_amt)
+	_env.ambient_light_energy = light_scale * lerpf(0.9, 0.7, day_amt)
 	_fill.light_color = tint.lerp(Color(0.85, 0.9, 1.0), 0.35)
 	_fill.light_energy = lerpf(0.25, 0.5, day_amt)
 
 	for lamp in _lamps:
-		(lamp as OmniLight3D).light_energy = 2.4 * dark
+		(lamp as OmniLight3D).light_energy = 1.6 * dark
 		(lamp as OmniLight3D).visible = dark > 0.05
 
 
@@ -382,7 +388,7 @@ func _sync_lamps(rect: Rect2i) -> void:
 			var lamp := OmniLight3D.new()
 			lamp.position = Vector3(float(rect.position.x) - 0.5 + float(rect.size.x) * fx, block_height(1.8), float(rect.position.y) - 0.5 + float(rect.size.y) * fy)
 			lamp.omni_range = 4.5
-			lamp.light_color = Color(1.0, 0.82, 0.5)
+			lamp.light_color = Color(1.0, 0.86, 0.62)
 			lamp.shadow_enabled = false
 			lamp.light_cull_mask = 1
 			_viewport.add_child(lamp)

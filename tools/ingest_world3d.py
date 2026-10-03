@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """실제 그림(Pixel Lab 등으로 만든 PNG)을 3D 마을용 규격 폴더에 넣는 도구.
 
-  python tools/ingest_world3d.py <자산id> <파일 또는 폴더 ...> [--resize] [--dry-run]
+  python tools/ingest_world3d.py <자산id> <파일 또는 폴더 ...> [--resize] [--dry-run] [--raw]
+  python tools/ingest_world3d.py <자산id> --retone      (이미 넣은 그림에 색 보정만 다시 적용. 원본은 받은그림/<자산id>/원본_<면>.png 로 백업)
 
 - 자산 id 와 면 이름·크기는 docs/그림_작업/faces.csv(그림 요청 문서가 쓰는 표)에서 읽는다.
 - 입력 파일 이름에서 면 이름을 알아낸다: `wall_front.png`, `moss_cottage__wall_front.png`, `moss_cottage_wall_front.png`, `face_wall_front.png` 모두 가능.
@@ -10,9 +11,13 @@
   `--resize` 를 주면 최근접(nearest)으로 맞춘다(Pixel Lab 이 정확한 크기를 못 낼 때. 줄이면 도트가 뭉개질 수 있으니 눈으로 확인할 것).
 - 결과: art/world3d/<자산id>/<면이름>.png (+ <면이름>_n.png). 그 뒤 Godot 에서 한 번 열어 .import 를 만들고
   `python tools/fix_texture_import.py` 로 무손실 설정을 맞춘 다음, 게임(game_3d_view.tscn)에서 F8 로 다시 읽는다.
+- 색 보정(기본 켜짐, 끄려면 --raw): Pixel Lab 그림이 형광색(채도·밝기 최댓값)으로 나와 풀밭과 어울리지 않는 문제를 줄인다.
+  채도는 0.8배 후 상한 0.68, 밝기는 0.8 이상 구간을 절반으로 눌러 상한 0.9. 같은 색은 같은 색으로 바뀌므로 색 수는 늘지 않는다(법선 맵은 건드리지 않음).
 Pillow 만 필요하다.
 """
 import argparse
+import colorsys
+import shutil
 import csv
 import os
 import sys
@@ -31,6 +36,34 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FACES_CSV = os.path.join(ROOT, "docs", "그림_작업", "faces.csv")
 OUT_DIR = os.path.join(ROOT, "art", "world3d")
 MAX_COLORS = 16
+
+
+
+SAT_SCALE, SAT_MAX = 0.8, 0.68
+VAL_KNEE, VAL_MAX = 0.8, 0.9
+
+
+def tone_pixel(r, g, b):
+    h, s, v = colorsys.rgb_to_hsv(r / 255.0, g / 255.0, b / 255.0)
+    s = min(s * SAT_SCALE, SAT_MAX)
+    if v > VAL_KNEE:
+        v = min(VAL_KNEE + (v - VAL_KNEE) * 0.5, VAL_MAX)
+    r2, g2, b2 = colorsys.hsv_to_rgb(h, s, v)
+    return (int(round(r2 * 255)), int(round(g2 * 255)), int(round(b2 * 255)))
+
+
+def tone_image(im):
+    """RGB 이미지의 채도·밝기를 눌러 형광색을 줄인다(색마다 한 번만 계산)."""
+    px = im.convert("RGB")
+    cache = {}
+    out = []
+    for c in px.getdata():
+        if c not in cache:
+            cache[c] = tone_pixel(*c)
+        out.append(cache[c])
+    res = Image.new("RGB", px.size)
+    res.putdata(out)
+    return res
 
 
 def load_faces(asset):
@@ -69,12 +102,38 @@ def collect(paths):
     return files
 
 
+def retone(asset, faces, out_folder, dry):
+    backup = os.path.join(ROOT, "docs", "그림_작업", "받은그림", asset)
+    done = 0
+    for face in faces:
+        path = os.path.join(out_folder, face + ".png")
+        if not os.path.exists(path):
+            continue
+        before = Image.open(path).convert("RGB")
+        after = tone_image(before)
+        if list(before.getdata()) == list(after.getdata()):
+            print("  변화 없음(이미 보정됨): %s" % face)
+            continue
+        if not dry:
+            os.makedirs(backup, exist_ok=True)
+            bk = os.path.join(backup, "원본_%s.png" % face)
+            if not os.path.exists(bk):
+                shutil.copyfile(path, bk)
+            after.save(path)
+        print("  보정: %s (원본 백업: 받은그림/%s/원본_%s.png)" % (face, asset, face))
+        done += 1
+    print("\n보정 %d개%s. Godot 에서 F8 로 다시 읽으세요." % (done, " (dry-run, 저장 안 함)" if dry else ""))
+    return 0
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("asset")
-    ap.add_argument("paths", nargs="+")
+    ap.add_argument("paths", nargs="*")
     ap.add_argument("--resize", action="store_true")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--raw", action="store_true", help="색 보정을 하지 않고 그대로 넣는다")
+    ap.add_argument("--retone", action="store_true", help="이미 넣은 그림에 색 보정만 다시 적용(원본 백업)")
     a = ap.parse_args()
 
     if not os.path.exists(FACES_CSV):
@@ -83,8 +142,14 @@ def main():
     if not faces:
         sys.exit("자산 id 를 찾을 수 없음: %s (faces.csv 의 asset 열 참고)" % a.asset)
 
-    ok, bad, provided = [], [], set()
     out_folder = os.path.join(OUT_DIR, a.asset)
+
+    if a.retone:
+        return retone(a.asset, faces, out_folder, a.dry_run)
+    if not a.paths:
+        sys.exit("파일 또는 폴더를 지정하세요(또는 --retone).")
+
+    ok, bad, provided = [], [], set()
     for path in collect(a.paths):
         stem = os.path.splitext(os.path.basename(path))[0]
         parsed = split_name(stem, a.asset, faces)
@@ -119,6 +184,8 @@ def main():
             im = height_to_normal.convert(im.convert("L"))
         else:
             im = im.convert("RGB")
+            if kind == "albedo" and not a.raw:
+                im = tone_image(im)
         if not a.dry_run:
             os.makedirs(out_folder, exist_ok=True)
             im.save(target)
