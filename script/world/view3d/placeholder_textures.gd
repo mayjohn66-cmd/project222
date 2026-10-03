@@ -121,7 +121,7 @@ static func _level(v: float, levels: int) -> float:
 # 문은 캐릭터(약 24px)보다 확실히 크게(약 1.4배), 창은 한눈에 창으로 읽히게 키웠다.
 static func window_layout(w: int, h: int, cells: int) -> Dictionary:
 	var cell_px: float = float(w) / float(maxi(cells, 1))
-	var dh: int = clampi(int(float(h) * 0.64), 6, 46)
+	var dh: int = clampi(int(float(h) * 0.72), 6, 46)
 	# 문 폭은 높이의 약 0.46배(현관문 비율 1:2.2). 입방체 건물에서 문이 길쭉해 보이지 않게 칸 폭 안에서 넓힌다.
 	var dw: int = clampi(int(float(dh) * 0.46), 8, 18)
 	dw = mini(dw, maxi(int(cell_px * 0.7), 6))
