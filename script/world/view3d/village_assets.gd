@@ -157,8 +157,12 @@ class PartBuilder:
 			if part["spec"].get("normal", null) != null:
 				st.generate_tangents()
 
+			var before: int = mesh.get_surface_count()
 			st.commit(mesh)
-			out.append(part["spec"])
+
+			# 면이 하나도 없는 부품은 mesh 에 면이 생기지 않으므로 재질 목록에도 넣지 않는다(개수가 어긋나면 오류).
+			if mesh.get_surface_count() > before:
+				out.append(part["spec"])
 
 		return out
 
@@ -200,6 +204,44 @@ static func oct(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: fl
 	for i in range(8):
 		var j2: int = (i + 1) % 8
 		BuildingMesh._tri(st, Vector3(cx, y1, cz), pts_t[i], pts_t[j2], Vector3.UP, Vector2(0, 0), Vector2(pts_t[i].x - cx, pts_t[i].z - cz), Vector2(pts_t[j2].x - cx, pts_t[j2].z - cz))
+
+
+# 둥근 덩어리(덤불·나무 잎): 아래가 평평한 반타원체. 겹겹의 고리(rings)와 둘레(segs) 면으로 윤곽이 둥글게 보인다.
+# 면마다 법선을 구면 기준으로 정해 톤이 둥글게 번진다. UV 는 둘레 길이 기준(반복 질감).
+static func dome(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: float, r: float, y0: float, y1: float, rings: int = 3, segs: int = 10) -> void:
+	var st: SurfaceTool = b.new_part(spec, Vector3(cx - r, y0, cz - r), Vector3(cx + r, y1, cz + r))
+	var h: float = y1 - y0
+	var seg_len: float = TAU * r / float(segs)
+	var ring_pts: Array = []
+
+	for k in range(rings + 1):
+		var phi: float = (float(k) / float(rings)) * PI * 0.5
+		var rr: float = r * cos(phi)
+		var yy: float = y0 + h * sin(phi)
+		var pts: Array = []
+
+		for i in range(segs):
+			var a: float = (float(i) + 0.5) * TAU / float(segs)
+			pts.append(Vector3(cx + cos(a) * rr, yy, cz + sin(a) * rr))
+
+		ring_pts.append(pts)
+
+	for k in range(rings):
+		var phi_m: float = ((float(k) + 0.5) / float(rings)) * PI * 0.5
+
+		for i in range(segs):
+			var j: int = (i + 1) % segs
+			var am: float = (float(i) + 1.0) * TAU / float(segs)
+			var n := Vector3(cos(am) * cos(phi_m) / r, sin(phi_m) / h, sin(am) * cos(phi_m) / r).normalized()
+			var vk0: float = float(k) * h / float(rings)
+			var vk1: float = float(k + 1) * h / float(rings)
+			BuildingMesh._quad(st, ring_pts[k][i], ring_pts[k][j], ring_pts[k + 1][j], ring_pts[k + 1][i], n, Vector2(seg_len * float(i), -vk0), Vector2(seg_len * float(i + 1), -vk0), Vector2(seg_len * float(i + 1), -vk1), Vector2(seg_len * float(i), -vk1))
+
+	var top: Array = ring_pts[rings]
+
+	for i in range(segs):
+		var j2: int = (i + 1) % segs
+		BuildingMesh._tri(st, Vector3(cx, y1, cz), top[i], top[j2], Vector3.UP, Vector2(0, 0), Vector2(top[i].x - cx, top[i].z - cz), Vector2(top[j2].x - cx, top[j2].z - cz))
 
 
 # 삼각 기둥 지붕(얇은 면, 두께 없음): 기둥·차양·작은 지붕용. ridge_x 면 용마루가 x 방향.
@@ -358,7 +400,15 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		ext_lo = Vector2(minf(ext_lo.x, pre.min_pt.x), minf(ext_lo.y, pre.min_pt.z))
 		ext_hi = Vector2(maxf(ext_hi.x, pre.max_pt.x), maxf(ext_hi.y, pre.max_pt.z))
 
-	var all_specs: Array = pre_specs + specs + extra_specs
+	# 건물 면 중 비어서 mesh 에 안 들어간 것(예: 굴뚝 없음)은 재질 목록에서도 뺀다. 안 그러면 뒤 부품의 재질이 한 칸씩 밀린다.
+	var present: Array = built.get("present", [])
+	var kept: Array = []
+
+	for i in range(specs.size()):
+		if i >= present.size() or present[i]:
+			kept.append(specs[i])
+
+	var all_specs: Array = pre_specs + kept + extra_specs
 	apply_overrides(all_specs, str(rule.get("asset", "")), p)
 
 	if apron_info != null:
@@ -393,7 +443,7 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 			"hay":
 				box(b, "hay", spec(_tex("flat", p["ts"], Color(0.85, 0.72, 0.3)), Color.WHITE, "hay", "건초 %d×%d 노랑" % [p["ts"], p["ts"]]), Vector3(x - 0.3, 0.0, z - 0.22), Vector3(x + 0.3, 0.38, z + 0.22))
 			"bush":
-				oct(b, "bush", spec(_tex("foliage", p["ts"], Color(0.95, 0.4, 0.55)), Color.WHITE, "bush", "덤불 %d×%d 반복(꽃 점)" % [p["ts"], p["ts"]]), x, z, 0.24, 0.0, 0.38, 0.2)
+				dome(b, "bush", spec(_tex("foliage", p["ts"], Color(0.95, 0.4, 0.55)), Color.WHITE, "bush", "덤불 %d×%d 반복(꽃 점)" % [p["ts"], p["ts"]]), x, z, 0.27, 0.0, 0.34)
 
 
 # ---------------------------------------------------------------- 소품
@@ -416,9 +466,9 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 		"tree":
 			var leaf: Dictionary = spec(_tex("foliage", ts, Color(0.9, 0.3, 0.3)), tint, "tree_foliage", "나뭇잎 %d×%d 반복(짙은 초록 + 밝은 점 + 빨간 열매 점)" % [ts, ts])
 			oct(b, "bark", bark, c.x, c.y, 0.13, 0.0, 1.0, 0.1)
-			oct(b, "leaf", leaf, c.x, c.y, 0.62, 0.9, 1.45, 0.55)
-			oct(b, "leaf", leaf, c.x, c.y, 0.5, 1.45, 1.9, 0.42)
-			oct(b, "leaf", leaf, c.x, c.y, 0.3, 1.9, 2.25, 0.16)
+			dome(b, "leaf", leaf, c.x, c.y, 0.66, 0.85, 1.55, 3, 12)
+			dome(b, "leaf", leaf, c.x, c.y, 0.5, 1.4, 2.0, 3, 12)
+			dome(b, "leaf", leaf, c.x, c.y, 0.3, 1.9, 2.35, 2, 10)
 			total = 2.25
 		"well":
 			oct(b, "stone", stone_spec(p, Color(1, 1, 1), "well_stone"), c.x, c.y, 0.58, 0.0, 0.55)
@@ -500,7 +550,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			box(b, "cap", iron, Vector3(c.x - 0.13, 1.86, c.y - 0.13), Vector3(c.x + 0.13, 1.92, c.y + 0.13))
 			total = 1.95
 		"flower_bush":
-			oct(b, "bush", spec(_tex("foliage", ts, Color(0.95, 0.4, 0.55)), tint, "flower_bush", "꽃 덤불 %d×%d 반복(짙은 초록 + 분홍 꽃 점)" % [ts, ts]), c.x, c.y, 0.27, 0.0, 0.42, 0.2)
+			dome(b, "bush", spec(_tex("foliage", ts, Color(0.95, 0.4, 0.55)), tint, "flower_bush", "꽃 덤불 %d×%d 반복(짙은 초록 + 분홍 꽃 점)" % [ts, ts]), c.x, c.y, 0.32, 0.0, 0.4)
 			total = 0.45
 		"sign":
 			box(b, "pole", bark, Vector3(c.x - 0.04, 0.0, c.y - 0.04), Vector3(c.x + 0.04, 1.4, c.y + 0.04))

@@ -28,6 +28,7 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 	var d: float = hi.y - lo.y
 	var ridge_x: bool = w >= d
 	var mesh: ArrayMesh = into if into != null else ArrayMesh.new()
+	var present: Array = []  # 면 순서대로, 실제로 면이 생겼는지(빈 면은 mesh 에 들어가지 않음)
 	var peak: float = wall_h + roof_h
 	# 용마루 축(u)과 가로(v) 좌표: 용마루가 x 방향이면 u=x, v=z / 아니면 u=z, v=x
 	var u0: float = (lo.x if ridge_x else lo.y)
@@ -46,10 +47,10 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 	# --- 0, 1: 벽 (+z 면, +x 면)
 	var st := _begin()
 	_quad(st, Vector3(lo.x, 0, hi.y), Vector3(hi.x, 0, hi.y), Vector3(hi.x, wall_h, hi.y), Vector3(lo.x, wall_h, hi.y), Vector3(0, 0, 1), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
-	st.commit(mesh)
+	present.append(_commit(st, mesh))
 	st = _begin()
 	_quad(st, Vector3(hi.x, 0, hi.y), Vector3(hi.x, 0, lo.y), Vector3(hi.x, wall_h, lo.y), Vector3(hi.x, wall_h, hi.y), Vector3(1, 0, 0), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
-	st.commit(mesh)
+	present.append(_commit(st, mesh))
 
 	# --- 2: 지붕 윗면 경사 둘 (UV: 용마루 방향 u 칸, 경사 방향 칸). 기와 법선 맵을 위해 접선 계산
 	st = _begin()
@@ -64,7 +65,7 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 		_quad(st, q_a, q_b, r_b, r_a, n, Vector2(0, slope_len), Vector2(ub - ua, slope_len), Vector2(ub - ua, 0), Vector2(0, 0))
 
 	st.generate_tangents()
-	st.commit(mesh)
+	present.append(_commit(st, mesh))
 
 	# --- 3: 박공 삼각형 둘 + 뒷벽 둘(그림자·가림용)
 	st = _begin()
@@ -75,7 +76,7 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 
 	_quad(st, Vector3(lo.x, 0, lo.y), Vector3(lo.x, 0, hi.y), Vector3(lo.x, wall_h, hi.y), Vector3(lo.x, wall_h, lo.y), Vector3(-1, 0, 0), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
 	_quad(st, Vector3(hi.x, 0, lo.y), Vector3(lo.x, 0, lo.y), Vector3(lo.x, wall_h, lo.y), Vector3(hi.x, wall_h, lo.y), Vector3(0, 0, -1), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
-	st.commit(mesh)
+	present.append(_commit(st, mesh))
 
 	# --- 4: 지붕 두께(처마·박공 가장자리·밑면) + 용마루 덮개. 단색에 가까운 어두운 목재/기와 색 질감 사용
 	st = _begin()
@@ -103,7 +104,7 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 	# 용마루 덮개: 길이 ua..ub, 폭 0.16, 높이 cap (윗면 + 양쪽 옆 + 양 끝)
 	var cw: float = 0.08
 	_box_uv(st, ridge_x, ua, ub, vc - cw, vc + cw, peak - 0.02, peak + cap)
-	st.commit(mesh)
+	present.append(_commit(st, mesh))
 
 	# --- 5: 굴뚝 (돌 질감 칸당 반복 UV). 지붕 먼 쪽 경사 위, 용마루 끝 가까이
 	st = _begin()
@@ -117,7 +118,7 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 		_box_uv(st, ridge_x, cu - 0.15, cu + 0.15, cv - 0.15, cv + 0.15, base_y, top_y)
 		_box_uv(st, ridge_x, cu - 0.2, cu + 0.2, cv - 0.2, cv + 0.2, top_y, top_y + 0.06)  # 머릿돌
 
-	st.commit(mesh)
+	present.append(_commit(st, mesh))
 
 	# --- 6: 차양(+z 면 위, 비스듬한 면). 위쪽은 벽에 붙고 아래쪽이 앞으로 나온다
 	st = _begin()
@@ -133,7 +134,7 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 		# 아래 단면(얇은 앞 가장자리)
 		_quad(st, Vector3(ax0, bot_y, hi.y + out), Vector3(ax1, bot_y, hi.y + out), Vector3(ax1, bot_y - 0.05, hi.y + out), Vector3(ax0, bot_y - 0.05, hi.y + out), Vector3(0, 0, 1), Vector2(0, 0), Vector2(ax1 - ax0, 0), Vector2(ax1 - ax0, 0.1), Vector2(0, 0.1))
 
-	st.commit(mesh)
+	present.append(_commit(st, mesh))
 
 	# --- 바닥 돌 마당은 건물과 다른 메시(apron). 건물과 같은 깊이로 그리면 건물 뒤 땅이 벽 위에 덮여서 따로 둔다.
 	var apron_mesh := ArrayMesh.new()
@@ -145,7 +146,7 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 		_quad(ast, Vector3(lo.x - apron, y_ap, hi.y + apron), Vector3(hi.x + apron, y_ap, hi.y + apron), Vector3(hi.x + apron, y_ap, lo.y - apron), Vector3(lo.x - apron, y_ap, lo.y - apron), Vector3(0, 1, 0), Vector2(lo.x - apron, hi.y + apron), Vector2(hi.x + apron, hi.y + apron), Vector2(hi.x + apron, lo.y - apron), Vector2(lo.x - apron, lo.y - apron))
 		ast.commit(apron_mesh)
 
-	return {"mesh": mesh, "apron_mesh": apron_mesh, "ridge_x": ridge_x}
+	return {"mesh": mesh, "apron_mesh": apron_mesh, "ridge_x": ridge_x, "present": present}
 
 
 # ---------------------------------------------------------------- 좌표 변환·기본 도형
@@ -184,6 +185,13 @@ static func _box_uv(st: SurfaceTool, ridge_x: bool, u0: float, u1: float, v0: fl
 
 
 # 사각형 한 장. 정점 a,b,c,d 는 같은 방향으로 이어진 순서, n 은 바깥쪽 법선. Godot 앞면은 시계 방향이라 맞춰서 뒤집는다.
+# 면을 mesh 에 붙이고, 실제로 면이 생겼는지 돌려준다(꼭짓점이 없으면 면이 생기지 않는다).
+static func _commit(st: SurfaceTool, mesh: ArrayMesh) -> bool:
+	var before: int = mesh.get_surface_count()
+	st.commit(mesh)
+	return mesh.get_surface_count() > before
+
+
 static func _quad(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3, d: Vector3, n: Vector3, ua: Vector2, ub: Vector2, uc: Vector2, ud: Vector2) -> void:
 	_tri(st, a, b, c, n, ua, ub, uc)
 	_tri(st, a, c, d, n, ua, uc, ud)
