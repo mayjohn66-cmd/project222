@@ -6,6 +6,11 @@ signal enemies_cleared
 signal exited
 signal defeated
 
+const CONTENT = preload("res://scenes/expedition/rooms/default_content_settings.tres")
+var gathering_sites: Array[Dictionary] = []
+var selected_loot_table := ""
+var selected_site_index := 0
+
 var settings: ExpeditionRoomSettings
 var attack_profile: ExpeditionAttackProfile
 var loadout: ExpeditionWeaponLoadout = null
@@ -51,6 +56,7 @@ func setup(config: ExpeditionRoomSettings, profile: ExpeditionAttackProfile,
 	var row: int = randi_range(3, 5)
 	obstacles = [Rect2(1, row, 1, 1), Rect2(6, row, 1, 1)]
 	if not enemy.is_empty():
+		var behavior: Dictionary = CONTENT.enemy_profile(str(enemy.get("id", "")))
 		var count: int = 1 if boss else settings.ordinary_enemy_count
 		for i in range(count):
 			var max_enemy_hp: int = maxi(1, roundi(float(enemy.get("max_hp", 1))
@@ -62,6 +68,8 @@ func setup(config: ExpeditionRoomSettings, profile: ExpeditionAttackProfile,
 					* ExpeditionDifficultyData.get_monster_atk_mult(difficulty))),
 				"defense": int(enemy.get("defense", 0)), "boss": boss,
 				"name": str(enemy.get("name", "몬스터")),
+				"speed_mult": float(behavior.get("speed", 1.0)), "windup_mult": float(behavior.get("windup", 1.0)),
+				"color": str(behavior.get("color", "d68ab3" if boss else "85bad4")),
 				"cooldown": 0.0, "windup": -1.0, "target": Vector2.ZERO
 			})
 	exit_open = enemies.is_empty()
@@ -94,7 +102,7 @@ func step(delta: float, movement: Vector2, attacking: bool) -> void:
 			interaction_progress = 0.0
 		else:
 			interaction_progress += delta
-			if interaction_progress >= settings.gathering_seconds:
+			if interaction_progress >= interaction_seconds():
 				object_consumed = true
 				interacting = false
 				object_used.emit()
@@ -227,9 +235,9 @@ func _step_enemy(enemy: Dictionary, delta: float) -> void:
 	if offset.length() <= reach and float(enemy["cooldown"]) <= 0.0 \
 			and not _wall_between(enemy["position"], player_position):
 		enemy["target"] = player_position
-		enemy["windup"] = settings.enemy_windup
+		enemy["windup"] = settings.enemy_windup * float(enemy.get("windup_mult", 1.0))
 	else:
-		var offset_step := offset.normalized() * settings.enemy_speed * delta
+		var offset_step := offset.normalized() * settings.enemy_speed * float(enemy.get("speed_mult", 1.0)) * delta
 		enemy["position"] = move_actor(enemy["position"], offset_step)
 
 func alive_enemies() -> int:
@@ -239,10 +247,39 @@ func alive_enemies() -> int:
 			count += 1
 	return count
 
+func configure_gathering(sites: Array[Dictionary]) -> void:
+	if object_kind != "gather": return
+	gathering_sites = sites.duplicate(true)
+	if not gathering_sites.is_empty(): _select_site(0)
+
+func _select_site(index: int) -> void:
+	selected_site_index = index
+	var site := gathering_sites[index]
+	object_position = Vector2(float(site["x"]), float(site["y"]))
+	selected_loot_table = str(site["table"])
+
+func interaction_seconds() -> float:
+	if gathering_sites.is_empty(): return settings.gathering_seconds
+	return maxf(0.1, float(gathering_sites[selected_site_index]["seconds"]))
+
 func interaction_label() -> String:
 	if finished:
 		return ""
-	if not object_kind.is_empty() and not object_consumed \
+	if not object_consumed and not gathering_sites.is_empty():
+		if not interacting:
+			var nearest := -1
+			var distance := settings.interaction_reach
+			for i in range(gathering_sites.size()):
+				var site := gathering_sites[i]
+				var point := Vector2(float(site["x"]), float(site["y"]))
+				var candidate := player_position.distance_to(point)
+				if candidate <= distance and not _wall_between(player_position, point):
+					nearest = i
+					distance = candidate
+			if nearest >= 0: _select_site(nearest)
+		if player_position.distance_to(object_position) <= settings.interaction_reach and not _wall_between(player_position, object_position):
+			return str(gathering_sites[selected_site_index]["label"])
+	if gathering_sites.is_empty() and not object_kind.is_empty() and not object_consumed \
 			and player_position.distance_to(object_position) <= settings.interaction_reach:
 		return "채집" if object_kind == "gather" else ("휴식" if object_kind == "heal" else "열기")
 	if exit_open and player_position.distance_to(exit_position) <= settings.interaction_reach:

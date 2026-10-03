@@ -1,0 +1,21 @@
+[gd_resource type="Resource" script_class="ResidentStorySettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/resident_story_settings.gd" id="1"]
+
+[resource]
+script = ExtResource("1")
+introductions = Array[Dictionary]([
+{"type":"peddler","npc":"행상인 타블렌"},
+{"type":"gem_hunter","npc":"채굴꾼 코르빈"},
+{"type":"relic_hunter","npc":"여행자 이세르"}
+])
+settlement_requests = Array[Dictionary]([
+{"id":"settle_naru","requires_intro":"peddler","npc":"행상인 타블렌","item":"dry_branch","amount":4,"reputation":1,"money":40},
+{"id":"settle_doyun","requires_intro":"gem_hunter","after":"settle_naru","npc":"채굴꾼 코르빈","item":"iron_ore","amount":4,"reputation":1,"money":50},
+{"id":"settle_sora","requires_intro":"relic_hunter","after":"settle_doyun","npc":"여행자 이세르","item":"stone_shard","amount":4,"reputation":1,"money":60}
+])
+managed_groups = PackedStringArray("NearbyHouses", "VillageExtraHouses", "VillageBlacksmith", "VillageToolShop", "VillageBuildings", "VillageDecor", "VillageGathering")
+landmarks = Array[Dictionary]([
+{"request":"settle_naru","path":"VillageDecor/MarketStall"},
+{"request":"settle_doyun","path":"VillageExtraHouses/EastCottage"},
+{"request":"settle_sora","path":"VillageDecor/VillageWell","additional_paths":["VillageGathering/WellBench"]}
+])

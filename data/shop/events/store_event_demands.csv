@@ -5,3 +5,5 @@ dungeon_raid,adventurer,item,potion,300,2,4
 spring_market,normal,category,food,120,2,3
 spring_market,traveler,category,food,60,1,2
 spring_market,child,category,food,150,2,3
+trail_supplies,traveler,item,bread,150,1,2
+trail_supplies,traveler,item,water,150,1,2

@@ -103,7 +103,7 @@ enum ExpeditionEndReason {
 )
 
 @onready var result_info_label: Label = (
-	$UI/ResultPanel/VBoxContainer/ResultInfoLabel
+	$UI/ResultPanel/VBoxContainer/ResultScroll/ResultInfoLabel
 )
 
 @onready var result_confirm_button: Button = (

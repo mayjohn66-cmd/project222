@@ -126,3 +126,14 @@ swamp_healer,item,toxic_spore,20
 swamp_healer,item,bog_soup,30
 swamp_healer,item,reed_tea,25
 swamp_healer,item,glow_lamp,20
+orchard_keeper,item,water,100
+orchard_keeper,item,bread,60
+orchard_keeper,item,forest_herb,40
+trail_courier,item,water,100
+trail_courier,item,bread,100
+field_cook,item,wheat,100
+field_cook,item,forest_mushroom,90
+field_cook,item,water,70
+stone_mason,item,iron_ore,80
+stone_mason,item,stone_shard,80
+stone_mason,item,bread,60

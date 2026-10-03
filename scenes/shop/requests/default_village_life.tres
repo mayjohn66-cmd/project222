@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="VillageLifeSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_life_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+residents = Array[Dictionary]([
+{"id":"naru","name":"행상인 타블렌","type":"peddler","group":"normal","request":"settle_naru","site":"VillageDecor/MarketStall","gift":"bread","amount":1},
+{"id":"doyun","name":"채굴꾼 코르빈","type":"gem_hunter","group":"normal","request":"settle_doyun","site":"VillageExtraHouses/EastCottage","gift":"iron_ore","amount":1},
+{"id":"sora","name":"여행자 이세르","type":"relic_hunter","group":"normal","request":"settle_sora","site":"VillageDecor/VillageWell","gift":"forest_herb","amount":1}
+])

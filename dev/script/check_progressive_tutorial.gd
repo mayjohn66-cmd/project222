@@ -16,6 +16,7 @@ func talk() -> void:
 	director.refresh()
 	player.global_position = director.npc.global_position
 	check(world.get_node("WorldInteractions").try_interact(), "NPC E interaction")
+	check(director.dialogue.name_label.text == director.SETTINGS.guide_name,"guide name is consistent in actual tutorial dialogue")
 	drain(director.dialogue)
 	director.refresh()
 func _ready() -> void: call_deferred("run")
@@ -60,6 +61,7 @@ func run() -> void:
 	manager.open_shop()
 	var checkout = world.get_node("CheckoutTutorial")
 	check(is_instance_valid(checkout.guide), "stage opens first customer exercise")
+	check(checkout.dialogue.name_label.text == director.SETTINGS.guide_name,"first customer uses same named guide")
 	if not is_instance_valid(checkout.guide):
 		get_tree().quit(1)
 		return

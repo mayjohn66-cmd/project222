@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="ExpeditionContentSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/expedition/rooms/expedition_content_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+enemy_profiles = Array[Dictionary]([
+{"id":"forest_thornling","speed":0.8,"windup":1.3,"color":"8fb56e"},
+{"id":"mine_shardling","speed":0.7,"windup":1.5,"color":"b8a28c"},
+{"id":"swamp_reedling","speed":1.1,"windup":1.15,"color":"c0ba79"},
+{"id":"ruins_wisp","speed":1.25,"windup":1.2,"color":"bd9bd7"}
+])
+gathering_encounters = Array[Dictionary]([
+{"id":"forest_gather_choice","sites":[{"table":"choice_forest_herb","label":"약초 모으기","x":2.5,"y":3.5,"seconds":0.9,"color":"8fb56e"},{"table":"choice_wild_berry","label":"열매 따기","x":5.5,"y":3.5,"seconds":1.1,"color":"d58ba0"}]},
+{"id":"mine_gather_choice","sites":[{"table":"choice_iron_ore","label":"철광맥 캐기","x":2.5,"y":3.5,"seconds":0.9,"color":"b8a28c"},{"table":"choice_stone_shard","label":"돌 조각 줍기","x":5.5,"y":3.5,"seconds":1.1,"color":"9ca9af"}]},
+{"id":"swamp_gather_choice","sites":[{"table":"choice_swamp_moss","label":"이끼 모으기","x":2.5,"y":3.5,"seconds":0.9,"color":"98b578"},{"table":"choice_marsh_reed","label":"갈대 베기","x":5.5,"y":3.5,"seconds":1.1,"color":"c0ba79"}]},
+{"id":"hidden_ruins_gather_choice","sites":[{"table":"choice_ancient_fragment","label":"고대 파편 줍기","x":2.5,"y":3.5,"seconds":0.9,"color":"b1a48d"},{"table":"choice_rune_dust","label":"룬 가루 모으기","x":5.5,"y":3.5,"seconds":1.1,"color":"bd9bd7"}]}
+])

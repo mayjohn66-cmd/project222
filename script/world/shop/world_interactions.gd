@@ -26,6 +26,15 @@ func blocked() -> bool:
  var world = get_parent()
  if bool(world.get_meta("checkout_tutorial_dialogue",false)): return true
  if bool(world.get_meta("progressive_tutorial_dialogue",false)): return true
+ if bool(world.get_meta("village_life_dialogue",false)): return true
+ if bool(world.get_meta("community_board_open",false)): return true
+ if bool(world.get_meta("resident_trade_open",false)): return true
+ if bool(world.get_meta("village_smithy_open",false)): return true
+ if bool(world.get_meta("village_journal_open",false)): return true
+ if bool(world.get_meta("village_gathering_open",false)): return true
+ if bool(world.get_meta("village_market_open",false)): return true
+ if bool(world.get_meta("village_rest_open",false)): return true
+ if bool(world.get_meta("lantern_wayfarer_open",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
  if manager.closing_shop or manager.summary_open: return true
  var menu = world.get_node_or_null("UI/GameMenu")
@@ -51,6 +60,38 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var rest = get_parent().get_node_or_null("VillageLifeDirector/VillageRestDirector")
+ if rest != null and not rest.interaction_hint().is_empty():
+  prompt.text = rest.interaction_hint()
+  return
+ var market = get_parent().get_node_or_null("VillageLifeDirector/VillageMarketDirector")
+ if market != null and not market.interaction_hint().is_empty():
+  prompt.text = market.interaction_hint()
+  return
+ var wayfarer = get_parent().get_node_or_null("LanternWayfarerDirector")
+ if wayfarer != null and not wayfarer.interaction_hint().is_empty():
+  prompt.text = wayfarer.interaction_hint()
+  return
+ var gathering = get_parent().get_node_or_null("VillageGatheringDirector")
+ if gathering != null and not gathering.interaction_hint().is_empty():
+  prompt.text = gathering.interaction_hint()
+  return
+ var board = get_parent().get_node_or_null("CommunityBoardDirector")
+ if board != null and not board.interaction_hint().is_empty():
+  prompt.text = board.interaction_hint()
+  return
+ var life = get_parent().get_node_or_null("VillageLifeDirector")
+ if life != null and not life.interaction_hint().is_empty():
+  prompt.text = life.interaction_hint()
+  return
+ var trade = get_parent().get_node_or_null("ResidentTradeDirector")
+ if trade != null and not trade.interaction_hint().is_empty():
+  prompt.text = trade.interaction_hint()
+  return
+ var smithy = get_parent().get_node_or_null("VillageSmithyDirector")
+ if smithy != null and not smithy.interaction_hint().is_empty():
+  prompt.text = smithy.interaction_hint()
+  return
  if near_dungeon():
   prompt.text = "[E] 원정으로 출발하기"
   return
@@ -59,10 +100,27 @@ func _process(_delta: float) -> void:
 
 func try_interact() -> bool:
  if blocked(): return false
+ var rest = get_parent().get_node_or_null("VillageLifeDirector/VillageRestDirector")
+ if rest != null and rest.try_interact(): return true
+ var market = get_parent().get_node_or_null("VillageLifeDirector/VillageMarketDirector")
+ if market != null and market.try_interact(): return true
+ var wayfarer = get_parent().get_node_or_null("LanternWayfarerDirector")
+ if wayfarer != null and wayfarer.try_interact(): return true
+ var gathering = get_parent().get_node_or_null("VillageGatheringDirector")
+ if gathering != null and gathering.try_interact(): return true
+ if blocked(): return false
  var tutorial = get_parent().get_node_or_null("TutorialDirector")
  if tutorial != null and tutorial.try_interact(): return true
  var requests = get_parent().get_node_or_null("ResidentRequestDirector")
  if requests != null and requests.try_interact(): return true
+ var board = get_parent().get_node_or_null("CommunityBoardDirector")
+ if board != null and board.try_interact(): return true
+ var life = get_parent().get_node_or_null("VillageLifeDirector")
+ if life != null and life.try_interact(): return true
+ var trade = get_parent().get_node_or_null("ResidentTradeDirector")
+ if trade != null and trade.try_interact(): return true
+ var smithy = get_parent().get_node_or_null("VillageSmithyDirector")
+ if smithy != null and smithy.try_interact(): return true
  var cashier = get_parent().get_node_or_null("ManualCheckoutController")
  if cashier != null and cashier.try_interact(): return true
  if near_dungeon():

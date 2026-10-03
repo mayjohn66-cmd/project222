@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="ResidentTradeSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/resident_trade_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+offers = Array[Dictionary]([
+{"id":"grain","give":"dry_branch","give_amount":3,"receive":"wheat","receive_amount":2,"friendship":1,"daily_limit":2},
+{"id":"mushroom","give":"wild_berry","give_amount":3,"receive":"forest_mushroom","receive_amount":2,"friendship":1,"daily_limit":2},
+{"id":"iron","give":"stone_shard","give_amount":2,"receive":"iron_ore","receive_amount":1,"friendship":3,"daily_limit":2}
+])

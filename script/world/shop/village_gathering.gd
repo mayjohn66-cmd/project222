@@ -15,6 +15,7 @@ func rebuild(terrain: Node2D) -> void:
 	# Each anchor is the ground contact point in its transparent source image.
 	_add_prop(terrain,"VillageNoticeboard",square+Vector2i(-2,-2),NOTICEBOARD,0.18,Vector2(768,950),Vector2(0,-7),20.0)
 	_add_prop(terrain,"WellBench",square+Vector2i(-1,4),BENCH,0.11,Vector2(828,970),Vector2(0,-11),21.0)
+	_add_prop(terrain,"TrailRestBench",square+Vector2i(-3,6),BENCH,0.11,Vector2(828,970),Vector2(0,-11),21.0)
 	_add_prop(terrain,"SmithLantern",square+Vector2i(8,-8),LANTERN,0.17,Vector2(908,847),Vector2(0,-6),11.0)
 	_add_prop(terrain,"MarketLantern",square+Vector2i(-6,3),LANTERN,0.14,Vector2(908,847),Vector2(0,-6),11.0)
 	_add_prop(terrain,"EastFlowerBed",square+Vector2i(10,-3),FLOWER_BUSH,0.075,Vector2(887,776),Vector2(0,-6),13.0)

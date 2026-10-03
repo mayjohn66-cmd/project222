@@ -55,7 +55,7 @@ func _ready() -> void:
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(hint_label)
 	var controls := HBoxContainer.new()
-	controls.alignment = BoxContainer.ALIGNMENT_CENTER
+	controls.alignment = BoxContainer.ALIGNMENT_END
 	column.add_child(controls)
 	for entry in [["←", Vector2.LEFT], ["↑", Vector2.UP], ["↓", Vector2.DOWN], ["→", Vector2.RIGHT]]:
 		var button := _button(str(entry[0]), controls)
@@ -127,7 +127,7 @@ func _physics_process(delta: float) -> void:
 	interact_button.disabled = caption.is_empty() or not _can_play()
 	interact_button.text = "%s [E]" % ("상호작용" if caption.is_empty() else caption)
 	if model.interacting:
-		hint_label.text = "채집 중 %d%%" % roundi(100.0 * model.interaction_progress / model.settings.gathering_seconds)
+		hint_label.text = "채집 중 %d%%" % roundi(100.0 * model.interaction_progress / model.interaction_seconds())
 	elif not notice.is_empty():
 		hint_label.text = notice
 	else:
@@ -193,7 +193,11 @@ func _draw() -> void:
 	for obstacle in model.obstacles:
 		actors.append({"kind": "obstacle", "at": obstacle.get_center(), "rect": obstacle})
 	if not model.object_kind.is_empty() and not model.object_consumed:
-		actors.append({"kind": "object", "at": model.object_position})
+		if model.gathering_sites.is_empty():
+			actors.append({"kind": "object", "at": model.object_position, "site": {}})
+		else:
+			for site in model.gathering_sites:
+				actors.append({"kind":"object", "at":Vector2(float(site["x"]),float(site["y"])), "site":site})
 	for enemy in model.enemies:
 		if int(enemy["hp"]) > 0: actors.append({"kind": "enemy", "at": enemy["position"], "enemy": enemy})
 	actors.append({"kind": "player", "at": model.player_position})
@@ -201,7 +205,7 @@ func _draw() -> void:
 	for actor in actors:
 		match actor["kind"]:
 			"obstacle": _draw_block(actor["rect"], 30 * tile_scale, Color("8c9483"))
-			"object": _draw_object()
+			"object": _draw_object(actor["site"])
 			"enemy": _draw_enemy(actor["enemy"])
 			"player": _draw_player()
 	for shot in model.projectiles:
@@ -232,23 +236,27 @@ func _draw_block(rect: Rect2, height: float, color: Color) -> void:
 	draw_colored_polygon(top, color)
 	draw_polyline(PackedVector2Array([top[0], top[1], top[2], top[3], top[0]]), color.lightened(0.2), 1)
 
-func _draw_object() -> void:
+func _draw_object(site: Dictionary = {}) -> void:
 	var color := Color("edd18a") if model.object_kind == "chest" else Color("81c988")
-	_draw_block(Rect2(model.object_position - Vector2.ONE * 0.24, Vector2.ONE * 0.48), 24 * tile_scale, color)
+	var at := model.object_position if site.is_empty() else Vector2(float(site["x"]),float(site["y"]))
+	if not site.is_empty(): color = Color(str(site["color"]))
+	_draw_block(Rect2(at - Vector2.ONE * 0.24, Vector2.ONE * 0.48), 24 * tile_scale, color)
 	var caption: String = "채집" if model.object_kind == "gather" else ("휴식" if model.object_kind == "heal" else "상자")
-	draw_string(ThemeDB.fallback_font, _point(model.object_position) + Vector2(-20, -36 * tile_scale), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, 14)
+	if not site.is_empty(): caption = str(site["label"])
+	draw_string(ThemeDB.fallback_font, _point(at) + Vector2(-20, -36 * tile_scale), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, 14)
 
 func _draw_enemy(enemy: Dictionary) -> void:
 	var at := _point(enemy["position"])
 	var radius: float = (28 if enemy["boss"] else 18) * tile_scale
 	draw_colored_polygon(_ground_shape(enemy["position"], 0.3), Color(0, 0, 0, 0.22))
 	at.y -= radius * 0.8
-	draw_circle(at, radius, Color("d68ab3") if enemy["boss"] else Color("85bad4"))
+	draw_circle(at, radius, Color(str(enemy.get("color", "85bad4"))))
 	for side in [-1, 1]: draw_circle(at + Vector2(side * radius * 0.3, -3), 2 * tile_scale, Color("1b2534"))
 	var bar := Rect2(at + Vector2(-radius, -radius - 10), Vector2(radius * 2, 5))
 	draw_rect(bar, Color("322330"))
 	bar.size.x *= float(enemy["hp"]) / float(enemy["max_hp"])
 	draw_rect(bar, Color("ea8a8a"))
+	draw_string(ThemeDB.fallback_font, at + Vector2(-48, -radius - 17), str(enemy["name"]), HORIZONTAL_ALIGNMENT_CENTER, 96, 12, Color("f4eddb"))
 
 func _draw_player() -> void:
 	var at := _point(model.player_position)

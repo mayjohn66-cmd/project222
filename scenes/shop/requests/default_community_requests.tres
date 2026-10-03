@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="CommunityRequestSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/community_request_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+requests = Array[Dictionary]([
+{"id":"path_light","resident":"naru","friendship":1,"requirements":[{"item":"dry_branch","amount":5}],"reputation":1,"money":40,"landmark":"VillageGathering/MarketLantern","landmark_name":"길목 등불"},
+{"id":"flower_corner","resident":"doyun","friendship":3,"after":"path_light","requirements":[{"item":"forest_herb","amount":3}],"reputation":1,"money":50,"landmark":"VillageGathering/EastFlowerBed","landmark_name":"마을 꽃자리"},
+{"id":"open_smithy","resident":"doyun","friendship":7,"after":"flower_corner","requirements":[{"item":"iron_ore","amount":5},{"item":"stone_shard","amount":4}],"reputation":1,"money":60,"landmark":"VillageBlacksmith/Smithy","landmark_name":"대장간 장비 제작"},
+{"id":"well_gathering","resident":"sora","friendship":3,"after":"flower_corner","participants":["naru","doyun","sora"],"participant_friendship":3,"requirements":[{"item":"bread","amount":3},{"item":"water","amount":3}],"reputation":1,"money":40,"landmark":"VillageGathering/WellBench","landmark_name":"우물 곁 저녁 모임"},
+{"id":"welcome_garden","resident":"sora","friendship":3,"after":"flower_corner","after_gathering":true,"requirements":[{"item":"dry_branch","amount":4},{"item":"forest_herb","amount":2}],"reputation":1,"money":40,"landmark":"VillageGathering/CottageFlowerBed","landmark_fallback":"VillageGathering/EastFlowerBed","landmark_slot":1,"landmark_name":"길손맞이 꽃자리"},
+{"id":"trail_rest_corner","resident":"doyun","friendship":7,"after":"flower_corner","after_afterglow":true,"participants":["naru","doyun","sora"],"participant_friendship":7,"requirements":[{"item":"dry_branch","amount":5},{"item":"stone_shard","amount":4}],"reputation":1,"money":40,"landmark":"VillageGathering/TrailRestBench","landmark_name":"길목의 작은 쉼터"}
+])

@@ -1,0 +1,2 @@
+beat_id,npc_id,conditions,gifts,repeat_days,lines
+first_customer_welcome,neighbor,day>=1,item:bread:2,0,"안녕하세요, 새로 문을 열었군요!|지나가다 따뜻한 불빛이 보여 들렀어요.|가게 안이 무척 아늑하고 신기하네요.|작은 축하 선물로 빵을 좀 가져왔어요.|앞으로 자주 들를 테니 잘 부탁해요."

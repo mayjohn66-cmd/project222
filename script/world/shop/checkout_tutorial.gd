@@ -3,18 +3,12 @@ extends Node
 
 const GUIDE_SCENE = preload("res://scenes/shop/actors/checkout_guide.tscn")
 const BEAT_ID: String = "tutorial_manual_checkout"
-@export var intro_lines: Array[String] = [
-	"개업을 축하해! 내가 첫 손님이 되어 줄게.",
-	"계산 연습을 위해 물건을 준비했어. 내가 계산대에서 기다릴 테니 직접 결제해 줘."
-]
-@export var checkout_lines: Array[String] = [
-	"물건을 골랐어. 표시된 계산대 뒤쪽으로 와 줘.",
-	"거기서 E나 결제 버튼을 누르면 돼. 계산이 끝날 때까지 자리에 있어 줘."
-]
-@export var finished_lines: Array[String] = [
-	"결제가 끝났네! 판매 대금은 보유금에, 판매 기록은 오늘 매출에 들어가.",
-	"직원이 없을 때는 이렇게 직접 계산하면 돼. 문을 닫아도 하루의 시간은 계속 흐르니 기억해 줘!"
-]
+var intro_lines: Array[String]:
+	get: return RequestTextData.lines("tutorial_dialogue", "checkout_intro")
+var checkout_lines: Array[String]:
+	get: return RequestTextData.lines("tutorial_dialogue", "checkout_checkout")
+var finished_lines: Array[String]:
+	get: return RequestTextData.lines("tutorial_dialogue", "checkout_finished")
 var manager
 var player
 var cashier: ManualCheckoutController
@@ -122,7 +116,7 @@ func _show_dialogue(lines: Array[String]) -> void:
 	previous_player_physics = player.is_physics_processing()
 	player.set_physics_process(false)
 	player.velocity = Vector2.ZERO
-	dialogue.start("이웃 주민", ArtLoader.load_texture("res://art/npc/npc_placeholder.png"), lines)
+	dialogue.start(TutorialDirector.SETTINGS.guide_name, ArtLoader.load_texture("res://art/npc/npc_placeholder.png"), lines)
 
 func _restore_dialogue_state() -> void:
 	if not dialogue_open: return

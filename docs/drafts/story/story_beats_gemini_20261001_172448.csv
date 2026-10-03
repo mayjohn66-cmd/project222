@@ -1,0 +1,2 @@
+beat_id,npc_id,conditions,gifts,repeat_days,lines
+first_visitor_neighbor,neighbor,day>=1,item:forest_herb:3,0,"숲속에 이런 눈부신 빛을 내는 건물이 생기다니…!|저절로 열리는 투명한 문이라니 굉장한 마법이네요.|지나가다 신기해서 홀린 듯 들어와 버렸어요.|숲에서 갓 채집한 약초인데 문을 연 선물로 드릴게요.|종종 들를게요. 신기한 게 참 많은 곳이네요."

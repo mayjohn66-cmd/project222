@@ -1,3 +1,4 @@
 event_id,title,discovery_start_day,discovery_end_day,start_day,end_day,rumor_customer_type_id,dialogue_id,description
 dungeon_raid,대규모 던전 공략,2,3,4,6,traveler,dungeon_raid_rumor,모험가들의 대규모 던전 공략으로 포션 수요가 증가합니다.
 spring_market,봄맞이 장터,8,12,15,19,any,spring_market_rumor,봄맞이 장터를 준비하는 주민들로 인해 음식 수요가 증가합니다.
+trail_supplies,길손들의 여행 준비,18,21,22,24,any,trail_supplies_rumor,멀리 떠나는 길손들이 물과 빵을 준비합니다. 여행자들의 방문과 여행 식량 수요가 잠시 늘어납니다.

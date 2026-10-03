@@ -69,7 +69,7 @@ func refresh() -> void:
 		npc = null
 		return
 	var ready: bool = flow.seen(str(step["id"])) and flow.goal_met(step, get_parent())
-	panel.display("안내 · " + str(step["title"]), "완료! 안내 NPC에게 보상을 받으세요. [E]" if ready else str(step["objective"]))
+	panel.display("안내 · " + str(step["title"]), "완료! %s에게 보상을 받으세요. [E]" % SETTINGS.guide_name if ready else str(step["objective"]))
 	var menu = get_parent().get_node_or_null("UI/GameMenu")
 	# 실제 목표를 수행하는 건축/생산 구역에서는 안내를 계속 보여 준다.
 	panel.root.visible = not talking and not get_tree().paused and not manager.summary_open \
@@ -91,8 +91,9 @@ func refresh() -> void:
 		get_parent().get_node("Actors").add_child(npc)
 		var floor_node = get_parent().get_node("Floor")
 		npc.global_position = _guidance_position()
-		npc.mark.text = "안내 [E]"
-		npc.mark.position.x = -52
+		npc.mark.text = SETTINGS.guide_name + " [E]"
+		npc.mark.size.x = 180
+		npc.mark.position.x = -90
 		npc.mark.add_theme_font_size_override("font_size", 18)
 
 func try_interact() -> bool:
@@ -119,7 +120,7 @@ func try_interact() -> bool:
 	player.set_physics_process(false)
 	player.velocity = Vector2.ZERO
 	get_parent().set_meta("progressive_tutorial_dialogue", true)
-	dialogue.start("이웃 주민", ArtLoader.load_texture("res://art/npc/npc_placeholder.png"), lines)
+	dialogue.start(SETTINGS.guide_name, ArtLoader.load_texture("res://art/npc/npc_placeholder.png"), lines)
 	return true
 
 func _unhandled_input(event: InputEvent) -> void:
