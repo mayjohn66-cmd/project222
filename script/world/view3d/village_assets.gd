@@ -363,7 +363,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		spec(tex_z, Color.WHITE, "wall_front", "카메라 왼쪽 아래를 보는 앞벽 %d×%d px: 문 1(가운데), 창 %d, 나무 뼈대, 아래 돌 기단" % [tex_z.get_width(), tex_z.get_height(), cells_z - 1]),
 		spec(tex_x, Color.WHITE, "wall_side", "카메라 오른쪽 아래를 보는 옆벽 %d×%d px: 창 %d, 나무 뼈대, 아래 돌 기단" % [tex_x.get_width(), tex_x.get_height(), cells_x]),
 		spec(_tex("flat", ts, roof_tint), Color.WHITE, "roof_tiles", "지붕 기와 %d×%d 한 칸 반복(이음매 없이). 법선 맵 별도" % [ts, ts], PlaceholderTextures.roof_normal(ts)),
-		spec(PlaceholderTextures.wall_facade(ts, ts, false, 1, plaster, timber), Color.WHITE, "gable_wall", "박공(지붕 끝 삼각형) 벽 %d×%d 반복" % [ts, ts]),
+		spec(PlaceholderTextures.flat_color(ts, plaster), Color.WHITE, "gable_wall", "박공(지붕 끝 삼각형) 벽 회반죽 단색 %d×%d (삼각형에 줄무늬가 비스듬히 늘어나지 않게 무늬 없음)" % [ts, ts]),
 		spec(PlaceholderTextures.flat_color(ts, PlaceholderTextures.soften(roof_tint).darkened(0.45)), Color.WHITE, "roof_trim", "지붕 두께·처마 단면·용마루 덮개 %d×%d 어두운 목재/기와" % [ts, ts]),
 		spec(_tex("stone", ts), Color(1.0, 0.82, 0.74), "chimney_stone", "굴뚝 돌 %d×%d 반복" % [ts, ts]),
 		spec(PlaceholderTextures.roof_tiles(ts, awning_tint.darkened(0.12)), Color.WHITE, "awning", "차양 기와 %d×%d 반복(지붕 기와와 같은 구조, 색은 가게마다)" % [ts, ts], PlaceholderTextures.roof_normal(ts)),
