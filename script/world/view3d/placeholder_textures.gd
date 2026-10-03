@@ -290,6 +290,46 @@ static func awning_stripes(size: int, a: Color, b: Color) -> ImageTexture:
 	return ImageTexture.create_from_image(img)
 
 
+# 빵집 간판(걸이식): 따뜻한 베이지 판에 둥근 빵 한 덩이(칼집 3줄). 16×12 도트 그림 한 장.
+static func bread_sign() -> ImageTexture:
+	var w: int = 16
+	var h: int = 12
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var board := Color(0.93, 0.8, 0.55)
+	var frame := Color(0.36, 0.22, 0.12)
+	var crust_hi := Color(0.96, 0.72, 0.36)
+	var crust := Color(0.82, 0.5, 0.2)
+	var crust_lo := Color(0.6, 0.33, 0.13)
+
+	for y in range(h):
+		for x in range(w):
+			var edge: bool = x == 0 or y == 0 or x == w - 1 or y == h - 1
+			img.set_pixel(x, y, frame if edge else board)
+
+	# 둥근 빵(타원): 가운데 (8, 6), 가로 반지름 5.5, 세로 반지름 3.4
+	for y in range(1, h - 1):
+		for x in range(1, w - 1):
+			var dx: float = (float(x) - 7.5) / 5.5
+			var dy: float = (float(y) - 6.0) / 3.4
+
+			if dx * dx + dy * dy <= 1.0:
+				var c: Color = crust
+				if dy < -0.35:
+					c = crust_hi
+				elif dy > 0.45:
+					c = crust_lo
+				img.set_pixel(x, y, c)
+
+	# 칼집 세 줄(비스듬한 어두운 선)
+	for k in range(3):
+		var sx: int = 5 + k * 3
+		img.set_pixel(sx, 4, crust_lo)
+		img.set_pixel(sx + 1, 5, crust_lo)
+		img.set_pixel(sx + 1, 6, crust_lo)
+
+	return ImageTexture.create_from_image(img)
+
+
 # 덧문(겉창): 가로 살(루버) 줄무늬. 밝은 줄과 어두운 줄이 두 픽셀씩 번갈아.
 static func shutter(size: int, base: Color) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
