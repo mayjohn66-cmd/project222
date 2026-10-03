@@ -433,6 +433,74 @@ static func bread_sign() -> ImageTexture:
 	return ImageTexture.create_from_image(img)
 
 
+# 풀 다발(십자로 세우는 컷아웃용): 투명 배경에 풀잎 몇 가닥. flower 면 끝에 점 하나(분홍/흰). 8×7 도트.
+static func grass_tuft(flower: bool) -> ImageTexture:
+	var w: int = 8
+	var h: int = 7
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var dark := Color(0.3, 0.52, 0.24)
+	var mid := Color(0.42, 0.68, 0.32)
+	var light := Color(0.6, 0.82, 0.42)
+	# 잎 가닥 (x, 높이): 가운데가 가장 높고 양옆이 낮다
+	var blades: Array = [[1, 3], [2, 5], [3, 4], [4, 6], [5, 4], [6, 5]]
+
+	for b in blades:
+		var bx: int = b[0]
+		var bh: int = b[1]
+
+		for k in range(bh):
+			var y: int = h - 1 - k
+			var c: Color = dark if k == 0 else (mid if k < bh - 1 else light)
+			img.set_pixel(bx, y, c)
+
+	if flower:
+		img.set_pixel(4, 0, Color(1.0, 0.85, 0.9))
+		img.set_pixel(3, 1, Color(0.95, 0.5, 0.65))
+		img.set_pixel(5, 1, Color(0.95, 0.5, 0.65))
+
+	return ImageTexture.create_from_image(img)
+
+
+# 빵집 진열대 윗면(위에서 본 빵 그림): 나무 쟁반 위 바게트 두 줄(뒤) + 둥근 빵 셋(앞). 18×18 중 앞쪽 17×8 칸만 쓴다.
+static func bread_counter_top(size: int) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var tray := Color(0.86, 0.66, 0.42)
+	var tray_dark := Color(0.7, 0.5, 0.3)
+	var loaf := Color(0.84, 0.52, 0.2)
+	var loaf_hi := Color(0.96, 0.74, 0.4)
+	var loaf_lo := Color(0.6, 0.34, 0.13)
+	var bag := Color(0.9, 0.66, 0.3)
+	var bag_lo := Color(0.68, 0.45, 0.18)
+
+	for y in range(size):
+		for x in range(size):
+			img.set_pixel(x, y, tray_dark if (x == 0 or y == 0 or y == 8) else tray)
+
+	# 바게트 둘: 뒤쪽(y 1~3), 가로로 긴 타원 + 아랫줄 그늘
+	for row in [[1, 2], [3, 4]]:
+		for x in range(2, 15):
+			img.set_pixel(x, row[0], bag)
+			img.set_pixel(x, row[1], bag_lo if row[1] == 4 else bag)
+		img.set_pixel(1, row[0], bag_lo)
+		img.set_pixel(15, row[0], bag_lo)
+
+	# 둥근 빵 셋: 앞쪽(y 5~7), 지름 4~5
+	for cx in [3, 8, 13]:
+		for dy in range(-1, 2):
+			for dx in range(-2, 3):
+				if abs(dx) == 2 and abs(dy) == 1:
+					continue
+				var c: Color = loaf
+				if dy == -1:
+					c = loaf_hi
+				elif dy == 1:
+					c = loaf_lo
+				img.set_pixel(cx + dx, 6 + dy, c)
+
+	return ImageTexture.create_from_image(img)
+
+
 # 덧문(겉창): 가로 살(루버) 줄무늬. 밝은 줄과 어두운 줄이 두 픽셀씩 번갈아.
 static func shutter(size: int, base: Color) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)

@@ -770,7 +770,7 @@ func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, text
 
 
 # 면마다 다른 재질을 쓰는 건물 메시 항목(박공 지붕 건물 등). materials 는 메시 면(surface) 순서대로.
-func _set_mesh_item(key: String, mesh: Mesh, materials: Array, lo: Vector2, hi: Vector2, total_blocks: float, signature: String, fixed_rank: float = NAN) -> void:
+func _set_mesh_item(key: String, mesh: Mesh, materials: Array, lo: Vector2, hi: Vector2, total_blocks: float, signature: String, fixed_rank: float = NAN, outline: bool = true) -> void:
 	_remove_item(key)
 	var inst := MeshInstance3D.new()
 	inst.mesh = mesh
@@ -787,6 +787,7 @@ func _set_mesh_item(key: String, mesh: Mesh, materials: Array, lo: Vector2, hi: 
 	var id_material := ShaderMaterial.new()
 	id_material.shader = ID_SHADER
 	id_inst.material_override = id_material
+	id_inst.visible = outline  # 투명 컷아웃(풀 다발)은 윤곽선 판에 사각형이 찍히지 않게 끈다
 	_viewport.add_child(id_inst)
 	var center := Vector3((lo.x + hi.x) * 0.5, 0.0, (lo.y + hi.y) * 0.5)
 	_items[key] = {"mesh": inst, "material": materials[0], "materials": materials, "id_mesh": id_inst, "id_material": id_material, "min": Vector3(lo.x, lo.y, 0.0), "max": Vector3(hi.x, hi.y, total_blocks * block_px), "center": center, "signature": signature, "fixed_rank": fixed_rank}

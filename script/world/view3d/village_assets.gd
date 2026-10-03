@@ -469,21 +469,12 @@ static func _add_smoke(b: PartBuilder, lo: Vector2, hi: Vector2, peak: float, p:
 		y += r * 1.5
 
 
-# 진열대: 앞이 열린 나무 카운터 위에 둥근 빵 셋과 바게트 둘(빵집 앞면의 핵심).
+# 진열대: 나무 카운터. 윗면에 위에서 본 빵 그림(바게트·둥근 빵)을 평면으로 붙인다(입체 빵은 작아서 어색해 보였다).
 static func _add_counter(b: PartBuilder, p: Dictionary, x: float, z: float) -> void:
-	var ts: int = p["ts"]
 	var wood_a: Dictionary = wood(p, Color(1.0, 0.82, 0.58), "counter_wood")
-	var wood_top: Dictionary = wood(p, Color(1.2, 0.95, 0.68), "counter_top")
-	box(b, "counter", wood_a, Vector3(x - 0.44, 0.0, z - 0.2), Vector3(x + 0.44, 0.5, z + 0.2))
-	box(b, "counter_top", wood_top, Vector3(x - 0.48, 0.5, z - 0.23), Vector3(x + 0.48, 0.55, z + 0.23))
-	var bread: Dictionary = spec(_tex("flat", ts, Color(0.8, 0.46, 0.17)), Color.WHITE, "bread", "빵 %d×%d 노릇한 주황" % [ts, ts])
-	var baguette: Dictionary = spec(_tex("flat", ts, Color(0.86, 0.62, 0.28)), Color.WHITE, "baguette", "바게트 %d×%d 연한 황갈색" % [ts, ts])
-
-	for k in range(3):
-		dome(b, "bread", bread, x - 0.3 + 0.3 * float(k), z + 0.07, 0.11, 0.55, 0.69, 2, 8)
-
-	box(b, "baguette", baguette, Vector3(x - 0.3, 0.55, z - 0.17), Vector3(x + 0.05, 0.62, z - 0.11))
-	box(b, "baguette", baguette, Vector3(x - 0.05, 0.55, z - 0.1), Vector3(x + 0.34, 0.62, z - 0.04))
+	var top: Dictionary = spec(PlaceholderTextures.bread_counter_top(p["ts"]), Color.WHITE, "counter_top_bread", "진열대 윗면 %d×%d: 쟁반 + 바게트 둘 + 둥근 빵 셋(위에서 본 평면 그림, 앞쪽 17×8 칸 사용)" % [p["ts"], p["ts"]])
+	box(b, "counter", wood_a, Vector3(x - 0.46, 0.0, z - 0.2), Vector3(x + 0.46, 0.5, z + 0.2))
+	box(b, "counter_top", top, Vector3(x - 0.48, 0.5, z - 0.22), Vector3(x + 0.48, 0.55, z + 0.22))
 
 
 # 걸이 간판: 벽에서 앞으로 뻗은 팔 끝에 빵 그림 판이 매달린다. 판은 카메라가 보는 +x 쪽 면에 그림이 나온다.

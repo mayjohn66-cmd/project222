@@ -19,6 +19,7 @@ var _ground: Dictionary = {}  # 종류 → {mesh, material, id_mesh, id_material
 var _ground_signature: String = ""
 var _object_signature: String = ""
 var _keys: Dictionary = {}  # 이번에 만든 항목 키 → true
+var _tuft_keys: Array = []  # 풀 다발 항목 키(물체 정리 대상이 아니라 따로 관리)
 
 
 func _init(owner_view: Node, exterior_node: Node2D) -> void:
@@ -172,8 +173,12 @@ func sync_ground() -> void:
 		view._viewport.add_child(id_inst)
 		_ground[kind] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material}
 
+	_sync_tufts(per_kind.get("grass", []))
+
 
 func clear_ground() -> void:
+	_clear_tufts()
+
 	for kind in _ground.keys():
 		(_ground[kind]["mesh"] as Node).queue_free()
 		(_ground[kind]["id_mesh"] as Node).queue_free()
@@ -196,6 +201,127 @@ func update_ground_params(count: float) -> void:
 		(g["id_material"] as ShaderMaterial).set_shader_parameter("rank", -1.0)
 		(g["id_material"] as ShaderMaterial).set_shader_parameter("rank_count", count)
 		(g["id_material"] as ShaderMaterial).set_shader_parameter("id", 0.0)
+
+
+
+# ---------------------------------------------------------------- 풀 다발(십자 컷아웃)
+
+const TUFT_CHUNK: int = 8
+const CUTOUT_SHADER: Shader = preload("res://script/world/view3d/shader/cutout.gdshader")
+const TUFT_RANK: float = -0.6  # 바닥(-1) 위, 돌 마당(-0.5)·모든 물체 뒤
+
+
+func _cutout_material(texture: Texture2D) -> ShaderMaterial:
+	var m := ShaderMaterial.new()
+	m.shader = CUTOUT_SHADER
+	m.set_shader_parameter("albedo_tex", texture)
+	return m
+
+
+func _clear_tufts() -> void:
+	for k in _tuft_keys:
+		view._remove_item(str(k))
+
+	_tuft_keys.clear()
+
+
+# 풀밭 칸 일부에 작은 풀 다발을 십자(서로 직각인 두 장, 앞뒤 양면)로 세운다. 투명 컷아웃이라 사각형이 아니라 풀 모양으로 보인다.
+# 칸 위치로 결정되는 값(무작위 아님)이라 다시 만들어도 같은 자리에 난다. 윤곽선 판에는 넣지 않는다.
+func _sync_tufts(grass_cells: Array) -> void:
+	_clear_tufts()
+	var chunks: Dictionary = {}
+
+	for cell in grass_cells:
+		var ck := Vector2i(int(floorf(float(cell.x) / float(TUFT_CHUNK))), int(floorf(float(cell.y) / float(TUFT_CHUNK))))
+
+		if not chunks.has(ck):
+			chunks[ck] = []
+
+		(chunks[ck] as Array).append(cell)
+
+	var mat_plain: ShaderMaterial = _cutout_material(PlaceholderTextures.grass_tuft(false))
+	var mat_flower: ShaderMaterial = _cutout_material(PlaceholderTextures.grass_tuft(true))
+	var half_w: float = 0.2
+	var height: float = 0.32
+
+	for ck in chunks.keys():
+		var st_plain := SurfaceTool.new()
+		st_plain.begin(Mesh.PRIMITIVE_TRIANGLES)
+		var st_flower := SurfaceTool.new()
+		st_flower.begin(Mesh.PRIMITIVE_TRIANGLES)
+		var n_plain: int = 0
+		var n_flower: int = 0
+		var lo := Vector2(INF, INF)
+		var hi := Vector2(-INF, -INF)
+
+		for cell in chunks[ck]:
+			var h: int = absi((cell.x * 73856093) ^ (cell.y * 19349663)) % 1000
+
+			if h >= 560:
+				continue
+
+			var count: int = 2 if h < 140 else 1
+
+			for k in range(count):
+				var hh: int = absi(h * 31 + k * 977) % 1000
+				var cx: float = float(cell.x) + (float(hh % 100) / 100.0 - 0.5) * 0.7
+				var cz: float = float(cell.y) + (float((hh / 100) % 10) / 10.0 - 0.5) * 0.7
+				var flower: bool = (hh % 7) == 0
+				var st: SurfaceTool = st_flower if flower else st_plain
+				_add_tuft(st, cx, cz, half_w, height)
+
+				if flower:
+					n_flower += 1
+				else:
+					n_plain += 1
+
+				lo = Vector2(minf(lo.x, cx - half_w), minf(lo.y, cz - half_w))
+				hi = Vector2(maxf(hi.x, cx + half_w), maxf(hi.y, cz + half_w))
+
+		if n_plain + n_flower == 0:
+			continue
+
+		var mesh := ArrayMesh.new()
+		var mats: Array = []
+
+		if n_plain > 0:
+			st_plain.commit(mesh)
+			mats.append(mat_plain)
+
+		if n_flower > 0:
+			st_flower.commit(mesh)
+			mats.append(mat_flower)
+
+		var key: String = "tuft_%d_%d" % [ck.x, ck.y]
+		view._set_mesh_item(key, mesh, mats, lo, hi, 0.3, "tuft", TUFT_RANK, false)
+		(view._items[key]["mesh"] as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_tuft_keys.append(key)
+
+
+# 십자 두 장(x 방향, z 방향), 각각 앞뒤 양면. 법선은 위로 기울여 바닥과 비슷한 밝기로 보이게 한다.
+static func _add_tuft(st: SurfaceTool, cx: float, cz: float, half_w: float, height: float) -> void:
+	var n_front := Vector3(0.0, 0.9, 0.43).normalized()
+	var n_back := Vector3(0.0, 0.9, -0.43).normalized()
+	var n_right := Vector3(0.43, 0.9, 0.0).normalized()
+	var n_left := Vector3(-0.43, 0.9, 0.0).normalized()
+	var uv0 := Vector2(0, 1)
+	var uv1 := Vector2(1, 1)
+	var uv2 := Vector2(1, 0)
+	var uv3 := Vector2(0, 0)
+	# x 방향 판(z = cz 고정)
+	var a := Vector3(cx - half_w, 0.0, cz)
+	var b := Vector3(cx + half_w, 0.0, cz)
+	var c := Vector3(cx + half_w, height, cz)
+	var d := Vector3(cx - half_w, height, cz)
+	BuildingMesh._quad(st, a, b, c, d, n_front, uv0, uv1, uv2, uv3)
+	BuildingMesh._quad(st, a, b, c, d, n_back, uv0, uv1, uv2, uv3)
+	# z 방향 판(x = cx 고정)
+	var e := Vector3(cx, 0.0, cz - half_w)
+	var f := Vector3(cx, 0.0, cz + half_w)
+	var g := Vector3(cx, height, cz + half_w)
+	var h2 := Vector3(cx, height, cz - half_w)
+	BuildingMesh._quad(st, e, f, g, h2, n_right, uv0, uv1, uv2, uv3)
+	BuildingMesh._quad(st, e, f, g, h2, n_left, uv0, uv1, uv2, uv3)
 
 
 # ---------------------------------------------------------------- 물체
@@ -310,7 +436,13 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 		var cw: float = float(rule["canon_w"])
 		var cd: float = float(rule["canon_d"])
 
-		if ((hi.x - lo.x) >= (hi.y - lo.y)) != (cw >= cd):
+		# axis=x 면 긴 쪽을 항상 x(문이 있는 +z 면이 긴 면) 방향으로 둔다. 그 외에는 발자국의 긴 쪽에 맞춘다.
+		var swap: bool = ((hi.x - lo.x) >= (hi.y - lo.y)) != (cw >= cd)
+
+		if str(rule.get("axis", "")) == "x":
+			swap = cw < cd
+
+		if swap:
 			var tmp: float = cw
 			cw = cd
 			cd = tmp
