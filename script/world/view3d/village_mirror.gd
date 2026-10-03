@@ -231,10 +231,8 @@ func clear_ground() -> void:
 	_ground.clear()
 
 
-# 돌아가는 부품(풍차 날개 등)을 돌린다. 날개는 카메라를 보는 평면이므로 그 평면의 수직 축(카메라 방향)으로 돌린다.
+# 돌아가는 부품(풍차 날개 등)을 돌린다. 날개는 건물 앞면(+z)과 같은 평면이므로 그 평면의 수직 축(+z)으로 돌린다. 부품마다 axis 로 바꿀 수 있다.
 func tick(delta: float) -> void:
-	var axis := Vector3(0.7071, 0.0, 0.7071)
-
 	for k in _anims.keys():
 		if not view._items.has(k):
 			continue
@@ -242,7 +240,7 @@ func tick(delta: float) -> void:
 		var inst: Node3D = view._items[k]["mesh"]
 
 		if is_instance_valid(inst):
-			inst.rotate(axis, float(_anims[k]["speed"]) * delta)
+			inst.rotate(_anims[k]["axis"] as Vector3, float(_anims[k]["speed"]) * delta)
 
 
 func reset_signatures() -> void:
@@ -549,7 +547,7 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 			var ainst: MeshInstance3D = view._items[akey]["mesh"]
 			ainst.position = pos
 			ainst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			_anims[akey] = {"speed": float(an["speed"])}
+			_anims[akey] = {"speed": float(an["speed"]), "axis": an.get("axis", Vector3(0.7071, 0.0, 0.7071))}
 			_keys[akey] = true
 
 		if built.get("display", null) != null:

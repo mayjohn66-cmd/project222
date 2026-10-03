@@ -618,6 +618,15 @@ static func _card(b: PartBuilder, spec: Dictionary, cx: float, y0: float, cz: fl
 	BuildingMesh._quad(st, pa, pb, pb + up, pa + up, Vector3(0.7071, 0.0, 0.7071), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
 
 
+# +z 면을 보는 카드(x-y 평면, 법선 +z): 건물 앞벽과 같은 방향을 바라보는 평면(풍차 날개 등). cz 위치, 중심 x=cx, 아래 y0, 폭 w 높이 h.
+static func _card_z(b: PartBuilder, spec: Dictionary, cx: float, y0: float, cz: float, w: float, h: float) -> void:
+	var pa := Vector3(cx - w * 0.5, y0, cz)
+	var pb := Vector3(cx + w * 0.5, y0, cz)
+	var up := Vector3(0, h, 0)
+	var st: SurfaceTool = b.new_part(spec, pa, pb + up, 50.0)
+	BuildingMesh._quad(st, pa, pb, pb + up, pa + up, Vector3(0.0, 0.0, 1.0), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
+
+
 static func _card_spec(kind: String, p: Dictionary) -> Dictionary:
 	var sp: Dictionary = spec(PlaceholderTextures.bread_card(kind), Color.WHITE, "card_" + kind, "빵 카드 %s (투명 배경 컷아웃, 어두운 윤곽선)" % kind)
 	sp["cutout"] = true
@@ -1164,25 +1173,24 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			oct(b, "mill_body", body_w, c.x, c.y, r1, 0.0, 3.0, r1 * 0.62)
 			oct(b, "mill_band", body_w, c.x, c.y, r1 * 0.66, 2.9, 3.05, r1 * 0.66)
 			oct(b, "mill_roof", roof_m, c.x, c.y, r1 * 0.74, 3.05, 3.95, 0.05)
-			# 문·창은 카메라를 정면으로 보는 대각선 면(날개와 같은 방향)에 카드로 붙인다. 몸체가 위로 갈수록 좁아지므로 높이별 반지름을 계산한다.
+			# 문·창·날개는 다른 건물 앞면과 같은 +z 면(화면 좌측 하단을 보는 면)을 바라본다. 몸체가 위로 갈수록 좁아지므로 높이별 면 위치를 계산한다.
 			var apothem_k: float = 0.9239  # 팔각형 변 중심까지 거리 / 꼭짓점 반지름
 			var ap_door: float = r1 * (1.0 - 0.38 * (0.5 / 3.0)) * apothem_k
 			var ap_win: float = r1 * (1.0 - 0.38 * (1.9 / 3.0)) * apothem_k
-			var dk: float = 0.7071
-			_card(b, dark_m, c.x + dk * (ap_door + 0.02), 0.0, c.y + dk * (ap_door + 0.02), 0.58, 1.08)
-			_card(b, door_m, c.x + dk * (ap_door + 0.045), 0.0, c.y + dk * (ap_door + 0.045), 0.46, 0.96)
-			_card(b, dark_m, c.x + dk * (ap_win + 0.03), 1.7, c.y + dk * (ap_win + 0.03), 0.2, 0.42)
+			box(b, "mill_door_frame", dark_m, Vector3(c.x - 0.27, 0.0, c.y + ap_door - 0.06), Vector3(c.x + 0.27, 1.08, c.y + ap_door + 0.03))
+			box(b, "mill_door", door_m, Vector3(c.x - 0.22, 0.0, c.y + ap_door - 0.06), Vector3(c.x + 0.22, 0.98, c.y + ap_door + 0.05))
+			box(b, "mill_win", dark_m, Vector3(c.x - 0.1, 1.7, c.y + ap_win - 0.04), Vector3(c.x + 0.1, 2.12, c.y + ap_win + 0.04))
 			# 날개 축(몸체 앞 위쪽에서 카메라 쪽으로 튀어나온 나무 토막)과 날개: 날개는 카메라를 보는 평면 컷아웃이라 그 축으로 돌려도 정면 그대로다.
-			var hub_d: float = r1 * 0.62 + 0.25
-			var hub := Vector3(c.x + 0.7071 * hub_d, 2.55, c.y + 0.7071 * hub_d)
-			box(b, "mill_axle", wood_m, Vector3(hub.x - 0.12 - 0.7071 * 0.15, 2.43, hub.z - 0.12 - 0.7071 * 0.15), Vector3(hub.x + 0.0, 2.67, hub.z + 0.0))
+			var ap_hub: float = r1 * (1.0 - 0.38 * (2.55 / 3.0)) * apothem_k
+			var hub := Vector3(c.x, 2.55, c.y + ap_hub + 0.28)
+			box(b, "mill_axle", wood_m, Vector3(hub.x - 0.12, 2.43, c.y + ap_hub - 0.05), Vector3(hub.x + 0.12, 2.67, hub.z))
 			var blades: Dictionary = spec(PlaceholderTextures.windmill_blades(), Color.WHITE, "mill_blades", "풍차 날개 24×24 (투명 배경 컷아웃, 십자 뼈대와 격자 천)")
 			blades["cutout"] = true
 			var ab := PartBuilder.new()
-			_card(ab, blades, 0.0, -1.1, 0.0, 2.2, 2.2)
+			_card_z(ab, blades, 0.0, -1.1, 0.0, 2.2, 2.2)
 			var amesh := ArrayMesh.new()
 			var aspecs: Array = ab.commit_into(amesh)
-			anim_parts.append({"mesh": amesh, "specs": aspecs, "pos": hub + Vector3(0.7071 * 0.12, 0.0, 0.7071 * 0.12), "speed": 0.9})
+			anim_parts.append({"mesh": amesh, "specs": aspecs, "pos": hub + Vector3(0.0, 0.0, 0.1), "speed": 0.9, "axis": Vector3(0.0, 0.0, 1.0)})
 			total = 3.95
 		"low_wall":
 			box(b, "stone", stone_spec(p, Color(1, 1, 1), "low_wall_stone"), Vector3(lo.x, 0.0, lo.y), Vector3(hi.x, 0.55, hi.y))

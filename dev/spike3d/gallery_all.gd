@@ -100,7 +100,7 @@ func _shoot(out: String) -> void:
 func _process(delta: float) -> void:
 	for sp in spinners:
 		if is_instance_valid(sp["node"]):
-			(sp["node"] as Node3D).rotate(Vector3(0.7071, 0.0, 0.7071), float(sp["speed"]) * delta)
+			(sp["node"] as Node3D).rotate(sp["axis"] as Vector3, float(sp["speed"]) * delta)
 
 	var pan := Vector2.ZERO
 
@@ -277,7 +277,7 @@ func _show_page(i: int) -> void:
 
 			for an in built2.get("anim", []):
 				var node := _add_mesh(an["mesh"], an["specs"], an["pos"])
-				spinners.append({"node": node, "speed": float(an["speed"])})
+				spinners.append({"node": node, "speed": float(an["speed"]), "axis": an.get("axis", Vector3(0.7071, 0.0, 0.7071))})
 
 	label.text = "%d) %s   — 1~5 쪽 전환 / 방향키 이동 / +- 확대 / R 색 다시 뽑기" % [i + 1, str(pg["title"])]
 	_place_camera()
