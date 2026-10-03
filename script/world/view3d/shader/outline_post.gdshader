@@ -8,6 +8,8 @@ uniform float levels = 256.0;
 // 빛 조절(참조 화면처럼 하이라이트가 날아가지 않게): 밝기 knee 위쪽은 부드럽게 눌러 흰색으로 날아가는 것을 막고(색은 유지),
 // 어두운 쪽은 차가운 색으로 살짝 물들여(그림자 색 이동) 칙칙하지 않게 한다. knee=1.0 이면 눌러 주지 않는다.
 uniform float knee = 0.78;
+// 전체 노출(밝기 배율). 깔끔한 스타일은 밝은 질감이라 1 보다 낮춰 하이라이트가 날아가지 않게 한다.
+uniform float exposure = 1.0;
 uniform vec3 shadow_tint = vec3(0.86, 0.92, 1.12);
 uniform float shadow_amount = 0.45;
 
@@ -28,6 +30,7 @@ void fragment() {
 		}
 		c.rgb = mix(c.rgb, c.rgb * outline_dark, edge);
 	}
+	c.rgb *= exposure;
 	float lum = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
 	if (knee < 0.999 && lum > knee) {
 		float room = 1.0 - knee;

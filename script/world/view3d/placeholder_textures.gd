@@ -4,6 +4,9 @@ extends RefCounted
 ## 질감 한 변 = 낮은 해상도 칸 폭의 절반(36 → 18)이라야 질감 1픽셀 = 화면 1픽셀.
 ## 줄눈 패턴은 질감 크기 18(3줄) 기준으로 이음매 없이 반복된다.
 
+## 깔끔한 도트 스타일(카이로소프트풍 참조): 잡음·얼룩 없이 평면 색 + 얇은 선 몇 줄. false 면 이전의 질감 많은 스타일.
+static var clean: bool = true
+
 
 static func is_seam(kind: String, x: int, y: int, size: int) -> bool:
 	var rows: int = 3 if size % 3 == 0 else 2
@@ -33,11 +36,19 @@ static func albedo(kind: String, size: int) -> ImageTexture:
 
 			match kind:
 				"grass":
-					var shade: float = rng.randf_range(-0.07, 0.07)
-					c = Color(0.36 + shade, 0.6 + shade, 0.3 + shade)
+					if clean:
+						var dot: bool = (x * 7 + y * 13) % 41 == 0
+						c = Color(0.56, 0.74, 0.42) if dot else Color(0.48, 0.68, 0.36)
+					else:
+						var shade: float = rng.randf_range(-0.07, 0.07)
+						c = Color(0.36 + shade, 0.6 + shade, 0.3 + shade)
 				"brick":
-					var tone: float = rng.randf_range(-0.04, 0.04)
-					c = Color(0.3, 0.3, 0.38) if seam else Color(0.5 + tone, 0.5 + tone, 0.58 + tone)
+					if clean:
+						var edge: bool = x == 0 or y == 0
+						c = Color(0.6, 0.6, 0.66) if edge else Color(0.68, 0.68, 0.74)
+					else:
+						var tone: float = rng.randf_range(-0.04, 0.04)
+						c = Color(0.3, 0.3, 0.38) if seam else Color(0.5 + tone, 0.5 + tone, 0.58 + tone)
 				_:
 					var grain: float = rng.randf_range(-0.03, 0.03)
 					c = Color(0.3, 0.2, 0.12) if seam else Color(0.62 + grain, 0.43 + grain, 0.27 + grain)
@@ -116,9 +127,83 @@ static func window_layout(w: int, h: int, cells: int) -> Dictionary:
 	}
 
 
+# 깔끔한 스타일 벽: 평면 회반죽 + 얇은 보 + 밝은 파랑 유리창(흰 틀) + 갈색 문. 잡음·그림자 줄 없음.
+static func _wall_facade_clean(w: int, h: int, door: bool, window_count: int, plaster: Color, timber: Color) -> ImageTexture:
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var lay: Dictionary = window_layout(w, h, window_count)
+	var base_h: int = lay["base_h"]
+	var glass := Color(0.5, 0.74, 0.92)
+	var frame := Color(0.92, 0.88, 0.8)
+	var door_color := Color(0.64, 0.38, 0.22)
+	var door_dark := Color(0.4, 0.24, 0.14)
+	var stone := Color(0.82, 0.8, 0.76)
+	var stone_line := Color(0.66, 0.64, 0.6)
+
+	for y in range(h):
+		for x in range(w):
+			img.set_pixel(x, y, plaster)
+
+	for y in range(h - base_h, h):
+		for x in range(w):
+			img.set_pixel(x, y, stone_line if (y == h - base_h or (x % 8 == 0 and (y - (h - base_h)) % 3 != 0)) else stone)
+
+	for x in range(w):
+		for y in range(0, 2):
+			img.set_pixel(x, y, timber)
+
+	for y in range(h):
+		for x in [0, 1, w - 2, w - 1]:
+			img.set_pixel(x, y, timber)
+
+	var cells: int = maxi(window_count, 1)
+	var door_cell: int = cells / 2 if door else -1
+
+	for k in range(cells):
+		var cx: int = int((float(k) + 0.5) * float(w) / float(cells))
+
+		if k == door_cell:
+			var dw: int = lay["dw"]
+			var dh: int = lay["dh"]
+			var x0: int = cx - dw / 2
+			var y0: int = h - base_h - dh
+
+			for y in range(y0, h - base_h):
+				for x in range(x0, x0 + dw):
+					if x >= 0 and x < w and y >= 0:
+						var edge: bool = x == x0 or x == x0 + dw - 1 or y == y0
+						var panel: bool = y == y0 + dh / 2 or x == cx
+						img.set_pixel(x, y, door_dark if (edge or panel) else door_color)
+
+			if cx + dw / 4 < w:
+				img.set_pixel(cx + dw / 4, h - base_h - dh / 2 + 2, Color(0.98, 0.84, 0.3))
+		else:
+			var ww: int = lay["ww"]
+			var wh: int = lay["wh"]
+			var wy: int = lay["wy"]
+			var wx0: int = cx - ww / 2
+
+			for y in range(wy, wy + wh):
+				for x in range(wx0, wx0 + ww):
+					if x >= 0 and x < w and y >= 0 and y < h:
+						var edge: bool = x == wx0 or x == wx0 + ww - 1 or y == wy or y == wy + wh - 1
+						var bar: bool = x == cx or y == wy + wh / 2
+						var shine: bool = (not edge) and (not bar) and (x - wx0) + (y - wy) in [3, 4]
+						img.set_pixel(x, y, frame if (edge or bar) else (Color(0.9, 0.97, 1.0) if shine else glass))
+
+			for x in range(wx0 - 1, wx0 + ww + 1):
+				if x >= 0 and x < w and wy + wh < h:
+					img.set_pixel(x, wy + wh, frame.darkened(0.12))
+
+	return ImageTexture.create_from_image(img)
+
+
 static func wall_facade(width_texels: int, height_texels: int, door: bool, window_count: int, plaster: Color, timber: Color) -> ImageTexture:
 	var w: int = maxi(width_texels, 4)
 	var h: int = maxi(height_texels, 4)
+
+	if clean:
+		return _wall_facade_clean(w, h, door, window_count, plaster, timber)
+
 	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
 	var rng := RandomNumberGenerator.new()
 	rng.seed = w * 131 + h
@@ -217,6 +302,24 @@ static func wall_facade(width_texels: int, height_texels: int, door: bool, windo
 # + 기와 사이 세로 틈. 부드러운 그라데이션과 무작위 노이즈는 쓰지 않는다. 기와 폭 = 한 칸의 3분의 1, 줄 높이 = 한 칸의 6분의 1(18 → 6×3).
 static func roof_tiles(size: int, base: Color) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+
+	if clean:
+		# 평면 색 + 기와 줄마다 윗줄 한 픽셀 밝게 / 아랫줄 한 픽셀 어둡게(깔끔한 도트 지붕)
+		var rh: int = maxi(size / 3, 2)
+
+		for y in range(size):
+			var c: Color = base
+
+			if y % rh == 0:
+				c = base.lightened(0.14)
+			elif y % rh == rh - 1:
+				c = base.darkened(0.2)
+
+			for x in range(size):
+				img.set_pixel(x, y, c)
+
+		return ImageTexture.create_from_image(img)
+
 	var tile_w: int = maxi(size / 3, 3)
 	var row_h: int = maxi(size / 6, 2)
 	var cols: int = maxi(size / tile_w, 1)
@@ -413,6 +516,18 @@ static func foliage(size: int, base: Color, flower: Color = Color(0, 0, 0, 0)) -
 # 돌(낮은 담·우물): 회색 블록 줄눈
 static func stone(size: int, base: Color = Color(0.58, 0.56, 0.52)) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+
+	if clean:
+		var rh: int = maxi(size / 3, 2)
+		var lit: Color = base.lightened(0.18)
+
+		for y in range(size):
+			for x in range(size):
+				var mortar: bool = (y % rh == 0) or ((x + (y / rh % 2) * (size / 4)) % (size / 2) == 0)
+				img.set_pixel(x, y, base.darkened(0.22) if mortar else lit)
+
+		return ImageTexture.create_from_image(img)
+
 	var rng := RandomNumberGenerator.new()
 	rng.seed = 909
 	var row_h: int = maxi(size / 3, 2)

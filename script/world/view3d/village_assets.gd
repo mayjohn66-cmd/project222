@@ -316,7 +316,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var width: float = hi.x - lo.x
 	var depth: float = hi.y - lo.y
 	var h_texels: int = int(roundf(wall_blocks * float(p["block_px"])))
-	var timber := Color(0.34, 0.22, 0.14)
+	var timber: Color = Color(0.56, 0.38, 0.24) if PlaceholderTextures.clean else Color(0.34, 0.22, 0.14)
 	var cells_z: int = maxi(int(roundf(width)), 1)
 	var cells_x: int = maxi(int(roundf(depth)), 1)
 	var tex_z: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(width * ts)), h_texels, true, cells_z, plaster, timber)

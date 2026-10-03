@@ -8,6 +8,8 @@ extends RefCounted
 const CONTAINERS: Array = ["NearbyHouses", "VillageExtraHouses", "VillageBlacksmith", "VillageToolShop", "VillageBuildings", "VillageDecor", "VillageGathering", "DungeonRoadside", "DungeonWall"]
 const RULES_PATH: String = "res://data/shop/catalogs/village_3d.csv"
 const GROUND_TEXTURES: Dictionary = {"grass": ["grass", Color(0.62, 0.6, 0.46)], "road": ["brick", Color(0.5, 0.46, 0.46)], "paving": ["brick", Color(0.82, 0.76, 0.68)]}
+# 깔끔한 스타일(PlaceholderTextures.clean)용: 질감 자체가 이미 밝은 색이라 곱하는 색을 거의 1 로 둔다.
+const GROUND_TEXTURES_CLEAN: Dictionary = {"grass": ["grass", Color(1.0, 1.0, 1.0)], "road": ["brick", Color(0.96, 0.96, 0.98)], "paving": ["brick", Color(1.0, 0.93, 0.8)]}
 
 var view: Node  # StoreView3D
 var exterior: Node2D
@@ -152,7 +154,8 @@ func sync_ground() -> void:
 				st.add_vertex(quad[idx])
 
 		var mesh: ArrayMesh = st.commit()
-		var info: Array = GROUND_TEXTURES.get(kind, GROUND_TEXTURES["grass"])
+		var ground_table: Dictionary = GROUND_TEXTURES_CLEAN if PlaceholderTextures.clean else GROUND_TEXTURES
+		var info: Array = ground_table.get(kind, ground_table["grass"])
 		var material: ShaderMaterial = view._make_surface_material(str(info[0]), info[1])
 		var inst := MeshInstance3D.new()
 		inst.mesh = mesh
