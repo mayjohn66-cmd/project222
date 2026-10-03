@@ -71,7 +71,7 @@ func _shots(dir: String, view: Node) -> void:
 	DirAccess.make_dir_recursive_absolute(dir)
 	for i in range(SPOTS.size()):
 		_teleport(i)
-		for m in [[StoreView3D.Mode.OFF, "2d"], [StoreView3D.Mode.ON, "3d"]]:
+		for m in [[StoreView3D.Mode.OFF, "2d"], [StoreView3D.Mode.OVERLAY, "ov"], [StoreView3D.Mode.ON, "3d"]]:
 			view.mode = m[0]
 			for f in range(40):
 				await get_tree().process_frame
