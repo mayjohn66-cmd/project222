@@ -234,12 +234,16 @@ def do_pixellab(faces):
         return
     task = write_task(faces, a)
     rel = os.path.relpath(task, ROOT).replace(os.sep, "/")
-    first = ("%s 을 읽고 그 지시대로 진행해 줘. 먼저 `/mcp` 로 pixellab 연결과 도구를 확인해서 알려 주고, 첫 번째 면 하나만 만들어서 보여 줘." % rel)
+    # Pixel Lab MCP 가 다른 폴더 범위로 등록돼 있으면 환경변수 WORLD3D_CLAUDE_DIR 에 그 폴더를 적는다(그 폴더에서 claude 를 실행하되 파일은 이 저장소에 만든다).
+    run_dir = os.environ.get("WORLD3D_CLAUDE_DIR") or ROOT
+    base = rel if os.path.abspath(run_dir) == os.path.abspath(ROOT) else task
+    root_note = "" if base == rel else " 지시 파일의 상대 경로(`docs/…`, `art/…`)는 모두 저장소 루트 `%s` 기준이며, 그림 파일은 그 루트 아래에만 저장해 줘(현재 폴더에는 저장하지 마)." % ROOT
+    first = ("%s 을 읽고 그 지시대로 진행해 줘.%s 먼저 `/mcp` 로 pixellab 연결과 도구를 확인해서 알려 주고, 첫 번째 면 하나만 만들어서 보여 줘." % (base, root_note))
     print("\n작업 지시 파일을 만들었습니다: %s" % rel)
     print("PC 의 Claude Code 에 줄 첫 문장:\n  %s\n" % first)
-    if input("지금 이 폴더에서 claude 를 실행할까요? (y/N) ").strip().lower() == "y":
+    if input("지금 %s 에서 claude 를 실행할까요? (y/N) " % run_dir).strip().lower() == "y":
         try:
-            subprocess.run(["claude", first], cwd=ROOT, shell=sys.platform.startswith("win"))
+            subprocess.run(["claude", first], cwd=run_dir, shell=sys.platform.startswith("win"))
         except OSError as e:
             print("claude 를 실행하지 못했습니다(%s). 새 터미널에서 직접 `claude` 를 실행한 뒤 위 문장을 붙여 넣으세요." % e)
     elif copy_clip(first):
