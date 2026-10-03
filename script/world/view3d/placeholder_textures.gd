@@ -501,6 +501,255 @@ static func bread_counter_top(size: int) -> ImageTexture:
 	return ImageTexture.create_from_image(img)
 
 
+# ---------------------------------------------------------------- 빵집(가게) 전용
+
+# 5×7 도트 글꼴(빵집 간판용: B A K E R Y 만). 한 줄이 5비트.
+const FONT_5X7: Dictionary = {
+	"B": [0b11110, 0b10001, 0b10001, 0b11110, 0b10001, 0b10001, 0b11110],
+	"A": [0b01110, 0b10001, 0b10001, 0b11111, 0b10001, 0b10001, 0b10001],
+	"K": [0b10001, 0b10010, 0b10100, 0b11000, 0b10100, 0b10010, 0b10001],
+	"E": [0b11111, 0b10000, 0b10000, 0b11110, 0b10000, 0b10000, 0b11111],
+	"R": [0b11110, 0b10001, 0b10001, 0b11110, 0b10100, 0b10010, 0b10001],
+	"Y": [0b10001, 0b10001, 0b01010, 0b00100, 0b00100, 0b00100, 0b00100],
+}
+
+
+static func _draw_text(img: Image, text: String, x0: int, y0: int, color: Color, shadow: Color) -> void:
+	var x: int = x0
+
+	for ch in text:
+		var rows: Array = FONT_5X7.get(ch, [])
+
+		for ry in range(rows.size()):
+			for rx in range(5):
+				if (int(rows[ry]) >> (4 - rx)) & 1 == 1:
+					var px: int = x + rx
+					var py: int = y0 + ry
+
+					if px + 1 < img.get_width() and py + 1 < img.get_height():
+						img.set_pixel(px + 1, py + 1, shadow)
+
+		for ry in range(rows.size()):
+			for rx in range(5):
+				if (int(rows[ry]) >> (4 - rx)) & 1 == 1:
+					var qx: int = x + rx
+					var qy: int = y0 + ry
+
+					if qx < img.get_width() and qy < img.get_height():
+						img.set_pixel(qx, qy, color)
+
+		x += 6
+
+
+# 가게 앞 가로 간판: 진갈색 판 + 크림색 테두리 + 가운데 "BAKERY" + 양끝 둥근 빵 그림.
+static func bakery_fascia(w: int, h: int) -> ImageTexture:
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var board := Color(0.5, 0.3, 0.17)
+	var rim := Color(0.96, 0.88, 0.68)
+	var text := Color(1.0, 0.94, 0.78)
+	var shade := Color(0.28, 0.15, 0.08)
+	var loaf := Color(0.9, 0.58, 0.24)
+	var loaf_hi := Color(0.98, 0.78, 0.44)
+
+	for y in range(h):
+		for x in range(w):
+			var edge: bool = x == 0 or y == 0 or x == w - 1 or y == h - 1
+			img.set_pixel(x, y, rim if edge else board)
+
+	var tw: int = 6 * 6 - 1
+	var tx: int = (w - tw) / 2
+	var ty: int = maxi((h - 7) / 2, 1)
+	_draw_text(img, "BAKERY", tx, ty, text, shade)
+
+	# 양끝 둥근 빵(7×5): 위 한 줄 밝게
+	for side in [0, 1]:
+		var bx: int = 4 if side == 0 else w - 11
+		var by: int = maxi((h - 5) / 2, 1)
+
+		for dy in range(5):
+			for dx in range(7):
+				if (dy == 0 or dy == 4) and (dx == 0 or dx == 6):
+					continue
+
+				var c: Color = loaf_hi if dy <= 1 else loaf
+
+				if dx == 0 or dx == 6 or dy == 4:
+					c = loaf.darkened(0.25)
+
+				if bx + dx < w - 1 and by + dy < h - 1:
+					img.set_pixel(bx + dx, by + dy, c)
+
+	return ImageTexture.create_from_image(img)
+
+
+# 가게 앞면 벽(빵집): 큰 진열창(선반 두 단 + 빵) 셋과 유리문 하나, 위쪽은 간판 자리(간판은 따로 붙는다).
+static func shop_front_wall(w: int, h: int, cells: int, plaster: Color, timber: Color) -> ImageTexture:
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var lay: Dictionary = window_layout(w, h, cells)
+	var base_h: int = lay["base_h"]
+	var cell_px: float = float(w) / float(maxi(cells, 1))
+	var door_cell: int = cells / 2
+	var glow := Color(1.0, 0.9, 0.66)
+	var glow_dark := Color(0.92, 0.76, 0.5)
+	var shelf := Color(0.55, 0.34, 0.2)
+	var loaf := Color(0.88, 0.56, 0.22)
+	var loaf_hi := Color(0.98, 0.78, 0.44)
+	var loaf_lo := Color(0.62, 0.36, 0.14)
+	var glass := Color(0.7, 0.86, 0.96)
+	var stone := Color(0.82, 0.8, 0.76)
+	var stone_line := Color(0.66, 0.64, 0.6)
+	var win_top: int = int(float(h) * 0.28)
+	var win_bot: int = h - base_h - 3
+
+	for y in range(h):
+		for x in range(w):
+			img.set_pixel(x, y, plaster)
+
+	for y in range(h - base_h, h):
+		for x in range(w):
+			img.set_pixel(x, y, stone_line if (y == h - base_h or (x % 8 == 0 and (y - (h - base_h)) % 3 != 0)) else stone)
+
+	# 칸 경계 기둥(2px)과 양 끝 기둥
+	for k in range(cells + 1):
+		var bx: int = clampi(int(float(k) * cell_px) - 1, 0, w - 2)
+
+		for y in range(h):
+			img.set_pixel(bx, y, timber)
+			img.set_pixel(bx + 1, y, timber)
+
+	for k in range(cells):
+		var x0: int = int(float(k) * cell_px) + 3
+		var x1: int = int(float(k + 1) * cell_px) - 2
+
+		if k == door_cell:
+			# 유리문: 갈색 틀 + 위 유리 + 아래 판 + 손잡이
+			var dtop: int = int(float(h) * 0.24)
+
+			for y in range(dtop, h - base_h):
+				for x in range(x0, x1):
+					var frame: bool = x == x0 or x == x1 - 1 or y == dtop or y == h - base_h - 1
+					var upper: bool = y < dtop + int(float(h - base_h - dtop) * 0.62)
+					img.set_pixel(x, y, timber if frame else (glow if upper else Color(0.62, 0.38, 0.22)))
+
+			img.set_pixel(x1 - 3, dtop + (h - base_h - dtop) / 2, Color(0.98, 0.84, 0.3))
+			continue
+
+		# 진열창: 틀(갈색 1px) 안쪽은 따뜻한 빛, 선반 둘, 선반마다 빵
+		for y in range(win_top, win_bot):
+			for x in range(x0, x1):
+				var edge: bool = x == x0 or x == x1 - 1 or y == win_top or y == win_bot - 1
+				img.set_pixel(x, y, timber if edge else (glow if y < (win_top + win_bot) / 2 else glow_dark))
+
+		var shelf_ys: Array = [win_top + (win_bot - win_top) / 3, win_top + (win_bot - win_top) * 2 / 3]
+
+		for sy in shelf_ys:
+			for x in range(x0 + 1, x1 - 1):
+				img.set_pixel(x, sy, shelf)
+
+			# 선반 위 빵: 4×3 도트 둥근 빵을 6px 간격으로
+			var bxx: int = x0 + 3
+
+			while bxx + 4 < x1 - 1:
+				for dy in range(3):
+					for dx in range(4):
+						if dy == 0 and (dx == 0 or dx == 3):
+							continue
+
+						var c: Color = loaf_hi if dy == 0 else (loaf_lo if dy == 2 else loaf)
+						img.set_pixel(bxx + dx, sy - 3 + dy, c)
+
+				bxx += 6
+
+		# 유리 반사 한 줄
+		for k2 in range(3):
+			var gx: int = x0 + 2 + k2
+			var gy: int = win_top + 1 + k2
+
+			if gx < x1 - 1 and gy < win_bot - 1:
+				img.set_pixel(gx, gy, glass)
+
+	return ImageTexture.create_from_image(img)
+
+
+static func _add_outline(img: Image, color: Color) -> void:
+	var w: int = img.get_width()
+	var h: int = img.get_height()
+	var src: Image = img.duplicate()
+
+	for y in range(h):
+		for x in range(w):
+			if src.get_pixel(x, y).a > 0.5:
+				continue
+
+			for d in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+				var nx: int = x + d.x
+				var ny: int = y + d.y
+
+				if nx >= 0 and ny >= 0 and nx < w and ny < h and src.get_pixel(nx, ny).a > 0.5:
+					img.set_pixel(x, y, color)
+					break
+
+
+# 빵 카드(상자에 꽂는 평면 그림, 투명 배경): "baguette"(세로로 긴 바게트, 칼집) / "loaf"(둥근 빵). 어두운 갈색 윤곽선 포함.
+static func bread_card(kind: String) -> ImageTexture:
+	var line := Color(0.36, 0.2, 0.1)
+	var base := Color(0.9, 0.6, 0.26)
+	var hi := Color(0.99, 0.8, 0.46)
+	var lo := Color(0.72, 0.43, 0.17)
+	var cut := Color(0.6, 0.3, 0.12)
+	var img: Image
+
+	if kind == "baguette":
+		img = Image.create(7, 18, false, Image.FORMAT_RGBA8)
+		img.fill(Color(0, 0, 0, 0))
+
+		for y in range(1, 17):
+			var half: float = 2.5 if (y > 2 and y < 15) else 1.5
+
+			for x in range(7):
+				var dx: float = float(x) - 3.0
+
+				if absf(dx) <= half:
+					var c: Color = base
+
+					if dx < -half + 1.0:
+						c = hi
+					elif dx > half - 1.0:
+						c = lo
+
+					img.set_pixel(x, y, c)
+
+		for y in [5, 9, 13]:
+			img.set_pixel(2, y, cut)
+			img.set_pixel(3, y, cut)
+			img.set_pixel(4, y, cut)
+	else:
+		img = Image.create(12, 10, false, Image.FORMAT_RGBA8)
+		img.fill(Color(0, 0, 0, 0))
+
+		for y in range(1, 9):
+			for x in range(1, 11):
+				var dx2: float = (float(x) - 5.5) / 4.5
+				var dy2: float = (float(y) - 4.5) / 3.5
+
+				if dx2 * dx2 + dy2 * dy2 <= 1.0:
+					var c2: Color = base
+
+					if dy2 < -0.35:
+						c2 = hi
+					elif dy2 > 0.4:
+						c2 = lo
+
+					img.set_pixel(x, y, c2)
+
+		for x in [3, 5, 7]:
+			img.set_pixel(x, 3, cut)
+			img.set_pixel(x + 1, 4, cut)
+
+	_add_outline(img, line)
+	return ImageTexture.create_from_image(img)
+
+
 # 덧문(겉창): 가로 살(루버) 줄무늬. 밝은 줄과 어두운 줄이 두 픽셀씩 번갈아.
 static func shutter(size: int, base: Color) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)

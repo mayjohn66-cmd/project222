@@ -1,6 +1,6 @@
 [
   {
-    "awning_tint": "e0702a",
+    "awning_tint": "d9503c",
     "canon_d": 2.2,
     "canon_w": 4.0,
     "faces": [
@@ -68,15 +68,6 @@
         "w": 18
       },
       {
-        "file": "bakery__shutter_wood.png",
-        "h": 18,
-        "name": "shutter_wood",
-        "normal_file": "",
-        "note": "덧문 18×18 가로 살(청록 계열, 가게마다 색)",
-        "tileable": true,
-        "w": 18
-      },
-      {
         "file": "bakery__eave_tile.png",
         "h": 18,
         "name": "eave_tile",
@@ -86,20 +77,11 @@
         "w": 18
       },
       {
-        "file": "bakery__counter_wood.png",
+        "file": "bakery__cloth_awning.png",
         "h": 18,
-        "name": "counter_wood",
+        "name": "cloth_awning",
         "normal_file": "",
-        "note": "나무 판(가로 판자 결)",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "bakery__counter_top_bread.png",
-        "h": 18,
-        "name": "counter_top_bread",
-        "normal_file": "",
-        "note": "진열대 윗면 18×18: 쟁반 + 바게트 둘 + 둥근 빵 셋(위에서 본 평면 그림, 앞쪽 17×8 칸 사용)",
+        "note": "천 차양 줄무늬 18×18 반복(크림 + 가게 색)",
         "tileable": true,
         "w": 18
       },
@@ -113,42 +95,6 @@
         "w": 18
       },
       {
-        "file": "bakery__step.png",
-        "h": 18,
-        "name": "step",
-        "normal_file": "",
-        "note": "회색 돌 블록 줄눈",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "bakery__basket.png",
-        "h": 18,
-        "name": "basket",
-        "normal_file": "",
-        "note": "바구니 옆면 18×18 갈색 엮음",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "bakery__bread.png",
-        "h": 18,
-        "name": "bread",
-        "normal_file": "",
-        "note": "빵 18×18 노릇한 주황",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "bakery__iron.png",
-        "h": 18,
-        "name": "iron",
-        "normal_file": "",
-        "note": "검은 쇠(기둥·테두리) 단색 18×18",
-        "tileable": true,
-        "w": 18
-      },
-      {
         "file": "bakery__sign_frame.png",
         "h": 18,
         "name": "sign_frame",
@@ -158,13 +104,22 @@
         "w": 18
       },
       {
-        "file": "bakery__bread_sign.png",
-        "h": 12,
-        "name": "bread_sign",
+        "file": "bakery__bakery_fascia.png",
+        "h": 11,
+        "name": "bakery_fascia",
         "normal_file": "",
-        "note": "빵집 간판 그림 16×12 (베이지 판 + 둥근 빵), +x 쪽 면 한 장",
+        "note": "빵집 간판 69×11 (BAKERY 글자 + 양끝 빵), 한 장 전체",
         "tileable": false,
-        "w": 16
+        "w": 69
+      },
+      {
+        "file": "bakery__step.png",
+        "h": 18,
+        "name": "step",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
       },
       {
         "file": "bakery__apron_stone.png",
@@ -182,12 +137,12 @@
     "kind": "gable",
     "label": "빵집",
     "notes": "마을 건물. 앞 차양·창 화분·통과 상자가 붙음",
-    "roof_blocks": 1.0,
+    "roof_blocks": 0.7,
     "roof_tint": "d9503c",
     "sprite": "res://art/world/village_buildings_v1/bakery.png",
-    "style": "",
+    "style": "shop",
     "tint": "f3ead2",
-    "total_blocks": 3.1,
+    "total_blocks": 2.8,
     "wall_blocks": 2.1
   },
   {

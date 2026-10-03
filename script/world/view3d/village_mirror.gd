@@ -411,7 +411,7 @@ func sync_objects(world: Node) -> void:
 
 
 func _remove_keys(base: String) -> void:
-	for suffix in ["a", "b"]:
+	for suffix in ["a", "b", "c"]:
 		view._remove_item(base + suffix)
 		_keys.erase(base + suffix)
 
@@ -463,6 +463,12 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 
 		view._set_mesh_item(key + "a", built["mesh"], VillageAssets.make_materials(built["specs"]), built["lo"], built["hi"], float(built["total_blocks"]), sig)
 		_keys[key + "a"] = true
+
+		if built.get("display", null) != null:
+			var dp: Dictionary = built["display"]
+			view._set_mesh_item(key + "c", dp["mesh"], VillageAssets.make_materials(dp["specs"]), dp["lo"], dp["hi"], float(dp["total_blocks"]), sig, NAN, false)
+			(view._items[key + "c"]["mesh"] as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+			_keys[key + "c"] = true
 
 		if built["apron"] != null:
 			var ap: Dictionary = built["apron"]

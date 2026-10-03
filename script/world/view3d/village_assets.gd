@@ -8,6 +8,7 @@ extends RefCounted
 ## 매개변수 p: {"ts": 질감 크기, "block_px": 1블록 세로 px, "unit_px_z": 세계 단위 1 의 화면 세로 px}
 
 const FACADE_SHADER: Shader = preload("res://script/world/view3d/shader/facade.gdshader")
+const CUTOUT_SHADER: Shader = preload("res://script/world/view3d/shader/cutout.gdshader")
 
 static var _texture_cache: Dictionary = {}
 
@@ -97,12 +98,13 @@ static func _tex(kind: String, ts: int, extra: Color = Color(0, 0, 0, 0)) -> Ima
 
 static func make_material(spec: Dictionary) -> ShaderMaterial:
 	var m := ShaderMaterial.new()
-	m.shader = FACADE_SHADER
+	# 투명 컷아웃(빵 카드 등)은 별도 셰이더. 이 재질이 든 물체는 그림자를 끄고 쓴다(셰이더 파일 설명 참고).
+	m.shader = CUTOUT_SHADER if bool(spec.get("cutout", false)) else FACADE_SHADER
 	m.set_shader_parameter("albedo_tex", spec["tex"])
 	m.set_shader_parameter("tint", spec.get("tint", Color.WHITE))
 	m.set_shader_parameter("uv_scale", spec.get("uv_scale", Vector2.ONE))
 
-	if spec.get("normal", null) != null:
+	if spec.get("normal", null) != null and not bool(spec.get("cutout", false)):
 		m.set_shader_parameter("normal_tex", spec["normal"])
 		m.set_shader_parameter("use_normal", true)
 
@@ -319,7 +321,11 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var timber: Color = Color(0.56, 0.38, 0.24) if PlaceholderTextures.clean else Color(0.34, 0.22, 0.14)
 	var cells_z: int = maxi(int(roundf(width)), 1)
 	var cells_x: int = maxi(int(roundf(depth)), 1)
+	var is_shop: bool = str(rule.get("style", "")) == "shop"
 	var tex_z: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(width * ts)), h_texels, true, cells_z, plaster, timber)
+
+	if is_shop:
+		tex_z = PlaceholderTextures.shop_front_wall(int(roundf(width * ts)), h_texels, cells_z, plaster, timber)
 	var tex_x: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(depth * ts)), h_texels, false, cells_x, plaster, timber)
 	var specs: Array = [
 		spec(tex_z, Color.WHITE, "wall_front", "카메라 왼쪽 아래를 보는 앞벽 %d×%d px: 문 1(가운데), 창 %d, 나무 뼈대, 아래 돌 기단" % [tex_z.get_width(), tex_z.get_height(), cells_z - 1]),
@@ -388,12 +394,25 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		box(b, "sign_board", spec(PlaceholderTextures.sign_board(ts), Color.WHITE, "sign_board", "걸린 간판 %d×%d (가게 표시 그림은 가게마다)" % [ts, ts]), Vector3(sx - 0.02, wall_h * 0.8 - 0.24, hi.y + 0.28), Vector3(sx + 0.05, wall_h * 0.8, hi.y + 0.34))
 
 	_add_eave_nubs(b, lo, hi, wall_h, roof_tint, p)
+	var display: PartBuilder = null
+
+	if is_shop:
+		_add_fascia(b, p, lo, hi, wall_h, h_texels)
+		_add_cloth_awning(b, p, lo, hi, wall_h, cells_z, cells_z / 2, awning_tint)
+		display = PartBuilder.new()
 
 	if bool(rule.get("chimney", true)):
 		_add_smoke(b, lo, hi, wall_h + roof_h, p)
 
-	_add_extras(b, str(rule.get("extras", "")), lo, hi, p, wall_h)
+	_add_extras(b, str(rule.get("extras", "")), lo, hi, p, wall_h, display)
 	var extra_specs: Array = b.commit_into(mesh)
+	var display_info: Variant = null
+
+	if display != null and display.min_pt.x != INF:
+		var dmesh := ArrayMesh.new()
+		var dspecs: Array = display.commit_into(dmesh)
+		apply_overrides(dspecs, str(rule.get("asset", "")), p)
+		display_info = {"mesh": dmesh, "specs": dspecs, "lo": Vector2(display.min_pt.x, display.min_pt.z), "hi": Vector2(display.max_pt.x, display.max_pt.z), "total_blocks": display.max_pt.y * float(p["unit_px_z"]) / float(p["block_px"])}
 
 	var ext_lo: Vector2 = lo
 	var ext_hi: Vector2 = hi
@@ -426,7 +445,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	if apron_info != null:
 		apply_overrides([apron_info["spec"]], str(rule.get("asset", "")), p)
 
-	return {"mesh": mesh, "specs": all_specs, "apron": apron_info, "total_blocks": wall_blocks + roof_blocks, "lo": ext_lo, "hi": ext_hi}
+	return {"mesh": mesh, "specs": all_specs, "display": display_info, "apron": apron_info, "total_blocks": wall_blocks + roof_blocks, "lo": ext_lo, "hi": ext_hi}
 
 
 # extras: "이름:dx:dz;..." — 건물 앞(+z)쪽 중심 기준 옆(dx)·앞(dz) 칸 위치에 작은 소품(통·상자·화분)
@@ -469,6 +488,97 @@ static func _add_smoke(b: PartBuilder, lo: Vector2, hi: Vector2, peak: float, p:
 		y += r * 1.5
 
 
+# 카메라 쪽(+x,+z 대각선)을 보는 평면 카드 한 장(투명 컷아웃). 상자에 꽂힌 종이처럼 세워 둔다. 바닥 중심 (cx, y0, cz), 폭 w, 높이 h.
+static func _card(b: PartBuilder, spec: Dictionary, cx: float, y0: float, cz: float, w: float, h: float) -> void:
+	var r := Vector3(0.7071, 0.0, -0.7071) * (w * 0.5)
+	var c0 := Vector3(cx, y0, cz)
+	var pa: Vector3 = c0 - r
+	var pb: Vector3 = c0 + r
+	var up := Vector3(0, h, 0)
+	var st: SurfaceTool = b.new_part(spec, pa, pb + up)
+	BuildingMesh._quad(st, pa, pb, pb + up, pa + up, Vector3(0.7071, 0.0, 0.7071), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
+
+
+static func _card_spec(kind: String, p: Dictionary) -> Dictionary:
+	var sp: Dictionary = spec(PlaceholderTextures.bread_card(kind), Color.WHITE, "card_" + kind, "빵 카드 %s (투명 배경 컷아웃, 어두운 윤곽선)" % kind)
+	sp["cutout"] = true
+	return sp
+
+
+# 빵 상자: 윗면이 열린 나무 상자(바닥 + 사방 판). 안에 빵 카드를 세워 꽂는다(여러 장이 겹쳐 "빵이 가득 든" 모양).
+static func _add_bread_bin(b: PartBuilder, p: Dictionary, x: float, z: float, kind: String) -> void:
+	var plank: Dictionary = wood(p, Color(1.0, 0.84, 0.6), "bin_wood")
+	var inner: Dictionary = spec(_tex("flat", p["ts"], Color(0.42, 0.26, 0.14)), Color.WHITE, "bin_inner", "빵 상자 안쪽 어두운 갈색 단색 %d×%d" % [p["ts"], p["ts"]])
+	var hx: float = 0.42
+	var hz: float = 0.22
+	var rim: float = 0.34
+	box(b, "bin_bottom", inner, Vector3(x - hx, 0.0, z - hz), Vector3(x + hx, 0.05, z + hz))
+	box(b, "bin_back", plank, Vector3(x - hx, 0.0, z - hz), Vector3(x + hx, rim, z - hz + 0.04))
+	box(b, "bin_left", plank, Vector3(x - hx, 0.0, z - hz), Vector3(x - hx + 0.04, rim, z + hz))
+
+	var card: Dictionary = _card_spec(kind, p)
+
+	if kind == "baguette":
+		var xs: Array = [-0.3, -0.15, 0.0, 0.15, 0.3]
+		var hs: Array = [0.74, 0.86, 0.78, 0.9, 0.72]
+
+		for i in range(xs.size()):
+			_card(b, card, x + float(xs[i]) * 0.9, 0.08, z - 0.04 + 0.03 * float(i % 2), 0.24, float(hs[i]))
+	else:
+		# 둥근 빵은 앞뒤 두 줄(뒤는 높게)
+		for i in range(3):
+			_card(b, card, x + (float(i) - 1.0) * 0.27, 0.2, z - 0.1, 0.34, 0.3)
+
+		for i in range(2):
+			_card(b, card, x + (float(i) - 0.5) * 0.3, 0.1, z + 0.06, 0.34, 0.3)
+
+	box(b, "bin_right", plank, Vector3(x + hx - 0.04, 0.0, z - hz), Vector3(x + hx, rim, z + hz))
+	box(b, "bin_front", plank, Vector3(x - hx, 0.0, z + hz - 0.04), Vector3(x + hx, rim, z + hz))
+
+
+# 가게 앞면 천 차양(줄무늬): 진열창 칸 위에만(문 칸은 비움). 앞 가장자리에 톱니 단.
+static func _add_cloth_awning(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Vector2, wall_h: float, cells: int, door_cell: int, tint: Color) -> void:
+	var ts: int = p["ts"]
+	var cloth: Dictionary = spec(PlaceholderTextures.awning_stripes(ts, Color(0.98, 0.95, 0.86), tint), Color.WHITE, "cloth_awning", "천 차양 줄무늬 %d×%d 반복(크림 + 가게 색)" % [ts, ts])
+	var width: float = hi.x - lo.x
+	var cell_w: float = width / float(cells)
+	var y_top: float = wall_h - 0.72
+	var y_bot: float = y_top - 0.34
+	var out: float = 0.55
+
+	for k in range(cells):
+		if k == door_cell:
+			continue
+
+		var x0: float = lo.x + float(k) * cell_w + 0.04
+		var x1: float = lo.x + float(k + 1) * cell_w - 0.04
+		slope(b, "awning", cloth, Vector3(x0, y_top, hi.y), Vector3(x1, y_top, hi.y), Vector3(x1, y_bot, hi.y + out), Vector3(x0, y_bot, hi.y + out), Vector3(0, out, (y_top - y_bot)).normalized(), x1 - x0, 1.0)
+		var tooth: int = maxi(int(roundf((x1 - x0) / 0.2)), 2)
+		var tw: float = (x1 - x0) / float(tooth)
+
+		for t in range(tooth):
+			if t % 2 == 0:
+				box(b, "valance", cloth, Vector3(x0 + tw * float(t), y_bot - 0.09, hi.y + out - 0.03), Vector3(x0 + tw * float(t + 1), y_bot, hi.y + out + 0.01))
+
+
+# 가게 이름 간판(앞벽 맨 위): 가로로 긴 판, 정면(+z)에 한 장 그림.
+static func _add_fascia(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Vector2, wall_h: float, h_texels: int) -> void:
+	var ts: int = p["ts"]
+	var sign_h: float = 11.0 * wall_h / float(h_texels)
+	var x0: float = lo.x + 0.08
+	var x1: float = hi.x - 0.08
+	# 지붕 처마(0.14)와 처마 끝 조각(0.09)보다 앞으로 내밀어야 지붕에 가려지지 않는다.
+	var y1: float = wall_h - 0.06
+	var y0: float = y1 - sign_h
+	var z: float = hi.y + 0.28
+	var tex: ImageTexture = PlaceholderTextures.bakery_fascia(int(roundf((x1 - x0) * float(ts))), 11)
+	var board: Dictionary = spec(tex, Color.WHITE, "bakery_fascia", "빵집 간판 %d×11 (BAKERY 글자 + 양끝 빵), 한 장 전체" % tex.get_width())
+	var back: Dictionary = spec(_tex("flat", ts, Color(0.36, 0.22, 0.12)), Color.WHITE, "sign_frame", "간판 뒤판·테두리 어두운 나무 단색 %d×%d" % [ts, ts])
+	box(b, "fascia_back", back, Vector3(x0 - 0.02, y0 - 0.02, hi.y + 0.1), Vector3(x1 + 0.02, y1 + 0.02, z - 0.01))
+	var st: SurfaceTool = b.new_part(board, Vector3(x0, y0, z), Vector3(x1, y1, z + 0.01))
+	BuildingMesh._quad(st, Vector3(x0, y0, z), Vector3(x1, y0, z), Vector3(x1, y1 - 0.01, z), Vector3(x0, y1 - 0.01, z), Vector3(0, 0, 1), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
+
+
 # 진열대: 나무 카운터. 윗면에 위에서 본 빵 그림(바게트·둥근 빵)을 평면으로 붙인다(입체 빵은 작아서 어색해 보였다).
 static func _add_counter(b: PartBuilder, p: Dictionary, x: float, z: float) -> void:
 	var wood_a: Dictionary = wood(p, Color(1.0, 0.82, 0.58), "counter_wood")
@@ -497,7 +607,7 @@ static func _add_hang_sign(b: PartBuilder, p: Dictionary, x: float, wall_z: floa
 	BuildingMesh._quad(st, Vector3(x + 0.01, y0, z1), Vector3(x + 0.01, y0, z0), Vector3(x + 0.01, y1, z0), Vector3(x + 0.01, y1, z1), Vector3(1, 0, 0), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
 
 
-static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, p: Dictionary, wall_h: float = 2.0) -> void:
+static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, p: Dictionary, wall_h: float = 2.0, display: PartBuilder = null) -> void:
 	if text.strip_edges().is_empty():
 		return
 
@@ -511,6 +621,11 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 
 		var x: float = cx + float(f[1])
 		var z: float = hi.y + float(f[2])
+		# 상자·카운터·간판처럼 앞에 놓는 진열 소품은 따로 그림자 없는 묶음(display)에 넣는다(투명 컷아웃이 섞여 있어서).
+		var tb: PartBuilder = b
+
+		if display != null and f[0] in ["counter", "hang_sign", "basket", "bin_baguette", "bin_loaf"]:
+			tb = display
 
 		match f[0]:
 			"barrel":
@@ -522,12 +637,17 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 			"hay":
 				box(b, "hay", spec(_tex("flat", p["ts"], Color(0.85, 0.72, 0.3)), Color.WHITE, "hay", "건초 %d×%d 노랑" % [p["ts"], p["ts"]]), Vector3(x - 0.3, 0.0, z - 0.22), Vector3(x + 0.3, 0.38, z + 0.22))
 			"counter":
-				_add_counter(b, p, x, z)
+				_add_counter(tb, p, x, z)
 			"hang_sign":
-				_add_hang_sign(b, p, x, hi.y, z - hi.y, wall_h)
+				_add_hang_sign(tb, p, x, hi.y, z - hi.y, wall_h)
 			"basket":
-				oct(b, "basket", spec(PlaceholderTextures.crate(p["ts"], Color(0.62, 0.42, 0.22)), Color.WHITE, "basket", "바구니 옆면 %d×%d 갈색 엮음" % [p["ts"], p["ts"]]), x, z, 0.19, 0.0, 0.26, 0.17)
-				dome(b, "bread", spec(_tex("flat", p["ts"], Color(0.74, 0.42, 0.16)), Color.WHITE, "bread", "빵 %d×%d 노릇한 주황" % [p["ts"], p["ts"]]), x, z, 0.17, 0.26, 0.4, 2, 8)
+				oct(tb, "basket", spec(PlaceholderTextures.crate(p["ts"], Color(0.62, 0.42, 0.22)), Color.WHITE, "basket", "바구니 옆면 %d×%d 갈색 엮음" % [p["ts"], p["ts"]]), x, z, 0.19, 0.0, 0.26, 0.17)
+				_card(tb, _card_spec("loaf", p), x - 0.05, 0.16, z, 0.28, 0.25)
+				_card(tb, _card_spec("loaf", p), x + 0.07, 0.2, z - 0.03, 0.26, 0.23)
+			"bin_baguette":
+				_add_bread_bin(tb, p, x, z, "baguette")
+			"bin_loaf":
+				_add_bread_bin(tb, p, x, z, "loaf")
 			"bush":
 				dome(b, "bush", spec(_tex("foliage", p["ts"], Color(0.95, 0.4, 0.55)), Color.WHITE, "bush", "덤불 %d×%d 반복(꽃 점)" % [p["ts"], p["ts"]]), x, z, 0.27, 0.0, 0.34)
 
