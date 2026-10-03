@@ -130,13 +130,23 @@ static func wall_facade(width_texels: int, height_texels: int, door: bool, windo
 			var mortar_col: bool = (x + soff) % 8 == 0
 			img.set_pixel(x, y, Color(0.4, 0.39, 0.37) if (mortar_row or mortar_col) else Color(0.6, 0.58, 0.54))
 
-	for x in range(w):
-		for y in range(0, 2):
-			img.set_pixel(x, y, timber)
+	# 나무 뼈대는 위/왼쪽에 밝은 줄, 아래/오른쪽에 어두운 줄을 둬서 두께가 있어 보이게 한다.
+	var beam_hi: Color = timber.lightened(0.28)
+	var beam_lo: Color = timber.darkened(0.3)
 
-	for y in range(h):
-		for x in [0, 1, w - 2, w - 1]:
-			img.set_pixel(x, y, timber)
+	for x in range(w):
+		for y in range(0, 3):
+			img.set_pixel(x, y, beam_hi if y == 0 else (beam_lo if y == 2 else timber))
+
+	for y in range(3, h):
+		for k in range(4):
+			var bx: int = k if k < 2 else w - 4 + k
+			img.set_pixel(bx, y, beam_hi if k == 0 else (beam_lo if k == 3 else timber))
+
+	# 모서리 버팀대(위쪽 안쪽 대각선 4px) — 반목조 느낌
+	for k in range(5):
+		img.set_pixel(clampi(4 + k, 0, w - 1), clampi(3 + k, 0, h - 1), timber)
+		img.set_pixel(clampi(w - 5 - k, 0, w - 1), clampi(3 + k, 0, h - 1), timber)
 
 	# 창문: 가로를 window_count 칸으로 나눠 가운데에 하나씩. 문이 있으면 문 칸은 창문 대신 문.
 	var cells: int = maxi(window_count, 1)
@@ -168,6 +178,17 @@ static func wall_facade(width_texels: int, height_texels: int, door: bool, windo
 						var bar: bool = x == cx or y == wy + wh / 2
 						img.set_pixel(x, y, timber if (edge or bar) else glass)
 
+	# 바닥·처마 아래 접지 그림자(환경 가림 근사): 기단 바로 위 2줄과 위쪽 보 아래 3줄을 어둡게
+	for x in range(w):
+		for k in range(2):
+			var y_low: int = h - base_h - 1 - k
+			if y_low > 3:
+				img.set_pixel(x, y_low, img.get_pixel(x, y_low).darkened(0.16 - 0.06 * k))
+		for k in range(3):
+			var y_up: int = 3 + k
+			if y_up < h:
+				img.set_pixel(x, y_up, img.get_pixel(x, y_up).darkened(0.2 - 0.06 * k))
+
 	return ImageTexture.create_from_image(img)
 
 
@@ -177,9 +198,12 @@ static func roof_tiles(size: int, base: Color) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
 	var tile_w: int = maxi(size / 3, 3)
 	var row_h: int = maxi(size / 6, 2)
-	var light: Color = base.lightened(0.22)
-	var dark: Color = base.darkened(0.38)
-	var gap: Color = base.darkened(0.3)
+	var cols: int = maxi(size / tile_w, 1)
+	var rows: int = maxi(size / row_h, 1)
+	# 손으로 칠한 느낌: 기와 장마다 밝기를 조금씩 다르게(3가지), 채도는 살짝 낮춰 형광 느낌을 줄인다.
+	var calm: Color = base.lerp(Color(base.get_luminance(), base.get_luminance(), base.get_luminance()), 0.12)
+	var variants: Array = [calm.darkened(0.06), calm, calm.lightened(0.07)]
+	var gap: Color = calm.darkened(0.45)
 
 	for y in range(size):
 		var row: int = y / row_h
@@ -187,16 +211,20 @@ static func roof_tiles(size: int, base: Color) -> ImageTexture:
 		var offset: int = (row % 2) * (tile_w / 2)
 
 		for x in range(size):
-			var lx: int = (x + offset) % tile_w
-			var c: Color = base
+			var xs: int = x + offset
+			var lx: int = xs % tile_w
+			var col: int = (xs / tile_w) % cols
+			var c: Color = variants[(row * 5 + col * 3 + row / 2) % 3]
 
 			if ly == 0:
-				c = light
+				c = c.lightened(0.26)  # 윗줄 하이라이트
 			elif ly == row_h - 1:
-				c = dark
+				c = c.darkened(0.42)  # 아랫줄 그림자(겹친 기와 아래)
+			elif lx == 1:
+				c = c.lightened(0.1)  # 왼쪽 가장자리 약한 하이라이트
 
 			if lx == 0:
-				c = gap if ly > 0 else base
+				c = gap if ly > 0 else c.darkened(0.2)  # 기와 사이 틈
 
 			img.set_pixel(x, y, c)
 

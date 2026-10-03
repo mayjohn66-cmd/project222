@@ -328,7 +328,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		spec(PlaceholderTextures.wall_facade(ts, ts, false, 1, plaster, timber), Color.WHITE, "gable_wall", "박공(지붕 끝 삼각형) 벽 %d×%d 반복" % [ts, ts]),
 		spec(PlaceholderTextures.flat_color(ts, roof_tint.darkened(0.45)), Color.WHITE, "roof_trim", "지붕 두께·처마 단면·용마루 덮개 %d×%d 어두운 목재/기와" % [ts, ts]),
 		spec(_tex("stone", ts), Color(1.0, 0.82, 0.74), "chimney_stone", "굴뚝 돌 %d×%d 반복" % [ts, ts]),
-		spec(PlaceholderTextures.awning_stripes(ts, Color(0.96, 0.9, 0.78), awning_tint), Color.WHITE, "awning", "차양 줄무늬 %d×%d 반복" % [ts, ts]),
+		spec(PlaceholderTextures.roof_tiles(ts, awning_tint.darkened(0.12)), Color.WHITE, "awning", "차양 기와 %d×%d 반복(지붕 기와와 같은 구조, 색은 가게마다)" % [ts, ts], PlaceholderTextures.roof_normal(ts)),
 	]
 	# 지붕 기와는 flat_color 대신 기와 질감을 쓰도록 교체(법선 맵과 짝)
 	specs[2]["tex"] = PlaceholderTextures.roof_tiles(ts, roof_tint)
@@ -380,6 +380,11 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		box(b, "sign_bracket", wood(p, Color(0.3, 0.2, 0.12), "sign_bracket"), Vector3(sx, wall_h * 0.8, hi.y), Vector3(sx + 0.03, wall_h * 0.8 + 0.03, hi.y + 0.34))
 		box(b, "sign_board", spec(PlaceholderTextures.sign_board(ts), Color.WHITE, "sign_board", "걸린 간판 %d×%d (가게 표시 그림은 가게마다)" % [ts, ts]), Vector3(sx - 0.02, wall_h * 0.8 - 0.24, hi.y + 0.28), Vector3(sx + 0.05, wall_h * 0.8, hi.y + 0.34))
 
+	_add_eave_nubs(b, lo, hi, wall_h, roof_tint, p)
+
+	if bool(rule.get("chimney", true)):
+		_add_smoke(b, lo, hi, wall_h + roof_h, p)
+
 	_add_extras(b, str(rule.get("extras", "")), lo, hi, p)
 	var extra_specs: Array = b.commit_into(mesh)
 
@@ -418,6 +423,45 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 
 
 # extras: "이름:dx:dz;..." — 건물 앞(+z)쪽 중심 기준 옆(dx)·앞(dz) 칸 위치에 작은 소품(통·상자·화분)
+# 보이는 쪽 처마 끝에 기와 끝 조각을 한 줄 붙여 가장자리가 물결(톱니) 모양으로 보이게 한다.
+static func _add_eave_nubs(b: PartBuilder, lo: Vector2, hi: Vector2, wall_h: float, roof_tint: Color, p: Dictionary) -> void:
+	var ts: int = p["ts"]
+	var overhang: float = 0.14
+	var ridge_x: bool = (hi.x - lo.x) >= (hi.y - lo.y)
+	var cap: Dictionary = spec(PlaceholderTextures.roof_tiles(ts, roof_tint.lightened(0.04)), Color.WHITE, "eave_tile", "처마 끝 기와 조각 %d×%d 반복(지붕 기와와 같은 구조)" % [ts, ts], PlaceholderTextures.roof_normal(ts))
+	var u0: float = (lo.x if ridge_x else lo.y) - overhang
+	var u1: float = (hi.x if ridge_x else hi.y) + overhang
+	var v_edge: float = (hi.y if ridge_x else hi.x) + overhang
+	var count: int = maxi(int(roundf((u1 - u0) / 0.34)), 2)
+	var step: float = (u1 - u0) / float(count)
+
+	for k in range(count):
+		var a: float = u0 + step * float(k) + 0.02
+		var c: float = u0 + step * float(k + 1) - 0.02
+
+		if ridge_x:
+			box(b, "eave", cap, Vector3(a, wall_h - 0.07, v_edge - 0.02), Vector3(c, wall_h + 0.03, v_edge + 0.09))
+		else:
+			box(b, "eave", cap, Vector3(v_edge - 0.02, wall_h - 0.07, a), Vector3(v_edge + 0.09, wall_h + 0.03, c))
+
+
+# 굴뚝 연기: 위로 갈수록 커지고 옆으로 번지는 흰 덩어리 셋(정지 상태). 2D 그림의 연기를 대신한다.
+static func _add_smoke(b: PartBuilder, lo: Vector2, hi: Vector2, peak: float, p: Dictionary) -> void:
+	var ts: int = p["ts"]
+	var ridge_x: bool = (hi.x - lo.x) >= (hi.y - lo.y)
+	var cu: float = (hi.x if ridge_x else hi.y) - 0.6
+	var cv: float = ((lo.y + hi.y) * 0.5 if ridge_x else (lo.x + hi.x) * 0.5) + 0.2
+	var cx: float = cu if ridge_x else cv
+	var cz: float = cv if ridge_x else cu
+	var puff: Dictionary = spec(PlaceholderTextures.flat_color(ts, Color(0.92, 0.9, 0.9)), Color.WHITE, "smoke", "굴뚝 연기 단색 %d×%d 연한 회백색" % [ts, ts])
+	var y: float = peak + 0.34
+
+	for k in range(3):
+		var r: float = 0.07 + 0.03 * float(k)
+		dome(b, "smoke", puff, cx + 0.05 * float(k), cz - 0.03 * float(k), r, y, y + r * 1.4, 2, 8)
+		y += r * 1.5
+
+
 static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, p: Dictionary) -> void:
 	if text.strip_edges().is_empty():
 		return
@@ -442,6 +486,9 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 				box(b, "sack", spec(_tex("flat", p["ts"], Color(0.8, 0.72, 0.52)), Color.WHITE, "sack", "자루 %d×%d 베이지" % [p["ts"], p["ts"]]), Vector3(x - 0.16, 0.0, z - 0.14), Vector3(x + 0.16, 0.34, z + 0.14))
 			"hay":
 				box(b, "hay", spec(_tex("flat", p["ts"], Color(0.85, 0.72, 0.3)), Color.WHITE, "hay", "건초 %d×%d 노랑" % [p["ts"], p["ts"]]), Vector3(x - 0.3, 0.0, z - 0.22), Vector3(x + 0.3, 0.38, z + 0.22))
+			"basket":
+				oct(b, "basket", spec(PlaceholderTextures.crate(p["ts"], Color(0.62, 0.42, 0.22)), Color.WHITE, "basket", "바구니 옆면 %d×%d 갈색 엮음" % [p["ts"], p["ts"]]), x, z, 0.19, 0.0, 0.26, 0.17)
+				dome(b, "bread", spec(_tex("flat", p["ts"], Color(0.9, 0.55, 0.2)), Color.WHITE, "bread", "빵 %d×%d 노릇한 주황" % [p["ts"], p["ts"]]), x, z, 0.17, 0.26, 0.4, 2, 8)
 			"bush":
 				dome(b, "bush", spec(_tex("foliage", p["ts"], Color(0.95, 0.4, 0.55)), Color.WHITE, "bush", "덤불 %d×%d 반복(꽃 점)" % [p["ts"], p["ts"]]), x, z, 0.27, 0.0, 0.34)
 
