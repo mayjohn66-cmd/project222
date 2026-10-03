@@ -577,6 +577,23 @@ static func _add_fascia(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Vector2,
 	BuildingMesh._quad(st, Vector3(x0, y0, z), Vector3(x1, y0, z), Vector3(x1, y1 - 0.01, z), Vector3(x0, y1 - 0.01, z), Vector3(0, 0, 1), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
 
 
+# 긴 진열대: 앞이 열린 긴 나무 카운터 위에 둥근 빵을 한 개씩 간격을 두고 올려놓는다(바게트·상자 진열은 빼고 간략화).
+static func _add_long_counter(b: PartBuilder, p: Dictionary, x: float, z: float, length: float) -> void:
+	var body: Dictionary = wood(p, Color(1.0, 0.84, 0.6), "counter_wood")
+	var top: Dictionary = spec(_tex("flat", p["ts"], Color(0.98, 0.9, 0.74)), Color.WHITE, "counter_top", "진열대 윗판 단색 %d×%d 밝은 베이지" % [p["ts"], p["ts"]])
+	var hl: float = length * 0.5
+	var hd: float = 0.2
+	box(b, "counter", body, Vector3(x - hl, 0.0, z - hd), Vector3(x + hl, 0.46, z + hd))
+	box(b, "counter_top", top, Vector3(x - hl - 0.02, 0.46, z - hd - 0.03), Vector3(x + hl + 0.02, 0.5, z + hd + 0.03))
+	var count: int = maxi(int(floorf(length / 0.45)), 2)
+	var gap: float = length / float(count)
+	var card: Dictionary = _card_spec("loaf", p)
+
+	for i in range(count):
+		var cx: float = x - hl + gap * (float(i) + 0.5)
+		_card(b, card, cx, 0.5, z + (0.02 if i % 2 == 0 else -0.02), 0.4, 0.36)
+
+
 # 진열대: 나무 카운터. 윗면에 위에서 본 빵 그림(바게트·둥근 빵)을 평면으로 붙인다(입체 빵은 작아서 어색해 보였다).
 static func _add_counter(b: PartBuilder, p: Dictionary, x: float, z: float) -> void:
 	var wood_a: Dictionary = wood(p, Color(1.0, 0.82, 0.58), "counter_wood")
@@ -622,7 +639,7 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 		# 상자·카운터·간판처럼 앞에 놓는 진열 소품은 따로 그림자 없는 묶음(display)에 넣는다(투명 컷아웃이 섞여 있어서).
 		var tb: PartBuilder = b
 
-		if display != null and f[0] in ["counter", "hang_sign", "basket", "bin_baguette", "bin_loaf"]:
+		if display != null and f[0] in ["counter", "hang_sign", "basket", "bin_baguette", "bin_loaf", "long_counter"]:
 			tb = display
 
 		match f[0]:
@@ -642,6 +659,8 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 				oct(tb, "basket", spec(PlaceholderTextures.crate(p["ts"], Color(0.62, 0.42, 0.22)), Color.WHITE, "basket", "바구니 옆면 %d×%d 갈색 엮음" % [p["ts"], p["ts"]]), x, z, 0.19, 0.0, 0.26, 0.17)
 				_card(tb, _card_spec("loaf", p), x - 0.05, 0.16, z, 0.28, 0.25)
 				_card(tb, _card_spec("loaf", p), x + 0.07, 0.2, z - 0.03, 0.26, 0.23)
+			"long_counter":
+				_add_long_counter(tb, p, x, z, float(f[3]) if f.size() > 3 else 1.6)
 			"bin_baguette":
 				_add_bread_bin(tb, p, x, z, "baguette")
 			"bin_loaf":
