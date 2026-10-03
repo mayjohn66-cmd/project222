@@ -95,9 +95,9 @@ _FACES_CACHE = {}
 
 
 def _faces_expected():
-    """docs/drafts/art_requests/faces.csv → {(자산id, 면이름): (w, h)}"""
+    """docs/그림_작업/faces.csv → {(자산id, 면이름): (w, h)}"""
     if not _FACES_CACHE:
-        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "drafts", "art_requests", "faces.csv")
+        path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs", "그림_작업", "faces.csv")
         if os.path.exists(path):
             with open(path, encoding="utf-8-sig", newline="") as f:
                 for row in csv.DictReader(f):

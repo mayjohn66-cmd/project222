@@ -11,7 +11,7 @@
   3) 그림 넣기      그림 폴더(또는 파일)를 알려 주면 검사하고 art/world3d/<자산id>/ 에 넣음
   4) 가져오기 설정·검증  .import 무손실 설정 맞추기 + validate_assets 검사
   5) 요청서·틀 다시 만들기  (Godot 필요: GODOT_EXE 환경변수) 그림 요청 문서와 면 질감 틀 PNG 재생성
-  6) Pixel Lab 으로 만들기   자산 하나의 작업 지시 파일(TASK.md)을 만들고, PC 의 Claude Code(`claude`, Pixel Lab MCP 연결됨)를 그 지시와 함께 실행
+  6) Pixel Lab 으로 만들기   자산 하나의 작업 지시 파일(지시 파일)을 만들고, PC 의 Claude Code(`claude`, Pixel Lab MCP 연결됨)를 그 지시와 함께 실행
 참고: 이미지는 이 도구가 아니라 PC 의 Claude Code 가 Pixel Lab MCP 로 만든다(사용자 범위로 연결: `claude mcp add pixellab ... -s user`, 토큰은 저장소에 두지 않음).
       이 도구는 지시 파일을 만들고, 만들어진 PNG 를 검사해 art/world3d/ 에 넣는 일을 맡는다.
 Pillow 가 필요하다(pip install pillow).
@@ -22,7 +22,7 @@ import subprocess
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-ART_REQ = os.path.join(ROOT, "docs", "drafts", "art_requests")
+ART_REQ = os.path.join(ROOT, "docs", "그림_작업")
 FACES_CSV = os.path.join(ART_REQ, "faces.csv")
 OUT_DIR = os.path.join(ROOT, "art", "world3d")
 PY = sys.executable
@@ -108,7 +108,8 @@ def show_next(faces, asset=None):
     print("\n다음에 그릴 면: %s (%s) — %s" % (a, r["asset_label"], r["face"]))
     print("  크기      : %s x %s px  (%s)" % (r["width"], r["height"], r["repeat"]))
     print("  법선 맵   : %s" % r["normal_map"].replace(a + "/", "") if r["normal_map"] != "선택" else "  법선 맵   : 선택")
-    print("  틀 PNG    : docs/drafts/art_requests/%s  (이 크기·배치 그대로 새로 그리기)" % r["file"])
+    print("  틀 PNG    : docs/그림_작업/%s  (이 크기·배치 그대로 새로 그리기)" % r["file"])
+    print("  시트      : docs/그림_작업/시트/%s.png  (한 장 요약)" % a)
     print("  저장 위치 : art/world3d/%s/%s.png   (도구 3번으로 넣으면 자동)" % (a, r["face"]))
     print("  설명      : %s" % r["note"])
     print("\n  영문 프롬프트:\n  %s\n" % r["prompt_en"])
@@ -176,17 +177,17 @@ TASK_HEADER = """# 작업 지시 — {label} ({asset}) 의 3D 마을용 면 질�
 - 이미지 생성은 크레딧이 든다. 한 번에 한 면만, 마음에 안 들면 사용자와 상의해서 다시 만든다.
 - **토큰·API 키를 화면에 찍거나 파일에 적지 않는다.**
 
-## 1. 규칙 (docs/그림_요청_3D_마을.md 1장 요약)
+## 1. 규칙 (docs/그림_작업/요청서.md 1장 요약)
 - 크기는 아래 표의 크기와 **정확히 같게**. 확대·축소로 맞추지 않는다. 정확한 크기를 못 내는 도구라면 가장 가까운 크기로 만든 뒤 `--resize`(최근접)로 맞추되 도트가 뭉개지지 않았는지 사용자에게 보여 준다.
 - 외곽선·그림자·빛(밝고 어두움)·반투명 없이 **평평한 색**으로. 안쪽 선(줄눈·창틀·나무결)은 허용.
 - 색은 한 장 8~12개(최대 16), 같은 자산의 면끼리 팔레트를 공유(벽·기단·창틀 색).
 - "반복"인 면은 위아래·좌우가 이어져야 한다. 만든 뒤 `python tools/preview_tiles.py <파일>` 로 3x3 이은 그림을 만들어 이음매를 사용자에게 보여 준다.
-- 틀 PNG(`docs/drafts/art_requests/{asset}/face_<면>.png`)는 창·문 위치 등 **배치 규격**이다. 가능하면 참조/초안 이미지로 쓰고, 같은 배치를 지킨다. 2D 원본 그림 `{sprite}` 은 분위기 참고용(그대로 베끼지 않는다).
+- 틀 PNG(`docs/그림_작업/틀/{asset}__<면>.png`)와 한 장 요약 `docs/그림_작업/시트/{asset}.png` 는 창·문 위치 등 **배치 규격**이다. 가능하면 참조/초안 이미지로 쓰고, 같은 배치를 지킨다. 2D 원본 그림 `{sprite}` 은 분위기 참고용(그대로 베끼지 않는다).
 - 문은 앞벽 가운데, 창 위치는 틀과 같게(3D 의 화분·계단 위치가 맞아야 함).
 
 ## 2. 저장 위치
-- 만든 결과는 먼저 `docs/drafts/art_requests/{asset}/incoming/<면이름>.png` 에 둔다(Godot 가 가져오지 않는 폴더).
-- 사용자가 확인하면 `python tools/ingest_world3d.py {asset} docs/drafts/art_requests/{asset}/incoming` 로 넣는다(크기·불투명·색 수 검사, `art/world3d/{asset}/` 에 저장).
+- 만든 결과는 먼저 `docs/그림_작업/받은그림/{asset}/<면이름>.png` 에 둔다(Godot 가 가져오지 않는 폴더).
+- 사용자가 확인하면 `python tools/ingest_world3d.py {asset} docs/그림_작업/받은그림/{asset}` 로 넣는다(크기·불투명·색 수 검사, `art/world3d/{asset}/` 에 저장).
 - 넣은 뒤 사용자에게 안내: Godot 를 한 번 열고 → `python tools/fix_texture_import.py` → 게임(`dev/spike3d/game_3d_view.tscn`)에서 F8.
 
 ## 3. 만들 면 (먼저 그릴 순서)
@@ -213,14 +214,15 @@ def write_task(faces, asset):
     for i, r in enumerate(rows, 1):
         done = "  ← 이미 그림이 있음(건너뛰어도 됨)" if has_art(asset, r["face"]) else ""
         lines.append("### %d. `%s` %sx%s px — %s%s" % (i, r["face"], r["width"], r["height"], r["repeat"], done))
-        lines.append("- 틀: `docs/drafts/art_requests/%s`" % r["file"])
+        lines.append("- 틀: `docs/그림_작업/%s`" % r["file"])
         lines.append("- 법선 맵: %s" % ("필요(같은 크기 `%s_n.png`, 못 만들면 회색조 높이 맵 `%s_h.png` 로 대신)" % (r["face"], r["face"]) if r["normal_map"] != "선택" else "선택"))
         lines.append("- 설명: %s" % r["note"])
         lines.append("- 영문 프롬프트: `%s`" % r["prompt_en"])
         lines.append("")
     lines.append(TASK_FOOTER)
-    out = os.path.join(ART_REQ, asset, "TASK.md")
-    os.makedirs(os.path.join(ART_REQ, asset, "incoming"), exist_ok=True)
+    out = os.path.join(ART_REQ, "지시", asset + ".md")
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    os.makedirs(os.path.join(ART_REQ, "받은그림", asset), exist_ok=True)
     with open(out, "w", encoding="utf-8", newline="\n") as f:
         f.write("\n".join(lines))
     return out

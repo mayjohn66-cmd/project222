@@ -3,8 +3,8 @@
 
   python tools/ingest_world3d.py <자산id> <파일 또는 폴더 ...> [--resize] [--dry-run]
 
-- 자산 id 와 면 이름·크기는 docs/drafts/art_requests/faces.csv(그림 요청 문서가 쓰는 표)에서 읽는다.
-- 입력 파일 이름에서 면 이름을 알아낸다: `wall_front.png`, `moss_cottage_wall_front.png`, `face_wall_front.png` 모두 가능.
+- 자산 id 와 면 이름·크기는 docs/그림_작업/faces.csv(그림 요청 문서가 쓰는 표)에서 읽는다.
+- 입력 파일 이름에서 면 이름을 알아낸다: `wall_front.png`, `moss_cottage__wall_front.png`, `moss_cottage_wall_front.png`, `face_wall_front.png` 모두 가능.
     * `..._n.png` = 법선 맵 그대로,  `..._h.png` = 높이 맵(회색조) → 법선 맵으로 변환(tools/height_to_normal.py)
 - 검사: 불투명(알파 255 만), 색 수(알베도 16 이하), 크기가 요청서와 같은지. 크기가 다르면 기본은 거절하고,
   `--resize` 를 주면 최근접(nearest)으로 맞춘다(Pixel Lab 이 정확한 크기를 못 낼 때. 줄이면 도트가 뭉개질 수 있으니 눈으로 확인할 것).
@@ -23,7 +23,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import height_to_normal  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FACES_CSV = os.path.join(ROOT, "docs", "drafts", "art_requests", "faces.csv")
+FACES_CSV = os.path.join(ROOT, "docs", "그림_작업", "faces.csv")
 OUT_DIR = os.path.join(ROOT, "art", "world3d")
 MAX_COLORS = 16
 
@@ -44,7 +44,7 @@ def split_name(stem, asset, face_names):
         kind, stem = "normal", stem[:-2]
     elif stem.endswith("_h"):
         kind, stem = "height", stem[:-2]
-    for prefix in ("face_", asset + "_"):
+    for prefix in ("face_", asset + "__", asset + "_"):
         if stem.startswith(prefix):
             stem = stem[len(prefix):]
     if stem in face_names:

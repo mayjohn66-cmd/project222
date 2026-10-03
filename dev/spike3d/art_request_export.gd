@@ -1,6 +1,6 @@
 extends Node
 ## 그림 요청용 "미리 출력": 마을 건물·소품 3D 모양(VillageAssets, 실제 게임과 같은 코드)의 면 질감 틀과 격리 미리보기를 PNG/JSON 으로 내보낸다.
-## 인자: --out <폴더>  (기본 res://docs/drafts/art_requests)  →  <폴더>/<id>/face_*.png, preview.png, 그리고 assets.json (2D 원본은 복사하지 않고 경로만 적음)
+## 인자: --out <폴더>  (기본 res://docs/그림_작업)  →  <폴더>/틀/<id>__<면>.png (+ _n.png), <id>__preview.png, 그리고 <폴더>/assets.json (2D 원본은 복사하지 않고 경로만 적음)
 ## 틀 질감은 코드로 칠한 임시 그림이다: 크기와 면 배치가 "실제로 요청할 그림의 규격"이고, 그림 담당이 이 위에 새로 그린다.
 
 const PREVIEW_BUILDING: int = 176  # 건물 미리보기 낮은 해상도 한 변(px). 3배 확대해 저장
@@ -15,7 +15,7 @@ var only_id: String = ""  # --only <id>: 한 자산만 다시 내보낸다(asset
 
 func _ready() -> void:
 	var args := OS.get_cmdline_user_args()
-	out_dir = ProjectSettings.globalize_path("res://docs/drafts/art_requests")
+	out_dir = ProjectSettings.globalize_path("res://docs/그림_작업")
 
 	for i in range(args.size()):
 		if args[i] == "--out" and i + 1 < args.size():
@@ -52,17 +52,18 @@ func _ready() -> void:
 		else:
 			built = VillageAssets.build_prop(str(rule.get("style", "")), lo, hi, rule, p)
 
-		var folder: String = "%s/%s" % [out_dir, a["id"]]
+		var folder: String = "%s/틀" % out_dir  # 모든 틀을 한 폴더에 평평하게: <id>__<면>.png
 		DirAccess.make_dir_recursive_absolute(folder)
-		var faces: Array = _save_faces(folder, built["specs"], p)
-		await _render_preview(folder + "/preview.png", built, p, PREVIEW_BUILDING if str(a["kind_group"]) == "building" else PREVIEW_PROP)
+		var prefix: String = "%s__" % a["id"]
+		var faces: Array = _save_faces(folder, prefix, built["specs"], p)
+		await _render_preview(folder + "/" + prefix + "preview.png", built, p, PREVIEW_BUILDING if str(a["kind_group"]) == "building" else PREVIEW_PROP)
 		var src_path: String = str(a["sprite"])  # 2D 원본은 복사하지 않고 경로만 기록(저장소 크기 때문)
 
 		result.append({"id": a["id"], "label": a["label"], "group": a["kind_group"], "notes": a["notes"], "sprite": src_path, "kind": rule["kind"], "style": rule.get("style", ""), "canon_w": cw, "canon_d": cd, "total_blocks": built["total_blocks"], "faces": faces, "has_apron": built["apron"] != null, "tint": (rule.get("tint", Color.WHITE) as Color).to_html(false), "roof_tint": (rule.get("roof_tint", Color.WHITE) as Color).to_html(false), "awning_tint": (rule.get("awning_tint", Color.WHITE) as Color).to_html(false), "wall_blocks": rule.get("height_blocks", 0.0), "roof_blocks": rule.get("roof_blocks", 0.0)})
 
 		if built["apron"] != null:
 			var ap: Dictionary = built["apron"]
-			var apron_faces: Array = _save_faces(folder, [ap["spec"]], p)
+			var apron_faces: Array = _save_faces(folder, prefix, [ap["spec"]], p)
 			result[-1]["faces"] += apron_faces
 
 	if only_id == "":
@@ -95,7 +96,7 @@ func _read_assets() -> Array:
 
 
 # 이름이 같은 면(여러 부품이 같은 질감을 쓸 때)은 한 번만 저장한다.
-func _save_faces(folder: String, specs: Array, p: Dictionary) -> Array:
+func _save_faces(folder: String, prefix: String, specs: Array, p: Dictionary) -> Array:
 	var faces: Array = []
 	var seen: Dictionary = {}
 
@@ -109,14 +110,14 @@ func _save_faces(folder: String, specs: Array, p: Dictionary) -> Array:
 		var tex: ImageTexture = s["tex"]
 		var img: Image = tex.get_image()
 		img.convert(Image.FORMAT_RGBA8)
-		img.save_png("%s/face_%s.png" % [folder, name])
-		var entry: Dictionary = {"name": name, "file": "face_%s.png" % name, "w": img.get_width(), "h": img.get_height(), "note": s.get("note", ""), "tileable": img.get_width() == int(p["ts"]) and img.get_height() == int(p["ts"]), "normal_file": ""}
+		img.save_png("%s/%s%s.png" % [folder, prefix, name])
+		var entry: Dictionary = {"name": name, "file": "%s%s.png" % [prefix, name], "w": img.get_width(), "h": img.get_height(), "note": s.get("note", ""), "tileable": img.get_width() == int(p["ts"]) and img.get_height() == int(p["ts"]), "normal_file": ""}
 
 		if s.get("normal", null) != null:
 			var nimg: Image = (s["normal"] as ImageTexture).get_image()
 			nimg.convert(Image.FORMAT_RGBA8)
-			nimg.save_png("%s/face_%s_n.png" % [folder, name])
-			entry["normal_file"] = "face_%s_n.png" % name
+			nimg.save_png("%s/%s%s_n.png" % [folder, prefix, name])
+			entry["normal_file"] = "%s%s_n.png" % [prefix, name]
 
 		faces.append(entry)
 
