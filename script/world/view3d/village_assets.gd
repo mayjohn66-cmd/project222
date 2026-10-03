@@ -134,11 +134,12 @@ class PartBuilder:
 	var min_pt: Vector3 = Vector3(INF, INF, INF)
 	var max_pt: Vector3 = Vector3(-INF, -INF, -INF)
 
-	func new_part(spec: Dictionary, a: Vector3, b: Vector3) -> SurfaceTool:
+	# bias: 정렬 순서에 더하는 값. 다른 부품 위에 놓이는 얇은 것(빵 카드)은 크게 줘서 항상 나중(앞)에 그리게 한다.
+	func new_part(spec: Dictionary, a: Vector3, b: Vector3, bias: float = 0.0) -> SurfaceTool:
 		var st := SurfaceTool.new()
 		st.begin(Mesh.PRIMITIVE_TRIANGLES)
 		var c: Vector3 = (a + b) * 0.5
-		parts.append({"depth": c.x + c.z + c.y * 0.02, "spec": spec, "st": st})
+		parts.append({"depth": c.x + c.z + c.y * 0.02 + bias, "spec": spec, "st": st})
 		min_pt = Vector3(minf(min_pt.x, minf(a.x, b.x)), minf(min_pt.y, minf(a.y, b.y)), minf(min_pt.z, minf(a.z, b.z)))
 		max_pt = Vector3(maxf(max_pt.x, maxf(a.x, b.x)), maxf(max_pt.y, maxf(a.y, b.y)), maxf(max_pt.z, maxf(a.z, b.z)))
 		return st
@@ -495,7 +496,8 @@ static func _card(b: PartBuilder, spec: Dictionary, cx: float, y0: float, cz: fl
 	var pa: Vector3 = c0 - r
 	var pb: Vector3 = c0 + r
 	var up := Vector3(0, h, 0)
-	var st: SurfaceTool = b.new_part(spec, pa, pb + up)
+	# 카드는 놓인 면(진열대 윗판 등)보다 항상 나중에 그린다(bias). 안 그러면 왼쪽 카드가 윗판 뒤로 정렬돼 아랫부분이 잘린다.
+	var st: SurfaceTool = b.new_part(spec, pa, pb + up, 50.0)
 	BuildingMesh._quad(st, pa, pb, pb + up, pa + up, Vector3(0.7071, 0.0, 0.7071), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
 
 
