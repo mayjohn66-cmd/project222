@@ -167,7 +167,27 @@ static func roof_levels(kind: String, wall_h: float, roof_h: float, hs: float, l
 	if kind == "half_hip":
 		return [{"y": wall_h, "ui": 0.0, "vh": hs}, {"y": wall_h + roof_h * 0.62, "ui": 0.0, "vh": hs * 0.38}, {"y": peak, "ui": minf(hs * 0.55, max_in), "vh": 0.0}]
 
+	if kind == "hip":
+		# 사방 경사(모임지붕): 용마루가 양 끝에서 hs 만큼 줄어든다(build 의 hip 옵션과 같은 모양, 지붕창 위치 계산용)
+		return [{"y": wall_h, "ui": 0.0, "vh": hs}, {"y": peak, "ui": minf(hs, len_u * 0.5), "vh": 0.0}]
+
 	return [{"y": wall_h, "ui": 0.0, "vh": hs}, {"y": peak, "ui": 0.0, "vh": 0.0}]
+
+
+# 용마루에서 가로로 w 만큼 떨어진 곳에서 지붕이 양 끝에서 안쪽으로 들어간 거리(박공 지붕은 0)
+static func roof_inset_at(levels: Array, w: float) -> float:
+	var a: float = absf(w)
+
+	for k in range(levels.size() - 1):
+		var l0: Dictionary = levels[k]
+		var l1: Dictionary = levels[k + 1]
+
+		if a <= float(l0["vh"]) and a >= float(l1["vh"]):
+			var span: float = float(l0["vh"]) - float(l1["vh"])
+			var t: float = 0.0 if span < 0.0001 else (float(l0["vh"]) - a) / span
+			return lerpf(float(l0["ui"]), float(l1["ui"]), t)
+
+	return 0.0
 
 
 # 용마루에서 가로로 w 만큼 떨어진 곳의 지붕 표면 높이(w 가 처마보다 크면 처마 높이)

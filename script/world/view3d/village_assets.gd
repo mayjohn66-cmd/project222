@@ -200,6 +200,24 @@ static func box_st(st: SurfaceTool, lo: Vector3, hi: Vector3) -> void:
 	q.call(st, Vector3(lo.x, lo.y, lo.z), Vector3(lo.x, lo.y, hi.z), Vector3(lo.x, hi.y, hi.z), Vector3(lo.x, hi.y, lo.z), Vector3(-1, 0, 0), Vector2(0, dy), Vector2(dz, dy), Vector2(dz, 0), Vector2(0, 0))
 
 
+# +z 면(평면 z0)에 붙는 문: 돌 문틀(좌우 기둥 + 상인방 + 문턱, 한 면으로 모음) + 널빤지 문판(질감 한 장).
+# cx 가운데 x, base_y 바닥 높이, w 문 폭, h 문 높이. 문판은 벽에서 0.015 앞, 문틀은 0.1 튀어나온다.
+static func add_door_z(b: PartBuilder, p: Dictionary, cx: float, base_y: float, z0: float, w: float, h: float, window: bool = false, stone_tint: Color = Color(1.12, 1.08, 1.02)) -> void:
+	var ts: int = p["ts"]
+	var panel_spec: Dictionary = spec(PlaceholderTextures.door_plank(maxi(int(roundf(w * float(ts) * 0.9)), 8), maxi(int(roundf(h * float(ts) * 1.15)), 16), Color(0.6, 0.37, 0.2), window), Color.WHITE, "door_plank", "널빤지 문 판: 세로 판자 + 쇠띠 둘 + 고리 손잡이(작은 질감 한 장)")
+	var pa := Vector3(cx - w * 0.5, base_y, z0 + 0.015)
+	var pb := Vector3(cx + w * 0.5, base_y, z0 + 0.015)
+	var up := Vector3(0.0, h, 0.0)
+	var pst: SurfaceTool = b.new_part(panel_spec, pa, pb + up, 40.0)
+	BuildingMesh._quad(pst, pa, pb, pb + up, pa + up, Vector3(0.0, 0.0, 1.0), Vector2(0, 1), Vector2(1, 1), Vector2(1, 0), Vector2(0, 0))
+	var stone: Dictionary = stone_spec(p, stone_tint, "door_frame_stone")
+	var st: SurfaceTool = b.new_part(stone, Vector3(cx - w * 0.5 - 0.1, base_y, z0), Vector3(cx + w * 0.5 + 0.1, base_y + h + 0.12, z0 + 0.12), 41.0)
+	box_st(st, Vector3(cx - w * 0.5 - 0.1, base_y, z0), Vector3(cx - w * 0.5, base_y + h + 0.02, z0 + 0.1))
+	box_st(st, Vector3(cx + w * 0.5, base_y, z0), Vector3(cx + w * 0.5 + 0.1, base_y + h + 0.02, z0 + 0.1))
+	box_st(st, Vector3(cx - w * 0.5 - 0.12, base_y + h, z0), Vector3(cx + w * 0.5 + 0.12, base_y + h + 0.12, z0 + 0.12))
+	box_st(st, Vector3(cx - w * 0.5 - 0.12, base_y, z0), Vector3(cx + w * 0.5 + 0.12, base_y + 0.05, z0 + 0.14))
+
+
 # 팔각 기둥(통·줄기·잎 덩어리). 옆면 UV 는 둘레 길이 기준.
 static func oct(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: float, r: float, y0: float, y1: float, r_top: float = -1.0) -> void:
 	var st: SurfaceTool = b.new_part(spec, Vector3(cx - r, y0, cz - r), Vector3(cx + r, y1, cz + r))
@@ -364,7 +382,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		spec(tex_x, Color.WHITE, "wall_side", "카메라 오른쪽 아래를 보는 옆벽 %d×%d px: 창 %d, 나무 뼈대, 아래 돌 기단" % [tex_x.get_width(), tex_x.get_height(), cells_x]),
 		spec(_tex("flat", ts, roof_tint), Color.WHITE, "roof_tiles", "지붕 기와 %d×%d 한 칸 반복(이음매 없이). 법선 맵 별도" % [ts, ts], PlaceholderTextures.roof_normal(ts)),
 		spec(PlaceholderTextures.flat_color(ts, plaster), Color.WHITE, "gable_wall", "박공(지붕 끝 삼각형) 벽 회반죽 단색 %d×%d (삼각형에 줄무늬가 비스듬히 늘어나지 않게 무늬 없음)" % [ts, ts]),
-		spec(PlaceholderTextures.flat_color(ts, PlaceholderTextures.soften(roof_tint).darkened(0.45)), Color.WHITE, "roof_trim", "지붕 두께·처마 단면·용마루 덮개 %d×%d 어두운 목재/기와" % [ts, ts]),
+		spec(PlaceholderTextures.flat_color(ts, PlaceholderTextures.soften(roof_tint).darkened(0.22)), Color.WHITE, "roof_trim", "지붕 두께·처마 단면·용마루 덮개 %d×%d 어두운 목재/기와" % [ts, ts]),
 		spec(_tex("stone", ts), Color(1.0, 0.82, 0.74), "chimney_stone", "굴뚝 돌 %d×%d 반복" % [ts, ts]),
 		spec(PlaceholderTextures.roof_tiles(ts, awning_tint.darkened(0.12)), Color.WHITE, "awning", "차양 기와 %d×%d 반복(지붕 기와와 같은 구조, 색은 가게마다)" % [ts, ts], PlaceholderTextures.roof_normal(ts)),
 	]
@@ -509,7 +527,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		var ridge_x: bool = width >= depth
 		var hs_roof: float = (depth if ridge_x else width) * 0.5 + 0.14
 		var len_u: float = (width if ridge_x else depth) + 0.28
-		var levels: Array = BuildingMesh.roof_levels(roof_kind if BuildingMesh.LAYERED_KINDS.has(roof_kind) else "", wall_h, roof_h, hs_roof, len_u)
+		var levels: Array = BuildingMesh.roof_levels(roof_kind if (BuildingMesh.LAYERED_KINDS.has(roof_kind) or roof_kind == "hip") else "", wall_h, roof_h, hs_roof, len_u)
 		HouseShapes.apply(shape_tokens, {
 			"b": b, "p": p, "lo": lo, "hi": hi, "wall_h": wall_h_low, "wall_h_total": wall_h, "roof_h": roof_h, "ridge_x": ridge_x,
 			"hs": hs_roof, "vc": ((lo.y + hi.y) * 0.5 if ridge_x else (lo.x + hi.x) * 0.5), "levels": levels, "plaster": plaster, "timber": timber,
@@ -1130,8 +1148,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			box(b, "tower_band", band, Vector3(c.x - hx - 0.05, 2.5, c.y - hx - 0.05), Vector3(c.x + hx + 0.05, 2.65, c.y + hx + 0.05))
 			box(b, "tower_band", band, Vector3(c.x - hx - 0.08, wall_top - 0.15, c.y - hx - 0.08), Vector3(c.x + hx + 0.08, wall_top, c.y + hx + 0.08))
 			# 앞(+z)면: 문 + 창 슬릿 둘, 옆(+x)면: 창 슬릿 둘
-			box(b, "tower_door", door_c, Vector3(c.x - 0.22, 0.35, c.y + hx), Vector3(c.x + 0.22, 1.2, c.y + hx + 0.03))
-			box(b, "tower_door_top", dark, Vector3(c.x - 0.16, 1.2, c.y + hx), Vector3(c.x + 0.16, 1.32, c.y + hx + 0.03))
+			add_door_z(b, p, c.x, 0.35, c.y + hx, 0.46, 0.98)
 
 			for yy in [1.8, 3.0]:
 				box(b, "slit", dark, Vector3(c.x - 0.05, yy, c.y + hx), Vector3(c.x + 0.05, yy + 0.4, c.y + hx + 0.03))
@@ -1151,11 +1168,14 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			oct(b, "dome_steps", trim_d, c.x, c.y, r0 + 0.15, 0.0, 0.18)
 			oct(b, "dome_drum", wall_d, c.x, c.y, r0, 0.18, 2.0)
 			oct(b, "dome_band", trim_d, c.x, c.y, r0 + 0.05, 1.9, 2.05)
-			box(b, "dome_door", door_d, Vector3(c.x - 0.22, 0.18, c.y + r0 * 0.92), Vector3(c.x + 0.22, 1.1, c.y + r0 * 0.92 + 0.05))
+			add_door_z(b, p, c.x, 0.18, c.y + r0 * 0.9239, 0.46, 0.95, true)
+
+			var dwp: Dictionary = HouseShapes.win_parts(b, p, Vector3(c.x - r0, 0.2, c.y - r0), Vector3(c.x + r0 + 0.12, 2.0, c.y + r0 + 0.12))
+			var ap_d: float = r0 * 0.9239
 
 			for sd in [-1.0, 1.0]:
-				box(b, "dome_win", glass_d, Vector3(c.x + sd * 0.55 - 0.1, 0.8, c.y + r0 * 0.9), Vector3(c.x + sd * 0.55 + 0.1, 1.45, c.y + r0 * 0.9 + 0.04))
-				box(b, "dome_win", glass_d, Vector3(c.x + r0 * 0.9, 0.8, c.y + sd * 0.55 - 0.1), Vector3(c.x + r0 * 0.9 + 0.04, 1.45, c.y + sd * 0.55 + 0.1))
+				HouseShapes.win_on_z(dwp, c.x + sd * 0.55, 0.85, 1.5, 0.12, c.y + ap_d)
+				HouseShapes.win_on_x(dwp, c.y + sd * 0.55, 0.85, 1.5, 0.12, c.x + ap_d)
 
 			var dome_tex: Dictionary = spec(PlaceholderTextures.roof_tiles(ts, rule.get("roof_tint", Color(0.42, 0.4, 0.68))), Color.WHITE, "dome_roof", "둥근 지붕 기와 %d×%d" % [ts, ts])
 			dome(b, "dome", dome_tex, c.x, c.y, r0 + 0.1, 2.0, 3.3, 4, 12)
@@ -1177,8 +1197,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			var apothem_k: float = 0.9239  # 팔각형 변 중심까지 거리 / 꼭짓점 반지름
 			var ap_door: float = r1 * (1.0 - 0.38 * (0.5 / 3.0)) * apothem_k
 			var ap_win: float = r1 * (1.0 - 0.38 * (1.9 / 3.0)) * apothem_k
-			box(b, "mill_door_frame", dark_m, Vector3(c.x - 0.27, 0.0, c.y + ap_door - 0.06), Vector3(c.x + 0.27, 1.08, c.y + ap_door + 0.03))
-			box(b, "mill_door", door_m, Vector3(c.x - 0.22, 0.0, c.y + ap_door - 0.06), Vector3(c.x + 0.22, 0.98, c.y + ap_door + 0.05))
+			add_door_z(b, p, c.x, 0.0, c.y + ap_door - 0.04, 0.46, 1.0)
 			box(b, "mill_win", dark_m, Vector3(c.x - 0.1, 1.7, c.y + ap_win - 0.04), Vector3(c.x + 0.1, 2.12, c.y + ap_win + 0.04))
 			# 날개 축(몸체 앞 위쪽에서 카메라 쪽으로 튀어나온 나무 토막)과 날개: 날개는 카메라를 보는 평면 컷아웃이라 그 축으로 돌려도 정면 그대로다.
 			var ap_hub: float = r1 * (1.0 - 0.38 * (2.55 / 3.0)) * apothem_k

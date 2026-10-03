@@ -226,8 +226,11 @@ static func _dormers(c: Dictionary, count: int) -> void:
 	var dw: float = 0.66
 	var face_h: float = 0.58
 	var y_top: float = y_f + face_h
-	var span_lo: float = u0 + 0.9
-	var span_hi: float = u1 - 1.7  # 굴뚝(+u 끝)을 피한다
+	# 지붕이 양 끝에서 안쪽으로 들어간 만큼(모임지붕·맨사드·반 박공)은 지붕창을 놓지 않는다. 지붕 끝 바깥으로 삐져나와 떠 보이는 것을 막는다.
+	var inset: float = BuildingMesh.roof_inset_at(levels, w_front)
+	var edge: float = 0.14 + inset + dw * 0.5 + 0.2
+	var span_lo: float = u0 - 0.14 + edge
+	var span_hi: float = minf(u1 + 0.14 - edge, u1 - 1.7)  # 굴뚝(+u 끝)을 피한다
 	var ts: int = p["ts"]
 	var face_spec: Dictionary = VillageAssets.spec(PlaceholderTextures.flat_color(ts, c["plaster"]), Color.WHITE, "dormer_front", "지붕창 앞면 회반죽 단색 %d×%d" % [ts, ts])
 	var side_spec: Dictionary = c["wall_spec"]
@@ -235,8 +238,11 @@ static func _dormers(c: Dictionary, count: int) -> void:
 
 	if span_hi - span_lo < 0.2:
 		count = 1
-		span_lo = (u0 + u1) * 0.5 - 0.5
+		span_lo = (u0 + u1) * 0.5 - 0.4
 		span_hi = span_lo
+
+		if span_lo < u0 + edge - 0.14 or span_lo > u1 - edge + 0.14:
+			return  # 지붕이 너무 짧아서 놓을 자리가 없다
 
 	for k in range(count):
 		var uc: float = (span_lo + span_hi) * 0.5 if count == 1 else lerpf(span_lo, span_hi, float(k) / float(count - 1))

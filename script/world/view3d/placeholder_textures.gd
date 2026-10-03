@@ -1558,3 +1558,65 @@ static func sign_board(size: int) -> ImageTexture:
 			img.set_pixel(x, y, Color(0.3, 0.2, 0.12) if border else (Color(0.95, 0.92, 0.85) if arrow else Color(0.6, 0.42, 0.26)))
 
 	return ImageTexture.create_from_image(img)
+
+
+# 널빤지 문(탑·돔·풍차·작은 문): 세로 판자 + 가로 쇠띠 둘 + 쇠 경첩 끝 + 고리 손잡이. window: 위쪽 작은 유리창.
+static func door_plank(w: int, h: int, wood: Color = Color(0.6, 0.37, 0.2), window: bool = false) -> ImageTexture:
+	var wd: int = maxi(w, 6)
+	var ht: int = maxi(h, 10)
+	var base: Color = soften(wood) if clean else wood
+	var dark: Color = base.darkened(0.5)
+	var plank_a: Color = base
+	var plank_b: Color = base.darkened(0.14)
+	var iron := Color(0.24, 0.24, 0.3)
+	var img := Image.create(wd, ht, false, Image.FORMAT_RGBA8)
+
+	for y in range(ht):
+		for x in range(wd):
+			var plank: int = (x - 1) / 3
+			var col: Color = plank_a if plank % 2 == 0 else plank_b
+
+			if (x - 1) % 3 == 2 and x > 0 and x < wd - 1:
+				col = base.darkened(0.3)  # 판자 사이 줄
+
+			if y % 5 == 3 and (x + y / 5) % 4 == 0:
+				col = col.darkened(0.08)  # 나뭇결 점
+
+			img.set_pixel(x, y, col)
+
+	# 바깥 테두리
+	for x in range(wd):
+		img.set_pixel(x, 0, dark)
+		img.set_pixel(x, ht - 1, dark)
+
+	for y in range(ht):
+		img.set_pixel(0, y, dark)
+		img.set_pixel(wd - 1, y, dark)
+
+	# 쇠띠 둘(경첩): 왼쪽 끝이 두껍게
+	for sy in [int(float(ht) * 0.2), int(float(ht) * 0.7)]:
+		for x in range(1, wd - 1):
+			img.set_pixel(x, sy, iron)
+			img.set_pixel(x, sy + 1, iron.lightened(0.08))
+
+		for dy in range(-1, 3):
+			if sy + dy > 0 and sy + dy < ht - 1:
+				img.set_pixel(1, sy + dy, iron)
+				img.set_pixel(2, sy + dy, iron)
+
+	# 고리 손잡이(오른쪽, 가운데)
+	var hx: int = wd - 3
+	var hy: int = ht / 2 + 1
+	img.set_pixel(hx, hy, Color(0.96, 0.8, 0.32))
+	img.set_pixel(hx, hy + 1, Color(0.7, 0.55, 0.2))
+
+	if window:
+		var wx0: int = wd / 2 - 2
+		var wy0: int = 3
+
+		for y in range(wy0, wy0 + 5):
+			for x in range(wx0, wx0 + 4):
+				var edge: bool = x == wx0 or x == wx0 + 3 or y == wy0 or y == wy0 + 4
+				img.set_pixel(x, y, dark if edge else Color(0.5, 0.74, 0.92))
+
+	return ImageTexture.create_from_image(img)
