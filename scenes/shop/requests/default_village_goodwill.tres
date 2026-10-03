@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="VillageGoodwillSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/village_goodwill_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+gifts = Array[Dictionary]([{"item":"wheat","amount":2},{"item":"forest_herb","amount":2}])
+moments = Array[Dictionary]([
+{"id":"goodwill_intro","npc":"이세르","stage":"생활 부탁 세 개를 전달하고 후일담을 모두 완독한 다음 날 이후. 이세르가 이웃들의 가게에 대한 생각을 직접 들어 보라고 권함. 소개 대화 완독으로 시작. 물품 전달·구매·기한 없음"},
+{"id":"goodwill_naru","npc":"타블렌","stage":"이세르의 제안을 듣고 타블렌에게 실제 E 대화. 가게가 돌아와 짐을 내려놓을 기준점이 된다는 이야기. 완독으로 타블렌 안부 기록. 돈·물품은 여기서 지급하지 않음"},
+{"id":"goodwill_doyun","npc":"코르빈","stage":"이세르의 제안을 듣고 코르빈에게 실제 E 대화. 가게의 평범한 불빛과 일을 마친 발걸음을 이야기. 완독으로 코르빈 안부 기록. 새 건물·장비·주민 해금 없음"},
+{"id":"goodwill_sora","npc":"이세르","stage":"제안 시작 후 이세르 본인에게 다시 E 대화. 이름보다 안부를 적는 마을 기록 이야기. 완독으로 이세르 안부 기록. 다른 이웃과 순서 자유. 아직 최종 답례 없음"},
+{"id":"goodwill_wait","npc":"이세르","stage":"이세르의 안부를 들었지만 아직 못 들은 이웃이 있음. 수첩에서 남은 주민을 확인하고 실제 E 대화를 끝까지 듣도록 안내. 기한·소비·지급 없음"},
+{"id":"goodwill_finish","npc":"이세르","stage":"이웃 세 명의 안부를 모두 완독한 뒤 이세르에게 돌아와 마지막 대화를 끝까지 읽음. 주민들이 모은 기존 밀·약초를 창고에 일회성으로 전달하고 평판 반영. 중단하면 지급하지 않음. 수량·돈은 대사에 쓰지 않음. completion은 수첩에서 다시 읽는 기억. 새 시설·고객·물건 배치·편지 아이템 없음"}
+])

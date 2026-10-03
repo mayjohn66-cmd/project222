@@ -22,9 +22,11 @@ static func entries() -> Array[Dictionary]:
 	result.append({"id":VillageStoryFlow.JOURNAL_ID,"title":VillageStoryFlow.title()})
 	result.append({"id":VillageMarketFlow.JOURNAL_ID,"title":VillageMarketFlow.title()})
 	result.append({"id":VillageRestFlow.JOURNAL_ID,"title":"쉼터에서 처음 함께 쉬기"})
+	result.append({"id":VillageGoodwillFlow.JOURNAL_ID,"title":VillageGoodwillFlow.title()})
 	return result
 
 static func information(id: String) -> String:
+	if id == VillageGoodwillFlow.JOURNAL_ID: return VillageGoodwillFlow.information()
 	if id == VillageRestFlow.JOURNAL_ID: return VillageRestFlow.information()
 	if id == VillageMarketFlow.JOURNAL_ID: return VillageMarketFlow.information()
 	if id == VillageStoryFlow.JOURNAL_ID: return VillageStoryFlow.information()
@@ -64,6 +66,9 @@ static func information(id: String) -> String:
 
 static func destination(world: Node, id: String) -> Node2D:
 	if not available(): return null
+	if id == VillageGoodwillFlow.JOURNAL_ID:
+		var resident_id := VillageGoodwillFlow.next_resident()
+		return destination(world, "resident:" + resident_id) if not resident_id.is_empty() else null
 	if id == VillageRestFlow.JOURNAL_ID:
 		if VillageRestFlow.prepared(): return VillageRestFlow.site(world)
 		return destination(world, "community:" + VillageRestFlow.SETTINGS.preparation)

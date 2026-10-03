@@ -122,13 +122,20 @@ func nearest() -> Dictionary:
 		best = {"id":"well", "name":"공동 우물"}
 	return best
 
+func _next_story_action(resident_id: String) -> Dictionary:
+	var goodwill := VillageGoodwillFlow.action(resident_id)
+	return goodwill if not goodwill.is_empty() else VillageStoryFlow.action(resident_id)
+
 func interaction_hint() -> String:
 	var target := nearest()
 	if target.is_empty(): return ""
 	if target["id"] == "well": return "[E] 공동 우물 · 오늘 물을 길었어요" if VillageLifeFlow.well_used_today() else "[E] 공동 우물에서 물 긷기"
 	if not MarketAfterglowFlow.pending(str(target["id"])).is_empty(): return "[E] %s · 부탁 뒤 후일담" % target["name"]
-	var action := VillageStoryFlow.action(str(target["id"]))
+	var action := _next_story_action(str(target["id"]))
 	if not action.is_empty():
+		if action.get("flow", "") == "goodwill":
+			var goodwill_labels := {"introduction":"안부 이야기 시작", "listen":"이웃의 안부 듣기", "finish":"이웃의 선물 받기", "reminder":"남은 안부 확인"}
+			return "[E] %s · %s" % [target["name"], goodwill_labels[action["stage"]]]
 		var labels := {"introduction":"마을 이야기 시작", "listen":"마을 이야기 듣기", "choose":"남길 기억 고르기", "finish":"기록 마치기", "reminder":"남은 이야기 확인", "memory":"남긴 기억 다시 듣기"}
 		return "[E] %s · %s" % [target["name"], labels[action["stage"]]]
 	return "[E] %s · %s" % [target["name"], "다시 이야기하기" if VillageLifeFlow.greeted_today(target["id"]) else "오늘의 안부 나누기"]
@@ -163,10 +170,10 @@ func try_interact() -> bool:
 			lines.append("마을 게시판에서 개인 부탁을 맡거나 준비한 물품을 전달할 수 있어요.")
 		afterglow_action = MarketAfterglowFlow.pending(str(target["id"]))
 		if not afterglow_action.is_empty(): lines.append_array(MarketAfterglowFlow.lines(afterglow_action))
-		story_action = VillageStoryFlow.action(str(target["id"])) if afterglow_action.is_empty() else {}
+		story_action = _next_story_action(str(target["id"])) if afterglow_action.is_empty() else {}
 		if not story_action.is_empty():
 			lines.append_array(RequestTextData.lines("service_text", str(story_action["id"]), str(story_action.get("field", "lines"))))
-			if story_action["stage"] == "finish": lines.append("답례: " + VillageStoryFlow.reward_description())
+			if story_action["stage"] == "finish": lines.append("답례: " + (VillageGoodwillFlow.reward_description() if story_action.get("flow", "") == "goodwill" else VillageStoryFlow.reward_description()))
 	talking = true
 	previous_paused = manager.hour_timer.paused
 	previous_physics = player.is_physics_processing()
@@ -181,16 +188,19 @@ func _end_talk() -> void:
 	if not talking: return
 	if dialogue.line_index >= dialogue.lines.size():
 		if not afterglow_action.is_empty(): MarketAfterglowFlow.listen(afterglow_action)
-		match str(story_action.get("stage", "")):
-			"introduction": VillageStoryFlow.accept()
-			"listen": VillageStoryFlow.listen(str(story_action["resident"]))
-			"choose":
-				if VillageStoryFlow.ready() and VillageStoryFlow.chosen().is_empty():
-					story_action = {}
-					story_panel.display()
-					return
-			"finish":
-				if VillageStoryFlow.finish(): manager.customer_spawner.refresh_spawn_interval()
+		if story_action.get("flow", "") == "goodwill":
+			if VillageGoodwillFlow.complete_action(story_action) and story_action["stage"] == "finish": manager.customer_spawner.refresh_spawn_interval()
+		else:
+			match str(story_action.get("stage", "")):
+				"introduction": VillageStoryFlow.accept()
+				"listen": VillageStoryFlow.listen(str(story_action["resident"]))
+				"choose":
+					if VillageStoryFlow.ready() and VillageStoryFlow.chosen().is_empty():
+						story_action = {}
+						story_panel.display()
+						return
+				"finish":
+					if VillageStoryFlow.finish(): manager.customer_spawner.refresh_spawn_interval()
 	story_action = {}
 	afterglow_action = ""
 	talking = false

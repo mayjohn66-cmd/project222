@@ -34,6 +34,7 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/requests/default_village_story.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_village_market.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_village_rest.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/requests/default_village_goodwill.tres": KIND_SERVICE_TEXT,
 }
 
 
