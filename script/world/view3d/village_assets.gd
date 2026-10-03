@@ -1051,21 +1051,26 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			var roof_m: Dictionary = spec(PlaceholderTextures.roof_tiles(ts, rule.get("roof_tint", Color(0.7, 0.36, 0.28))), Color.WHITE, "mill_roof", "풍차 지붕 기와 %d×%d" % [ts, ts])
 			var door_m: Dictionary = spec(_tex("flat", ts, Color(0.5, 0.32, 0.18)), Color.WHITE, "mill_door", "풍차 문 갈색 단색 %d×%d" % [ts, ts])
 			var dark_m: Dictionary = spec(_tex("flat", ts, Color(0.16, 0.14, 0.18)), Color.WHITE, "mill_dark", "풍차 창 어두운 단색 %d×%d" % [ts, ts])
-			var r1: float = minf(sx, sz) * 0.5 - 0.35
-			oct(b, "mill_body", body_w, c.x, c.y, r1, 0.0, 2.6, r1 * 0.7)
-			oct(b, "mill_roof", roof_m, c.x, c.y, r1 * 0.78, 2.6, 3.5, 0.05)
-			box(b, "mill_door", door_m, Vector3(c.x - 0.2, 0.0, c.y + r1 - 0.05), Vector3(c.x + 0.2, 0.9, c.y + r1 + 0.02))
-			box(b, "mill_win", dark_m, Vector3(c.x - 0.08, 1.4, c.y + r1 * 0.9), Vector3(c.x + 0.08, 1.8, c.y + r1 * 0.9 + 0.05))
-			# 날개: 카메라를 보는 평면 컷아웃. 중심 축은 탑 앞 위쪽
+			var wood_m: Dictionary = wood(p, Color(0.5, 0.34, 0.2), "mill_axle")
+			var r1: float = minf(sx, sz) * 0.5 - 0.1
+			# 몸체: 아래가 넓고 위가 좁은 팔각탑(높이 3.0), 지붕: 원뿔(3.0~3.9)
+			oct(b, "mill_body", body_w, c.x, c.y, r1, 0.0, 3.0, r1 * 0.62)
+			oct(b, "mill_band", body_w, c.x, c.y, r1 * 0.66, 2.9, 3.05, r1 * 0.66)
+			oct(b, "mill_roof", roof_m, c.x, c.y, r1 * 0.74, 3.05, 3.95, 0.05)
+			box(b, "mill_door", door_m, Vector3(c.x - 0.22, 0.0, c.y + r1 - 0.06), Vector3(c.x + 0.22, 1.0, c.y + r1 + 0.02))
+			box(b, "mill_win", dark_m, Vector3(c.x - 0.08, 1.7, c.y + r1 * 0.82), Vector3(c.x + 0.08, 2.1, c.y + r1 * 0.82 + 0.05))
+			# 날개 축(몸체 앞 위쪽에서 카메라 쪽으로 튀어나온 나무 토막)과 날개: 날개는 카메라를 보는 평면 컷아웃이라 그 축으로 돌려도 정면 그대로다.
+			var hub_d: float = r1 * 0.62 + 0.25
+			var hub := Vector3(c.x + 0.7071 * hub_d, 2.55, c.y + 0.7071 * hub_d)
+			box(b, "mill_axle", wood_m, Vector3(hub.x - 0.12 - 0.7071 * 0.15, 2.43, hub.z - 0.12 - 0.7071 * 0.15), Vector3(hub.x + 0.0, 2.67, hub.z + 0.0))
 			var blades: Dictionary = spec(PlaceholderTextures.windmill_blades(), Color.WHITE, "mill_blades", "풍차 날개 24×24 (투명 배경 컷아웃, 십자 뼈대와 격자 천)")
 			blades["cutout"] = true
-			# 날개는 돌려야 하므로 건물 mesh 에 넣지 않고 따로 만든다(중심이 원점, 위치는 anim 의 pos). 카메라를 보는 평면이라 그 축으로 돌려도 정면 그대로다.
 			var ab := PartBuilder.new()
-			_card(ab, blades, 0.0, -1.3, 0.0, 2.6, 2.6)
+			_card(ab, blades, 0.0, -1.1, 0.0, 2.2, 2.2)
 			var amesh := ArrayMesh.new()
 			var aspecs: Array = ab.commit_into(amesh)
-			anim_parts.append({"mesh": amesh, "specs": aspecs, "pos": Vector3(c.x + 0.5, 2.7, c.y + 0.5), "speed": 0.9})
-			total = 3.5
+			anim_parts.append({"mesh": amesh, "specs": aspecs, "pos": hub + Vector3(0.7071 * 0.12, 0.0, 0.7071 * 0.12), "speed": 0.9})
+			total = 3.95
 		"low_wall":
 			box(b, "stone", stone_spec(p, Color(1, 1, 1), "low_wall_stone"), Vector3(lo.x, 0.0, lo.y), Vector3(hi.x, 0.55, hi.y))
 			box(b, "cap", stone_spec(p, Color(1.25, 1.2, 1.1), "low_wall_cap"), Vector3(lo.x - 0.03, 0.55, lo.y - 0.03), Vector3(hi.x + 0.03, 0.64, hi.y + 0.03))
