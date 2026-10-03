@@ -816,10 +816,10 @@ static func _add_hang_sign(b: PartBuilder, p: Dictionary, x: float, wall_z: floa
 	var y_arm: float = wall_h * 0.8
 	var tip_z: float = wall_z + tip_dz
 	box(b, "arm", iron, Vector3(x - 0.02, y_arm, wall_z), Vector3(x + 0.02, y_arm + 0.04, tip_z + 0.02))
-	var z0: float = tip_z - 1.14
+	var z0: float = tip_z - 0.8
 	var z1: float = tip_z - 0.04
 	var y1: float = y_arm - 0.07
-	var y0: float = y1 - 0.82
+	var y0: float = y1 - 0.6
 	box(b, "chain", iron, Vector3(x - 0.01, y1, z0 + 0.06), Vector3(x + 0.01, y_arm, z0 + 0.08))
 	box(b, "chain", iron, Vector3(x - 0.01, y1, z1 - 0.08), Vector3(x + 0.01, y_arm, z1 - 0.06))
 	box(b, "sign_back", frame_wood, Vector3(x - 0.04, y0, z0), Vector3(x + 0.0, y1, z1))
@@ -992,29 +992,34 @@ static func _build_stall(b: PartBuilder, lo: Vector2, hi: Vector2, kind: String,
 			dome(b, "umbrella", stripes, cx, cz - 0.05, 0.9, 1.55, 2.05, 3, 12)
 			top = 2.1
 
-	# 상품 카드: 카운터 위 앞·뒤 두 줄, 종류를 돌려 가며
+	# 상품 카드: 카운터 위 한 줄, 같은 종류끼리 묶어서(AABBCC) 균등 간격으로 놓는다.
 	var goods: Array = d["goods"]
-	var gx: float = x0 + 0.2
-	var idx: int = 0
+	var kinds: Array = []
 
-	while gx < x1 - 0.1 and goods.size() > 0:
-		var tok: String = str(goods[idx % goods.size()])
-		_card(b, _goods_spec(tok, ts), gx, 0.65, z1 - 0.12 - (0.14 if idx % 2 == 0 else 0.0), 0.28, 0.28)
-		gx += 0.27
-		idx += 1
+	for g in goods:
+		if not kinds.has(str(g)):
+			kinds.append(str(g))
 
-	# 매다는 상품(차양 앞 가장자리 아래)
+	if kinds.size() > 0:
+		var span_g: float = x1 - x0 - 0.4
+		var n_g: int = maxi(int(span_g / 0.3) + 1, 2)
+		var step_g: float = span_g / float(n_g - 1)
+
+		for gi in range(n_g):
+			var tok: String = kinds[mini(gi * kinds.size() / n_g, kinds.size() - 1)]
+			_card(b, _goods_spec(tok, ts), x0 + 0.2 + step_g * float(gi), 0.65, z1 - 0.2, 0.28, 0.28)
+
+	# 매다는 상품(차양 앞 가장자리 아래): 한 종류를 균등 간격으로
 	var hang: Array = d["hang"]
 
 	if hang.size() > 0:
-		var hx: float = x0 + 0.15
-		var hi_idx: int = 0
+		var span_h: float = x1 - x0 - 0.3
+		var n_h: int = maxi(int(span_h / 0.36) + 1, 2)
+		var step_h: float = span_h / float(n_h - 1)
+		var htok: String = str(hang[0])
 
-		while hx < x1 - 0.1:
-			var htok: String = str(hang[hi_idx % hang.size()])
-			_card(b, _goods_spec(htok, ts), hx, 1.0, z1 + 0.14, 0.2, 0.26)
-			hx += 0.34
-			hi_idx += 1
+		for hi_idx in range(n_h):
+			_card(b, _goods_spec(htok, ts), x0 + 0.15 + step_h * float(hi_idx), 1.0, z1 + 0.14, 0.2, 0.26)
 
 	# 양옆 소품
 	var props: Array = d["props"]
@@ -1198,7 +1203,8 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			var ap_door: float = r1 * (1.0 - 0.38 * (0.5 / 3.0)) * apothem_k
 			var ap_win: float = r1 * (1.0 - 0.38 * (1.9 / 3.0)) * apothem_k
 			add_door_z(b, p, c.x, 0.0, c.y + ap_door - 0.04, 0.46, 1.0)
-			box(b, "mill_win", dark_m, Vector3(c.x - 0.1, 1.7, c.y + ap_win - 0.04), Vector3(c.x + 0.1, 2.12, c.y + ap_win + 0.04))
+			var mwp: Dictionary = HouseShapes.win_parts(b, p, Vector3(c.x - 0.3, 1.6, c.y + ap_win - 0.1), Vector3(c.x + 0.3, 2.2, c.y + ap_win + 0.2))
+			HouseShapes.win_on_z(mwp, c.x, 1.72, 2.1, 0.13, c.y + ap_win - 0.03)
 			# 날개 축(몸체 앞 위쪽에서 카메라 쪽으로 튀어나온 나무 토막)과 날개: 날개는 카메라를 보는 평면 컷아웃이라 그 축으로 돌려도 정면 그대로다.
 			var ap_hub: float = r1 * (1.0 - 0.38 * (2.55 / 3.0)) * apothem_k
 			var hub := Vector3(c.x, 2.55, c.y + ap_hub + 0.28)
