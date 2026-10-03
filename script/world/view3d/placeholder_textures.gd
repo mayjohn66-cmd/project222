@@ -121,10 +121,14 @@ static func _level(v: float, levels: int) -> float:
 # 문은 캐릭터(약 24px)보다 확실히 크게(약 1.4배), 창은 한눈에 창으로 읽히게 키웠다.
 static func window_layout(w: int, h: int, cells: int) -> Dictionary:
 	var cell_px: float = float(w) / float(maxi(cells, 1))
+	var dh: int = clampi(int(float(h) * 0.64), 6, 46)
+	# 문 폭은 높이의 약 0.46배(현관문 비율 1:2.2). 입방체 건물에서 문이 길쭉해 보이지 않게 칸 폭 안에서 넓힌다.
+	var dw: int = clampi(int(float(dh) * 0.46), 8, 18)
+	dw = mini(dw, maxi(int(cell_px * 0.7), 6))
 	return {
 		"base_h": clampi(int(float(h) * 0.16), 2, 6),
-		"dw": clampi(int(cell_px * 0.5), 5, 16),
-		"dh": clampi(int(float(h) * 0.66), 6, 46),
+		"dw": dw,
+		"dh": dh,
 		"ww": clampi(int(cell_px * 0.46), 5, 14),
 		"wh": clampi(int(float(h) * 0.36), 4, 18),
 		"wy": int(float(h) * 0.2),
@@ -171,15 +175,33 @@ static func _wall_facade_clean(w: int, h: int, door: bool, window_count: int, pl
 			var x0: int = cx - dw / 2
 			var y0: int = h - base_h - dh
 
-			for y in range(y0, h - base_h):
-				for x in range(x0, x0 + dw):
-					if x >= 0 and x < w and y >= 0:
-						var edge: bool = x == x0 or x == x0 + dw - 1 or y == y0
-						var panel: bool = y == y0 + dh / 2 or x == cx
-						img.set_pixel(x, y, door_dark if (edge or panel) else door_color)
+			# 문: 어두운 테두리 + 갈색 면 + 위·아래 판(안쪽 한 칸 어둡게) + 위쪽 작은 유리창 + 손잡이, 위에 문 위 틀(상인방)
+			for y in range(y0 - 1, h - base_h):
+				for x in range(x0 - 1, x0 + dw + 1):
+					if x < 0 or x >= w or y < 0:
+						continue
 
-			if cx + dw / 4 < w:
-				img.set_pixel(cx + dw / 4, h - base_h - dh / 2 + 2, Color(0.98, 0.84, 0.3))
+					var lintel: bool = y == y0 - 1
+					var edge: bool = x == x0 - 1 or x == x0 + dw or y == y0 or lintel
+					var inner: bool = x == x0 or x == x0 + dw - 1
+					var pane_row: bool = y == y0 + dh / 2
+					var upper: bool = y > y0 + 1 and y < y0 + dh / 2 and x > x0 + 1 and x < x0 + dw - 2
+					var lower: bool = y > y0 + dh / 2 + 1 and y < h - base_h - 1 and x > x0 + 1 and x < x0 + dw - 2
+					var col: Color = door_color
+
+					if edge or lintel:
+						col = door_dark
+					elif inner or pane_row:
+						col = door_dark.lightened(0.1)
+					elif upper:
+						col = Color(0.78, 0.9, 0.98) if (x + y) % 4 != 0 else Color(0.92, 0.97, 1.0)
+					elif lower:
+						col = door_color.lightened(0.12)
+
+					img.set_pixel(x, y, col)
+
+			if x0 + dw - 3 < w:
+				img.set_pixel(x0 + dw - 3, y0 + dh / 2 + 3, Color(0.98, 0.84, 0.3))
 		else:
 			var ww: int = lay["ww"]
 			var wh: int = lay["wh"]
