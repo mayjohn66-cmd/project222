@@ -17,6 +17,11 @@ import os
 import re
 import sys
 
+# Windows 한국어 환경(cp949)에서 한글·기호 출력 시 UnicodeEncodeError 로 멈추지 않게 한다.
+for _s in (sys.stdout, sys.stderr):
+    if hasattr(_s, "reconfigure"):
+        _s.reconfigure(encoding="utf-8", errors="replace")
+
 REQUIRED = {
     "compress/mode": "0",
     "detect_3d/compress_to": "0",

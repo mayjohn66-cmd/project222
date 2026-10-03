@@ -19,3 +19,7 @@ balance_baseline.md
 # MCP 설정(API 토큰이 들어갈 수 있음)
 .mcp.json
 .claude/settings.local.json
+
+# Python 캐시
+__pycache__/
+*.pyc
