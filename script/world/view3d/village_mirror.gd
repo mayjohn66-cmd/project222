@@ -463,7 +463,18 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 		else:
 			built = VillageAssets.build_prop(str(rule.get("style", "")), lo, hi, rule, p)
 
-		view._set_mesh_item(key + "a", built["mesh"], VillageAssets.make_materials(built["specs"]), built["lo"], built["hi"], float(built["total_blocks"]), sig)
+		var has_cutout: bool = false
+
+		for sp in built["specs"]:
+			if bool((sp as Dictionary).get("cutout", false)):
+				has_cutout = true
+
+		# 투명 컷아웃(상품 카드)이 든 물체는 그림자를 끄고 윤곽선 판에서도 뺀다(셰이더 파일 설명 참고).
+		view._set_mesh_item(key + "a", built["mesh"], VillageAssets.make_materials(built["specs"]), built["lo"], built["hi"], float(built["total_blocks"]), sig, NAN, not has_cutout)
+
+		if has_cutout:
+			(view._items[key + "a"]["mesh"] as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
 		_keys[key + "a"] = true
 
 		if built.get("display", null) != null:

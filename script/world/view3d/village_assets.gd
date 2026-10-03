@@ -719,6 +719,158 @@ static func _add_extras(b: PartBuilder, text: String, lo: Vector2, hi: Vector2, 
 				dome(b, "bush", spec(_tex("foliage", p["ts"], Color(0.95, 0.4, 0.55)), Color.WHITE, "bush", "덤불 %d×%d 반복(꽃 점)" % [p["ts"], p["ts"]]), x, z, 0.27, 0.0, 0.34)
 
 
+# ---------------------------------------------------------------- 가판대 종류(데이터)
+
+# canopy: stripe(줄무늬 천) / solid(단색 천 + 톱니 단) / tent(사방 천막) / shingle(나무 지붕 한쪽 경사) / umbrella(큰 파라솔)
+# goods: 카운터 위에 놓는 상품 카드 목록("종류" 또는 "종류:#색"), hang: 차양 앞에 매다는 카드, props: 양옆 소품(crate/barrel/basket/sack)
+const STALL_TYPES: Dictionary = {
+	"bread": {"canopy": "stripe", "c1": "d9503c", "c2": "fbf3e0", "counter": "d8a870", "skirt": "e8c89a", "goods": ["loaf", "loaf", "baguette"], "hang": [], "props": ["basket", "sack"]},
+	"fruit": {"canopy": "stripe", "c1": "4a9a4a", "c2": "fbf3e0", "counter": "b88c5c", "skirt": "6aaa5a", "goods": ["apple", "orange", "lemon", "grape"], "hang": [], "props": ["crate", "barrel"]},
+	"fish": {"canopy": "stripe", "c1": "4a86c0", "c2": "f2f6fa", "counter": "8aa8c0", "skirt": "5a96d0", "goods": ["fish", "fish"], "hang": ["fish"], "props": ["barrel", "crate"]},
+	"meat": {"canopy": "stripe", "c1": "c8403a", "c2": "fbf3e0", "counter": "b07a54", "skirt": "d85a50", "goods": ["ham", "ham"], "hang": ["ham"], "props": ["crate", "barrel"]},
+	"cloth": {"canopy": "solid", "c1": "a050c0", "c2": "", "counter": "c89a6a", "skirt": "d05080", "goods": ["cloth:#d05080", "cloth:#4a86c0", "cloth:#e8b030", "cloth:#4a9a4a"], "hang": ["cloth:#a050c0"], "props": ["sack", "basket"]},
+	"herb": {"canopy": "shingle", "c1": "7a5a34", "c2": "", "counter": "9a7a4c", "skirt": "5a8a3a", "goods": ["herb", "herb", "flower:#e8e050"], "hang": ["herb"], "props": ["basket", "barrel"]},
+	"potion": {"canopy": "solid", "c1": "5a3a8a", "c2": "", "counter": "6a4a7a", "skirt": "7a5aa0", "goods": ["bottle:#d04040", "bottle:#4a86e0", "bottle:#4ac060", "bottle:#c050d0"], "hang": ["bottle:#e0b030"], "props": ["barrel", "crate"]},
+	"flower": {"canopy": "umbrella", "c1": "e06080", "c2": "fbf3e0", "counter": "d8b078", "skirt": "f0a0b0", "goods": ["flower:#e06080", "flower:#f0e050", "flower:#b070e0", "flower:#ffffff"], "hang": [], "props": ["basket", "basket"]},
+	"pottery": {"canopy": "tent", "c1": "d8b060", "c2": "", "counter": "a07a50", "skirt": "c89860", "goods": ["jar", "jar", "jar"], "hang": [], "props": ["barrel", "barrel"]},
+	"books": {"canopy": "solid", "c1": "2a6a58", "c2": "", "counter": "6a4a30", "skirt": "3a8a70", "goods": ["book:#a03030", "book:#3050a0", "book:#d0a030", "book:#308050"], "hang": [], "props": ["crate", "sack"]},
+	"spice": {"canopy": "tent", "c1": "d08030", "c2": "fbf3e0", "counter": "b0804c", "skirt": "e0a050", "goods": ["jar", "herb", "apple"], "hang": ["herb"], "props": ["sack", "sack"]},
+	"cheese": {"canopy": "shingle", "c1": "a05030", "c2": "", "counter": "c8a060", "skirt": "e8c860", "goods": ["lemon", "lemon", "loaf"], "hang": ["ham"], "props": ["barrel", "crate"]},
+}
+
+
+static func _goods_spec(token: String, ts: int) -> Dictionary:
+	var parts: PackedStringArray = token.split(":")
+	var color := Color(0.85, 0.25, 0.25)
+
+	if parts.size() > 1:
+		color = Color.html(parts[1])
+
+	var sp: Dictionary = spec(PlaceholderTextures.goods_card(parts[0], color), Color.WHITE, "goods_" + parts[0], "가판대 상품 카드 %s (투명 배경 컷아웃, 어두운 윤곽선)" % parts[0])
+	sp["cutout"] = true
+	return sp
+
+
+# 천막/지붕 네 면(사방으로 경사진 피라미드): 중심 (cx, cz), 반폭 (hx, hz), 아래 y0(처마), 꼭대기 y1.
+static func pyramid(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: float, hx: float, hz: float, y0: float, y1: float) -> void:
+	var st: SurfaceTool = b.new_part(spec, Vector3(cx - hx, y0, cz - hz), Vector3(cx + hx, y1, cz + hz))
+	var apex := Vector3(cx, y1, cz)
+	var c0 := Vector3(cx - hx, y0, cz - hz)
+	var c1 := Vector3(cx + hx, y0, cz - hz)
+	var c2 := Vector3(cx + hx, y0, cz + hz)
+	var c3 := Vector3(cx - hx, y0, cz + hz)
+	var rise: float = y1 - y0
+	var nx: Vector3 = Vector3(rise, hx, 0.0).normalized()
+	var nz: Vector3 = Vector3(0.0, hz, rise).normalized()
+	var sl_x: float = sqrt(hx * hx + rise * rise)
+	var sl_z: float = sqrt(hz * hz + rise * rise)
+	# +z(앞) / +x / -z / -x 네 면. UV: 처마 따라 u, 경사 따라 v
+	BuildingMesh._tri(st, c3, c2, apex, Vector3(0.0, nz.y, nz.z), Vector2(0, sl_z), Vector2(hx * 2.0, sl_z), Vector2(hx, 0))
+	BuildingMesh._tri(st, c2, c1, apex, nx, Vector2(0, sl_x), Vector2(hz * 2.0, sl_x), Vector2(hz, 0))
+	BuildingMesh._tri(st, c1, c0, apex, Vector3(0.0, nz.y, -nz.z), Vector2(0, sl_z), Vector2(hx * 2.0, sl_z), Vector2(hx, 0))
+	BuildingMesh._tri(st, c0, c3, apex, Vector3(-nx.x, nx.y, 0.0).normalized(), Vector2(0, sl_x), Vector2(hz * 2.0, sl_x), Vector2(hz, 0))
+
+
+# 가판대 한 칸(종류는 STALL_TYPES). lo/hi 는 발자국. 반환: 전체 높이(칸).
+static func _build_stall(b: PartBuilder, lo: Vector2, hi: Vector2, kind: String, p: Dictionary) -> float:
+	var ts: int = p["ts"]
+	var d: Dictionary = STALL_TYPES[kind]
+	var c1: Color = Color.html(str(d["c1"]))
+	var c2: Color = Color.html(str(d["c2"])) if str(d["c2"]) != "" else c1.lightened(0.35)
+	var counter_c: Color = Color.html(str(d["counter"]))
+	var skirt_c: Color = Color.html(str(d["skirt"]))
+	var bark: Dictionary = wood(p, Color(0.42, 0.3, 0.2), "bark")
+	var canopy_kind: String = str(d["canopy"])
+	var stripes: Dictionary = spec(PlaceholderTextures.awning_stripes(ts, c2, c1), Color.WHITE, "stall_cloth_stripe", "가판대 줄무늬 천 %d×%d (가판대마다 색 다름)" % [ts, ts])
+	var solid: Dictionary = spec(_tex("flat", ts, c1), Color.WHITE, "stall_cloth_solid", "가판대 단색 천 %d×%d" % [ts, ts])
+	var shingle: Dictionary = spec(PlaceholderTextures.roof_tiles(ts, c1), Color.WHITE, "stall_shingle", "가판대 나무 지붕 기와 %d×%d" % [ts, ts])
+	var x0: float = lo.x + 0.08
+	var x1: float = hi.x - 0.08
+	var z0: float = lo.y + 0.08
+	var z1: float = hi.y - 0.08
+	var cx: float = (x0 + x1) * 0.5
+	var cz: float = (z0 + z1) * 0.5
+	var top: float = 2.0
+
+	# 카운터와 앞 천(스커트)
+	box(b, "counter", wood(p, counter_c, "stall_counter"), Vector3(x0, 0.0, z1 - 0.45), Vector3(x1, 0.65, z1))
+	box(b, "skirt", stripes if canopy_kind == "stripe" else spec(_tex("flat", ts, skirt_c), Color.WHITE, "stall_skirt", "가판대 카운터 앞 천 단색 %d×%d" % [ts, ts]), Vector3(x0 - 0.02, 0.05, z1), Vector3(x1 + 0.02, 0.62, z1 + 0.03))
+
+	# 기둥
+	if canopy_kind == "umbrella":
+		oct(b, "pole", bark, cx, cz - 0.05, 0.05, 0.0, 1.7, 0.05)
+	else:
+		for corner in [Vector2(x0, z0), Vector2(x1 - 0.07, z0), Vector2(x0, z1 - 0.07), Vector2(x1 - 0.07, z1 - 0.07)]:
+			box(b, "post", bark, Vector3(corner.x, 0.0, corner.y), Vector3(corner.x + 0.07, 1.6, corner.y + 0.07))
+
+	# 지붕
+	match canopy_kind:
+		"stripe", "solid":
+			var cloth: Dictionary = stripes if canopy_kind == "stripe" else solid
+			slope(b, "awning", cloth, Vector3(x0 - 0.05, 1.75, z0), Vector3(x1 + 0.05, 1.75, z0), Vector3(x1 + 0.05, 1.35, z1 + 0.18), Vector3(x0 - 0.05, 1.35, z1 + 0.18), Vector3(0, 0.6, 0.8), x1 - x0 + 0.1, 1.0)
+			var n_teeth: int = maxi(int(roundf((x1 - x0) / 0.2)), 3)
+			var tw: float = (x1 - x0 + 0.1) / float(n_teeth)
+
+			for t in range(n_teeth):
+				var tooth_spec: Dictionary = cloth if (t % 2 == 0) else spec(_tex("flat", ts, c1.darkened(0.2) if canopy_kind == "solid" else c2), Color.WHITE, "stall_valance", "가판대 처마 단 단색 %d×%d" % [ts, ts])
+				box(b, "valance", tooth_spec, Vector3(x0 - 0.05 + tw * float(t), 1.26, z1 + 0.15), Vector3(x0 - 0.05 + tw * float(t + 1), 1.35, z1 + 0.19))
+
+			top = 1.8
+		"shingle":
+			slope(b, "awning", shingle, Vector3(x0 - 0.05, 1.8, z0 - 0.04), Vector3(x1 + 0.05, 1.8, z0 - 0.04), Vector3(x1 + 0.05, 1.4, z1 + 0.18), Vector3(x0 - 0.05, 1.4, z1 + 0.18), Vector3(0, 0.6, 0.8), x1 - x0 + 0.1, 1.0)
+			top = 1.85
+		"tent":
+			pyramid(b, "tent", stripes if str(d["c2"]) != "" else solid, cx, cz, (x1 - x0) * 0.5 + 0.12, (z1 - z0) * 0.5 + 0.12, 1.45, 2.1)
+			top = 2.15
+		"umbrella":
+			dome(b, "umbrella", stripes, cx, cz - 0.05, 0.9, 1.55, 2.05, 3, 12)
+			top = 2.1
+
+	# 상품 카드: 카운터 위 앞·뒤 두 줄, 종류를 돌려 가며
+	var goods: Array = d["goods"]
+	var gx: float = x0 + 0.2
+	var idx: int = 0
+
+	while gx < x1 - 0.1 and goods.size() > 0:
+		var tok: String = str(goods[idx % goods.size()])
+		_card(b, _goods_spec(tok, ts), gx, 0.65, z1 - 0.12 - (0.14 if idx % 2 == 0 else 0.0), 0.28, 0.28)
+		gx += 0.27
+		idx += 1
+
+	# 매다는 상품(차양 앞 가장자리 아래)
+	var hang: Array = d["hang"]
+
+	if hang.size() > 0:
+		var hx: float = x0 + 0.15
+		var hi_idx: int = 0
+
+		while hx < x1 - 0.1:
+			var htok: String = str(hang[hi_idx % hang.size()])
+			_card(b, _goods_spec(htok, ts), hx, 1.0, z1 + 0.14, 0.2, 0.26)
+			hx += 0.34
+			hi_idx += 1
+
+	# 양옆 소품
+	var props: Array = d["props"]
+
+	for i in range(mini(props.size(), 2)):
+		var px: float = x0 - 0.12 if i == 0 else x1 + 0.12
+		var pz: float = z1 - 0.18
+		var pk: String = str(props[i])
+
+		match pk:
+			"barrel":
+				oct(b, "barrel", spec(_tex("barrel", ts), Color.WHITE, "barrel", "통(배럴) 옆면 %d×%d" % [ts, ts]), px, pz, 0.17, 0.0, 0.42, 0.15)
+			"crate":
+				box(b, "crate", spec(_tex("crate", ts), Color.WHITE, "crate", "나무 상자 %d×%d" % [ts, ts]), Vector3(px - 0.15, 0.0, pz - 0.15), Vector3(px + 0.15, 0.3, pz + 0.15))
+			"sack":
+				box(b, "sack", spec(_tex("flat", ts, Color(0.8, 0.72, 0.52)), Color.WHITE, "sack", "자루 %d×%d 베이지" % [ts, ts]), Vector3(px - 0.13, 0.0, pz - 0.12), Vector3(px + 0.13, 0.3, pz + 0.12))
+			_:
+				oct(b, "basket", spec(PlaceholderTextures.crate(ts, Color(0.62, 0.42, 0.22)), Color.WHITE, "basket", "바구니 옆면 %d×%d" % [ts, ts]), px, pz, 0.16, 0.0, 0.22, 0.14)
+
+	return top
+
+
 # ---------------------------------------------------------------- 소품
 
 static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionary) -> Dictionary:
@@ -751,25 +903,28 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			roof_prism(b, "roof", roof_spec, c.x - 0.66, c.x + 0.66, c.y - 0.55, c.y + 0.55, 1.5, 0.45, true)
 			total = 1.95
 		"stall":
-			var cloth: Dictionary = spec(PlaceholderTextures.awning_stripes(ts, Color(0.96, 0.92, 0.8), roof_tint), Color.WHITE, "stall_awning", "가판대 차양 줄무늬 %d×%d 반복(가게마다 색 다름)" % [ts, ts])
-			var goods_tint: Color = rule.get("goods_tint", Color(0.8, 0.55, 0.25))
-			var goods: Dictionary = spec(_tex("flat", ts, goods_tint), Color.WHITE, "stall_goods", "가판대 상품 단색 %d×%d(빵·생선·옷감·약초 중 하나)" % [ts, ts])
-			var x0: float = lo.x + 0.08
-			var x1: float = hi.x - 0.08
-			var z0: float = lo.y + 0.08
-			var z1: float = hi.y - 0.08
-			box(b, "counter", wood(p, Color(0.66, 0.46, 0.3), "stall_counter"), Vector3(x0, 0.0, z1 - 0.45), Vector3(x1, 0.65, z1))
-			for corner in [Vector2(x0, z0), Vector2(x1 - 0.07, z0), Vector2(x0, z1 - 0.07), Vector2(x1 - 0.07, z1 - 0.07)]:
-				box(b, "post", bark, Vector3(corner.x, 0.0, corner.y), Vector3(corner.x + 0.07, 1.6, corner.y + 0.07))
+			if STALL_TYPES.has(str(rule.get("variant", ""))):
+				total = _build_stall(b, lo, hi, str(rule["variant"]), p)
+			else:
+				var cloth: Dictionary = spec(PlaceholderTextures.awning_stripes(ts, Color(0.96, 0.92, 0.8), roof_tint), Color.WHITE, "stall_awning", "가판대 차양 줄무늬 %d×%d 반복(가게마다 색 다름)" % [ts, ts])
+				var goods_tint: Color = rule.get("goods_tint", Color(0.8, 0.55, 0.25))
+				var goods: Dictionary = spec(_tex("flat", ts, goods_tint), Color.WHITE, "stall_goods", "가판대 상품 단색 %d×%d(빵·생선·옷감·약초 중 하나)" % [ts, ts])
+				var x0: float = lo.x + 0.08
+				var x1: float = hi.x - 0.08
+				var z0: float = lo.y + 0.08
+				var z1: float = hi.y - 0.08
+				box(b, "counter", wood(p, Color(0.66, 0.46, 0.3), "stall_counter"), Vector3(x0, 0.0, z1 - 0.45), Vector3(x1, 0.65, z1))
+				for corner in [Vector2(x0, z0), Vector2(x1 - 0.07, z0), Vector2(x0, z1 - 0.07), Vector2(x1 - 0.07, z1 - 0.07)]:
+					box(b, "post", bark, Vector3(corner.x, 0.0, corner.y), Vector3(corner.x + 0.07, 1.6, corner.y + 0.07))
 
-			slope(b, "awning", cloth, Vector3(x0 - 0.05, 1.75, z0), Vector3(x1 + 0.05, 1.75, z0), Vector3(x1 + 0.05, 1.35, z1 + 0.18), Vector3(x0 - 0.05, 1.35, z1 + 0.18), Vector3(0, 0.6, 0.8), x1 - x0 + 0.1, 1.0)
-			var gx: float = x0 + 0.15
+				slope(b, "awning", cloth, Vector3(x0 - 0.05, 1.75, z0), Vector3(x1 + 0.05, 1.75, z0), Vector3(x1 + 0.05, 1.35, z1 + 0.18), Vector3(x0 - 0.05, 1.35, z1 + 0.18), Vector3(0, 0.6, 0.8), x1 - x0 + 0.1, 1.0)
+				var gx: float = x0 + 0.15
 
-			while gx < x1 - 0.2:
-				box(b, "goods", goods, Vector3(gx, 0.65, z1 - 0.38), Vector3(gx + 0.16, 0.77, z1 - 0.1))
-				gx += 0.26
+				while gx < x1 - 0.2:
+					box(b, "goods", goods, Vector3(gx, 0.65, z1 - 0.38), Vector3(gx + 0.16, 0.77, z1 - 0.1))
+					gx += 0.26
 
-			total = 1.8
+				total = 1.8
 		"low_wall":
 			box(b, "stone", stone_spec(p, Color(1, 1, 1), "low_wall_stone"), Vector3(lo.x, 0.0, lo.y), Vector3(hi.x, 0.55, hi.y))
 			box(b, "cap", stone_spec(p, Color(1.25, 1.2, 1.1), "low_wall_cap"), Vector3(lo.x - 0.03, 0.55, lo.y - 0.03), Vector3(hi.x + 0.03, 0.64, hi.y + 0.03))

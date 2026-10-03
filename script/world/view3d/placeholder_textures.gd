@@ -1053,6 +1053,145 @@ static func icon_sign(kind: String) -> ImageTexture:
 	return ImageTexture.create_from_image(img)
 
 
+# ---------------------------------------------------------------- 가판대 상품 카드(투명 컷아웃, 어두운 윤곽선)
+
+# 종류: apple orange lemon grape fish ham bottle(색 지정) flower(색 지정) jar book cloth(색 지정) herb loaf baguette
+static func goods_card(kind: String, color: Color = Color(0.85, 0.25, 0.25)) -> ImageTexture:
+	if kind == "loaf" or kind == "baguette":
+		return bread_card(kind)
+
+	var line := Color(0.3, 0.18, 0.1)
+	var img := Image.create(10, 10, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+
+	match kind:
+		"apple", "orange", "lemon":
+			var base: Color = {"apple": Color(0.86, 0.2, 0.2), "orange": Color(0.96, 0.6, 0.15), "lemon": Color(0.98, 0.86, 0.25)}[kind]
+
+			for y in range(2, 9):
+				for x in range(1, 9):
+					var dx: float = (float(x) - 4.5) / 3.7
+					var dy: float = (float(y) - 5.5) / 3.3
+
+					if dx * dx + dy * dy <= 1.0:
+						img.set_pixel(x, y, base.lightened(0.25) if (dx < -0.1 and dy < -0.1) else (base.darkened(0.18) if dy > 0.4 else base))
+
+			_px(img, 4, 1, Color(0.3, 0.6, 0.25))
+			_px(img, 5, 1, Color(0.3, 0.6, 0.25))
+		"grape":
+			var g := Color(0.5, 0.25, 0.65)
+
+			for row in range(4):
+				for k in range(4 - row):
+					var gx: int = 2 + row + k * 2
+					_px(img, gx, 2 + row * 2, g.lightened(0.2))
+					_px(img, gx + 1, 2 + row * 2, g)
+					_px(img, gx, 3 + row * 2, g)
+					_px(img, gx + 1, 3 + row * 2, g.darkened(0.2))
+
+			_px(img, 4, 1, Color(0.3, 0.55, 0.25))
+		"fish":
+			var body := Color(0.55, 0.7, 0.85)
+
+			for y in range(3, 8):
+				for x in range(1, 8):
+					var dx2: float = (float(x) - 4.0) / 3.6
+					var dy2: float = (float(y) - 5.0) / 2.2
+
+					if dx2 * dx2 + dy2 * dy2 <= 1.0:
+						img.set_pixel(x, y, body.lightened(0.25) if y < 5 else body)
+
+			for k in range(3):
+				_px(img, 8, 4 + k - (k % 2), body.darkened(0.15))
+				_px(img, 9, 3 + k * 2 - (k % 2) * 0, body.darkened(0.15))
+
+			_px(img, 2, 4, Color(0.1, 0.1, 0.15))
+		"ham":
+			var meat := Color(0.82, 0.33, 0.33)
+
+			for y in range(2, 9):
+				for x in range(1, 8):
+					var dx3: float = (float(x) - 4.0) / 3.4
+					var dy3: float = (float(y) - 5.5) / 3.2
+
+					if dx3 * dx3 + dy3 * dy3 <= 1.0:
+						img.set_pixel(x, y, meat.lightened(0.2) if dy3 < -0.2 else (meat.darkened(0.2) if dy3 > 0.4 else meat))
+
+			_px(img, 8, 5, Color(0.95, 0.9, 0.8))
+			_px(img, 9, 5, Color(0.95, 0.9, 0.8))
+			_px(img, 9, 4, Color(0.95, 0.9, 0.8))
+			_px(img, 9, 6, Color(0.95, 0.9, 0.8))
+		"bottle":
+			for y in range(4, 9):
+				for x in range(3, 7):
+					img.set_pixel(x, y, color.lightened(0.2) if x == 3 else (color.darkened(0.2) if x == 6 else color))
+
+			for y in range(1, 4):
+				_px(img, 4, y, Color(0.8, 0.85, 0.9))
+				_px(img, 5, y, Color(0.8, 0.85, 0.9))
+
+			_px(img, 4, 1, Color(0.55, 0.35, 0.2))
+			_px(img, 5, 1, Color(0.55, 0.35, 0.2))
+		"flower":
+			var leaf := Color(0.3, 0.6, 0.28)
+
+			for y in range(5, 10):
+				_px(img, 4, y, leaf)
+
+			_px(img, 3, 7, leaf)
+			_px(img, 5, 6, leaf)
+
+			for c in [Vector2i(3, 2), Vector2i(5, 2), Vector2i(4, 1), Vector2i(4, 3), Vector2i(4, 2)]:
+				_px(img, c.x, c.y, color.lightened(0.15) if c.x == 4 and c.y == 2 else color)
+
+			_px(img, 4, 2, Color(1.0, 0.9, 0.4))
+		"jar":
+			var clay := Color(0.72, 0.42, 0.25)
+
+			for y in range(3, 9):
+				var half: int = 3 if (y > 3 and y < 8) else 2
+
+				for x in range(5 - half, 5 + half):
+					img.set_pixel(x, y, clay.lightened(0.18) if x == 5 - half else (clay.darkened(0.2) if x == 4 + half else clay))
+
+			for x in range(3, 7):
+				_px(img, x, 2, clay.darkened(0.3))
+		"book":
+			var cover: Color = color
+
+			for y in range(1, 9):
+				for x in range(2, 8):
+					img.set_pixel(x, y, cover.lightened(0.15) if x == 2 else cover)
+
+			for y in range(2, 8):
+				_px(img, 7, y, Color(0.95, 0.92, 0.8))
+
+			for x in range(3, 6):
+				_px(img, x, 3, Color(0.95, 0.85, 0.4))
+		"cloth":
+			for y in range(2, 9):
+				for x in range(1, 9):
+					var stripe: bool = (x + y / 2) % 3 == 0
+					img.set_pixel(x, y, color.lightened(0.3) if stripe else color)
+
+			for x in range(1, 9):
+				_px(img, x, 2, color.darkened(0.2))
+				_px(img, x, 8, color.darkened(0.25))
+		_:
+			# herb: 풀 다발
+			var gr := Color(0.35, 0.65, 0.3)
+
+			for k in range(4):
+				for y in range(2 + (k % 2), 9):
+					_px(img, 2 + k * 2, y, gr.lightened(0.15) if y < 4 else gr)
+
+			_px(img, 3, 8, Color(0.7, 0.5, 0.3))
+			_px(img, 4, 8, Color(0.7, 0.5, 0.3))
+
+	_add_outline(img, line)
+	return ImageTexture.create_from_image(img)
+
+
 # 덧문(겉창): 가로 살(루버) 줄무늬. 밝은 줄과 어두운 줄이 두 픽셀씩 번갈아.
 static func shutter(size: int, base: Color) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
