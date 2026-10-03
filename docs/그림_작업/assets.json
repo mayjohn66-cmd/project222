@@ -95,6 +95,15 @@
         "w": 18
       },
       {
+        "file": "bakery__step.png",
+        "h": 18,
+        "name": "step",
+        "normal_file": "",
+        "note": "회색 돌 블록 줄눈",
+        "tileable": true,
+        "w": 18
+      },
+      {
         "file": "bakery__sign_frame.png",
         "h": 18,
         "name": "sign_frame",
@@ -105,21 +114,12 @@
       },
       {
         "file": "bakery__bakery_fascia.png",
-        "h": 11,
+        "h": 14,
         "name": "bakery_fascia",
         "normal_file": "",
-        "note": "빵집 간판 69×11 (BAKERY 글자 + 양끝 빵), 한 장 전체",
+        "note": "가게 간판 69×14 (BAKERY 글자 + 양끝 그림), 한 장 전체",
         "tileable": false,
         "w": 69
-      },
-      {
-        "file": "bakery__step.png",
-        "h": 18,
-        "name": "step",
-        "normal_file": "",
-        "note": "회색 돌 블록 줄눈",
-        "tileable": true,
-        "w": 18
       },
       {
         "file": "bakery__apron_stone.png",
@@ -137,12 +137,12 @@
     "kind": "gable",
     "label": "빵집",
     "notes": "마을 건물. 앞 차양·창 화분·통과 상자가 붙음",
-    "roof_blocks": 0.7,
+    "roof_blocks": 0.5,
     "roof_tint": "d9503c",
     "sprite": "res://art/world/village_buildings_v1/bakery.png",
     "style": "shop",
     "tint": "f3ead2",
-    "total_blocks": 2.8,
+    "total_blocks": 2.6,
     "wall_blocks": 2.1
   },
   {
@@ -822,7 +822,7 @@
     "wall_blocks": 2.3
   },
   {
-    "awning_tint": "e0702a",
+    "awning_tint": "5a6a8a",
     "canon_d": 3.0,
     "canon_w": 3.0,
     "faces": [
@@ -899,20 +899,20 @@
         "w": 18
       },
       {
-        "file": "blacksmith__sign_bracket.png",
+        "file": "blacksmith__barrel.png",
         "h": 18,
-        "name": "sign_bracket",
+        "name": "barrel",
         "normal_file": "",
-        "note": "나무 판(가로 판자 결)",
+        "note": "통(배럴) 옆면 18×18: 세로 판자 + 쇠테 2줄",
         "tileable": true,
         "w": 18
       },
       {
-        "file": "blacksmith__sign_board.png",
+        "file": "blacksmith__cloth_awning.png",
         "h": 18,
-        "name": "sign_board",
+        "name": "cloth_awning",
         "normal_file": "",
-        "note": "걸린 간판 18×18 (가게 표시 그림은 가게마다)",
+        "note": "천 차양 줄무늬 18×18 반복(크림 + 가게 색)",
         "tileable": true,
         "w": 18
       },
@@ -922,15 +922,6 @@
         "name": "smoke",
         "normal_file": "",
         "note": "굴뚝 연기 단색 18×18 연한 회백색",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "blacksmith__barrel.png",
-        "h": 18,
-        "name": "barrel",
-        "normal_file": "",
-        "note": "통(배럴) 옆면 18×18: 세로 판자 + 쇠테 2줄",
         "tileable": true,
         "w": 18
       },
@@ -953,6 +944,24 @@
         "w": 18
       },
       {
+        "file": "blacksmith__sign_frame.png",
+        "h": 18,
+        "name": "sign_frame",
+        "normal_file": "",
+        "note": "간판 뒤판·테두리 어두운 나무 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__bakery_fascia.png",
+        "h": 14,
+        "name": "bakery_fascia",
+        "normal_file": "",
+        "note": "가게 간판 51×14 (SMITH 글자 + 양끝 그림), 한 장 전체",
+        "tileable": false,
+        "w": 51
+      },
+      {
         "file": "blacksmith__apron_stone.png",
         "h": 18,
         "name": "apron_stone",
@@ -971,7 +980,7 @@
     "roof_blocks": 1.1,
     "roof_tint": "7a809c",
     "sprite": "res://art/world/blacksmith_v2/blacksmith_iso.png",
-    "style": "",
+    "style": "shop",
     "tint": "a9a094",
     "total_blocks": 3.5,
     "wall_blocks": 2.4
@@ -1036,24 +1045,6 @@
         "w": 18
       },
       {
-        "file": "tool_shop__awning.png",
-        "h": 18,
-        "name": "awning",
-        "normal_file": "tool_shop__awning_n.png",
-        "note": "차양 기와 18×18 반복(지붕 기와와 같은 구조, 색은 가게마다)",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "tool_shop__shutter_wood.png",
-        "h": 18,
-        "name": "shutter_wood",
-        "normal_file": "",
-        "note": "덧문 18×18 가로 살(청록 계열, 가게마다 색)",
-        "tileable": true,
-        "w": 18
-      },
-      {
         "file": "tool_shop__eave_tile.png",
         "h": 18,
         "name": "eave_tile",
@@ -1063,47 +1054,20 @@
         "w": 18
       },
       {
-        "file": "tool_shop__sign_bracket.png",
+        "file": "tool_shop__barrel.png",
         "h": 18,
-        "name": "sign_bracket",
+        "name": "barrel",
         "normal_file": "",
-        "note": "나무 판(가로 판자 결)",
+        "note": "통(배럴) 옆면 18×18: 세로 판자 + 쇠테 2줄",
         "tileable": true,
         "w": 18
       },
       {
-        "file": "tool_shop__planter_box.png",
+        "file": "tool_shop__cloth_awning.png",
         "h": 18,
-        "name": "planter_box",
+        "name": "cloth_awning",
         "normal_file": "",
-        "note": "나무 판(가로 판자 결)",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "tool_shop__planter_flowers.png",
-        "h": 18,
-        "name": "planter_flowers",
-        "normal_file": "",
-        "note": "창 아래 화분 꽃·풀 18×18 반복",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "tool_shop__sign_board.png",
-        "h": 18,
-        "name": "sign_board",
-        "normal_file": "",
-        "note": "걸린 간판 18×18 (가게 표시 그림은 가게마다)",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "tool_shop__crate.png",
-        "h": 18,
-        "name": "crate",
-        "normal_file": "",
-        "note": "나무 상자 18×18: 판자 + 모서리 틀 + 가로 보강",
+        "note": "천 차양 줄무늬 18×18 반복(크림 + 가게 색)",
         "tileable": true,
         "w": 18
       },
@@ -1117,13 +1081,31 @@
         "w": 18
       },
       {
-        "file": "tool_shop__barrel.png",
+        "file": "tool_shop__crate.png",
         "h": 18,
-        "name": "barrel",
+        "name": "crate",
         "normal_file": "",
-        "note": "통(배럴) 옆면 18×18: 세로 판자 + 쇠테 2줄",
+        "note": "나무 상자 18×18: 판자 + 모서리 틀 + 가로 보강",
         "tileable": true,
         "w": 18
+      },
+      {
+        "file": "tool_shop__sign_frame.png",
+        "h": 18,
+        "name": "sign_frame",
+        "normal_file": "",
+        "note": "간판 뒤판·테두리 어두운 나무 단색 18×18",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "tool_shop__bakery_fascia.png",
+        "h": 14,
+        "name": "bakery_fascia",
+        "normal_file": "",
+        "note": "가게 간판 60×14 (TOOLS 글자 + 양끝 그림), 한 장 전체",
+        "tileable": false,
+        "w": 60
       },
       {
         "file": "tool_shop__apron_stone.png",
@@ -1144,7 +1126,7 @@
     "roof_blocks": 1.2,
     "roof_tint": "a05a30",
     "sprite": "res://art/world/tool_shop_v1/tool_shop.png",
-    "style": "",
+    "style": "shop",
     "tint": "c9a878",
     "total_blocks": 3.8,
     "wall_blocks": 2.6

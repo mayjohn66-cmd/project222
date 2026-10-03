@@ -571,7 +571,7 @@ static func _draw_text(img: Image, text: String, x0: int, y0: int, color: Color,
 
 
 # 가게 앞 가로 간판: 진갈색 판 + 크림색 테두리 + 가운데 "BAKERY" + 양끝 둥근 빵 그림.
-static func bakery_fascia(w: int, h: int, text: String = "BAKERY") -> ImageTexture:
+static func bakery_fascia(w: int, h: int, text: String = "BAKERY", icon: String = "bread") -> ImageTexture:
 	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
 	var board := Color(0.5, 0.3, 0.17)
 	var rim := Color(0.96, 0.88, 0.68)
@@ -590,29 +590,42 @@ static func bakery_fascia(w: int, h: int, text: String = "BAKERY") -> ImageTextu
 	var ty: int = maxi((h - 7) / 2, 1)
 	_draw_text(img, text, tx, ty, text_color, shade)
 
-	# 양끝 둥근 빵(7×5): 위 한 줄 밝게
+	# 양끝 그림(7×5): bread = 둥근 빵(위 한 줄 밝게), tool = 망치(손잡이 + 머리), none = 없음
 	for side in [0, 1]:
 		var bx: int = 4 if side == 0 else w - 11
 		var by: int = maxi((h - 5) / 2, 1)
 
-		for dy in range(5):
-			for dx in range(7):
-				if (dy == 0 or dy == 4) and (dx == 0 or dx == 6):
-					continue
+		if icon == "bread":
+			for dy in range(5):
+				for dx in range(7):
+					if (dy == 0 or dy == 4) and (dx == 0 or dx == 6):
+						continue
 
-				var c: Color = loaf_hi if dy <= 1 else loaf
+					var c: Color = loaf_hi if dy <= 1 else loaf
 
-				if dx == 0 or dx == 6 or dy == 4:
-					c = loaf.darkened(0.25)
+					if dx == 0 or dx == 6 or dy == 4:
+						c = loaf.darkened(0.25)
 
-				if bx + dx < w - 1 and by + dy < h - 1:
-					img.set_pixel(bx + dx, by + dy, c)
+					if bx + dx < w - 1 and by + dy < h - 1:
+						img.set_pixel(bx + dx, by + dy, c)
+		elif icon == "tool":
+			var steel := Color(0.78, 0.82, 0.9)
+			var handle := Color(0.66, 0.44, 0.24)
+
+			for k in range(5):
+				if bx + 1 + k < w - 1 and by + 4 - k < h - 1:
+					img.set_pixel(bx + 1 + k, by + 4 - k, handle)
+
+			for dx in range(3):
+				for dy in range(2):
+					if bx + 3 + dx < w - 1 and by + dy < h - 1:
+						img.set_pixel(bx + 3 + dx, by + dy, steel)
 
 	return ImageTexture.create_from_image(img)
 
 
 # 가게 앞면 벽(빵집): 큰 진열창(선반 두 단 + 빵) 셋과 유리문 하나, 위쪽은 간판 자리(간판은 따로 붙는다).
-static func shop_front_wall(w: int, h: int, cells: int, plaster: Color, timber: Color) -> ImageTexture:
+static func shop_front_wall(w: int, h: int, cells: int, plaster: Color, timber: Color, goods: Color = Color(0.88, 0.56, 0.22)) -> ImageTexture:
 	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
 	var lay: Dictionary = window_layout(w, h, cells)
 	var base_h: int = lay["base_h"]
@@ -621,9 +634,9 @@ static func shop_front_wall(w: int, h: int, cells: int, plaster: Color, timber: 
 	var glow := Color(1.0, 0.9, 0.66)
 	var glow_dark := Color(0.92, 0.76, 0.5)
 	var shelf := Color(0.55, 0.34, 0.2)
-	var loaf := Color(0.88, 0.56, 0.22)
-	var loaf_hi := Color(0.98, 0.78, 0.44)
-	var loaf_lo := Color(0.62, 0.36, 0.14)
+	var loaf: Color = goods
+	var loaf_hi: Color = goods.lightened(0.28)
+	var loaf_lo: Color = goods.darkened(0.3)
 	var glass := Color(0.7, 0.86, 0.96)
 	var stone := Color(0.82, 0.8, 0.76)
 	var stone_line := Color(0.66, 0.64, 0.6)

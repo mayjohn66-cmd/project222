@@ -329,7 +329,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var tex_z: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(width * ts)), h_texels, true, cells_z, plaster, timber)
 
 	if is_shop:
-		tex_z = PlaceholderTextures.shop_front_wall(int(roundf(width * ts)), h_texels, cells_z, plaster, timber)
+		tex_z = PlaceholderTextures.shop_front_wall(int(roundf(width * ts)), h_texels, cells_z, plaster, timber, rule.get("goods_tint", Color(0.88, 0.56, 0.22)))
 	var tex_x: ImageTexture = PlaceholderTextures.wall_facade(int(roundf(depth * ts)), h_texels, false, cells_x, plaster, timber)
 	var specs: Array = [
 		spec(tex_z, Color.WHITE, "wall_front", "카메라 왼쪽 아래를 보는 앞벽 %d×%d px: 문 1(가운데), 창 %d, 나무 뼈대, 아래 돌 기단" % [tex_z.get_width(), tex_z.get_height(), cells_z - 1]),
@@ -404,7 +404,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	var display: PartBuilder = null
 
 	if is_shop:
-		_add_fascia(b, p, lo, hi, wall_h, h_texels, str(rule.get("sign_text", "BAKERY")))
+		_add_fascia(b, p, lo, hi, wall_h, h_texels, str(rule.get("sign_text", "BAKERY")), str(rule.get("sign_icon", "bread")))
 		_add_cloth_awning(b, p, lo, hi, wall_h, cells_z, cells_z / 2, awning_tint)
 		display = PartBuilder.new()
 
@@ -568,7 +568,7 @@ static func _add_cloth_awning(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Ve
 
 
 # 가게 이름 간판(앞벽 맨 위): 가로로 긴 판, 정면(+z)에 한 장 그림.
-static func _add_fascia(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Vector2, wall_h: float, h_texels: int, text: String = "BAKERY") -> void:
+static func _add_fascia(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Vector2, wall_h: float, h_texels: int, text: String = "BAKERY", icon: String = "bread") -> void:
 	var ts: int = p["ts"]
 	var sign_px: int = 14
 	var sign_h: float = float(sign_px) * wall_h / float(h_texels)
@@ -578,7 +578,7 @@ static func _add_fascia(b: PartBuilder, p: Dictionary, lo: Vector2, hi: Vector2,
 	var y0: float = wall_h - 0.2
 	var y1: float = y0 + sign_h
 	var z: float = hi.y + 0.28
-	var tex: ImageTexture = PlaceholderTextures.bakery_fascia(int(roundf((x1 - x0) * float(ts))), sign_px, text)
+	var tex: ImageTexture = PlaceholderTextures.bakery_fascia(int(roundf((x1 - x0) * float(ts))), sign_px, text, icon)
 	var board: Dictionary = spec(tex, Color.WHITE, "bakery_fascia", "가게 간판 %d×%d (%s 글자 + 양끝 그림), 한 장 전체" % [tex.get_width(), sign_px, text])
 	var back: Dictionary = spec(_tex("flat", ts, Color(0.36, 0.22, 0.12)), Color.WHITE, "sign_frame", "간판 뒤판·테두리 어두운 나무 단색 %d×%d" % [ts, ts])
 	box(b, "fascia_back", back, Vector3(x0 - 0.02, y0 - 0.02, hi.y + 0.1), Vector3(x1 + 0.02, y1 + 0.02, z - 0.01), 40.0)
