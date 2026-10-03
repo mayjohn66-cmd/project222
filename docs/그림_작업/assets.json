@@ -823,8 +823,8 @@
   },
   {
     "awning_tint": "5a6a8a",
-    "canon_d": 3.0,
-    "canon_w": 3.0,
+    "canon_d": 2.4,
+    "canon_w": 3.2,
     "faces": [
       {
         "file": "blacksmith__plinth_stone.png",
@@ -837,21 +837,21 @@
       },
       {
         "file": "blacksmith__wall_front.png",
-        "h": 53,
+        "h": 44,
         "name": "wall_front",
         "normal_file": "",
-        "note": "카메라 왼쪽 아래를 보는 앞벽 54×53 px: 문 1(가운데), 창 2, 나무 뼈대, 아래 돌 기단",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 58×44 px: 문 1(가운데), 창 2, 나무 뼈대, 아래 돌 기단",
         "tileable": false,
-        "w": 54
+        "w": 58
       },
       {
         "file": "blacksmith__wall_side.png",
-        "h": 53,
+        "h": 44,
         "name": "wall_side",
         "normal_file": "",
-        "note": "카메라 오른쪽 아래를 보는 옆벽 54×53 px: 창 3, 나무 뼈대, 아래 돌 기단",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 43×44 px: 창 2, 나무 뼈대, 아래 돌 기단",
         "tileable": false,
-        "w": 54
+        "w": 43
       },
       {
         "file": "blacksmith__roof_tiles.png",
@@ -899,20 +899,29 @@
         "w": 18
       },
       {
-        "file": "blacksmith__barrel.png",
+        "file": "blacksmith__stump_wood.png",
         "h": 18,
-        "name": "barrel",
+        "name": "stump_wood",
         "normal_file": "",
-        "note": "통(배럴) 옆면 18×18: 세로 판자 + 쇠테 2줄",
+        "note": "나무 판(가로 판자 결)",
         "tileable": true,
         "w": 18
       },
       {
-        "file": "blacksmith__cloth_awning.png",
+        "file": "blacksmith__anvil_iron.png",
         "h": 18,
-        "name": "cloth_awning",
+        "name": "anvil_iron",
         "normal_file": "",
-        "note": "천 차양 줄무늬 18×18 반복(크림 + 가게 색)",
+        "note": "모루 쇠 단색 18×18 푸른 회색",
+        "tileable": true,
+        "w": 18
+      },
+      {
+        "file": "blacksmith__anvil_top.png",
+        "h": 18,
+        "name": "anvil_top",
+        "normal_file": "",
+        "note": "모루 윗판 단색 18×18 밝은 회색",
         "tileable": true,
         "w": 18
       },
@@ -926,20 +935,20 @@
         "w": 18
       },
       {
-        "file": "blacksmith__step.png",
+        "file": "blacksmith__iron.png",
         "h": 18,
-        "name": "step",
+        "name": "iron",
         "normal_file": "",
-        "note": "회색 돌 블록 줄눈",
+        "note": "검은 쇠(기둥·테두리) 단색 18×18",
         "tileable": true,
         "w": 18
       },
       {
-        "file": "blacksmith__crate.png",
+        "file": "blacksmith__log_wood.png",
         "h": 18,
-        "name": "crate",
+        "name": "log_wood",
         "normal_file": "",
-        "note": "나무 상자 18×18: 판자 + 모서리 틀 + 가로 보강",
+        "note": "나무 판(가로 판자 결)",
         "tileable": true,
         "w": 18
       },
@@ -953,13 +962,13 @@
         "w": 18
       },
       {
-        "file": "blacksmith__bakery_fascia.png",
-        "h": 14,
-        "name": "bakery_fascia",
+        "file": "blacksmith__anvil_sign.png",
+        "h": 12,
+        "name": "anvil_sign",
         "normal_file": "",
-        "note": "가게 간판 51×14 (SMITH 글자 + 양끝 그림), 한 장 전체",
+        "note": "걸이 간판 그림 16×12 (anvil), +x 쪽 면 한 장",
         "tileable": false,
-        "w": 51
+        "w": 16
       },
       {
         "file": "blacksmith__apron_stone.png",
@@ -977,18 +986,18 @@
     "kind": "gable",
     "label": "대장간",
     "notes": "돌벽과 어두운 슬레이트 지붕. 간판",
-    "roof_blocks": 1.1,
-    "roof_tint": "7a809c",
+    "roof_blocks": 0.9,
+    "roof_tint": "4e5668",
     "sprite": "res://art/world/blacksmith_v2/blacksmith_iso.png",
-    "style": "shop",
-    "tint": "a9a094",
-    "total_blocks": 3.5,
-    "wall_blocks": 2.4
+    "style": "forge",
+    "tint": "b8bcd0",
+    "total_blocks": 2.9,
+    "wall_blocks": 2.0
   },
   {
     "awning_tint": "3a8a7a",
-    "canon_d": 3.5,
-    "canon_w": 3.5,
+    "canon_d": 3.8,
+    "canon_w": 2.8,
     "faces": [
       {
         "file": "tool_shop__plinth_stone.png",
@@ -1004,18 +1013,18 @@
         "h": 57,
         "name": "wall_front",
         "normal_file": "",
-        "note": "카메라 왼쪽 아래를 보는 앞벽 63×57 px: 문 1(가운데), 창 3, 나무 뼈대, 아래 돌 기단",
+        "note": "카메라 왼쪽 아래를 보는 앞벽 50×57 px: 문 1(가운데), 창 2, 나무 뼈대, 아래 돌 기단",
         "tileable": false,
-        "w": 63
+        "w": 50
       },
       {
         "file": "tool_shop__wall_side.png",
         "h": 57,
         "name": "wall_side",
         "normal_file": "",
-        "note": "카메라 오른쪽 아래를 보는 옆벽 63×57 px: 창 4, 나무 뼈대, 아래 돌 기단",
+        "note": "카메라 오른쪽 아래를 보는 옆벽 68×57 px: 창 4, 나무 뼈대, 아래 돌 기단",
         "tileable": false,
-        "w": 63
+        "w": 68
       },
       {
         "file": "tool_shop__roof_tiles.png",
@@ -1054,20 +1063,11 @@
         "w": 18
       },
       {
-        "file": "tool_shop__barrel.png",
+        "file": "tool_shop__log_wood.png",
         "h": 18,
-        "name": "barrel",
+        "name": "log_wood",
         "normal_file": "",
-        "note": "통(배럴) 옆면 18×18: 세로 판자 + 쇠테 2줄",
-        "tileable": true,
-        "w": 18
-      },
-      {
-        "file": "tool_shop__cloth_awning.png",
-        "h": 18,
-        "name": "cloth_awning",
-        "normal_file": "",
-        "note": "천 차양 줄무늬 18×18 반복(크림 + 가게 색)",
+        "note": "나무 판(가로 판자 결)",
         "tileable": true,
         "w": 18
       },
@@ -1081,11 +1081,11 @@
         "w": 18
       },
       {
-        "file": "tool_shop__crate.png",
+        "file": "tool_shop__iron.png",
         "h": 18,
-        "name": "crate",
+        "name": "iron",
         "normal_file": "",
-        "note": "나무 상자 18×18: 판자 + 모서리 틀 + 가로 보강",
+        "note": "검은 쇠(기둥·테두리) 단색 18×18",
         "tileable": true,
         "w": 18
       },
@@ -1099,13 +1099,13 @@
         "w": 18
       },
       {
-        "file": "tool_shop__bakery_fascia.png",
-        "h": 14,
-        "name": "bakery_fascia",
+        "file": "tool_shop__tools_sign.png",
+        "h": 12,
+        "name": "tools_sign",
         "normal_file": "",
-        "note": "가게 간판 60×14 (TOOLS 글자 + 양끝 그림), 한 장 전체",
+        "note": "걸이 간판 그림 16×12 (tools), +x 쪽 면 한 장",
         "tileable": false,
-        "w": 60
+        "w": 16
       },
       {
         "file": "tool_shop__apron_stone.png",
@@ -1123,12 +1123,12 @@
     "kind": "gable",
     "label": "도구점",
     "notes": "앞 차양과 간판",
-    "roof_blocks": 1.2,
-    "roof_tint": "a05a30",
+    "roof_blocks": 1.5,
+    "roof_tint": "3a8a7a",
     "sprite": "res://art/world/tool_shop_v1/tool_shop.png",
-    "style": "shop",
-    "tint": "c9a878",
-    "total_blocks": 3.8,
+    "style": "workshop",
+    "tint": "ffffff",
+    "total_blocks": 4.1,
     "wall_blocks": 2.6
   },
   {

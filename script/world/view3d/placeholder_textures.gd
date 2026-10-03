@@ -792,6 +792,267 @@ static func bread_card(kind: String) -> ImageTexture:
 	return ImageTexture.create_from_image(img)
 
 
+# ---------------------------------------------------------------- 대장간·작업장 전용
+
+static func _px(img: Image, x: int, y: int, c: Color) -> void:
+	if x >= 0 and y >= 0 and x < img.get_width() and y < img.get_height():
+		img.set_pixel(x, y, c)
+
+
+# 대장간 앞벽: 푸른 회색 돌벽 + 가운데 큰 아치형 화덕 칸(안쪽 어둡고, 오른쪽에 불꽃·숯, 왼쪽에 모루 그림자) + 양옆 쇠창살 작은 창.
+static func forge_front_wall(w: int, h: int, cells: int, stone_tint: Color) -> ImageTexture:
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var a: Color = Color(0.64, 0.66, 0.74) * stone_tint
+	var b: Color = Color(0.54, 0.56, 0.64) * stone_tint
+	var mortar: Color = Color(0.36, 0.37, 0.45)
+	var base_h: int = clampi(int(float(h) * 0.12), 2, 5)
+
+	for y in range(h):
+		var row: int = y / 4
+		var off: int = (row % 2) * 4
+
+		for x in range(w):
+			var m: bool = (y % 4 == 0) or ((x + off) % 8 == 0)
+			img.set_pixel(x, y, mortar if m else (a if ((x + off) / 8 + row) % 2 == 0 else b))
+
+	# 화덕 칸(아치): 가운데 폭 약 44%
+	var bw: int = int(float(w) * 0.44)
+	var bx0: int = (w - bw) / 2
+	var bx1: int = bx0 + bw
+	var by0: int = int(float(h) * 0.2)
+	var by1: int = h
+	var frame := Color(0.8, 0.8, 0.88)
+
+	for y in range(by0, by1):
+		for x in range(bx0 - 2, bx1 + 2):
+			var corner: bool = (y - by0) < 2 and (x - (bx0 - 2) < 2 or (bx1 + 1) - x < 2)
+			if not corner:
+				_px(img, x, y, frame)
+
+	for y in range(by0 + 2, by1):
+		for x in range(bx0, bx1):
+			var corner2: bool = (y - by0 - 2) < 2 and (x - bx0 < 2 or (bx1 - 1) - x < 2)
+			if not corner2:
+				_px(img, x, y, Color(0.13, 0.1, 0.1))
+
+	# 바닥 따뜻한 반사(화덕 앞)
+	for x in range(bx0 + 2, bx1 - 2):
+		_px(img, x, h - 2, Color(0.42, 0.2, 0.1))
+		_px(img, x, h - 1, Color(0.3, 0.14, 0.08))
+
+	# 불꽃·숯(오른쪽): 숯 줄 + 불꽃 두 겹
+	var fx: int = bx1 - 10
+	for dx in range(8):
+		_px(img, fx + dx, h - 4, Color(0.85, 0.22, 0.08))
+		_px(img, fx + dx, h - 3, Color(0.6, 0.12, 0.06))
+
+	for dx in range(2, 7):
+		_px(img, fx + dx, h - 5, Color(1.0, 0.55, 0.15))
+		_px(img, fx + dx, h - 6, Color(1.0, 0.55, 0.15))
+
+	for dx in range(3, 6):
+		_px(img, fx + dx, h - 7, Color(1.0, 0.85, 0.3))
+		_px(img, fx + dx, h - 8, Color(1.0, 0.85, 0.3))
+
+	_px(img, fx + 4, h - 9, Color(1.0, 0.9, 0.5))
+
+	# 모루 그림자(왼쪽): 받침 + 허리 + 윗판(뿔 포함)
+	var ax: int = bx0 + 5
+	var shade := Color(0.34, 0.36, 0.46)
+
+	for dx in range(0, 8):
+		_px(img, ax + dx, h - 3, shade)
+		_px(img, ax + dx, h - 2, shade)
+
+	for dx in range(2, 6):
+		_px(img, ax + dx, h - 4, shade)
+		_px(img, ax + dx, h - 5, shade)
+
+	for dx in range(-1, 10):
+		_px(img, ax + dx, h - 6, Color(0.5, 0.52, 0.62))
+		_px(img, ax + dx, h - 7, shade)
+
+	_px(img, ax - 2, h - 6, shade)
+
+	# 양옆 작은 쇠창살 창
+	for k in range(cells):
+		var cx: int = int((float(k) + 0.5) * float(w) / float(cells))
+
+		if cx > bx0 - 4 and cx < bx1 + 4:
+			continue
+
+		for y in range(int(float(h) * 0.3), int(float(h) * 0.3) + 8):
+			for x in range(cx - 3, cx + 3):
+				var edge: bool = x == cx - 3 or x == cx + 2 or y == int(float(h) * 0.3) or y == int(float(h) * 0.3) + 7
+				var bar: bool = x == cx - 1 or x == cx
+				_px(img, x, y, frame if edge else (Color(0.2, 0.2, 0.26) if bar else Color(0.1, 0.1, 0.14)))
+
+	for y in range(h - base_h, h):
+		for x in range(w):
+			if x < bx0 - 2 or x >= bx1 + 2:
+				_px(img, x, y, Color(0.4, 0.41, 0.48) if (y == h - base_h) else Color(0.46, 0.47, 0.55))
+
+	return ImageTexture.create_from_image(img)
+
+
+static func _draw_tool(img: Image, kind: String, x: int, y: int) -> void:
+	var steel := Color(0.78, 0.82, 0.9)
+	var steel_dk := Color(0.5, 0.54, 0.64)
+	var wood := Color(0.66, 0.44, 0.24)
+
+	match kind:
+		"pick":
+			for k in range(10):
+				_px(img, x + 4, y + k, wood)
+
+			for dx in range(0, 9):
+				_px(img, x + dx, y + 1, steel)
+
+			_px(img, x, y + 2, steel_dk)
+			_px(img, x + 8, y + 2, steel_dk)
+		"saw":
+			for k in range(6):
+				for dx in range(1, 6 - k / 2):
+					_px(img, x + dx, y + k, steel)
+
+			for k in range(6):
+				_px(img, x, y + k, steel_dk if k % 2 == 0 else steel)
+
+			for k in range(6, 10):
+				_px(img, x + 2, y + k, wood)
+				_px(img, x + 3, y + k, wood)
+		"shovel":
+			for k in range(7):
+				_px(img, x + 3, y + k, wood)
+
+			for dy in range(6, 10):
+				for dx in range(1, 6):
+					if not (dy == 9 and (dx == 1 or dx == 5)):
+						_px(img, x + dx, y + dy, steel)
+		_:
+			for k in range(10):
+				_px(img, x + 3, y + k, wood)
+
+			for dx in range(0, 7):
+				for dy in range(0, 3):
+					_px(img, x + dx, y + dy, steel if dy < 2 else steel_dk)
+
+
+# 작업장(도구 가게) 앞벽: 세로 널판 벽 + 가운데 큰 쌍여닫이문(X 보강) + 양옆 판에 걸린 도구(곡괭이·톱·삽·망치).
+static func workshop_front_wall(w: int, h: int, cells: int, wood_tint: Color) -> ImageTexture:
+	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
+	var pa: Color = Color(0.82, 0.6, 0.38) * wood_tint
+	var pb: Color = Color(0.74, 0.53, 0.33) * wood_tint
+	var seam: Color = Color(0.46, 0.3, 0.17)
+	var trim := Color(0.28, 0.5, 0.45)
+	var base_h: int = clampi(int(float(h) * 0.1), 2, 4)
+
+	for y in range(h):
+		for x in range(w):
+			var c: Color = seam if x % 4 == 0 else (pa if (x / 4) % 2 == 0 else pb)
+			img.set_pixel(x, y, c)
+
+	for x in range(w):
+		for y in range(0, 2):
+			img.set_pixel(x, y, trim)
+
+	for y in range(h):
+		for x in [0, 1, w - 2, w - 1]:
+			img.set_pixel(x, y, trim)
+
+	var door_cell: int = cells / 2
+	var cell_px: float = float(w) / float(maxi(cells, 1))
+	var dw: int = int(cell_px * 0.8)
+	var dh: int = int(float(h) * 0.72)
+	var dcx: int = int((float(door_cell) + 0.5) * cell_px)
+	var dx0: int = dcx - dw / 2
+	var dy0: int = h - base_h - dh
+	var door := Color(0.5, 0.33, 0.18)
+	var door_dk := Color(0.3, 0.19, 0.1)
+
+	for y in range(dy0, h - base_h):
+		for x in range(dx0, dx0 + dw):
+			var edge: bool = x == dx0 or x == dx0 + dw - 1 or y == dy0 or x == dcx
+			_px(img, x, y, door_dk if edge else door)
+
+	# 쌍여닫이문 X 보강
+	for half in range(2):
+		var hx0: int = dx0 + half * (dw / 2)
+		var hwid: int = dw / 2
+
+		for k in range(hwid):
+			var yy: int = dy0 + 2 + int(float(k) * float(dh - 4) / float(maxi(hwid, 1)))
+			_px(img, hx0 + k, yy, door_dk)
+			_px(img, hx0 + hwid - 1 - k, yy, door_dk)
+
+	_px(img, dcx - 2, dy0 + dh / 2, Color(0.95, 0.82, 0.3))
+	_px(img, dcx + 1, dy0 + dh / 2, Color(0.95, 0.82, 0.3))
+
+	# 양옆 도구 걸이판: 어두운 판 위에 도구 둘씩
+	var kinds_left: Array = ["pick", "saw"]
+	var kinds_right: Array = ["shovel", "hammer"]
+
+	for k in range(cells):
+		if k == door_cell:
+			continue
+
+		var cx: int = int((float(k) + 0.5) * cell_px)
+		var board_w: int = clampi(int(cell_px * 0.7), 10, 24)
+		var bx: int = cx - board_w / 2
+		var by: int = int(float(h) * 0.3)
+
+		for y in range(by, by + 14):
+			for x in range(bx, bx + board_w):
+				_px(img, x, y, Color(0.34, 0.22, 0.13) if (x == bx or x == bx + board_w - 1 or y == by or y == by + 13) else Color(0.55, 0.37, 0.22))
+
+		var kinds: Array = kinds_left if k < door_cell else kinds_right
+		_draw_tool(img, kinds[0], bx + 2, by + 2)
+
+		if board_w >= 18:
+			_draw_tool(img, kinds[1], bx + board_w - 10, by + 2)
+
+	for y in range(h - base_h, h):
+		for x in range(w):
+			_px(img, x, y, Color(0.56, 0.54, 0.5))
+
+	return ImageTexture.create_from_image(img)
+
+
+# 걸이 간판용 그림(16×12): 모루(대장간) / 곡괭이+망치(도구 가게)
+static func icon_sign(kind: String) -> ImageTexture:
+	var img := Image.create(16, 12, false, Image.FORMAT_RGBA8)
+	var board := Color(0.86, 0.8, 0.7)
+	var frame := Color(0.3, 0.2, 0.12)
+
+	for y in range(12):
+		for x in range(16):
+			img.set_pixel(x, y, frame if (x == 0 or y == 0 or x == 15 or y == 11) else board)
+
+	var dark := Color(0.2, 0.2, 0.26)
+	var mid := Color(0.45, 0.47, 0.56)
+
+	if kind == "anvil":
+		for dx in range(3, 13):
+			_px(img, dx, 3, mid)
+			_px(img, dx, 4, dark)
+
+		for dx in range(1, 4):
+			_px(img, dx, 3, mid)
+
+		for dx in range(6, 10):
+			for dy in range(5, 8):
+				_px(img, dx, dy, dark)
+
+		for dx in range(4, 12):
+			_px(img, dx, 8, dark)
+			_px(img, dx, 9, dark)
+	else:
+		_draw_tool(img, "pick", 2, 1)
+		_draw_tool(img, "hammer", 9, 1)
+
+	return ImageTexture.create_from_image(img)
+
+
 # 덧문(겉창): 가로 살(루버) 줄무늬. 밝은 줄과 어두운 줄이 두 픽셀씩 번갈아.
 static func shutter(size: int, base: Color) -> ImageTexture:
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)

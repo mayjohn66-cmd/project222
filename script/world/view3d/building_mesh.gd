@@ -118,9 +118,11 @@ static func build(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, option
 		var cv: float = vc + 0.2  # 보이는 쪽(+) 경사 위
 		var slope_y: float = wall_h + roof_h * (1.0 - 0.2 / hs * 1.0)  # cv 위치의 지붕 표면 높이(근사)
 		var base_y: float = slope_y - 0.12
-		var top_y: float = peak + 0.2
-		_box_uv(st, ridge_x, cu - 0.15, cu + 0.15, cv - 0.15, cv + 0.15, base_y, top_y)
-		_box_uv(st, ridge_x, cu - 0.2, cu + 0.2, cv - 0.2, cv + 0.2, top_y, top_y + 0.06)  # 머릿돌
+		var big: bool = bool(options.get("chimney_big", false))
+		var ch: float = 0.26 if big else 0.15
+		var top_y: float = peak + (0.65 if big else 0.2)
+		_box_uv(st, ridge_x, cu - ch, cu + ch, cv - ch, cv + ch, base_y, top_y)
+		_box_uv(st, ridge_x, cu - ch - 0.05, cu + ch + 0.05, cv - ch - 0.05, cv + ch + 0.05, top_y, top_y + 0.06)  # 머릿돌
 
 	present.append(_commit(st, mesh))
 

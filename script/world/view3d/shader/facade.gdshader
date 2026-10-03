@@ -21,7 +21,7 @@ uniform float emit_strength = 0.0;
 void fragment() {
 	vec3 albedo_rgb = texture(albedo_tex, UV * uv_scale).rgb;
 	ALBEDO = albedo_rgb * tint.rgb;
-	float warm = step(0.85, albedo_rgb.r) * step(0.7, albedo_rgb.g) * (1.0 - step(0.8, albedo_rgb.b));
+	float warm = step(0.85, albedo_rgb.r) * step(0.45, albedo_rgb.g) * (1.0 - step(0.8, albedo_rgb.b));
 	EMISSION = albedo_rgb * emit_strength * warm;
 
 	if (use_normal) {

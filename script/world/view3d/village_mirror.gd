@@ -441,6 +441,8 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 
 		if str(rule.get("axis", "")) == "x":
 			swap = cw < cd
+		elif str(rule.get("axis", "")) == "y":
+			swap = cw > cd  # 긴 쪽을 y(앞뒤)로: 좁은 쪽(박공 끝)이 앞(+z)을 본다
 
 		if swap:
 			var tmp: float = cw
