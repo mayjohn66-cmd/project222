@@ -448,7 +448,7 @@ func _sync(model: RefCounted, delta: float) -> void:
 
 	if float(model.attack_flash) > 0.0 and _prev_flash <= 0.0:
 		var dur: float = maxf(0.3, float(model.attack_profile.cooldown) * 0.85)
-		_player.play_attack(dur, method == ExpeditionAttackProfile.Method.PROJECTILE)
+		_player.play_attack(dur, method == ExpeditionAttackProfile.Method.PROJECTILE, float(model.attack_profile.arc_degrees))
 
 		if method == ExpeditionAttackProfile.Method.MELEE:
 			_spawn_slash(model, dur)
@@ -581,7 +581,7 @@ func _spawn_slash(model: RefCounted, dur: float) -> void:
 	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_content.add_child(node)
 	var face: Vector2 = model.facing
-	_fx.append({"kind": "slash", "node": node, "t": 0.0, "delay": dur * 0.06, "sweep": dur * 0.3, "fade": 0.2,
+	_fx.append({"kind": "slash", "node": node, "t": 0.0, "delay": dur * 0.2, "sweep": dur * 0.3, "fade": 0.2,
 		"center": model.player_position, "angle": atan2(face.y, face.x), "half": deg_to_rad(float(model.attack_profile.arc_degrees)) * 0.5,
 		"reach": float(model.attack_profile.reach)})
 

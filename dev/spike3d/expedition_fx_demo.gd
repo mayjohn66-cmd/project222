@@ -27,8 +27,8 @@ func _ready() -> void:
 	var c0: Vector2 = view.stage.project(model.player_position, 0.5)
 	im0.get_region(Rect2i(int(c0.x) - 140, int(c0.y) - 130, 280, 220)).save_png("%s/idle.png" % out)
 	model.basic_attack()
-	for k in 14:
-		await get_tree().create_timer(0.025).timeout
+	for k in 16:
+		await get_tree().create_timer(0.02).timeout
 		var img := get_viewport().get_texture().get_image()
 		var c: Vector2 = view.stage.project(model.player_position, 0.5)
 		img.get_region(Rect2i(int(c.x) - 140, int(c.y) - 130, 280, 220)).save_png("%s/fx_%02d.png" % [out, k])

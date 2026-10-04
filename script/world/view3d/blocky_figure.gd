@@ -29,6 +29,7 @@ var _yaw_cur: float = NAN
 var _atk_t: float = -1.0  # 공격 진행 시간(초), -1 = 공격 중 아님
 var _atk_dur: float = 0.4
 var _atk_ranged: bool = false
+var _atk_arc: float = 80.0  # 공격 부채꼴 각도(도). 팔을 이만큼 휩쓴다
 var _weapon: Node3D = null
 var _hurt_t: float = -1.0  # 피격 진행 시간(초), -1 = 아님
 var _hurt_dur: float = 0.4
@@ -399,8 +400,9 @@ func set_weapon(kind: String) -> void:
 
 
 # 공격 동작을 시작한다. duration 은 휘두르는 전체 시간. ranged 면 두 팔을 앞으로 뻗어 쏘는 동작.
-func play_attack(duration: float, ranged: bool = false) -> void:
+func play_attack(duration: float, ranged: bool = false, arc_degrees: float = 80.0) -> void:
 	_atk_t = 0.0
+	_atk_arc = arc_degrees
 	_atk_dur = maxf(0.15, duration)
 	_atk_ranged = ranged
 
@@ -414,6 +416,7 @@ func _apply_attack_pose(d2r: float) -> void:
 		if _weapon != null:
 			_weapon_hold = maxf(0.0, _weapon_hold)
 			_weapon.visible = weapon_always or _weapon_hold > 0.0
+			_weapon.rotation.x = lerpf(_weapon.rotation.x, deg_to_rad(-50.0), 0.5)
 
 			if weapon_always and _hurt_t < 0.0:
 				# 무기를 쥔 오른팔: 걸을 때도 크게 흔들지 않고 칼끝을 앞으로 내민 자세(마인크래프트처럼)
@@ -448,16 +451,29 @@ func _apply_attack_pose(d2r: float) -> void:
 		head.rotation.x = deg_to_rad(-3.0) * raise
 		return
 
-	# 칼 휘두르기(마인크래프트식): 오른팔이 앞으로 번쩍 올라갔다가 부드럽게 내려온다. 몸통은 살짝 비틀리고 반대팔이 약간 흔들린다.
-	# swing = sin(√p · π): 시작이 빠르고 끝이 느린 한 번의 곡선(최대 p=0.25 근처)
-	var swing: float = sin(sqrt(p) * PI)
-	sh_r.rotation = Vector3(deg_to_rad(-24.0 - 88.0 * swing), 0.0, deg_to_rad(-8.0) * swing)
-	el_r.rotation = Vector3(deg_to_rad(-22.0 - 14.0 * swing), 0.0, 0.0)
-	sh_l.rotation = Vector3(deg_to_rad(10.0) * swing, 0.0, deg_to_rad(4.0))
+	# 칼 휘두르기: 궤적(수평 부채꼴)과 같이 팔을 옆으로 휩쓴다. 팔을 앞으로 들어 올린 채(arm_up) 한쪽 끝(-1)에서 반대쪽 끝(+1)으로
+	# 어깨를 좌우(yaw)로 돌려 지나가고, 몸통·머리가 따라 돈다. 0~0.2 준비(옆으로 벌림) → 0.2~0.5 휩쓸기 → 0.5~1 되돌림.
+	var s_sweep: float
+	if p < 0.2:
+		s_sweep = lerpf(0.0, -1.0, smoothstep(0.0, 0.2, p))
+	elif p < 0.5:
+		s_sweep = lerpf(-1.0, 1.0, smoothstep(0.2, 0.5, p))
+	else:
+		s_sweep = lerpf(1.0, 0.0, smoothstep(0.5, 1.0, p))
+
+	var arm_up: float = smoothstep(0.0, 0.2, p) * (1.0 - smoothstep(0.55, 1.0, p))
+	var half_deg: float = _atk_arc * 0.5 + 8.0
+	# 회전 순서가 yaw(Y) → pitch(X) 라서, 팔을 앞으로 든 뒤 전체를 수직축으로 돌리는 것이 된다.
+	sh_r.rotation = Vector3(deg_to_rad(-24.0 - 62.0 * arm_up), deg_to_rad(half_deg) * s_sweep, 0.0)
+	el_r.rotation = Vector3(deg_to_rad(-22.0 - 10.0 * arm_up), 0.0, 0.0)
+	sh_l.rotation = Vector3(deg_to_rad(8.0) * arm_up, deg_to_rad(-10.0) * s_sweep, deg_to_rad(4.0))
 	el_l.rotation = Vector3.ZERO
-	chest.rotation = Vector3(deg_to_rad(4.0) * swing, deg_to_rad(-14.0) * swing, 0.0)
-	hips.rotation = Vector3(0.0, deg_to_rad(5.0) * swing, 0.0)
-	head.rotation.y = deg_to_rad(9.0) * swing
+	chest.rotation = Vector3(deg_to_rad(3.0) * arm_up, deg_to_rad(16.0) * s_sweep, 0.0)
+	hips.rotation = Vector3(0.0, deg_to_rad(6.0) * s_sweep, 0.0)
+	head.rotation.y = deg_to_rad(7.0) * s_sweep
+
+	if _weapon != null:
+		_weapon.rotation.x = deg_to_rad(-50.0 + 42.0 * arm_up)  # 휩쓸 땐 칼날이 거의 수평(팔과 나란히)
 
 
 # 예전 방식(비교용): 걸음 단계 0~3 을 끊어서 팔다리를 흔든다. 보간 없음.
