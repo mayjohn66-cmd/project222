@@ -7,7 +7,6 @@ extends Node
 ## 설계: docs/계획_매장_3D_적용_초안.md, 규격: docs/그림_규격서_3D도트_초안.md
 ## 칸 좌표: 2D 게임의 칸 좌표(칸 중심이 정수)를 그대로 3D 의 (x, z) 로 쓴다.
 
-enum Mode { OFF, OVERLAY, ON }  # 끔 / 반투명 겹침(2D 와 위치 비교) / 3D 만 불투명(2D 는 3D 가 안 덮는 곳에만 보임)
 
 const GAME_TILE: Vector2 = Vector2(96.0, 48.0)  # 2D 게임의 칸 크기
 # 확대 배율(shrink)에 따라 정해지는 값. 기본 3배: 낮은 해상도 칸 36×18, 블록 22px, 질감 18, 2D 줌 1.125.
@@ -37,11 +36,6 @@ const ID_SHADER: Shader = preload("res://script/world/view3d/shader/sorted_id.gd
 const OUTLINE_SHADER: Shader = preload("res://script/world/view3d/shader/outline_post.gdshader")
 const FACADE_SHADER: Shader = preload("res://script/world/view3d/shader/facade.gdshader")
 
-var mode: Mode = Mode.ON:  # 게임은 항상 3D. 다른 값은 dev/ 비교 장면에서만 쓴다
-	set(value):
-		mode = value
-		_apply_mode()
-
 var world: Node2D
 var floor_node: Node2D
 var objects_node: Node2D
@@ -58,8 +52,6 @@ var _sun: DirectionalLight3D
 var _fill: DirectionalLight3D  # 보조광: 그림자 쪽 벽(+x 면)이 새까맣게 떨어지지 않게 반대편에서 약하게 비춘다(그림자 없음)
 var _post_material: ShaderMaterial
 var _ready_done: bool = false
-var _zoom_applied: bool = false
-var _saved_zoom: Vector2 = Vector2.ONE
 
 # 키 → {mesh, material, id_mesh, id_material, min, max, center, signature}
 var _items: Dictionary = {}
@@ -73,7 +65,7 @@ var _ground_mesh: MeshInstance3D
 var _ground_id_mesh: MeshInstance3D
 var _ground_id_material: ShaderMaterial
 var _texture_cache: Dictionary = {}
-# 3D 만 보기(Mode.ON)일 때 숨긴 2D 노드와 원래 보이던 상태(끄면 복원): 인스턴스 id → [노드, 원래 visible]
+# 숨긴 2D 그림 노드: 인스턴스 id → [노드, 원래 visible]
 var _hidden_2d: Dictionary = {}
 const VIEW_MARGIN: float = 15.0  # 정렬에 넣는 범위(카메라 중심 칸 ± 이 값)
 var _view_center: Vector2 = Vector2.ZERO
@@ -85,8 +77,6 @@ var _lamps: Array = []
 var _lamp_signature: String = ""
 var day_manager: Node
 var exterior: Node2D
-## 마을(매장 바깥)도 3D 로 그린다(항상 true. dev/ 비교 장면에서만 끈다).
-var village_enabled: bool = true
 var weather_override: String = ""  # 개발용: clear / rain / snow. 비우면 날씨 계산(WeatherSystem)을 따른다
 var weather_override_intensity: float = 0.85
 var weather: Dictionary = {"kind": "clear", "intensity": 0.0}  # 지금 날씨(부드럽게 변하는 값)
@@ -236,48 +226,15 @@ func _build_id_pass() -> void:
 	_id_viewport.add_child(id_env)
 
 
+# 처음 한 번: 3D 층을 켜고 2D 그림을 숨기며, 3D 칸 크기(화면 108px)와 2D 칸 크기를 맞추려고 2D 카메라 줌을 올린다.
 func _apply_mode() -> void:
-	if not _ready_done:
-		return
+	_canvas.visible = true
+	_collect_2d_to_hide()
 
-	_canvas.visible = mode != Mode.OFF
-
-	if mode == Mode.OFF and village != null:
-		village.restore_collisions(world)
-	_apply_2d_hiding()
-
-	# 3D 칸 크기(화면 108px)와 2D 칸 크기를 맞추려고 2D 카메라 줌을 올린다(끄면 원래 값으로).
 	if camera2d != null:
-		if mode != Mode.OFF and not _zoom_applied:
-			_saved_zoom = camera2d.zoom
-			camera2d.zoom = Vector2.ONE * match_zoom
-			_zoom_applied = true
-		elif mode == Mode.OFF and _zoom_applied:
-			camera2d.zoom = _saved_zoom
-			_zoom_applied = false
+		camera2d.zoom = Vector2.ONE * match_zoom
 
-	_container.modulate = Color(1, 1, 1, 0.55 if mode == Mode.OVERLAY else 1.0)
-	set_process(mode != Mode.OFF)
-
-
-func set_village_enabled(value: bool) -> void:
-	village_enabled = value
-
-	if not value and village != null:
-		for key in _items.keys():
-			if str(key).begins_with("vil"):
-				_remove_item(str(key))
-
-		village.clear_ground()
-		village.reset_signatures()
-		village._keys.clear()
-		village.restore_collisions(world)
-
-		if decals != null:
-			decals.clear_puddles()
-			decals.clear_prints()
-
-	_apply_2d_hiding()
+	set_process(true)
 
 
 # 마을 건물·소품을 다시 만든다(art/world3d/ 에 그림을 넣거나 바꾼 뒤 게임을 껐다 켜지 않고 확인할 때, F8).
@@ -291,10 +248,6 @@ func reload_village_art() -> void:
 
 	village._keys.clear()
 	village.reset_signatures()
-
-
-func cycle_mode() -> void:
-	mode = ((int(mode) + 1) % 3) as Mode
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -325,22 +278,9 @@ func _hide_2d_node(n: CanvasItem) -> void:
 	n.visible = false
 
 
-func _apply_2d_hiding() -> void:
-	if mode == Mode.ON:
-		_collect_2d_to_hide()
-	else:
-		for id in _hidden_2d.keys():
-			var entry: Array = _hidden_2d[id]
-
-			if is_instance_valid(entry[0]):
-				(entry[0] as CanvasItem).visible = entry[1]
-
-		_hidden_2d.clear()
-
-
 # 숨길 것: 바닥(그림만. 충돌 노드는 그대로), 판자 벽, 가구와 사람의 그림 노드(Visual). 글자 표시(재고 등)·건축 고스트·UI 는 그대로 둔다.
 func _collect_2d_to_hide() -> void:
-	if village_enabled and exterior != null:
+	if exterior != null:
 		_hide_2d_node(exterior)
 
 		for container_name in VillageMirror.CONTAINERS:
@@ -549,13 +489,12 @@ func _process(delta: float) -> void:
 		_sync_furniture()
 		_sync_build_guides()
 
-		if village != null and village_enabled:
+		if village != null:
 			village.set_season(current_season())
 			village.sync_ground()
 			village.sync_objects(world)
 
-		if mode == Mode.ON:
-			_collect_2d_to_hide()
+		_collect_2d_to_hide()
 
 	# 건축 중에는 미리보기·안내가 마우스를 매 프레임 따라가야 하므로 0.25초 주기를 기다리지 않는다.
 	var builder: Node = world.get_node_or_null("BuildManager")
@@ -564,12 +503,11 @@ func _process(delta: float) -> void:
 		_sync_furniture()
 		_sync_build_guides()
 
-		if mode == Mode.ON:
-			_collect_2d_to_hide()
+		_collect_2d_to_hide()
 
 	_sync_actors(delta)
 
-	if village != null and village_enabled:
+	if village != null:
 		village.tick(delta)
 
 	_sort_and_update()

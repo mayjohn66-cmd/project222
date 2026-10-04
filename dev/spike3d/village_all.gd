@@ -1,6 +1,6 @@
 extends Node
-## 개발용: 마을의 모든 건물을 연 상태(정착 이야기 진행 무시)로 3D 겹침/3D만 화면을 본다.
-## 실행: 이 씬을 열고 F6. 조작은 게임과 같고 F10 = 끔→겹침→3D만. 숫자키 1~5 = 마을 구역으로 순간이동.
+## 개발용: 마을의 모든 건물을 연 상태(정착 이야기 진행 무시)로 3D 화면을 본다.
+## 실행: 이 씬을 열고 F6. 조작은 게임과 같다. 숫자키 1~5 = 마을 구역으로 순간이동.
 ## 인자(스크린샷용): --shot <폴더>
 var _scene: Node
 var _terrain: Node2D
@@ -34,9 +34,8 @@ func _ready() -> void:
 	_label.add_theme_color_override("font_outline_color", Color.BLACK)
 	_label.add_theme_constant_override("outline_size", 6)
 	layer.add_child(_label)
-	_label.text = "F10 3D 전환 · 1~5 구역 이동 · 이동은 게임과 동일"
+	_label.text = "1~5 구역 이동 · 이동은 게임과 동일"
 	var view := _scene.get_node("StoreView3D")
-	view.mode = StoreView3D.Mode.OVERLAY
 	_teleport(0)
 	var args := OS.get_cmdline_user_args()
 	var i_season := args.find("--season")
@@ -69,7 +68,7 @@ func _teleport(i: int) -> void:
 	var cam: Camera2D = _player.get_node("Camera2D")
 	cam.zoom = Vector2(0.55, 0.55)
 	cam.position = Vector2(0, -60)
-	_label.text = "%s · F10 3D 전환 · 1~5 구역 이동" % spot[0]
+	_label.text = "%s · 1~5 구역 이동" % spot[0]
 
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo:
@@ -81,12 +80,10 @@ func _shots(dir: String, view: Node) -> void:
 	DirAccess.make_dir_recursive_absolute(dir)
 	for i in range(SPOTS.size()):
 		_teleport(i)
-		for m in [[StoreView3D.Mode.OFF, "2d"], [StoreView3D.Mode.OVERLAY, "ov"], [StoreView3D.Mode.ON, "3d"]]:
-			view.mode = m[0]
-			for f in range(40):
-				await get_tree().process_frame
-			_label.visible = false
+		for f in range(40):
 			await get_tree().process_frame
-			get_viewport().get_texture().get_image().save_png("%s/spot%d_%s.png" % [dir, i + 1, m[1]])
-			_label.visible = true
+		_label.visible = false
+		await get_tree().process_frame
+		get_viewport().get_texture().get_image().save_png("%s/spot%d_3d.png" % [dir, i + 1])
+		_label.visible = true
 	get_tree().quit()
