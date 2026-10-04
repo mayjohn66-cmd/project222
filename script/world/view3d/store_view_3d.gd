@@ -717,7 +717,7 @@ func _sync_furniture() -> void:
 			continue
 
 		# 진열대: 미리보기는 색 상자, 실제 진열대는 틀 + 상품이 놓인 모델(ShelfAssets). 행의 kind 가 shelf 면 아래에서 따로 만든다.
-		var is_shelf: bool = row["kind"] == "shelf"
+		var is_shelf: bool = row["kind"] == "shelf" or row["kind"] == "model"
 
 		if row["kind"] != "box" and not is_shelf:
 			continue
@@ -771,9 +771,16 @@ func _sync_furniture() -> void:
 			item_tint = item_tint.lerp(Color(0.55, 1.0, 0.9) if preview_valid else Color(1.0, 0.25, 0.25), 0.4 if preview_valid else 0.65)
 
 		if as_model:
-			var spl: int = int(node.get("slots_per_level")) if node.get("slots_per_level") != null else 2
-			var slot_list: Array = node.get("slots") if node.get("slots") != null else []
-			var built: Dictionary = ShelfAssets.build(lo, hi, rotation_index, stack, slot_list, spl, {"ts": texture_size, "block_px": block_px, "unit_px_z": (tile_low / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))})
+			var pp: Dictionary = {"ts": texture_size, "block_px": block_px, "unit_px_z": (tile_low / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))}
+			var built: Dictionary
+
+			if row["kind"] == "model":
+				built = FurnitureAssets.build(build_id, lo, hi, rotation_index, pp)
+			else:
+				var spl: int = int(node.get("slots_per_level")) if node.get("slots_per_level") != null else 2
+				var slot_list: Array = node.get("slots") if node.get("slots") != null else []
+				built = ShelfAssets.build(lo, hi, rotation_index, stack, slot_list, spl, pp)
+
 			_set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), lo, hi, float(built["total_blocks"]), sig, NAN, true)
 			continue
 
@@ -922,46 +929,56 @@ func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: 
 			inward = 1.0
 
 	var center_along: float = float(anchor.x) if along_x else float(anchor.y)
-	var tint: Color = row["tint"]
-	var tex: String = str(row["texture"])
+	var is_door: bool = row["kind"] == "door"
+	var front_rot: int = FurnitureAssets.wall_front_rot(rotation_index)
+	# 발자국: 문은 벽 두께, 판(포스터·지도·깃발)은 벽 안쪽 면에 얇게 붙인다.
+	var t: float = WALL_THICKNESS if is_door else 0.12
+	var a0: float = line - t * 0.5 if is_door else (line if inward > 0.0 else line - t)
+	var a1: float = a0 + t
+	var lo_v: Vector2
+	var hi_v: Vector2
 
-	if row["kind"] == "door":
-		# 문 틀: 양쪽 기둥 + 윗 가로대(가운데는 비워 둠, 손님이 지나감)
-		var post: float = 0.12
-		var t: float = WALL_THICKNESS
-		var depth_lo: float = line - t * 0.5
-		var depth_hi: float = line + t * 0.5
-		var h: float = float(row["height_blocks"])
-
-		for k in [["a", -0.5, -0.5 + post], ["b", 0.5 - post, 0.5]]:
-			var lo_v: Vector2 = Vector2(center_along + k[1], depth_lo) if along_x else Vector2(depth_lo, center_along + k[1])
-			var hi_v: Vector2 = Vector2(center_along + k[2], depth_hi) if along_x else Vector2(depth_hi, center_along + k[2])
-			_set_item(base_key + k[0], lo_v, hi_v, h, tex, tint, sig)
-
-		var lo_c: Vector2 = Vector2(center_along - 0.5, depth_lo) if along_x else Vector2(depth_lo, center_along - 0.5)
-		var hi_c: Vector2 = Vector2(center_along + 0.5, depth_hi) if along_x else Vector2(depth_hi, center_along + 0.5)
-		_set_item(base_key + "c", lo_c, hi_c, 0.4, tex, tint, sig, h - 0.4)
+	if along_x:
+		lo_v = Vector2(center_along - 0.5, a0)
+		hi_v = Vector2(center_along + 0.5, a1)
 	else:
-		# 얇은 판: 벽 안쪽 면에 붙인다.
-		var thin: float = 0.06
-		var lo_p: Vector2
-		var hi_p: Vector2
-		var a0: float = line if inward > 0.0 else line - thin
-		var a1: float = a0 + thin
+		lo_v = Vector2(a0, center_along - 0.5)
+		hi_v = Vector2(a1, center_along + 0.5)
 
-		if along_x:
-			lo_p = Vector2(center_along - 0.4, a0)
-			hi_p = Vector2(center_along + 0.4, a1)
-		else:
-			lo_p = Vector2(a0, center_along - 0.4)
-			hi_p = Vector2(a1, center_along + 0.4)
+	var pp: Dictionary = {"ts": texture_size, "block_px": block_px, "unit_px_z": (tile_low / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))}
+	var built: Dictionary = FurnitureAssets.build(build_id, lo_v, hi_v, front_rot, pp)
+	var sort_lo: Vector2 = lo_v
+	var sort_hi: Vector2 = hi_v
 
-		_set_item(base_key + "a", lo_p, hi_p, float(row["height_blocks"]), tex, tint, sig, float(row["base_blocks"]))
+	# 열린 문짝이 방 안쪽으로 0.65칸 나오므로 정렬 범위도 그만큼 넓힌다.
+	if is_door:
+		match front_rot:
+			0:
+				sort_hi.y += 0.65
+			1:
+				sort_hi.x += 0.65
+			2:
+				sort_lo.y -= 0.65
+			_:
+				sort_lo.x -= 0.65
 
-	# 정리: 쓰지 않은 키는 빈 항목 제거(문은 a·b·c 모두 쓰지만 판은 a 만 씀)
-	if row["kind"] != "door":
-		alive.erase(base_key + "b")
-		alive.erase(base_key + "c")
+	_set_mesh_item(base_key + "a", built["mesh"], VillageAssets.make_materials(built["specs"]), sort_lo, sort_hi, float(built["total_blocks"]), sig, NAN, true)
+
+	# 벽에 걸리는 장식은 바닥에서 띄운다(base_blocks).
+	var lift: float = block_height(float(row["base_blocks"]))
+
+	if lift > 0.0:
+		var item: Dictionary = _items[base_key + "a"]
+
+		for node_key in ["mesh", "id_mesh"]:
+			var inst: MeshInstance3D = item.get(node_key)
+
+			if inst != null and is_instance_valid(inst):
+				inst.position.y = lift
+
+	# 쓰지 않는 키(b, c)는 살려 두지 않는다.
+	alive.erase(base_key + "b")
+	alive.erase(base_key + "c")
 
 
 # ---------------------------------------------------------------- 상자 만들기·지우기
