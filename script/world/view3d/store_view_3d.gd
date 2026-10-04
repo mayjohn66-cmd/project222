@@ -506,6 +506,7 @@ func _process(delta: float) -> void:
 		_collect_2d_to_hide()
 
 	_sync_actors(delta)
+	_update_wall_cutaway(delta)
 
 	if village != null:
 		village.tick(delta)
@@ -644,8 +645,53 @@ func _sync_walls() -> void:
 			lo_v = Vector2(x0, r["lo"])
 			hi_v = Vector2(x0 + WALL_THICKNESS, r["hi"])
 
-		_set_item("wall%d" % index, lo_v, hi_v, WALL_TALL_BLOCKS if r["tall"] else WALL_LOW_BLOCKS, "brick", Color(1.2, 1.08, 0.92) if PlaceholderTextures.clean else Color(0.85, 0.7, 0.55), "")
+		var wall_blocks: float = WALL_TALL_BLOCKS if r["tall"] else WALL_LOW_BLOCKS
+		_set_item("wall%d" % index, lo_v, hi_v, wall_blocks, "brick", Color(1.2, 1.08, 0.92) if PlaceholderTextures.clean else Color(0.85, 0.7, 0.55), "")
+		# 앞쪽 벽(카메라에 가까운 동·남쪽 면)은 플레이어가 가까이 오면 낮아진다(벽 뒤에 서면 몸이 가려지므로). 뒤쪽 벽은 그대로.
+		_items["wall%d" % index]["cutaway"] = {"rect": Rect2(lo_v, hi_v - lo_v), "h": block_height(wall_blocks), "factor": 1.0} if r["direction"] == 1 or r["direction"] == 2 else {}
 		index += 1
+
+
+# 앞쪽 벽 투시: 플레이어가 벽 2.4칸 안으로 들어오면 벽 높이를 부드럽게 0.38배까지 낮추고, 멀어지면 되돌린다.
+const CUTAWAY_NEAR: float = 1.2
+const CUTAWAY_FAR: float = 2.6
+const CUTAWAY_MIN: float = 0.38
+
+
+func _update_wall_cutaway(delta: float) -> void:
+	if player == null or floor_node == null:
+		return
+
+	var pc: Vector2 = world_to_cell(player.global_position)
+
+	for key in _items.keys():
+		if not str(key).begins_with("wall"):
+			continue
+
+		var item: Dictionary = _items[key]
+		var cut: Dictionary = item.get("cutaway", {})
+
+		if cut.is_empty():
+			continue
+
+		var rect: Rect2 = cut["rect"]
+		var nearest := Vector2(clampf(pc.x, rect.position.x, rect.end.x), clampf(pc.y, rect.position.y, rect.end.y))
+		var dist: float = pc.distance_to(nearest)
+		var target: float = lerpf(CUTAWAY_MIN, 1.0, clampf((dist - CUTAWAY_NEAR) / (CUTAWAY_FAR - CUTAWAY_NEAR), 0.0, 1.0))
+		var f: float = move_toward(float(cut["factor"]), target, delta * 2.5)
+
+		if absf(f - float(cut["factor"])) < 0.0005:
+			continue
+
+		cut["factor"] = f
+		var h: float = float(cut["h"])
+
+		for node_key in ["mesh", "id_mesh"]:
+			var inst: MeshInstance3D = item.get(node_key)
+
+			if inst != null and is_instance_valid(inst):
+				inst.scale.y = f
+				inst.position.y = h * 0.5 * f
 
 
 # ---------------------------------------------------------------- 가구
