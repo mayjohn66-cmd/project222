@@ -87,6 +87,10 @@ var day_manager: Node
 var exterior: Node2D
 ## 마을(매장 바깥)도 3D 로 그릴지. F9 로 켜고 끈다(매장만 3D / 마을 전체 3D 비교용).
 var village_enabled: bool = true
+var weather_override: String = ""  # 개발용: clear / rain / snow. 비우면 날씨 계산(WeatherSystem)을 따른다
+var weather_override_intensity: float = 0.85
+var weather: Dictionary = {"kind": "clear", "intensity": 0.0}  # 지금 날씨(부드럽게 변하는 값)
+var _weather_overlay: WeatherOverlay
 var season_override: String = ""  # 개발용: 비우면 달력(GameState.total_day)을 따른다
 var sync_collision: bool = true  # 3D 로 보이는 건물·소품의 발자국을 실제 충돌 모양으로 쓴다
 ## 색 단계 수(채널당). 256 = 제한 없음, 낮출수록 색이 뭉쳐서 도트 그림 같은 느낌(예: 12). 시험용 값.
@@ -144,6 +148,10 @@ func _build_view() -> void:
 	_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_container.set_anchors_preset(Control.PRESET_FULL_RECT)
 	_canvas.add_child(_container)
+	_weather_overlay = WeatherOverlay.new()
+	_weather_overlay.pixel = shrink
+	_weather_overlay.visible = false
+	_canvas.add_child(_weather_overlay)
 
 	_viewport = SubViewport.new()
 	_viewport.own_world_3d = true
@@ -351,6 +359,34 @@ func _current_hour() -> float:
 	return hour
 
 
+# 날씨 목표값(override 또는 달력·시각 계산)을 향해 부드럽게 바꾸고, 비·눈 입자 판에 알린다.
+func _update_weather(delta: float) -> void:
+	var target: Dictionary
+
+	if weather_override != "":
+		target = {"kind": weather_override, "intensity": 0.0 if weather_override == "clear" else weather_override_intensity}
+	else:
+		var gs: Node = get_node_or_null("/root/GameState")
+		target = WeatherSystem.forecast(int(gs.get("total_day")) if gs != null else 1, _current_hour())
+
+	var kind: String = str(target["kind"])
+	var k: float = float(weather["intensity"])
+	var goal: float = float(target["intensity"])
+
+	# 종류가 바뀌면 먼저 약해져서 0 이 된 뒤 새 날씨로 바뀐다.
+	if kind != str(weather["kind"]) and k > 0.01:
+		goal = 0.0
+
+	k = move_toward(k, goal, delta * 0.35)
+
+	if k <= 0.01 and kind != str(weather["kind"]):
+		weather["kind"] = kind
+
+	weather["intensity"] = k
+	_weather_overlay.pixel = shrink
+	_weather_overlay.set_weather(str(weather["kind"]), k)
+
+
 # 지금 계절(spring/summer/autumn/winter). season_override 가 있으면 그것, 아니면 달력.
 func current_season() -> String:
 	if season_override != "":
@@ -389,6 +425,14 @@ func apply_hour(h: float) -> void:
 	_sun.light_energy = light_scale * sun_k * lerpf(0.9, lerpf(0.8, 1.2, sun_curve), day_amt)
 	_env.ambient_light_color = Color(0.74, 0.76, 0.84) * tint * (sst["ambient_tint"] as Color)
 	_env.ambient_light_energy = light_scale * lerpf(1.35, 1.3 * amb_k, day_amt)
+	var wk: float = float(weather["intensity"])
+	_sun.shadow_opacity = lerpf(1.0, 0.35, wk)  # 흐린 날은 그림자가 연하다
+
+	if wk > 0.0:
+		var rainy: bool = str(weather["kind"]) == "rain"
+		_sun.light_energy *= lerpf(1.0, 0.4 if rainy else 0.65, wk)
+		_env.ambient_light_color = _env.ambient_light_color.lerp(Color(0.62, 0.68, 0.8) if rainy else Color(0.8, 0.84, 0.95), wk * 0.7)
+		_env.ambient_light_energy *= lerpf(1.0, 1.0 if rainy else 1.15, wk)
 	_fill.light_color = tint.lerp(Color(0.85, 0.9, 1.0), 0.35)
 	_fill.light_energy = lerpf(0.3, 0.3 if PlaceholderTextures.clean else 0.5, day_amt)
 
@@ -462,6 +506,7 @@ func _process(delta: float) -> void:
 		return
 
 	_sync_camera()
+	_update_weather(delta)
 	apply_hour(_current_hour())
 	_wall_timer -= delta
 

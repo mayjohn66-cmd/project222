@@ -1,0 +1,5 @@
+season,rain_chance,snow_chance,min_hours,max_hours,note
+spring,0.12,0,3,8,봄: 가끔 비
+summer,0.10,0,2,6,여름: 소나기 정도
+autumn,0.12,0,3,8,가을: 가끔 비
+winter,0.03,0.14,4,10,겨울: 눈이 가끔 내림(비는 드묾)
