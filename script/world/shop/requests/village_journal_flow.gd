@@ -25,9 +25,12 @@ static func entries() -> Array[Dictionary]:
 	result.append({"id":VillageGoodwillFlow.JOURNAL_ID,"title":VillageGoodwillFlow.title()})
 	for event in SeasonalVillageFlow.events():
 		result.append({"id":SeasonalVillageFlow.JOURNAL_PREFIX + str(event["id"]), "title":SeasonalVillageFlow.title(str(event["id"]))})
+	for event in ResidentMemoryFlow.SETTINGS.events:
+		result.append({"id":ResidentMemoryFlow.JOURNAL_PREFIX + str(event["id"]), "title":ResidentMemoryFlow.title(str(event["id"]))})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with(ResidentMemoryFlow.JOURNAL_PREFIX): return ResidentMemoryFlow.information(id.trim_prefix(ResidentMemoryFlow.JOURNAL_PREFIX))
 	if id.begins_with(SeasonalVillageFlow.JOURNAL_PREFIX): return SeasonalVillageFlow.information(id.trim_prefix(SeasonalVillageFlow.JOURNAL_PREFIX))
 	if id == VillageGoodwillFlow.JOURNAL_ID: return VillageGoodwillFlow.information()
 	if id == VillageRestFlow.JOURNAL_ID: return VillageRestFlow.information()
@@ -69,6 +72,10 @@ static func information(id: String) -> String:
 
 static func destination(world: Node, id: String) -> Node2D:
 	if not available(): return null
+	if id.begins_with(ResidentMemoryFlow.JOURNAL_PREFIX):
+		var memory := ResidentMemoryFlow.event(id.trim_prefix(ResidentMemoryFlow.JOURNAL_PREFIX))
+		if memory.is_empty() or not ResidentMemoryFlow.locked_reason(memory).is_empty(): return null
+		return destination(world, "resident:" + str(memory["giver"]))
 	if id.begins_with(SeasonalVillageFlow.JOURNAL_PREFIX):
 		var event_id := id.trim_prefix(SeasonalVillageFlow.JOURNAL_PREFIX)
 		var event := SeasonalVillageFlow.event(event_id)

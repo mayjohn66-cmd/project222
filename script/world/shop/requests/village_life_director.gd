@@ -10,6 +10,7 @@ var previous_paused := false
 var previous_physics := true
 var elapsed := 0.0
 var story_panel: VillageStoryPanel
+var memory_panel: ResidentMemoryPanel
 var story_action: Dictionary = {}
 var afterglow_action := ""
 
@@ -23,6 +24,10 @@ func _ready() -> void:
 	add_child(story_panel)
 	story_panel.closed.connect(_end_talk)
 	story_panel.action_requested.connect(_select_memory)
+	memory_panel = ResidentMemoryPanel.new()
+	add_child(memory_panel)
+	memory_panel.closed.connect(_end_talk)
+	memory_panel.action_requested.connect(_select_resident_memory)
 	var market := VillageMarketDirector.new()
 	market.name = "VillageMarketDirector"
 	add_child(market)
@@ -131,7 +136,11 @@ func _next_story_action(resident_id: String) -> Dictionary:
 	var story := VillageStoryFlow.action(resident_id)
 	if not story.is_empty() and not VillageStoryFlow.completed(): return story
 	var seasonal := SeasonalVillageFlow.action(resident_id)
-	return seasonal if not seasonal.is_empty() else story
+	if not seasonal.is_empty() and SeasonalVillageFlow.accepted(str(seasonal["event"])): return seasonal
+	var memory := ResidentMemoryFlow.action(resident_id)
+	if not memory.is_empty() and not ResidentMemoryFlow.completed(str(memory["event"])): return memory
+	if not seasonal.is_empty(): return seasonal
+	return memory if not memory.is_empty() else story
 
 func interaction_hint() -> String:
 	var target := nearest()
@@ -140,6 +149,7 @@ func interaction_hint() -> String:
 	if not MarketAfterglowFlow.pending(str(target["id"])).is_empty(): return "[E] %s · 부탁 뒤 후일담" % target["name"]
 	var action := _next_story_action(str(target["id"]))
 	if not action.is_empty():
+		if action.get("flow", "") == "resident_memory": return "[E] %s · %s" % [target["name"], ResidentMemoryFlow.title(str(action["event"]))]
 		if action.get("flow", "") == "seasonal": return "[E] %s · %s" % [target["name"], SeasonalVillageFlow.title(str(action["event"]))]
 		if action.get("flow", "") == "goodwill":
 			var goodwill_labels := {"introduction":"안부 이야기 시작", "listen":"이웃의 안부 듣기", "finish":"이웃의 선물 받기", "reminder":"남은 안부 확인"}
@@ -185,6 +195,8 @@ func try_interact() -> bool:
 				var materials := SeasonalVillageFlow.requirements_description(str(story_action["event"]))
 				if not materials.is_empty(): lines.append(materials)
 				if story_action["stage"] == "finish": lines.append("답례: " + SeasonalVillageFlow.reward_description(str(story_action["event"])))
+			elif story_action.get("flow", "") == "resident_memory":
+				if story_action["stage"] == "finish": lines.append("답례: " + ResidentMemoryFlow.reward_description(str(story_action["event"])))
 			elif story_action["stage"] == "finish": lines.append("답례: " + (VillageGoodwillFlow.reward_description() if story_action.get("flow", "") == "goodwill" else VillageStoryFlow.reward_description()))
 	talking = true
 	previous_paused = manager.hour_timer.paused
@@ -200,7 +212,15 @@ func _end_talk() -> void:
 	if not talking: return
 	if dialogue.line_index >= dialogue.lines.size():
 		if not afterglow_action.is_empty(): MarketAfterglowFlow.listen(afterglow_action)
-		if story_action.get("flow", "") == "seasonal":
+		if story_action.get("flow", "") == "resident_memory":
+			if ResidentMemoryFlow.complete_action(story_action):
+				if story_action["stage"] == "choose":
+					memory_panel.event_id = str(story_action["event"])
+					story_action = {}
+					memory_panel.display()
+					return
+				if story_action["stage"] == "finish": manager.customer_spawner.refresh_spawn_interval()
+		elif story_action.get("flow", "") == "seasonal":
 			if SeasonalVillageFlow.complete_action(story_action) and story_action["stage"] == "finish": manager.customer_spawner.refresh_spawn_interval()
 		elif story_action.get("flow", "") == "goodwill":
 			if VillageGoodwillFlow.complete_action(story_action) and story_action["stage"] == "finish": manager.customer_spawner.refresh_spawn_interval()
@@ -231,6 +251,16 @@ func _select_memory(id: String) -> void:
 	var lines := RequestTextData.lines("service_text", str(story_action["id"]))
 	lines.append("답례: " + VillageStoryFlow.reward_description())
 	dialogue.start(str(VillageLifeFlow.resident(VillageStoryFlow.SETTINGS.giver)["name"]), null, lines)
+
+func _select_resident_memory(scene_id: String) -> void:
+	if not talking or not memory_panel.root.visible or not ResidentMemoryFlow.select(memory_panel.event_id, scene_id): return
+	memory_panel.root.hide()
+	memory_panel.backdrop.hide()
+	var giver := str(ResidentMemoryFlow.event(memory_panel.event_id)["giver"])
+	story_action = ResidentMemoryFlow.action(giver)
+	var lines := RequestTextData.lines("service_text", scene_id)
+	lines.append("답례: " + ResidentMemoryFlow.reward_description(memory_panel.event_id))
+	dialogue.start(str(VillageLifeFlow.resident(giver)["name"]), null, lines)
 
 func _exit_tree() -> void:
 	# Leaving a scene is not proof that its conversation was fully read.

@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="ResidentMemorySettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/resident_memory_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+events = Array[Dictionary]([
+{"id":"naru_familiar_place","giver":"naru","friendship":7,"after_any_seasonal":["spring_snack_ingredients","winter_shared_meal_materials"],"days_after_seasonal":1,"gifts":[{"item":"wild_berry","amount":2}],"reputation":1,"choices":[{"id":"naru_memory_greeting"},{"id":"naru_memory_staying"}]},
+{"id":"doyun_small_discovery","giver":"doyun","friendship":7,"after_any_seasonal":["summer_reed_tea_materials","autumn_lamp_materials"],"days_after_seasonal":1,"gifts":[{"item":"stone_shard","amount":2}],"reputation":1,"choices":[{"id":"doyun_memory_pause"},{"id":"doyun_memory_sharing"}]},
+{"id":"sora_unwritten_day","giver":"sora","friendship":7,"after_request":"sora_autumn_tea","after_request_heard":true,"days_after_request":1,"after_any_seasonal":["spring_snack_ingredients","summer_reed_tea_materials","autumn_lamp_materials","winter_shared_meal_materials"],"days_after_seasonal":1,"gifts":[{"item":"forest_herb","amount":2}],"reputation":1,"choices":[{"id":"sora_memory_ordinary"},{"id":"sora_memory_company"}]}
+])
+moments = Array[Dictionary]([
+{"id":"naru_familiar_place_intro","npc":"타블렌","stage":"타블렌 안부7일과 본인 봄 간식/겨울 식사 재료 부탁 중 하나 완료 다음 날 이후. 계절과 시각 무관. 익숙한 인사와 머무르고 싶은 마음을 나누는 일회성 관계 이야기 소개. E 완독으로 시작, 물품 소비/새 시설/이동 없음."},
+{"id":"naru_familiar_place_choose","npc":"타블렌","stage":"관계 이야기 소개 완독 뒤 플레이어에게 익숙한 인사/머무를 자리 중 마음에 가까운 답을 묻는다. 이 대화 완독 후 기존 형태의 선택 창에서 두 답을 고른다. 선택 미루기 가능, 선택만으로 답례 지급 없음. 두 답의 수치/후속 해금 차이 없음."},
+{"id":"naru_memory_greeting","npc":"타블렌","stage":"플레이어가 익숙한 인사를 선택한 타블렌의 응답. 최종 E 대화 완독 때 열매2/평판1 최초1회, 다른 선택과 답례 동일. completion은 수첩과 반복 대화의 선택별 기억. 새 인물/방문 약속/영구 거주 계약 없음."},
+{"id":"naru_memory_staying","npc":"타블렌","stage":"플레이어가 머무를 자리를 선택한 타블렌의 응답. 최종 완독 때 열매2/평판1 최초1회, 인사 선택과 동일. 선택 뒤 중단하면 같은 응답 재개. completion은 선택한 마음의 기억이며 새 건물/거주 시스템 변화 없음."},
+{"id":"doyun_small_discovery_intro","npc":"코르빈","stage":"코르빈 안부7일과 여름 차/가을 저녁 채비 재료 부탁 중 하나 완료 다음 날 이후. 계절/시각 무관. 일만 생각하던 중 작은 여유를 돌아보는 관계 이야기. E 소개 완독 시작, 물품 준비/원정 방문 요구 없음."},
+{"id":"doyun_small_discovery_choose","npc":"코르빈","stage":"관계 소개 뒤 쉬는 순간/작은 발견을 나누는 마음 중 답을 묻는다. 완독 후 선택 창 두 답, 미룰 수 있음. 선택은 저장하되 최종 응답 완독 전 답례 없음. 수치 우열/새 광산 해금 없음."},
+{"id":"doyun_memory_pause","npc":"코르빈","stage":"플레이어가 잠깐 쉬는 순간을 선택한 응답. 마지막 완독 시 돌조각2/평판1 최초1회, 다른 답과 동일. completion은 선택별 기억. 시간 건너뛰기/체력 회복/작업 속도 변화 없음."},
+{"id":"doyun_memory_sharing","npc":"코르빈","stage":"플레이어가 작은 발견을 나누는 마음을 선택한 응답. 완독 시 돌조각2/평판1 최초1회, 휴식 선택과 같음. completion은 기억. 실제 발견 아이템/보석/새 원정 지점/추가 보상 약속 없음."},
+{"id":"sora_unwritten_day_intro","npc":"이세르","stage":"이세르 안부7일, 본인 행사 후 갈대 차 부탁/후일담 완독 다음 날과 네 생활 재료 부탁 중 아무 하나 완료 다음 날 이후. 모두 사계절 완료 조건 아님. 기록 밖의 평범한 하루를 생각하는 관계 이야기, 계절/시각 제한과 재료 소비 없음. E 소개 완독 시작."},
+{"id":"sora_unwritten_day_choose","npc":"이세르","stage":"관계 소개 뒤 별일 없는 하루/함께한 사람 중 기록에 남길 마음을 묻는다. E 완독 후 두 답 선택, 닫아 미루기 가능. 선택만으로 답례 없음. 선택별 수치/새 글 오브젝트/스토리 기능 해금 없음."},
+{"id":"sora_memory_ordinary","npc":"이세르","stage":"플레이어가 별일 없는 하루를 선택한 응답. 최종 완독 때 약초2/평판1 최초1회, 다른 선택과 동일. completion은 실제 수첩/반복 대화에서 읽는 선택별 기억. 시간/날씨 변화/새 책 아이템 없음."},
+{"id":"sora_memory_company","npc":"이세르","stage":"플레이어가 함께한 사람을 선택한 응답. 최종 완독 때 약초2/평판1 최초1회, 평범한 하루 선택과 동일. 중단 시 선택 유지하고 같은 응답 재개. completion은 기억. 특정 미방문 인물 등장/새 모임/손님 해금 약속 없음."}
+])
