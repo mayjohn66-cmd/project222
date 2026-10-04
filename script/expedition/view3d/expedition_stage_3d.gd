@@ -13,10 +13,10 @@ const SHRINK: int = 3
 
 # 지역별 꾸밈: floor(질감 종류)·floor_tint·wall_tint·wall_kind·bg(배경색)·ambient·sun(빛 세기)·torch(횃불 불빛)
 const THEMES: Dictionary = {
-	"forest": {"floor": "grass", "floor_tint": Color(0.5, 0.72, 0.44), "wall_kind": "hedge", "wall_tint": Color(0.42, 0.6, 0.4), "bg": Color(0.1, 0.16, 0.14), "ambient": Color(0.62, 0.74, 0.62), "sun": 0.42, "torch": Color(1.0, 0.85, 0.6), "obstacle": "tree"},
-	"mine": {"floor": "brick", "floor_tint": Color(0.62, 0.66, 0.78), "wall_kind": "rock", "wall_tint": Color(0.5, 0.54, 0.66), "bg": Color(0.06, 0.07, 0.1), "ambient": Color(0.55, 0.6, 0.78), "sun": 0.3, "torch": Color(1.0, 0.7, 0.4), "obstacle": "rock"},
-	"swamp": {"floor": "grass", "floor_tint": Color(0.44, 0.6, 0.42), "wall_kind": "rock", "wall_tint": Color(0.46, 0.6, 0.5), "bg": Color(0.06, 0.1, 0.08), "ambient": Color(0.5, 0.66, 0.56), "sun": 0.35, "torch": Color(0.7, 1.0, 0.7), "obstacle": "stump"},
-	"hidden_ruins": {"floor": "brick", "floor_tint": Color(0.7, 0.62, 0.8), "wall_kind": "ruin", "wall_tint": Color(0.66, 0.6, 0.78), "bg": Color(0.08, 0.06, 0.12), "ambient": Color(0.66, 0.6, 0.8), "sun": 0.32, "torch": Color(0.8, 0.6, 1.0), "obstacle": "column"},
+	"forest": {"slab": Color(0.36, 0.26, 0.17), "ring_tint": 0.82, "floor": "grass", "floor_tint": Color(0.5, 0.72, 0.44), "wall_kind": "hedge", "wall_tint": Color(0.42, 0.6, 0.4), "bg": Color(0.09, 0.15, 0.1), "ambient": Color(0.72, 0.82, 0.68), "sun": 0.75, "torch": Color(1.0, 0.85, 0.6), "obstacle": "tree"},
+	"mine": {"slab": Color(0.26, 0.27, 0.33), "ring_tint": 0.7, "floor": "brick", "floor_tint": Color(0.62, 0.66, 0.78), "wall_kind": "rock", "wall_tint": Color(0.5, 0.54, 0.66), "bg": Color(0.06, 0.07, 0.1), "ambient": Color(0.55, 0.6, 0.78), "sun": 0.3, "torch": Color(1.0, 0.7, 0.4), "obstacle": "rock"},
+	"swamp": {"slab": Color(0.2, 0.23, 0.16), "ring_tint": 0.75, "floor": "grass", "floor_tint": Color(0.44, 0.6, 0.42), "wall_kind": "rock", "wall_tint": Color(0.46, 0.6, 0.5), "bg": Color(0.06, 0.1, 0.08), "ambient": Color(0.5, 0.66, 0.56), "sun": 0.35, "torch": Color(0.7, 1.0, 0.7), "obstacle": "stump"},
+	"hidden_ruins": {"slab": Color(0.3, 0.27, 0.36), "ring_tint": 0.72, "floor": "brick", "floor_tint": Color(0.7, 0.62, 0.8), "wall_kind": "ruin", "wall_tint": Color(0.66, 0.6, 0.78), "bg": Color(0.08, 0.06, 0.12), "ambient": Color(0.66, 0.6, 0.8), "sun": 0.32, "torch": Color(0.8, 0.6, 1.0), "obstacle": "column"},
 }
 
 var active: bool = true
@@ -29,6 +29,9 @@ var _content: Node3D
 var _id_dummy: Node3D
 var _built_model: RefCounted = null
 var _theme: Dictionary = THEMES["forest"]
+var _theme_id: String = "forest"
+var _scenery: ExpeditionScenery
+var _wisps: Array = []
 var _p: Dictionary = {"ts": 24, "block_px": 22.0, "unit_px_z": 20.0}
 var _player: BlockyFigure
 var _player_prev: Vector2 = Vector2.ZERO
@@ -82,6 +85,7 @@ func _ready() -> void:
 	_vp.add_child(we)
 	_content = Node3D.new()
 	_vp.add_child(_content)
+	_scenery = ExpeditionScenery.new(self)
 	_id_dummy = Node3D.new()
 	_id_dummy.visible = false
 	_vp.add_child(_id_dummy)
@@ -127,6 +131,7 @@ func _layout() -> void:
 
 func _ready_theme(region: String) -> void:
 	_theme = THEMES.get(region, THEMES["forest"])
+	_theme_id = region if THEMES.has(region) else "forest"
 	_env.background_color = _theme["bg"]
 	_env.ambient_light_color = _theme["ambient"]
 	_env.ambient_light_energy = 0.62
@@ -148,8 +153,12 @@ func rebuild(model: RefCounted, region: String) -> void:
 	_exit_glow = null
 	_exit_bars = null
 	_ready_theme(region)
+	_scenery.clear_cache()
+	_wisps.clear()
 	_build_floor()
-	_build_walls()
+	var srng := RandomNumberGenerator.new()
+	srng.randomize()
+	_scenery.build(_theme_id, srng)
 
 	for r in model.obstacles:
 		_build_obstacle(r)
@@ -193,17 +202,20 @@ func _build_floor() -> void:
 	var tint: Color = _theme["floor_tint"]
 	var b := VillageAssets.PartBuilder.new()
 
-	# 타일마다 살짝 다른 밝기(3종)로 격자·얼룩이 보이게
-	for y in range(GRID):
-		for x in range(GRID):
-			var v: int = (x * 7 + y * 13 + x * y) % 3
-			var spec: Dictionary = _spec_tex(kind, tint * Color(0.9 + 0.07 * v, 0.9 + 0.07 * v, 0.9 + 0.07 * v), "floor_%d" % v)
+	# 타일마다 살짝 다른 밝기(3종)로 격자·얼룩이 보이게. 방 바깥(뒤쪽 두 변 너머 2칸)도 어둡게 이어 깔아 주변 풍경이 떠 보이지 않게 한다.
+	var ring: float = float(_theme["ring_tint"])
+
+	for y in range(-2, GRID):
+		for x in range(-2, GRID):
+			var v: int = absi(x * 7 + y * 13 + x * y) % 3
+			var br: float = (0.9 + 0.07 * float(v)) * (1.0 if (x >= 0 and y >= 0) else ring)
+			var spec: Dictionary = _spec_tex(kind, tint * Color(br, br, br), "floor_%d_%s" % [v, str(x >= 0 and y >= 0)])
 			var st: SurfaceTool = b.new_part(spec, Vector3(x, 0, y), Vector3(x + 1, 0, y + 1))
 			BuildingMesh._quad(st, Vector3(x, 0, y), Vector3(x + 1, 0, y), Vector3(x + 1, 0, y + 1), Vector3(x, 0, y + 1), Vector3.UP, Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1))
 
-	# 판 옆면(앞쪽 둘): 어두운 돌
-	var side: Dictionary = _spec_tex("brick", Color(0.32, 0.3, 0.34), "floor_side")
-	VillageAssets.box(b, "slab", side, Vector3(0, -0.7, 0), Vector3(GRID, -0.02, GRID))
+	# 판 옆면(앞쪽 둘): 지역 색(숲 = 흙, 광산 = 바위 …)
+	var side: Dictionary = VillageAssets._noise_spec(ts, _theme["slab"], (_theme["slab"] as Color).lightened(0.12), "floor_side", 63, Color.WHITE, 0.1)
+	VillageAssets.box(b, "slab", side, Vector3(-2, -0.7, -2), Vector3(GRID, -0.02, GRID))
 	_node(b)
 
 	# 바닥 이음 틈과 잔돌·풀(작은 소품): 칸 해시로 흩뿌림
@@ -262,6 +274,32 @@ func _build_walls() -> void:
 	# 횃불: 문 양옆과 벽 가운데
 	for tp in [Vector3(exit_x - gate_half - 0.45, WALL_H * 0.62, 0.12), Vector3(exit_x + gate_half + 0.45, WALL_H * 0.62, 0.12), Vector3(0.12, WALL_H * 0.62, 4.0), Vector3(6.4, WALL_H * 0.62, 0.12)]:
 		_add_torch(tp)
+
+
+func add_glow_light(pos: Vector3, color: Color, energy: float, rng_range: float) -> void:
+	var light := OmniLight3D.new()
+	light.light_color = color
+	light.light_energy = energy
+	light.omni_range = rng_range
+	light.position = pos
+	light.set_meta("base", energy)
+	_content.add_child(light)
+	_torches.append(light)
+
+
+# 늪의 도깨비불: 떠다니는 작은 빛(초록)
+func add_wisp(pos: Vector3, color: Color) -> void:
+	var b := VillageAssets.PartBuilder.new()
+	var glow: Dictionary = _flat(color, "wisp", 1.0)
+	VillageAssets.dome(b, "wisp", glow, 0.0, 0.0, 0.08, -0.08, 0.1, 2, 8)
+	var node: MeshInstance3D = _node(b)
+	node.position = pos
+	var light := OmniLight3D.new()
+	light.light_color = color
+	light.light_energy = 0.7
+	light.omni_range = 2.6
+	node.add_child(light)
+	_wisps.append({"node": node, "base": pos, "phase": randf() * 6.0})
 
 
 func _add_torch(pos: Vector3) -> void:
@@ -815,7 +853,12 @@ func _sync(model: RefCounted, delta: float) -> void:
 		_exit_bars.visible = not bool(model.exit_open)
 
 	for i in range(_torches.size()):
-		(_torches[i] as OmniLight3D).light_energy = 0.9 + 0.2 * sin(_time * 7.0 + float(i) * 1.7) + 0.1 * sin(_time * 13.0 + float(i))
+		(_torches[i] as OmniLight3D).light_energy = float((_torches[i] as OmniLight3D).get_meta("base", 0.9)) * (1.0 + 0.2 * sin(_time * 7.0 + float(i) * 1.7) + 0.1 * sin(_time * 13.0 + float(i)))
+
+	for w in _wisps:
+		var base: Vector3 = w["base"]
+		var ph: float = float(w["phase"])
+		(w["node"] as Node3D).position = base + Vector3(sin(_time * 0.7 + ph) * 0.5, 0.15 * sin(_time * 1.6 + ph), cos(_time * 0.55 + ph) * 0.5)
 
 	_tick_fx(delta)
 
