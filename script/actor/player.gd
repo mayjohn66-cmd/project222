@@ -11,7 +11,6 @@ var in_production_room: bool = false
 @export var speed: float = 200.0
 @export var interaction_distance: float = 70.0
 
-@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var shelf_panel = $"../../UI/ShelfPanel"
 @onready var money_label: Label = $"../../UI/HUD/MoneyLabel"
 @onready var warehouse_room = $"../../WarehouseRoom"

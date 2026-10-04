@@ -1,7 +1,6 @@
 class_name VillageResident
 extends CharacterBody2D
 
-const VISUAL = preload("res://script/actor/character_visual.gd")
 var resident_id: String
 var customer_type_id: String
 var customer_group_id: String
@@ -20,11 +19,6 @@ func _ready() -> void:
 	var shape := CircleShape2D.new()
 	shape.radius = VillageLifeFlow.SETTINGS.resident_radius
 	collision.shape = shape
-	var visual := AnimatedSprite2D.new()
-	visual.name = "Visual"
-	visual.set_script(VISUAL)
-	visual.actor_role = "customer"
-	add_child(visual)
 	add_child(collision)
 	title = Label.new()
 	title.position = Vector2(-110, -88)
