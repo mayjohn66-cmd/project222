@@ -80,14 +80,14 @@ static func wall_front_rot(wall_rotation: int) -> int:
 	return [0, 3, 2, 1][posmod(wall_rotation, 4)]
 
 
-static func build(build_id: String, lo: Vector2, hi: Vector2, rot: int, p: Dictionary) -> Dictionary:
+static func build(build_id: String, lo: Vector2, hi: Vector2, rot: int, p: Dictionary, extra: Dictionary = {}) -> Dictionary:
 	var f := Frame.new(lo, hi, rot, p)
 
 	match build_id:
 		"register":
 			return _register(f)
 		"warehouse_rack":
-			return _rack(f)
+			return _rack(f, extra)
 		"drink_machine":
 			return _drink_machine(f)
 		"magic_oven":
@@ -137,15 +137,13 @@ static func _register(f: Frame) -> Dictionary:
 	return f.finish(1.1)
 
 
-static func _rack(f: Frame) -> Dictionary:
+# 창고 선반: 철제 기둥 + 선반 판 세 장. 저장된 아이템을 층마다 한 종류씩 보여 준다(아래 층부터 저장 칸 순서대로 서로 다른 아이템 3종까지).
+# extra["storage_slots"] = [{item_id, amount}]. 수량이 많을수록 더 많이(최대 6개) 놓인다.
+static func _rack(f: Frame, extra: Dictionary = {}) -> Dictionary:
 	var L: float = f.length
 	var D: float = f.depth
 	var post: Dictionary = f.flat(Color(0.34, 0.37, 0.43), "rack_iron")
 	var board: Dictionary = f.wood(Color(0.7, 0.52, 0.34), "rack_board")
-	var crate: Dictionary = f.wood(Color(0.78, 0.6, 0.38), "rack_crate")
-	var crate2: Dictionary = f.wood(Color(0.55, 0.4, 0.26), "rack_crate2")
-	var sack: Dictionary = f.flat(Color(0.82, 0.74, 0.55), "rack_sack")
-	var band: Dictionary = f.flat(Color(0.36, 0.32, 0.3), "rack_band")
 
 	for pu in [0.05, L - 0.05]:
 		for pv in [0.08, D - 0.08]:
@@ -156,26 +154,41 @@ static func _rack(f: Frame) -> Dictionary:
 		f.box(board, 0.0, L, 0.0, D, y, y + 0.05)
 
 	f.box(board, 0.0, L, 0.0, D, 1.68, 1.74)
-	# 선반 위 상자와 자루(칸마다 다르게)
-	var n: int = maxi(2, int(round(L / 0.5)))
-	for i in range(n):
-		var u: float = 0.1 + (L - 0.2) * (float(i) + 0.5) / float(n)
-		for k in range(ys.size()):
-			var y: float = float(ys[k]) + 0.05
-			var pick: int = (i * 3 + k * 5) % 4
 
-			match pick:
-				0:
-					f.box(crate, u - 0.17, u + 0.17, D * 0.2, D * 0.8, y, y + 0.3)
-					f.box(band, u - 0.175, u + 0.175, D * 0.2 - 0.01, D * 0.8 + 0.01, y + 0.13, y + 0.16)
-				1:
-					f.dome(sack, u, D * 0.5, 0.17, y, y + 0.32)
-				2:
-					f.cyl(crate2, u, D * 0.5, 0.15, y, y + 0.34, 0.14)
-					f.cyl(band, u, D * 0.5, 0.155, y + 0.1, y + 0.13, 0.155)
-				_:
-					f.box(crate2, u - 0.14, u + 0.14, D * 0.25, D * 0.75, y, y + 0.22)
-					f.box(crate, u - 0.1, u + 0.1, D * 0.32, D * 0.68, y + 0.22, y + 0.4)
+	# 층별 저장품: 서로 다른 아이템을 저장 칸 순서대로 최대 3종, 같은 아이템의 수량은 합친다.
+	var order: Array = []
+	var totals: Dictionary = {}
+
+	for slot in extra.get("storage_slots", []):
+		var id: String = str((slot as Dictionary).get("item_id", ""))
+		var amount: int = int((slot as Dictionary).get("amount", 0))
+
+		if id.is_empty() or amount <= 0:
+			continue
+
+		if not totals.has(id):
+			totals[id] = 0
+			order.append(id)
+
+		totals[id] = int(totals[id]) + amount
+
+	var ts: int = int(f.p["ts"])
+	var limits: Array = [0.66 - 0.17, 1.2 - 0.71, 1.68 - 1.25]  # 각 층 선반 위 여유 높이
+
+	for k in range(mini(order.size(), 3)):
+		var item_id: String = order[k]
+		var gs: Array = ShelfAssets.goods_specs(item_id, ts)
+		var shape: String = ShelfAssets.shape_of(item_id)
+		var count: int = clampi(int(ceil(float(totals[item_id]) / 8.0)), 1, 6)
+		var fit: float = float(limits[k]) * ShelfAssets.HEADROOM / float(ShelfAssets.SHAPE_HEIGHT.get(shape, 0.2))
+		var sc: float = minf(ShelfAssets.GOODS_SCALE * 1.15, fit)
+		var y_top: float = float(ys[k]) + 0.05
+
+		for n in range(count):
+			var u: float = 0.16 + (L - 0.32) * (float(n) + 0.5) / float(count)
+			var v: float = D * (0.62 if n % 2 == 0 else 0.4) if count > 3 else D * 0.5
+			var at: Vector3 = f.world(u, v, y_top)
+			ShelfAssets._good(shape, Callable(f, "part"), gs[0], gs[1], gs[2], at, sc, n)
 
 	return f.finish(1.8)
 

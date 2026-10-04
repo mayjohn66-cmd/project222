@@ -1,5 +1,4 @@
 extends Node2D
-const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
 
 
 @export var columns: int = 6
@@ -53,11 +52,6 @@ func _add_edge(
 	collision.shape = shape
 	body.add_child(collision)
 
-
-func _draw() -> void:
-	for y in range(rows):
-		for x in range(columns):
-			TILE_ART.draw_cell(self, grid_to_local(Vector2i(x, y)), tile_width, tile_height, TILE_ART.PAVING)
 
 
 func _create_return_door_visual() -> void:

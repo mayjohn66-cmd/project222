@@ -1,6 +1,5 @@
 @tool
 extends Node2D
-const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
 
 
 
@@ -262,11 +261,6 @@ func _add_boundary_edge(
 
 	boundary_body.add_child(collision)
 
-
-func _draw() -> void:
-	for y in range(rows):
-		for x in range(columns):
-			TILE_ART.draw_cell(self, grid_to_local(Vector2i(x, y)), tile_width, tile_height, TILE_ART.WOOD)
 
 
 func grid_to_local(

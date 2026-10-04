@@ -591,6 +591,7 @@ func get_build_overlay() -> Dictionary:
 				guides.append({"cell": anchor + offset, "color": Color(0.25, 0.55, 1.0, 0.4)})
 
 	return {
+		"origin_world": floor.to_global(floor.grid_to_local(Vector2i.ZERO)),
 		"build_id": selected_id,
 		"anchor": anchor,
 		"size": size,

@@ -199,6 +199,7 @@ func _build_view() -> void:
 		village = VillageMirror.new(self, exterior)
 		decals = GroundDecals.new(self, village)
 
+	_room_mirror = RoomMirror.new(self)
 	_ready_done = true
 	_apply_mode()
 
@@ -486,6 +487,10 @@ func _process(delta: float) -> void:
 		_wall_timer = 0.25
 		_sync_floor()
 		_sync_walls()
+
+		if _room_mirror != null:
+			_room_mirror.sync()
+
 		_sync_furniture()
 		_sync_build_guides()
 
@@ -665,7 +670,7 @@ func _update_wall_cutaway(delta: float) -> void:
 	var pc: Vector2 = world_to_cell(player.global_position)
 
 	for key in _items.keys():
-		if not str(key).begins_with("wall"):
+		if not (str(key).begins_with("wall") or str(key).begins_with("rwall")):
 			continue
 
 		var item: Dictionary = _items[key]
@@ -696,10 +701,29 @@ func _update_wall_cutaway(delta: float) -> void:
 
 # ---------------------------------------------------------------- 가구
 
+# 가구를 읽어 올 곳: 매장 Objects(원점 0) + 창고·생산실 Objects(방 칸 (0,0) 이 놓인 세계 칸을 원점으로).
+func _furniture_sources() -> Array:
+	var out: Array = [{"node": objects_node, "origin": Vector2.ZERO, "rect": floor_node.get_store_rect()}]
+
+	if _room_mirror != null:
+		out.append_array(_room_mirror.sources())
+
+	return out
+
+
 func _sync_furniture() -> void:
 	var alive: Dictionary = {}
 
-	for node in objects_node.get_children():
+	for src in _furniture_sources():
+		_sync_furniture_from(src["node"], src["origin"], src["rect"], alive)
+
+	for key in _items.keys():
+		if (str(key).begins_with("furn") or str(key).begins_with("wmount")) and not alive.has(key):
+			_remove_item(key)
+
+
+func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, alive: Dictionary) -> void:
+	for node in objects.get_children():
 		if not node is Node2D or not node.has_meta("build_id"):
 			continue
 
@@ -713,7 +737,7 @@ func _sync_furniture() -> void:
 		var row: Dictionary = Furniture3DData.get_row(build_id)
 
 		if row["kind"] == "door" or row["kind"] == "wall_plate":
-			_sync_wall_mounted(node, build_id, row, alive)
+			_sync_wall_mounted(node, build_id, row, alive, origin, store_rect)
 			continue
 
 		# 진열대: 미리보기는 색 상자, 실제 진열대는 틀 + 상품이 놓인 모델(ShelfAssets). 행의 kind 가 shelf 면 아래에서 따로 만든다.
@@ -743,14 +767,19 @@ func _sync_furniture() -> void:
 			for sl in node.get("slots"):
 				stock_sig += "%s:%d," % [str((sl as Dictionary).get("item_id", "")), mini(int((sl as Dictionary).get("stock", 0)), ShelfAssets.MAX_VISIBLE)]
 
-		var sig: String = "%s|%s|%d|%d|%d|%d|%s|%s|%s" % [build_id, str(anchor), rotation_index, fx, fy, stack, str(is_preview), str(preview_valid), stock_sig]
+		# 창고 선반: 저장 칸의 (아이템, 수량)이 바뀌면 다시 만든다.
+		if as_model and build_id == "warehouse_rack" and node.get("storage_slots") != null:
+			for sl in node.get("storage_slots"):
+				stock_sig += "%s:%d," % [str((sl as Dictionary).get("item_id", "")), int((sl as Dictionary).get("amount", 0))]
+
+		var sig: String = "%s|%s|%s|%d|%d|%d|%d|%s|%s|%s" % [build_id, str(anchor), str(origin), rotation_index, fx, fy, stack, str(is_preview), str(preview_valid), stock_sig]
 
 		if _items.has(key) and _items[key]["signature"] == sig:
 			continue
 
 		# FurnitureFootprint 와 같은 규칙: 칸 중심이 정수, 두께(depth_ratio)는 회전에 따라 한쪽 변에 붙는다.
-		var lo := Vector2(float(anchor.x) - 0.5, float(anchor.y) - 0.5)
-		var hi := Vector2(float(anchor.x + fx) - 0.5, float(anchor.y + fy) - 0.5)
+		var lo := Vector2(float(anchor.x) - 0.5, float(anchor.y) - 0.5) + origin
+		var hi := Vector2(float(anchor.x + fx) - 0.5, float(anchor.y + fy) - 0.5) + origin
 		var depth: float = row["depth_ratio"]
 
 		if depth < 1.0:
@@ -775,7 +804,12 @@ func _sync_furniture() -> void:
 			var built: Dictionary
 
 			if row["kind"] == "model":
-				built = FurnitureAssets.build(build_id, lo, hi, rotation_index, pp)
+				var extra: Dictionary = {}
+
+				if build_id == "warehouse_rack" and node.get("storage_slots") != null:
+					extra["storage_slots"] = node.get("storage_slots")
+
+				built = FurnitureAssets.build(build_id, lo, hi, rotation_index, pp, extra)
 			else:
 				var spl: int = int(node.get("slots_per_level")) if node.get("slots_per_level") != null else 2
 				var slot_list: Array = node.get("slots") if node.get("slots") != null else []
@@ -786,14 +820,11 @@ func _sync_furniture() -> void:
 
 		_set_item(key, lo, hi, height_blocks, str(row["texture"]), item_tint, sig)
 
-	for key in _items.keys():
-		if (str(key).begins_with("furn") or str(key).begins_with("wmount")) and not alive.has(key):
-			_remove_item(key)
-
 
 # ---------------------------------------------------------------- 건축 안내(발자국 윤곽·점유 칸·직원/결제/접근 칸)
 
 var _build_guide: MeshInstance3D
+var _room_mirror: RoomMirror
 var _build_guide_sig: String = ""
 
 
@@ -830,6 +861,13 @@ func _sync_build_guides() -> void:
 		_build_guide.material_override = mat
 		_viewport.add_child(_build_guide)
 
+	# 매장이 아니라 창고·생산실에서 건축하면 방 칸 (0,0) 이 놓인 세계 칸을 더해 그린다.
+	var guide_origin := Vector2.ZERO
+
+	if data.has("origin_world"):
+		var oc: Vector2 = world_to_cell(data["origin_world"])
+		guide_origin = Vector2(roundf(oc.x), roundf(oc.y))
+
 	var verts := PackedVector3Array()
 	var colors := PackedColorArray()
 	var y: float = 0.06
@@ -840,11 +878,11 @@ func _sync_build_guides() -> void:
 			colors.append(c)
 
 	for cell in data["base_cells"]:
-		quad.call(float(cell.x) - 0.5, float(cell.y) - 0.5, float(cell.x) + 0.5, float(cell.y) + 0.5, Color(0.6, 0.8, 0.9, 0.18))
+		quad.call(float(cell.x) + guide_origin.x - 0.5, float(cell.y) + guide_origin.y - 0.5, float(cell.x) + guide_origin.x + 0.5, float(cell.y) + guide_origin.y + 0.5, Color(0.6, 0.8, 0.9, 0.18))
 
 	for g in data["guides"]:
 		var c: Vector2i = g["cell"]
-		quad.call(float(c.x) - 0.5, float(c.y) - 0.5, float(c.x) + 0.5, float(c.y) + 0.5, g["color"])
+		quad.call(float(c.x) + guide_origin.x - 0.5, float(c.y) + guide_origin.y - 0.5, float(c.x) + guide_origin.x + 0.5, float(c.y) + guide_origin.y + 0.5, g["color"])
 
 	# 발자국 윤곽(가구 3D 와 같은 칸 규칙): 얇은 테두리 네 줄
 	var row: Dictionary = Furniture3DData.get_row(str(data["build_id"]))
@@ -852,8 +890,8 @@ func _sync_build_guides() -> void:
 	if row["kind"] == "box":
 		var anchor: Vector2i = data["anchor"]
 		var size: Vector2i = data["size"]
-		var lo := Vector2(float(anchor.x) - 0.5, float(anchor.y) - 0.5)
-		var hi := Vector2(float(anchor.x + size.x) - 0.5, float(anchor.y + size.y) - 0.5)
+		var lo := Vector2(float(anchor.x) - 0.5, float(anchor.y) - 0.5) + guide_origin
+		var hi := Vector2(float(anchor.x + size.x) - 0.5, float(anchor.y + size.y) - 0.5) + guide_origin
 		var depth: float = row["depth_ratio"]
 
 		if depth < 1.0:
@@ -889,7 +927,7 @@ func _sync_build_guides() -> void:
 
 # 벽에 붙는 가구(문 틀, 포스터·지도·깃발 판). 앵커 칸과 회전으로 벽 변(가장자리)을 정한다.
 # 회전 0 = 뒤쪽 y 작은 변, 1 = x 큰 변, 2 = y 큰 변, 3 = x 작은 변(벽 선분 규칙 wood_walls.gd 와 같음).
-func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: Dictionary) -> void:
+func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: Dictionary, origin: Vector2 = Vector2.ZERO, rect: Rect2i = Rect2i()) -> void:
 	var anchor: Vector2i = node.get_meta("anchor", Vector2i.ZERO)
 	var rotation_index: int = posmod(int(node.get_meta("rotation_index", 0)), 4)
 	var visual: Node = node.get_node_or_null("Visual")
@@ -897,9 +935,8 @@ func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: 
 	if visual != null and visual.get("rotation_index") != null:
 		rotation_index = posmod(int(visual.get("rotation_index")), 4)
 
-	var rect: Rect2i = floor_node.get_store_rect()
 	var base_key: String = "wmount%d" % node.get_instance_id()
-	var sig: String = "%s|%s|%d" % [build_id, str(anchor), rotation_index]
+	var sig: String = "%s|%s|%s|%d" % [build_id, str(anchor), str(origin), rotation_index]
 	alive[base_key + "a"] = true
 	alive[base_key + "b"] = true
 	alive[base_key + "c"] = true
@@ -916,19 +953,19 @@ func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: 
 
 	match rotation_index:
 		0:
-			line = -0.5
+			line = -0.5 + origin.y
 			inward = 1.0
 		1:
-			line = float(rect.position.x + rect.size.x) - 0.5
+			line = float(rect.position.x + rect.size.x) - 0.5 + origin.x
 			inward = -1.0
 		2:
-			line = float(rect.position.y + rect.size.y) - 0.5
+			line = float(rect.position.y + rect.size.y) - 0.5 + origin.y
 			inward = -1.0
 		3:
-			line = -0.5
+			line = -0.5 + origin.x
 			inward = 1.0
 
-	var center_along: float = float(anchor.x) if along_x else float(anchor.y)
+	var center_along: float = (float(anchor.x) + origin.x) if along_x else (float(anchor.y) + origin.y)
 	var is_door: bool = row["kind"] == "door"
 	var front_rot: int = FurnitureAssets.wall_front_rot(rotation_index)
 	# 발자국: 문은 벽 두께, 판(포스터·지도·깃발)은 벽 안쪽 면에 얇게 붙인다.
