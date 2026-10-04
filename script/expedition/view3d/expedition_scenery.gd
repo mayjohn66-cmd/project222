@@ -127,7 +127,12 @@ func _edge_rects() -> Array:
 
 # ---------------------------------------------------------------- 지역별
 
-func build(theme_id: String, rng: RandomNumberGenerator) -> void:
+func build(theme_id: String, rng: RandomNumberGenerator, model: RefCounted = null) -> void:
+	_build_surroundings(theme_id, rng)
+	_build_floor_decor(theme_id, rng, model)
+
+
+func _build_surroundings(theme_id: String, rng: RandomNumberGenerator) -> void:
 	match theme_id:
 		"mine":
 			_build_mine(rng)
@@ -359,6 +364,162 @@ func _exit_ruins() -> void:
 	st._exit_bars = st._node(door)
 	st._exit_glow = _glow_quad(Color(0.75, 0.5, 1.0), 1.2, 1.5, "ruin_light")
 	st.add_glow_light(Vector3(EXIT_X, 0.8, 0.2), Color(0.8, 0.55, 1.0), 1.0, 3.4)
+
+
+# ---------------------------------------------------------------- 바닥 장식(방 안)
+
+# 방 안 바닥에도 주변 풍경과 같은 종류를 깐다: 낮은 것(풀·꽃·덤불·잔돌·버섯·수정 조각)만 놓아 이동을 막지 않고 시야도 가리지 않는다.
+# 시작 지점·출구 길·적·오브젝트·장애물 둘레는 비운다.
+func _keepout(model: RefCounted) -> Array:
+	var out: Array = [Rect2(2.7, 0.0, 1.6, 2.2), Rect2(2.6, 6.0, 1.8, 2.0)]
+
+	if model == null:
+		return out
+
+	out.append(Rect2(model.player_position - Vector2(1.2, 1.2), Vector2(2.4, 2.4)))
+
+	for e in model.enemies:
+		out.append(Rect2((e["position"] as Vector2) - Vector2(0.9, 0.9), Vector2(1.8, 1.8)))
+
+	for o in model.obstacles:
+		out.append((o as Rect2).grow(0.7))
+
+	if model.gathering_sites.is_empty():
+		if str(model.object_kind) != "":
+			out.append(Rect2(model.object_position - Vector2(0.9, 0.9), Vector2(1.8, 1.8)))
+	else:
+		for site in model.gathering_sites:
+			out.append(Rect2(Vector2(float(site["x"]), float(site["y"])) - Vector2(0.9, 0.9), Vector2(1.8, 1.8)))
+
+	return out
+
+
+func _build_floor_decor(theme_id: String, rng: RandomNumberGenerator, model: RefCounted) -> void:
+	var field: Array = [Rect2(0.35, 0.35, 7.3, 7.3)]
+	var avoid: Array = _keepout(model)
+
+	match theme_id:
+		"mine":
+			var rubble: Dictionary = _tpl_pebbles(Color(0.5, 0.5, 0.58), "m_rubble")
+			var stal: Dictionary = _tpl_stalagmite(Color(0.34, 0.36, 0.44), "m_stal")
+			var cry: Dictionary = _tpl_crystal(Color(0.35, 0.85, 0.95), "m_crystal")
+
+			for p in _scatter(rng, field, avoid, 22, 0.55):
+				_inst(rubble, p, 0.8 + rng.randf() * 0.9, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 6, 1.2):
+				_inst(stal, p, 0.45 + rng.randf() * 0.35, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 4, 1.8):
+				_inst(cry, p, 0.5 + rng.randf() * 0.3, _yaw(rng))
+				st.add_glow_light(Vector3(p.x, 0.4, p.y), Color(0.45, 0.85, 1.0), 0.5, 2.2)
+
+			for p in _scatter(rng, field, avoid, 5, 1.0):
+				_inst(_tpl_prop("rock", {}, "m_rock"), p, 0.7 + rng.randf() * 0.5, _yaw(rng))
+		"swamp":
+			var reeds: Dictionary = _tpl_reeds("s_reeds")
+
+			for p in _scatter(rng, field, avoid, 11, 0.8):
+				_inst(reeds, p, 0.38 + rng.randf() * 0.25, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 5, 1.1):
+				_inst(_tpl_prop("stump", {}, "s_stump"), p, 0.6 + rng.randf() * 0.3, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 6, 0.9):
+				_inst(_tpl_prop("flower_bush", {"variant": "hedge"}, "s_bush"), p, 0.7 + rng.randf() * 0.35, _yaw(rng))
+
+			_floor_puddles(rng, field, avoid, 4)
+		"hidden_ruins":
+			var rubble2: Dictionary = _tpl_pebbles(Color(0.62, 0.58, 0.7), "r_rubble")
+
+			for p in _scatter(rng, field, avoid, 20, 0.55):
+				_inst(rubble2, p, 0.8 + rng.randf() * 0.9, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 3, 1.8):
+				_inst(_tpl_column(1, "r_col"), p, 0.7 + rng.randf() * 0.2, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 3, 1.8):
+				_inst(_tpl_ruin_wall(0, "r_wall"), p, 0.55 + rng.randf() * 0.2, round(rng.randf() * 4.0) * PI * 0.5)
+
+			for p in _scatter(rng, field, avoid, 7, 0.9):
+				_inst(_tpl_prop("flower_bush", {"variant": "hedge"}, "r_bush"), p, 0.7 + rng.randf() * 0.35, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 4, 1.4):
+				_inst(_tpl_prop("rock", {}, "r_rock"), p, 0.5 + rng.randf() * 0.3, _yaw(rng))
+		_:
+			var grass: Dictionary = _tpl_grass(Color(0.28, 0.58, 0.26), Color(0.42, 0.74, 0.34), "f_grass", 0.6)
+
+			for p in _scatter(rng, field, avoid, 34, 0.5):
+				_inst(grass, p, 0.7 + rng.randf() * 0.7, _yaw(rng))
+
+			var flowers: Array = [_tpl_flowers(Color(1.0, 0.85, 0.95), "f_fl_a"), _tpl_flowers(Color(1.0, 0.85, 0.3), "f_fl_b"), _tpl_flowers(Color(0.85, 0.7, 1.0), "f_fl_c")]
+
+			for p in _scatter(rng, field, avoid, 12, 0.8):
+				_inst(flowers[rng.randi() % 3], p, 0.8 + rng.randf() * 0.5, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 7, 1.0):
+				_inst(_tpl_prop("flower_bush", {"variant": "berry" if rng.randf() < 0.3 else ""}, "f_bush_%s" % (rng.randf() < 0.3)), p, 0.7 + rng.randf() * 0.4, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 4, 1.4):
+				_inst(_tpl_prop("rock", {}, "f_rock"), p, 0.5 + rng.randf() * 0.4, _yaw(rng))
+
+			for p in _scatter(rng, field, avoid, 2, 2.5):
+				_inst(_tpl_prop("log", {}, "f_log"), p, 0.9, round(rng.randf() * 2.0) * PI * 0.5)
+
+			for p in _scatter(rng, field, avoid, 3, 1.4):
+				_inst(_tpl_mushrooms("f_mush"), p, 0.9 + rng.randf() * 0.4, _yaw(rng))
+
+
+func _floor_puddles(rng: RandomNumberGenerator, field: Array, avoid: Array, count: int) -> void:
+	var b := VillageAssets.PartBuilder.new()
+	var water: Dictionary = st._flat(Color(0.2, 0.38, 0.36), "swamp_water_in", 0.12)
+	var wp: SurfaceTool = b.new_part(water, Vector3(-1, 0, -1), Vector3(1, 1, 1))
+
+	for p in _scatter(rng, field, avoid, count, 2.0):
+		var r: float = 0.4 + rng.randf() * 0.35
+		VillageAssets.oct_st(wp, p.x, p.y, r, 0.0, 0.02, r * 0.97)
+
+	st._node(b)
+
+
+func _tpl_flowers(color: Color, key: String) -> Dictionary:
+	if _cache.has(key):
+		return _cache[key]
+
+	var b := VillageAssets.PartBuilder.new()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(key)
+	var stem: SurfaceTool = b.new_part(st._flat(Color(0.3, 0.6, 0.28), key + "_s"), Vector3(-1, 0, -1), Vector3(1, 1, 1))
+	var head: SurfaceTool = b.new_part(st._flat(color, key + "_h", 0.2), Vector3(-1, 0, -1), Vector3(1, 1, 1))
+
+	for i in range(6):
+		var x: float = rng.randf_range(-0.22, 0.22)
+		var z: float = rng.randf_range(-0.22, 0.22)
+		var h: float = 0.22 + rng.randf() * 0.18
+		VillageAssets.oct_st(stem, x, z, 0.02, 0.0, h, 0.0)
+		VillageAssets.dome_st(head, x, z, 0.06, h - 0.02, h + 0.07, 2, 6)
+
+	return _tpl_builder(b, key)
+
+
+func _tpl_mushrooms(key: String) -> Dictionary:
+	if _cache.has(key):
+		return _cache[key]
+
+	var b := VillageAssets.PartBuilder.new()
+	var rng := RandomNumberGenerator.new()
+	rng.seed = hash(key)
+	var stem: SurfaceTool = b.new_part(st._flat(Color(0.9, 0.88, 0.8), key + "_s"), Vector3(-1, 0, -1), Vector3(1, 1, 1))
+	var cap: SurfaceTool = b.new_part(st._flat(Color(0.8, 0.3, 0.3), key + "_c"), Vector3(-1, 0, -1), Vector3(1, 1, 1))
+
+	for i in range(3):
+		var x: float = rng.randf_range(-0.15, 0.15)
+		var z: float = rng.randf_range(-0.15, 0.15)
+		var h: float = 0.1 + rng.randf() * 0.1
+		VillageAssets.box_st(stem, Vector3(x - 0.02, 0.0, z - 0.02), Vector3(x + 0.02, h, z + 0.02))
+		VillageAssets.dome_st(cap, x, z, 0.07, h - 0.02, h + 0.07, 2, 6)
+
+	return _tpl_builder(b, key)
 
 
 # ---------------------------------------------------------------- 템플릿 모양

@@ -158,7 +158,7 @@ func rebuild(model: RefCounted, region: String) -> void:
 	_build_floor()
 	var srng := RandomNumberGenerator.new()
 	srng.randomize()
-	_scenery.build(_theme_id, srng)
+	_scenery.build(_theme_id, srng, model)
 
 	for r in model.obstacles:
 		_build_obstacle(r)
