@@ -36,7 +36,7 @@ func is_guiding() -> bool:
 
 func permits_first_checkout() -> bool:
 	var step := flow.current()
-	return not enabled or str(step.get("id", "")) == "checkout" or flow.done("checkout")
+	return not enabled or (not OpeningPrologueFlow.pending() and (str(step.get("id", "")) == "checkout" or flow.done("checkout")))
 
 func _blocked() -> bool:
 	var world = get_parent()
@@ -66,6 +66,10 @@ func refresh() -> void:
 		npc = null
 		return
 	OpeningJourneyFlow.initialize(get_parent())
+	if OpeningPrologueFlow.pending():
+		panel.root.hide()
+		if not talking and not _blocked(): _begin_prologue(OpeningPrologueFlow.current())
+		return
 	for facility in get_tree().get_nodes_in_group("production_facility"):
 		if not facility.output_collected.is_connected(_on_output_collected):
 			facility.output_collected.connect(_on_output_collected)
@@ -113,6 +117,19 @@ func try_interact() -> bool:
 	_begin_step(step)
 	return true
 
+func _begin_prologue(moment: Dictionary) -> void:
+	var lines := RequestTextData.lines("service_text",str(moment["id"]))
+	if lines.is_empty(): return
+	pending = {"prologue":str(moment["id"])}
+	talking = true
+	timer_was_paused = manager.hour_timer.paused
+	physics_was_enabled = player.is_physics_processing()
+	manager.hour_timer.paused = true
+	player.set_physics_process(false)
+	player.velocity = Vector2.ZERO
+	get_parent().set_meta("progressive_tutorial_dialogue",true)
+	dialogue.start("나",null,lines)
+
 func _begin_step(step: Dictionary) -> void:
 	var id := str(step["id"])
 	var ready := flow.seen(id) and flow.goal_met(step, get_parent())
@@ -149,7 +166,9 @@ func _end_talk() -> void:
 	var completed_read: bool = dialogue.line_index >= dialogue.lines.size()
 	var result := pending.duplicate(true)
 	pending.clear()
-	if not result.is_empty() and completed_read:
+	if result.has("prologue") and completed_read:
+		OpeningPrologueFlow.complete(str(result["prologue"]))
+	elif not result.is_empty() and completed_read:
 		var step: Dictionary = result["step"]
 		if flow.current().get("id", "") == step.get("id", ""):
 			if result["action"] == "intro": flow.introduce(step)

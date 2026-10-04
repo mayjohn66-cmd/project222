@@ -1,0 +1,113 @@
+extends Node
+const Tools = preload("res://dev/gemini/request_text_tools.gd")
+const Writer = preload("res://dev/gemini/request_text_runner.gd")
+var checks := 0
+var failures := 0
+func check(ok: bool, message: String) -> void:
+	checks += 1
+	if not ok:
+		failures += 1
+		push_error(message)
+func _ready() -> void: call_deferred("verify")
+func frames() -> void:
+	for i in range(4): await get_tree().process_frame
+func drain(panel: StoryDialoguePanel) -> void:
+	for i in range(100):
+		if not panel.open: return
+		panel._advance()
+	check(false,"dialogue terminates")
+func spawn():
+	var world = load("res://scenes/shop/main.tscn").instantiate()
+	add_child(world)
+	await frames()
+	world.get_node("TutorialDirector").set_process(false)
+	world.get_node("CheckoutTutorial").set_process(false)
+	world.get_node("CustomerSpawner").set_process(false)
+	return world
+func verify() -> void:
+	GameState.initialize_new_game()
+	var world = await spawn()
+	var director: TutorialDirector = world.get_node("TutorialDirector")
+	var manager = world.get_node("DayManager")
+	var player = world.get_node("Actors/Player")
+	check(OpeningPrologueFlow.SETTINGS.moments.size() == 3,"three ordered prologue moments")
+	check(PlayerProgress.story_beat_days.has(OpeningJourneyFlow.PROLOGUE),"genuine new bootstrap opts into prologue")
+	check(director.dialogue.open and director.pending.get("prologue","") == "prologue_last_shift","first story appears before setup intro")
+	check(not director.flow.seen("setup") and not director.flow.done("setup"),"prologue does not advance tutorial goals")
+	check(director.dialogue.name_label.text == "나" and not director.dialogue.portrait.visible and not is_instance_valid(director.npc),"player alone with no local instructor")
+	check(manager.hour_timer.paused and not player.is_physics_processing() and world.get_node("WorldInteractions").blocked(),"dialogue pauses clock movement and normal interaction")
+	check(not director.panel.root.visible and not director.permits_first_checkout(),"goal instructions and first shopper wait for prologue")
+	world.get_node("CheckoutTutorial").try_start()
+	check(not is_instance_valid(world.get_node("CheckoutTutorial").guide),"cannot summon first buyer during story")
+	var layout := GameState.get_store_layout().duplicate(true)
+	var inventory: Dictionary = GameState.create_save_data()["inventory"].duplicate(true)
+	var money: int = GameState.money
+	var physics_before: bool = director.physics_was_enabled
+	var paused_before: bool = director.timer_was_paused
+	var position: Vector2 = player.global_position
+	Input.action_press("move_up")
+	for i in range(4): await get_tree().physics_frame
+	Input.action_release("move_up")
+	check(player.global_position == position,"held input cannot move during prologue")
+	director.dialogue.close()
+	check(not OpeningPrologueFlow.completed("prologue_last_shift") and not director.talking,"partial scene records nothing")
+	check(manager.hour_timer.paused == paused_before and player.is_physics_processing() == physics_before,"interrupted scene restores prior states")
+	director.refresh()
+	check(director.pending.get("prologue","") == "prologue_last_shift","interrupted scene retries in place")
+	drain(director.dialogue)
+	check(OpeningPrologueFlow.completed("prologue_last_shift") and OpeningPrologueFlow.current().get("id","") == "prologue_unfamiliar_window","complete first scene alone advances")
+	check(not OpeningPrologueFlow.complete("prologue_last_shift") and not OpeningPrologueFlow.complete("prologue_keep_the_light"),"duplicate or out-of-order scene rejected")
+	director.refresh()
+	check(director.pending.get("prologue","") == "prologue_unfamiliar_window","middle scene opened")
+	var saved := GameState.create_save_data().duplicate(true)
+	check(GameState.is_save_data_valid(saved),"mid-prologue full save valid")
+	director.dialogue.close()
+	world.queue_free()
+	await frames()
+	check(GameState.apply_save_data(saved),"full saved game restores")
+	world = await spawn()
+	director = world.get_node("TutorialDirector")
+	manager = world.get_node("DayManager")
+	player = world.get_node("Actors/Player")
+	check(director.pending.get("prologue","") == "prologue_unfamiliar_window","resume starts incomplete scene, not first scene")
+	drain(director.dialogue)
+	director.refresh()
+	check(director.pending.get("prologue","") == "prologue_keep_the_light","last decision appears before tutorial")
+	drain(director.dialogue)
+	check(not OpeningPrologueFlow.pending() and not director.flow.seen("setup"),"last full read releases tutorial without performing it")
+	check(GameState.get_store_layout() == layout and GameState.create_save_data()["inventory"] == inventory and GameState.money == money and ResidentRequestFlow.reputation() == 0,"no extra gifts money reputation or placement changes")
+	director.refresh()
+	check(director.dialogue.open and director.pending.get("action","") == "intro" and director.pending.get("step",{}).get("id","") == "setup","existing tutorial starts after story")
+	drain(director.dialogue)
+	director.refresh()
+	drain(director.dialogue)
+	director.refresh()
+	check(director.flow.current().get("id","") == "stock","setup still leads into real stocking goal")
+	world.queue_free()
+	await frames()
+	# Previously saved tutorials without the new opt-in marker are not replayed.
+	GameState.initialize_new_game()
+	var old_layout: Array[Dictionary] = TutorialDirector.SETTINGS.opening_layout.duplicate(true)
+	GameState.save_store_layout(old_layout)
+	PlayerProgress.record_story_beat(OpeningJourneyFlow.VERSION,1)
+	world = await spawn()
+	check(not OpeningPrologueFlow.pending() and not PlayerProgress.story_beat_days.has(OpeningJourneyFlow.PROLOGUE),"old arrival save retains its existing start")
+	check(world.get_node("TutorialDirector").pending.get("action","") == "intro","old save goes straight to existing setup")
+	world.queue_free()
+	await frames()
+	GameState.initialize_new_game()
+	PlayerProgress.record_story_beat(OpeningJourneyFlow.PROLOGUE,1)
+	PlayerProgress.record_story_beat("tutorial_step:stock:intro",1)
+	check(not OpeningPrologueFlow.pending(),"already-progressed tutorial is never pulled back")
+	PlayerProgress.reset()
+	check(not OpeningPrologueFlow.completed("prologue_last_shift"),"new-game reset clears story memory")
+	var sources := Tools.load_sources()
+	for moment in OpeningPrologueFlow.SETTINGS.moments:
+		var id := str(moment["id"])
+		check(sources[Tools.KIND_SERVICE_TEXT].has(id) and not RequestTextData.lines("service_text",id).is_empty(),"runtime and writer know each scene")
+		check(Writer.build_prompt(Tools.KIND_SERVICE_TEXT,{Tools.KIND_SERVICE_TEXT:{id:sources[Tools.KIND_SERVICE_TEXT][id]}},sources).contains(str(moment["stage"])),"writer retains staged knowledge constraints")
+	var prose := Tools.validate_file(Tools.TEXT_PATH,sources)
+	check(prose["errors"].is_empty() and prose["warns"].is_empty(),"complete dialogue CSV validated")
+	print("PROLOGUE_TEXT ",prose)
+	print("CHECK_OPENING_PROLOGUE checks=",checks," failures=",failures)
+	get_tree().quit(0 if failures == 0 else 1)

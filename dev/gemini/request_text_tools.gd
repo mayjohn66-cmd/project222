@@ -26,6 +26,7 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/requests/default_resident_story.tres": KIND_RESIDENT_REQUEST,
 	"res://scenes/shop/requests/default_resident_trade.tres": KIND_TRADE_OFFER,
 	"res://scenes/shop/tutorial/default_tutorial.tres": KIND_TUTORIAL_STEP,
+	"res://scenes/shop/tutorial/default_opening_prologue.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_personal_requests.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_season_stockpile.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_market_afterglow.tres": KIND_PERSONAL_REQUEST,

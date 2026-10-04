@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="OpeningPrologueSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/tutorial/opening_prologue_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+moments = Array[Dictionary]([
+{"id":"prologue_last_shift","npc":"플레이어 독백","stage":"새 게임 최초 장면. 가게 안에서 익숙한 일상을 떠올리다 도로 소리가 사라진 것을 알아챈다. 과거 기억과 지금을 구분. 전이의 원인/신/마법사/사고/현실의 특정 날짜/플레이어 이름은 확정하지 않는다. 별도 현실 지도나 사건 영상은 구현하지 않음."},
+{"id":"prologue_unfamiliar_window","npc":"플레이어 독백","stage":"같은 가게의 유리문 너머 낯선 풀과 나무를 본다. 함께 옮겨 온 계산대/문/진열대와 남아 있던 빵/물을 확인. 몸/가게 이동이나 무료 추가 물품 없음. 아직 손님/현지 화폐/상인/검/갑옷/제작을 만나거나 이해하지 못함."},
+{"id":"prologue_keep_the_light","npc":"플레이어 독백","stage":"상황을 다 알지 못하지만 낯선 곳에서 혼자 밖으로 나서기 전에 익숙한 가게부터 정리하기로 결정. 튜토리얼 setup→stock→현지인의 실제 첫 구매로 연결. 주민/동료/손님의 확정 즉시 등장 없음. 처음부터 현지 화폐를 알고 있거나 전이 원인을 설명하지 않는다. 마지막 완독 후 튜토리얼 시작, 선물/돈/평판/추가 능력 없음."}
+])

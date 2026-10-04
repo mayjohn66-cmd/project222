@@ -4,6 +4,7 @@ extends RefCounted
 # 진행 키는 기존 저장 구조를 사용한다. 새 게임의 물품과 기존 저장을 섞지 않는다.
 const SETTINGS = preload("res://scenes/shop/tutorial/default_tutorial.tres")
 const VERSION := "tutorial_event:arrival_v2"
+const PROLOGUE := "tutorial_event:opening_prologue_v1"
 const TRADE := "tutorial_event:arrival_barter"
 const RAW_SALE := "tutorial_event:raw_material_sale"
 
@@ -38,6 +39,7 @@ static func initialize(world: Node) -> void:
 		GameState.remove_furniture(str(entry["build_id"]), 1)
 	GameState.save_store_layout(SETTINGS.opening_layout.duplicate(true))
 	PlayerProgress.record_story_beat(VERSION, GameState.total_day)
+	PlayerProgress.record_story_beat(PROLOGUE, GameState.total_day)
 	# 부트스트랩은 제작/주민 흐름의 클래스 의존 순환을 만들지 않는다.
 	PlayerProgress.record_story_beat("tutorial_event:crafting_path_v1", GameState.total_day)
 
