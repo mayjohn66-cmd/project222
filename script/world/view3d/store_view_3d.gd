@@ -160,6 +160,8 @@ func _build_view() -> void:
 
 	_sun = DirectionalLight3D.new()
 	_sun.shadow_enabled = true
+	_sun.directional_shadow_mode = DirectionalLight3D.SHADOW_ORTHOGONAL  # 구간을 나누지 않아 카메라가 움직여도 그림자가 흔들리지 않게
+	_sun.directional_shadow_max_distance = 90.0
 	_viewport.add_child(_sun)
 	_fill = DirectionalLight3D.new()
 	_fill.shadow_enabled = false
@@ -748,6 +750,16 @@ func _make_surface_material(kind: String, tint: Color) -> ShaderMaterial:
 	return m
 
 
+# 보이는 메시는 순번 깊이(DEPTH)를 직접 써서 그림자 패스에서 그림자 깊이가 순번·개수에 따라 변한다(걸어 다닐 때 그림자가 움직이는 원인).
+# → 보이는 쪽은 그림자를 끄고, 같은 메시를 보통 재질로 그리는 그림자 전용 자식을 달아 그림자를 드리운다.
+func _add_shadow_caster(inst: MeshInstance3D) -> void:
+	inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var caster := MeshInstance3D.new()
+	caster.mesh = inst.mesh
+	caster.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+	inst.add_child(caster)
+
+
 func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, texture_kind: String, tint: Color, signature: String, base_blocks: float = 0.0) -> void:
 	_remove_item(key)
 	var h: float = block_height(height_blocks)
@@ -761,6 +773,7 @@ func _set_item(key: String, lo: Vector2, hi: Vector2, height_blocks: float, text
 	inst.material_override = material
 	inst.position = Vector3((lo.x + hi.x) * 0.5, base_h + h * 0.5, (lo.y + hi.y) * 0.5)
 	_viewport.add_child(inst)
+	_add_shadow_caster(inst)
 	var id_inst := MeshInstance3D.new()
 	id_inst.mesh = mesh
 	id_inst.layers = 2
@@ -784,6 +797,8 @@ func _set_mesh_item(key: String, mesh: Mesh, materials: Array, lo: Vector2, hi: 
 		inst.set_surface_override_material(i, materials[i])
 
 	_viewport.add_child(inst)
+	if outline:
+		_add_shadow_caster(inst)
 	var id_inst := MeshInstance3D.new()
 	id_inst.mesh = mesh
 	id_inst.layers = 2
