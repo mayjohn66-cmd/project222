@@ -22,6 +22,9 @@ var board: Rect2
 var notice: String = ""
 var player_frames: SpriteFrames
 var floor_color := Color("253e32")
+var region_id: String = "forest"  # 3D 무대의 지역별 꾸밈(forest/mine/swamp/hidden_ruins)
+var use_3d: bool = true  # 던전 방을 3D 로 그린다(F10 으로 끄고 켠다)
+var stage: ExpeditionStage3D
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -76,6 +79,11 @@ func _ready() -> void:
 	help.text = "이동 WASD / 방향키 · 기본 공격 J / Space · 무기 교체 Q · 상호작용 E"
 	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	column.add_child(help)
+	# 3D 무대: 이 뷰의 뒤에 깔려 바닥·벽·장애물·적·플레이어를 그린다. 체력 막대·글자·공격 표시는 이 뷰가 그 위에 2D 로 그린다.
+	stage = ExpeditionStage3D.new()
+	stage.view = self
+	add_child(stage)
+	move_child(stage, 0)
 	if ResourceLoader.exists("res://art/characters/cozy_v1/player/frames.tres"):
 		player_frames = load("res://art/characters/cozy_v1/player/frames.tres")
 	# 버튼을 클릭하는 순간 공격하고, 누르고 있으면 기본 공격을 반복한다.
@@ -96,6 +104,11 @@ func _can_play() -> bool:
 	return visible and model != null and not model.finished and (not blocked.is_valid() or not blocked.call())
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if visible and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
+		use_3d = not use_3d
+		get_viewport().set_input_as_handled()
+		return
+
 	if _can_play() and event.is_action_pressed("interact"):
 		model.interact()
 		get_viewport().set_input_as_handled()
@@ -134,6 +147,10 @@ func _physics_process(delta: float) -> void:
 		hint_label.text = "출구가 열렸습니다" if model.exit_open else "몬스터를 처치하면 출구가 열립니다"
 	queue_redraw()
 
+func _stage_on() -> bool:
+	return use_3d and stage != null and stage.is_inside_tree() and stage.active
+
+
 func _layout_board() -> void:
 	var available := Vector2(maxf(80, size.x - 80), maxf(80, size.y - 228))
 	tile_scale = minf(available.x / (tile_size.x * 8), available.y / (tile_size.y * 8))
@@ -141,6 +158,8 @@ func _layout_board() -> void:
 	board = Rect2(Vector2((size.x - extent.x) * 0.5, 96 + (available.y - extent.y) * 0.5), extent)
 
 func _point(tile: Vector2) -> Vector2:
+	if _stage_on():
+		return stage.project(tile, 0.0)
 	return board.position + Vector2(board.size.x * 0.5, tile_size.y * tile_scale * 0.5) \
 		+ GRID.project(tile - Vector2.ONE * 0.5, tile_size) * tile_scale
 
@@ -156,27 +175,34 @@ func _footprint(rect: Rect2) -> PackedVector2Array:
 
 func _draw() -> void:
 	if model == null: return
+	if stage != null:
+		stage.active = use_3d
+		stage.visible = use_3d
 	_layout_board()
-	draw_rect(Rect2(Vector2.ZERO, size), Color("111b20"))
-	# 상점과 동일한 타일 그림, 좌표식, 2:1 시점을 사용한다.
-	var origin := _point(Vector2.ONE * 0.5)
-	draw_set_transform(origin)
-	for y in range(8):
-		for x in range(8):
-			var center := GRID.project(Vector2(x, y), tile_size) * tile_scale
-			TILE_ART.draw_cell(self, center, tile_size.x * tile_scale, tile_size.y * tile_scale, floor_texture)
-			var half := tile_size * tile_scale * 0.5
-			draw_polyline(PackedVector2Array([center + Vector2(0, -half.y), center + Vector2(half.x, 0),
-				center + Vector2(0, half.y), center + Vector2(-half.x, 0), center + Vector2(0, -half.y)]), Color(0.85, 0.9, 0.65, 0.22), 1)
-	draw_set_transform(Vector2.ZERO)
-	var edge := _footprint(Rect2(0, 0, 8, 8))
-	var depth := Vector2(0, 12 * tile_scale)
-	for pair in [[1, 2], [2, 3]]:
-		draw_colored_polygon(PackedVector2Array([edge[pair[0]], edge[pair[1]],
-			edge[pair[1]] + depth, edge[pair[0]] + depth]), floor_color.darkened(0.3))
-	draw_polyline(PackedVector2Array([edge[0], edge[1], edge[2], edge[3], edge[0]]), Color("9d9271"), 2)
-	var exit_shape := _footprint(Rect2(model.exit_position - Vector2.ONE * 0.28, Vector2.ONE * 0.56))
-	draw_colored_polygon(exit_shape, Color("9bd693") if model.exit_open else Color("5f676d"))
+	var on3d := _stage_on()
+	if not on3d:
+		draw_rect(Rect2(Vector2.ZERO, size), Color("111b20"))
+	if not on3d:
+		# 상점과 동일한 타일 그림, 좌표식, 2:1 시점을 사용한다.
+		var origin := _point(Vector2.ONE * 0.5)
+		draw_set_transform(origin)
+		for y in range(8):
+			for x in range(8):
+				var center := GRID.project(Vector2(x, y), tile_size) * tile_scale
+				TILE_ART.draw_cell(self, center, tile_size.x * tile_scale, tile_size.y * tile_scale, floor_texture)
+				var half := tile_size * tile_scale * 0.5
+				draw_polyline(PackedVector2Array([center + Vector2(0, -half.y), center + Vector2(half.x, 0),
+					center + Vector2(0, half.y), center + Vector2(-half.x, 0), center + Vector2(0, -half.y)]), Color(0.85, 0.9, 0.65, 0.22), 1)
+		draw_set_transform(Vector2.ZERO)
+		var edge := _footprint(Rect2(0, 0, 8, 8))
+		var depth := Vector2(0, 12 * tile_scale)
+		for pair in [[1, 2], [2, 3]]:
+			draw_colored_polygon(PackedVector2Array([edge[pair[0]], edge[pair[1]],
+				edge[pair[1]] + depth, edge[pair[0]] + depth]), floor_color.darkened(0.3))
+		draw_polyline(PackedVector2Array([edge[0], edge[1], edge[2], edge[3], edge[0]]), Color("9d9271"), 2)
+	if not on3d:
+		var exit_shape := _footprint(Rect2(model.exit_position - Vector2.ONE * 0.28, Vector2.ONE * 0.56))
+		draw_colored_polygon(exit_shape, Color("9bd693") if model.exit_open else Color("5f676d"))
 	draw_string(ThemeDB.fallback_font, _point(model.exit_position) + Vector2(-18, -12), "출구", HORIZONTAL_ALIGNMENT_LEFT, -1, 16)
 	for enemy in model.enemies:
 		if int(enemy["hp"]) > 0 and float(enemy["windup"]) >= 0.0:
@@ -204,10 +230,12 @@ func _draw() -> void:
 	actors.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return _point(a["at"]).y < _point(b["at"]).y)
 	for actor in actors:
 		match actor["kind"]:
-			"obstacle": _draw_block(actor["rect"], 30 * tile_scale, Color("8c9483"))
+			"obstacle":
+				if not on3d: _draw_block(actor["rect"], 30 * tile_scale, Color("8c9483"))
 			"object": _draw_object(actor["site"])
 			"enemy": _draw_enemy(actor["enemy"])
-			"player": _draw_player()
+			"player":
+				if not on3d: _draw_player()
 	for shot in model.projectiles:
 		draw_circle(_point(shot["position"]) - Vector2(0, 12 * tile_scale), 4 * tile_scale, Color("f6d391"))
 	for note in model.feedback:
@@ -240,7 +268,7 @@ func _draw_object(site: Dictionary = {}) -> void:
 	var color := Color("edd18a") if model.object_kind == "chest" else Color("81c988")
 	var at := model.object_position if site.is_empty() else Vector2(float(site["x"]),float(site["y"]))
 	if not site.is_empty(): color = Color(str(site["color"]))
-	_draw_block(Rect2(at - Vector2.ONE * 0.24, Vector2.ONE * 0.48), 24 * tile_scale, color)
+	if not _stage_on(): _draw_block(Rect2(at - Vector2.ONE * 0.24, Vector2.ONE * 0.48), 24 * tile_scale, color)
 	var caption: String = "채집" if model.object_kind == "gather" else ("휴식" if model.object_kind == "heal" else "상자")
 	if not site.is_empty(): caption = str(site["label"])
 	draw_string(ThemeDB.fallback_font, _point(at) + Vector2(-20, -36 * tile_scale), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, 14)
@@ -248,10 +276,15 @@ func _draw_object(site: Dictionary = {}) -> void:
 func _draw_enemy(enemy: Dictionary) -> void:
 	var at := _point(enemy["position"])
 	var radius: float = (28 if enemy["boss"] else 18) * tile_scale
-	draw_colored_polygon(_ground_shape(enemy["position"], 0.3), Color(0, 0, 0, 0.22))
-	at.y -= radius * 0.8
-	draw_circle(at, radius, Color(str(enemy.get("color", "85bad4"))))
-	for side in [-1, 1]: draw_circle(at + Vector2(side * radius * 0.3, -3), 2 * tile_scale, Color("1b2534"))
+	if _stage_on():
+		# 3D 로 그려진 몸 위에, 체력 막대와 이름만 2D 로(머리 위 높이를 3D 에서 투영)
+		at = stage.project(enemy["position"], 1.15 if enemy["boss"] else 0.7)
+		at.y += radius * 0.8
+	else:
+		draw_colored_polygon(_ground_shape(enemy["position"], 0.3), Color(0, 0, 0, 0.22))
+		at.y -= radius * 0.8
+		draw_circle(at, radius, Color(str(enemy.get("color", "85bad4"))))
+		for side in [-1, 1]: draw_circle(at + Vector2(side * radius * 0.3, -3), 2 * tile_scale, Color("1b2534"))
 	var bar := Rect2(at + Vector2(-radius, -radius - 10), Vector2(radius * 2, 5))
 	draw_rect(bar, Color("322330"))
 	bar.size.x *= float(enemy["hp"]) / float(enemy["max_hp"])

@@ -72,6 +72,7 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	view.notice = "두 지점 중 한 곳에서 [E] · 한 방에서 한 곳만 채집할 수 있어요." if not model.gathering_sites.is_empty() else ""
 	view.title_label.text = "%s · %s" % [str(ExpeditionMapData.get_region_data(host.current_region_id).get("name", host.current_region_id)),
 		host.get_map_node_display_name(room_type)]
+	view.region_id = host.current_region_id
 	view.floor_color = {"forest": Color("253e32"), "mine": Color("343d49"),
 		"swamp": Color("354235"), "hidden_ruins": Color("43394b")}.get(host.current_region_id, Color("253e32"))
 	view.floor_texture = view.TILE_ART.PAVING if host.current_region_id in ["mine", "hidden_ruins"] else view.TILE_ART.GRASS

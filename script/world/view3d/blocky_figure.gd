@@ -204,6 +204,12 @@ func _box(pivot: Node3D, size: Vector3, tex_front: Texture2D, tex_side: Texture2
 	return inst
 
 
+# 순번 깊이를 쓸지(기본) / 진짜 깊이를 쓸지. 순번 정렬이 없는 장면(원정 방)에서는 false.
+func set_sorted(sorted: bool) -> void:
+	for part in parts:
+		(part["material"] as ShaderMaterial).set_shader_parameter("use_sort", sorted)
+
+
 # 보이기/숨기기(윤곽선 번호 판 쪽도 함께).
 func set_shown(shown: bool) -> void:
 	visible = shown
