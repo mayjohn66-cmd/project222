@@ -185,7 +185,8 @@ func _build_view() -> void:
 	_post_material.set_shader_parameter("id_tex", _id_viewport.get_texture())
 	_container.material = _post_material
 	_post_material.set_shader_parameter("levels", color_levels)
-	_post_material.set_shader_parameter("exposure", 0.8 if PlaceholderTextures.clean else 1.0)
+	_post_material.set_shader_parameter("shadow_amount", 0.28)  # 어두운 부분의 푸른 눌림(옛 0.45)을 줄여 그림자 속도 보이게
+	_post_material.set_shader_parameter("exposure", 0.9 if PlaceholderTextures.clean else 1.0)
 	if exterior != null:
 		village = VillageMirror.new(self, exterior)
 
@@ -362,13 +363,13 @@ func apply_hour(h: float) -> void:
 	_sun.rotation_degrees = Vector3(-elev, yaw, 0.0)
 	_sun.light_color = tint
 	# 깔끔한 스타일은 환경광을 높이고 해를 낮춰 그림자가 연하게(참조 화면처럼 밝고 대비가 낮게).
-	var sun_k: float = 0.5 if PlaceholderTextures.clean else 1.0
+	var sun_k: float = 0.3 if PlaceholderTextures.clean else 1.0
 	var amb_k: float = 1.05 if PlaceholderTextures.clean else 1.0
 	_sun.light_energy = light_scale * sun_k * lerpf(0.9, lerpf(0.8, 1.2, sun_curve), day_amt)
 	_env.ambient_light_color = Color(0.74, 0.76, 0.84) * tint
-	_env.ambient_light_energy = light_scale * lerpf(0.9, 0.7 * amb_k, day_amt)
+	_env.ambient_light_energy = light_scale * lerpf(1.35, 1.3 * amb_k, day_amt)
 	_fill.light_color = tint.lerp(Color(0.85, 0.9, 1.0), 0.35)
-	_fill.light_energy = lerpf(0.25, 0.22 if PlaceholderTextures.clean else 0.5, day_amt)
+	_fill.light_energy = lerpf(0.3, 0.3 if PlaceholderTextures.clean else 0.5, day_amt)
 
 	for lamp in _lamps:
 		(lamp as OmniLight3D).light_energy = 1.6 * dark
