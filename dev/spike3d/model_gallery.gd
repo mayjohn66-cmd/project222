@@ -5,7 +5,7 @@ extends Node3D
 
 const PITCH_DEG: float = 30.0
 const YAW_DEG: float = 45.0
-const PAGES: Array = ["가구(계산대·선반·설비·장식·문)", "진열 상품", "마을 건물·소품", "캐릭터"]
+const PAGES: Array = ["가구(계산대·선반·설비·장식·문)", "진열 상품", "마을 건물·소품", "캐릭터", "사람별 외형(손님·직원)"]
 const FURNITURE: Array = [
 	["register", "계산대", 2, 0.5], ["warehouse_rack", "창고 선반", 2, 1.0], ["magic_oven", "마법 오븐", 2, 1.0],
 	["drink_machine", "음료 제조기", 1, 1.0], ["plant_small", "작은 화분", 1, 0.5], ["night_lantern", "심야의 등불", 1, 0.3],
@@ -213,8 +213,10 @@ func _build_page() -> void:
 			_page_goods()
 		2:
 			_page_village()
-		_:
+		3:
 			_page_characters()
+		_:
+			_page_looks()
 
 	if _shot_dir != "":
 		_shoot.call_deferred()
@@ -345,6 +347,33 @@ func _page_characters() -> void:
 		f.position = Vector3(float(i) * 1.8, 0.0, 0.0)
 		_figures.append(f)
 		_tag(names[i], Vector3(float(i) * 1.8, 0.0, 0.7))
+
+
+# actor_looks_3d.csv 의 모든 외형을 8열로 늘어놓는다.
+func _page_looks() -> void:
+	var keys: Array = []
+	var file := FileAccess.open(ActorLooks.DATA_PATH, FileAccess.READ)
+	file.get_csv_line()
+
+	while not file.eof_reached():
+		var cells: PackedStringArray = file.get_csv_line()
+
+		if cells.size() > 1 and not cells[0].is_empty():
+			keys.append(cells[0])
+
+	var cols: int = 8
+	_size = 17.0
+	_target = Vector3(float(cols - 1) * 0.9, 0.0, float((keys.size() - 1) / cols) * 0.9)
+
+	for i in range(keys.size()):
+		var pos := Vector3(float(i % cols) * 1.8, 0.0, float(i / cols) * 1.8)
+		var f := BlockyFigure.new()
+		f.build(_content, _id_dummy, 3.0, 1.14, 0.308, ActorLooks.get_look(keys[i]))
+		f.set_sorted(false)
+		f.facing_yaw_deg = 45.0
+		f.position = pos
+		_figures.append(f)
+		_tag(keys[i], pos + Vector3(0.0, 0.0, 0.7))
 
 
 func _shoot() -> void:

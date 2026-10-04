@@ -41,6 +41,12 @@ var _id_root: Node3D
 var _j: Dictionary = {}  # 관절 이름 → Node3D
 var _leg_h: float = 0.45
 var _step_len: float = 0.4
+var _head_w: float = 0.3
+var _head_h: float = 0.3
+var _torso_w: float = 0.3
+var _torso_d: float = 0.17
+var _torso_h: float = 0.3
+static var _color_tex: Dictionary = {}
 
 
 static func _make_tex(w: int, h: int, painter: Callable) -> ImageTexture:
@@ -56,19 +62,25 @@ static func _make_tex(w: int, h: int, painter: Callable) -> ImageTexture:
 # 임시 도트 질감. 실제로는 Pixel Lab 으로 만든 작은 그림이 이 자리에 들어간다.
 # 카메라가 위에서 30도로 내려다보므로 머리 윗면이 크게 보인다 → 윗면에 가르마와 머리카락 결을 그리고,
 # 얼굴은 앞면 아래쪽 3분의 2에 두며 앞머리가 이마를 덮는다. 색은 밝은 빛에서 하얗게 날아가지 않게 조금 어둡게 잡았다.
-static func _face_textures() -> Dictionary:
-	if not _tex_cache.is_empty():
-		return _tex_cache
+# look: ActorLooks 의 외형 사전(skin·hair·shirt·apron·pants·shoe). 빈 항목은 기본 색. 같은 외형은 질감을 같이 쓴다.
+static func _face_textures(look: Dictionary = {}) -> Dictionary:
+	var sig := ""
 
-	var skin := Color(0.80, 0.56, 0.42)
-	var skin_shade := Color(0.72, 0.49, 0.37)
-	var hair := Color(0.30, 0.18, 0.13)
-	var hair_hi := Color(0.40, 0.25, 0.18)
-	var shirt := Color(0.78, 0.78, 0.74)
-	var apron := Color(0.14, 0.34, 0.25)
-	var pants := Color(0.30, 0.22, 0.20)
-	var pants_dk := Color(0.25, 0.18, 0.16)
-	var shoe := Color(0.20, 0.14, 0.12)
+	for k in ActorLooks.COLOR_KEYS:
+		sig += str(look.get(k, "")) + "|"
+
+	if _tex_cache.has(sig):
+		return _tex_cache[sig]
+
+	var skin: Color = look.get("skin", Color(0.80, 0.56, 0.42))
+	var skin_shade: Color = skin.darkened(0.1)
+	var hair: Color = look.get("hair", Color(0.30, 0.18, 0.13))
+	var hair_hi: Color = hair.lightened(0.25)
+	var shirt: Color = look.get("shirt", Color(0.78, 0.78, 0.74))
+	var apron: Color = look.get("apron", Color(0.14, 0.34, 0.25))
+	var pants: Color = look.get("pants", Color(0.30, 0.22, 0.20))
+	var pants_dk: Color = pants.darkened(0.15)
+	var shoe: Color = look.get("shoe", Color(0.20, 0.14, 0.12))
 	var tex: Dictionary = {}
 	tex["head_front"] = _make_tex(14, 13, func(x, y):
 		var u: float = (float(x) + 0.5) / 14.0
@@ -108,15 +120,24 @@ static func _face_textures() -> Dictionary:
 	tex["thigh"] = _make_tex(4, 6, func(_x, y): return pants if y % 3 != 2 else pants_dk)
 	tex["shin"] = _make_tex(4, 6, func(_x, y): return pants if float(y) / 6.0 < 0.78 else shoe)
 	tex["foot"] = _make_tex(4, 3, func(_x, _y): return shoe)
-	_tex_cache = tex
+	_tex_cache[sig] = tex
 	return tex
 
 
 # head_ratio: 몇 등신인가(키 ÷ 머리 높이). 2 = 머리가 키의 절반(아주 아기자기), 3 = 키의 3분의 1.
 # total: 전체 키(칸). torso_fixed > 0 이면 몸통 길이를 그 값으로 고정하고 남는 길이를 다리에 준다.
-func build(parent: Node, id_parent: Node, head_ratio: float = 3.0, total: float = 0.95, torso_fixed: float = -1.0) -> void:
+# look 에 total·head_ratio 가 있으면 인자 대신 쓴다(아이는 작게). 모자·등짐·손 소품도 look 에 따라 붙는다.
+func build(parent: Node, id_parent: Node, head_ratio: float = 3.0, total: float = 0.95, torso_fixed: float = -1.0, look: Dictionary = {}) -> void:
+	if look.has("total"):
+		var scale: float = float(look["total"]) / total
+		total = float(look["total"])
+
+		if torso_fixed > 0.0:
+			torso_fixed *= scale
+
+	head_ratio = float(look.get("head_ratio", head_ratio))
 	head_ratio_value = head_ratio
-	var t: Dictionary = _face_textures()
+	var t: Dictionary = _face_textures(look)
 	var head_h: float = total / head_ratio
 	var head_w: float = head_h * 1.1
 	var rest: float = total - head_h
@@ -168,7 +189,13 @@ func build(parent: Node, id_parent: Node, head_ratio: float = 3.0, total: float 
 		var foot_node := _box(ankle, Vector3(leg_w * 0.96, foot_h, leg_w * 1.55), t["foot"], t["foot"], t["foot"], false)
 		foot_node.position = Vector3(0.0, -foot_h * 0.5, leg_w * 0.28)
 
+	_head_w = head_w
+	_head_h = head_h
+	_torso_w = torso_w
+	_torso_d = torso_d
+	_torso_h = torso_h
 	parent.add_child(self)
+	_add_accessories(look)
 
 
 func _joint(joint_name: String, parent_node: Node3D, pos: Vector3) -> Node3D:
@@ -178,6 +205,145 @@ func _joint(joint_name: String, parent_node: Node3D, pos: Vector3) -> Node3D:
 	parent_node.add_child(n)
 	_j[joint_name] = n
 	return n
+
+
+# ---------------------------------------------------------------- 모자·등짐·손 소품
+
+static func _flat_tex(c: Color) -> ImageTexture:
+	var k: String = c.to_html()
+
+	if not _color_tex.has(k):
+		_color_tex[k] = _make_tex(2, 2, func(_x, _y): return c)
+
+	return _color_tex[k]
+
+
+# 한 가지 색의 상자. 중심 위치(pivot 기준)와 z 축 기울기(도)를 정한다.
+func _acc(pivot: Node3D, size: Vector3, c: Color, center: Vector3, tilt_deg: float = 0.0) -> MeshInstance3D:
+	var tex := _flat_tex(c)
+	var n := _box(pivot, size, tex, tex, tex, false)
+	n.position = center
+	n.rotation.z = deg_to_rad(tilt_deg)
+	return n
+
+
+func _add_accessories(look: Dictionary) -> void:
+	if look.has("hat"):
+		_add_hat(str(look["hat"]), look.get("hat_color", Color(0.5, 0.5, 0.5)))
+
+	if look.has("back"):
+		_add_back(str(look["back"]), look.get("back_color", Color(0.5, 0.4, 0.3)))
+
+	if look.has("hand"):
+		_add_hand(str(look["hand"]), look.get("hand_color", Color(0.5, 0.4, 0.3)))
+
+	set_sorted(_sorted)
+
+
+# 머리 관절 기준: 머리 상자는 y 0 ~ head_h, 앞쪽 +z.
+func _add_hat(kind: String, c: Color) -> void:
+	var head: Node3D = _j["head"]
+	var w: float = _head_w
+	var h: float = _head_h
+	var d: float = h * 0.95
+	var dark: Color = c.darkened(0.2)
+
+	match kind:
+		"cap":
+			_acc(head, Vector3(w * 1.06, h * 0.22, d * 1.06), c, Vector3(0.0, h * 0.93, 0.0))
+			_acc(head, Vector3(w * 0.9, h * 0.05, d * 0.4), dark, Vector3(0.0, h * 0.84, d * 0.7))
+		"straw":
+			_acc(head, Vector3(w * 1.9, h * 0.05, w * 1.9), c, Vector3(0.0, h * 0.9, 0.0))
+			_acc(head, Vector3(w * 1.05, h * 0.24, d * 1.05), c.darkened(0.1), Vector3(0.0, h * 1.0, 0.0))
+		"hood":
+			_acc(head, Vector3(w * 1.14, h * 0.4, d * 1.12), c, Vector3(0.0, h * 0.88, 0.0))
+			_acc(head, Vector3(w * 1.14, h * 0.85, d * 0.22), c, Vector3(0.0, h * 0.55, -d * 0.5))
+			_acc(head, Vector3(w * 0.12, h * 0.62, d * 0.9), c, Vector3(-w * 0.58, h * 0.55, 0.0))
+			_acc(head, Vector3(w * 0.12, h * 0.62, d * 0.9), c, Vector3(w * 0.58, h * 0.55, 0.0))
+		"helmet":
+			_acc(head, Vector3(w * 1.12, h * 0.42, d * 1.1), c, Vector3(0.0, h * 0.88, 0.0))
+			_acc(head, Vector3(w * 1.14, h * 0.07, d * 1.14), dark, Vector3(0.0, h * 0.68, 0.0))
+			_acc(head, Vector3(w * 0.1, h * 0.25, d * 0.1), dark, Vector3(0.0, h * 0.62, d * 0.55))
+		"wizard":
+			_acc(head, Vector3(w * 1.7, h * 0.05, w * 1.7), c, Vector3(0.0, h * 0.9, 0.0))
+			_acc(head, Vector3(w * 1.0, h * 0.3, d * 1.0), c, Vector3(0.0, h * 1.06, 0.0))
+			_acc(head, Vector3(w * 0.7, h * 0.3, d * 0.7), c, Vector3(0.0, h * 1.34, 0.0), 6.0)
+			_acc(head, Vector3(w * 0.4, h * 0.3, d * 0.4), dark, Vector3(w * 0.04, h * 1.62, 0.0), 14.0)
+		"chef":
+			_acc(head, Vector3(w * 1.02, h * 0.62, d * 1.0), c, Vector3(0.0, h * 1.18, 0.0))
+			_acc(head, Vector3(w * 1.12, h * 0.1, d * 1.1), c.darkened(0.08), Vector3(0.0, h * 0.9, 0.0))
+		"beret":
+			_acc(head, Vector3(w * 1.18, h * 0.14, d * 1.1), c, Vector3(0.0, h * 0.94, 0.0))
+			_acc(head, Vector3(w * 0.2, h * 0.1, d * 0.2), dark, Vector3(0.0, h * 1.04, 0.0))
+		"fedora":
+			_acc(head, Vector3(w * 1.45, h * 0.05, d * 1.45), c, Vector3(0.0, h * 0.9, 0.0))
+			_acc(head, Vector3(w * 1.0, h * 0.3, d * 1.0), c, Vector3(0.0, h * 1.03, 0.0))
+			_acc(head, Vector3(w * 1.04, h * 0.07, d * 1.04), dark, Vector3(0.0, h * 0.96, 0.0))
+
+
+# 가슴 관절 기준: 몸통은 y 0 ~ -torso_h, 등 쪽이 -z.
+func _add_back(kind: String, c: Color) -> void:
+	var chest: Node3D = _j["chest"]
+	var w: float = _torso_w
+	var d: float = _torso_d
+	var h: float = _torso_h
+	var dark: Color = c.darkened(0.25)
+
+	match kind:
+		"backpack":
+			_acc(chest, Vector3(w * 0.82, h * 0.78, 0.12), c, Vector3(0.0, -h * 0.5, -d * 0.5 - 0.06))
+			_acc(chest, Vector3(w * 0.86, h * 0.2, 0.13), dark, Vector3(0.0, -h * 0.25, -d * 0.5 - 0.065))
+		"quiver":
+			_acc(chest, Vector3(0.06, h * 1.1, 0.06), c, Vector3(w * 0.18, -h * 0.5, -d * 0.5 - 0.04), -16.0)
+			_acc(chest, Vector3(0.07, 0.05, 0.07), Color(0.9, 0.9, 0.85), Vector3(w * 0.18 + h * 0.15, h * 0.1, -d * 0.5 - 0.04), -16.0)
+		"satchel":
+			_acc(chest, Vector3(0.05, h * 0.2, 0.15), c, Vector3(w * 0.5 + 0.03, -h * 0.82, 0.0))
+			_acc(chest, Vector3(w * 1.06, 0.03, d * 1.1), dark, Vector3(0.0, -h * 0.35, 0.0), 0.0)
+		"mailbag":
+			_acc(chest, Vector3(0.09, h * 0.42, w * 0.9), c, Vector3(w * 0.5 + 0.05, -h * 0.72, -d * 0.1))
+			_acc(chest, Vector3(0.1, h * 0.12, w * 0.9), dark, Vector3(w * 0.5 + 0.055, -h * 0.55, -d * 0.1))
+		"cape":
+			_acc(chest, Vector3(w * 1.05, h * 1.5, 0.035), c, Vector3(0.0, -h * 0.7, -d * 0.5 - 0.02))
+
+
+# 오른손목 기준: 손은 아래(-y)로 늘어진다. 소품은 손에서 위·아래로 뻗는다.
+func _add_hand(kind: String, c: Color) -> void:
+	var wrist: Node3D = _j["wr_r"]
+	var wood := Color(0.42, 0.28, 0.16)
+
+	match kind:
+		"pickaxe":
+			_acc(wrist, Vector3(0.035, 0.42, 0.035), wood, Vector3(0.0, 0.1, 0.0))
+			_acc(wrist, Vector3(0.025, 0.05, 0.26), c, Vector3(0.0, 0.31, 0.0))
+		"hammer":
+			_acc(wrist, Vector3(0.035, 0.4, 0.035), wood, Vector3(0.0, 0.1, 0.0))
+			_acc(wrist, Vector3(0.1, 0.09, 0.09), c, Vector3(0.0, 0.3, 0.0))
+		"sickle":
+			_acc(wrist, Vector3(0.03, 0.22, 0.03), wood, Vector3(0.0, 0.0, 0.0))
+			_acc(wrist, Vector3(0.02, 0.03, 0.16), c, Vector3(0.0, 0.12, 0.06))
+		"staff":
+			_acc(wrist, Vector3(0.035, 0.78, 0.035), c, Vector3(0.0, 0.16, 0.0))
+			_acc(wrist, Vector3(0.09, 0.09, 0.09), Color(0.55, 0.9, 1.0), Vector3(0.0, 0.58, 0.0))
+		"sword":
+			_acc(wrist, Vector3(0.035, 0.1, 0.035), wood, Vector3(0.0, 0.0, 0.0))
+			_acc(wrist, Vector3(0.11, 0.03, 0.05), Color(0.95, 0.78, 0.25), Vector3(0.0, 0.06, 0.0))
+			_acc(wrist, Vector3(0.05, 0.36, 0.02), c, Vector3(0.0, 0.25, 0.0))
+		"basket":
+			_acc(wrist, Vector3(0.16, 0.1, 0.16), c, Vector3(0.0, -0.13, 0.0))
+			_acc(wrist, Vector3(0.14, 0.03, 0.03), c.darkened(0.2), Vector3(0.0, -0.05, 0.0))
+		"flask":
+			_acc(wrist, Vector3(0.07, 0.1, 0.07), c, Vector3(0.0, -0.1, 0.0))
+			_acc(wrist, Vector3(0.03, 0.05, 0.03), Color(0.7, 0.7, 0.72), Vector3(0.0, -0.03, 0.0))
+		"book":
+			_acc(wrist, Vector3(0.1, 0.13, 0.03), c, Vector3(0.0, -0.1, 0.03))
+		"lantern":
+			_acc(wrist, Vector3(0.08, 0.11, 0.08), c, Vector3(0.0, -0.14, 0.0))
+			_acc(wrist, Vector3(0.1, 0.02, 0.1), Color(0.25, 0.22, 0.2), Vector3(0.0, -0.075, 0.0))
+		"briefcase":
+			_acc(wrist, Vector3(0.05, 0.13, 0.2), c, Vector3(0.0, -0.17, 0.0))
+		"pot":
+			_acc(wrist, Vector3(0.14, 0.09, 0.14), c, Vector3(0.0, -0.13, 0.0))
+			_acc(wrist, Vector3(0.15, 0.02, 0.15), c.darkened(0.2), Vector3(0.0, -0.08, 0.0))
 
 
 # 관절 아래로 늘어지는(또는 head 처럼 위로 솟는) 상자 하나를 만든다. 반환: 상자 노드(위치 조절용)

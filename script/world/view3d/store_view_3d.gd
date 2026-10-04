@@ -1133,6 +1133,23 @@ func _collect_actor_nodes() -> Array:
 	return nodes
 
 
+# 사람마다 다른 외형을 고르는 키: 플레이어 "player", 직원 "worker", 손님은 소분류(없으면 대분류) id.
+func _actor_look_key(n: Node) -> String:
+	if n == player:
+		return "player"
+
+	if n.is_in_group("worker"):
+		return "worker"
+
+	if n.is_in_group("customer"):
+		return ActorLooks.customer_key(str(n.get("customer_type_id")))
+
+	if n.is_in_group("story_npc"):
+		return "story_npc"
+
+	return "merchant_npc" if n.is_in_group("merchant_npc") else "player"
+
+
 func _sync_actors(delta: float) -> void:
 	var seen: Dictionary = {}
 
@@ -1140,10 +1157,17 @@ func _sync_actors(delta: float) -> void:
 		var id: int = n.get_instance_id()
 		seen[id] = true
 
+		var look_key: String = _actor_look_key(n)
+
+		# 손님 종류는 만든 뒤에 정해지기도 하니, 외형 키가 바뀌면 새로 만든다.
+		if _actors.has(id) and _actors[id].get("look_key", "") != look_key:
+			(_actors[id]["figure"] as BlockyFigure).destroy()
+			_actors.erase(id)
+
 		if not _actors.has(id):
 			var figure := BlockyFigure.new()
-			figure.build(_viewport, _viewport, ACTOR_HEAD_RATIO, ACTOR_TOTAL, ACTOR_TORSO)
-			_actors[id] = {"node": n, "figure": figure, "cell": world_to_cell((n as Node2D).global_position)}
+			figure.build(_viewport, _viewport, ACTOR_HEAD_RATIO, ACTOR_TOTAL, ACTOR_TORSO, ActorLooks.get_look(look_key))
+			_actors[id] = {"node": n, "figure": figure, "cell": world_to_cell((n as Node2D).global_position), "look_key": look_key}
 
 		var entry: Dictionary = _actors[id]
 		var figure: BlockyFigure = entry["figure"]
