@@ -10,6 +10,8 @@ const CONTENT = preload("res://scenes/expedition/rooms/default_content_settings.
 var gathering_sites: Array[Dictionary] = []
 var selected_loot_table := ""
 var selected_site_index := 0
+var extra_interaction_label: Callable
+var extra_interact: Callable
 
 var settings: ExpeditionRoomSettings
 var attack_profile: ExpeditionAttackProfile
@@ -345,6 +347,9 @@ func interaction_seconds() -> float:
 func interaction_label() -> String:
 	if finished:
 		return ""
+	if extra_interaction_label.is_valid():
+		var extra: String = extra_interaction_label.call()
+		if not extra.is_empty(): return extra
 	if not object_consumed and not gathering_sites.is_empty():
 		if not interacting:
 			var nearest := -1
@@ -367,6 +372,7 @@ func interaction_label() -> String:
 	return ""
 
 func interact() -> void:
+	if extra_interact.is_valid() and extra_interact.call(): return
 	var label := interaction_label()
 	if label.is_empty():
 		return

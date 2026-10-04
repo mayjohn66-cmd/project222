@@ -772,6 +772,7 @@ func checkout_item() -> void:
 		carried_amount
 	)
 	if RegularCustomerRecords.record_sale(self,carried_item_id,carried_amount): RegularCustomerVisits.remark(self)
+	if ExpeditionContactFlow.record_sale(self,carried_item_id,carried_amount): ExpeditionContactVisits.remark(self)
 	StoreEventRemark.tell(self, "bought", carried_item_id)
 
 	# 결제 완료 상품은 더 이상 미결제 상태가 아님

@@ -41,6 +41,15 @@ func _ready() -> void:
 	var regular := RegularCustomerDirector.new()
 	regular.name = "RegularCustomerDirector"
 	add_child(regular)
+	var contact := RegularCustomerDirector.new()
+	contact.name = "ExpeditionContactDirector"
+	contact.story_flow = ExpeditionContactFlow
+	contact.purchase_group = "expedition_contact_customer"
+	contact.identity_meta = "expedition_contact_id"
+	contact.open_meta = "expedition_contact_open"
+	contact.visitor_prefix = "원정에서 만난 "
+	contact.interaction_prefix = "[E] 원정에서 만난 사람 · "
+	add_child(contact)
 	call_deferred("refresh")
 
 func _process(delta: float) -> void:

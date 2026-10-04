@@ -33,9 +33,12 @@ static func entries() -> Array[Dictionary]:
 		result.append({"id":PreservationLessonFlow.JOURNAL_PREFIX + str(event["id"]),"title":PreservationLessonFlow.title(str(event["id"]))})
 	for event in RegularCustomerFlow.SETTINGS.events:
 		result.append({"id":RegularCustomerFlow.JOURNAL_PREFIX + str(event["id"]),"title":RegularCustomerFlow.title(str(event["id"]))})
+	for event in ExpeditionContactFlow.SETTINGS.events:
+		result.append({"id":ExpeditionContactFlow.JOURNAL_PREFIX + str(event["id"]),"title":ExpeditionContactFlow.title(str(event["id"]))})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with(ExpeditionContactFlow.JOURNAL_PREFIX): return ExpeditionContactFlow.information(id.trim_prefix(ExpeditionContactFlow.JOURNAL_PREFIX))
 	if id.begins_with(RegularCustomerFlow.JOURNAL_PREFIX): return RegularCustomerFlow.information(id.trim_prefix(RegularCustomerFlow.JOURNAL_PREFIX))
 	if id.begins_with(PreservationLessonFlow.JOURNAL_PREFIX): return PreservationLessonFlow.information(id.trim_prefix(PreservationLessonFlow.JOURNAL_PREFIX))
 	if id.begins_with(CraftingPathFlow.JOURNAL_PREFIX): return CraftingPathFlow.information(id.trim_prefix(CraftingPathFlow.JOURNAL_PREFIX))
@@ -80,6 +83,10 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id.begins_with(ExpeditionContactFlow.JOURNAL_PREFIX):
+		var contact = world.get_node_or_null("VillageLifeDirector/ExpeditionContactDirector")
+		if contact != null and contact.current_id == id.trim_prefix(ExpeditionContactFlow.JOURNAL_PREFIX) and is_instance_valid(contact.npc) and contact.npc.visible and not contact.npc.is_queued_for_deletion(): return contact.npc
+		return null
 	if id.begins_with(RegularCustomerFlow.JOURNAL_PREFIX):
 		var director = world.get_node_or_null("VillageLifeDirector/RegularCustomerDirector")
 		if director != null and director.current_id == id.trim_prefix(RegularCustomerFlow.JOURNAL_PREFIX) and is_instance_valid(director.npc) and director.npc.visible and not director.npc.is_queued_for_deletion(): return director.npc

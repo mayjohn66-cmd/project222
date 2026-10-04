@@ -219,6 +219,7 @@ func spawn_customer() -> void:
 		customer.customer_type_id = introduced_type
 		customer.customer_group_id = CustomerTypeData.get_group_id(introduced_type)
 	var regular_visit := RegularCustomerVisits.prepare(customer,introduced_type)
+	if not regular_visit: regular_visit = ExpeditionContactVisits.prepare(customer,introduced_type)
 	customer.get_node("Visual").refresh_profile()
 
 	# 손님은 반드시 도로 양쪽 끝 중 한 곳에서 생성된다.

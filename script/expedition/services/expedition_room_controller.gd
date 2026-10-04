@@ -12,11 +12,15 @@ var node_type: String = ""
 var pending_loot: Array[Dictionary] = []
 var boss: bool = false
 var map_retreat_button: Button
+var contact: ExpeditionContactRoom
 
 func setup(new_host) -> void:
 	host = new_host
 	view = ROOM_SCENE.instantiate()
 	host.get_node("UI").add_child(view)
+	contact = ExpeditionContactRoom.new()
+	contact.controller = self
+	view.add_child(contact)
 	view.z_index = 10
 	view.hide()
 	view.blocked = Callable(self, "_menu_open")
@@ -40,7 +44,7 @@ func is_active() -> bool:
 	return is_instance_valid(view) and view.visible
 
 func _menu_open() -> bool:
-	return host.game_menu.menu_open or host.game_menu.settings_panel.visible \
+	return (contact != null and contact.open) or host.game_menu.menu_open or host.game_menu.settings_panel.visible \
 		or host.game_menu.save_slot_panel.visible or host.management_menu.visible \
 		or host.game_menu.quit_game_dialog.visible or host.game_menu.return_title_dialog.visible
 
@@ -89,6 +93,7 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	host.battle_timer.stop()
 	host.battle_active = true # 방 진행 중에는 체크포인트 저장/지도 선택을 막는다.
 	view.show()
+	contact.enter()
 
 func _enemies_cleared() -> void:
 	# 방 전체 보상은 한 번만 굴린다. 몬스터 수가 드롭량을 늘리지 않는다.
@@ -124,6 +129,7 @@ func _object_used() -> void:
 		view.notice = "%s ×%d 획득" % [ItemData.get_item_name(item_id), amount]
 
 func _close() -> void:
+	contact.clear()
 	host.combat_player_hp = model.player_hp
 	host.battle_active = false
 	view.hide()

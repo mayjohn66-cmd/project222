@@ -37,9 +37,13 @@ static func prepare(customer: Node, introduced_type: String = "") -> bool:
 	customer.set_meta("regular_story_item",str(chosen["purchase_item"]))
 	customer.set_meta("regular_story_amount",int(chosen["repeat_amount"]) if stage == "repeat" else 1)
 	customer.add_to_group("regular_customer")
+	show_label(customer,"단골 · " + CustomerTypeData.get_display_name(customer.customer_type_id))
+	return true
+
+static func show_label(customer: Node, caption: String) -> void:
 	var label := Label.new()
 	label.name = "RegularCustomerName"
-	label.text = "단골 · " + CustomerTypeData.get_display_name(customer.customer_type_id)
+	label.text = caption
 	label.position = Vector2(-120,-104)
 	label.size.x = 240
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -48,7 +52,6 @@ static func prepare(customer: Node, introduced_type: String = "") -> bool:
 	label.add_theme_color_override("font_outline_color",Color("302415"))
 	label.add_theme_constant_override("outline_size",4)
 	customer.add_child(label)
-	return true
 static func stock_count(tree: SceneTree, item: String) -> int:
 	var amount := 0
 	for shelf in tree.get_nodes_in_group("shelf"):
@@ -58,6 +61,9 @@ static func remark(customer: Node) -> void:
 	var id := str(customer.get_meta("regular_story_id",""))
 	var stage := str(customer.get_meta("regular_story_purchase",""))
 	var text := RequestTextData.text("service_text",id + "_" + stage + "_sale","lines")
+	display_remark(customer,text)
+
+static func display_remark(customer: Node, text: String) -> void:
 	if text.is_empty() or not is_instance_valid(customer.player): return
 	var notice = customer.player.get_node_or_null("StoreEventRemark")
 	if notice == null:

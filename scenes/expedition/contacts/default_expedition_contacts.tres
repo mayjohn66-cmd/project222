@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="ExpeditionContactSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/expedition/contacts/expedition_contact_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+events = Array[Dictionary]([
+{"id":"contact_forest_bundle","region":"forest","type":"gatherer","color":"c1d4a0","days_after":1,"requirements":[{"item":"dry_branch","amount":2}],"gifts":[{"item":"forest_herb","amount":2}],"reputation":1,"purchase_item":"wild_berry","purchase_amount":1},
+{"id":"contact_mine_scent","region":"mine","type":"digger","color":"b5b7cf","days_after":1,"requirements":[{"item":"forest_herb","amount":2}],"gifts":[{"item":"stone_shard","amount":2}],"reputation":1,"purchase_item":"bread","purchase_amount":1},
+{"id":"contact_river_meal","region":"river_valley","type":"reed_cutter","color":"b0d2c8","days_after":1,"requirements":[{"item":"wheat","amount":2}],"gifts":[{"item":"marsh_reed","amount":2}],"reputation":1,"purchase_item":"raw_water","purchase_amount":1}
+])
+moments = Array[Dictionary]([
+{"id":"contact_forest_bundle_meet","npc":"채집가","stage":"숲 물음표의 비전투 빈 방/휴식 방에서 실제 접근 E 소개. 최종 완독 때 가지 부탁을 기록. 원정 가방/창고 소비나 답례 없음. 다음 날 이후 마을 게시판 근처에서 같은 사람에게 창고 재료를 직접 전달."},
+{"id":"contact_forest_bundle_wait","npc":"채집가","stage":"원정 소개 완독 다음 날 이후 게시판 근처 E 준비 안내. 창고 가지가 부족하면 기다림. 기한/계절 제한 없음, 무료 재료/강제 손실 없음."},
+{"id":"contact_forest_bundle_finish","npc":"채집가","stage":"같은 사람에게 창고 가지 직접 전달. 최종 E 완독 때 실제 재고 재확인/정확 소비, 설정 약초/평판 최초1회. 다음 날 이후 진열한 열매를 실제 구매하러 방문. 설비/제조법/추가 인파 없음."},
+{"id":"contact_forest_bundle_bought","npc":"채집가","stage":"답례 이후 다른 날 원정에서 만난 동일 대표가 실제 진열 열매를 결제한 직후 1줄. 시간/이동 안 멈춤, 돈은 상품 판매 대금, 추가 답례 없음."},
+{"id":"contact_forest_bundle_after","npc":"채집가","stage":"실제 가게 구매 다음 날 이후 게시판 근처 E 후일담 완독, 수첩 기억. 추가 답례/확정 매출/새 배우 없음."},
+{"id":"contact_mine_scent_meet","npc":"굴착 광부","stage":"광산 물음표의 비전투 빈 방/휴식 방에서 실제 접근 E 소개. 최종 완독 때 약초 부탁 기록. 원정 재고 소비/답례 없음, 다음 날 이후 마을에서 창고 약초를 같은 사람에게 직접 전달."},
+{"id":"contact_mine_scent_wait","npc":"굴착 광부","stage":"소개 다음 날 이후 마을 게시판 근처 E. 창고 약초 준비 안내만, 기간/계절 제한 없음. 회복 능력 약속 없음."},
+{"id":"contact_mine_scent_finish","npc":"굴착 광부","stage":"최종 E 완독 때 창고 약초 정확 소비/설정 돌과 평판 최초1회. 다음 날 이후 빵 진열을 준비하면 실제 손님 구매, 새 광맥/제조법/설비 없음."},
+{"id":"contact_mine_scent_bought","npc":"굴착 광부","stage":"다른 날 진열 빵 실제 결제 직후 1줄. 구매 이유, 시간/이동 안 멈춤, 추가 답례 없음."},
+{"id":"contact_mine_scent_after","npc":"굴착 광부","stage":"실제 가게 빵 결제 다음 날 이후 E 후일담 완독/수첩 기억. 대화가 재료·새 손님·능력 변화를 만들지 않음."},
+{"id":"contact_river_meal_meet","npc":"갈대 베는 사람","stage":"계곡 물음표 비전투 빈 방/휴식 방 실제 접근 E 소개. 최종 완독 때 밀 부탁 기록, 원정 가방 소비/답례 없음. 다음 날 이후 마을에서 창고 밀 직접 전달."},
+{"id":"contact_river_meal_wait","npc":"갈대 베는 사람","stage":"소개 다음 날 이후 마을 E. 창고 밀을 기다림, 다른 계절에도 준비 가능, 제작/조리 요구 없음."},
+{"id":"contact_river_meal_finish","npc":"갈대 베는 사람","stage":"최종 E 완독 때 창고 밀 정확 소비/설정 갈대와 평판 최초1회. 다음 날 이후 진열한 채집한 물을 실제로 구매, 원정 물병 도구 규칙 유지, 새 제조법 없음."},
+{"id":"contact_river_meal_bought","npc":"갈대 베는 사람","stage":"실제 진열 채집한 물 결제 직후 1줄. 원재료 구매 이유, 상품 생수와 구별. 시간/이동 안 멈춤/추가 답례 없음."},
+{"id":"contact_river_meal_after","npc":"갈대 베는 사람","stage":"원재료 물 실제 결제 다음 날 이후 E 후일담 완독/수첩 기억. 실제 조리/새 레시피/확정 매출/추가 답례 없음."}
+])
