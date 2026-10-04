@@ -107,6 +107,10 @@ static func make_material(spec: Dictionary) -> ShaderMaterial:
 	if spec.has("emit"):
 		m.set_shader_parameter("emit_strength", float(spec["emit"]))
 
+	if spec.has("sway"):
+		m.set_shader_parameter("sway_amp", float(spec["sway"]))
+		m.set_shader_parameter("sway_base", float(spec.get("sway_base", 0.6)))
+
 	if spec.get("normal", null) != null and not bool(spec.get("cutout", false)):
 		m.set_shader_parameter("normal_tex", spec["normal"])
 		m.set_shader_parameter("use_normal", true)
@@ -528,8 +532,10 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		_add_fascia(b, p, lo, hi, wall_h, h_texels, str(rule.get("sign_text", "BAKERY")), str(rule.get("sign_icon", "bread")))
 		_add_cloth_awning(b, p, lo, hi, wall_h, cells_z, cells_z / 2, awning_tint)
 
+	var smoke_anims: Array = []
+
 	if bool(rule.get("chimney", true)):
-		_add_smoke(b, lo, hi, wall_h + roof_h, p, is_forge)
+		smoke_anims = _smoke_anims(lo, hi, wall_h + roof_h, p, is_forge)
 
 	_add_extras(b, str(rule.get("extras", "")), lo, hi, p, wall_h, display)
 
@@ -591,7 +597,7 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 	if apron_info != null:
 		apply_overrides([apron_info["spec"]], str(rule.get("asset", "")), p)
 
-	return {"mesh": mesh, "specs": all_specs, "display": display_info, "apron": apron_info, "total_blocks": wall_blocks + roof_blocks, "lo": ext_lo, "hi": ext_hi}
+	return {"mesh": mesh, "specs": all_specs, "display": display_info, "apron": apron_info, "anim": smoke_anims, "total_blocks": wall_blocks + roof_blocks, "lo": ext_lo, "hi": ext_hi}
 
 
 # extras: "이름:dx:dz;..." — 건물 앞(+z)쪽 중심 기준 옆(dx)·앞(dz) 칸 위치에 작은 소품(통·상자·화분)
@@ -618,6 +624,28 @@ static func _add_eave_nubs(b: PartBuilder, lo: Vector2, hi: Vector2, wall_h: flo
 
 
 # 굴뚝 연기: 위로 갈수록 커지고 옆으로 번지는 흰 덩어리 셋(정지 상태). 2D 그림의 연기를 대신한다.
+# 굴뚝 연기 부품 목록: 연기 덩어리 셋이 굴뚝 위에서 위로 떠오르며 커졌다 작아지길 반복한다(drift). 위상을 어긋나게 해서 끊기지 않고 이어져 보인다.
+static func _smoke_anims(lo: Vector2, hi: Vector2, peak: float, p: Dictionary, big: bool = false) -> Array:
+	var ts: int = p["ts"]
+	var ridge_x: bool = (hi.x - lo.x) >= (hi.y - lo.y)
+	var cu: float = (hi.x if ridge_x else hi.y) - BuildingMesh.CHIMNEY_INSET
+	var cv: float = ((lo.y + hi.y) * 0.5 if ridge_x else (lo.x + hi.x) * 0.5) + 0.2
+	var cx: float = cu if ridge_x else cv
+	var cz: float = cv if ridge_x else cu
+	var puff: Dictionary = spec(PlaceholderTextures.flat_color(ts, Color(0.92, 0.9, 0.9)), Color.WHITE, "smoke", "굴뚝 연기 단색 %d×%d 연한 회백색" % [ts, ts])
+	var y: float = peak + (0.8 if big else 0.34)
+	var out: Array = []
+
+	for k in range(3):
+		var pb := PartBuilder.new()
+		dome(pb, "smoke", puff, 0.0, 0.0, 0.1, 0.0, 0.14, 2, 8)
+		var pmesh := ArrayMesh.new()
+		var pspecs: Array = pb.commit_into(pmesh)
+		out.append({"mesh": pmesh, "specs": pspecs, "pos": Vector3(cx, y, cz), "mode": "drift", "speed": 0.28, "phase": float(k) / 3.0, "rise": 1.0, "drift": Vector3(0.18, 0.0, -0.1), "half": 1.0})
+
+	return out
+
+
 static func _add_smoke(b: PartBuilder, lo: Vector2, hi: Vector2, peak: float, p: Dictionary, big: bool = false) -> void:
 	var ts: int = p["ts"]
 	var ridge_x: bool = (hi.x - lo.x) >= (hi.y - lo.y)
@@ -628,10 +656,7 @@ static func _add_smoke(b: PartBuilder, lo: Vector2, hi: Vector2, peak: float, p:
 	var puff: Dictionary = spec(PlaceholderTextures.flat_color(ts, Color(0.92, 0.9, 0.9)), Color.WHITE, "smoke", "굴뚝 연기 단색 %d×%d 연한 회백색" % [ts, ts])
 	var y: float = peak + (0.8 if big else 0.34)
 
-	for k in range(3):
-		var r: float = 0.07 + 0.03 * float(k)
-		dome(b, "smoke", puff, cx + 0.05 * float(k), cz - 0.03 * float(k), r, y, y + r * 1.4, 2, 8)
-		y += r * 1.5
+	pass
 
 
 # 카메라 쪽(+x,+z 대각선)을 보는 평면 카드 한 장(투명 컷아웃). 상자에 꽂힌 종이처럼 세워 둔다. 바닥 중심 (cx, y0, cz), 폭 w, 높이 h.
@@ -1208,12 +1233,14 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 	match style:
 		"tree":
 			var leaf: Dictionary = spec(_tex("foliage", ts, Color(0.9, 0.3, 0.3)), tint, "tree_foliage", "나뭇잎 %d×%d 반복(짙은 초록 + 밝은 점 + 빨간 열매 점)" % [ts, ts])
+			leaf["sway"] = 0.04
 			var variant: String = str(rule.get("variant", "round"))
 			var bark_dark: Dictionary = wood(p, Color(0.34, 0.24, 0.17), "bark_dark")
 			var root_spec: Dictionary = wood(p, Color(0.4, 0.28, 0.19), "bark_root")
 
 			if variant == "pine":
 				var pine: Dictionary = _noise_spec(ts, Color(0.16, 0.38, 0.24), Color(0.3, 0.55, 0.36), "pine_foliage", 3)
+				pine["sway"] = 0.04
 				oct(b, "root", root_spec, c.x, c.y, 0.17, 0.0, 0.16, 0.12)
 				oct(b, "bark", bark, c.x, c.y, 0.12, 0.1, 0.8, 0.09)
 				oct(b, "cone", pine, c.x, c.y, 0.7, 0.45, 1.2, 0.28)
@@ -1224,6 +1251,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			elif variant == "birch":
 				var white: Dictionary = _noise_spec(ts, Color(0.92, 0.92, 0.86), Color(0.3, 0.28, 0.26), "birch_bark", 5, Color.WHITE, 0.06)
 				var light_leaf: Dictionary = _noise_spec(ts, Color(0.4, 0.62, 0.3), Color(0.58, 0.78, 0.4), "birch_foliage", 7)
+				light_leaf["sway"] = 0.04
 				oct(b, "bark", white, c.x, c.y, 0.09, 0.0, 1.5, 0.07)
 				_crown(b, light_leaf, c.x, c.y, [{"dx": -0.2, "dz": -0.12, "r": 0.4, "y0": 1.2, "y1": 1.9}, {"dx": 0.0, "dz": 0.0, "r": 0.5, "y0": 1.35, "y1": 2.15}, {"dx": 0.18, "dz": 0.12, "r": 0.36, "y0": 1.25, "y1": 1.95}, {"dx": 0.04, "dz": 0.02, "r": 0.3, "y0": 1.9, "y1": 2.4}], 2, 10)
 				total = 2.45
@@ -1234,12 +1262,14 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 				total = 2.7
 			elif variant == "autumn":
 				var fall: Dictionary = _noise_spec(ts, Color(0.86, 0.5, 0.18), Color(0.96, 0.78, 0.3), "autumn_foliage", 9)
+				fall["sway"] = 0.04
 				oct(b, "root", root_spec, c.x, c.y, 0.17, 0.0, 0.16, 0.12)
 				oct(b, "bark", bark, c.x, c.y, 0.13, 0.1, 1.0, 0.1)
 				_crown(b, fall, c.x, c.y, [{"dx": -0.3, "dz": -0.2, "r": 0.42, "y0": 0.9, "y1": 1.5}, {"dx": 0.0, "dz": 0.0, "r": 0.66, "y0": 0.85, "y1": 1.6}, {"dx": 0.3, "dz": 0.22, "r": 0.4, "y0": 0.9, "y1": 1.45}, {"dx": 0.06, "dz": 0.04, "r": 0.5, "y0": 1.4, "y1": 2.05}, {"dx": 0.1, "dz": 0.07, "r": 0.28, "y0": 1.9, "y1": 2.35}])
 				total = 2.35
 			elif variant == "cherry":
 				var bloom: Dictionary = _noise_spec(ts, Color(0.93, 0.5, 0.66), Color(1.0, 0.8, 0.88), "cherry_blossom", 11, Color.WHITE, 0.18)
+				bloom["sway"] = 0.04
 				oct(b, "root", bark_dark, c.x, c.y, 0.15, 0.0, 0.14, 0.11)
 				oct(b, "bark", bark_dark, c.x, c.y, 0.11, 0.1, 1.05, 0.08)
 				box(b, "limb", bark_dark, Vector3(c.x - 0.38, 0.95, c.y - 0.03), Vector3(c.x + 0.0, 1.03, c.y + 0.03))
@@ -1248,6 +1278,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 				total = 2.3
 			elif variant == "willow":
 				var wleaf: Dictionary = _noise_spec(ts, Color(0.38, 0.58, 0.3), Color(0.55, 0.74, 0.4), "willow_foliage", 13)
+				wleaf["sway"] = 0.04
 				oct(b, "root", bark_dark, c.x, c.y, 0.2, 0.0, 0.18, 0.15)
 				oct(b, "bark", bark_dark, c.x, c.y, 0.15, 0.12, 1.2, 0.11)
 				var wst: SurfaceTool = b.new_part(wleaf, Vector3(c.x - 0.95, 0.4, c.y - 0.95), Vector3(c.x + 0.95, 1.9, c.y + 0.95))
@@ -1273,6 +1304,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 				total = 1.95
 			elif variant == "poplar":
 				var pl: Dictionary = _noise_spec(ts, Color(0.28, 0.52, 0.26), Color(0.46, 0.7, 0.36), "poplar_foliage", 15)
+				pl["sway"] = 0.04
 				oct(b, "bark", bark, c.x, c.y, 0.1, 0.0, 0.8, 0.08)
 				_crown(b, pl, c.x, c.y, [{"dx": 0.0, "dz": 0.0, "r": 0.42, "y0": 0.6, "y1": 1.4}, {"dx": 0.02, "dz": 0.01, "r": 0.4, "y0": 1.15, "y1": 2.0}, {"dx": 0.04, "dz": 0.02, "r": 0.3, "y0": 1.75, "y1": 2.6}, {"dx": 0.06, "dz": 0.03, "r": 0.16, "y0": 2.3, "y1": 2.95}], 3, 10)
 				total = 3.0
@@ -1412,7 +1444,7 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			_card_z(ab, blades, 0.0, -1.1, 0.0, 2.2, 2.2)
 			var amesh := ArrayMesh.new()
 			var aspecs: Array = ab.commit_into(amesh)
-			anim_parts.append({"mesh": amesh, "specs": aspecs, "pos": hub + Vector3(0.0, 0.0, 0.1), "speed": 0.9, "axis": Vector3(0.0, 0.0, 1.0)})
+			anim_parts.append({"mesh": amesh, "specs": aspecs, "pos": hub + Vector3(0.0, 0.0, 0.1), "mode": "rotate", "speed": 0.9, "axis": Vector3(0.0, 0.0, 1.0)})
 			total = 3.95
 		"low_wall":
 			box(b, "stone", stone_spec(p, Color(1, 1, 1), "low_wall_stone"), Vector3(lo.x, 0.0, lo.y), Vector3(hi.x, 0.55, hi.y))
@@ -1463,7 +1495,13 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			total = 0.65
 		"lantern":
 			box(b, "pole", iron, Vector3(c.x - 0.04, 0.0, c.y - 0.04), Vector3(c.x + 0.04, 1.6, c.y + 0.04))
-			box(b, "lamp", spec(_tex("flat", ts, Color(1.0, 0.85, 0.45)), Color(1.4, 1.3, 1.0), "lantern_glass", "가로등 유리 단색 %d×%d 따뜻한 노랑(밤에 빛남)" % [ts, ts]), Vector3(c.x - 0.1, 1.6, c.y - 0.1), Vector3(c.x + 0.1, 1.86, c.y + 0.1))
+			var lamp_spec: Dictionary = spec(_tex("flat", ts, Color(1.0, 0.85, 0.45)), Color(1.4, 1.3, 1.0), "lantern_glass", "가로등 유리 단색 %d×%d 따뜻한 노랑(밤에 빛남)" % [ts, ts])
+			lamp_spec["emit"] = 1.0
+			var lamb := PartBuilder.new()
+			box(lamb, "lamp", lamp_spec, Vector3(-0.1, 0.0, -0.1), Vector3(0.1, 0.26, 0.1))
+			var lammesh := ArrayMesh.new()
+			var lamspecs: Array = lamb.commit_into(lammesh)
+			anim_parts.append({"mesh": lammesh, "specs": lamspecs, "pos": Vector3(c.x, 1.6, c.y), "mode": "pulse", "speed": 5.0, "amp": 0.3, "half": 0.5, "emit_base": 1.0})
 			box(b, "cap", iron, Vector3(c.x - 0.13, 1.86, c.y - 0.13), Vector3(c.x + 0.13, 1.92, c.y + 0.13))
 			total = 1.95
 		"flower_bush":
@@ -1471,6 +1509,8 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 
 			if bvar == "berry":
 				var berry: Dictionary = _noise_spec(ts, Color(0.24, 0.46, 0.26), Color(0.82, 0.18, 0.22), "berry_bush", 17, Color.WHITE, 0.1)
+				berry["sway"] = 0.05
+				berry["sway_base"] = 0.05
 				_crown(b, berry, c.x, c.y, [{"dx": -0.18, "dz": -0.1, "r": 0.3, "y0": 0.0, "y1": 0.42}, {"dx": 0.0, "dz": 0.0, "r": 0.34, "y0": 0.0, "y1": 0.5}, {"dx": 0.2, "dz": 0.12, "r": 0.28, "y0": 0.0, "y1": 0.4}], 2, 10)
 				total = 0.55
 			elif bvar == "hedge":
@@ -1527,20 +1567,38 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			oct(b, "pillar", fs, c.x, c.y, 0.15, 0.4, 1.0, 0.11)
 			oct(b, "bowl", fs, c.x, c.y, 0.42, 0.88, 1.06, 0.5)
 			oct(b, "bowl_water", water, c.x, c.y, 0.38, 1.04, 1.07, 0.38)
-			dome(b, "spout", water, c.x, c.y, 0.1, 1.06, 1.3, 2, 8)
+			var spb := PartBuilder.new()
+			dome(spb, "spout", water, 0.0, 0.0, 0.1, 0.0, 0.24, 2, 8)
+			var spmesh := ArrayMesh.new()
+			var spspecs: Array = spb.commit_into(spmesh)
+			anim_parts.append({"mesh": spmesh, "specs": spspecs, "pos": Vector3(c.x, 1.06, c.y), "mode": "bob", "speed": 3.6, "amp": 0.035, "half": 0.8})
+
+			for di in range(6):
+				var da: float = float(di) * TAU / 6.0
+				var drb := PartBuilder.new()
+				dome(drb, "drop", water, 0.0, 0.0, 0.04, 0.0, 0.07, 2, 6)
+				var drmesh := ArrayMesh.new()
+				var drspecs: Array = drb.commit_into(drmesh)
+				anim_parts.append({"mesh": drmesh, "specs": drspecs, "pos": Vector3(c.x, 1.3, c.y), "mode": "arc", "speed": 0.8, "phase": float(di) / 6.0, "amp": 0.25, "drift": Vector3(cos(da) * 0.4, 0.0, sin(da) * 0.4), "half": 0.8})
+
 			total = 1.35
 		"scarecrow":
 			var straw: Dictionary = _noise_spec(ts, Color(0.88, 0.74, 0.34), Color(0.98, 0.9, 0.5), "straw", 27, Color.WHITE, 0.16)
 			var cloth_s: Dictionary = _flat_spec(ts, Color(0.5, 0.32, 0.62), "scarecrow_shirt")
 			var hat_s: Dictionary = _flat_spec(ts, Color(0.46, 0.3, 0.18), "scarecrow_hat")
 			oct(b, "pole", bark, c.x, c.y, 0.04, 0.0, 1.4, 0.035)
-			box(b, "arms", wood(p, Color(0.5, 0.36, 0.22), "scarecrow_arms"), Vector3(c.x - 0.5, 0.95, c.y - 0.03), Vector3(c.x + 0.5, 1.01, c.y + 0.03))
-			box(b, "shirt", cloth_s, Vector3(c.x - 0.15, 0.55, c.y - 0.1), Vector3(c.x + 0.15, 1.05, c.y + 0.1))
-			box(b, "hand", straw, Vector3(c.x - 0.58, 0.9, c.y - 0.05), Vector3(c.x - 0.46, 1.04, c.y + 0.05))
-			box(b, "hand", straw, Vector3(c.x + 0.46, 0.9, c.y - 0.05), Vector3(c.x + 0.58, 1.04, c.y + 0.05))
-			dome(b, "head", straw, c.x, c.y, 0.14, 1.12, 1.38, 2, 8)
-			oct(b, "brim", hat_s, c.x, c.y, 0.24, 1.36, 1.39, 0.24)
-			oct(b, "hat", hat_s, c.x, c.y, 0.14, 1.39, 1.62, 0.07)
+			# 몸·팔·머리·모자는 막대 위 받침(높이 0.55)을 중심으로 좌우로 살랑 흔들린다(sway). 부품 좌표는 받침 기준.
+			var sab := PartBuilder.new()
+			box(sab, "arms", wood(p, Color(0.5, 0.36, 0.22), "scarecrow_arms"), Vector3(-0.5, 0.4, -0.03), Vector3(0.5, 0.46, 0.03))
+			box(sab, "shirt", cloth_s, Vector3(-0.15, 0.0, -0.1), Vector3(0.15, 0.5, 0.1))
+			box(sab, "hand", straw, Vector3(-0.58, 0.35, -0.05), Vector3(-0.46, 0.49, 0.05))
+			box(sab, "hand", straw, Vector3(0.46, 0.35, -0.05), Vector3(0.58, 0.49, 0.05))
+			dome(sab, "head", straw, 0.0, 0.0, 0.14, 0.57, 0.83, 2, 8)
+			oct(sab, "brim", hat_s, 0.0, 0.0, 0.24, 0.81, 0.84, 0.24)
+			oct(sab, "hat", hat_s, 0.0, 0.0, 0.14, 0.84, 1.07, 0.07)
+			var samesh := ArrayMesh.new()
+			var saspecs: Array = sab.commit_into(samesh)
+			anim_parts.append({"mesh": samesh, "specs": saspecs, "pos": Vector3(c.x, 0.55, c.y), "mode": "sway", "speed": 1.5, "amp": 0.06, "axis": Vector3(0.0, 0.0, 1.0), "half": 1.0})
 			total = 1.7
 		"campfire":
 			var stones: Dictionary = _noise_spec(ts, Color(0.42, 0.43, 0.48), Color(0.58, 0.59, 0.64), "fire_stone", 29)
@@ -1557,8 +1615,21 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			var logs_s: Dictionary = wood(p, Color(0.4, 0.28, 0.18), "fire_logs")
 			box(b, "log", logs_s, Vector3(c.x - 0.34, 0.05, c.y - 0.05), Vector3(c.x + 0.34, 0.18, c.y + 0.08))
 			box(b, "log", logs_s, Vector3(c.x - 0.06, 0.18, c.y - 0.32), Vector3(c.x + 0.06, 0.31, c.y + 0.32))
-			pyramid(b, "flame", ember, c.x, c.y, 0.22, 0.22, 0.2, 0.82)
-			pyramid(b, "flame", ember2, c.x, c.y, 0.12, 0.12, 0.2, 0.66)
+			# 불꽃은 바닥(0)에서 시작하는 별도 부품으로 만들어 일렁이게 한다(flicker). 불똥 셋은 위로 떠올랐다 사라진다(drift).
+			var fb := PartBuilder.new()
+			pyramid(fb, "flame", ember, 0.0, 0.0, 0.22, 0.22, 0.0, 0.62)
+			pyramid(fb, "flame", ember2, 0.0, 0.0, 0.12, 0.12, 0.0, 0.46)
+			var fmesh := ArrayMesh.new()
+			var fspecs: Array = fb.commit_into(fmesh)
+			anim_parts.append({"mesh": fmesh, "specs": fspecs, "pos": Vector3(c.x, 0.2, c.y), "mode": "flicker", "speed": 8.0, "amp": 0.22, "half": 0.8, "emit_base": 1.0})
+
+			for sk in range(3):
+				var sb := PartBuilder.new()
+				box(sb, "spark", ember2, Vector3(-0.025, 0.0, -0.025), Vector3(0.025, 0.05, 0.025))
+				var smesh := ArrayMesh.new()
+				var sspecs: Array = sb.commit_into(smesh)
+				anim_parts.append({"mesh": smesh, "specs": sspecs, "pos": Vector3(c.x + (float(sk) - 1.0) * 0.07, 0.62, c.y + (float(sk) - 1.0) * 0.04), "mode": "drift", "speed": 0.5, "phase": float(sk) / 3.0, "rise": 0.7, "drift": Vector3((float(sk) - 1.0) * 0.12, 0.0, 0.05), "half": 0.8, "emit_base": 1.0})
+
 			total = 0.65
 		"flowerbed":
 			var soil: Dictionary = _flat_spec(ts, Color(0.36, 0.26, 0.18), "bed_soil")

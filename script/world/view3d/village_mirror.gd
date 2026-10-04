@@ -64,7 +64,8 @@ var _ground_signature: String = ""
 var _object_signature: String = ""
 var _keys: Dictionary = {}  # 이번에 만든 항목 키 → true
 var _tuft_keys: Array = []  # 풀 다발 항목 키(물체 정리 대상이 아니라 따로 관리)
-var _anims: Dictionary = {}  # 돌아가는 부품 항목 키 → {speed}
+var _anims: Dictionary = {}  # 움직이는 부품 항목 키 → VillageAnim 항목(mode, speed, ...)
+var _time: float = 0.0
 
 
 func _init(owner_view: Node, exterior_node: Node2D) -> void:
@@ -233,6 +234,8 @@ func clear_ground() -> void:
 
 # 돌아가는 부품(풍차 날개 등)을 돌린다. 날개는 건물 앞면(+z)과 같은 평면이므로 그 평면의 수직 축(+z)으로 돌린다. 부품마다 axis 로 바꿀 수 있다.
 func tick(delta: float) -> void:
+	_time += delta
+
 	for k in _anims.keys():
 		if not view._items.has(k):
 			continue
@@ -240,7 +243,7 @@ func tick(delta: float) -> void:
 		var inst: Node3D = view._items[k]["mesh"]
 
 		if is_instance_valid(inst):
-			inst.rotate(_anims[k]["axis"] as Vector3, float(_anims[k]["speed"]) * delta)
+			VillageAnim.apply(inst, view._items[k]["materials"], _anims[k], _time, delta)
 
 
 func reset_signatures() -> void:
@@ -543,11 +546,15 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 			var an: Dictionary = anims[ai]
 			var akey: String = key + "d%d" % ai
 			var pos: Vector3 = an["pos"]
-			view._set_mesh_item(akey, an["mesh"], VillageAssets.make_materials(an["specs"]), Vector2(pos.x - 1.5, pos.z - 1.5), Vector2(pos.x + 1.5, pos.z + 1.5), pos.y + 1.5, sig, NAN, false)
+			var ahalf: float = float(an.get("half", 1.5))
+			view._set_mesh_item(akey, an["mesh"], VillageAssets.make_materials(an["specs"]), Vector2(pos.x - ahalf, pos.z - ahalf), Vector2(pos.x + ahalf, pos.z + ahalf), pos.y + ahalf, sig, NAN, false)
 			var ainst: MeshInstance3D = view._items[akey]["mesh"]
 			ainst.position = pos
 			ainst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-			_anims[akey] = {"speed": float(an["speed"]), "axis": an.get("axis", Vector3(0.7071, 0.0, 0.7071))}
+			var entry: Dictionary = an.duplicate()
+			entry.erase("mesh")
+			entry.erase("specs")
+			_anims[akey] = entry
 			_keys[akey] = true
 
 		if built.get("display", null) != null:

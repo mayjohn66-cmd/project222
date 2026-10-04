@@ -35,6 +35,7 @@ var cam_zoom: float = 15.0
 var cam_pan: Vector2 = Vector2.ZERO
 var seed_shift: int = 0
 var spinners: Array = []
+var anim_time: float = 0.0
 var shrink: int = 2
 
 
@@ -99,13 +100,24 @@ func _shoot(out: String) -> void:
 
 		get_viewport().get_texture().get_image().save_png("%s/gallery_%d.png" % [out, pg + 1])
 
+		# 움직임 확인: 0.7초 뒤 한 장 더(애니메이션이 있는 쪽 비교용)
+		if pg >= 3:
+			var t_end: float = anim_time + 0.7
+
+			while anim_time < t_end:
+				await get_tree().process_frame
+
+			get_viewport().get_texture().get_image().save_png("%s/gallery_%d_later.png" % [out, pg + 1])
+
 	get_tree().quit()
 
 
 func _process(delta: float) -> void:
+	anim_time += delta
+
 	for sp in spinners:
 		if is_instance_valid(sp["node"]):
-			(sp["node"] as Node3D).rotate(sp["axis"] as Vector3, float(sp["speed"]) * delta)
+			VillageAnim.apply(sp["node"] as Node3D, sp["mats"], sp["an"], anim_time, delta)
 
 	var pan := Vector2.ZERO
 
@@ -226,6 +238,10 @@ func _show_page(i: int) -> void:
 			if built0.get("display", null) != null:
 				_add_mesh(built0["display"]["mesh"], built0["display"]["specs"], Vector3.ZERO)
 
+			for an0 in built0.get("anim", []):
+				var node0 := _add_mesh(an0["mesh"], an0["specs"], an0["pos"])
+				spinners.append({"node": node0, "an": an0, "mats": node_mats(node0)})
+
 			if built0.get("apron", null) != null:
 				var ap0: Dictionary = built0["apron"]
 				var m0 := VillageAssets.make_material(ap0["spec"])
@@ -284,7 +300,7 @@ func _show_page(i: int) -> void:
 
 			for an in built2.get("anim", []):
 				var node := _add_mesh(an["mesh"], an["specs"], an["pos"])
-				spinners.append({"node": node, "speed": float(an["speed"]), "axis": an.get("axis", Vector3(0.7071, 0.0, 0.7071))})
+				spinners.append({"node": node, "an": an, "mats": node_mats(node)})
 
 	label.text = "%d) %s   — 1~6 쪽 전환 / 방향키 이동 / +- 확대 / R 색 다시 뽑기" % [i + 1, str(pg["title"])]
 	_place_camera()
@@ -309,3 +325,12 @@ func _add_mesh(mesh: Mesh, specs: Array, pos: Vector3) -> MeshInstance3D:
 
 	holder.add_child(inst)
 	return inst
+
+
+func node_mats(node: MeshInstance3D) -> Array:
+	var out: Array = []
+
+	for i in range(node.mesh.get_surface_count()):
+		out.append(node.get_surface_override_material(i))
+
+	return out

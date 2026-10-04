@@ -17,6 +17,19 @@ uniform sampler2D normal_tex : hint_normal, filter_nearest, repeat_enable;
 uniform bool use_normal = false;
 // 따뜻한 밝은 색 픽셀(가게 진열창 안쪽의 빛)만 스스로 빛나게 하는 정도. 0 이면 끔. 그림자(차양 그늘)가 져도 창 안이 어둡게 죽지 않게 한다.
 uniform float emit_strength = 0.0;
+// 잎이 바람에 흔들리는 정도(0 이면 끔). 바닥(sway_base)보다 높은 정점일수록 많이 움직인다. 정점 위치로 위상을 달리해 나무마다 박자가 다르다.
+uniform float sway_amp = 0.0;
+uniform float sway_speed = 1.6;
+uniform float sway_base = 0.6;
+
+void vertex() {
+	if (sway_amp > 0.0) {
+		float h = max(VERTEX.y - sway_base, 0.0);
+		float ph = VERTEX.x * 0.9 + VERTEX.z * 0.7;
+		VERTEX.x += sin(TIME * sway_speed + ph) * sway_amp * h;
+		VERTEX.z += cos(TIME * sway_speed * 0.8 + ph) * sway_amp * 0.6 * h;
+	}
+}
 
 void fragment() {
 	vec3 albedo_rgb = texture(albedo_tex, UV * uv_scale).rgb;
