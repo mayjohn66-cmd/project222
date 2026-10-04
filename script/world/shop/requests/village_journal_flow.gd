@@ -35,9 +35,12 @@ static func entries() -> Array[Dictionary]:
 		result.append({"id":RegularCustomerFlow.JOURNAL_PREFIX + str(event["id"]),"title":RegularCustomerFlow.title(str(event["id"]))})
 	for event in ExpeditionContactFlow.SETTINGS.events:
 		result.append({"id":ExpeditionContactFlow.JOURNAL_PREFIX + str(event["id"]),"title":ExpeditionContactFlow.title(str(event["id"]))})
+	for event in WeatherLifeFlow.SETTINGS.events:
+		result.append({"id":WeatherLifeFlow.JOURNAL_PREFIX + str(event["id"]),"title":WeatherLifeFlow.title(str(event["id"]))})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with(WeatherLifeFlow.JOURNAL_PREFIX): return WeatherLifeFlow.information(id.trim_prefix(WeatherLifeFlow.JOURNAL_PREFIX))
 	if id.begins_with(ExpeditionContactFlow.JOURNAL_PREFIX): return ExpeditionContactFlow.information(id.trim_prefix(ExpeditionContactFlow.JOURNAL_PREFIX))
 	if id.begins_with(RegularCustomerFlow.JOURNAL_PREFIX): return RegularCustomerFlow.information(id.trim_prefix(RegularCustomerFlow.JOURNAL_PREFIX))
 	if id.begins_with(PreservationLessonFlow.JOURNAL_PREFIX): return PreservationLessonFlow.information(id.trim_prefix(PreservationLessonFlow.JOURNAL_PREFIX))
@@ -83,6 +86,10 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id.begins_with(WeatherLifeFlow.JOURNAL_PREFIX):
+		var weather = world.get_node_or_null("VillageLifeDirector/WeatherLifeDirector")
+		if weather != null and weather.current_id == id.trim_prefix(WeatherLifeFlow.JOURNAL_PREFIX) and is_instance_valid(weather.npc) and weather.npc.visible and not weather.npc.is_queued_for_deletion(): return weather.npc
+		return null
 	if id.begins_with(ExpeditionContactFlow.JOURNAL_PREFIX):
 		var contact = world.get_node_or_null("VillageLifeDirector/ExpeditionContactDirector")
 		if contact != null and contact.current_id == id.trim_prefix(ExpeditionContactFlow.JOURNAL_PREFIX) and is_instance_valid(contact.npc) and contact.npc.visible and not contact.npc.is_queued_for_deletion(): return contact.npc

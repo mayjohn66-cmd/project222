@@ -50,6 +50,15 @@ func _ready() -> void:
 	contact.visitor_prefix = "원정에서 만난 "
 	contact.interaction_prefix = "[E] 원정에서 만난 사람 · "
 	add_child(contact)
+	var weather := RegularCustomerDirector.new()
+	weather.name = "WeatherLifeDirector"
+	weather.story_flow = WeatherLifeFlow
+	weather.purchase_group = "weather_life_customer"
+	weather.identity_meta = "weather_life_id"
+	weather.open_meta = "weather_life_open"
+	weather.visitor_prefix = "날씨 이야기 · "
+	weather.interaction_prefix = "[E] 날씨를 따라온 인사 · "
+	add_child(weather)
 	call_deferred("refresh")
 
 func _process(delta: float) -> void:

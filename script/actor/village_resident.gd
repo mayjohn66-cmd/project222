@@ -12,6 +12,7 @@ var routine_label := "머무는 곳"
 var retry_elapsed := 0.0
 
 func _ready() -> void:
+	add_to_group("story_npc")
 	y_sort_enabled = true
 	collision_layer = 0
 	collision_mask = 1
@@ -20,6 +21,7 @@ func _ready() -> void:
 	shape.radius = VillageLifeFlow.SETTINGS.resident_radius
 	collision.shape = shape
 	var visual := AnimatedSprite2D.new()
+	visual.name = "Visual"
 	visual.set_script(VISUAL)
 	visual.actor_role = "customer"
 	add_child(visual)

@@ -37,6 +37,7 @@ func blocked() -> bool:
  if bool(world.get_meta("seasonal_village_open",false)): return true
  if bool(world.get_meta("regular_customer_open",false)): return true
  if bool(world.get_meta("expedition_contact_open",false)): return true
+ if bool(world.get_meta("weather_life_open",false)): return true
  if bool(world.get_meta("lantern_wayfarer_open",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
  if manager.closing_shop or manager.summary_open: return true
@@ -63,6 +64,10 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var weather = get_parent().get_node_or_null("VillageLifeDirector/WeatherLifeDirector")
+ if weather != null and not weather.interaction_hint().is_empty():
+  prompt.text = weather.interaction_hint()
+  return
  var contact = get_parent().get_node_or_null("VillageLifeDirector/ExpeditionContactDirector")
  if contact != null and not contact.interaction_hint().is_empty():
   prompt.text = contact.interaction_hint()
@@ -114,6 +119,8 @@ func _process(_delta: float) -> void:
  else: prompt.text = ""
 
 func try_interact() -> bool:
+ var weather = get_parent().get_node_or_null("VillageLifeDirector/WeatherLifeDirector")
+ if weather != null and weather.try_interact(): return true
  var contact = get_parent().get_node_or_null("VillageLifeDirector/ExpeditionContactDirector")
  if contact != null and contact.try_interact(): return true
  var regular = get_parent().get_node_or_null("VillageLifeDirector/RegularCustomerDirector")

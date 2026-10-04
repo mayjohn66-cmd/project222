@@ -1,0 +1,23 @@
+[gd_resource type="Resource" script_class="RegularCustomerSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/regular_customer_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+events = Array[Dictionary]([
+{"id":"weather_rain_lunch","type":"backpacker","weather_filter":"rain","season_filter":"any","recipe":"camp_bread","condition_hint":"현지식 빵 제조법을 배운 뒤 비 오는 날","purchase_item":"camp_bread","purchase_amount":2,"days_after":1,"gifts":[{"item":"wheat","amount":2}],"reputation":1},
+{"id":"weather_summer_berries","type":"villager","weather_filter":"clear","season_filter":"summer","condition_hint":"여름의 맑은 날","purchase_item":"wild_berry","purchase_amount":2,"days_after":1,"gifts":[{"item":"forest_herb","amount":2}],"reputation":1},
+{"id":"weather_snow_kindling","type":"digger","weather_filter":"snow","season_filter":"winter","condition_hint":"겨울에 눈이 내리는 날","purchase_item":"dry_branch","purchase_amount":3,"days_after":1,"gifts":[{"item":"coal","amount":2}],"reputation":1}
+])
+moments = Array[Dictionary]([
+{"id":"weather_rain_lunch_intro","npc":"배낭 여행자","stage":"실제 현재 날씨와 계절 및 첫 정착 조건을 충족하여 마을 게시판 근처 E 소개 완독. 진열 상품을 나중에 실제 구매. 현지식 빵은 제조법 학습 필요. 소개 전 날씨가 끝나면 다음 기회, 완독 이후 날씨/계절이 바뀌어도 유지. 무료 지급/직접 재료 전달/시간 기한 없음."},
+{"id":"weather_rain_lunch_bought","npc":"배낭 여행자","stage":"태그된 대표 손님이 진열 상품을 설정 수량만큼 실제 결제한 직후 짧은 한 줄. 무료 물품/자동 판매/가격 인상 없음. 현대 편의점 빵이 아닌 현지식 빵, 열매와 가지는 원정 원재료."},
+{"id":"weather_rain_lunch_finish","npc":"배낭 여행자","stage":"실제 상품 결제 다음 날 이후 게시판 근처 E 최종 완독. 창고 재료 추가 소비 없이 설정 재료 답례와 평판 최초 1회, 현금/설비/회복/새 제조법/손님 해금 없음. 날씨가 끝나도 이전 구매를 회상한다."},
+{"id":"weather_rain_lunch_after","npc":"배낭 여행자","stage":"답례 다음 날 이후 E 후일담 완독. 현재 날씨 단정 없이 지난 날의 생활을 회상. 추가 지급/강제 방문/수요 증가 없음. completion은 수첩 기억."},
+{"id":"weather_summer_berries_intro","npc":"마을 주민","stage":"실제 현재 날씨와 계절 및 첫 정착 조건을 충족하여 마을 게시판 근처 E 소개 완독. 진열 상품을 나중에 실제 구매. 현지식 빵은 제조법 학습 필요. 소개 전 날씨가 끝나면 다음 기회, 완독 이후 날씨/계절이 바뀌어도 유지. 무료 지급/직접 재료 전달/시간 기한 없음."},
+{"id":"weather_summer_berries_bought","npc":"마을 주민","stage":"태그된 대표 손님이 진열 상품을 설정 수량만큼 실제 결제한 직후 짧은 한 줄. 무료 물품/자동 판매/가격 인상 없음. 현대 편의점 빵이 아닌 현지식 빵, 열매와 가지는 원정 원재료."},
+{"id":"weather_summer_berries_finish","npc":"마을 주민","stage":"실제 상품 결제 다음 날 이후 게시판 근처 E 최종 완독. 창고 재료 추가 소비 없이 설정 재료 답례와 평판 최초 1회, 현금/설비/회복/새 제조법/손님 해금 없음. 날씨가 끝나도 이전 구매를 회상한다."},
+{"id":"weather_summer_berries_after","npc":"마을 주민","stage":"답례 다음 날 이후 E 후일담 완독. 현재 날씨 단정 없이 지난 날의 생활을 회상. 추가 지급/강제 방문/수요 증가 없음. completion은 수첩 기억."},
+{"id":"weather_snow_kindling_intro","npc":"광부","stage":"실제 현재 날씨와 계절 및 첫 정착 조건을 충족하여 마을 게시판 근처 E 소개 완독. 진열 상품을 나중에 실제 구매. 현지식 빵은 제조법 학습 필요. 소개 전 날씨가 끝나면 다음 기회, 완독 이후 날씨/계절이 바뀌어도 유지. 무료 지급/직접 재료 전달/시간 기한 없음."},
+{"id":"weather_snow_kindling_bought","npc":"광부","stage":"태그된 대표 손님이 진열 상품을 설정 수량만큼 실제 결제한 직후 짧은 한 줄. 무료 물품/자동 판매/가격 인상 없음. 현대 편의점 빵이 아닌 현지식 빵, 열매와 가지는 원정 원재료."},
+{"id":"weather_snow_kindling_finish","npc":"광부","stage":"실제 상품 결제 다음 날 이후 게시판 근처 E 최종 완독. 창고 재료 추가 소비 없이 설정 재료 답례와 평판 최초 1회, 현금/설비/회복/새 제조법/손님 해금 없음. 날씨가 끝나도 이전 구매를 회상한다."},
+{"id":"weather_snow_kindling_after","npc":"광부","stage":"답례 다음 날 이후 E 후일담 완독. 현재 날씨 단정 없이 지난 날의 생활을 회상. 추가 지급/강제 방문/수요 증가 없음. completion은 수첩 기억."}
+])
