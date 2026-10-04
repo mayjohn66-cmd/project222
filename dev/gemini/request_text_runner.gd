@@ -667,7 +667,7 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 					items.append(_item_name(str(requirement["item"])))
 				info = "인물: %s / 필요한 물건: %s / 정착 뒤 안부를 나눈 이웃의 개인 부탁 / 기한 없음 / 창고 준비 후 게시판에서 직접 전달" % [resident.get("name", d.get("resident", "")), "·".join(items)]
 				if d.has("stockpile_season"):
-					info += " / 제안 계절: " + str(d["stockpile_season"]) + " / 지난 계절에만 원정에서 얻는 재료를 오래 보관해 전달 / 제안을 맡은 뒤 계절이 바뀌어도 유지 / 대금·평판은 UI에 표시하며 숫자는 대사에 넣지 않음 / 서리 결정은 녹지 않는 마법 재료이며 냉장고·무료 재료·새 제작 기능 없음"
+					info += " / 제안 계절: " + str(d["stockpile_season"]) + " / 지난 계절에만 원정에서 얻는 재료를 오래 보관해 전달 / 제안을 맡은 뒤 계절이 바뀌어도 유지 / 대금·평판은 UI에 표시하며 숫자는 대사에 넣지 않음 / 서리 얼음은 상온 다음 아침에 물이 됨: 냉동함에 넣었다가 전달할 날 꺼냄 / 새순·물박하는 채집 계절이 지난 아침에 시들고 냉장·냉동 보관 가능 / 식물 부탁은 베이킹 작업대에서 가공한 말린 봄 새순·말린 물박하를 요구 / 주민은 보존 경험을 말하며 설비 설치·버튼 조작은 플레이어 UI에 맡김 / 무료 재료 없음"
 				var after := str(d.get("after", ""))
 				if not after.is_empty():
 					info += " / 앞선 개인 부탁: " + Tools.row_from_source(Tools.KIND_PERSONAL_REQUEST, {"id":after})[2]

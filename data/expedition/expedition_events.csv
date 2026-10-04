@@ -88,9 +88,9 @@ forest_nutling_gather,forest,gather,90,낙엽 아래 잘 여문 들밤이 모여
 forest_nutling_battle,forest,battle,50,떨어진 밤송이 사이에서 작은 짐승이 움직인다.,battle,nutling,0,,autumn,
 meadow_nutling_gather,meadow,gather,90,낙엽 아래 잘 여문 들밤이 모여 있다.,loot,climate_autumn_nut,0,,autumn,
 meadow_nutling_battle,meadow,battle,50,떨어진 밤송이 사이에서 작은 짐승이 움직인다.,battle,nutling,0,,autumn,
-mine_frostling_gather,mine,gather,90,찬 바위 틈에 녹지 않는 서리 결정이 맺혔다.,loot,climate_winter_frost,0,,winter,
+mine_frostling_gather,mine,gather,90,찬 바위 틈에 서리 얼음이 맺혔다. 다음 아침 전에 냉동 보관하자.,loot,climate_winter_frost,0,,winter,
 mine_frostling_battle,mine,battle,50,서리 조각을 두른 짐승이 길을 가로막는다.,battle,frostling,0,,winter,
-river_valley_frostling_gather,river_valley,gather,90,찬 바위 틈에 녹지 않는 서리 결정이 맺혔다.,loot,climate_winter_frost,0,,winter,
+river_valley_frostling_gather,river_valley,gather,90,찬 바위 틈에 서리 얼음이 맺혔다. 다음 아침 전에 냉동 보관하자.,loot,climate_winter_frost,0,,winter,
 river_valley_frostling_battle,river_valley,battle,50,서리 조각을 두른 짐승이 길을 가로막는다.,battle,frostling,0,,winter,
 forest_rainling_gather,forest,gather,90,빗물에 젖은 잎 끝에서 작은 구슬이 반짝인다.,loot,climate_rain_pearl,0,,,rain
 forest_rainling_battle,forest,battle,50,빗방울이 모여 동그란 정령이 되었다.,battle,rainling,0,,,rain

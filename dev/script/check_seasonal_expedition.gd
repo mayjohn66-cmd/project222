@@ -137,6 +137,7 @@ func verify_stockpile() -> void:
 	PlayerProgress.reset()
 	GameState.remove_meta("shop_return_context")
 	GameState.total_day = 85
+	GameState.preservation_state = PreservationService.initial_state(85)
 	var world = load("res://scenes/shop/main.tscn").instantiate()
 	world.get_node("TutorialDirector").enabled = false
 	world.get_node("VillageLifeDirector").crafting_path_enabled = false
@@ -163,13 +164,18 @@ func verify_stockpile() -> void:
 		var id := str(entry["id"])
 		var item := str(entry["requirements"][0]["item"])
 		GameState.remove_item(item, GameState.get_item_count(item))
-		GameState.total_day = {"winter_frost":85,"spring_bud":1,"summer_mint":29}[item]
+		GameState.total_day = {"winter_frost":85,"dried_spring_bud":1,"dried_summer_mint":29}[item]
+		GameState.preservation_state = PreservationService.initial_state(GameState.total_day)
 		GameState.add_item(item, 3)
+		if item == "winter_frost":
+			GameState.money += int(PreservationService.unit("freezer")["cost"])
+			check(PreservationService.install("freezer") and PreservationService.deposit("freezer", item, 3) == 3, "winter stock actually frozen")
 		var saved := GameState.create_save_data().duplicate(true)
 		GameState.remove_item(item, 3)
-		check(GameState.apply_save_data(saved) and GameState.get_item_count(item) == 3, "seasonal warehouse material survives actual full save")
+		check(GameState.apply_save_data(saved) and (PreservationService.count("freezer") == 3 if item == "winter_frost" else GameState.get_item_count(item) == 3), "protected/processed material survives actual full save")
 		GameState.total_day = DAYS[entry["stockpile_season"]] + 112
-		check(GameState.get_item_count(item) == 3, "warehouse remains after seasons and year pass")
+		PreservationService.settle()
+		check((PreservationService.count("freezer") == 3 if item == "winter_frost" else GameState.get_item_count(item) == 3), "preserved warehouse remains after seasons and year pass")
 		GameState.total_day += 28
 		check(not PersonalRequestFlow.accept(id), "request only offered in its demand season")
 		GameState.total_day -= 28
@@ -183,7 +189,9 @@ func verify_stockpile() -> void:
 		board.panel.cards["personal:" + id]["action"].pressed.emit()
 		check(PersonalRequestFlow.accepted(id), "real board accepts seasonal request")
 		GameState.total_day += 28
-		check(PersonalRequestFlow.can_deliver(id), "accepted promise survives season change")
+		check(PersonalRequestFlow.locked_reason(PersonalRequestFlow.request(id)).is_empty(), "accepted promise survives season change")
+		if item == "winter_frost": check(PreservationService.withdraw("freezer", item, 3) == 3, "withdraw ice on actual delivery day")
+		check(PersonalRequestFlow.can_deliver(id), "preserved output ready for accepted promise")
 		GameState.remove_item(item, 2)
 		var money: int = GameState.money
 		var rep := ResidentRequestFlow.reputation()
@@ -200,7 +208,7 @@ func verify_stockpile() -> void:
 		board.panel.close()
 		check(sources["personal_request"].has(id), "Gemini knows native request kind")
 		text_rows.append(Tools.row_from_source("personal_request", sources["personal_request"][id]))
-		check(Writer.build_prompt("personal_request", {"personal_request":{id:sources["personal_request"][id]}}).contains("녹지 않는"), "writer receives storage worldbuilding context")
+		check(Writer.build_prompt("personal_request", {"personal_request":{id:sources["personal_request"][id]}}).contains("냉동함"), "writer receives actual preservation context")
 	check(Tools.validate_rows(Tools.COLUMNS, text_rows, sources)["errors"].is_empty(), "rough request prose valid for writer")
 	world.queue_free()
 	await settle()
