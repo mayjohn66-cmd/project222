@@ -395,79 +395,44 @@ func _keepout(model: RefCounted) -> Array:
 
 
 func _build_floor_decor(theme_id: String, rng: RandomNumberGenerator, model: RefCounted) -> void:
+	# 방 안 바닥은 비워 두고(채집·상자 오브젝트와 장애물만), 풀밭 수준의 아주 작은 것만 조금 뿌려 허전함을 던다. 큰 것은 놓지 않는다.
 	var field: Array = [Rect2(0.35, 0.35, 7.3, 7.3)]
 	var avoid: Array = _keepout(model)
 
 	match theme_id:
 		"mine":
 			var rubble: Dictionary = _tpl_pebbles(Color(0.5, 0.5, 0.58), "m_rubble")
-			var stal: Dictionary = _tpl_stalagmite(Color(0.34, 0.36, 0.44), "m_stal")
-			var cry: Dictionary = _tpl_crystal(Color(0.35, 0.85, 0.95), "m_crystal")
 
-			for p in _scatter(rng, field, avoid, 22, 0.55):
-				_inst(rubble, p, 0.8 + rng.randf() * 0.9, _yaw(rng))
-
-			for p in _scatter(rng, field, avoid, 6, 1.2):
-				_inst(stal, p, 0.45 + rng.randf() * 0.35, _yaw(rng))
-
-			for p in _scatter(rng, field, avoid, 4, 1.8):
-				_inst(cry, p, 0.5 + rng.randf() * 0.3, _yaw(rng))
-				st.add_glow_light(Vector3(p.x, 0.4, p.y), Color(0.45, 0.85, 1.0), 0.5, 2.2)
-
-			for p in _scatter(rng, field, avoid, 5, 1.0):
-				_inst(_tpl_prop("rock", {}, "m_rock"), p, 0.7 + rng.randf() * 0.5, _yaw(rng))
+			for p in _scatter(rng, field, avoid, 9, 0.9):
+				_inst(rubble, p, 0.7 + rng.randf() * 0.6, _yaw(rng))
 		"swamp":
-			var reeds: Dictionary = _tpl_reeds("s_reeds")
+			var tufts: Dictionary = _tpl_grass(Color(0.3, 0.46, 0.26), Color(0.42, 0.6, 0.34), "s_grass", 0.4)
 
-			for p in _scatter(rng, field, avoid, 11, 0.8):
-				_inst(reeds, p, 0.38 + rng.randf() * 0.25, _yaw(rng))
+			for p in _scatter(rng, field, avoid, 12, 0.8):
+				_inst(tufts, p, 0.6 + rng.randf() * 0.5, _yaw(rng))
 
-			for p in _scatter(rng, field, avoid, 5, 1.1):
-				_inst(_tpl_prop("stump", {}, "s_stump"), p, 0.6 + rng.randf() * 0.3, _yaw(rng))
-
-			for p in _scatter(rng, field, avoid, 6, 0.9):
-				_inst(_tpl_prop("flower_bush", {"variant": "hedge"}, "s_bush"), p, 0.7 + rng.randf() * 0.35, _yaw(rng))
-
-			_floor_puddles(rng, field, avoid, 4)
+			for p in _scatter(rng, field, avoid, 2, 2.5):
+				_inst(_tpl_mushrooms("s_mush"), p, 0.8 + rng.randf() * 0.3, _yaw(rng))
 		"hidden_ruins":
 			var rubble2: Dictionary = _tpl_pebbles(Color(0.62, 0.58, 0.7), "r_rubble")
 
-			for p in _scatter(rng, field, avoid, 20, 0.55):
-				_inst(rubble2, p, 0.8 + rng.randf() * 0.9, _yaw(rng))
+			for p in _scatter(rng, field, avoid, 9, 0.9):
+				_inst(rubble2, p, 0.7 + rng.randf() * 0.6, _yaw(rng))
 
-			for p in _scatter(rng, field, avoid, 3, 1.8):
-				_inst(_tpl_column(1, "r_col"), p, 0.7 + rng.randf() * 0.2, _yaw(rng))
+			var moss: Dictionary = _tpl_grass(Color(0.3, 0.5, 0.3), Color(0.4, 0.62, 0.36), "r_grass", 0.35)
 
-			for p in _scatter(rng, field, avoid, 3, 1.8):
-				_inst(_tpl_ruin_wall(0, "r_wall"), p, 0.55 + rng.randf() * 0.2, round(rng.randf() * 4.0) * PI * 0.5)
-
-			for p in _scatter(rng, field, avoid, 7, 0.9):
-				_inst(_tpl_prop("flower_bush", {"variant": "hedge"}, "r_bush"), p, 0.7 + rng.randf() * 0.35, _yaw(rng))
-
-			for p in _scatter(rng, field, avoid, 4, 1.4):
-				_inst(_tpl_prop("rock", {}, "r_rock"), p, 0.5 + rng.randf() * 0.3, _yaw(rng))
+			for p in _scatter(rng, field, avoid, 5, 1.2):
+				_inst(moss, p, 0.6 + rng.randf() * 0.4, _yaw(rng))
 		_:
-			var grass: Dictionary = _tpl_grass(Color(0.28, 0.58, 0.26), Color(0.42, 0.74, 0.34), "f_grass", 0.6)
+			var grass: Dictionary = _tpl_grass(Color(0.28, 0.58, 0.26), Color(0.42, 0.74, 0.34), "f_grass", 0.45)
 
-			for p in _scatter(rng, field, avoid, 34, 0.5):
-				_inst(grass, p, 0.7 + rng.randf() * 0.7, _yaw(rng))
+			for p in _scatter(rng, field, avoid, 16, 0.7):
+				_inst(grass, p, 0.6 + rng.randf() * 0.5, _yaw(rng))
 
 			var flowers: Array = [_tpl_flowers(Color(1.0, 0.85, 0.95), "f_fl_a"), _tpl_flowers(Color(1.0, 0.85, 0.3), "f_fl_b"), _tpl_flowers(Color(0.85, 0.7, 1.0), "f_fl_c")]
 
-			for p in _scatter(rng, field, avoid, 12, 0.8):
-				_inst(flowers[rng.randi() % 3], p, 0.8 + rng.randf() * 0.5, _yaw(rng))
-
-			for p in _scatter(rng, field, avoid, 7, 1.0):
-				_inst(_tpl_prop("flower_bush", {"variant": "berry" if rng.randf() < 0.3 else ""}, "f_bush_%s" % (rng.randf() < 0.3)), p, 0.7 + rng.randf() * 0.4, _yaw(rng))
-
-			for p in _scatter(rng, field, avoid, 4, 1.4):
-				_inst(_tpl_prop("rock", {}, "f_rock"), p, 0.5 + rng.randf() * 0.4, _yaw(rng))
-
-			for p in _scatter(rng, field, avoid, 2, 2.5):
-				_inst(_tpl_prop("log", {}, "f_log"), p, 0.9, round(rng.randf() * 2.0) * PI * 0.5)
-
-			for p in _scatter(rng, field, avoid, 3, 1.4):
-				_inst(_tpl_mushrooms("f_mush"), p, 0.9 + rng.randf() * 0.4, _yaw(rng))
+			for p in _scatter(rng, field, avoid, 5, 1.3):
+				_inst(flowers[rng.randi() % 3], p, 0.7 + rng.randf() * 0.4, _yaw(rng))
 
 
 func _floor_puddles(rng: RandomNumberGenerator, field: Array, avoid: Array, count: int) -> void:
