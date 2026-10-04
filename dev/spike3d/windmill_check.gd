@@ -33,7 +33,6 @@ func _ready() -> void:
 	body.global_position = at
 	plr.global_position = at + Vector2(0, 40)
 	mirror.forced_hour = 12.0
-	mirror.mode = StoreView3D.Mode.ON
 
 	for i in range(40):
 		await get_tree().process_frame

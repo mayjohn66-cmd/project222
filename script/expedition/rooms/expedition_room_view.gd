@@ -1,10 +1,8 @@
 class_name ExpeditionRoomView
 extends Control
 
-const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
 const GRID = preload("res://script/world/shared/isometric_grid.gd")
 @export var tile_size := Vector2(96, 48)
-var floor_texture: Texture2D = TILE_ART.GRASS
 var tile_scale: float = 1.0
 
 signal retreat_requested
@@ -20,8 +18,6 @@ var swap_button: Button
 var move_buttons: Dictionary = {}
 var board: Rect2
 var notice: String = ""
-var player_frames: SpriteFrames
-var floor_color := Color("253e32")
 var region_id: String = "forest"  # 3D 무대의 지역별 꾸밈(초원·계곡 포함)
 var use_3d: bool = true  # 던전 방을 3D 로 그린다(항상 3D)
 var stage: ExpeditionStage3D
@@ -86,8 +82,6 @@ func _ready() -> void:
 	stage.view = self
 	add_child(stage)
 	move_child(stage, 0)
-	if ResourceLoader.exists("res://art/characters/cozy_v1/player/frames.tres"):
-		player_frames = load("res://art/characters/cozy_v1/player/frames.tres")
 	# 버튼을 클릭하는 순간 공격하고, 누르고 있으면 기본 공격을 반복한다.
 	attack_button.button_down.connect(func():
 		if _can_play(): model.basic_attack())
@@ -179,32 +173,6 @@ func _draw() -> void:
 		stage.active = use_3d
 		stage.visible = use_3d
 	_layout_board()
-	var on3d := _stage_on()
-	if not on3d:
-		draw_rect(Rect2(Vector2.ZERO, size), Color("111b20"))
-	if not on3d:
-		# 상점과 동일한 타일 그림, 좌표식, 2:1 시점을 사용한다.
-		var origin := _point(Vector2.ONE * 0.5)
-		draw_set_transform(origin)
-		for y in range(8):
-			for x in range(8):
-				var center := GRID.project(Vector2(x, y), tile_size) * tile_scale
-				TILE_ART.draw_cell(self, center, tile_size.x * tile_scale, tile_size.y * tile_scale, floor_texture)
-				var half := tile_size * tile_scale * 0.5
-				if ground_overlay.a > 0:
-					draw_colored_polygon(PackedVector2Array([center + Vector2(0, -half.y), center + Vector2(half.x, 0), center + Vector2(0, half.y), center + Vector2(-half.x, 0)]), ground_overlay)
-				draw_polyline(PackedVector2Array([center + Vector2(0, -half.y), center + Vector2(half.x, 0),
-					center + Vector2(0, half.y), center + Vector2(-half.x, 0), center + Vector2(0, -half.y)]), Color(0.85, 0.9, 0.65, 0.22), 1)
-		draw_set_transform(Vector2.ZERO)
-		var edge := _footprint(Rect2(0, 0, 8, 8))
-		var depth := Vector2(0, 12 * tile_scale)
-		for pair in [[1, 2], [2, 3]]:
-			draw_colored_polygon(PackedVector2Array([edge[pair[0]], edge[pair[1]],
-				edge[pair[1]] + depth, edge[pair[0]] + depth]), floor_color.darkened(0.3))
-		draw_polyline(PackedVector2Array([edge[0], edge[1], edge[2], edge[3], edge[0]]), Color("9d9271"), 2)
-	if not on3d:
-		var exit_shape := _footprint(Rect2(model.exit_position - Vector2.ONE * 0.28, Vector2.ONE * 0.56))
-		draw_colored_polygon(exit_shape, Color("9bd693") if model.exit_open else Color("5f676d"))
 	draw_string(ThemeDB.fallback_font, _point(model.exit_position) + Vector2(-18, -12), "출구", HORIZONTAL_ALIGNMENT_LEFT, -1, 16)
 	for enemy in model.enemies:
 		if int(enemy["hp"]) > 0 and float(enemy["windup"]) >= 0.0:
@@ -217,31 +185,15 @@ func _draw() -> void:
 		var angle := model.facing.angle()
 		var arc := deg_to_rad(model.attack_profile.arc_degrees) * 0.5
 		draw_polyline(_ground_shape(model.player_position, model.attack_profile.reach, angle - arc, angle + arc), Color("fff0b7"), 4)
-	# 발밑의 화면 Y 순서로 그려 장애물 뒤에 선 캐릭터를 가린다.
-	var actors: Array[Dictionary] = []
-	for obstacle in model.obstacles:
-		actors.append({"kind": "obstacle", "at": obstacle.get_center(), "rect": obstacle})
+	# 몸·장애물·바닥은 3D 무대가 그린다. 여기서는 채집 이름표와 적 체력 막대·이름만 위에 얹는다.
 	if not model.object_kind.is_empty() and not model.object_consumed:
 		if model.gathering_sites.is_empty():
-			actors.append({"kind": "object", "at": model.object_position, "site": {}})
+			_draw_object({})
 		else:
 			for site in model.gathering_sites:
-				actors.append({"kind":"object", "at":Vector2(float(site["x"]),float(site["y"])), "site":site})
+				_draw_object(site)
 	for enemy in model.enemies:
-		if int(enemy["hp"]) > 0: actors.append({"kind": "enemy", "at": enemy["position"], "enemy": enemy})
-	actors.append({"kind": "player", "at": model.player_position})
-	actors.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return _point(a["at"]).y < _point(b["at"]).y)
-	for actor in actors:
-		match actor["kind"]:
-			"obstacle":
-				if not on3d: _draw_block(actor["rect"], 30 * tile_scale, Color("8c9483"))
-			"object": _draw_object(actor["site"])
-			"enemy": _draw_enemy(actor["enemy"])
-			"player":
-				if not on3d: _draw_player()
-	for shot in model.projectiles:
-		if on3d: break
-		draw_circle(_point(shot["position"]) - Vector2(0, 12 * tile_scale), 4 * tile_scale, Color("f6d391"))
+		if int(enemy["hp"]) > 0: _draw_enemy(enemy)
 	for note in model.feedback:
 		var cell: float = tile_size.x * tile_scale
 		var note_at := _point(note["position"])
@@ -278,20 +230,8 @@ func _draw() -> void:
 			draw_polygon(PackedVector2Array([q[0], q[1], q[2], q[3]]), PackedColorArray([outer, outer, inner, inner]))
 
 
-func _draw_block(rect: Rect2, height: float, color: Color) -> void:
-	var base := _footprint(rect)
-	var top := PackedVector2Array()
-	for point in base: top.append(point - Vector2(0, height))
-	for pair in [[1, 2], [2, 3]]:
-		draw_colored_polygon(PackedVector2Array([base[pair[0]], base[pair[1]], top[pair[1]], top[pair[0]]]), color.darkened(0.3 if pair[0] == 1 else 0.15))
-	draw_colored_polygon(top, color)
-	draw_polyline(PackedVector2Array([top[0], top[1], top[2], top[3], top[0]]), color.lightened(0.2), 1)
-
 func _draw_object(site: Dictionary = {}) -> void:
-	var color := Color("edd18a") if model.object_kind == "chest" else Color("81c988")
 	var at := model.object_position if site.is_empty() else Vector2(float(site["x"]),float(site["y"]))
-	if not site.is_empty(): color = Color(str(site["color"]))
-	if not _stage_on(): _draw_block(Rect2(at - Vector2.ONE * 0.24, Vector2.ONE * 0.48), 24 * tile_scale, color)
 	var caption: String = "채집" if model.object_kind == "gather" else ("휴식" if model.object_kind == "heal" else "상자")
 	if not site.is_empty(): caption = str(site["label"])
 	draw_string(ThemeDB.fallback_font, _point(at) + Vector2(-20, -36 * tile_scale), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, 14)
@@ -299,35 +239,11 @@ func _draw_object(site: Dictionary = {}) -> void:
 func _draw_enemy(enemy: Dictionary) -> void:
 	var at := _point(enemy["position"])
 	var radius: float = (28 if enemy["boss"] else 18) * tile_scale
-	if _stage_on():
-		# 3D 로 그려진 몸 위에, 체력 막대와 이름만 2D 로(머리 위 높이를 3D 에서 투영)
-		at = stage.project(enemy["position"], 1.15 if enemy["boss"] else 0.7)
-		at.y += radius * 0.8
-	else:
-		draw_colored_polygon(_ground_shape(enemy["position"], 0.3), Color(0, 0, 0, 0.22))
-		at.y -= radius * 0.8
-		draw_circle(at, radius, Color(str(enemy.get("color", "85bad4"))))
-		for side in [-1, 1]: draw_circle(at + Vector2(side * radius * 0.3, -3), 2 * tile_scale, Color("1b2534"))
+	# 3D 로 그려진 몸 위에, 체력 막대와 이름만 2D 로(머리 위 높이를 3D 에서 투영)
+	at = stage.project(enemy["position"], 1.15 if enemy["boss"] else 0.7)
+	at.y += radius * 0.8
 	var bar := Rect2(at + Vector2(-radius, -radius - 10), Vector2(radius * 2, 5))
 	draw_rect(bar, Color("322330"))
 	bar.size.x *= float(enemy["hp"]) / float(enemy["max_hp"])
 	draw_rect(bar, Color("ea8a8a"))
 	draw_string(ThemeDB.fallback_font, at + Vector2(-48, -radius - 17), str(enemy["name"]), HORIZONTAL_ALIGNMENT_CENTER, 96, 12, Color("f4eddb"))
-
-func _draw_player() -> void:
-	var at := _point(model.player_position)
-	var texture: Texture2D
-	var screen_facing := GRID.project(model.facing, tile_size).normalized()
-	if player_frames != null:
-		var animation := "walk_up" if screen_facing.y < 0 else "walk_down"
-		if absf(screen_facing.x) > absf(screen_facing.y):
-			animation = "walk_right" if screen_facing.x > 0 else "walk_left"
-		if player_frames.has_animation(animation):
-			texture = player_frames.get_frame_texture(animation, int(model.elapsed * 6) % player_frames.get_frame_count(animation))
-	draw_colored_polygon(_ground_shape(model.player_position, model.settings.actor_radius), Color(0, 0, 0, 0.25))
-	if texture != null:
-		var sprite_size := Vector2(64, 64) * tile_scale
-		draw_texture_rect(texture, Rect2(at - Vector2(sprite_size.x * 0.5, sprite_size.y * 0.85), sprite_size), false,
-			Color("ffaaaa") if model.hurt_remaining > 0 else Color.WHITE)
-	else: draw_circle(at - Vector2(0, 14 * tile_scale), 14 * tile_scale, Color("f8e1a3"))
-	draw_line(at, _point(model.player_position + model.facing * 0.45), Color("faf3d1"), 2)

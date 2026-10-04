@@ -514,7 +514,7 @@ func _sprite_info(body: StaticBody2D) -> Dictionary:
 	return {"path": "", "height_px": 0.0}
 
 
-# 3D 로 보이는 발자국(칸 좌표 사각형)과 같은 충돌 다각형을 몸체에 달고, 옛 2D 충돌 모양은 꺼 둔다(3D 를 끄면 restore_collisions 가 되돌림).
+# 3D 로 보이는 발자국(칸 좌표 사각형)과 같은 충돌 다각형을 몸체에 달고, 옛 2D 충돌 모양은 꺼 둔다.
 func _apply_collision(body: StaticBody2D, lo: Vector2, hi: Vector2, blocked_off: bool = false) -> void:
 	var poly := body.get_node_or_null(COLLISION_3D) as CollisionPolygon2D
 
@@ -546,38 +546,6 @@ func _apply_collision(body: StaticBody2D, lo: Vector2, hi: Vector2, blocked_off:
 		pts.append(body.to_local(view.cell_to_world(c)))
 
 	poly.polygon = pts
-
-
-func restore_collisions(world: Node) -> void:
-	if world == null:
-		return
-
-	_clear_snowmen()
-	_clear_trees()
-	_snow_dirty = true
-
-	for container_name in CONTAINERS:
-		var container: Node = world.get_node_or_null(container_name)
-
-		if container == null:
-			continue
-
-		for body in container.get_children():
-			var poly: Node = body.get_node_or_null(COLLISION_3D)
-
-			if poly == null:
-				continue
-
-			for path in body.get_meta("c3_off", []):
-				var node: Node = body.get_node_or_null(NodePath(str(path)))
-
-				if node != null:
-					node.set("disabled", false)
-
-			body.remove_meta("c3_off")
-			poly.queue_free()
-			poly.name = "Collision3D_removed"
-
 
 
 var _snow_cells: Array = []

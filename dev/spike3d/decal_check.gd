@@ -16,7 +16,6 @@ func _ready() -> void:
 		await get_tree().process_frame
 	for i in 30: await get_tree().process_frame
 	var view = scene._scene.get_node("StoreView3D")
-	view.mode = StoreView3D.Mode.ON
 	if mode == "snow":
 		view.season_override = "winter"
 		view.weather_override = "snow"

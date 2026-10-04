@@ -7,7 +7,6 @@ extends Node
 ## 설계: docs/계획_매장_3D_적용_초안.md, 규격: docs/그림_규격서_3D도트_초안.md
 ## 칸 좌표: 2D 게임의 칸 좌표(칸 중심이 정수)를 그대로 3D 의 (x, z) 로 쓴다.
 
-enum Mode { OFF, OVERLAY, ON }  # 끔 / 반투명 겹침(2D 와 위치 비교) / 3D 만 불투명(2D 는 3D 가 안 덮는 곳에만 보임)
 
 const GAME_TILE: Vector2 = Vector2(96.0, 48.0)  # 2D 게임의 칸 크기
 # 확대 배율(shrink)에 따라 정해지는 값. 기본 3배: 낮은 해상도 칸 36×18, 블록 22px, 질감 18, 2D 줌 1.125.
@@ -37,11 +36,6 @@ const ID_SHADER: Shader = preload("res://script/world/view3d/shader/sorted_id.gd
 const OUTLINE_SHADER: Shader = preload("res://script/world/view3d/shader/outline_post.gdshader")
 const FACADE_SHADER: Shader = preload("res://script/world/view3d/shader/facade.gdshader")
 
-var mode: Mode = Mode.ON:  # 게임은 항상 3D. 다른 값은 dev/ 비교 장면에서만 쓴다
-	set(value):
-		mode = value
-		_apply_mode()
-
 var world: Node2D
 var floor_node: Node2D
 var objects_node: Node2D
@@ -58,8 +52,6 @@ var _sun: DirectionalLight3D
 var _fill: DirectionalLight3D  # 보조광: 그림자 쪽 벽(+x 면)이 새까맣게 떨어지지 않게 반대편에서 약하게 비춘다(그림자 없음)
 var _post_material: ShaderMaterial
 var _ready_done: bool = false
-var _zoom_applied: bool = false
-var _saved_zoom: Vector2 = Vector2.ONE
 
 # 키 → {mesh, material, id_mesh, id_material, min, max, center, signature}
 var _items: Dictionary = {}
@@ -73,7 +65,7 @@ var _ground_mesh: MeshInstance3D
 var _ground_id_mesh: MeshInstance3D
 var _ground_id_material: ShaderMaterial
 var _texture_cache: Dictionary = {}
-# 3D 만 보기(Mode.ON)일 때 숨긴 2D 노드와 원래 보이던 상태(끄면 복원): 인스턴스 id → [노드, 원래 visible]
+# 숨긴 2D 그림 노드: 인스턴스 id → [노드, 원래 visible]
 var _hidden_2d: Dictionary = {}
 const VIEW_MARGIN: float = 15.0  # 정렬에 넣는 범위(카메라 중심 칸 ± 이 값)
 var _view_center: Vector2 = Vector2.ZERO
@@ -85,8 +77,6 @@ var _lamps: Array = []
 var _lamp_signature: String = ""
 var day_manager: Node
 var exterior: Node2D
-## 마을(매장 바깥)도 3D 로 그린다(항상 true. dev/ 비교 장면에서만 끈다).
-var village_enabled: bool = true
 var weather_override: String = ""  # 개발용: clear / rain / snow. 비우면 날씨 계산(WeatherSystem)을 따른다
 var weather_override_intensity: float = 0.85
 var weather: Dictionary = {"kind": "clear", "intensity": 0.0}  # 지금 날씨(부드럽게 변하는 값)
@@ -123,6 +113,7 @@ func configure_scale(n: int) -> void:
 
 func _ready() -> void:
 	process_priority = 200  # 2D 노드들이 움직인 다음에 읽는다
+	process_mode = Node.PROCESS_MODE_ALWAYS  # 건축 모드가 게임을 멈춰도(get_tree().paused) 3D 는 미리보기·가구를 계속 갱신한다
 	world = get_parent() as Node2D
 	_build_view.call_deferred()
 
@@ -235,48 +226,15 @@ func _build_id_pass() -> void:
 	_id_viewport.add_child(id_env)
 
 
+# 처음 한 번: 3D 층을 켜고 2D 그림을 숨기며, 3D 칸 크기(화면 108px)와 2D 칸 크기를 맞추려고 2D 카메라 줌을 올린다.
 func _apply_mode() -> void:
-	if not _ready_done:
-		return
+	_canvas.visible = true
+	_collect_2d_to_hide()
 
-	_canvas.visible = mode != Mode.OFF
-
-	if mode == Mode.OFF and village != null:
-		village.restore_collisions(world)
-	_apply_2d_hiding()
-
-	# 3D 칸 크기(화면 108px)와 2D 칸 크기를 맞추려고 2D 카메라 줌을 올린다(끄면 원래 값으로).
 	if camera2d != null:
-		if mode != Mode.OFF and not _zoom_applied:
-			_saved_zoom = camera2d.zoom
-			camera2d.zoom = Vector2.ONE * match_zoom
-			_zoom_applied = true
-		elif mode == Mode.OFF and _zoom_applied:
-			camera2d.zoom = _saved_zoom
-			_zoom_applied = false
+		camera2d.zoom = Vector2.ONE * match_zoom
 
-	_container.modulate = Color(1, 1, 1, 0.55 if mode == Mode.OVERLAY else 1.0)
-	set_process(mode != Mode.OFF)
-
-
-func set_village_enabled(value: bool) -> void:
-	village_enabled = value
-
-	if not value and village != null:
-		for key in _items.keys():
-			if str(key).begins_with("vil"):
-				_remove_item(str(key))
-
-		village.clear_ground()
-		village.reset_signatures()
-		village._keys.clear()
-		village.restore_collisions(world)
-
-		if decals != null:
-			decals.clear_puddles()
-			decals.clear_prints()
-
-	_apply_2d_hiding()
+	set_process(true)
 
 
 # 마을 건물·소품을 다시 만든다(art/world3d/ 에 그림을 넣거나 바꾼 뒤 게임을 껐다 켜지 않고 확인할 때, F8).
@@ -290,10 +248,6 @@ func reload_village_art() -> void:
 
 	village._keys.clear()
 	village.reset_signatures()
-
-
-func cycle_mode() -> void:
-	mode = ((int(mode) + 1) % 3) as Mode
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
@@ -324,22 +278,9 @@ func _hide_2d_node(n: CanvasItem) -> void:
 	n.visible = false
 
 
-func _apply_2d_hiding() -> void:
-	if mode == Mode.ON:
-		_collect_2d_to_hide()
-	else:
-		for id in _hidden_2d.keys():
-			var entry: Array = _hidden_2d[id]
-
-			if is_instance_valid(entry[0]):
-				(entry[0] as CanvasItem).visible = entry[1]
-
-		_hidden_2d.clear()
-
-
 # 숨길 것: 바닥(그림만. 충돌 노드는 그대로), 판자 벽, 가구와 사람의 그림 노드(Visual). 글자 표시(재고 등)·건축 고스트·UI 는 그대로 둔다.
 func _collect_2d_to_hide() -> void:
-	if village_enabled and exterior != null:
+	if exterior != null:
 		_hide_2d_node(exterior)
 
 		for container_name in VillageMirror.CONTAINERS:
@@ -546,18 +487,27 @@ func _process(delta: float) -> void:
 		_sync_floor()
 		_sync_walls()
 		_sync_furniture()
+		_sync_build_guides()
 
-		if village != null and village_enabled:
+		if village != null:
 			village.set_season(current_season())
 			village.sync_ground()
 			village.sync_objects(world)
 
-		if mode == Mode.ON:
-			_collect_2d_to_hide()
+		_collect_2d_to_hide()
+
+	# 건축 중에는 미리보기·안내가 마우스를 매 프레임 따라가야 하므로 0.25초 주기를 기다리지 않는다.
+	var builder: Node = world.get_node_or_null("BuildManager")
+
+	if builder != null and builder.get("build_mode") == true:
+		_sync_furniture()
+		_sync_build_guides()
+
+		_collect_2d_to_hide()
 
 	_sync_actors(delta)
 
-	if village != null and village_enabled:
+	if village != null:
 		village.tick(delta)
 
 	_sort_and_update()
@@ -707,6 +657,12 @@ func _sync_furniture() -> void:
 		if not node is Node2D or not node.has_meta("build_id"):
 			continue
 
+		var is_preview: bool = bool(node.get_meta("is_build_preview", false))
+
+		# 건축 미리보기: 보일 때만, 칸이 정해진 뒤에만 실제 가구처럼 3D 로 그린다(가능 = 밝은 청록, 불가 = 붉은색).
+		if is_preview and (not (node as Node2D).is_visible_in_tree() or not node.has_meta("anchor")):
+			continue
+
 		var build_id: String = str(node.get_meta("build_id"))
 		var row: Dictionary = Furniture3DData.get_row(build_id)
 
@@ -723,9 +679,15 @@ func _sync_furniture() -> void:
 		var fx: int = int(visual.get("footprint_x")) if visual != null and visual.get("footprint_x") != null else 1
 		var fy: int = int(visual.get("footprint_y")) if visual != null and visual.get("footprint_y") != null else 1
 		var stack: int = int(node.get("stack_level")) if node.get("stack_level") != null else 1
+		var preview_valid: bool = bool(node.get_meta("preview_valid", true))
+
+		if is_preview:
+			stack = int(node.get_meta("preview_stack", 1))
+			rotation_index = int(node.get_meta("rotation_index", rotation_index))
+
 		var key: String = "furn%d" % node.get_instance_id()
 		alive[key] = true
-		var sig: String = "%s|%s|%d|%d|%d|%d" % [build_id, str(anchor), rotation_index, fx, fy, stack]
+		var sig: String = "%s|%s|%d|%d|%d|%d|%s|%s" % [build_id, str(anchor), rotation_index, fx, fy, stack, str(is_preview), str(preview_valid)]
 
 		if _items.has(key) and _items[key]["signature"] == sig:
 			continue
@@ -747,11 +709,112 @@ func _sync_furniture() -> void:
 					lo.x = hi.x - depth
 
 		var height_blocks: float = float(row["height_blocks"]) + float(row["stack_step_blocks"]) * float(maxi(stack - 1, 0))
-		_set_item(key, lo, hi, height_blocks, str(row["texture"]), row["tint"], sig)
+		var item_tint: Color = row["tint"]
+
+		if is_preview:
+			item_tint = item_tint.lerp(Color(0.55, 1.0, 0.9) if preview_valid else Color(1.0, 0.25, 0.25), 0.4 if preview_valid else 0.65)
+
+		_set_item(key, lo, hi, height_blocks, str(row["texture"]), item_tint, sig)
 
 	for key in _items.keys():
 		if (str(key).begins_with("furn") or str(key).begins_with("wmount")) and not alive.has(key):
 			_remove_item(key)
+
+
+# ---------------------------------------------------------------- 건축 안내(발자국 윤곽·점유 칸·직원/결제/접근 칸)
+
+var _build_guide: MeshInstance3D
+var _build_guide_sig: String = ""
+
+
+# BuildManager.get_build_overlay() 의 데이터를 바닥에 색 칸으로 그린다(2D _draw 의 안내를 대신함). 깊이 검사 없이 가구 위에도 보인다.
+func _sync_build_guides() -> void:
+	var manager: Node = world.get_node_or_null("BuildManager")
+	var data: Dictionary = manager.get_build_overlay() if manager != null and manager.has_method("get_build_overlay") else {}
+
+	if data.is_empty():
+		if _build_guide != null:
+			_build_guide.visible = false
+
+		return
+
+	var sig: String = str(data)
+
+	if sig == _build_guide_sig and _build_guide != null:
+		_build_guide.visible = true
+		return
+
+	_build_guide_sig = sig
+
+	if _build_guide == null:
+		_build_guide = MeshInstance3D.new()
+		_build_guide.layers = 1
+		_build_guide.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		var mat := StandardMaterial3D.new()
+		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		mat.vertex_color_use_as_albedo = true
+		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		mat.no_depth_test = true
+		mat.render_priority = 100
+		mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+		_build_guide.material_override = mat
+		_viewport.add_child(_build_guide)
+
+	var verts := PackedVector3Array()
+	var colors := PackedColorArray()
+	var y: float = 0.06
+
+	var quad := func(x0: float, z0: float, x1: float, z1: float, c: Color) -> void:
+		for p in [Vector3(x0, y, z0), Vector3(x1, y, z0), Vector3(x1, y, z1), Vector3(x0, y, z0), Vector3(x1, y, z1), Vector3(x0, y, z1)]:
+			verts.append(p)
+			colors.append(c)
+
+	for cell in data["base_cells"]:
+		quad.call(float(cell.x) - 0.5, float(cell.y) - 0.5, float(cell.x) + 0.5, float(cell.y) + 0.5, Color(0.6, 0.8, 0.9, 0.18))
+
+	for g in data["guides"]:
+		var c: Vector2i = g["cell"]
+		quad.call(float(c.x) - 0.5, float(c.y) - 0.5, float(c.x) + 0.5, float(c.y) + 0.5, g["color"])
+
+	# 발자국 윤곽(가구 3D 와 같은 칸 규칙): 얇은 테두리 네 줄
+	var row: Dictionary = Furniture3DData.get_row(str(data["build_id"]))
+
+	if row["kind"] == "box":
+		var anchor: Vector2i = data["anchor"]
+		var size: Vector2i = data["size"]
+		var lo := Vector2(float(anchor.x) - 0.5, float(anchor.y) - 0.5)
+		var hi := Vector2(float(anchor.x + size.x) - 0.5, float(anchor.y + size.y) - 0.5)
+		var depth: float = row["depth_ratio"]
+
+		if depth < 1.0:
+			match posmod(int(data["rotation"]), 4):
+				0:
+					hi.y = lo.y + depth
+				1:
+					hi.x = lo.x + depth
+				2:
+					lo.y = hi.y - depth
+				3:
+					lo.x = hi.x - depth
+
+		var edge: Color = Color(0.4, 0.95, 1.0, 0.95) if data["valid"] else Color(1.0, 0.3, 0.3, 0.95)
+		var t: float = 0.04
+		quad.call(lo.x, lo.y, hi.x, lo.y + t, edge)
+		quad.call(lo.x, hi.y - t, hi.x, hi.y, edge)
+		quad.call(lo.x, lo.y, lo.x + t, hi.y, edge)
+		quad.call(hi.x - t, lo.y, hi.x, hi.y, edge)
+
+	var arrays := []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = verts
+	arrays[Mesh.ARRAY_COLOR] = colors
+	var mesh := ArrayMesh.new()
+
+	if verts.size() > 0:
+		mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+
+	_build_guide.mesh = mesh
+	_build_guide.visible = true
 
 
 # 벽에 붙는 가구(문 틀, 포스터·지도·깃발 판). 앵커 칸과 회전으로 벽 변(가장자리)을 정한다.

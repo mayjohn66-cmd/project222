@@ -23,7 +23,6 @@ func _ready() -> void:
 	dm.hour_timer.stop()
 	var plr: Node2D = scene.get_node("Actors/Player")
 	mirror.forced_hour = 12.0
-	mirror.mode = StoreView3D.Mode.ON
 	plr.visible = false  # 건물 한가운데에 세워 화면 중앙에 오게 하므로 가린다
 
 	for t in TARGETS:

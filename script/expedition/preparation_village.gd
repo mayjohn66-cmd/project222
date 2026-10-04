@@ -1,7 +1,5 @@
 extends Node2D
 ## First expedition-world step: walk along the road and leave from its far end.
-const TILE = preload("res://script/world/shop/world_tile_art.gd")
-const VISUAL = preload("res://script/actor/character_visual.gd")
 const ORIGIN := Vector2(576,98)
 const EXIT_CELL := Vector2(8,1)
 const START_CELL := Vector2(8,10)
@@ -29,16 +27,16 @@ static func on_road(point: Vector2) -> bool:
 func _ready() -> void:
  host = get_parent()
  texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
- var ground := Road.new()
- ground.z_index = -10
- add_child(ground)
+ # 바닥·나무·출구 문·플레이어 몸은 3D(PreparationRoad3D)가 그린다. 이 노드는 이동·출구 판정과 글자만 맡는다.
+ var view3d := PreparationRoad3D.new()
+ view3d.village = self
+ add_child(view3d)
  exit_marker = ExitMark.new()
  exit_marker.position = grid(EXIT_CELL)
  add_child(exit_marker)
  player = CharacterBody2D.new()
  player.name = "VillagePlayer"
  player.position = grid(START_CELL)
- player.add_child(VISUAL.new())
  add_child(player)
  camera = Camera2D.new()
  camera.position_smoothing_enabled = true
@@ -107,7 +105,6 @@ func _physics_process(delta: float) -> void:
  else: player.velocity = Vector2.ZERO
  prompt.text = "[E]  숲으로 원정 출발" if near_exit() else "도로를 따라 오른쪽 위 출구로 이동하세요  ↗"
  exit_marker.active = near_exit()
- exit_marker.queue_redraw()
 
 func _unhandled_input(event: InputEvent) -> void:
  if not visible or _blocked(): return
@@ -125,13 +122,6 @@ func try_departure() -> void:
   departing = false
   prompt.text = "출발하지 못했습니다. 잠시 후 다시 시도해주세요."
 
-class Road extends Node2D:
- func _draw() -> void:
-  draw_rect(Rect2(-1800,-1800,4800,4800),Color("334b3d"))
-  for y in range(15):
-   for x in range(7,10):
-    TILE.draw_cell(self,ORIGIN+Vector2((x-y)*48,(x+y)*24),96,48,TILE.PAVING)
-
 class ExitMark extends Node2D:
  var active := false
  func _ready() -> void:
@@ -145,10 +135,6 @@ class ExitMark extends Node2D:
   label.add_theme_color_override("font_outline_color",Color("334b3d"))
   label.add_theme_constant_override("outline_size",4)
   add_child(label)
- func _draw() -> void:
-  # A ground-level exit cue, not a building or prop.
-  var color := Color("ffdfa0") if active else Color("bcb899")
-  draw_polyline(PackedVector2Array([Vector2(-32,0),Vector2(0,-16),Vector2(32,0),Vector2(0,16),Vector2(-32,0)]),color,2)
 
 func _setup_clock() -> void:
  clock_hud = preload("res://script/expedition/village_clock_hud.gd").new()

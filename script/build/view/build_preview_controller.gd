@@ -109,9 +109,26 @@ func set_preview_color(
 		preview_node.modulate = color
 
 
+# 3D 거울(StoreView3D)이 미리보기를 실제 가구처럼 3D 로 그리도록 칸·회전·쌓임·가능 여부를 메타로 알린다.
+func set_preview_cell(
+	cell: Vector2i,
+	rotation_index: int,
+	stack_level: int = 1
+) -> void:
+	if not has_preview():
+		return
+
+	preview_node.set_meta("anchor", cell)
+	preview_node.set_meta("rotation_index", rotation_index)
+	preview_node.set_meta("preview_stack", stack_level)
+
+
 func set_placement_valid(
 	is_valid: bool
 ) -> void:
+	if has_preview():
+		preview_node.set_meta("preview_valid", is_valid)
+
 	if is_valid:
 		set_preview_color(
 			VALID_PREVIEW_COLOR
