@@ -34,6 +34,7 @@ static func deposit(id: String, item: String, amount: int = 1) -> int:
 	var removed := GameState.remove_item(item, moved)
 	var contents: Dictionary = GameState.preservation_state[id]
 	contents[item] = int(contents.get(item, 0)) + removed
+	PreservationLessonRecords.record_deposit(id, item, removed)
 	return removed
 
 static func withdraw(id: String, item: String, amount: int = 1) -> int:
@@ -45,6 +46,7 @@ static func withdraw(id: String, item: String, amount: int = 1) -> int:
 	contents[item] = int(contents[item]) - moved
 	if contents[item] == 0: contents.erase(item)
 	GameState.add_item(item, moved)
+	PreservationLessonRecords.record_withdraw(id, item, moved)
 	return moved
 
 static func valid_state(value: Variant, day: int) -> bool:

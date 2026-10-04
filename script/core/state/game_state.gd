@@ -429,6 +429,7 @@ func add_item(
 		get_item_count(item_id)
 		+ amount
 	)
+	PreservationLessonRecords.record_found(item_id)
 
 
 func remove_item(

@@ -29,9 +29,12 @@ static func entries() -> Array[Dictionary]:
 		result.append({"id":ResidentMemoryFlow.JOURNAL_PREFIX + str(event["id"]), "title":ResidentMemoryFlow.title(str(event["id"]))})
 	for entry in CraftingPathFlow.SETTINGS.stages:
 		result.append({"id":CraftingPathFlow.JOURNAL_PREFIX + str(entry["id"]),"title":CraftingPathFlow.title(str(entry["id"]))})
+	for event in PreservationLessonFlow.SETTINGS.events:
+		result.append({"id":PreservationLessonFlow.JOURNAL_PREFIX + str(event["id"]),"title":PreservationLessonFlow.title(str(event["id"]))})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with(PreservationLessonFlow.JOURNAL_PREFIX): return PreservationLessonFlow.information(id.trim_prefix(PreservationLessonFlow.JOURNAL_PREFIX))
 	if id.begins_with(CraftingPathFlow.JOURNAL_PREFIX): return CraftingPathFlow.information(id.trim_prefix(CraftingPathFlow.JOURNAL_PREFIX))
 	if id.begins_with(ResidentMemoryFlow.JOURNAL_PREFIX): return ResidentMemoryFlow.information(id.trim_prefix(ResidentMemoryFlow.JOURNAL_PREFIX))
 	if id.begins_with(SeasonalVillageFlow.JOURNAL_PREFIX): return SeasonalVillageFlow.information(id.trim_prefix(SeasonalVillageFlow.JOURNAL_PREFIX))
@@ -74,6 +77,10 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id.begins_with(PreservationLessonFlow.JOURNAL_PREFIX):
+		var entry := PreservationLessonFlow.event(id.trim_prefix(PreservationLessonFlow.JOURNAL_PREFIX))
+		if entry.is_empty() or PreservationLessonFlow.completed(str(entry["id"])) or not PreservationLessonFlow.locked_reason(entry).is_empty(): return null
+		return destination(world,"resident:" + str(entry["giver"]))
 	if id.begins_with(CraftingPathFlow.JOURNAL_PREFIX):
 		var entry := CraftingPathFlow.stage(id.trim_prefix(CraftingPathFlow.JOURNAL_PREFIX))
 		if entry.is_empty() or not CraftingPathFlow.locked_reason(entry).is_empty(): return null

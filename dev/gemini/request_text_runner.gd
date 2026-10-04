@@ -693,6 +693,8 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 					info = "마을 이야기·이벤트 / 말하는 사람: %s / 장면: %s / 새 정착·구매·해금을 약속하지 않음" % [d.get("npc", ""), d["stage"]]
 				if id.begins_with("craft_"):
 					info = "교류로 제품 발전 / 화자: %s / 장면: %s / 소개 완독 시 실제 제조법 학습, 소개 후 제작 수령과 창고 시제품이 필요, 최종 완독 때 시제품 소비·평판 최초 1회 / 현지인은 현지 재료·음식을 설명, 처음 편의점 빵·생수의 재현 지식은 플레이어 / 조작·수량은 UI, 새 시설·돈·무료 완제품 약속 없음" % [d.get("npc", ""),d.get("stage", "")]
+				if id.begins_with("preserve_"):
+					info = "처음 만난 계절 재료의 보존 체험 / 화자: %s / 장면: %s / 소개 완독 후 실제 보관 입고→다음 날 이후 출고 또는 실제 베이킹 생산 수령 / 생재료(cold)와 가공품(dry) 경로의 서술 구분 / 두 방법 중 하나만 필요, 기한·계절 제한 없음·손실 강제 없음 / 일반 창고 시료를 주민 E로 직접 전달, 최종 완독 최초1회 소비·작은 재료 답례·평판 / 현지인은 보존 경험, 현대 설비 설치/키/수량은 UI / 무료 설비·새 고객·실제 음용/회복 없음" % [d.get("npc", ""),d.get("stage", "")]
 				if kind == Tools.KIND_TUTORIAL_DIALOGUE:
 					info = "초반 현지 손님의 실제 구매 / " + ("원정 원재료를 다시 구매" if id.begins_with("raw_") else "함께 온 가게 식품을 처음 구매") + " / 조작·매출 기록·현대 기기 설명은 UI와 플레이어 몫 / 연습용 물건이나 추가 선물 없음"
 				if id == "arrival_peddler_return":
