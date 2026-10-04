@@ -24,3 +24,11 @@ func set_rotation_index(value: int) -> void:
 func set_footprint(size_x: int, size_y: int):
 	footprint_x = max(1, size_x)
 	footprint_y = max(1, size_y)
+
+
+# 칸 좌표(x, y)를 이 노드 기준 화면 좌표로(상호작용 거리 계산 등에서 쓴다).
+func grid_point(x: float, y: float) -> Vector2:
+	return Vector2(
+		(x - y) * tile_width * 0.5,
+		(x + y) * tile_height * 0.5
+	)
