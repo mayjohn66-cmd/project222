@@ -103,3 +103,9 @@ night_cloak,심야의 망토,equipment,tool,0,2,1,false,false,res://art/items/pi
 starlight_boots,별빛 장화,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/starlight_boots.png,걸을 때마다 은은한 별빛이 남는 가벼운 장화다.,0,3,bag,expedition,2
 camp_bread,현지식 빵,store_product,food,100,0,0,true,true,res://art/items/pixel_v1/bread.png,이곳의 밀로 구운 소박한 빵이다. 처음 가게에 남아 있던 빵과는 다르다.,0,0,inventory,shelf,0
 scroll_camp_bread,현지식 빵 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,이곳의 밀로 소박한 빵을 굽는 법을 적은 두루마리다.,0,0,bag,expedition,2
+spring_bud,봄 새순,material,material,30,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,봄의 숲과 초원에서만 자라는 새순. 말려 보관하면 가을에도 향을 나눌 수 있다.,0,0,inventory,shelf,1
+summer_mint,여름 물박하,material,material,30,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,여름의 늪과 계곡에서만 돋는 물박하. 보관한 잎은 겨울의 따뜻한 차에도 쓰인다.,0,0,inventory,shelf,1
+autumn_nut,가을 들밤,material,material,35,1,1,true,true,res://art/items/pixel_v1/forest_mushroom.png,가을 숲과 초원에서만 여무는 들밤. 창고에 보관해 두고 나눌 수 있다.,0,0,inventory,shelf,1
+winter_frost,녹지 않는 서리 결정,material,material,35,1,1,true,true,res://art/items/pixel_v1/mine_crystal.png,겨울 광산과 계곡에서만 맺히는 마법의 얼음. 계절이 바뀌어도 녹지 않아 여름에 찾는 이웃이 있다.,0,0,inventory,shelf,1
+rain_pearl,빗방울 구슬,material,material,40,1,1,true,true,res://art/items/pixel_v1/raw_water.png,비가 내리는 숲과 늪의 잎에 맺히는 구슬. 창고에 오래 보관할 수 있다.,0,0,inventory,shelf,1
+snow_bloom,눈꽃 이끼,material,material,40,1,1,true,true,res://art/items/pixel_v1/swamp_moss.png,겨울 눈이 내릴 때 초원과 계곡에서 피어나는 이끼. 보관해도 사라지지 않는다.,0,0,inventory,shelf,1

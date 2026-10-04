@@ -49,13 +49,15 @@ static func reload() -> void:
 static func get_events_by_node_type(
 	region_id: String,
 	node_type: String,
-	current_day: int
+	current_day: int,
+	environment: Dictionary = {}
 ) -> Array[Dictionary]:
 	ensure_loaded()
 
 	var result: Array[Dictionary] = []
 
 	for event in events:
+		if not ExpeditionEnvironment.matches(event, environment): continue
 		var event_region_id: String = str(
 			event.get(
 				"region_id",
@@ -195,6 +197,8 @@ static func _load_events() -> void:
 		events.append(
 			{
 				"event_id": event_id,
+				"season_filter": CsvReader.get_cell(row, indexes, "season_filter"),
+				"weather_filter": CsvReader.get_cell(row, indexes, "weather_filter"),
 
 				"region_id": CsvReader.get_cell(
 					row,
@@ -255,13 +259,15 @@ static func get_random_event(
 	region_id: String,
 	node_type: String,
 	current_day: int,
-	allow_heal_event: bool = true
+	allow_heal_event: bool = true,
+	environment: Dictionary = {}
 ) -> Dictionary:
 	var candidates: Array[Dictionary] = (
 		get_events_by_node_type(
 			region_id,
 			node_type,
-			current_day
+			current_day,
+			environment
 		)
 	)
 
@@ -437,6 +443,8 @@ static func _load_loot() -> void:
 
 		var entry: Dictionary = {
 			"table_id": table_id,
+			"season_filter": CsvReader.get_cell(row, indexes, "season_filter"),
+			"weather_filter": CsvReader.get_cell(row, indexes, "weather_filter"),
 
 			"item_id": item_id,
 
@@ -724,7 +732,8 @@ static func get_invalid_region_event_ids(
 static func get_random_loot(
 	table_id: String,
 	rare_chance_mult: float = 1.0,
-	difficulty: int = 1
+	difficulty: int = 1,
+	environment: Dictionary = {}
 ) -> Dictionary:
 	var all_entries: Array[Dictionary] = (
 		get_loot_entries(
@@ -735,6 +744,7 @@ static func get_random_loot(
 	var candidates: Array[Dictionary] = []
 
 	for entry in all_entries:
+		if not ExpeditionEnvironment.matches(entry, environment): continue
 		if (
 			difficulty < int(entry.get("min_difficulty", 1))
 			or difficulty > int(entry.get("max_difficulty", 9999))

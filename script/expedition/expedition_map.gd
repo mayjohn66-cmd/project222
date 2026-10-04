@@ -19,6 +19,8 @@ var layer_count: int = 6
 var difficulty: int = ExpeditionDifficultyData.MIN_LEVEL
 var width: int = 3
 var layers: Array = []
+# 출발 때의 계절/날씨. 복원해도 이 원정의 조건이 바뀌지 않는다.
+var environment: Dictionary = {}
 
 
 var region_id: String = GameConfig.DEFAULT_REGION_ID
@@ -27,6 +29,7 @@ var region_id: String = GameConfig.DEFAULT_REGION_ID
 
 
 func generate():
+	environment = ExpeditionEnvironment.capture()
 	layers.clear()
 
 	difficulty = ExpeditionDifficultyData.clamp_level(

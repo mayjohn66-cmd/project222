@@ -22,6 +22,8 @@ var board: Rect2
 var notice: String = ""
 var player_frames: SpriteFrames
 var floor_color := Color("253e32")
+var weather_overlay: ExpeditionWeatherOverlay
+var ground_overlay := Color.TRANSPARENT
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -81,6 +83,8 @@ func _ready() -> void:
 	# 버튼을 클릭하는 순간 공격하고, 누르고 있으면 기본 공격을 반복한다.
 	attack_button.button_down.connect(func():
 		if _can_play(): model.basic_attack())
+	weather_overlay = ExpeditionWeatherOverlay.new()
+	add_child(weather_overlay)
 
 func _button(caption: String, parent: Control) -> Button:
 	var button := Button.new()
@@ -167,6 +171,8 @@ func _draw() -> void:
 			var center := GRID.project(Vector2(x, y), tile_size) * tile_scale
 			TILE_ART.draw_cell(self, center, tile_size.x * tile_scale, tile_size.y * tile_scale, floor_texture)
 			var half := tile_size * tile_scale * 0.5
+			if ground_overlay.a > 0:
+				draw_colored_polygon(PackedVector2Array([center + Vector2(0, -half.y), center + Vector2(half.x, 0), center + Vector2(0, half.y), center + Vector2(-half.x, 0)]), ground_overlay)
 			draw_polyline(PackedVector2Array([center + Vector2(0, -half.y), center + Vector2(half.x, 0),
 				center + Vector2(0, half.y), center + Vector2(-half.x, 0), center + Vector2(0, -half.y)]), Color(0.85, 0.9, 0.65, 0.22), 1)
 	draw_set_transform(Vector2.ZERO)

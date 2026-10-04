@@ -811,6 +811,7 @@ func enter_expedition_scene():
 	expedition_transition_pending = true
 	GameState.set_meta("shop_return_context",{
 		"hour":current_hour,
+		"minute":get_display_minute(),
 		"was_open":shop_open,
 		"expedition_seconds":0.0,
 		"stats":player.get_daily_shop_stats(),

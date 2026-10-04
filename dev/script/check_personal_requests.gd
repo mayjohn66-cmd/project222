@@ -8,6 +8,8 @@ func check(ok: bool,label: String) -> void:
 func _ready() -> void: call_deferred("run")
 func run() -> void:
 	var world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false
+	world.get_node("VillageLifeDirector").crafting_path_enabled = false
 	add_child(world)
 	for i in range(10): await get_tree().process_frame
 	for step in TutorialDirector.SETTINGS.steps: PlayerProgress.record_story_beat("tutorial_step:" + str(step["id"]) + ":done",GameState.total_day)
@@ -23,6 +25,7 @@ func run() -> void:
 	check(board.panel.cards.has("personal:naru_provisions"),"personal cards coexist with community cards")
 	for entry in PersonalRequestFlow.entries():
 		if entry.has("after"): continue # 후속 부탁은 아래에서 선행·모임·날짜 조건을 함께 검증한다.
+		if entry.has("stockpile_season"): continue # 계절·장기 보관은 check_seasonal_expedition에서 실제 전달로 검사한다.
 		var id := str(entry["id"])
 		var resident := str(entry["resident"])
 		check(not PersonalRequestFlow.accept(id),"unsettled resident cannot offer " + id)

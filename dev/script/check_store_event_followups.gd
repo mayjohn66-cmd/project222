@@ -37,6 +37,8 @@ func drain() -> void:
 	check(false, "conversation terminates")
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false
+	world.get_node("VillageLifeDirector").crafting_path_enabled = false
 	add_child(world)
 	await settle()
 	life = world.get_node("VillageLifeDirector")
@@ -49,7 +51,7 @@ func run() -> void:
 	manager.hour_timer.paused = false
 	player.set_physics_process(false)
 	world.get_node("CustomerSpawner").set_process(false)
-	check(StoreEventFollowupFlow.SETTINGS.requests.size() == 5 and PersonalRequestFlow.entries().size() == 17 and MarketAfterglowFlow.moments().size() == 11, "five requests and five afterglows extend existing content")
+	check(StoreEventFollowupFlow.SETTINGS.requests.size() == 5 and PersonalRequestFlow.entries().size() == 17 + SeasonStockpileFlow.SETTINGS.requests.size() and MarketAfterglowFlow.moments().size() == 11, "five requests and five afterglows extend existing content")
 	var sources := Tools.load_sources()
 	for entry in StoreEventFollowupFlow.SETTINGS.requests:
 		var id := str(entry["id"])

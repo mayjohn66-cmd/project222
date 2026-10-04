@@ -1,5 +1,7 @@
 extends RefCounted
 
+var environment: Dictionary = {}
+
 
 # difficulty: 원정 난이도 레벨. 수량 배율과 희귀 재료 확률 배율을 정한다.
 func roll_enemy_loot(
@@ -39,7 +41,8 @@ func roll_loot_table(
 			ExpeditionDifficultyData.get_rare_chance_mult(
 				difficulty
 			),
-			difficulty
+			difficulty,
+			environment
 		)
 	)
 
