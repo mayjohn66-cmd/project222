@@ -441,6 +441,11 @@ func _add_cell_boundary(
 		0
 	)
 
+	# 벽 바깥쪽 두께 벡터(3D 벽 두께 StoreView3D.WALL_THICKNESS 칸): +x = (w/2, h/2), +y = (-w/2, h/2)
+	var thick: float = StoreView3D.WALL_THICKNESS
+	var out_px := Vector2(tile_width * 0.5, tile_height * 0.5) * thick   # +x 방향(오른쪽 경계)
+	var out_py := Vector2(-tile_width * 0.5, tile_height * 0.5) * thick  # +y 방향(아래쪽 경계)
+
 	# 오른쪽 경계
 	if not is_world_cell_inside(
 		cell + Vector2i(1, 0)
@@ -454,6 +459,7 @@ func _add_cell_boundary(
 				right,
 				bottom
 			)
+			BoundarySegment.add_thick(boundary, right, bottom, out_px)
 
 	# 왼쪽 경계
 	if not is_world_cell_inside(
@@ -468,6 +474,7 @@ func _add_cell_boundary(
 				left,
 				top
 			)
+			BoundarySegment.add_thick(boundary, left, top, -out_px)
 
 	# 아래쪽 경계
 	if not is_world_cell_inside(
@@ -482,6 +489,7 @@ func _add_cell_boundary(
 				bottom,
 				left
 			)
+			BoundarySegment.add_thick(boundary, bottom, left, out_py)
 
 	# 위쪽 경계
 	if not is_world_cell_inside(
@@ -496,3 +504,4 @@ func _add_cell_boundary(
 				top,
 				right
 			)
+			BoundarySegment.add_thick(boundary, top, right, -out_py)
