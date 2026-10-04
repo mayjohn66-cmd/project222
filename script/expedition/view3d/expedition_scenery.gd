@@ -148,94 +148,62 @@ func _yaw(rng: RandomNumberGenerator) -> float:
 	return rng.randf() * TAU
 
 
-# 주변 풍경은 "정돈된 띠"로 만든다: 뒤쪽 두 변을 따라 같은 간격·같은 크기의 모듈을 한 줄(또는 두 줄) 세운다. 흩뿌리지 않아서 깔끔하다.
-# 점 목록: 뒤-오른쪽 변(z = base_z, x 를 따라)과 뒤-왼쪽 변(x = base_x, z 를 따라). 출구 틈 구간은 뺀다.
-func _line_points(step: float, base: float, stagger: float, jitter: float, rng: RandomNumberGenerator) -> Array:
+# 주변 풍경은 "투명 가벽 + 지형 오브젝트" 방식이다. 방 가장자리는 보이지 않는 벽(이동 한계)이 막고, 그 바깥을 지역 지형물로 꾸민다.
+# 일렬로 세우면 인위적이라서, 뒤쪽 두 변을 불규칙한 간격으로 걸으며 점을 뽑고 깊이도 물결치듯 흔든다.
+# 종류·크기·방향을 섞고 가끔 빈틈과 작은 무리(군락)를 만든다. 출구 틈 구간은 비운다.
+func _walk_border(rng: RandomNumberGenerator, base: float, step_min: float, step_max: float, wave: float, skip: float = 0.0) -> Array:
 	var out: Array = []
-	var x: float = -1.4 + stagger
+	var phase: float = rng.randf() * TAU
+	var x: float = -1.6 + rng.randf() * step_max
 
-	while x < 9.0:
-		var inside_gap: bool = x > GAP.position.x and x < GAP.end.x
-		var gx: float = x + rng.randf_range(-jitter, jitter)
+	while x < 9.2:
+		if not (x > GAP.position.x and x < GAP.end.x) and rng.randf() >= skip:
+			out.append({"pos": Vector2(x, base + sin(x * 0.8 + phase) * wave + rng.randf_range(-wave, wave) * 0.5), "axis": 0})
 
-		if not inside_gap:
-			out.append({"pos": Vector2(gx, base + rng.randf_range(-jitter, jitter)), "yaw_axis": 0})
+		x += rng.randf_range(step_min, step_max)
 
-		x += step
+	var z: float = 0.2 + rng.randf() * step_max
 
-	var z: float = 0.1 + stagger
+	while z < 9.2:
+		if rng.randf() >= skip:
+			out.append({"pos": Vector2(base + sin(z * 0.8 + phase) * wave + rng.randf_range(-wave, wave) * 0.5, z), "axis": 1})
 
-	while z < 9.0:
-		out.append({"pos": Vector2(base + rng.randf_range(-jitter, jitter), z + rng.randf_range(-jitter, jitter)), "yaw_axis": 1})
-		z += step
+		z += rng.randf_range(step_min, step_max)
 
 	return out
+
+
+func _pick(rng: RandomNumberGenerator, arr: Array):
+	return arr[rng.randi() % arr.size()]
 
 
 func _build_forest(rng: RandomNumberGenerator) -> void:
-	# 낮은 산울타리가 맨 앞(2m 단위로 이어 붙임), 그 뒤로 나무 두 줄(앞줄 작게, 뒷줄 크게, 소나무와 둥근 나무를 번갈아).
-	for pt in _hedge_segments(-0.45):
-		_inst(_tpl_hedge(pt["axis"], "f_hedge"), pt["pos"], 1.0, 0.0)
+	# 뒤 숲: 큰 나무, 앞 숲: 중간 나무, 가장자리: 덤불·풀. 간격과 크기가 제각각이라 자연스러운 숲 가장자리가 된다.
+	for pt in _walk_border(rng, -2.6, 1.3, 2.1, 0.4, 0.05):
+		var v: String = _pick(rng, ["big_oak", "pine", "round", "big_oak", "birch"])
+		_inst(_tpl_prop("tree", {"variant": v}, "f_tree_" + v), pt["pos"], rng.randf_range(1.15, 1.55), _yaw(rng))
 
-	var kinds: Array = ["pine", "round"]
-	var i: int = 0
+	for pt in _walk_border(rng, -1.3, 1.0, 1.9, 0.35, 0.12):
+		var v2: String = _pick(rng, ["pine", "round", "birch", "round"])
+		_inst(_tpl_prop("tree", {"variant": v2}, "f_tree_" + v2), pt["pos"], rng.randf_range(0.8, 1.15), _yaw(rng))
 
-	for pt in _line_points(1.5, -1.25, 0.0, 0.1, rng):
-		var v: String = kinds[i % 2]
-		_inst(_tpl_prop("tree", {"variant": v}, "f_tree_" + v), pt["pos"], 0.95, 0.0)
-		i += 1
+	var grass: Dictionary = _tpl_grass(Color(0.28, 0.58, 0.26), Color(0.42, 0.74, 0.34), "f_grass_b", 0.5)
 
-	i = 0
+	for pt in _walk_border(rng, -0.4, 0.7, 1.4, 0.3, 0.1):
+		if rng.randf() < 0.55:
+			var bv: String = _pick(rng, ["", "berry", ""])
+			_inst(_tpl_prop("flower_bush", {"variant": bv}, "f_bush_" + bv), pt["pos"], rng.randf_range(0.9, 1.6), _yaw(rng))
+		else:
+			_inst(grass, pt["pos"], rng.randf_range(0.9, 1.4), _yaw(rng))
 
-	for pt in _line_points(1.5, -2.45, 0.75, 0.1, rng):
-		var v2: String = ["big_oak", "pine", "round", "birch"][i % 4]
-		_inst(_tpl_prop("tree", {"variant": v2}, "f_tree_" + v2), pt["pos"], 1.25, 0.0)
-		i += 1
+		if rng.randf() < 0.25:
+			_inst(grass, pt["pos"] + Vector2(rng.randf_range(-0.4, 0.4), rng.randf_range(0.2, 0.6)), rng.randf_range(0.7, 1.1), _yaw(rng))
 
 	# 출구 양옆의 큰 나무 둘(숲의 문)
 	_inst(_tpl_prop("tree", {"variant": "big_oak"}, "f_tree_big_oak"), Vector2(2.1, -0.95), 1.55, 0.0)
-	_inst(_tpl_prop("tree", {"variant": "big_oak"}, "f_tree_big_oak"), Vector2(4.9, -0.95), 1.55, 0.0)
+	_inst(_tpl_prop("tree", {"variant": "big_oak"}, "f_tree_big_oak"), Vector2(4.9, -0.95), 1.55, 2.0)
 	_forest_path(rng)
 	_exit_forest()
-
-
-# 산울타리 조각(길이 2칸) 위치: 뒤-오른쪽 변은 x 방향, 뒤-왼쪽 변은 z 방향으로 이어 붙인다.
-func _hedge_segments(base: float) -> Array:
-	var out: Array = []
-	var x: float = -1.0
-
-	while x < 9.0:
-		if abs(x - EXIT_X) > 1.6:
-			out.append({"pos": Vector2(x, base), "axis": 0})
-
-		x += 2.0
-
-	var z: float = 1.0
-
-	while z < 9.0:
-		out.append({"pos": Vector2(base, z), "axis": 1})
-		z += 2.0
-
-	return out
-
-
-func _tpl_hedge(axis: int, key: String) -> Dictionary:
-	var k: String = "%s_%d" % [key, axis]
-	var lo := Vector2(-1.0, -0.25) if axis == 0 else Vector2(-0.25, -1.0)
-	var hi := Vector2(1.0, 0.25) if axis == 0 else Vector2(0.25, 1.0)
-
-	if _cache.has(k):
-		return _cache[k]
-
-	var built: Dictionary = VillageAssets.build_prop("flower_bush", lo, hi, {"variant": "hedge"}, st._p)
-	var mats: Array = VillageAssets.make_materials(built["specs"])
-
-	for m in mats:
-		(m as ShaderMaterial).set_shader_parameter("use_sort", false)
-
-	var t: Dictionary = {"mesh": built["mesh"], "mats": mats}
-	_cache[k] = t
-	return t
 
 
 func _forest_path(rng: RandomNumberGenerator) -> void:
@@ -254,55 +222,62 @@ func _forest_path(rng: RandomNumberGenerator) -> void:
 
 
 func _build_mine(rng: RandomNumberGenerator) -> void:
-	# 바위 능선: 앞줄은 중간 크기, 뒷줄은 큰 바위(어긋나게). 수정은 일정 간격으로 앞줄 위에 한 송이씩.
-	var i: int = 0
+	# 큰 암벽(뒤) + 크고 작은 바위가 뭉친 언덕(앞) + 군데군데 수정·종유석. 바위끼리 겹치게 놓아 하나의 덩어리로 보인다.
+	for pt in _walk_border(rng, -2.2, 1.4, 2.3, 0.4, 0.05):
+		_inst(_tpl_prop("rock", {}, "m_rock"), pt["pos"], rng.randf_range(2.6, 3.6), _yaw(rng))
 
-	for pt in _line_points(1.6, -0.95, 0.0, 0.08, rng):
-		_inst(_tpl_prop("rock", {}, "m_rock"), pt["pos"], 1.9 if i % 2 == 0 else 2.3, float(i % 4) * PI * 0.5)
-		i += 1
+	var lights: int = 0
 
-	i = 0
+	for pt in _walk_border(rng, -0.8, 0.9, 1.7, 0.35, 0.1):
+		_inst(_tpl_prop("rock", {}, "m_rock"), pt["pos"], rng.randf_range(1.0, 2.4), _yaw(rng))
 
-	for pt in _line_points(1.9, -2.3, 0.9, 0.1, rng):
-		_inst(_tpl_prop("rock", {}, "m_rock"), pt["pos"], 3.0, float(i % 4) * PI * 0.5)
-		i += 1
+		if rng.randf() < 0.5:
+			_inst(_tpl_prop("rock", {}, "m_rock"), pt["pos"] + Vector2(rng.randf_range(-0.5, 0.5), rng.randf_range(0.1, 0.5)), rng.randf_range(0.6, 1.2), _yaw(rng))
 
-	i = 0
+		var roll: float = rng.randf()
 
-	for pt in _line_points(1.6, -0.55, 0.8, 0.0, rng):
-		if i % 3 == 0:
-			_inst(_tpl_crystal(Color(0.35, 0.85, 0.95), "m_crystal"), pt["pos"], 1.1, 0.0)
+		if roll < 0.2:
+			var cp: Vector2 = pt["pos"] + Vector2(rng.randf_range(-0.3, 0.3), rng.randf_range(0.2, 0.55))
+			_inst(_tpl_crystal(Color(0.35, 0.85, 0.95), "m_crystal"), cp, rng.randf_range(0.8, 1.3), _yaw(rng))
 
-			if i % 6 == 0:
-				st.add_glow_light(Vector3(pt["pos"].x, 0.7, pt["pos"].y), Color(0.45, 0.85, 1.0), 0.9, 3.4)
-
-		i += 1
+			if lights < 3:
+				lights += 1
+				st.add_glow_light(Vector3(cp.x, 0.7, cp.y), Color(0.45, 0.85, 1.0), 0.9, 3.4)
+		elif roll < 0.4:
+			_inst(_tpl_stalagmite(Color(0.5, 0.5, 0.58), "m_stal"), pt["pos"] + Vector2(rng.randf_range(-0.3, 0.3), rng.randf_range(0.2, 0.5)), rng.randf_range(0.8, 1.3), _yaw(rng))
 
 	_inst(_tpl_prop("rock", {}, "m_rock"), Vector2(2.0, -0.8), 3.2, 0.0)
-	_inst(_tpl_prop("rock", {}, "m_rock"), Vector2(5.0, -0.8), 3.2, 0.0)
+	_inst(_tpl_prop("rock", {}, "m_rock"), Vector2(5.0, -0.8), 3.0, 2.0)
 	_exit_mine()
 
 
 func _build_swamp(rng: RandomNumberGenerator) -> void:
-	# 물 띠 + 갈대 띠 + 죽은 나무 한 줄(일정 간격)
-	_swamp_strips()
+	# 군데군데 고인 물, 갈대 무리, 크기가 제각각인 죽은 나무.
+	var wb := VillageAssets.PartBuilder.new()
+	var water: Dictionary = st._flat(Color(0.2, 0.38, 0.36), "swamp_water", 0.12)
+	var wp: SurfaceTool = wb.new_part(water, Vector3(-1, 0, -1), Vector3(1, 1, 1))
+
+	for pt in _walk_border(rng, -0.9, 1.4, 2.4, 0.3, 0.1):
+		var pr: float = rng.randf_range(0.5, 0.95)
+		VillageAssets.oct_st(wp, pt["pos"].x, pt["pos"].y, pr, 0.0, 0.025, pr * 0.97)
+
+	st._node(wb)
 	var reeds: Dictionary = _tpl_reeds("s_reeds")
 
-	for pt in _line_points(0.95, -0.55, 0.0, 0.06, rng):
-		_inst(reeds, pt["pos"], 1.0, 0.0)
+	for pt in _walk_border(rng, -0.45, 0.6, 1.3, 0.35, 0.15):
+		_inst(reeds, pt["pos"], rng.randf_range(0.8, 1.35), _yaw(rng))
 
 	var i: int = 0
 
-	for pt in _line_points(1.9, -1.75, 0.0, 0.1, rng):
-		_inst(_tpl_prop("tree", {"variant": "dead"}, "s_dead"), pt["pos"], 1.25, float(i % 4) * 0.7)
+	for pt in _walk_border(rng, -1.7, 1.3, 2.3, 0.4, 0.1):
+		_inst(_tpl_prop("tree", {"variant": "dead"}, "s_dead"), pt["pos"], rng.randf_range(1.0, 1.5), _yaw(rng))
 		i += 1
 
-	for pt in _line_points(1.9, -2.7, 0.95, 0.1, rng):
-		_inst(_tpl_prop("tree", {"variant": "dead"}, "s_dead"), pt["pos"], 1.45, float(i % 4) * 0.7)
-		i += 1
+	for pt in _walk_border(rng, -2.8, 1.4, 2.4, 0.4, 0.05):
+		_inst(_tpl_prop("tree", {"variant": "dead"}, "s_dead"), pt["pos"], rng.randf_range(1.3, 1.8), _yaw(rng))
 
 	_inst(_tpl_prop("tree", {"variant": "dead"}, "s_dead"), Vector2(2.2, -0.9), 1.5, 0.4)
-	_inst(_tpl_prop("tree", {"variant": "dead"}, "s_dead"), Vector2(4.8, -0.9), 1.5, 2.0)
+	_inst(_tpl_prop("tree", {"variant": "dead"}, "s_dead"), Vector2(4.8, -0.9), 1.4, 2.0)
 
 	for k in range(2):
 		st.add_wisp(Vector3(rng.randf_range(0.0, 7.5), 0.8, rng.randf_range(-0.8, 0.5)), Color(0.6, 1.0, 0.7))
@@ -310,44 +285,29 @@ func _build_swamp(rng: RandomNumberGenerator) -> void:
 	_exit_swamp()
 
 
-func _swamp_strips() -> void:
-	var b := VillageAssets.PartBuilder.new()
-	var water: Dictionary = st._flat(Color(0.2, 0.38, 0.36), "swamp_water", 0.12)
-	var wp: SurfaceTool = b.new_part(water, Vector3(-1, 0, -1), Vector3(1, 1, 1))
-	# 뒤-오른쪽 변을 따라 가는 띠(출구 틈 제외)와 뒤-왼쪽 변을 따라 가는 띠
-	VillageAssets.box_st(wp, Vector3(-1.4, 0.0, -1.1), Vector3(GAP.position.x, 0.025, -0.65))
-	VillageAssets.box_st(wp, Vector3(GAP.end.x, 0.0, -1.1), Vector3(9.0, 0.025, -0.65))
-	VillageAssets.box_st(wp, Vector3(-1.1, 0.0, 0.1), Vector3(-0.65, 0.025, 9.0))
-	st._node(b)
-
-
 func _build_ruins(rng: RandomNumberGenerator) -> void:
-	# 낮은 돌담을 이어 세우되 세 조각마다 하나는 무너져 비고, 이음새마다 기둥이 선다. 뒤에는 한 겹 더 높은 담.
-	var i: int = 0
+	# 무너진 담 조각(길이·높이·방향이 제각각), 부러진 기둥, 흩어진 돌무더기. 군데군데 이끼 낀 풀.
+	var rubble: Dictionary = _tpl_pebbles(Color(0.62, 0.58, 0.7), "r_rubble_b")
+	var moss: Dictionary = _tpl_grass(Color(0.3, 0.5, 0.3), Color(0.4, 0.62, 0.36), "r_grass_b", 0.4)
 
-	for pt in _wall_segments(-0.55, 2.4):
-		if i % 3 != 2:
-			_inst(_tpl_ruin_wall(i % 2, "r_wall"), pt["pos"], 1.0, 0.0 if pt["axis"] == 0 else PI * 0.5)
+	for pt in _walk_border(rng, -1.9, 1.5, 2.6, 0.35, 0.2):
+		var yaw_w: float = (0.0 if pt["axis"] == 0 else PI * 0.5) + rng.randf_range(-0.3, 0.3)
+		_inst(_tpl_ruin_wall(2, "r_wall"), pt["pos"], rng.randf_range(1.0, 1.3), yaw_w)
 
-		i += 1
+	for pt in _walk_border(rng, -0.7, 1.3, 2.4, 0.3, 0.25):
+		var yaw_f: float = (0.0 if pt["axis"] == 0 else PI * 0.5) + rng.randf_range(-0.35, 0.35)
+		_inst(_tpl_ruin_wall(int(rng.randi() % 2), "r_wall"), pt["pos"], rng.randf_range(0.8, 1.05), yaw_f)
 
-	i = 0
+		if rng.randf() < 0.5:
+			_inst(rubble, pt["pos"] + Vector2(rng.randf_range(-0.6, 0.6), rng.randf_range(0.2, 0.7)), rng.randf_range(0.8, 1.3), _yaw(rng))
 
-	for pt in _wall_segments(-0.55, 2.4):
-		_inst(_tpl_column(0 if i % 2 == 0 else 1, "r_col"), pt["pos"] + (Vector2(1.2, 0.0) if pt["axis"] == 0 else Vector2(0.0, 1.2)), 1.0, 0.0)
-		i += 1
-
-	i = 0
-
-	for pt in _wall_segments(-1.9, 2.4):
-		if i % 3 != 1:
-			_inst(_tpl_ruin_wall(2, "r_wall"), pt["pos"], 1.15, 0.0 if pt["axis"] == 0 else PI * 0.5)
-
-		i += 1
+		if rng.randf() < 0.4:
+			_inst(moss, pt["pos"] + Vector2(rng.randf_range(-0.5, 0.5), rng.randf_range(0.2, 0.6)), rng.randf_range(0.7, 1.1), _yaw(rng))
 
 	var cols: Array = []
 
-	for pt in _line_points(3.6, -0.55, 1.2, 0.0, rng):
+	for pt in _walk_border(rng, -1.2, 2.2, 3.6, 0.4, 0.15):
+		_inst(_tpl_column(int(rng.randi() % 2), "r_col"), pt["pos"], rng.randf_range(0.9, 1.15), _yaw(rng))
 		cols.append(pt["pos"])
 
 	for k in range(mini(3, cols.size())):
@@ -355,24 +315,6 @@ func _build_ruins(rng: RandomNumberGenerator) -> void:
 
 	_exit_ruins()
 
-
-func _wall_segments(base: float, step: float) -> Array:
-	var out: Array = []
-	var x: float = -1.2
-
-	while x < 9.0:
-		if abs(x - EXIT_X) > 1.7:
-			out.append({"pos": Vector2(x, base), "axis": 0})
-
-		x += step
-
-	var z: float = 1.2
-
-	while z < 9.0:
-		out.append({"pos": Vector2(base, z), "axis": 1})
-		z += step
-
-	return out
 
 
 # ---------------------------------------------------------------- 출구(닫힘/열림)
