@@ -34,6 +34,7 @@ func _ready() -> void:
 		"swamp": swamp_button,
 		"hidden_ruins": special_button
 	}
+	ExpeditionRegionMarkers.add_regions(self,region_buttons,forest_button)
 	for region_id in region_buttons:
 		var button: Button = region_buttons[region_id]
 		button.material = button.material.duplicate()

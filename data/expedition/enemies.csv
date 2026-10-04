@@ -13,3 +13,9 @@ forest_thornling,숲 가시덩굴,40,8,2,forest_enemy
 mine_shardling,돌조각 정령,55,9,4,mine_enemy
 swamp_reedling,늪 갈대괴물,50,9,3,swamp_enemy
 ruins_wisp,유적 잔불,50,10,3,ruins_enemy
+meadow_fluffling,초원 솜털짐승,35,7,1,meadow_enemy
+meadow_seedling,밀이삭 정령,42,8,2,meadow_enemy
+meadow_guardian,바람갈기 수호수,90,12,4,meadow_boss
+river_crab,물가 돌게,45,9,2,river_enemy
+river_pebbling,물돌 정령,52,9,4,river_enemy
+river_guardian,갈대뿌리 수호자,110,14,6,river_boss

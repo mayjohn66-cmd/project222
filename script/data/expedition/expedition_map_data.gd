@@ -406,6 +406,14 @@ static func get_region_data(region_id: String) -> Dictionary:
 
 	return regions[region_id].duplicate(true)
 
+static func get_region_ids() -> Array[String]:
+	if not _regions_loaded:
+		_regions_loaded = _load_regions()
+	var result: Array[String] = []
+	if _regions_loaded:
+		for id in regions: result.append(str(id))
+	return result
+
 
 # =========================
 # 入장 조건 검사 — 수량 변경 없음

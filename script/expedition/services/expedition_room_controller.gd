@@ -64,6 +64,8 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 		host.combat_player_max_hp, host.BASE_PLAYER_ATTACK + loadout.active_bonus(), host.combat_player_defense,
 		enemy, host.get_run_difficulty(), boss, kind, loadout)
 	model.configure_gathering(model.CONTENT.gathering(str(event.get("event_id", ""))))
+	var region_profile: Dictionary = model.CONTENT.region_profile(host.current_region_id)
+	model.configure_region(region_profile)
 	model.object_used.connect(_object_used)
 	model.enemies_cleared.connect(_enemies_cleared)
 	model.exited.connect(_exit)
@@ -72,9 +74,8 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	view.notice = "두 지점 중 한 곳에서 [E] · 한 방에서 한 곳만 채집할 수 있어요." if not model.gathering_sites.is_empty() else ""
 	view.title_label.text = "%s · %s" % [str(ExpeditionMapData.get_region_data(host.current_region_id).get("name", host.current_region_id)),
 		host.get_map_node_display_name(room_type)]
-	view.floor_color = {"forest": Color("253e32"), "mine": Color("343d49"),
-		"swamp": Color("354235"), "hidden_ruins": Color("43394b")}.get(host.current_region_id, Color("253e32"))
-	view.floor_texture = view.TILE_ART.PAVING if host.current_region_id in ["mine", "hidden_ruins"] else view.TILE_ART.GRASS
+	view.floor_color = Color(str(region_profile.get("color","253e32")))
+	view.floor_texture = view.TILE_ART.PAVING if region_profile.get("floor","grass") == "paving" else view.TILE_ART.GRASS
 	host.map_panel.hide()
 	host.bag_panel.hide()
 	host.battle_panel.hide()

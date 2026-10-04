@@ -74,6 +74,15 @@ func setup(config: ExpeditionRoomSettings, profile: ExpeditionAttackProfile,
 			})
 	exit_open = enemies.is_empty()
 
+func configure_region(profile: Dictionary) -> void:
+	var layouts: Array = profile.get("layouts", [])
+	if layouts.is_empty(): return
+	var chosen: Array = layouts[randi_range(0,layouts.size() - 1)]
+	var placed: Array[Rect2] = []
+	for rect in chosen:
+		placed.append(Rect2(float(rect[0]),float(rect[1]),float(rect[2]),float(rect[3])))
+	obstacles = placed
+
 func step(delta: float, movement: Vector2, attacking: bool) -> void:
 	if finished:
 		return

@@ -146,7 +146,8 @@ func _point(tile: Vector2) -> Vector2:
 
 func _ground_shape(center: Vector2, radius: float, from: float = 0, to: float = TAU) -> PackedVector2Array:
 	var points := PackedVector2Array()
-	for i in range(33):
+	# 면의 삼각분할에는 중복 끝점을 넣지 않고, 공격 호에는 끝점까지 넣는다.
+	for i in range(32 if is_equal_approx(to - from, TAU) else 33):
 		points.append(_point(center + Vector2.from_angle(lerpf(from, to, float(i) / 32)) * radius))
 	return points
 
@@ -183,6 +184,7 @@ func _draw() -> void:
 			var reach: float = model.settings.boss_reach if enemy["boss"] else model.settings.enemy_reach
 			var warning := _ground_shape(enemy["target"], reach)
 			draw_colored_polygon(warning, Color(1.0, 0.3, 0.2, 0.25))
+			warning.append(warning[0])
 			draw_polyline(warning, Color("f78c64"), 2)
 	if model.attack_flash > 0:
 		var angle := model.facing.angle()
