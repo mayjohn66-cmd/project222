@@ -88,6 +88,7 @@ func _ready() -> void:
 	_player = BlockyFigure.new()
 	_player.build(_content, _id_dummy, 3.0, 1.14, 0.308)
 	_player.set_sorted(false)
+	_player.weapon_always = true
 	set_process(true)
 
 
@@ -580,7 +581,7 @@ func _spawn_slash(model: RefCounted, dur: float) -> void:
 	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	_content.add_child(node)
 	var face: Vector2 = model.facing
-	_fx.append({"kind": "slash", "node": node, "t": 0.0, "delay": dur * 0.28, "sweep": dur * 0.26, "fade": 0.2,
+	_fx.append({"kind": "slash", "node": node, "t": 0.0, "delay": dur * 0.06, "sweep": dur * 0.3, "fade": 0.2,
 		"center": model.player_position, "angle": atan2(face.y, face.x), "half": deg_to_rad(float(model.attack_profile.arc_degrees)) * 0.5,
 		"reach": float(model.attack_profile.reach)})
 
@@ -592,7 +593,7 @@ func _build_slash_mesh(f: Dictionary, head_u: float, tail_u: float, alpha: float
 	var a0: float = float(f["angle"]) + float(f["half"])  # 시작(위쪽 오른쪽)
 	var a1: float = float(f["angle"]) - float(f["half"])
 	var r_out: float = float(f["reach"]) * 1.0
-	var r_in: float = float(f["reach"]) * 0.28
+	var r_in: float = float(f["reach"]) * 0.4
 	var n: int = 14
 
 	for i in range(n):
@@ -604,9 +605,9 @@ func _build_slash_mesh(f: Dictionary, head_u: float, tail_u: float, alpha: float
 
 		for u in [u0, u1]:
 			var ang: float = lerpf(a0, a1, u)
-			var y: float = 1.05 - 0.75 * u  # 위에서 아래로 내려치는 궤적
+			var y: float = 0.62 + 0.1 * sin(u * PI)  # 마인크래프트 휩쓸기처럼 수평에 가까운 부채꼴
 			var dir := Vector2(cos(ang), sin(ang))
-			pts.append([c + dir * r_out, y, c + dir * r_in, y - 0.32])
+			pts.append([c + dir * r_out, y, c + dir * r_in, y - 0.04])
 
 		var cols0 := Color(1.0, 0.95, 0.7, al0)
 		var cols1 := Color(1.0, 0.95, 0.7, al1)

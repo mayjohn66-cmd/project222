@@ -32,6 +32,7 @@ var _atk_ranged: bool = false
 var _weapon: Node3D = null
 var _hurt_t: float = -1.0  # 피격 진행 시간(초), -1 = 아님
 var _hurt_dur: float = 0.4
+var weapon_always: bool = false  # true 면 무기를 늘 들고 있다(원정 방)
 var _weapon_hold: float = 0.0  # 공격이 끝난 뒤에도 무기를 잠깐 더 보인다
 var _idle_t: float = 0.0
 var _id_root: Node3D
@@ -361,8 +362,6 @@ func _apply_hurt_pose(d2r: float) -> void:
 		(_j["kn_" + k2] as Node3D).rotation.x = 26.0 * d2r * k
 		(_j["hip_" + k2] as Node3D).rotation.x = -12.0 * d2r * k
 
-	if _weapon != null:
-		_weapon.visible = false
 
 
 # ---------------------------------------------------------------- 공격
@@ -394,8 +393,9 @@ func set_weapon(kind: String) -> void:
 		guard.position = Vector3(0.0, -0.1, 0.0)
 		var blade := _box(_weapon, Vector3(0.07, 0.5, 0.025), steel, steel, steel, false)
 		blade.position = Vector3(0.0, -0.1, 0.0)
+		_weapon.rotation.x = deg_to_rad(-50.0)  # 칼끝이 손에서 앞쪽 아래로 비스듬히(팔을 들면 앞쪽 위)
 
-	_weapon.visible = false
+	_weapon.visible = weapon_always
 
 
 # 공격 동작을 시작한다. duration 은 휘두르는 전체 시간. ranged 면 두 팔을 앞으로 뻗어 쏘는 동작.
@@ -413,7 +413,14 @@ func _apply_attack_pose(d2r: float) -> void:
 	if _atk_t < 0.0:
 		if _weapon != null:
 			_weapon_hold = maxf(0.0, _weapon_hold)
-			_weapon.visible = _weapon_hold > 0.0
+			_weapon.visible = weapon_always or _weapon_hold > 0.0
+
+			if weapon_always and _hurt_t < 0.0:
+				# 무기를 쥔 오른팔: 걸을 때도 크게 흔들지 않고 칼끝을 앞으로 내민 자세(마인크래프트처럼)
+				var sr: Node3D = _j["sh_r"]
+				var er: Node3D = _j["el_r"]
+				sr.rotation.x = lerpf(sr.rotation.x, deg_to_rad(-24.0), 0.75)
+				er.rotation.x = lerpf(er.rotation.x, deg_to_rad(-22.0), 0.75)
 
 		return
 
@@ -441,33 +448,16 @@ func _apply_attack_pose(d2r: float) -> void:
 		head.rotation.x = deg_to_rad(-3.0) * raise
 		return
 
-	# 칼 휘두르기: 뒤로 젖힘(0~0.28) → 빠르게 내려침(~0.52) → 되돌림
-	var wind: float = smoothstep(0.0, 0.28, p)
-	var strike: float = smoothstep(0.28, 0.52, p)
-	var back: float = smoothstep(0.52, 1.0, p)
-	# 어깨 회전 x: + = 뒤, - = 앞. 뒤 +80° → 앞 -105° → 0
-	var arm: float = lerpf(0.0, 80.0, wind)
-	arm = lerpf(arm, -105.0, strike)
-	arm = lerpf(arm, 0.0, back)
-	var elbow: float = lerpf(0.0, -55.0, wind)
-	elbow = lerpf(elbow, -8.0, strike)
-	elbow = lerpf(elbow, 0.0, back)
-	var twist: float = lerpf(0.0, 26.0, wind)  # 가슴을 뒤로 비튼다
-	twist = lerpf(twist, -24.0, strike)
-	twist = lerpf(twist, 0.0, back)
-	var lunge: float = (1.0 - back) * strike * 8.0  # 내려칠 때 몸이 앞으로 숙는다
-	sh_r.rotation = Vector3(deg_to_rad(arm), 0.0, deg_to_rad(-6.0) * (wind - back))
-	el_r.rotation = Vector3(deg_to_rad(elbow), 0.0, 0.0)
-	sh_l.rotation = Vector3(deg_to_rad(-18.0) * wind * (1.0 - strike) + deg_to_rad(14.0) * strike * (1.0 - back), 0.0, deg_to_rad(4.0))
-	el_l.rotation = Vector3(deg_to_rad(-20.0) * wind, 0.0, 0.0)
-	chest.rotation = Vector3(deg_to_rad(lunge), deg_to_rad(twist), 0.0)
-	hips.rotation = Vector3(0.0, deg_to_rad(-twist * 0.35), 0.0)
-	head.rotation.y = deg_to_rad(-twist * 0.4)
-	# 다리: 내려칠 때 앞발을 내딛는 느낌(왼발 앞)
-	var step_f: float = strike * (1.0 - back)
-	(_j["hip_l"] as Node3D).rotation.x = deg_to_rad(-22.0) * step_f
-	(_j["kn_l"] as Node3D).rotation.x = deg_to_rad(18.0) * step_f
-	(_j["hip_r"] as Node3D).rotation.x = deg_to_rad(12.0) * step_f
+	# 칼 휘두르기(마인크래프트식): 오른팔이 앞으로 번쩍 올라갔다가 부드럽게 내려온다. 몸통은 살짝 비틀리고 반대팔이 약간 흔들린다.
+	# swing = sin(√p · π): 시작이 빠르고 끝이 느린 한 번의 곡선(최대 p=0.25 근처)
+	var swing: float = sin(sqrt(p) * PI)
+	sh_r.rotation = Vector3(deg_to_rad(-24.0 - 88.0 * swing), 0.0, deg_to_rad(-8.0) * swing)
+	el_r.rotation = Vector3(deg_to_rad(-22.0 - 14.0 * swing), 0.0, 0.0)
+	sh_l.rotation = Vector3(deg_to_rad(10.0) * swing, 0.0, deg_to_rad(4.0))
+	el_l.rotation = Vector3.ZERO
+	chest.rotation = Vector3(deg_to_rad(4.0) * swing, deg_to_rad(-14.0) * swing, 0.0)
+	hips.rotation = Vector3(0.0, deg_to_rad(5.0) * swing, 0.0)
+	head.rotation.y = deg_to_rad(9.0) * swing
 
 
 # 예전 방식(비교용): 걸음 단계 0~3 을 끊어서 팔다리를 흔든다. 보간 없음.
