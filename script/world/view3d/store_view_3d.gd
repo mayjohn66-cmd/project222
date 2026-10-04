@@ -91,6 +91,7 @@ var weather_override: String = ""  # 개발용: clear / rain / snow. 비우면 �
 var weather_override_intensity: float = 0.85
 var weather: Dictionary = {"kind": "clear", "intensity": 0.0}  # 지금 날씨(부드럽게 변하는 값)
 var _weather_overlay: WeatherOverlay
+var decals: GroundDecals  # 물웅덩이·눈 발자국
 var wetness: float = 0.0  # 젖은 정도 0~1(비가 오면 빨리 오르고, 그친 뒤 천천히 마른다)
 var season_override: String = ""  # 개발용: 비우면 달력(GameState.total_day)을 따른다
 var sync_collision: bool = true  # 3D 로 보이는 건물·소품의 발자국을 실제 충돌 모양으로 쓴다
@@ -200,6 +201,7 @@ func _build_view() -> void:
 	_post_material.set_shader_parameter("exposure", 0.9 if PlaceholderTextures.clean else 1.0)
 	if exterior != null:
 		village = VillageMirror.new(self, exterior)
+		decals = GroundDecals.new(self, village)
 
 	_ready_done = true
 	_apply_mode()
@@ -264,6 +266,10 @@ func set_village_enabled(value: bool) -> void:
 		village.reset_signatures()
 		village._keys.clear()
 		village.restore_collisions(world)
+
+		if decals != null:
+			decals.clear_puddles()
+			decals.clear_prints()
 
 	_apply_2d_hiding()
 
@@ -525,6 +531,9 @@ func _process(delta: float) -> void:
 
 	_sync_camera()
 	_update_weather(delta)
+
+	if decals != null:
+		decals.tick(delta)
 	apply_hour(_current_hour())
 	_wall_timer -= delta
 
@@ -956,6 +965,9 @@ func _sync_actors(delta: float) -> void:
 		entry["cell"] = cell
 		figure.set_shown((n as Node2D).is_visible_in_tree())
 		figure.walking = move.length() > 0.0005 and delta > 0.0
+
+		if decals != null and village != null and (n as Node2D).is_visible_in_tree():
+			decals.walk(id, cell, move, village.is_snow_ground(cell))
 		if figure.walking:
 			figure.move_speed = lerpf(figure.move_speed, clampf(move.length() / delta, 0.4, 4.0), 0.25)
 

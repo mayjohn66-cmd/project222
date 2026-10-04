@@ -235,8 +235,22 @@ func sync_ground() -> void:
 		_ground[kind] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material}
 
 	_snow_cells = per_kind.get("grass", [])
+	var snowy: bool = str(SeasonStyle.style(season if season != "" else "spring").get("grass_kind", "grass")) == "snow"
+
+	if view.decals != null:
+		view.decals.rebuild_puddles(per_kind, snowy)
+		view.decals.clear_prints()
+
 	_snow_dirty = true
 	_sync_tufts(per_kind.get("grass", []))
+
+
+# 이 칸(소수 좌표 가능)이 눈 덮인 풀밭인지(발자국이 남는 곳).
+func is_snow_ground(cell: Vector2) -> bool:
+	if str(SeasonStyle.style(season if season != "" else "spring").get("grass_kind", "grass")) != "snow":
+		return false
+
+	return _cell_kind(Vector2i(roundi(cell.x), roundi(cell.y))) == "grass"
 
 
 func clear_ground() -> void:
@@ -509,6 +523,9 @@ func restore_collisions(world: Node) -> void:
 	if world == null:
 		return
 
+	_clear_snowmen()
+	_snow_dirty = true
+
 	for container_name in CONTAINERS:
 		var container: Node = world.get_node_or_null(container_name)
 
@@ -535,6 +552,7 @@ func restore_collisions(world: Node) -> void:
 
 var _snow_cells: Array = []
 var _snow_keys: Array = []
+var _snow_bodies: Array = []  # 눈사람 충돌 몸체(2D). 3D 를 끄면 지운다
 var _snow_dirty: bool = true
 
 
@@ -543,6 +561,12 @@ func _clear_snowmen() -> void:
 		view._remove_item(str(k))
 
 	_snow_keys.clear()
+
+	for body in _snow_bodies:
+		if is_instance_valid(body):
+			(body as Node).queue_free()
+
+	_snow_bodies.clear()
 
 
 # 겨울(snowman_rate > 0): 풀밭 칸 중 아주 일부에 눈사람을 세운다. 칸 위치로 정해지는 값이라 다시 만들어도 같은 자리이고,
@@ -585,6 +609,23 @@ func _sync_snowmen() -> void:
 		var key: String = "snowman_%d_%d" % [cell.x, cell.y]
 		view._set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), built["lo"], built["hi"], float(built["total_blocks"]), "snowman", NAN, true)
 		_snow_keys.append(key)
+
+		if view.sync_collision and view.world != null:
+			var body := StaticBody2D.new()
+			body.name = "SnowmanCollider%d_%d" % [cell.x, cell.y]
+			body.collision_layer = 1
+			body.collision_mask = 0
+			view.world.add_child(body)
+			var poly := CollisionPolygon2D.new()
+			var pts := PackedVector2Array()
+			var r: float = 0.3
+
+			for corner in [Vector2(-r, -r), Vector2(r, -r), Vector2(r, r), Vector2(-r, r)]:
+				pts.append(body.to_local(view.cell_to_world(Vector2(cell.x, cell.y) + corner)))
+
+			poly.polygon = pts
+			body.add_child(poly)
+			_snow_bodies.append(body)
 
 
 func sync_objects(world: Node) -> void:

@@ -1644,3 +1644,78 @@ static func noise_tex(size: int, base: Color, dot: Color, seed_value: int = 1, d
 				img.set_pixel(x, y, base)
 
 	return ImageTexture.create_from_image(img)
+
+
+# 물웅덩이 도트 그림(32×32, 투명 배경). group 0~2 는 물결 중심 위치가 다르고, frame 0 은 잔잔한 물, 1~4 는 물결 고리가 커지는 모습.
+static func puddle(group: int, frame: int) -> ImageTexture:
+	var n: int = 32
+	var img := Image.create(n, n, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var centers: Array = [Vector2(0, 0), Vector2(-0.22, 0.12), Vector2(0.2, -0.16)]
+	var rc: Vector2 = centers[group % 3] * float(n) * 0.5
+
+	for y in range(n):
+		for x in range(n):
+			var p := Vector2(float(x) + 0.5 - float(n) * 0.5, float(y) + 0.5 - float(n) * 0.5)
+			var ang: float = atan2(p.y, p.x)
+			var edge: float = 0.78 + 0.1 * sin(ang * 3.0 + float(group)) + 0.06 * sin(ang * 5.0 + 1.3)
+			var d: float = p.length() / (float(n) * 0.5)
+
+			if d > edge:
+				continue
+
+			var col := Color(0.4, 0.55, 0.74)
+
+			if d > edge - 0.1:
+				col = Color(0.27, 0.38, 0.55)  # 가장자리(젖은 땅과 맞닿는 어두운 띠)
+			elif (x + y * 2) % 11 == 0:
+				col = Color(0.62, 0.75, 0.9)  # 하늘 반사 점
+			elif p.y < -float(n) * 0.12:
+				col = Color(0.46, 0.61, 0.8)
+
+			img.set_pixel(x, y, col)
+
+	if frame > 0:
+		var radius: float = float(frame) * 3.4
+		var ring := Color(0.86, 0.93, 1.0)
+
+		for y in range(n):
+			for x in range(n):
+				var p2 := Vector2(float(x) + 0.5 - float(n) * 0.5, float(y) + 0.5 - float(n) * 0.5)
+
+				if img.get_pixel(x, y).a < 0.5:
+					continue
+
+				# 눌린 타원(바닥 위에서 본 원): 가로가 길다
+				var q: Vector2 = (p2 - rc)
+				var dd: float = Vector2(q.x, q.y * 1.4).length()
+
+				if absf(dd - radius) < 0.75:
+					img.set_pixel(x, y, ring)
+
+	return ImageTexture.create_from_image(img)
+
+
+# 눈 위 발자국 도트 그림(8×14, 투명 배경): 앞꿈치와 뒤꿈치. 위쪽(v=0)이 발끝.
+static func footprint() -> ImageTexture:
+	var img := Image.create(8, 14, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var dent := Color(0.6, 0.64, 0.74)
+	var rim := Color(0.86, 0.88, 0.94)
+
+	for y in range(0, 8):
+		var half: int = 3 if y > 0 and y < 7 else 2
+		for x in range(4 - half, 4 + half):
+			img.set_pixel(x, y, dent)
+
+	for y in range(9, 13):
+		var half2: int = 2
+		for x in range(4 - half2, 4 + half2):
+			img.set_pixel(x, y, dent)
+
+	for y in range(0, 14):
+		for x in range(0, 8):
+			if img.get_pixel(x, y).a > 0.5 and y > 0 and img.get_pixel(x, y - 1).a < 0.5:
+				img.set_pixel(x, y, rim)
+
+	return ImageTexture.create_from_image(img)
