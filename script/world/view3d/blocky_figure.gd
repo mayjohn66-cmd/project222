@@ -26,6 +26,11 @@ var smooth: bool = true
 var walk_blend: float = 0.0  # 0 = 서 있음, 1 = 걷는 자세
 var phase: float = 0.0
 var _yaw_cur: float = NAN
+var _atk_t: float = -1.0  # 공격 진행 시간(초), -1 = 공격 중 아님
+var _atk_dur: float = 0.4
+var _atk_ranged: bool = false
+var _weapon: Node3D = null
+var _weapon_hold: float = 0.0  # 공격이 끝난 뒤에도 무기를 잠깐 더 보인다
 var _idle_t: float = 0.0
 var _id_root: Node3D
 var _j: Dictionary = {}  # 관절 이름 → Node3D
@@ -244,6 +249,15 @@ func animate(delta: float) -> void:
 		return
 
 	_idle_t += delta
+
+	if _atk_t >= 0.0:
+		_atk_t += delta
+		_weapon_hold = 0.3
+
+		if _atk_t >= _atk_dur:
+			_atk_t = -1.0
+	elif _weapon_hold > 0.0:
+		_weapon_hold -= delta
 	# 걷는 자세 비중: 걷기 시작하면 빠르게 1로, 멈추면 조금 천천히 0으로
 	var target: float = 1.0 if walking else 0.0
 	walk_blend = move_toward(walk_blend, target, delta * (7.0 if walking else 5.0))
@@ -253,6 +267,7 @@ func animate(delta: float) -> void:
 		phase = fmod(phase + TAU * move_speed / (_step_len * 2.0) * delta, TAU)
 
 	_apply_pose()
+	rotation_degrees.y = _yaw_cur  # 정렬 판(sync_sort)이 없는 장면(원정 방)에서도 바라보는 방향으로 돈다
 
 
 func _apply_pose() -> void:
@@ -293,6 +308,113 @@ func _apply_pose() -> void:
 		var forward: float = maxf(-ang, 0.0)  # 팔이 앞에 있을수록 팔꿈치가 더 굽는다
 		sh.rotation = Vector3(arm_x * d2r, 0.0, sg * (idle * 1.5 + w * 2.0) * d2r)
 		el.rotation = Vector3(-(w * (12.0 + 22.0 * forward) + idle * 7.0) * d2r, 0.0, 0.0)
+
+	_apply_attack_pose(d2r)
+
+
+# ---------------------------------------------------------------- 공격
+
+# 무기를 오른손에 쥐게 한다(kind: "sword" 칼 / "staff" 지팡이). 공격 중과 직후에만 보인다.
+func set_weapon(kind: String) -> void:
+	if _weapon != null:
+		_weapon.queue_free()
+		_weapon = null
+
+	var wrist: Node3D = _j["wr_r"]
+	_weapon = Node3D.new()
+	wrist.add_child(_weapon)
+	var steel := _make_tex(2, 2, func(_x, _y): return Color(0.86, 0.9, 0.97))
+	var grip := _make_tex(2, 2, func(_x, _y): return Color(0.4, 0.26, 0.15))
+	var gold := _make_tex(2, 2, func(_x, _y): return Color(0.95, 0.78, 0.25))
+	var glow := _make_tex(2, 2, func(_x, _y): return Color(0.55, 0.9, 1.0))
+
+	if kind == "staff":
+		var rod := _box(_weapon, Vector3(0.035, 0.5, 0.035), grip, grip, grip, false)
+		rod.position = Vector3(0.0, 0.05, 0.0)
+		var orb := _box(_weapon, Vector3(0.09, 0.09, 0.09), glow, glow, glow, false)
+		orb.position = Vector3(0.0, 0.5, 0.0)
+	else:
+		# 칼: 손에서 아래(-Y)로 뻗는 날. 팔을 앞으로 휘두르면 날이 앞을 향한다.
+		var handle := _box(_weapon, Vector3(0.035, 0.1, 0.035), grip, grip, grip, false)
+		handle.position = Vector3(0.0, 0.03, 0.0)
+		var guard := _box(_weapon, Vector3(0.13, 0.03, 0.05), gold, gold, gold, false)
+		guard.position = Vector3(0.0, -0.1, 0.0)
+		var blade := _box(_weapon, Vector3(0.07, 0.5, 0.025), steel, steel, steel, false)
+		blade.position = Vector3(0.0, -0.1, 0.0)
+
+	_weapon.visible = false
+
+
+# 공격 동작을 시작한다. duration 은 휘두르는 전체 시간. ranged 면 두 팔을 앞으로 뻗어 쏘는 동작.
+func play_attack(duration: float, ranged: bool = false) -> void:
+	_atk_t = 0.0
+	_atk_dur = maxf(0.15, duration)
+	_atk_ranged = ranged
+
+
+func is_attacking() -> bool:
+	return _atk_t >= 0.0
+
+
+func _apply_attack_pose(d2r: float) -> void:
+	if _atk_t < 0.0:
+		if _weapon != null:
+			_weapon_hold = maxf(0.0, _weapon_hold)
+			_weapon.visible = _weapon_hold > 0.0
+
+		return
+
+	var p: float = clampf(_atk_t / _atk_dur, 0.0, 1.0)
+	var sh_r: Node3D = _j["sh_r"]
+	var el_r: Node3D = _j["el_r"]
+	var sh_l: Node3D = _j["sh_l"]
+	var el_l: Node3D = _j["el_l"]
+	var chest: Node3D = _j["chest"]
+	var hips: Node3D = _j["hips"]
+	var head: Node3D = _j["head"]
+
+	if _weapon != null:
+		_weapon.visible = true
+
+	if _atk_ranged:
+		# 두 팔을 앞으로 뻗었다가(0~0.3) 잠깐 버티고(~0.65) 내린다
+		var raise: float = smoothstep(0.0, 0.3, p) * (1.0 - smoothstep(0.65, 1.0, p))
+		sh_r.rotation = Vector3(deg_to_rad(-85.0) * raise, 0.0, 0.0)
+		sh_l.rotation = Vector3(deg_to_rad(-80.0) * raise, 0.0, deg_to_rad(-8.0) * raise)
+		el_r.rotation = Vector3(deg_to_rad(-8.0) * raise, 0.0, 0.0)
+		el_l.rotation = Vector3(deg_to_rad(-8.0) * raise, 0.0, 0.0)
+		chest.rotation = Vector3(deg_to_rad(-4.0) * raise, 0.0, 0.0)
+		hips.rotation.x = deg_to_rad(-5.0) * raise
+		head.rotation.x = deg_to_rad(-3.0) * raise
+		return
+
+	# 칼 휘두르기: 뒤로 젖힘(0~0.28) → 빠르게 내려침(~0.52) → 되돌림
+	var wind: float = smoothstep(0.0, 0.28, p)
+	var strike: float = smoothstep(0.28, 0.52, p)
+	var back: float = smoothstep(0.52, 1.0, p)
+	# 어깨 회전 x: + = 뒤, - = 앞. 뒤 +80° → 앞 -105° → 0
+	var arm: float = lerpf(0.0, 80.0, wind)
+	arm = lerpf(arm, -105.0, strike)
+	arm = lerpf(arm, 0.0, back)
+	var elbow: float = lerpf(0.0, -55.0, wind)
+	elbow = lerpf(elbow, -8.0, strike)
+	elbow = lerpf(elbow, 0.0, back)
+	var twist: float = lerpf(0.0, 26.0, wind)  # 가슴을 뒤로 비튼다
+	twist = lerpf(twist, -24.0, strike)
+	twist = lerpf(twist, 0.0, back)
+	var lunge: float = (1.0 - back) * strike * 8.0  # 내려칠 때 몸이 앞으로 숙는다
+	sh_r.rotation = Vector3(deg_to_rad(arm), 0.0, deg_to_rad(-6.0) * (wind - back))
+	el_r.rotation = Vector3(deg_to_rad(elbow), 0.0, 0.0)
+	sh_l.rotation = Vector3(deg_to_rad(-18.0) * wind * (1.0 - strike) + deg_to_rad(14.0) * strike * (1.0 - back), 0.0, deg_to_rad(4.0))
+	el_l.rotation = Vector3(deg_to_rad(-20.0) * wind, 0.0, 0.0)
+	chest.rotation = Vector3(deg_to_rad(lunge), deg_to_rad(twist), 0.0)
+	hips.rotation = Vector3(0.0, deg_to_rad(-twist * 0.35), 0.0)
+	head.rotation.y = deg_to_rad(-twist * 0.4)
+	# 다리: 내려칠 때 앞발을 내딛는 느낌(왼발 앞)
+	var step_f: float = strike * (1.0 - back)
+	(_j["hip_l"] as Node3D).rotation.x = deg_to_rad(-22.0) * step_f
+	(_j["kn_l"] as Node3D).rotation.x = deg_to_rad(18.0) * step_f
+	(_j["hip_r"] as Node3D).rotation.x = deg_to_rad(12.0) * step_f
 
 
 # 예전 방식(비교용): 걸음 단계 0~3 을 끊어서 팔다리를 흔든다. 보간 없음.

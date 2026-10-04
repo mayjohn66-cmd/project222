@@ -32,6 +32,8 @@ var _theme: Dictionary = THEMES["forest"]
 var _p: Dictionary = {"ts": 24, "block_px": 22.0, "unit_px_z": 20.0}
 var _player: BlockyFigure
 var _player_prev: Vector2 = Vector2.ZERO
+var _prev_flash: float = 0.0
+var _weapon_method: int = -1
 var _enemy_nodes: Array = []  # {node, enemy}
 var _object_nodes: Array = []
 var _exit_glow: MeshInstance3D
@@ -150,6 +152,8 @@ func rebuild(model: RefCounted, region: String) -> void:
 	_build_objects(model)
 	_build_enemies(model)
 	_player_prev = model.player_position
+	_prev_flash = 0.0
+	_weapon_method = -1
 	_player.set_shown(true)
 
 
@@ -171,6 +175,7 @@ func _node(b: VillageAssets.PartBuilder) -> MeshInstance3D:
 	for i in range(mats.size()):
 		inst.set_surface_override_material(i, mats[i])
 
+	inst.set_meta("mats", mats)
 	_content.add_child(inst)
 	return inst
 
@@ -366,7 +371,7 @@ func _build_enemies(model: RefCounted) -> void:
 			VillageAssets.oct(b, "horn_r", horn, r * 0.4, 0.0, 0.1, r * 1.3, r * 1.9, 0.0)
 
 		var inst: MeshInstance3D = _node(b)
-		_enemy_nodes.append({"node": inst, "enemy": e, "body_mat": null})
+		_enemy_nodes.append({"node": inst, "enemy": e, "hp_prev": int(e["hp"]), "flash": 0.0})
 
 
 # ---------------------------------------------------------------- 매 프레임
@@ -407,6 +412,17 @@ func _sync(model: RefCounted, delta: float) -> void:
 	if _player.walking:
 		_player.move_speed = lerpf(_player.move_speed, clampf(moved / maxf(delta, 0.0001), 0.5, 5.0), 0.3)
 
+	# 무기 모양(공격 방식이 바뀌면 다시 쥐게 한다)과 공격 동작: 모델이 공격을 시작하면(attack_flash 가 0 → 양수) 휘두른다.
+	var method: int = int(model.attack_profile.method)
+
+	if method != _weapon_method:
+		_weapon_method = method
+		_player.set_weapon("staff" if method == ExpeditionAttackProfile.Method.PROJECTILE else "sword")
+
+	if float(model.attack_flash) > 0.0 and _prev_flash <= 0.0:
+		_player.play_attack(maxf(0.3, float(model.attack_profile.cooldown) * 0.85), method == ExpeditionAttackProfile.Method.PROJECTILE)
+
+	_prev_flash = float(model.attack_flash)
 	_player.animate(delta)
 	# 적: 위치·바라보는 방향·미세한 출렁임, 쓰러지면 숨김
 	for en in _enemy_nodes:
@@ -420,6 +436,19 @@ func _sync(model: RefCounted, delta: float) -> void:
 		node.rotation.y = atan2(to_player.x, to_player.y) - PI * 0.25
 		var winding: bool = float(e["windup"]) >= 0.0
 		node.scale = Vector3.ONE * (1.0 + (0.12 if winding else 0.0))
+		# 맞으면 하얗게 번쩍이며 뒤로 떨린다
+		if int(e["hp"]) < int(en["hp_prev"]):
+			en["flash"] = 0.16
+
+		en["hp_prev"] = int(e["hp"])
+		en["flash"] = maxf(0.0, float(en["flash"]) - delta)
+		var flash_on: bool = float(en["flash"]) > 0.0
+
+		for m in node.get_meta("mats", []):
+			(m as ShaderMaterial).set_shader_parameter("tint", Color(2.4, 2.4, 2.4) if flash_on else Color.WHITE)
+
+		if flash_on:
+			node.position += Vector3(sin(_time * 90.0), 0.0, cos(_time * 90.0)) * 0.03
 	# 오브젝트: 사용했으면 숨김
 	for o in _object_nodes:
 		(o as Node3D).visible = not model.object_consumed
