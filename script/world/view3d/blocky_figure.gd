@@ -184,7 +184,14 @@ func _box(pivot: Node3D, size: Vector3, tex_front: Texture2D, tex_side: Texture2
 	m.set_shader_parameter("tex_top", tex_top)
 	m.set_shader_parameter("part_size", size)
 	inst.material_override = m
+	# 보이는 부품은 DEPTH 를 직접 쓰는 셰이더라 그림자 패스에서 그림자 깊이가 순번에 따라 뒤죽박죽이 된다.
+	# → 보이는 쪽은 그림자를 끄고, 같은 모양의 그림자 전용 상자(보통 재질)를 자식으로 달아 그림자를 드리운다.
+	inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	pivot.add_child(inst)
+	var shadow_inst := MeshInstance3D.new()
+	shadow_inst.mesh = mesh
+	shadow_inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_SHADOWS_ONLY
+	inst.add_child(shadow_inst)
 	var id_inst := MeshInstance3D.new()
 	id_inst.mesh = mesh
 	id_inst.layers = 2
