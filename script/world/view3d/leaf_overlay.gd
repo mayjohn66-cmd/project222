@@ -35,7 +35,7 @@ func _process(delta: float) -> void:
 func _draw() -> void:
 	var size_px: Vector2 = get_viewport_rect().size
 	var gust: float = pow(0.5 + 0.5 * sin(_t * 0.23 + 1.0), 3.0)  # 가끔 세게 부는 바람
-	var n: int = int((22.0 + 60.0 * gust) * amount)
+	var n: int = int((5.0 + 14.0 * gust) * amount)
 
 	for i in range(mini(n, MAX_LEAVES)):
 		var s: Vector4 = _seeds[i]

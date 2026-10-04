@@ -6,10 +6,10 @@ uid="uid://cgtir20yxly8v"
 
 [deps]
 
-files=["res://data/shop/catalogs/weather_3d.rain.translation", "res://data/shop/catalogs/weather_3d.snow.translation", "res://data/shop/catalogs/weather_3d.min.translation", "res://data/shop/catalogs/weather_3d.max.translation", "res://data/shop/catalogs/weather_3d.note.translation"]
+files=["res://data/shop/catalogs/weather_3d.rain.translation", "res://data/shop/catalogs/weather_3d.snow.translation", "res://data/shop/catalogs/weather_3d.min.translation", "res://data/shop/catalogs/weather_3d.max.translation", "res://data/shop/catalogs/weather_3d.rain.translation", "res://data/shop/catalogs/weather_3d.rain.translation", "res://data/shop/catalogs/weather_3d.snow.translation", "res://data/shop/catalogs/weather_3d.snow.translation", "res://data/shop/catalogs/weather_3d.note.translation"]
 
 source_file="res://data/shop/catalogs/weather_3d.csv"
-dest_files=["res://data/shop/catalogs/weather_3d.rain.translation", "res://data/shop/catalogs/weather_3d.snow.translation", "res://data/shop/catalogs/weather_3d.min.translation", "res://data/shop/catalogs/weather_3d.max.translation", "res://data/shop/catalogs/weather_3d.note.translation"]
+dest_files=["res://data/shop/catalogs/weather_3d.rain.translation", "res://data/shop/catalogs/weather_3d.snow.translation", "res://data/shop/catalogs/weather_3d.min.translation", "res://data/shop/catalogs/weather_3d.max.translation", "res://data/shop/catalogs/weather_3d.rain.translation", "res://data/shop/catalogs/weather_3d.rain.translation", "res://data/shop/catalogs/weather_3d.snow.translation", "res://data/shop/catalogs/weather_3d.snow.translation", "res://data/shop/catalogs/weather_3d.note.translation"]
 
 [params]
 

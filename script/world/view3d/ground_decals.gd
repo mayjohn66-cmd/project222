@@ -221,7 +221,7 @@ func rebuild_litter(grass_cells: Array, rate: float, blockers: Array) -> void:
 			var cell: Vector2i = entry[0]
 			var h: int = entry[1]
 			var v: int = h % 4
-			var size: float = 0.5 + float((h / 4) % 5) * 0.1
+			var size: float = 0.7 + float((h / 4) % 5) * 0.1
 			var cx: float = float(cell.x) + (float((h / 9) % 10) / 10.0 - 0.5) * 0.5
 			var cz: float = float(cell.y) + (float((h / 13) % 10) / 10.0 - 0.5) * 0.5
 			_add_flat_quad(sts[v], cx, cz, size, 0.0, 0.022, size)
