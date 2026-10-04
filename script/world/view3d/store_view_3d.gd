@@ -87,6 +87,7 @@ var day_manager: Node
 var exterior: Node2D
 ## 마을(매장 바깥)도 3D 로 그릴지. F9 로 켜고 끈다(매장만 3D / 마을 전체 3D 비교용).
 var village_enabled: bool = true
+var sync_collision: bool = true  # 3D 로 보이는 건물·소품의 발자국을 실제 충돌 모양으로 쓴다
 ## 색 단계 수(채널당). 256 = 제한 없음, 낮출수록 색이 뭉쳐서 도트 그림 같은 느낌(예: 12). 시험용 값.
 # 빛 세기 배율(낮 해·환경광). 참조 화면보다 밝게 날아갈 때 낮춘다. 후처리의 knee(하이라이트 눌림)와 같이 쓴다.
 var light_scale: float = 0.82
@@ -222,6 +223,9 @@ func _apply_mode() -> void:
 		return
 
 	_canvas.visible = mode != Mode.OFF
+
+	if mode == Mode.OFF and village != null:
+		village.restore_collisions(world)
 	_apply_2d_hiding()
 
 	# 3D 칸 크기(화면 108px)와 2D 칸 크기를 맞추려고 2D 카메라 줌을 올린다(끄면 원래 값으로).
@@ -249,6 +253,7 @@ func set_village_enabled(value: bool) -> void:
 		village.clear_ground()
 		village.reset_signatures()
 		village._keys.clear()
+		village.restore_collisions(world)
 
 	_apply_2d_hiding()
 
@@ -405,6 +410,11 @@ func _sync_lamps(rect: Rect2i) -> void:
 # ---------------------------------------------------------------- 좌표
 
 # 2D 세계 좌표 → 칸 좌표(연속 값, 칸 중심이 정수)
+func cell_to_world(cell: Vector2) -> Vector2:
+	var tile := Vector2(floor_node.tile_width, floor_node.tile_height)
+	return floor_node.to_global(Vector2((cell.x - cell.y) * 0.5 * tile.x, (cell.x + cell.y) * 0.5 * tile.y))
+
+
 func world_to_cell(global_pos: Vector2) -> Vector2:
 	var local: Vector2 = floor_node.to_local(global_pos)
 	var tile := Vector2(floor_node.tile_width, floor_node.tile_height)

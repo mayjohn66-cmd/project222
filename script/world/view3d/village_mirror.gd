@@ -5,6 +5,9 @@ extends RefCounted
 ## 높이·질감은 data/shop/catalogs/village_3d.csv 의 규칙(노드 이름 또는 스프라이트 그림 파일 이름에 포함된 글자)으로 정한다. 규칙이 없으면 스프라이트 높이로 추정한다.
 ## 게임 코드는 수정하지 않는다(2D 숨김은 StoreView3D 가 visible 만 바꿈).
 
+var _footprints: Dictionary = {}  # 물체 key → 3D 발자국(칸 좌표 Rect2)
+const COLLISION_3D := "Collision3D"
+const COLLISION_INSET := 0.04  # 보이는 발자국보다 살짝 안쪽(칸)
 const CONTAINERS: Array = ["NearbyHouses", "VillageExtraHouses", "VillageBlacksmith", "VillageToolShop", "VillageBuildings", "VillageDecor", "VillageGathering", "DungeonRoadside", "DungeonWall"]
 const RULES_PATH: String = "res://data/shop/catalogs/village_3d.csv"
 const GROUND_TEXTURES: Dictionary = {"grass": ["grass", Color(0.62, 0.6, 0.46)], "road": ["brick", Color(0.5, 0.46, 0.46)], "paving": ["brick", Color(0.82, 0.76, 0.68)]}
@@ -390,6 +393,9 @@ func _footprint_cell_rect(body: StaticBody2D) -> Rect2:
 	var points: Array = []
 
 	for child in body.get_children():
+		if child.name == COLLISION_3D:
+			continue
+
 		if child is CollisionPolygon2D:
 			for p in (child as CollisionPolygon2D).polygon:
 				points.append(view.world_to_cell(body.to_global((child as Node2D).position + p)))
@@ -428,6 +434,62 @@ func _sprite_info(body: StaticBody2D) -> Dictionary:
 	return {"path": "", "height_px": 0.0}
 
 
+# 3D 로 보이는 발자국(칸 좌표 사각형)과 같은 충돌 다각형을 몸체에 달고, 옛 2D 충돌 모양은 꺼 둔다(3D 를 끄면 restore_collisions 가 되돌림).
+func _apply_collision(body: StaticBody2D, lo: Vector2, hi: Vector2) -> void:
+	var poly := body.get_node_or_null(COLLISION_3D) as CollisionPolygon2D
+
+	if poly == null:
+		poly = CollisionPolygon2D.new()
+		poly.name = COLLISION_3D
+		body.add_child(poly)
+		var off: Array = []
+
+		for child in body.get_children():
+			if child != poly and (child is CollisionPolygon2D or child is CollisionShape2D) and not (child as Node).get("disabled"):
+				child.set("disabled", true)
+				off.append(str(child.name))
+
+		body.set_meta("c3_off", off)
+
+	var inset := Vector2(COLLISION_INSET, COLLISION_INSET)
+	var a: Vector2 = lo + inset
+	var b: Vector2 = hi - inset
+	var pts := PackedVector2Array()
+
+	for c in [Vector2(a.x, a.y), Vector2(b.x, a.y), Vector2(b.x, b.y), Vector2(a.x, b.y)]:
+		pts.append(body.to_local(view.cell_to_world(c)))
+
+	poly.polygon = pts
+
+
+func restore_collisions(world: Node) -> void:
+	if world == null:
+		return
+
+	for container_name in CONTAINERS:
+		var container: Node = world.get_node_or_null(container_name)
+
+		if container == null:
+			continue
+
+		for body in container.get_children():
+			var poly: Node = body.get_node_or_null(COLLISION_3D)
+
+			if poly == null:
+				continue
+
+			for path in body.get_meta("c3_off", []):
+				var node: Node = body.get_node_or_null(NodePath(str(path)))
+
+				if node != null:
+					node.set("disabled", false)
+
+			body.remove_meta("c3_off")
+			poly.queue_free()
+			poly.name = "Collision3D_removed"
+
+
+
 func sync_objects(world: Node) -> void:
 	var seen: Dictionary = {}
 	var parts: PackedStringArray = PackedStringArray()
@@ -456,10 +518,13 @@ func sync_objects(world: Node) -> void:
 			parts.append(sig)
 
 			if view._items.has(key + "a") and view._items[key + "a"]["signature"] == sig:
+				if view.sync_collision and _footprints.has(key) and body.get_node_or_null(COLLISION_3D) == null:
+					_apply_collision(body, (_footprints[key] as Rect2).position, (_footprints[key] as Rect2).end)
+
 				continue
 
 			_remove_keys(key)
-			_create_object(key, rect, rule, float(sprite_info["height_px"]), sig)
+			_create_object(key, rect, rule, float(sprite_info["height_px"]), sig, body)
 
 	# 사라진 물체 정리
 	for k in _keys.keys():
@@ -483,7 +548,7 @@ func _params() -> Dictionary:
 	return {"ts": view.texture_size, "block_px": view.block_px, "unit_px_z": (view.tile_low / sqrt(2.0)) * cos(deg_to_rad(30.0))}
 
 
-func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px: float, sig: String) -> void:
+func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px: float, sig: String, body: StaticBody2D = null) -> void:
 	var lo := rect.position
 	var hi := rect.position + rect.size
 	var kind: String = str(rule.get("kind", "box"))
@@ -516,6 +581,11 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 	half = Vector2(maxf(half.x, 0.15), maxf(half.y, 0.15))
 	lo = center - half
 	hi = center + half
+
+	_footprints[key] = Rect2(lo, hi - lo)
+
+	if body != null and view.sync_collision:
+		_apply_collision(body, lo, hi)
 
 	if kind == "gable" or kind == "prop":
 		var built: Dictionary

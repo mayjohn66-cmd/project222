@@ -293,6 +293,15 @@ static func up_st_quad(st: SurfaceTool, a: Vector3, b: Vector3, c: Vector3, d: V
 	_quad(st, a, b, c, d, n, Vector2(0, s_len), Vector2(u_len, s_len), Vector2(u_len, 0), Vector2(0, 0))
 
 
+const FASCIA_DROP: float = 0.15
+
+
+# a→b 선(지붕 가장자리)에서 수직으로 FASCIA_DROP 만큼 내려오는 띠 하나(바깥을 향한 면 n).
+static func _fascia(st: SurfaceTool, a: Vector3, b: Vector3, n: Vector3, length: float) -> void:
+	var d := Vector3(0.0, -FASCIA_DROP, 0.0)
+	_quad(st, a, b, b + d, a + d, n, Vector2(0, 0), Vector2(length, 0), Vector2(length, 1), Vector2(0, 1))
+
+
 static func _standard_roof_faces(mesh: ArrayMesh, present: Array, lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, options: Dictionary, ridge_x: bool) -> void:
 	var overhang: float = options.get("overhang", 0.14)
 	var t: float = options.get("thickness", 0.07)
@@ -371,9 +380,14 @@ static func _standard_roof_faces(mesh: ArrayMesh, present: Array, lo: Vector2, h
 		# 처마 단면(경사 아래 끝): 바깥 방향(v) 법선
 		_quad(st, top_eave_a, top_eave_b, bot_eave_b, bot_eave_a, _n(ridge_x, 0.0, side, 0.0), Vector2(0, 0), Vector2(ub - ua, 0), Vector2(ub - ua, 1), Vector2(0, 1))
 		if hip:
+			_fascia(st, top_eave_a, top_eave_b, _n(ridge_x, 0.0, side, 0.0), ub - ua)
 			continue
 
 		# 박공 가장자리 둘(경사를 따라 달리는 두께 면): 용마루 축 바깥 방향 법선
+		# 처마·박공 가장자리 아래로 늘어지는 목재 가장자리 널(fascia). 지붕이 종잇장처럼 얇아 보이지 않게 한다.
+		_fascia(st, top_eave_a, top_eave_b, _n(ridge_x, 0.0, side, 0.0), ub - ua)
+		_fascia(st, top_eave_b, top_ridge_b, _n(ridge_x, 1.0, 0.0, 0.0), slope_len)
+		_fascia(st, top_ridge_a, top_eave_a, _n(ridge_x, -1.0, 0.0, 0.0), slope_len)
 		_quad(st, top_eave_b, top_ridge_b, bot_ridge_b, bot_eave_b, _n(ridge_x, 1.0, 0.0, 0.0), Vector2(0, 0), Vector2(slope_len, 0), Vector2(slope_len, 1), Vector2(0, 1))
 		_quad(st, top_ridge_a, top_eave_a, bot_eave_a, bot_ridge_a, _n(ridge_x, -1.0, 0.0, 0.0), Vector2(0, 0), Vector2(slope_len, 0), Vector2(slope_len, 1), Vector2(0, 1))
 		# 밑면

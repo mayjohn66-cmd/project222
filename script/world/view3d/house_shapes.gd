@@ -208,6 +208,22 @@ static func _tower(c: Dictionary) -> void:
 		VillageAssets._card(b, glass_c, cx + dk * (ap + 0.04), wy + 0.04, cz + dk * (ap + 0.04), 0.2, 0.38)
 
 
+# 박공 끝벽(삼각형) 아랫단에 어두운 목재 띠(벨트)를 두른다. 위에서 내려다보면 삼각형은 아랫부분만 가느다랗게 보여서,
+# 띠가 없으면 지붕 사이에 밋밋한 흰(그늘에선 갈색) 쐐기만 남아 미완성처럼 보인다. 보이는 끝벽(ridge_x 면 +x 쪽, 아니면 +z 쪽)에만 단다.
+static func gable_truss(b, spec: Dictionary, lo: Vector2, hi: Vector2, wall_h: float, _roof_h: float, ridge_x: bool) -> void:
+	var v0: float = (lo.y if ridge_x else lo.x)
+	var v1: float = (hi.y if ridge_x else hi.x)
+	var u_end: float = (hi.x if ridge_x else hi.y)
+	_truss_box(b, spec, ridge_x, u_end, v0 - 0.04, v1 + 0.04, wall_h - 0.02, wall_h + 0.11, 0.06)
+
+
+static func _truss_box(b, spec: Dictionary, ridge_x: bool, u_end: float, va: float, vb: float, y0: float, y1: float, t: float) -> void:
+	if ridge_x:
+		VillageAssets.box(b, "gable_truss", spec, Vector3(u_end, y0, va), Vector3(u_end + t, y1, vb))
+	else:
+		VillageAssets.box(b, "gable_truss", spec, Vector3(va, y0, u_end), Vector3(vb, y1, u_end + t))
+
+
 static func _dormers(c: Dictionary, count: int) -> void:
 	var b = c["b"]
 	var lo: Vector2 = c["lo"]
