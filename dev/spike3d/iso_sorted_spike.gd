@@ -15,7 +15,7 @@ var sorted_mode: bool = true
 var use_png_textures: bool = false  # true = PNG 파일(dev/spike3d/textures)이 있으면 그걸 쓴다
 var use_normal_map: bool = false  # 법선 맵 켜기(시험 방 3 의 N 키)
 var use_blocky: bool = false  # true = 상자로 만든 3D 캐릭터, false = 2D 도트 판
-var blocky: BlockyActor
+var blocky  # BlockyActor 또는 BlockyFigure
 var walk_demo: bool = false
 var outline: bool = true
 var id_viewport: SubViewport

@@ -1,18 +1,36 @@
 class_name BlockyFigure
 extends Node3D
-## 상자 몇 개로 만든 캐릭터(머리·몸통·팔 둘·다리 둘). 그림은 부품 면마다 작은 도트 질감(지금은 코드로 만든 임시)이고,
-## 돌리면 어느 방향이든 알아서 맞고, 걸음은 몇 단계로 끊어서(보간 없음) 움직인다.
-## 크기 단위: 세계 단위(칸). 키 약 0.95, 폭 약 0.4. 앞쪽 = +Z.
+## 상자로 만든 캐릭터. 머리·몸통(가슴)·골반, 팔(어깨 → 팔꿈치 → 손), 다리(엉덩이 → 무릎 → 발목 → 발)를 관절 마디로 이어 붙였다.
+## 걸음은 스프라이트처럼 끊어서 바꾸지 않고 **걸은 거리로 정해지는 위상(phase)**에서 매 프레임 계산한다(보간 없이 부드럽게):
+##   - 다리: 엉덩이가 앞뒤로 흔들리고, 앞으로 나아가는 구간에서만 무릎이 굽고, 발은 지면과 평평하게 유지
+##   - 팔: 같은 쪽 다리와 반대로 흔들리고 팔꿈치가 앞으로 굽는다
+##   - 몸: 걸음마다 위아래로 출렁(두 걸음에 두 번)하고, 가슴이 골반과 반대로 살짝 비틀리며, 약간 앞으로 숙이고, 머리는 수평을 지킨다
+##   - 멈추면 한 번에 서지 않고 자세가 서서히 돌아오며(walk_blend), 서 있을 땐 숨쉬기·팔 흔들림이 있다
+##   - 방향을 바꿀 때 몸이 즉시 돌지 않고 짧게 돌아간다
+## move_speed(칸/초)가 걸음 속도를 정하므로 이동 속도와 발 구르는 속도가 맞는다(미끄러지듯 걷지 않는다).
+## smooth = false 로 두면 예전의 4단계 끊어 걷기(비교용)로 움직인다.
+## 크기 단위: 세계 단위(칸). 키 약 1.14, 폭 약 0.4. 앞쪽 = +Z.
 
 const PART_SHADER: Shader = preload("res://script/world/view3d/shader/blocky_part.gdshader")
 const ID_SHADER: Shader = preload("res://script/world/view3d/shader/blocky_id.gdshader")
 
-var parts: Array = []  # {node, pivot, material, id_node, id_material}
+static var _tex_cache: Dictionary = {}
+
+var parts: Array = []  # {inst, material, id_inst, id_material}
 var head_ratio_value: float = 3.0
 var walk_time: float = 0.0
 var walking: bool = false
-var facing_yaw_deg: float = 90.0  # 3/4 모습: 화면 오른쪽 아래를 본다(정면은 45, 화면 아래)
+var facing_yaw_deg: float = 90.0  # 목표 방향. 3/4 모습: 화면 오른쪽 아래를 본다(정면은 45, 화면 아래)
+var move_speed: float = 1.5  # 칸/초. 걸음 속도(발 구르는 빠르기)를 정한다
+var smooth: bool = true
+var walk_blend: float = 0.0  # 0 = 서 있음, 1 = 걷는 자세
+var phase: float = 0.0
+var _yaw_cur: float = NAN
+var _idle_t: float = 0.0
 var _id_root: Node3D
+var _j: Dictionary = {}  # 관절 이름 → Node3D
+var _leg_h: float = 0.45
+var _step_len: float = 0.4
 
 
 static func _make_tex(w: int, h: int, painter: Callable) -> ImageTexture:
@@ -26,9 +44,12 @@ static func _make_tex(w: int, h: int, painter: Callable) -> ImageTexture:
 
 
 # 임시 도트 질감. 실제로는 Pixel Lab 으로 만든 작은 그림이 이 자리에 들어간다.
-# 카메라가 위에서 30도로 내려다보므로 머리 윗면이 크게 보인다(앞면 높이의 약 40%) → 윗면에 가르마와 머리카락 결을 그리고,
+# 카메라가 위에서 30도로 내려다보므로 머리 윗면이 크게 보인다 → 윗면에 가르마와 머리카락 결을 그리고,
 # 얼굴은 앞면 아래쪽 3분의 2에 두며 앞머리가 이마를 덮는다. 색은 밝은 빛에서 하얗게 날아가지 않게 조금 어둡게 잡았다.
-func _face_textures() -> Dictionary:
+static func _face_textures() -> Dictionary:
+	if not _tex_cache.is_empty():
+		return _tex_cache
+
 	var skin := Color(0.80, 0.56, 0.42)
 	var skin_shade := Color(0.72, 0.49, 0.37)
 	var hair := Color(0.30, 0.18, 0.13)
@@ -36,6 +57,7 @@ func _face_textures() -> Dictionary:
 	var shirt := Color(0.78, 0.78, 0.74)
 	var apron := Color(0.14, 0.34, 0.25)
 	var pants := Color(0.30, 0.22, 0.20)
+	var pants_dk := Color(0.25, 0.18, 0.16)
 	var shoe := Color(0.20, 0.14, 0.12)
 	var tex: Dictionary = {}
 	tex["head_front"] = _make_tex(14, 13, func(x, y):
@@ -70,14 +92,18 @@ func _face_textures() -> Dictionary:
 		return shirt)
 	tex["torso_side"] = _make_tex(8, 10, func(_x, y): return shirt if float(y) / 10.0 < 0.3 else apron)
 	tex["torso_top"] = _make_tex(12, 8, func(_x, _y): return shirt)
-	tex["arm"] = _make_tex(4, 10, func(_x, y): return shirt if float(y) / 10.0 < 0.65 else skin)
-	tex["leg"] = _make_tex(4, 10, func(_x, y): return pants if float(y) / 10.0 < 0.75 else shoe)
+	tex["upper_arm"] = _make_tex(4, 6, func(_x, _y): return shirt)
+	tex["forearm"] = _make_tex(4, 6, func(_x, y): return shirt if float(y) / 6.0 < 0.34 else skin)
+	tex["hand"] = _make_tex(4, 3, func(_x, _y): return skin)
+	tex["thigh"] = _make_tex(4, 6, func(_x, y): return pants if y % 3 != 2 else pants_dk)
+	tex["shin"] = _make_tex(4, 6, func(_x, y): return pants if float(y) / 6.0 < 0.78 else shoe)
+	tex["foot"] = _make_tex(4, 3, func(_x, _y): return shoe)
+	_tex_cache = tex
 	return tex
 
 
 # head_ratio: 몇 등신인가(키 ÷ 머리 높이). 2 = 머리가 키의 절반(아주 아기자기), 3 = 키의 3분의 1.
-# 전체 키는 항상 같고(0.95칸 ≈ 2배 화면에서 32픽셀) 머리 비율에 따라 몸통·다리 길이가 달라진다.
-# total: 전체 키(칸). torso_fixed > 0 이면 몸통 길이를 그 값으로 고정하고 남는 길이를 다리에 준다(키가 커질 때 팔다리만 늘리는 방식).
+# total: 전체 키(칸). torso_fixed > 0 이면 몸통 길이를 그 값으로 고정하고 남는 길이를 다리에 준다.
 func build(parent: Node, id_parent: Node, head_ratio: float = 3.0, total: float = 0.95, torso_fixed: float = -1.0) -> void:
 	head_ratio_value = head_ratio
 	var t: Dictionary = _face_textures()
@@ -96,53 +122,79 @@ func build(parent: Node, id_parent: Node, head_ratio: float = 3.0, total: float 
 	var torso_d: float = torso_w * 0.55
 	var arm_w: float = clampf(torso_w * 0.28, 0.07, 0.11)
 	var leg_w: float = clampf(torso_w * 0.38, 0.09, 0.15)
-	var neck_y: float = leg_h + torso_h
-
-	var specs: Array = [
-		{"name": "leg_l", "size": Vector3(leg_w, leg_h, leg_w), "pivot": Vector3(-torso_w * 0.24, leg_h, 0.0), "tex": ["leg", "leg", "leg"]},
-		{"name": "leg_r", "size": Vector3(leg_w, leg_h, leg_w), "pivot": Vector3(torso_w * 0.24, leg_h, 0.0), "tex": ["leg", "leg", "leg"]},
-		{"name": "torso", "size": Vector3(torso_w, torso_h, torso_d), "pivot": Vector3(0.0, neck_y, 0.0), "tex": ["torso_front", "torso_side", "torso_top"], "no_swing": true},
-		{"name": "arm_l", "size": Vector3(arm_w, arm_h, arm_w), "pivot": Vector3(-(torso_w * 0.5 + arm_w * 0.5), neck_y - torso_h * 0.04, 0.0), "tex": ["arm", "arm", "arm"]},
-		{"name": "arm_r", "size": Vector3(arm_w, arm_h, arm_w), "pivot": Vector3(torso_w * 0.5 + arm_w * 0.5, neck_y - torso_h * 0.04, 0.0), "tex": ["arm", "arm", "arm"]},
-		{"name": "head", "size": Vector3(head_w, head_h, head_h * 0.95), "pivot": Vector3(0.0, neck_y, 0.0), "tex": ["head_front", "head_side", "head_top"], "no_swing": true, "head": true},
-	]
+	_leg_h = leg_h
+	_step_len = leg_h * 0.9
+	var foot_h: float = minf(leg_h * 0.14, 0.07)
+	var thigh_h: float = (leg_h - foot_h) * 0.5
+	var shin_h: float = (leg_h - foot_h) * 0.5
+	var hand_h: float = arm_h * 0.14
+	var upper_h: float = (arm_h - hand_h) * 0.52
+	var fore_h: float = (arm_h - hand_h) * 0.48
 	_id_root = Node3D.new()
 	id_parent.add_child(_id_root)
 
-	for sp in specs:
-		var pivot := Node3D.new()
-		pivot.name = sp["name"]
-		pivot.position = sp["pivot"]
-		add_child(pivot)
-		var size: Vector3 = sp["size"]
-		var mesh := BoxMesh.new()
-		mesh.size = size
-		var inst := MeshInstance3D.new()
-		inst.mesh = mesh
+	# 관절 뼈대: hips(골반, 높이 leg_h) → chest(가슴 윗면 = 목 높이, 몸통은 아래로 늘어짐) → head / 어깨 → 팔꿈치
+	var hips := _joint("hips", self, Vector3(0.0, leg_h, 0.0))
+	var chest := _joint("chest", hips, Vector3(0.0, torso_h, 0.0))
+	var head := _joint("head", chest, Vector3.ZERO)
+	_box(chest, Vector3(torso_w, torso_h, torso_d), t["torso_front"], t["torso_side"], t["torso_top"], false)
+	_box(head, Vector3(head_w, head_h, head_h * 0.95), t["head_front"], t["head_side"], t["head_top"], true)
 
-		# 상자 중심: 다리·팔·몸통은 관절 아래로 늘어지고, 머리는 위로 솟는다.
-		inst.position = Vector3(0.0, size.y * 0.5, 0.0) if sp.get("head", false) else Vector3(0.0, -size.y * 0.5, 0.0)
-
-		var m := ShaderMaterial.new()
-		m.shader = PART_SHADER
-		m.set_shader_parameter("tex_front", t[sp["tex"][0]])
-		m.set_shader_parameter("tex_side", t[sp["tex"][1]])
-		m.set_shader_parameter("tex_top", t[sp["tex"][2]])
-		m.set_shader_parameter("part_size", size)
-		inst.material_override = m
-		pivot.add_child(inst)
-
-		var id_inst := MeshInstance3D.new()
-		id_inst.mesh = mesh
-		id_inst.layers = 2
-		id_inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
-		var idm := ShaderMaterial.new()
-		idm.shader = ID_SHADER
-		id_inst.material_override = idm
-		_id_root.add_child(id_inst)
-		parts.append({"pivot": pivot, "inst": inst, "material": m, "id_inst": id_inst, "id_material": idm, "swing": not sp.get("no_swing", false), "left": str(sp["name"]).ends_with("_l"), "arm": str(sp["name"]).begins_with("arm"), "base_y": sp["pivot"].y})
+	for side in [-1, 1]:
+		var key: String = "l" if side < 0 else "r"
+		# 팔: 어깨 → 위팔, 팔꿈치 → 아래팔, 손목 → 손
+		var shoulder := _joint("sh_" + key, chest, Vector3(float(side) * (torso_w * 0.5 + arm_w * 0.5), -torso_h * 0.04, 0.0))
+		_box(shoulder, Vector3(arm_w, upper_h, arm_w), t["upper_arm"], t["upper_arm"], t["upper_arm"], false)
+		var elbow := _joint("el_" + key, shoulder, Vector3(0.0, -upper_h, 0.0))
+		_box(elbow, Vector3(arm_w * 0.94, fore_h, arm_w * 0.94), t["forearm"], t["forearm"], t["forearm"], false)
+		var wrist := _joint("wr_" + key, elbow, Vector3(0.0, -fore_h, 0.0))
+		_box(wrist, Vector3(arm_w * 0.9, hand_h, arm_w * 0.9), t["hand"], t["hand"], t["hand"], false)
+		# 다리: 엉덩이 → 허벅지, 무릎 → 정강이, 발목 → 발(앞쪽으로 길쭉)
+		var hip := _joint("hip_" + key, hips, Vector3(float(side) * torso_w * 0.24, 0.0, 0.0))
+		_box(hip, Vector3(leg_w, thigh_h, leg_w), t["thigh"], t["thigh"], t["thigh"], false)
+		var knee := _joint("kn_" + key, hip, Vector3(0.0, -thigh_h, 0.0))
+		_box(knee, Vector3(leg_w * 0.94, shin_h, leg_w * 0.94), t["shin"], t["shin"], t["shin"], false)
+		var ankle := _joint("an_" + key, knee, Vector3(0.0, -shin_h, 0.0))
+		var foot_node := _box(ankle, Vector3(leg_w * 0.96, foot_h, leg_w * 1.55), t["foot"], t["foot"], t["foot"], false)
+		foot_node.position = Vector3(0.0, -foot_h * 0.5, leg_w * 0.28)
 
 	parent.add_child(self)
+
+
+func _joint(joint_name: String, parent_node: Node3D, pos: Vector3) -> Node3D:
+	var n := Node3D.new()
+	n.name = joint_name
+	n.position = pos
+	parent_node.add_child(n)
+	_j[joint_name] = n
+	return n
+
+
+# 관절 아래로 늘어지는(또는 head 처럼 위로 솟는) 상자 하나를 만든다. 반환: 상자 노드(위치 조절용)
+func _box(pivot: Node3D, size: Vector3, tex_front: Texture2D, tex_side: Texture2D, tex_top: Texture2D, up: bool) -> MeshInstance3D:
+	var mesh := BoxMesh.new()
+	mesh.size = size
+	var inst := MeshInstance3D.new()
+	inst.mesh = mesh
+	inst.position = Vector3(0.0, size.y * 0.5, 0.0) if up else Vector3(0.0, -size.y * 0.5, 0.0)
+	var m := ShaderMaterial.new()
+	m.shader = PART_SHADER
+	m.set_shader_parameter("tex_front", tex_front)
+	m.set_shader_parameter("tex_side", tex_side)
+	m.set_shader_parameter("tex_top", tex_top)
+	m.set_shader_parameter("part_size", size)
+	inst.material_override = m
+	pivot.add_child(inst)
+	var id_inst := MeshInstance3D.new()
+	id_inst.mesh = mesh
+	id_inst.layers = 2
+	id_inst.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	var idm := ShaderMaterial.new()
+	idm.shader = ID_SHADER
+	id_inst.material_override = idm
+	_id_root.add_child(id_inst)
+	parts.append({"inst": inst, "material": m, "id_inst": id_inst, "id_material": idm})
+	return inst
 
 
 # 보이기/숨기기(윤곽선 번호 판 쪽도 함께).
@@ -161,30 +213,100 @@ func destroy() -> void:
 	queue_free()
 
 
-# 걸음 단계(0~3)를 끊어서 팔다리를 흔든다. 보간 없이 몇 단계만(제한 애니메이션).
 func animate(delta: float) -> void:
 	if walking:
 		walk_time += delta
 
+	if is_nan(_yaw_cur):
+		_yaw_cur = facing_yaw_deg
+
+	# 방향은 가장 가까운 쪽으로 짧게 돌아간다(즉시 휙 돌지 않게)
+	if smooth:
+		_yaw_cur = rad_to_deg(lerp_angle(deg_to_rad(_yaw_cur), deg_to_rad(facing_yaw_deg), clampf(delta * 16.0, 0.0, 1.0)))
+	else:
+		_yaw_cur = facing_yaw_deg
+
+	if not smooth:
+		_animate_stepped(delta)
+		return
+
+	_idle_t += delta
+	# 걷는 자세 비중: 걷기 시작하면 빠르게 1로, 멈추면 조금 천천히 0으로
+	var target: float = 1.0 if walking else 0.0
+	walk_blend = move_toward(walk_blend, target, delta * (7.0 if walking else 5.0))
+
+	if walk_blend > 0.01:
+		# 한 주기(두 걸음) 동안 가는 거리 = 걸음 길이 × 2. 속도가 빠를수록 위상이 빨리 간다.
+		phase = fmod(phase + TAU * move_speed / (_step_len * 2.0) * delta, TAU)
+
+	_apply_pose()
+
+
+func _apply_pose() -> void:
+	var w: float = walk_blend
+	var s: float = sin(phase)
+	var c: float = cos(phase)
+	var idle: float = 1.0 - w
+	var br: float = sin(_idle_t * 2.1)
+	var d2r: float = PI / 180.0
+	var hips: Node3D = _j["hips"]
+	var chest: Node3D = _j["chest"]
+	var head: Node3D = _j["head"]
+	# 몸통: 두 걸음에 두 번 출렁(다리가 수직일 때 가장 높고 벌렸을 때 가장 낮다), 골반 좌우 기울기·비틀기
+	hips.position.y = _leg_h + w * 0.022 * (0.5 * cos(2.0 * phase) - 0.25)
+	hips.position.x = w * 0.012 * s
+	hips.rotation = Vector3(0.0, w * 3.0 * d2r * s, w * 2.0 * d2r * s)
+	chest.rotation = Vector3(w * 3.0 * d2r, -w * 6.0 * d2r * s, -w * 1.2 * d2r * s)
+	chest.scale = Vector3(1.0, 1.0 + idle * 0.012 * br, 1.0)
+	head.rotation = Vector3(-w * 3.0 * d2r + idle * 0.8 * d2r * br, w * 3.5 * d2r * s, 0.0)
+
+	for side in [-1, 1]:
+		var k: String = "l" if side < 0 else "r"
+		var sg: float = 1.0 if side < 0 else -1.0  # 왼쪽 +, 오른쪽 - (왼발이 앞으로 나갈 때 sin > 0)
+		var hip: Node3D = _j["hip_" + k]
+		var knee: Node3D = _j["kn_" + k]
+		var ankle: Node3D = _j["an_" + k]
+		var sh: Node3D = _j["sh_" + k]
+		var el: Node3D = _j["el_" + k]
+		var ang: float = sg * s  # 이 다리의 앞뒤 위치(+ = 앞)
+		var vel: float = sg * c  # 이 다리의 앞뒤 속도(+ = 앞으로 나아가는 중)
+		var hip_x: float = -w * 30.0 * ang  # -x 회전 = 다리가 앞(+Z)으로
+		var knee_x: float = w * (6.0 + 42.0 * maxf(vel, 0.0) * (1.0 - 0.25 * absf(ang))) + idle * 2.0
+		hip.rotation = Vector3(hip_x * d2r, 0.0, 0.0)
+		knee.rotation = Vector3(knee_x * d2r, 0.0, 0.0)
+		ankle.rotation = Vector3(-(hip_x + knee_x) * 0.7 * d2r + w * (-6.0 * d2r * clampf(vel, 0.0, 1.0)), 0.0, 0.0)
+		# 팔은 같은 쪽 다리와 반대로
+		var arm_x: float = w * 26.0 * ang + idle * 2.2 * br * sg  # + = 뒤로
+		var forward: float = maxf(-ang, 0.0)  # 팔이 앞에 있을수록 팔꿈치가 더 굽는다
+		sh.rotation = Vector3(arm_x * d2r, 0.0, sg * (idle * 1.5 + w * 2.0) * d2r)
+		el.rotation = Vector3(-(w * (12.0 + 22.0 * forward) + idle * 7.0) * d2r, 0.0, 0.0)
+
+
+# 예전 방식(비교용): 걸음 단계 0~3 을 끊어서 팔다리를 흔든다. 보간 없음.
+func _animate_stepped(_delta: float) -> void:
 	var step: int = int(floor(walk_time * 8.0)) % 4 if walking else 0
 	var swing_deg: float = [0.0, 32.0, 0.0, -32.0][step]
 	var bob: float = 0.015 if (walking and step % 2 == 1) else 0.0
+	var hips: Node3D = _j["hips"]
+	hips.position.y = _leg_h + bob
+	hips.position.x = 0.0
+	hips.rotation = Vector3.ZERO
+	(_j["chest"] as Node3D).rotation = Vector3.ZERO
+	(_j["head"] as Node3D).rotation = Vector3.ZERO
 
-	for p in parts:
-		var pivot: Node3D = p["pivot"]
-
-		if not p["swing"]:
-			pivot.position.y = float(p["base_y"]) + bob
-			continue
-
-		var dir: float = -1.0 if p["left"] else 1.0
-		var arm_flip: float = -1.0 if p["arm"] else 1.0
-		pivot.rotation_degrees.x = swing_deg * dir * arm_flip
+	for side in [-1, 1]:
+		var k: String = "l" if side < 0 else "r"
+		var dir: float = -1.0 if side < 0 else 1.0
+		(_j["hip_" + k] as Node3D).rotation = Vector3(deg_to_rad(swing_deg * dir), 0.0, 0.0)
+		(_j["kn_" + k] as Node3D).rotation = Vector3.ZERO
+		(_j["an_" + k] as Node3D).rotation = Vector3.ZERO
+		(_j["sh_" + k] as Node3D).rotation = Vector3(deg_to_rad(-swing_deg * dir), 0.0, 0.0)
+		(_j["el_" + k] as Node3D).rotation = Vector3.ZERO
 
 
 # 정렬 순번과 부품 깊이 순서를 셰이더에 넣고, 윤곽선 판의 위치를 맞춘다. camera 는 부품 앞뒤를 가릴 때 쓴다.
 func sync_sort(rank: float, count: float, camera: Camera3D, id_value: float) -> void:
-	rotation_degrees.y = facing_yaw_deg
+	rotation_degrees.y = facing_yaw_deg if is_nan(_yaw_cur) else _yaw_cur
 	_id_root.global_transform = global_transform
 	var order: Array = []
 

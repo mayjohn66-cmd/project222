@@ -850,6 +850,8 @@ func _sync_actors(delta: float) -> void:
 		entry["cell"] = cell
 		figure.set_shown((n as Node2D).is_visible_in_tree())
 		figure.walking = move.length() > 0.0005 and delta > 0.0
+		if figure.walking:
+			figure.move_speed = lerpf(figure.move_speed, clampf(move.length() / delta, 0.4, 4.0), 0.25)
 
 		if move.length() > 0.0005:
 			figure.facing_yaw_deg = rad_to_deg(atan2(move.x, move.y))
