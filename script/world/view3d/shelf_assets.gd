@@ -10,6 +10,9 @@ const FIRST_LEVEL_H: float = 1.4
 const STACK_LEVEL_H: float = 1.0
 const MAX_VISIBLE: int = 5
 const GOODS_SCALE: float = 1.45  # 3D 화면(낮은 해상도)에서 알아볼 수 있게 상품을 실제 비율보다 크게
+## 모양별 높이(크기 배율 1 기준). 선반 사이 여유보다 높으면 배율을 줄여 윗판을 뚫지 않게 한다.
+const SHAPE_HEIGHT: Dictionary = {"loaf": 0.15, "bottle": 0.37, "flask": 0.33, "bowl": 0.095, "jar": 0.19, "rocks": 0.1, "crystal": 0.2, "bundle": 0.24, "mushroom": 0.17, "orb": 0.09, "scroll": 0.2, "lantern": 0.2, "box": 0.12, "disc": 0.04}
+const HEADROOM: float = 0.94  # 위 판과의 사이를 조금 남긴다
 
 static var _shapes: Dictionary = {}
 static var _loaded: bool = false
@@ -157,6 +160,8 @@ static func build(lo: Vector2, hi: Vector2, rotation: int, stack: int, slots: Ar
 				continue
 
 			var board_y: float = float(boards[j % 2]) + 0.04
+			# 이 선반 위 여유 높이(위 판 밑면까지). 아래 선반은 위 선반 밑까지, 위 선반은 층 윗판 밑까지.
+			var room: float = (float(boards[1]) - board_y) if j % 2 == 0 else ((y1 - 0.05) - board_y)
 			var seg_index: int = j / 2
 			var u_start: float = inset + 0.03 + seg * float(seg_index)
 			var shape: String = shape_of(item_id)
@@ -169,7 +174,8 @@ static func build(lo: Vector2, hi: Vector2, rotation: int, stack: int, slots: Ar
 				var uu: float = u_start + seg * (float(n) + 0.5) / float(count)
 				var vv: float = depth * (0.62 if n % 2 == 0 else 0.4) if count > 3 else depth * 0.5
 				var at: Vector3 = _to_world(lo, hi, rot, uu, vv, board_y, depth)
-				_good(shape, part, goods_spec, accent, cork, at, GOODS_SCALE * (0.82 if count > 3 else 1.0), n)
+				var fit: float = room * HEADROOM / float(SHAPE_HEIGHT.get(shape, 0.2))
+				_good(shape, part, goods_spec, accent, cork, at, minf(GOODS_SCALE * (0.82 if count > 3 else 1.0), fit), n)
 
 	var mesh := ArrayMesh.new()
 	var specs: Array = b.commit_into(mesh)
