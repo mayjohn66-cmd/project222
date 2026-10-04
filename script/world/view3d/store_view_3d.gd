@@ -770,7 +770,7 @@ func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, al
 				stock_sig += "%s:%d," % [str((sl as Dictionary).get("item_id", "")), mini(int((sl as Dictionary).get("stock", 0)), ShelfAssets.MAX_VISIBLE)]
 
 		# 창고 선반: 저장 칸의 (아이템, 수량)이 바뀌면 다시 만든다.
-		if as_model and build_id == "warehouse_rack" and node.get("storage_slots") != null:
+		if as_model and node.get("storage_slots") != null:
 			for sl in node.get("storage_slots"):
 				stock_sig += "%s:%d," % [str((sl as Dictionary).get("item_id", "")), int((sl as Dictionary).get("amount", 0))]
 
@@ -808,11 +808,12 @@ func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, al
 			if row["kind"] == "model":
 				var extra: Dictionary = {}
 
-				if build_id == "warehouse_rack" and node.get("storage_slots") != null:
+				if node.get("storage_slots") != null:
 					extra["storage_slots"] = node.get("storage_slots")
 
 				built = FurnitureAssets.build(build_id, lo, hi, rotation_index, pp, extra)
 			else:
+				pp["furniture_stage"] = FurnitureObjectCatalog.get_object(build_id).get("stage", "")
 				var spl: int = int(node.get("slots_per_level")) if node.get("slots_per_level") != null else 2
 				var slot_list: Array = node.get("slots") if node.get("slots") != null else []
 				built = ShelfAssets.build(lo, hi, rotation_index, stack, slot_list, spl, pp)

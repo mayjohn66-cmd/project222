@@ -77,34 +77,40 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 8
 
-[node name="DetailScroll" type="ScrollContainer" parent="MainVBox/Body"]
+[node name="DetailPanel" type="VBoxContainer" parent="MainVBox/Body"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/separation = 12
+
+[node name="DetailScroll" type="ScrollContainer" parent="MainVBox/Body/DetailPanel"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="Detail" type="VBoxContainer" parent="MainVBox/Body/DetailScroll"]
+[node name="Detail" type="VBoxContainer" parent="MainVBox/Body/DetailPanel/DetailScroll"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 16
 
-[node name="NameLabel" type="Label" parent="MainVBox/Body/DetailScroll/Detail"]
+[node name="NameLabel" type="Label" parent="MainVBox/Body/DetailPanel/DetailScroll/Detail"]
 layout_mode = 2
 theme_override_font_sizes/font_size = 26
 autowrap_mode = 2
 
-[node name="DescriptionLabel" type="Label" parent="MainVBox/Body/DetailScroll/Detail"]
+[node name="DescriptionLabel" type="Label" parent="MainVBox/Body/DetailPanel/DetailScroll/Detail"]
 layout_mode = 2
 autowrap_mode = 2
 
-[node name="OwnedLabel" type="Label" parent="MainVBox/Body/DetailScroll/Detail"]
+[node name="OwnedLabel" type="Label" parent="MainVBox/Body/DetailPanel/DetailScroll/Detail"]
 layout_mode = 2
 
-[node name="MaterialLabel" type="Label" parent="MainVBox/Body/DetailScroll/Detail"]
+[node name="MaterialLabel" type="Label" parent="MainVBox/Body/DetailPanel/DetailScroll/Detail"]
 layout_mode = 2
 autowrap_mode = 2
 
-[node name="CraftButton" type="Button" parent="MainVBox/Body/DetailScroll/Detail"]
+[node name="CraftButton" type="Button" parent="MainVBox/Body/DetailPanel"]
 custom_minimum_size = Vector2(0, 48)
 layout_mode = 2
 disabled = true

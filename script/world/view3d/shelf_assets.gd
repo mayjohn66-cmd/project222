@@ -104,9 +104,11 @@ static func build(lo: Vector2, hi: Vector2, rotation: int, stack: int, slots: Ar
 	var along_x: bool = rot == 0 or rot == 2
 	var length: float = (hi.x - lo.x) if along_x else (hi.y - lo.y)
 	var depth: float = (hi.y - lo.y) if along_x else (hi.x - lo.x)
-	var wood_frame: Dictionary = VillageAssets.wood(p, Color(0.78, 0.56, 0.34), "shelf_frame")
-	var wood_back: Dictionary = VillageAssets.wood(p, Color(0.52, 0.36, 0.24), "shelf_back")
-	var wood_board: Dictionary = VillageAssets.wood(p, Color(0.9, 0.7, 0.44), "shelf_board")
+	var materials := FurnitureVariantAssets.shelf_materials(p)
+	var wood_frame: Dictionary = materials[0]
+	var wood_back: Dictionary = materials[1]
+	var wood_board: Dictionary = materials[2]
+	var stage := str(p.get("furniture_stage", ""))
 	var ts: int = int(p["ts"])
 	# 부품(면)은 재질 이름 하나당 하나만 만든다.
 	var parts: Dictionary = {}
@@ -141,6 +143,12 @@ static func build(lo: Vector2, hi: Vector2, rotation: int, stack: int, slots: Ar
 		lbox.call(wood_board, inset, length - inset, 0.0, depth, boards[0], boards[0] + 0.04)
 		lbox.call(wood_board, inset, length - inset, 0.0, depth, boards[1], boards[1] + 0.04)
 		lbox.call(wood_frame, 0.0, length, 0.0, depth, y1 - 0.05, y1)
+		if stage == "modern":
+			var stripe := VillageAssets._flat_spec(ts, Color(0.26, 0.62, 0.43), "shelf_price_strip")
+			for y in boards: lbox.call(stripe, inset, length - inset, depth - 0.025, depth, float(y) - 0.04, float(y) + 0.02)
+		elif stage == "reinforced":
+			var iron := VillageAssets._flat_spec(ts, Color(0.31, 0.35, 0.39), "shelf_reinforced_bracket")
+			for u in [0.0, length - inset]: lbox.call(iron, u, u + inset, depth - 0.04, depth + 0.005, y0 + 0.1, y0 + 0.3)
 
 		# 이 층의 칸(slot): 칸 j 는 아래·위 선반에 번갈아 놓고, 한 선반에는 칸 수에 맞춰 길이를 나눈다.
 		var per_board: int = int(ceil(float(spl) / 2.0))

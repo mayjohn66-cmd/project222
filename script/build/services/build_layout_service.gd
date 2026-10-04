@@ -342,7 +342,7 @@ func restore_shelf_state(
 	var saved_stack_level: int = clampi(
 		int(data.get("stack_level", 1)),
 		1,
-		3
+		int(furniture.max_stack_level)
 	)
 
 	while furniture.stack_level < saved_stack_level:

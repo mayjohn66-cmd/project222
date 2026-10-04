@@ -72,7 +72,7 @@ class Frame extends RefCounted:
 
 
 static func has_model(build_id: String) -> bool:
-	return MODEL_IDS.has(build_id)
+	return MODEL_IDS.has(build_id) or FurnitureVariantAssets.has_model(build_id)
 
 
 # 벽 부착물의 회전(0=뒤 y 작은 벽, 1=x 큰 벽, 2=y 큰 벽, 3=x 작은 벽)을 앞쪽 방향 회전(0=+z, 1=+x, 2=-z, 3=-x)으로 바꾼다.
@@ -81,6 +81,7 @@ static func wall_front_rot(wall_rotation: int) -> int:
 
 
 static func build(build_id: String, lo: Vector2, hi: Vector2, rot: int, p: Dictionary, extra: Dictionary = {}) -> Dictionary:
+	if FurnitureVariantAssets.has_model(build_id): return FurnitureVariantAssets.build(build_id, lo, hi, rot, p, extra)
 	var f := Frame.new(lo, hi, rot, p)
 
 	match build_id:
@@ -144,6 +145,8 @@ static func _rack(f: Frame, extra: Dictionary = {}) -> Dictionary:
 	var D: float = f.depth
 	var post: Dictionary = f.flat(Color(0.34, 0.37, 0.43), "rack_iron")
 	var board: Dictionary = f.wood(Color(0.7, 0.52, 0.34), "rack_board")
+	if f.p.get("furniture_stage", "") == "wood": post = f.wood(Color(0.53, 0.35, 0.22), "rack_wood_post")
+	elif f.p.get("furniture_stage", "") == "modern": board = f.flat(Color(0.82, 0.87, 0.9), "rack_steel_board")
 
 	for pu in [0.05, L - 0.05]:
 		for pv in [0.08, D - 0.08]:

@@ -19,6 +19,7 @@ var storage_slots: Array[Dictionary] = []
 
 
 func _ready() -> void:
+	FurnitureObjectCatalog.configure_storage(self, str(get_meta("build_id", "")))
 	add_to_group(
 		"warehouse_storage"
 	)

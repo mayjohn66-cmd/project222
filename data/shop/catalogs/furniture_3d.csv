@@ -15,3 +15,13 @@ production_door,door,1.9,1.0,0.0,plank,8a5a36,0.0
 wall_poster,wall_plate,1.0,1.0,0.0,plank,ffd0a0,1.0
 old_world_map,wall_plate,0.8,1.0,0.0,plank,e8d8b0,1.0
 adventurer_banner,wall_plate,1.2,1.0,0.0,plank,c04040,0.8
+wood_shelf_1x1,shelf,1.4,0.5,1,plank,bc8756,0
+wood_shelf_2x1,shelf,1.4,0.5,1,plank,bc8756,0
+reinforced_shelf_2x1,shelf,1.4,0.5,1,plank,bc8756,0
+modern_shelf_1x1,shelf,1.4,0.5,1,plank,ffffff,0
+modern_shelf_2x1,shelf,1.4,0.5,1,plank,ffffff,0
+modern_shelf_3x1,shelf,1.4,0.5,1,plank,ffffff,0
+wood_register,model,1.1,0.5,0,plank,bc8756,0
+modern_register,model,1.1,0.5,0,plank,ffffff,0
+wood_warehouse_rack,model,1.8,1,0,plank,bc8756,0
+steel_warehouse_rack,model,1.8,1,0,plank,ffffff,0

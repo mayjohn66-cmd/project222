@@ -196,6 +196,7 @@ func setup_furniture(
 		description = "등록된 설명이 없습니다."
 
 	var status_text: String = "가구 보관함"
+	description += FurnitureObjectCatalog.detail(furniture_id)
 
 	if (
 		stored_count > 0

@@ -15,3 +15,13 @@ night_lantern,심야의 등불,decoration,res://art/furniture/pixel_v1/night_lan
 antique_cabinet,골동품 진열장,decoration,res://art/furniture/pixel_v1/antique_cabinet.png,수집가의 방문 비중을 높입니다.,interior,customer_weight,0.40,cabinet,1,collector
 old_world_map,낡은 세계지도,decoration,res://art/furniture/pixel_v1/old_world_map.png,여행자의 방문 비중을 높입니다.,interior,customer_weight,0.30,worldmap,1,traveler
 adventurer_banner,모험가 깃발,decoration,res://art/furniture/pixel_v1/adventurer_banner.png,모험가의 방문 비중을 높입니다.,interior,customer_weight,0.30,banner,1,adventurer
+wood_shelf_1x1,작은 나무 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,주운 가지를 수액으로 묶어 만든 소박한 진열대. 새 가게의 작은 수확을 올려 두기 좋다. 한 층만 사용할 수 있다.,store,,0,,0,
+wood_shelf_2x1,넓은 나무 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,가지와 나무틀을 넓게 엮은 진열대. 서로 다른 원정 재료를 나란히 놓을 수 있지만 위로 더 쌓을 수는 없다.,store,,0,,0,
+reinforced_shelf_2x1,보강 나무 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,익숙해진 나무틀에 철제 이음쇠를 더했다. 상품을 더 담고 같은 진열대를 하나 더 얹어 두 층으로 사용할 수 있다.,store,,0,,0,
+modern_shelf_1x1,소형 편의점 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,플레이어가 기억하는 흰 선반과 가격표 띠를 현지 재료로 재현한 철제 진열대. 좁은 자리에도 많은 상품을 진열할 수 있다.,store,,0,,0,
+modern_shelf_2x1,표준 편의점 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,흰 철판과 곧은 기둥을 가진 익숙한 편의점 진열대. 원재료에서 이웃과 만든 제품까지 네 종류를 한 층에 나누어 놓는다.,store,,0,,0,
+modern_shelf_3x1,대형 편의점 진열대,sales,res://art/furniture/pixel_v1/shelf_3x1.png,처음의 편의점을 떠올리며 길게 만든 철제 진열대. 넓은 설치 자리와 재료가 필요하지만 다양한 상품을 함께 전시할 수 있다.,store,,0,,0,
+wood_register,나무 거래 계산대,facility,res://art/furniture/pixel_v1/register.png,나무 상판과 작은 동전함으로 만든 거래 자리. 손님과 상품을 확인하고 현지 화폐를 받는다. 플레이어 직접 계산과 직원 계산 모두 가능하다.,store,,0,,0,
+modern_register,재현 편의점 계산대,facility,res://art/furniture/pixel_v1/register.png,매끈한 상판과 단말기 형태를 재현한 계산대. 황무지의 가게에 처음의 익숙함을 더한다. 결제 속도와 직접 계산 방식은 기존 계산대와 같다.,store,,0,,0,
+wood_warehouse_rack,나무 창고 선반,facility,res://art/furniture/pixel_v1/warehouse_rack.png,가지를 묶어 만든 창고용 선반. 진열할 수확물을 잠시 정리해 두는 공간이다. 냉장이나 냉동 기능은 없다.,construction,,0,,0,
+steel_warehouse_rack,철제 창고 선반,facility,res://art/furniture/pixel_v1/warehouse_rack.png,철제 기둥과 단단한 선반으로 만든 넉넉한 창고 집기. 다음 계절을 준비할 재료를 종류별로 정리한다. 냉장이나 냉동 기능은 없다.,construction,,0,,0,

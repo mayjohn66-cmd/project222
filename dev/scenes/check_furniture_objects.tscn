@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://dev/script/check_furniture_objects.gd" id="1"]
+[node name="CheckFurnitureObjects" type="Node"]
+script = ExtResource("1")

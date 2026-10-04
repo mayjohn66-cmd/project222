@@ -111,6 +111,9 @@ func configure_shelf(
 	new_slots_per_level: int,
 	new_slot_capacity: int
 ):
+	var build_id := str(get_meta("build_id", ""))
+	if ShelfData.has_shelf(build_id):
+		max_stack_level = ShelfData.get_max_stack_level(build_id)
 	slots_per_level = max(
 		1,
 		new_slots_per_level

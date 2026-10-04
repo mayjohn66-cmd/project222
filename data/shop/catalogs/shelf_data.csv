@@ -2,3 +2,9 @@ id,slots_per_level,slot_capacity,max_stack_level
 shelf_1x1,2,5,3
 shelf_2x1,3,7,3
 shelf_3x1,4,9,3
+wood_shelf_1x1,2,3,1
+wood_shelf_2x1,3,4,1
+reinforced_shelf_2x1,3,6,2
+modern_shelf_1x1,2,8,3
+modern_shelf_2x1,4,10,3
+modern_shelf_3x1,6,12,3

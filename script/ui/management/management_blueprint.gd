@@ -10,23 +10,23 @@ extends Control
 )
 
 @onready var name_label: Label = (
-	$MainVBox/Body/DetailScroll/Detail/NameLabel
+	$MainVBox/Body/DetailPanel/DetailScroll/Detail/NameLabel
 )
 
 @onready var description_label: Label = (
-	$MainVBox/Body/DetailScroll/Detail/DescriptionLabel
+	$MainVBox/Body/DetailPanel/DetailScroll/Detail/DescriptionLabel
 )
 
 @onready var material_label: Label = (
-	$MainVBox/Body/DetailScroll/Detail/MaterialLabel
+	$MainVBox/Body/DetailPanel/DetailScroll/Detail/MaterialLabel
 )
 
 @onready var owned_label: Label = (
-	$MainVBox/Body/DetailScroll/Detail/OwnedLabel
+	$MainVBox/Body/DetailPanel/DetailScroll/Detail/OwnedLabel
 )
 
 @onready var craft_button: Button = (
-	$MainVBox/Body/DetailScroll/Detail/CraftButton
+	$MainVBox/Body/DetailPanel/CraftButton
 )
 
 @onready var store_button: Button = (
@@ -51,9 +51,14 @@ var furniture_buttons: Dictionary = {}
 var selected_category: String = "store"
 var selected_furniture_id: String = ""
 var crafting: bool = false
+var furniture_preview: FurniturePreview
 
 
 func _ready() -> void:
+	furniture_preview = FurniturePreview.new()
+	name_label.get_parent().add_child(furniture_preview)
+	name_label.get_parent().move_child(furniture_preview, name_label.get_index() + 1)
+	furniture_preview.visible = false
 	# 고정 레이아웃은 management_blueprint.tscn에서 관리한다.
 	category_buttons = {
 		"store": store_button,
@@ -158,6 +163,8 @@ func refresh_view() -> void:
 		button.text = FurnitureData.get_furniture_name(
 			furniture_id
 		)
+		if not FurnitureObjectCatalog.locked_reason(furniture_id).is_empty():
+			button.text += " · 미해금"
 		button.toggle_mode = true
 		button.custom_minimum_size.y = 42
 
@@ -187,6 +194,7 @@ func refresh_view() -> void:
 
 
 func _clear_detail(message: String) -> void:
+	furniture_preview.visible = false
 	selected_furniture_id = ""
 
 	name_label.text = "제작할 가구를 선택하세요"
@@ -216,6 +224,7 @@ func _select_furniture(furniture_id: String) -> void:
 		return
 
 	selected_furniture_id = furniture_id
+	furniture_preview.show_furniture(furniture_id)
 	_update_furniture_buttons()
 
 	name_label.text = (
@@ -225,6 +234,7 @@ func _select_furniture(furniture_id: String) -> void:
 
 	description_label.text = (
 		str(data.get("description", ""))
+		+ FurnitureObjectCatalog.detail(furniture_id)
 		+ _get_effect_description(furniture_id)
 	)
 
@@ -265,7 +275,8 @@ func _select_furniture(furniture_id: String) -> void:
 
 	material_label.text = "\n".join(lines)
 	craft_button.text = "1개 제작"
-	craft_button.disabled = crafting or not enough
+	craft_button.disabled = crafting or not enough or not FurnitureObjectCatalog.locked_reason(furniture_id).is_empty()
+	if not FurnitureObjectCatalog.locked_reason(furniture_id).is_empty(): craft_button.text = "아직 만들 수 없습니다"
 
 
 func _on_craft_pressed() -> void:
@@ -295,10 +306,7 @@ func _on_craft_pressed() -> void:
 
 	# 클릭 시점의 재료를 다시 검사하고 차감
 	var consumed: bool = (
-		ProductionRecipeService.consume_ingredients(
-			recipe,
-			1
-		)
+		FurnitureObjectCatalog.craft(furniture_id)
 	)
 
 	if not consumed:
@@ -309,10 +317,8 @@ func _on_craft_pressed() -> void:
 		)
 		return
 
-	GameState.add_furniture(furniture_id, 1)
-
 	crafting = false
-	_select_furniture(furniture_id)
+	refresh_view()
 
 	description_label.text += (
 		"\n\n제작 완료! 가구 인벤토리에 추가되었습니다."
