@@ -124,6 +124,7 @@ func _object_used() -> void:
 	var amount: int = int(result.get("amount", 0))
 	if not item_id.is_empty() and amount > 0:
 		pending_loot.append({"item_id": item_id, "amount": amount})
+		if model.object_kind == "gather": VillageExpansionFlow.record_gather(host.current_region_id,item_id,amount)
 		view.notice = "%s ×%d 획득" % [ItemData.get_item_name(item_id), amount]
 
 func _close() -> void:

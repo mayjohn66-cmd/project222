@@ -21,6 +21,7 @@ func run() -> void:
 	var common := 0
 	var seasonal := 0
 	var expected: Dictionary = {"spring_market":["bread","berry_juice"],"summer_cool_break":["water","berry_juice"],"autumn_shared_table":["bread","mushroom_stew"],"winter_evening_warmth":["herb_drink","hand_warmer"],"spring_packed_lunch":["herbal_bread","dried_fruit"],"summer_waterside_tea":["mineral_water","reed_tea"],"autumn_lantern_preparation":["glow_lamp","reed_tea"],"winter_morning_table":["herbal_bread","traveler_stew"]}
+	expected.merge({"village_festival_spring":["camp_bread","wild_berry"],"village_festival_summer":["mineral_water","reed_tea"],"village_festival_autumn":["mushroom_stew","camp_bread"],"village_festival_winter":["herb_drink","hand_warmer"]})
 	for event in StoreEventData.events.values():
 		var id := str(event["event_id"])
 		var is_seasonal := str(event["event_kind"]) == "seasonal"
@@ -47,7 +48,7 @@ func run() -> void:
 			for reference in [1,29,57,85]:
 				var occurrence := StoreEventData.get_event_occurrence(id, reference)
 				check(StoreEventData.is_event_active(id, int(occurrence["start_day"])), "common event works regardless of season: " + id + ":" + str(reference))
-	check(common == 3 and seasonal == 8, "three common and eight seasonal sale events")
+	check(common == 3 and seasonal == 12, "three common and twelve seasonal sale events")
 	var invalid := StoreEventData.get_event("spring_market")
 	invalid["season_id"] = "rain"
 	check(not StoreEventSchedule.valid(invalid), "unknown season rejected")

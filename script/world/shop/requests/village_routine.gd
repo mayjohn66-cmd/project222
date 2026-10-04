@@ -2,6 +2,9 @@ class_name VillageRoutine
 extends RefCounted
 
 static func location(entry: Dictionary, hour: int) -> Dictionary:
+	var meeting := VillageExpansionFlow.gathering(hour)
+	if not meeting.is_empty() and meeting["participants"].has(str(entry["id"])):
+		return {"path":str(meeting["site"]),"label":VillageExpansionFlow.title(str(meeting["event"]))}
 	var home := {"path":str(entry["site"]), "label":"머무는 곳"}
 	if VillageRestFlow.active(hour) and str(entry["id"]) in VillageRestFlow.SETTINGS.participants:
 		return {"path":VillageRestFlow.SETTINGS.site_path, "label":"길목 쉼터 첫 모임"}

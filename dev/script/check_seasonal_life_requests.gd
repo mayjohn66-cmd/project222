@@ -47,7 +47,7 @@ func run() -> void:
 	player.set_physics_process(false)
 	world.get_node("CustomerSpawner").set_process(false)
 	check(SeasonalVillageFlow.SETTINGS.events.size() == 4 and SeasonalVillageFlow.events().size() == 8, "four original events plus four life requests registered")
-	check(PersonalRequestFlow.entries().size() == 17 + SeasonStockpileFlow.SETTINGS.requests.size() and MarketAfterglowFlow.moments().size() == 11, "existing board requests and afterglows kept separately")
+	check(PersonalRequestFlow.entries().size() == 17 + SeasonStockpileFlow.SETTINGS.requests.size() + WorkshopRequestFlow.SETTINGS.requests.size() and MarketAfterglowFlow.moments().size() == 11 + WorkshopRequestFlow.SETTINGS.moments.size(), "existing board requests and afterglows kept separately")
 	var sources := Tools.load_sources()
 	for entry in SeasonalLifeRequestFlow.SETTINGS.events:
 		var id := str(entry["id"])

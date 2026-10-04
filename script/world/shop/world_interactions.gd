@@ -38,6 +38,7 @@ func blocked() -> bool:
  if bool(world.get_meta("regular_customer_open",false)): return true
  if bool(world.get_meta("expedition_contact_open",false)): return true
  if bool(world.get_meta("weather_life_open",false)): return true
+ if bool(world.get_meta("village_expansion_open",false)): return true
  if bool(world.get_meta("lantern_wayfarer_open",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
  if manager.closing_shop or manager.summary_open: return true
@@ -75,6 +76,10 @@ func _process(_delta: float) -> void:
  var regular = get_parent().get_node_or_null("VillageLifeDirector/RegularCustomerDirector")
  if regular != null and not regular.interaction_hint().is_empty():
   prompt.text = regular.interaction_hint()
+  return
+ var expansion = get_parent().get_node_or_null("VillageLifeDirector/VillageExpansionDirector")
+ if expansion != null and not expansion.interaction_hint().is_empty():
+  prompt.text = expansion.interaction_hint()
   return
  var seasonal = get_parent().get_node_or_null("VillageLifeDirector/SeasonalVillageDirector")
  if seasonal != null and not seasonal.interaction_hint().is_empty():
@@ -126,6 +131,8 @@ func try_interact() -> bool:
  var regular = get_parent().get_node_or_null("VillageLifeDirector/RegularCustomerDirector")
  if regular != null and regular.try_interact(): return true
  if blocked(): return false
+ var expansion = get_parent().get_node_or_null("VillageLifeDirector/VillageExpansionDirector")
+ if expansion != null and expansion.try_interact(): return true
  var seasonal = get_parent().get_node_or_null("VillageLifeDirector/SeasonalVillageDirector")
  if seasonal != null and seasonal.try_interact(): return true
  var rest = get_parent().get_node_or_null("VillageLifeDirector/VillageRestDirector")

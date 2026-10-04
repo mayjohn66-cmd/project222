@@ -6,7 +6,7 @@ static func available() -> bool:
 
 static func entries() -> Array[Dictionary]:
 	var result: Array[Dictionary] = [{"id":"next_request", "title":"다음 주민 부탁"}]
-	for resident in VillageLifeFlow.SETTINGS.residents:
+	for resident in VillageLifeFlow.entries():
 		result.append({"id":"resident:" + str(resident["id"]), "title":str(resident["name"])})
 	for landmark in ResidentStoryFlow.SETTINGS.landmarks:
 		result.append({"id":"place:" + str(landmark["request"]), "title":ResidentStoryFlow.landmark_for_request(str(landmark["request"]))})
@@ -37,9 +37,12 @@ static func entries() -> Array[Dictionary]:
 		result.append({"id":ExpeditionContactFlow.JOURNAL_PREFIX + str(event["id"]),"title":ExpeditionContactFlow.title(str(event["id"]))})
 	for event in WeatherLifeFlow.SETTINGS.events:
 		result.append({"id":WeatherLifeFlow.JOURNAL_PREFIX + str(event["id"]),"title":WeatherLifeFlow.title(str(event["id"]))})
+	for event in VillageExpansionFlow.SETTINGS.events:
+		result.append({"id":VillageExpansionFlow.JOURNAL_PREFIX + str(event["id"]),"title":VillageExpansionFlow.title(str(event["id"]))})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with(VillageExpansionFlow.JOURNAL_PREFIX): return VillageExpansionFlow.information(id.trim_prefix(VillageExpansionFlow.JOURNAL_PREFIX))
 	if id.begins_with(WeatherLifeFlow.JOURNAL_PREFIX): return WeatherLifeFlow.information(id.trim_prefix(WeatherLifeFlow.JOURNAL_PREFIX))
 	if id.begins_with(ExpeditionContactFlow.JOURNAL_PREFIX): return ExpeditionContactFlow.information(id.trim_prefix(ExpeditionContactFlow.JOURNAL_PREFIX))
 	if id.begins_with(RegularCustomerFlow.JOURNAL_PREFIX): return RegularCustomerFlow.information(id.trim_prefix(RegularCustomerFlow.JOURNAL_PREFIX))
@@ -86,6 +89,16 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id.begins_with(VillageExpansionFlow.JOURNAL_PREFIX):
+		var event_id := id.trim_prefix(VillageExpansionFlow.JOURNAL_PREFIX)
+		var current := VillageExpansionFlow.step(event_id)
+		if current.is_empty():
+			if not VillageExpansionFlow.locked_reason(event_id).is_empty(): return null
+			var board := VillageSettlement.find_site(world,CommunityRequestFlow.SETTINGS.board_path)
+			return board if board != null and board.visible else null
+		var director = world.get_node_or_null("VillageLifeDirector/VillageExpansionDirector")
+		if current.has("site") and director != null: return VillageSettlement.find_site(world,str(current["site"]))
+		return director.npc_for(str(current["resident"])) if director != null else null
 	if id.begins_with(WeatherLifeFlow.JOURNAL_PREFIX):
 		var weather = world.get_node_or_null("VillageLifeDirector/WeatherLifeDirector")
 		if weather != null and weather.current_id == id.trim_prefix(WeatherLifeFlow.JOURNAL_PREFIX) and is_instance_valid(weather.npc) and weather.npc.visible and not weather.npc.is_queued_for_deletion(): return weather.npc

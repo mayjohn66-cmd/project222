@@ -10,7 +10,7 @@ func check(ok: bool, caption: String) -> void:
 		failures += 1
 		push_error(caption)
 func _ready() -> void: call_deferred("run")
-func sample(type_id: String, day: int) -> Dictionary:
+func sample(type_id: String, day: int, target_event: String) -> Dictionary:
 	seed(5091)
 	var units := 0
 	var event_units := 0
@@ -21,7 +21,7 @@ func sample(type_id: String, day: int) -> Dictionary:
 		units += int(request.get("amount", 0))
 		var item_id := str(request.get("item_id", ""))
 		item_units[item_id] = int(item_units.get(item_id, 0)) + int(request.get("amount", 0))
-		if not str(request.get("event_id", "")).is_empty(): event_units += int(request["amount"])
+		if str(request.get("event_id", "")) == target_event: event_units += int(request["amount"])
 	return {"units":units, "event_units":event_units, "item_units":item_units}
 func label_text(node: Node) -> String:
 	var result: String = (node.text + "\n") if node is Label else ""
@@ -42,7 +42,7 @@ func run() -> void:
 	var menu = world.get_node("UI/ManagementMenu")
 	var sources := Tools.load_sources()
 	var prose := RequestTextData.read_file(RequestTextData.CSV_PATH)
-	check(StoreEventStory.SETTINGS.moments.size() == 66, "eleven common/seasonal events have six narrative stages each")
+	check(StoreEventStory.SETTINGS.moments.size() == 90, "fifteen common/seasonal events have six narrative stages each")
 	var token_id := "store_trail_bought"
 	var bad_token := PackedStringArray([token_id, "service_text", "길손의 말", "", "준비를 다 했어.", ""])
 	check(not Tools.validate_rows(Tools.COLUMNS, [bad_token], sources)["errors"].is_empty(), "Gemini cannot remove actual purchased item token")
@@ -75,9 +75,9 @@ func run() -> void:
 		check(not StoreEventStory.reaction(id, type_id, item_id, "missing", start).is_empty(), "genuine event stockout gets reaction: " + id)
 		check(StoreEventStory.reaction(id, type_id, "iron_ore", "bought", start).is_empty(), "unrelated item gets no event praise: " + id)
 		check(StoreEventStory.reaction(id, type_id, item_id, "bought", end + 1).is_empty(), "expired demand gets no event praise: " + id)
-		var normal := sample(type_id, start - 1)
-		var active := sample(type_id, start)
-		var ended := sample(type_id, end + 1)
+		var normal := sample(type_id, start - 1, id)
+		var active := sample(type_id, start, id)
+		var ended := sample(type_id, end + 1, id)
 		check(normal["event_units"] == 0 and ended["event_units"] == 0, "event demand absent outside dates: " + id)
 		check(active["event_units"] > 0 and active["units"] > normal["units"], "actual request generator increases purchased units: " + id)
 		for cue in rumor["cue_items"]:

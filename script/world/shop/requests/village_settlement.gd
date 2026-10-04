@@ -17,7 +17,9 @@ static func apply_world(world: Node) -> void:
 	var editor := world.get_node_or_null("VillageMapEditor")
 	var editing: bool = editor != null and editor.active
 	var open_sites: Dictionary = {}
-	for path in CommunityRequestFlow.unlocked_paths():
+	var unlocked_paths := CommunityRequestFlow.unlocked_paths()
+	unlocked_paths.append_array(VillageExpansionFlow.unlocked_paths())
+	for path in unlocked_paths:
 		var site := find_site(world, path)
 		if site != null: open_sites[site.get_instance_id()] = true
 	for entry in CommunityRequestFlow.SETTINGS.requests:

@@ -10,3 +10,7 @@ spring_packed_lunch,봄길의 도시락,3,7,8,11,any,spring_packed_lunch_rumor,�
 summer_waterside_tea,물가에서 쉬는 오후,12,15,16,19,any,summer_waterside_tea_rumor,물가에서 여름 오후를 보내려는 손님들이 미네랄 워터와 갈대 차를 찾습니다.,seasonal,summer,0
 autumn_lantern_preparation,가을 등불 준비,3,7,8,10,any,autumn_lantern_preparation_rumor,가을 저녁을 준비하는 이웃들이 발광 등불과 갈대 차를 고릅니다.,seasonal,autumn,0
 winter_morning_table,겨울 아침의 식탁,3,7,8,10,any,winter_morning_table_rumor,겨울 아침 끼니를 챙기는 손님들이 약초 빵과 여행자 스튜를 찾습니다.,seasonal,winter,0
+village_festival_spring,봄의 소풍 자리,3,7,8,20,any,store_fest_spring_rumor,새 계절에 먹을 것을 챙겨 이웃들과 봄 모임을 연다.,seasonal,spring,0
+village_festival_summer,물가의 여름 인사,3,7,8,20,any,store_fest_summer_rumor,차와 물을 준비하고 우물 곁에서 여름 모임을 연다.,seasonal,summer,0
+village_festival_autumn,수확 뒤의 식탁,3,7,8,20,any,store_fest_autumn_rumor,수프와 빵을 모아 가을의 작은 식탁을 차린다.,seasonal,autumn,0
+village_festival_winter,등불 곁 겨울 모임,3,7,8,20,any,store_fest_winter_rumor,밤길의 따뜻한 음료를 챙겨 겨울 저녁을 함께 보낸다.,seasonal,winter,0

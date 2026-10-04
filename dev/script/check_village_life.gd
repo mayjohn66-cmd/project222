@@ -46,7 +46,7 @@ func run() -> void:
 		life.refresh()
 		check(life.residents.size() == index + 1, "resident appears only after own settlement")
 		var npc: VillageResident = life.residents[id]
-		check(npc.visible and npc.get_child(0).sprite_frames != null, "resident uses existing pixel sprite")
+		check(npc.visible and npc.is_in_group("story_npc") and CustomerTypeData.has_customer_type(npc.customer_type_id), "resident uses registered 3D actor appearance")
 		var shape := CircleShape2D.new()
 		shape.radius = 12
 		var query := PhysicsShapeQueryParameters2D.new()

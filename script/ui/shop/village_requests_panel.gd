@@ -7,6 +7,8 @@ func entries() -> Array[Dictionary]:
 		var card: Dictionary = entry.duplicate(true)
 		card["id"] = "personal:" + str(entry["id"])
 		result.append(card)
+	for event in VillageExpansionFlow.SETTINGS.events:
+		result.append({"id":VillageExpansionFlow.JOURNAL_PREFIX + str(event["id"]),"title":VillageExpansionFlow.title(str(event["id"]))})
 	return result
 
 func refresh() -> void:
@@ -22,3 +24,10 @@ func refresh() -> void:
 		elif not reason.is_empty(): card["action"].text = "아직 준비 중"
 		elif PersonalRequestFlow.accepted(id): card["action"].text = "물품 전달하기" if PersonalRequestFlow.can_deliver(id) else "물품을 준비하는 중"
 		else: card["action"].text = "개인 부탁 맡기"
+
+	for entry in VillageExpansionFlow.SETTINGS.events:
+		var id := str(entry["id"])
+		var card: Dictionary = cards[VillageExpansionFlow.JOURNAL_PREFIX + id]
+		card["info"].text = VillageExpansionFlow.information(id)
+		card["action"].disabled = VillageExpansionFlow.accepted(id) or not VillageExpansionFlow.locked_reason(id).is_empty()
+		card["action"].text = "주민에게 이어서 듣기 [E]" if VillageExpansionFlow.accepted(id) else ("이야기 맡기" if VillageExpansionFlow.locked_reason(id).is_empty() else "다음 소식을 기다리는 중")

@@ -59,6 +59,9 @@ func _ready() -> void:
 	weather.visitor_prefix = "날씨 이야기 · "
 	weather.interaction_prefix = "[E] 날씨를 따라온 인사 · "
 	add_child(weather)
+	var expansion := VillageExpansionDirector.new()
+	expansion.name = "VillageExpansionDirector"
+	add_child(expansion)
 	call_deferred("refresh")
 
 func _process(delta: float) -> void:
@@ -75,7 +78,7 @@ func refresh() -> void:
 			facility.output_collected.connect(PreservationLessonRecords.record_output)
 	var world := get_parent()
 	var editor = world.get_node_or_null("VillageMapEditor")
-	for entry in VillageLifeFlow.SETTINGS.residents:
+	for entry in VillageLifeFlow.entries():
 		var id := str(entry["id"])
 		var site := VillageSettlement.find_site(world, str(entry["site"]))
 		var open: bool = VillageLifeFlow.available(entry) and site != null and site.visible and not (editor != null and editor.active)
@@ -103,7 +106,7 @@ func refresh() -> void:
 		var target := _approach_position(destination_site)
 		if target != Vector2.INF:
 			# Offset neighbors sharing a landmark onto separate clear standing places.
-			var offset := Vector2(32 * VillageLifeFlow.SETTINGS.residents.find(entry),0)
+			var offset := Vector2(32 * VillageLifeFlow.entries().find(entry),0)
 			var shape := CircleShape2D.new()
 			shape.radius = VillageLifeFlow.SETTINGS.resident_radius
 			if VillageRoutine.clear(world.get_world_2d().direct_space_state,shape,target + offset): target += offset

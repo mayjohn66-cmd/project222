@@ -699,6 +699,8 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 					info = "실제 구매로 시작하는 단골 이야기 / 화자: %s / 장면: %s / 상품/수량/재료/답례는 UI, 새 고유 이름·자동 판매·실제 동료 등장·판매 보장·추가 답례 약속 없음 / introduction→실제 재구매→부탁→최종 완독→다음 날 후일담, 기간 제한 없음" % [d.get("npc",""),d.get("stage","")]
 				if id.begins_with("weather_"):
 					info = "날씨에서 이어진 실제 구매 / 화자: %s / 장면: %s / 날씨·계절은 최초 소개 조건, 소개 후에는 변화해도 계속 / 진열 상품을 대표 손님이 실제 구매한 다음 날 E 최종 완독에 재료 답례·평판 최초1회 / 직접 전달·무료 상품·자동 판매·가격 상승·기간 제한·새 시설/고유 이름 없음 / 현재 날씨 단정 없이 지난 구매 회상, 수량·가격은 UI" % [d.get("npc",""),d.get("stage","")]
+				if id.begins_with("expansion_"):
+					info = "마을의 여덟 콘텐츠 묶음 / 화자: %s / 실제 단계: %s / 기존 service_text, 수량·날짜·조작은 UI / 단계·대금 지급 시점·실제 제작/채집·참가자 도착 조건을 유지 / 새 고유 이름·미구현 건물·자동 판매·추가 지급·회복/능력치 효과를 약속하지 않음" % [d.get("npc", ""),d.get("stage", "")]
 				if id.begins_with("workshop_afterglow_"):
 					info = "교류로 배운 상품의 사용 후일담 / 화자: %s / 장면: %s / 게시판에서 완제품 전달 다음 날 이후 주민 E 완독으로 수첩 기억 / 상품 대금·작은 사례비는 이전 전달 때 이미 지급, 추가 지급 없음 / 현재 날씨 단정·새 이름/건물/무료 물품/회복/능력치/판매 보장 없음 / 수량·가격·조작은 UI" % [d.get("npc", ""),d.get("stage", "")]
 				if id.begins_with("prologue_"):

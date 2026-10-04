@@ -4,12 +4,18 @@ extends RefCounted
 const SETTINGS = preload("res://scenes/shop/requests/default_village_life.tres")
 const PREFIX := "village_life:"
 
+static func entries() -> Array[Dictionary]:
+	var result: Array[Dictionary] = SETTINGS.residents.duplicate(true)
+	result.append_array(VillageExpansionFlow.SETTINGS.residents)
+	return result
+
 static func resident(id: String) -> Dictionary:
-	for entry in SETTINGS.residents:
+	for entry in entries():
 		if str(entry["id"]) == id: return RequestTextData.enrich(entry, "resident_greeting")
 	return {}
 
 static func available(entry: Dictionary) -> bool:
+	if entry.has("expansion_event"): return ResidentRequestFlow.tutorial_finished() and VillageExpansionFlow.done(str(entry["expansion_event"]))
 	return not entry.is_empty() and ResidentRequestFlow.tutorial_finished() and ResidentRequestFlow.done(str(entry["request"]))
 
 static func greeted_today(id: String) -> bool:

@@ -75,6 +75,11 @@ func try_interact() -> bool:
 
 func _on_action(id: String) -> void:
 	if not open: return
+	if id.begins_with(VillageExpansionFlow.JOURNAL_PREFIX):
+		var event_id := id.trim_prefix(VillageExpansionFlow.JOURNAL_PREFIX)
+		if VillageExpansionFlow.accept(event_id): panel.message.text = VillageExpansionFlow.information(event_id)
+		panel.refresh()
+		return
 	var previous_visitors := VillageVisitorFlow.available_types()
 	if id.begins_with("personal:"):
 		var personal_id := id.trim_prefix("personal:")
