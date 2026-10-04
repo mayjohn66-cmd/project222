@@ -10,6 +10,7 @@ uniform vec3 part_size = vec3(1.0);
 uniform float rank = 0.0;
 uniform float rank_count = 1.0;
 uniform float sub = 0.5;
+uniform vec4 tint : source_color = vec4(1.0);  // 곱하는 색(피격 번쩍임 등)
 uniform bool use_sort = true;  // false = 순번 깊이 대신 진짜 깊이(원정 방처럼 3D 물체가 실제 깊이로 가리는 장면)
 
 varying vec3 lpos;
@@ -33,7 +34,7 @@ void fragment() {
 	} else {
 		col = texture(tex_top, vec2(0.5 + p.x, 0.5 + p.z)).rgb;
 	}
-	ALBEDO = col;
+	ALBEDO = col * tint.rgb;
 	if (use_sort) {
 		float band = 1.0 / (rank_count + 1.0);
 		DEPTH = 0.1 + 0.8 * ((rank + 1.5) * band + (sub - 0.5) * 0.8 * band);

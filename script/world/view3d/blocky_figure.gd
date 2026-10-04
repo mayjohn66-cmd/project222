@@ -30,6 +30,8 @@ var _atk_t: float = -1.0  # 공격 진행 시간(초), -1 = 공격 중 아님
 var _atk_dur: float = 0.4
 var _atk_ranged: bool = false
 var _weapon: Node3D = null
+var _hurt_t: float = -1.0  # 피격 진행 시간(초), -1 = 아님
+var _hurt_dur: float = 0.4
 var _weapon_hold: float = 0.0  # 공격이 끝난 뒤에도 무기를 잠깐 더 보인다
 var _idle_t: float = 0.0
 var _id_root: Node3D
@@ -209,6 +211,12 @@ func _box(pivot: Node3D, size: Vector3, tex_front: Texture2D, tex_side: Texture2
 	return inst
 
 
+# 모든 부품에 곱하는 색(1,1,1 = 원래 색). 피격 번쩍임 등.
+func set_tint(c: Color) -> void:
+	for part in parts:
+		(part["material"] as ShaderMaterial).set_shader_parameter("tint", c)
+
+
 # 순번 깊이를 쓸지(기본) / 진짜 깊이를 쓸지. 순번 정렬이 없는 장면(원정 방)에서는 false.
 func set_sorted(sorted: bool) -> void:
 	for part in parts:
@@ -249,6 +257,12 @@ func animate(delta: float) -> void:
 		return
 
 	_idle_t += delta
+
+	if _hurt_t >= 0.0:
+		_hurt_t += delta
+
+		if _hurt_t >= _hurt_dur:
+			_hurt_t = -1.0
 
 	if _atk_t >= 0.0:
 		_atk_t += delta
@@ -310,6 +324,45 @@ func _apply_pose() -> void:
 		el.rotation = Vector3(-(w * (12.0 + 22.0 * forward) + idle * 7.0) * d2r, 0.0, 0.0)
 
 	_apply_attack_pose(d2r)
+	_apply_hurt_pose(d2r)
+
+
+# ---------------------------------------------------------------- 피격
+
+# 맞았을 때: 몸이 뒤로 젖혀지며 팔을 휘젓고 무릎이 꺾였다가 돌아온다. 번쩍임(색)과 밀려남(위치)은 호출한 쪽이 한다.
+func play_hurt(duration: float = 0.4) -> void:
+	_hurt_t = 0.0
+	_hurt_dur = maxf(0.15, duration)
+
+
+func hurt_amount() -> float:
+	if _hurt_t < 0.0:
+		return 0.0
+
+	var p: float = clampf(_hurt_t / _hurt_dur, 0.0, 1.0)
+	return pow(1.0 - p, 2.0)
+
+
+func _apply_hurt_pose(d2r: float) -> void:
+	if _hurt_t < 0.0:
+		return
+
+	var k: float = hurt_amount()
+	var shake: float = sin(_hurt_t * 70.0) * k
+	(_j["chest"] as Node3D).rotation = Vector3(-22.0 * d2r * k, shake * 5.0 * d2r, shake * 3.0 * d2r)
+	(_j["head"] as Node3D).rotation = Vector3(-18.0 * d2r * k, -shake * 6.0 * d2r, 0.0)
+	(_j["hips"] as Node3D).rotation = Vector3(-4.0 * d2r * k, 0.0, 0.0)
+	(_j["sh_l"] as Node3D).rotation = Vector3(-30.0 * d2r * k, 0.0, 38.0 * d2r * k)
+	(_j["sh_r"] as Node3D).rotation = Vector3(-30.0 * d2r * k, 0.0, -38.0 * d2r * k)
+	(_j["el_l"] as Node3D).rotation = Vector3(-35.0 * d2r * k, 0.0, 0.0)
+	(_j["el_r"] as Node3D).rotation = Vector3(-35.0 * d2r * k, 0.0, 0.0)
+
+	for k2 in ["l", "r"]:
+		(_j["kn_" + k2] as Node3D).rotation.x = 26.0 * d2r * k
+		(_j["hip_" + k2] as Node3D).rotation.x = -12.0 * d2r * k
+
+	if _weapon != null:
+		_weapon.visible = false
 
 
 # ---------------------------------------------------------------- 공격

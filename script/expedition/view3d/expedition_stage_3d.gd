@@ -33,6 +33,10 @@ var _p: Dictionary = {"ts": 24, "block_px": 22.0, "unit_px_z": 20.0}
 var _player: BlockyFigure
 var _player_prev: Vector2 = Vector2.ZERO
 var _prev_flash: float = 0.0
+var _prev_hurt: float = 0.0
+var _fx: Array = []  # 일시 효과: {kind, node, t, ...}
+var _proj_nodes: Array = []
+var _fx_mat: StandardMaterial3D
 var _weapon_method: int = -1
 var _enemy_nodes: Array = []  # {node, enemy}
 var _object_nodes: Array = []
@@ -153,7 +157,9 @@ func rebuild(model: RefCounted, region: String) -> void:
 	_build_enemies(model)
 	_player_prev = model.player_position
 	_prev_flash = 0.0
+	_prev_hurt = 0.0
 	_weapon_method = -1
+	_clear_fx()
 	_player.set_shown(true)
 
 
@@ -371,7 +377,7 @@ func _build_enemies(model: RefCounted) -> void:
 			VillageAssets.oct(b, "horn_r", horn, r * 0.4, 0.0, 0.1, r * 1.3, r * 1.9, 0.0)
 
 		var inst: MeshInstance3D = _node(b)
-		_enemy_nodes.append({"node": inst, "enemy": e, "hp_prev": int(e["hp"]), "flash": 0.0})
+		_enemy_nodes.append({"node": inst, "enemy": e, "hp_prev": int(e["hp"]), "flash": 0.0, "prev_windup": -1.0, "wmax": 0.65, "lunge": -1.0, "lunge_dir": Vector2.ZERO})
 
 
 # ---------------------------------------------------------------- 매 프레임
@@ -400,12 +406,32 @@ func _snap(p: Vector3) -> Vector3:
 	return p + (roundf(r / px) * px - r) * right + (roundf(u / px) * px - u) * up
 
 
+var _hurt_dir: Vector2 = Vector2.ZERO
+
+
+# 가장 가까운 살아 있는 적에게서 멀어지는 방향(피격 때 밀려나는 쪽)
+func _away_from_enemies(model: RefCounted) -> Vector2:
+	var best: Vector2 = Vector2.ZERO
+	var best_d: float = INF
+
+	for e in model.enemies:
+		if int(e["hp"]) <= 0:
+			continue
+
+		var d: float = model.player_position.distance_to(e["position"])
+
+		if d < best_d:
+			best_d = d
+			best = (model.player_position - (e["position"] as Vector2)).normalized()
+
+	return best
+
+
 func _sync(model: RefCounted, delta: float) -> void:
-	# 플레이어
+	# ---- 플레이어
 	var pos: Vector2 = model.player_position
 	var moved: float = pos.distance_to(_player_prev)
 	_player_prev = pos
-	_player.position = _snap(Vector3(pos.x, 0.0, pos.y))
 	_player.walking = moved > 0.0005
 	_player.facing_yaw_deg = rad_to_deg(atan2(model.facing.x, model.facing.y))
 
@@ -420,22 +446,72 @@ func _sync(model: RefCounted, delta: float) -> void:
 		_player.set_weapon("staff" if method == ExpeditionAttackProfile.Method.PROJECTILE else "sword")
 
 	if float(model.attack_flash) > 0.0 and _prev_flash <= 0.0:
-		_player.play_attack(maxf(0.3, float(model.attack_profile.cooldown) * 0.85), method == ExpeditionAttackProfile.Method.PROJECTILE)
+		var dur: float = maxf(0.3, float(model.attack_profile.cooldown) * 0.85)
+		_player.play_attack(dur, method == ExpeditionAttackProfile.Method.PROJECTILE)
+
+		if method == ExpeditionAttackProfile.Method.MELEE:
+			_spawn_slash(model, dur)
 
 	_prev_flash = float(model.attack_flash)
+
+	# 피격: 몸이 젖혀지고 붉게 번쩍이며 적에게서 밀려난다. 무적 시간 끝 무렵엔 깜빡인다.
+	if float(model.hurt_remaining) > 0.0 and _prev_hurt <= 0.0:
+		_player.play_hurt(0.4)
+		_hurt_dir = _away_from_enemies(model)
+
+	_prev_hurt = float(model.hurt_remaining)
 	_player.animate(delta)
-	# 적: 위치·바라보는 방향·미세한 출렁임, 쓰러지면 숨김
+	var hk: float = _player.hurt_amount()
+	_player.set_tint(Color.WHITE.lerp(Color(2.3, 0.5, 0.5), hk))
+	_player.position = _snap(Vector3(pos.x + _hurt_dir.x * 0.3 * hk, 0.0, pos.y + _hurt_dir.y * 0.3 * hk))
+	var blink: bool = float(model.hurt_remaining) > 0.0 and float(model.hurt_remaining) < 0.32 and int(_time * 16.0) % 2 == 0
+	_player.set_shown(not blink)
+
+	# ---- 적: 위치·방향·출렁임. 공격 준비(웅크리며 붉어짐) → 도약(내려찍기) → 충격 고리. 맞으면 하얗게 번쩍이며 떨린다.
+	var reach_e: float = 0.9
+
 	for en in _enemy_nodes:
 		var e: Dictionary = en["enemy"]
 		var node: MeshInstance3D = en["node"]
 		node.visible = int(e["hp"]) > 0
 		var ep: Vector2 = e["position"]
-		var bob: float = 0.04 * sin(_time * 5.0 + ep.x * 3.0)
-		node.position = _snap(Vector3(ep.x, absf(bob), ep.y))
-		var to_player: Vector2 = model.player_position - ep
-		node.rotation.y = atan2(to_player.x, to_player.y) - PI * 0.25
 		var winding: bool = float(e["windup"]) >= 0.0
-		node.scale = Vector3.ONE * (1.0 + (0.12 if winding else 0.0))
+		var wprev: float = float(en["prev_windup"])
+
+		if winding and wprev < 0.0:
+			en["wmax"] = maxf(0.1, float(e["windup"]))  # 준비 시작: 전체 준비 시간 기억
+
+		if not winding and wprev >= 0.0 and int(e["hp"]) > 0:
+			# 준비가 끝나 공격이 나갔다: 목표 쪽으로 도약하고 땅에 충격 고리
+			var tgt: Vector2 = e["target"]
+			en["lunge"] = 0.0
+			en["lunge_dir"] = (tgt - ep).normalized()
+			reach_e = 1.35 if bool(e["boss"]) else 0.9
+			_spawn_ring(tgt, reach_e, Color(1.0, 0.45, 0.25), 0.35)
+
+		en["prev_windup"] = float(e["windup"])
+		var q: float = clampf(1.0 - float(e["windup"]) / float(en["wmax"]), 0.0, 1.0) if winding else 0.0
+		var to_p: Vector2 = (e["target"] as Vector2 - ep).normalized() if winding else (model.player_position - ep).normalized()
+		var bob: float = 0.04 * sin(_time * 5.0 + ep.x * 3.0) * (1.0 - q)
+		var off: Vector2 = -to_p * 0.22 * q  # 준비: 뒤로 웅크림
+		var sx: float = 1.0 + 0.2 * q
+		var sy: float = 1.0 - 0.3 * q
+
+		if float(en["lunge"]) >= 0.0:
+			en["lunge"] = float(en["lunge"]) + delta
+			var lt: float = clampf(float(en["lunge"]) / 0.26, 0.0, 1.0)
+			var f: float = sin(lt * PI)
+			off = (en["lunge_dir"] as Vector2) * 0.7 * f
+			sx = 1.0 - 0.2 * f
+			sy = 1.0 + 0.32 * f
+
+			if lt >= 1.0:
+				en["lunge"] = -1.0
+
+		node.position = _snap(Vector3(ep.x + off.x, absf(bob) + (0.12 * sin(clampf(float(en["lunge"]) / 0.26, 0.0, 1.0) * PI) if float(en["lunge"]) >= 0.0 else 0.0), ep.y + off.y))
+		node.rotation.y = atan2(to_p.x, to_p.y) - PI * 0.25
+		node.scale = Vector3(sx, sy, sx)
+
 		# 맞으면 하얗게 번쩍이며 뒤로 떨린다
 		if int(e["hp"]) < int(en["hp_prev"]):
 			en["flash"] = 0.16
@@ -443,19 +519,196 @@ func _sync(model: RefCounted, delta: float) -> void:
 		en["hp_prev"] = int(e["hp"])
 		en["flash"] = maxf(0.0, float(en["flash"]) - delta)
 		var flash_on: bool = float(en["flash"]) > 0.0
-
-		for m in node.get_meta("mats", []):
-			(m as ShaderMaterial).set_shader_parameter("tint", Color(2.4, 2.4, 2.4) if flash_on else Color.WHITE)
+		var tint: Color = Color(1.0 + 1.1 * q, 1.0 - 0.45 * q, 1.0 - 0.45 * q)
 
 		if flash_on:
+			tint = Color(2.4, 2.4, 2.4)
 			node.position += Vector3(sin(_time * 90.0), 0.0, cos(_time * 90.0)) * 0.03
-	# 오브젝트: 사용했으면 숨김
+
+		for m in node.get_meta("mats", []):
+			(m as ShaderMaterial).set_shader_parameter("tint", tint)
+
+	# ---- 투사체(멀리 쏘는 무기): 빛나는 구슬
+	_sync_projectiles(model)
+	# ---- 오브젝트: 사용했으면 숨김
 	for o in _object_nodes:
 		(o as Node3D).visible = not model.object_consumed
+
 	# 출구: 열렸으면 초록 빛, 닫혔으면 창살
 	if _exit_glow != null:
 		_exit_glow.visible = bool(model.exit_open)
 		_exit_bars.visible = not bool(model.exit_open)
-	# 횃불 일렁임
+
 	for i in range(_torches.size()):
 		(_torches[i] as OmniLight3D).light_energy = 0.9 + 0.2 * sin(_time * 7.0 + float(i) * 1.7) + 0.1 * sin(_time * 13.0 + float(i))
+
+	_tick_fx(delta)
+
+
+# ---------------------------------------------------------------- 효과: 베기 궤적·충격 고리·투사체
+
+func _fx_material() -> StandardMaterial3D:
+	if _fx_mat == null:
+		_fx_mat = StandardMaterial3D.new()
+		_fx_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		_fx_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		_fx_mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
+		_fx_mat.vertex_color_use_as_albedo = true
+		_fx_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+
+	return _fx_mat
+
+
+func _clear_fx() -> void:
+	for f in _fx:
+		if is_instance_valid(f["node"]):
+			(f["node"] as Node).queue_free()
+
+	_fx.clear()
+
+	for n in _proj_nodes:
+		if is_instance_valid(n):
+			(n as Node).queue_free()
+
+	_proj_nodes.clear()
+
+
+# 베기 궤적: 플레이어 앞 공격 부채꼴을 따라 한 번 쓸고 가는 빛줄기(머리는 밝고 꼬리는 투명). 칼 내려치는 순간(공격 시간의 28%)에 시작한다.
+func _spawn_slash(model: RefCounted, dur: float) -> void:
+	var node := MeshInstance3D.new()
+	node.material_override = _fx_material()
+	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	_content.add_child(node)
+	var face: Vector2 = model.facing
+	_fx.append({"kind": "slash", "node": node, "t": 0.0, "delay": dur * 0.28, "sweep": dur * 0.26, "fade": 0.2,
+		"center": model.player_position, "angle": atan2(face.y, face.x), "half": deg_to_rad(float(model.attack_profile.arc_degrees)) * 0.5,
+		"reach": float(model.attack_profile.reach)})
+
+
+func _build_slash_mesh(f: Dictionary, head_u: float, tail_u: float, alpha: float) -> ArrayMesh:
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var c: Vector2 = f["center"]
+	var a0: float = float(f["angle"]) + float(f["half"])  # 시작(위쪽 오른쪽)
+	var a1: float = float(f["angle"]) - float(f["half"])
+	var r_out: float = float(f["reach"]) * 1.0
+	var r_in: float = float(f["reach"]) * 0.28
+	var n: int = 14
+
+	for i in range(n):
+		var u0: float = lerpf(tail_u, head_u, float(i) / float(n))
+		var u1: float = lerpf(tail_u, head_u, float(i + 1) / float(n))
+		var al0: float = alpha * pow(float(i) / float(n), 1.6)
+		var al1: float = alpha * pow(float(i + 1) / float(n), 1.6)
+		var pts: Array = []
+
+		for u in [u0, u1]:
+			var ang: float = lerpf(a0, a1, u)
+			var y: float = 1.05 - 0.75 * u  # 위에서 아래로 내려치는 궤적
+			var dir := Vector2(cos(ang), sin(ang))
+			pts.append([c + dir * r_out, y, c + dir * r_in, y - 0.32])
+
+		var cols0 := Color(1.0, 0.95, 0.7, al0)
+		var cols1 := Color(1.0, 0.95, 0.7, al1)
+		var o0: Vector2 = pts[0][0]
+		var i0: Vector2 = pts[0][2]
+		var o1: Vector2 = pts[1][0]
+		var i1: Vector2 = pts[1][2]
+		var v_o0 := Vector3(o0.x, float(pts[0][1]), o0.y)
+		var v_i0 := Vector3(i0.x, float(pts[0][3]), i0.y)
+		var v_o1 := Vector3(o1.x, float(pts[1][1]), o1.y)
+		var v_i1 := Vector3(i1.x, float(pts[1][3]), i1.y)
+		for tri in [[v_o0, cols0], [v_i0, cols0], [v_o1, cols1], [v_i0, cols0], [v_i1, cols1], [v_o1, cols1]]:
+			st.set_color(tri[1])
+			st.add_vertex(tri[0])
+
+	return st.commit()
+
+
+# 땅에 퍼지는 충격 고리(적 공격 착탄). 반지름 radius 까지 커지며 사라진다.
+func _spawn_ring(at: Vector2, radius: float, color: Color, life: float) -> void:
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var seg: int = 28
+
+	for i in range(seg):
+		var a0: float = TAU * float(i) / float(seg)
+		var a1: float = TAU * float(i + 1) / float(seg)
+		var o0 := Vector3(cos(a0), 0.05, sin(a0))
+		var o1 := Vector3(cos(a1), 0.05, sin(a1))
+		var n0 := o0 * 0.78
+		var n1 := o1 * 0.78
+		n0.y = 0.05
+		n1.y = 0.05
+
+		for v in [[o0, 1.0], [n0, 0.0], [o1, 1.0], [n0, 0.0], [n1, 0.0], [o1, 1.0]]:
+			st.set_color(Color(color.r, color.g, color.b, float(v[1])))
+			st.add_vertex(v[0])
+
+	var node := MeshInstance3D.new()
+	node.mesh = st.commit()
+	node.material_override = _fx_material()
+	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	node.position = Vector3(at.x, 0.0, at.y)
+	node.scale = Vector3(0.2, 1.0, 0.2)
+	_content.add_child(node)
+	_fx.append({"kind": "ring", "node": node, "t": 0.0, "life": life, "radius": radius})
+
+
+func _tick_fx(delta: float) -> void:
+	var keep: Array = []
+
+	for f in _fx:
+		f["t"] = float(f["t"]) + delta
+		var node: MeshInstance3D = f["node"]
+
+		if str(f["kind"]) == "ring":
+			var p: float = float(f["t"]) / float(f["life"])
+
+			if p >= 1.0:
+				node.queue_free()
+				continue
+
+			var r: float = float(f["radius"]) * (0.25 + 0.75 * (1.0 - pow(1.0 - p, 3.0)))
+			node.scale = Vector3(r, 1.0, r)
+			node.transparency = clampf(p * p, 0.0, 1.0)  # 뒤로 갈수록 투명
+		else:
+			var t: float = float(f["t"]) - float(f["delay"])
+			var total: float = float(f["sweep"]) + float(f["fade"])
+
+			if t >= total:
+				node.queue_free()
+				continue
+
+			if t < 0.0:
+				node.mesh = null
+			else:
+				var sp: float = clampf(t / float(f["sweep"]), 0.0, 1.0)
+				var head: float = 1.0 - pow(1.0 - sp, 2.0)  # 빠르게 시작해 느려진다
+				var tail: float = maxf(0.0, head - 0.55 - 0.4 * clampf((t - float(f["sweep"])) / float(f["fade"]), 0.0, 1.0))
+				var alpha: float = 1.0 - clampf((t - float(f["sweep"])) / float(f["fade"]), 0.0, 1.0)
+				node.mesh = _build_slash_mesh(f, head, tail, alpha)
+
+		keep.append(f)
+
+	_fx = keep
+
+
+func _sync_projectiles(model: RefCounted) -> void:
+	var count: int = model.projectiles.size()
+
+	while _proj_nodes.size() < count:
+		var b := VillageAssets.PartBuilder.new()
+		var glow: Dictionary = VillageAssets._flat_spec(int(_p["ts"]), Color(1.0, 0.92, 0.55), "bolt")
+		glow["emit"] = 1.0
+		VillageAssets.dome(b, "bolt", glow, 0.0, 0.0, 0.1, -0.05, 0.12, 2, 8)
+		VillageAssets.dome(b, "bolt_low", glow, 0.0, 0.0, 0.1, -0.12, 0.05, 2, 8)
+		_proj_nodes.append(_node(b))
+
+	for i in range(_proj_nodes.size()):
+		var n: MeshInstance3D = _proj_nodes[i]
+		n.visible = i < count
+
+		if i < count:
+			var sp: Vector2 = model.projectiles[i]["position"]
+			n.position = Vector3(sp.x, 0.7, sp.y)

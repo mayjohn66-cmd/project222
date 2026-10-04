@@ -237,6 +237,7 @@ func _draw() -> void:
 			"player":
 				if not on3d: _draw_player()
 	for shot in model.projectiles:
+		if on3d: break
 		draw_circle(_point(shot["position"]) - Vector2(0, 12 * tile_scale), 4 * tile_scale, Color("f6d391"))
 	for note in model.feedback:
 		var cell: float = tile_size.x * tile_scale
@@ -254,6 +255,13 @@ func _draw() -> void:
 			draw_arc(note_at, cell * (0.3 + 0.35 * (1.0 - hurt_life)), 0, TAU, 24, Color(1, 0.3, 0.3, hurt_life), 4)
 		else:
 			draw_string(ThemeDB.fallback_font, note_at - Vector2(0, cell * 0.5), str(note["text"]), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
+	# 피격: 화면 가장자리가 붉게 번쩍인다(무적 시간 동안 서서히 사라짐)
+	if model.hurt_remaining > 0.0:
+		var hv: float = clampf(model.hurt_remaining / maxf(0.01, model.settings.hurt_grace), 0.0, 1.0)
+		var edge_w: float = 90.0
+		for r in [Rect2(0, 0, size.x, edge_w), Rect2(0, size.y - edge_w, size.x, edge_w), Rect2(0, 0, edge_w, size.y), Rect2(size.x - edge_w, 0, edge_w, size.y)]:
+			draw_rect(r, Color(0.9, 0.1, 0.1, 0.28 * hv))
+
 
 func _draw_block(rect: Rect2, height: float, color: Color) -> void:
 	var base := _footprint(rect)
