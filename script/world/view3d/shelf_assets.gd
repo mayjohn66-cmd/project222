@@ -159,14 +159,11 @@ static func build(lo: Vector2, hi: Vector2, rotation: int, stack: int, slots: Ar
 			var board_y: float = float(boards[j % 2]) + 0.04
 			var seg_index: int = j / 2
 			var u_start: float = inset + 0.03 + seg * float(seg_index)
-			# 선반 안쪽은 그늘이라 상품이 어둡게 죽으므로 색을 밝히고 약하게 스스로 빛나게 한다.
-			var color: Color = item_color(item_id).lerp(Color.WHITE, 0.22)
 			var shape: String = shape_of(item_id)
-			var goods_spec: Dictionary = VillageAssets._flat_spec(ts, color, "good_" + color.to_html(false))
-			var accent: Dictionary = VillageAssets._flat_spec(ts, color.darkened(0.25), "goodd_" + color.to_html(false))
-			goods_spec["emit"] = 0.3
-			accent["emit"] = 0.22
-			var cork: Dictionary = VillageAssets._flat_spec(ts, Color(0.62, 0.45, 0.28), "good_cork")
+			var gs: Array = goods_specs(item_id, ts)
+			var goods_spec: Dictionary = gs[0]
+			var accent: Dictionary = gs[1]
+			var cork: Dictionary = gs[2]
 
 			for n in range(count):
 				var uu: float = u_start + seg * (float(n) + 0.5) / float(count)
@@ -177,6 +174,35 @@ static func build(lo: Vector2, hi: Vector2, rotation: int, stack: int, slots: Ar
 	var mesh := ArrayMesh.new()
 	var specs: Array = b.commit_into(mesh)
 	return {"mesh": mesh, "specs": specs, "total_blocks": total_h, "lo": lo, "hi": hi}
+
+
+# 상품 재질 셋: [주색, 어두운 색, 마개]. 선반 안쪽은 그늘이라 상품이 어둡게 죽으므로 색을 밝히고 약하게 스스로 빛나게 한다.
+static func goods_specs(item_id: String, ts: int) -> Array:
+	var color: Color = item_color(item_id).lerp(Color.WHITE, 0.22)
+	var goods_spec: Dictionary = VillageAssets._flat_spec(ts, color, "good_" + color.to_html(false))
+	var accent: Dictionary = VillageAssets._flat_spec(ts, color.darkened(0.25), "goodd_" + color.to_html(false))
+	goods_spec["emit"] = 0.3
+	accent["emit"] = 0.22
+	return [goods_spec, accent, VillageAssets._flat_spec(ts, Color(0.62, 0.45, 0.28), "good_cork")]
+
+
+# 상품 한 개만의 메시(갤러리·미리보기용). 원점 중심, sc = 크기 배율.
+static func build_good(item_id: String, p: Dictionary, sc: float = 2.4) -> Dictionary:
+	var b := VillageAssets.PartBuilder.new()
+	var parts: Dictionary = {}
+	var part := func(spec: Dictionary) -> SurfaceTool:
+		var key: String = str(spec["name"])
+
+		if not parts.has(key):
+			parts[key] = b.new_part(spec, Vector3(-0.4, 0.0, -0.4), Vector3(0.4, 0.6, 0.4))
+
+		return parts[key]
+
+	var gs: Array = goods_specs(item_id, int(p["ts"]))
+	_good(shape_of(item_id), part, gs[0], gs[1], gs[2], Vector3.ZERO, sc, 0)
+	var mesh := ArrayMesh.new()
+	var specs: Array = b.commit_into(mesh)
+	return {"mesh": mesh, "specs": specs}
 
 
 # (u, v, y) → 칸 좌표 (x, y, z). lo/hi 는 3D 발자국. v 는 뒤(0)에서 앞(depth)으로.
