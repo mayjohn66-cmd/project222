@@ -1,7 +1,6 @@
 @tool
 class_name StoreExterior
 extends Node2D
-const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
 const TILE_GRID_OVERLAY = preload("res://script/world/shop/tile_grid_overlay.gd")
 const VILLAGE_LAYOUT_PATH := "res://data/village_map_layout.json"
 const VILLAGE_LAYOUT_FALLBACK := GameConfig.VILLAGE_LAYOUT_USER_PATH
@@ -122,10 +121,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		show_tile_grid = not show_tile_grid
 		get_viewport().set_input_as_handled()
 
-
-func _draw() -> void:
-	for cell in get_connected_map_cells():
-		_draw_ground_cell(cell,_get_cell_fill_color(cell))
 
 # Keep the shop lot fixed and bring the dungeon approach inside a compact circle.
 func get_route_rect() -> Rect2i:
@@ -592,39 +587,6 @@ func _is_sidewalk_cell(
 			return is_bottom_sidewalk
 
 	return false
-
-
-# 타일의 용도에 따라 표시 색상을 결정한다.
-func _get_cell_fill_color(
-	cell: Vector2i
-) -> Color:
-	if _is_road_cell(
-		cell
-	):
-		return road_color
-
-	if _is_sidewalk_cell(
-		cell
-	):
-		return sidewalk_color
-
-	return ground_color
-
-# 외부 부지 타일 하나를 그린다.
-func _draw_ground_cell(cell: Vector2i, _fill_color: Color) -> void:
-	var painted := get_layout_tile(cell)
-	if painted == "road" or painted == "grass":
-		TILE_ART.draw_cell(self,grid_to_local(cell),tile_width,tile_height,TILE_ART.PAVING if painted == "road" else TILE_ART.GRASS)
-		return
-	var texture: Texture2D = TILE_ART.GRASS
-	if _is_route_road(cell) or _is_road_cell(cell):
-		texture = TILE_ART.ROAD
-	elif _is_sidewalk_cell(cell):
-		texture = TILE_ART.PAVING
-	if get_route_rect().has_point(cell) or get_forecourt_rect().has_point(cell):
-		texture = TILE_ART.PAVING if _is_route_road(cell) or _is_village_courtyard(cell) else TILE_ART.GRASS
-		if get_village_square_rect().has_point(cell): texture = TILE_ART.ROAD
-	TILE_ART.draw_cell(self, grid_to_local(cell), tile_width, tile_height, texture)
 
 
 func grid_to_local(

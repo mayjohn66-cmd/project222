@@ -1,6 +1,5 @@
 @tool
 extends Node2D
-const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
 const GRID = preload("res://script/world/shared/isometric_grid.gd")
 
 
@@ -115,18 +114,6 @@ func get_corridor_rect() -> Rect2i:
 		corridor_length,
 		actual_width
 	)
-
-
-func _draw() -> void:
-	_draw_region(
-		get_store_rect(),
-		Color(0.35, 0.38, 0.35)
-	)
-
-func _draw_region(region: Rect2i, _fill_color: Color) -> void:
-	for row in range(region.position.y, region.end.y):
-		for column in range(region.position.x, region.end.x):
-			TILE_ART.draw_cell(self, grid_to_local(Vector2i(column, row)), tile_width, tile_height, TILE_ART.WOOD)
 
 
 func grid_to_local(cell: Vector2i) -> Vector2:
