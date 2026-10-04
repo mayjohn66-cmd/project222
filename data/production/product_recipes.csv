@@ -21,3 +21,6 @@ glow_lamp,glow_lamp,1,magic_oven,100
 traveler_stew,traveler_stew,1,magic_oven,80
 explorer_kit,explorer_kit,1,magic_oven,110
 rainbow_tonic,rainbow_tonic,1,drink_machine,180
+camp_bread,camp_bread,1,magic_oven,45
+dry_spring_bud,dried_spring_bud,1,magic_oven,30
+dry_summer_mint,dried_summer_mint,1,magic_oven,30

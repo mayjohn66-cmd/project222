@@ -43,6 +43,8 @@ func open_board() -> bool:
 func _ready() -> void: call_deferred("run")
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false
+	world.get_node("VillageLifeDirector").crafting_path_enabled = false
 	add_child(world)
 	await settle()
 	life = world.get_node("VillageLifeDirector")
@@ -53,7 +55,7 @@ func run() -> void:
 	manager.hour_timer.paused = false
 	manager.current_hour = 6
 	GameState.total_day = 50
-	check(PersonalRequestFlow.entries().size() == PersonalRequestFlow.SETTINGS.requests.size() + MarketAfterglowFlow.SETTINGS.requests.size() + MarketAfterglowFlow.FOLLOWUPS.requests.size() and MarketAfterglowFlow.SETTINGS.requests.size() == 3, "original requests remain registered alongside followups")
+	check(PersonalRequestFlow.entries().size() == PersonalRequestFlow.SETTINGS.requests.size() + MarketAfterglowFlow.SETTINGS.requests.size() + MarketAfterglowFlow.FOLLOWUPS.requests.size() + StoreEventFollowupFlow.SETTINGS.requests.size() + SeasonStockpileFlow.SETTINGS.requests.size() and MarketAfterglowFlow.SETTINGS.requests.size() == 3, "original requests remain registered alongside followups")
 	var sources := Tools.load_sources()
 	for entry in MarketAfterglowFlow.SETTINGS.requests:
 		var id := str(entry["id"])

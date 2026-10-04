@@ -10,7 +10,7 @@ static func accepted() -> bool: return PlayerProgress.story_beat_days.has(PREFIX
 static func prepared() -> bool: return PlayerProgress.story_beat_days.has(PREFIX + "prepared")
 static func completed() -> bool: return PlayerProgress.story_beat_days.has(PREFIX + "done")
 static func locked_reason() -> String:
-	if not ResidentRequestFlow.tutorial_finished(): return "델빈의 안내를 먼저 마쳐 주세요."
+	if not ResidentRequestFlow.tutorial_finished(): return "첫 거래와 원정 재료 판매를 먼저 마쳐 주세요."
 	if not VillageStoryFlow.completed(): return "이세르의 마을 이야기를 마치면 첫 장터를 준비할 수 있어요."
 	for id in SETTINGS.participants:
 		if not VillageLifeFlow.available(VillageLifeFlow.resident(id)): return "이웃들의 정착을 기다리고 있어요."

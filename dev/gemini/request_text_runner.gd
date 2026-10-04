@@ -666,6 +666,8 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 				for requirement in d.get("requirements", []):
 					items.append(_item_name(str(requirement["item"])))
 				info = "인물: %s / 필요한 물건: %s / 정착 뒤 안부를 나눈 이웃의 개인 부탁 / 기한 없음 / 창고 준비 후 게시판에서 직접 전달" % [resident.get("name", d.get("resident", "")), "·".join(items)]
+				if d.has("stockpile_season"):
+					info += " / 제안 계절: " + str(d["stockpile_season"]) + " / 지난 계절에만 원정에서 얻는 재료를 오래 보관해 전달 / 제안을 맡은 뒤 계절이 바뀌어도 유지 / 대금·평판은 UI에 표시하며 숫자는 대사에 넣지 않음 / 서리 얼음은 상온 다음 아침에 물이 됨: 냉동함에 넣었다가 전달할 날 꺼냄 / 새순·물박하는 채집 계절이 지난 아침에 시들고 냉장·냉동 보관 가능 / 식물 부탁은 베이킹 작업대에서 가공한 말린 봄 새순·말린 물박하를 요구 / 주민은 보존 경험을 말하며 설비 설치·버튼 조작은 플레이어 UI에 맡김 / 무료 재료 없음"
 				var after := str(d.get("after", ""))
 				if not after.is_empty():
 					info += " / 앞선 개인 부탁: " + Tools.row_from_source(Tools.KIND_PERSONAL_REQUEST, {"id":after})[2]
@@ -677,16 +679,28 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 					info += " / 기존 레시피: " + _item_name(str(d["recipe"]))
 				if bool(d.get("after_rest", false)):
 					info += " / 길목 쉼터 첫 모임을 끝까지 함께한 다음 날 이후 / 앞선 먹거리 부탁의 후일담도 완독 / 원정 재료를 창고에 준비해 게시판에서 전달하고 주민에게 E로 후일담 듣기 / 가방·장비·날씨·능력치 변경 없음 / 추가 답례 없음"
+				if d.has("after_store_event"):
+					info += " / 매장 행사에서 이어지는 부탁 / " + str(d.get("context", "")) + " / 행사 기간의 전체 매장 판매 기록이며 행사 수요 구매나 구매자 신원을 특정하지 않음 / 행사 종료 후 기한 없이 준비 / 후일담에 추가 답례 없음"
 			Tools.KIND_RESIDENT_INTRODUCTION:
 				info = "인물: %s / 손님 유형: %s" % [d.get("npc",""), d.get("type","")]
 			Tools.KIND_TRADE_OFFER:
 				info = "건네는 재료: %s / 받는 재료: %s" % [_item_name(str(d.get("give",""))), _item_name(str(d.get("receive","")))]
 			Tools.KIND_TUTORIAL_STEP:
-				info = "안내 목표: %s" % d.get("goal","")
+				info = "안내 목표: %s / 화자: %s / 장면: %s / 조작 키는 summary의 UI 안내에 유지, 현지인 대사로 이동하지 않음" % [d.get("goal",""), d.get("npc",""), d.get("stage","")]
 			Tools.KIND_TUTORIAL_DIALOGUE, Tools.KIND_SERVICE_TEXT:
 				info = "기존 기능 안내를 유지하는 문장: " + id
 				if d.has("stage"):
 					info = "마을 이야기·이벤트 / 말하는 사람: %s / 장면: %s / 새 정착·구매·해금을 약속하지 않음" % [d.get("npc", ""), d["stage"]]
+				if id.begins_with("craft_"):
+					info = "교류로 제품 발전 / 화자: %s / 장면: %s / 소개 완독 시 실제 제조법 학습, 소개 후 제작 수령과 창고 시제품이 필요, 최종 완독 때 시제품 소비·평판 최초 1회 / 현지인은 현지 재료·음식을 설명, 처음 편의점 빵·생수의 재현 지식은 플레이어 / 조작·수량은 UI, 새 시설·돈·무료 완제품 약속 없음" % [d.get("npc", ""),d.get("stage", "")]
+				if id.begins_with("preserve_"):
+					info = "처음 만난 계절 재료의 보존 체험 / 화자: %s / 장면: %s / 소개 완독 후 실제 보관 입고→다음 날 이후 출고 또는 실제 베이킹 생산 수령 / 생재료(cold)와 가공품(dry) 경로의 서술 구분 / 두 방법 중 하나만 필요, 기한·계절 제한 없음·손실 강제 없음 / 일반 창고 시료를 주민 E로 직접 전달, 최종 완독 최초1회 소비·작은 재료 답례·평판 / 현지인은 보존 경험, 현대 설비 설치/키/수량은 UI / 무료 설비·새 고객·실제 음용/회복 없음" % [d.get("npc", ""),d.get("stage", "")]
+				if kind == Tools.KIND_TUTORIAL_DIALOGUE:
+					info = "초반 현지 손님의 실제 구매 / " + ("원정 원재료를 다시 구매" if id.begins_with("raw_") else "함께 온 가게 식품을 처음 구매") + " / 조작·매출 기록·현대 기기 설명은 UI와 플레이어 몫 / 연습용 물건이나 추가 선물 없음"
+				if id == "arrival_peddler_return":
+					info = "이전에 실제 식품과 검·갑옷을 바꾼 타블렌의 재방문 / 처음 만나는 자기소개 금지 / 주민 부탁·정착은 기존 조건 유지"
+				if d.has("event_id") and d.has("context"):
+					info = "매장 행사 / 장면: %s / %s / 날짜·배율·판매 보장 안내 금지 / {item}이 있다면 유지 / 없는 날씨·인파·오브젝트 연출 추가 금지" % [d["stage"], d["context"]]
 				if d.has("speaker") and not d.has("stage"):
 					var speaker := str(d["speaker"])
 					info = "우물 곁 저녁 모임 / 말하는 사람: %s / 준비한 빵과 물을 함께 나눔 / 새 물품이나 돈을 약속하지 않음 / 화자 이름은 대사에 쓰지 않음" % ("장면 서술" if speaker.is_empty() else str(residents.get(speaker, {}).get("name", speaker)))

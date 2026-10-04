@@ -32,7 +32,7 @@ func find_register():
 	return guide_register if is_instance_valid(guide_register) else null
 
 func try_decoration_extra_purchase() -> void:
-	pass # 첫 거래는 상품 하나로 연습한다.
+	pass # 첫 거래는 실제 진열 상품 하나를 구매한다.
 
 func can_be_checked_out_by(actor: Node) -> bool:
 	return actor == player
@@ -56,9 +56,8 @@ func prepare_practice_checkout(cell: Vector2i) -> bool:
 			carried_amount = 1
 			break
 	if carried_amount == 0:
-		# 진열 상품이 소진돼도 안내 인물이 연습용 물건을 마련한다.
-		practice_item = true
-		carried_amount = 1
+		carried_item_id = ""
+		return false
 	moving = false
 	velocity = Vector2.ZERO
 	grid_path.clear()

@@ -43,6 +43,7 @@ static func is_recipe_available(
 ) -> bool:
 	ensure_loaded()
 
+	if not CraftingPathFlow.recipe_ready(recipe_id): return false
 	if not by_recipe.has(recipe_id):
 		return true
 
@@ -78,6 +79,7 @@ static func is_scroll_worth_dropping(
 
 	if recipe_id.is_empty():
 		return true
+	if not CraftingPathFlow.recipe_ready(recipe_id): return false
 
 	if PlayerProgress.is_recipe_learned(recipe_id):
 		return false

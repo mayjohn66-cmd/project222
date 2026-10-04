@@ -22,9 +22,23 @@ static func entries() -> Array[Dictionary]:
 	result.append({"id":VillageStoryFlow.JOURNAL_ID,"title":VillageStoryFlow.title()})
 	result.append({"id":VillageMarketFlow.JOURNAL_ID,"title":VillageMarketFlow.title()})
 	result.append({"id":VillageRestFlow.JOURNAL_ID,"title":"쉼터에서 처음 함께 쉬기"})
+	result.append({"id":VillageGoodwillFlow.JOURNAL_ID,"title":VillageGoodwillFlow.title()})
+	for event in SeasonalVillageFlow.events():
+		result.append({"id":SeasonalVillageFlow.JOURNAL_PREFIX + str(event["id"]), "title":SeasonalVillageFlow.title(str(event["id"]))})
+	for event in ResidentMemoryFlow.SETTINGS.events:
+		result.append({"id":ResidentMemoryFlow.JOURNAL_PREFIX + str(event["id"]), "title":ResidentMemoryFlow.title(str(event["id"]))})
+	for entry in CraftingPathFlow.SETTINGS.stages:
+		result.append({"id":CraftingPathFlow.JOURNAL_PREFIX + str(entry["id"]),"title":CraftingPathFlow.title(str(entry["id"]))})
+	for event in PreservationLessonFlow.SETTINGS.events:
+		result.append({"id":PreservationLessonFlow.JOURNAL_PREFIX + str(event["id"]),"title":PreservationLessonFlow.title(str(event["id"]))})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with(PreservationLessonFlow.JOURNAL_PREFIX): return PreservationLessonFlow.information(id.trim_prefix(PreservationLessonFlow.JOURNAL_PREFIX))
+	if id.begins_with(CraftingPathFlow.JOURNAL_PREFIX): return CraftingPathFlow.information(id.trim_prefix(CraftingPathFlow.JOURNAL_PREFIX))
+	if id.begins_with(ResidentMemoryFlow.JOURNAL_PREFIX): return ResidentMemoryFlow.information(id.trim_prefix(ResidentMemoryFlow.JOURNAL_PREFIX))
+	if id.begins_with(SeasonalVillageFlow.JOURNAL_PREFIX): return SeasonalVillageFlow.information(id.trim_prefix(SeasonalVillageFlow.JOURNAL_PREFIX))
+	if id == VillageGoodwillFlow.JOURNAL_ID: return VillageGoodwillFlow.information()
 	if id == VillageRestFlow.JOURNAL_ID: return VillageRestFlow.information()
 	if id == VillageMarketFlow.JOURNAL_ID: return VillageMarketFlow.information()
 	if id == VillageStoryFlow.JOURNAL_ID: return VillageStoryFlow.information()
@@ -63,7 +77,28 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id.begins_with(PreservationLessonFlow.JOURNAL_PREFIX):
+		var entry := PreservationLessonFlow.event(id.trim_prefix(PreservationLessonFlow.JOURNAL_PREFIX))
+		if entry.is_empty() or PreservationLessonFlow.completed(str(entry["id"])) or not PreservationLessonFlow.locked_reason(entry).is_empty(): return null
+		return destination(world,"resident:" + str(entry["giver"]))
+	if id.begins_with(CraftingPathFlow.JOURNAL_PREFIX):
+		var entry := CraftingPathFlow.stage(id.trim_prefix(CraftingPathFlow.JOURNAL_PREFIX))
+		if entry.is_empty() or not CraftingPathFlow.locked_reason(entry).is_empty(): return null
+		return destination(world,"resident:" + str(entry["giver"]))
 	if not available(): return null
+	if id.begins_with(ResidentMemoryFlow.JOURNAL_PREFIX):
+		var memory := ResidentMemoryFlow.event(id.trim_prefix(ResidentMemoryFlow.JOURNAL_PREFIX))
+		if memory.is_empty() or not ResidentMemoryFlow.locked_reason(memory).is_empty(): return null
+		return destination(world, "resident:" + str(memory["giver"]))
+	if id.begins_with(SeasonalVillageFlow.JOURNAL_PREFIX):
+		var event_id := id.trim_prefix(SeasonalVillageFlow.JOURNAL_PREFIX)
+		var event := SeasonalVillageFlow.event(event_id)
+		if event.is_empty() or SeasonalVillageFlow.completed(event_id) or not SeasonalVillageFlow.locked_reason(event).is_empty(): return null
+		if SeasonalVillageFlow.accepted(event_id) and event["mode"] == "observe" and not SeasonalVillageFlow.observed(event_id): return SeasonalVillageFlow.site(world, event_id)
+		return destination(world, "resident:" + SeasonalVillageFlow.next_resident(event_id))
+	if id == VillageGoodwillFlow.JOURNAL_ID:
+		var resident_id := VillageGoodwillFlow.next_resident()
+		return destination(world, "resident:" + resident_id) if not resident_id.is_empty() else null
 	if id == VillageRestFlow.JOURNAL_ID:
 		if VillageRestFlow.prepared(): return VillageRestFlow.site(world)
 		return destination(world, "community:" + VillageRestFlow.SETTINGS.preparation)

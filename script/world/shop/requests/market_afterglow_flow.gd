@@ -8,6 +8,7 @@ const PREFIX := "market_afterglow:"
 static func moments() -> Array[Dictionary]:
 	var entries: Array[Dictionary] = SETTINGS.moments.duplicate(true)
 	entries.append_array(FOLLOWUPS.moments)
+	entries.append_array(StoreEventFollowupFlow.SETTINGS.moments)
 	return entries
 
 static func moment(request_id: String) -> Dictionary:
@@ -17,8 +18,9 @@ static func moment(request_id: String) -> Dictionary:
 static func heard(request_id: String) -> bool:
 	return PlayerProgress.story_beat_days.has(PREFIX + request_id + ":heard")
 static func pending(resident_id: String) -> String:
-	if not ResidentRequestFlow.tutorial_finished() or not VillageMarketFlow.completed(): return ""
+	if not ResidentRequestFlow.tutorial_finished(): return ""
 	for entry in moments():
+		if bool(entry.get("after_market", true)) and not VillageMarketFlow.completed(): continue
 		var id := str(entry["request"])
 		if str(entry["resident"]) == resident_id and PersonalRequestFlow.done(id) and not heard(id): return id
 	return ""

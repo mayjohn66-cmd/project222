@@ -16,6 +16,7 @@ func _ready() -> void: call_deferred("run")
 
 func run() -> void:
 	var world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false # Post-tutorial fixture; opening is tested separately.
 	add_child(world)
 	for i in range(4): await get_tree().process_frame
 	var director = world.get_node("ResidentRequestDirector")

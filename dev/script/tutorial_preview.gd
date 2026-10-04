@@ -7,8 +7,8 @@ func _ready() -> void:
 		await get_tree().process_frame
 		await RenderingServer.frame_post_draw
 	var director = world.get_node("TutorialDirector")
-	world.get_node("Actors/Player").global_position = director.npc.global_position + Vector2(30,20)
-	director.try_interact()
+	# 초반은 현지 안내 NPC 대신 플레이어의 상황 정리 독백이다.
+	director.refresh()
 	director.dialogue.typing_tween.kill()
 	director.dialogue.text_label.visible_ratio = 1.0
 	for i in range(4):

@@ -408,6 +408,7 @@ func start_shopping():
 			wanted_item_id,
 			wanted_amount
 		)
+		StoreEventRemark.tell(self, "missing", wanted_item_id)
 
 		start_wandering()
 		return
@@ -683,12 +684,7 @@ func arrive_at_target():
 
 			# 아직 전달하지 않은 소문이 있다면
 			# 계산 후 잠시 가게를 돌아다닌다.
-			if (
-				not rumor_event_id.is_empty()
-				and not GameState.has_discovered_store_event(
-					rumor_event_id
-				)
-			):
+			if can_share_rumor():
 
 				start_wandering()
 				return
@@ -772,6 +768,7 @@ func checkout_item() -> void:
 		carried_item_id,
 		carried_amount
 	)
+	StoreEventRemark.tell(self, "bought", carried_item_id)
 
 	# 결제 완료 상품은 더 이상 미결제 상태가 아님
 	carried_item_id = ""
@@ -1646,14 +1643,7 @@ func can_share_rumor() -> bool:
 	if rumor_event_id.is_empty():
 		return false
 
-	if GameState.has_discovered_store_event(
-		rumor_event_id
-	):
-		return false
-
-	return StoreEventData.has_event(
-		rumor_event_id
-	)
+	return StoreEventData.can_share_event(rumor_event_id, GameState.total_day)
 
 
 func share_rumor_event() -> Dictionary:
@@ -1661,8 +1651,8 @@ func share_rumor_event() -> Dictionary:
 		return {}
 
 	var event_data: Dictionary = (
-		StoreEventData.get_event(
-			rumor_event_id
+		StoreEventData.get_event_occurrence(
+			rumor_event_id, GameState.total_day
 		)
 	)
 
@@ -1672,8 +1662,8 @@ func share_rumor_event() -> Dictionary:
 	var event_id: String = rumor_event_id
 
 	var discovered: bool = (
-		GameState.discover_store_event(
-			event_id
+		StoreEventData.discover_event(
+			event_id, GameState.total_day
 		)
 	)
 

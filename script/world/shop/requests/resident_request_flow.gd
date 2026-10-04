@@ -5,10 +5,7 @@ const SETTINGS = preload("res://scenes/shop/requests/default_resident_requests.t
 const PREFIX := "resident_request:"
 
 static func tutorial_finished() -> bool:
-	for step in TutorialDirector.SETTINGS.steps:
-		if not PlayerProgress.story_beat_days.has("tutorial_step:" + str(step["id"]) + ":done"):
-			return false
-	return true
+	return OpeningJourneyFlow.core_finished()
 
 static func current() -> Dictionary:
 	if not tutorial_finished(): return {}

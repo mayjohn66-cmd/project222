@@ -18,3 +18,11 @@ hidden_ruins,battle,40
 hidden_ruins,gather,15
 hidden_ruins,unknown,25
 hidden_ruins,treasure,20
+meadow,battle,30
+meadow,gather,40
+meadow,unknown,20
+meadow,treasure,10
+river_valley,battle,35
+river_valley,gather,35
+river_valley,unknown,20
+river_valley,treasure,10

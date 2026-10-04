@@ -24,6 +24,7 @@ func _ready() -> void: call_deferred("run")
 
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false # Post-tutorial fixture; opening is tested separately.
 	add_child(world)
 	await settle()
 	var trade: ResidentTradeDirector = world.get_node("ResidentTradeDirector")

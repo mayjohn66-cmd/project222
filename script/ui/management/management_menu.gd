@@ -426,25 +426,15 @@ func refresh_schedule() -> void:
 
 	for event_id in discovered_ids:
 		var event_data: Dictionary = (
-			StoreEventData.get_event(
-				event_id
+			StoreEventData.get_event_occurrence(
+				event_id, GameState.get_store_event_discovery_day(event_id)
 			)
 		)
 
 		if event_data.is_empty():
 			continue
 
-		var end_day: int = int(
-			event_data.get(
-				"end_day",
-				0
-			)
-		)
-
-		# 종료된 일정은 일정 탭에서 숨긴다.
-		if GameState.total_day > end_day:
-			continue
-
+		# 마무리된 이야기도 남겨 실제 영업 기록과 함께 돌아본다.
 		event_data["discovery_day"] = (
 			GameState.get_store_event_discovery_day(
 				event_id
@@ -481,10 +471,16 @@ func refresh_schedule() -> void:
 
 		return
 
-	for event_data in discovered_events:
-		_create_schedule_entry(
-			event_data
-		)
+	for kind in ["common", "seasonal"]:
+		var entries: Array[Dictionary] = []
+		for event in discovered_events:
+			if str(event.get("event_kind", "common")) == kind: entries.append(event)
+		if entries.is_empty(): continue
+		var heading := Label.new()
+		heading.text = "공용 이벤트" if kind == "common" else "계절 이벤트"
+		heading.add_theme_font_size_override("font_size", 20)
+		schedule_list.add_child(heading)
+		for event in entries: _create_schedule_entry(event)
 
 
 func _sort_events_by_start_day(
@@ -500,60 +496,9 @@ func _sort_events_by_start_day(
 func _create_schedule_entry(
 	event_data: Dictionary
 ) -> void:
-	var title: String = str(
-		event_data.get(
-			"title",
-			"알 수 없는 일정"
-		)
-	)
-
-	var description: String = str(
-		event_data.get(
-			"description",
-			""
-		)
-	)
-
-	var discovery_day: int = int(
-		event_data.get(
-			"discovery_day",
-			0
-		)
-	)
-
-	var start_day: int = int(
-		event_data.get(
-			"start_day",
-			0
-		)
-	)
-
-	var end_day: int = int(
-		event_data.get(
-			"end_day",
-			start_day
-		)
-	)
-
-	var event_id: String = str(
-		event_data.get(
-			"event_id",
-			""
-		)
-	)
-
-	var effect_text: String = (
-		get_schedule_effect_text(
-			event_id
-		)
-	)
-
-	var status_text: String = (
-		_get_schedule_status_text(
-			start_day,
-			end_day
-		)
-	)
+	var event_id := str(event_data.get("event_id", ""))
+	var start_day := int(event_data.get("start_day", 0))
+	var end_day := int(event_data.get("end_day", 0))
 
 	var event_panel := PanelContainer.new()
 
@@ -602,34 +547,11 @@ func _create_schedule_entry(
 		Control.SIZE_EXPAND_FILL
 	)
 
-	label.text = (
-		"[%s] %s"
-		% [
-			status_text,
-			title
-		]
-		+ "\n발견: "
-		+ CalendarData.get_display_date(
-			discovery_day
-		)
-		+ "\n기간: "
-		+ CalendarData.get_display_date(
-			start_day
-		)
-		+ " ~ "
-		+ CalendarData.get_display_date(
-			end_day
-		)
-		
-		+ "\n"
-		+ description
-		+ "\n\n[예상 영향]\n"
-		+ effect_text
-)
+	label.text = StoreEventStory.note_text(event_data, GameState.total_day)
 
 	if GameState.total_day > end_day:
 		label.text += (
-			"\n\n[실제 결과]\n"
+			"\n\n[그 무렵의 영업 기록]\n"
 			+ get_schedule_result_text(
 				event_id,
 				start_day,

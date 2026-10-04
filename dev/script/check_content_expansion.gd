@@ -22,6 +22,7 @@ func make_host():
 
 func run() -> void:
 	var world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false # Post-tutorial fixture; opening is tested separately.
 	add_child(world)
 	for i in range(8): await get_tree().process_frame
 	PlayerProgress.reset()
@@ -111,7 +112,9 @@ func run() -> void:
 	await get_tree().process_frame
 	for profile in ExpeditionRoomModel.CONTENT.enemy_profiles:
 		var id := str(profile["id"])
-		var region: String = {"forest_thornling":"forest","mine_shardling":"mine","swamp_reedling":"swamp","ruins_wisp":"hidden_ruins"}[id]
+		var regions := {"forest_thornling":"forest","mine_shardling":"mine","swamp_reedling":"swamp","ruins_wisp":"hidden_ruins"}
+		if not regions.has(id): continue # New regions/climate have their own complete run checks.
+		var region: String = regions[id]
 		check(EnemyData.has_enemy(id) and not ExpeditionEventData.get_loot_entries(EnemyData.get_loot_table(id)).is_empty(), "new monster has existing region drops: " + id)
 		var candidates := ExpeditionEventData.get_events_by_node_type(region, "battle", 1)
 		check(candidates.any(func(e: Dictionary) -> bool: return e["target_id"] == id), "new monster reachable through normal map: " + id)
@@ -133,8 +136,11 @@ func run() -> void:
 		inst.queue_free()
 		await get_tree().process_frame
 	for encounter in ExpeditionRoomModel.CONTENT.gathering_encounters:
+		if encounter["sites"].size() != 2: continue # One-site seasonal rooms are covered by check_seasonal_expedition.
 		for choice in range(2):
 			var inst = await make_host()
+			# Tool-based choices keep their real success/tool requirements.
+			check(inst.expedition_bag.add_item("sickle",Vector2i(0,0)) >= 0 and inst.expedition_bag.add_item("gathering_bottle",Vector2i(3,0)) >= 0,"fixture packs registered gathering tools")
 			var controller: ExpeditionRoomController = inst.expedition_room_controller
 			controller.enter({"event_id":encounter["id"], "result_type":"loot", "target_id":"forest_gather"}, "gather")
 			var model := controller.model

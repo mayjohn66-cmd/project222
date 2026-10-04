@@ -45,6 +45,7 @@ func _menu_open() -> bool:
 		or host.game_menu.quit_game_dialog.visible or host.game_menu.return_title_dialog.visible
 
 func enter(event_data: Dictionary, room_type: String) -> void:
+	host.expedition_loot_service.environment = host.expedition_map.environment.duplicate(true)
 	event = event_data.duplicate(true)
 	node_type = room_type
 	boss = node_type == ExpeditionMap.NODE_BOSS
@@ -63,19 +64,25 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	model.setup(SETTINGS, loadout.active_profile(), host.combat_player_hp,
 		host.combat_player_max_hp, host.BASE_PLAYER_ATTACK + loadout.active_bonus(), host.combat_player_defense,
 		enemy, host.get_run_difficulty(), boss, kind, loadout)
+	var region_profile: Dictionary = model.CONTENT.region_profile(host.current_region_id)
+	model.configure_region(region_profile)
 	model.configure_gathering(model.CONTENT.gathering(str(event.get("event_id", ""))))
 	model.object_used.connect(_object_used)
 	model.enemies_cleared.connect(_enemies_cleared)
 	model.exited.connect(_exit)
 	model.defeated.connect(_defeat)
 	view.model = model
-	view.notice = "두 지점 중 한 곳에서 [E] · 한 방에서 한 곳만 채집할 수 있어요." if not model.gathering_sites.is_empty() else ""
+	view.notice = "두 지점 중 한 곳에서 [E] · 한 방에서 한 곳만 채집할 수 있어요." if model.gathering_sites.size() > 1 else ("채집 지점에 다가가 [E] · 한 번만 채집할 수 있어요." if model.gathering_sites.size() == 1 else "")
 	view.title_label.text = "%s · %s" % [str(ExpeditionMapData.get_region_data(host.current_region_id).get("name", host.current_region_id)),
 		host.get_map_node_display_name(room_type)]
 	view.region_id = host.current_region_id
-	view.floor_color = {"forest": Color("253e32"), "mine": Color("343d49"),
-		"swamp": Color("354235"), "hidden_ruins": Color("43394b")}.get(host.current_region_id, Color("253e32"))
-	view.floor_texture = view.TILE_ART.PAVING if host.current_region_id in ["mine", "hidden_ruins"] else view.TILE_ART.GRASS
+	view.title_label.text += " · " + ExpeditionEnvironment.label(host.expedition_map.environment)
+	view.weather_overlay.environment = host.expedition_map.environment.duplicate(true)
+	view.weather_overlay.environment["indoors"] = region_profile.get("floor", "grass") == "paving"
+	view.weather_overlay.queue_redraw()
+	view.ground_overlay = ExpeditionEnvironment.ground_overlay(host.expedition_map.environment, region_profile.get("floor", "grass") == "grass")
+	view.floor_color = ExpeditionEnvironment.floor_tint(Color(str(region_profile.get("color","253e32"))), host.expedition_map.environment, region_profile.get("floor", "grass") == "grass")
+	view.floor_texture = view.TILE_ART.PAVING if region_profile.get("floor","grass") == "paving" else view.TILE_ART.GRASS
 	host.map_panel.hide()
 	host.bag_panel.hide()
 	host.battle_panel.hide()

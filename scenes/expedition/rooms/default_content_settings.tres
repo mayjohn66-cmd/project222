@@ -6,11 +6,45 @@ enemy_profiles = Array[Dictionary]([
 {"id":"forest_thornling","speed":0.8,"windup":1.3,"color":"8fb56e"},
 {"id":"mine_shardling","speed":0.7,"windup":1.5,"color":"b8a28c"},
 {"id":"swamp_reedling","speed":1.1,"windup":1.15,"color":"c0ba79"},
-{"id":"ruins_wisp","speed":1.25,"windup":1.2,"color":"bd9bd7"}
+{"id":"ruins_wisp","speed":1.25,"windup":1.2,"color":"bd9bd7"},
+{"id":"meadow_fluffling","speed":0.9,"windup":1.3,"color":"e4d8a6"},
+{"id":"meadow_seedling","speed":0.65,"windup":1.4,"color":"c4c377"},
+{"id":"meadow_guardian","speed":0.85,"windup":1.25,"color":"cba66a"},
+{"id":"river_crab","speed":0.8,"windup":1.2,"color":"aaa69b"},
+{"id":"river_pebbling","speed":0.7,"windup":1.4,"color":"8eb4be"},
+{"id":"river_guardian","speed":0.8,"windup":1.25,"color":"83ac8b"},
+{"id":"budling","speed":0.85,"windup":1.3,"color":"8fbf72"},
+{"id":"mintling","speed":0.85,"windup":1.3,"color":"68bda0"},
+{"id":"nutling","speed":0.85,"windup":1.3,"color":"b69563"},
+{"id":"frostling","speed":0.85,"windup":1.3,"color":"9dd6dd"},
+{"id":"rainling","speed":0.85,"windup":1.3,"color":"83b9d0"},
+{"id":"snowling","speed":0.85,"windup":1.3,"color":"d6e5ed"}
 ])
 gathering_encounters = Array[Dictionary]([
 {"id":"forest_gather_choice","sites":[{"table":"choice_forest_herb","label":"약초 모으기","x":2.5,"y":3.5,"seconds":0.9,"color":"8fb56e"},{"table":"choice_wild_berry","label":"열매 따기","x":5.5,"y":3.5,"seconds":1.1,"color":"d58ba0"}]},
 {"id":"mine_gather_choice","sites":[{"table":"choice_iron_ore","label":"철광맥 캐기","x":2.5,"y":3.5,"seconds":0.9,"color":"b8a28c"},{"table":"choice_stone_shard","label":"돌 조각 줍기","x":5.5,"y":3.5,"seconds":1.1,"color":"9ca9af"}]},
 {"id":"swamp_gather_choice","sites":[{"table":"choice_swamp_moss","label":"이끼 모으기","x":2.5,"y":3.5,"seconds":0.9,"color":"98b578"},{"table":"choice_marsh_reed","label":"갈대 베기","x":5.5,"y":3.5,"seconds":1.1,"color":"c0ba79"}]},
-{"id":"hidden_ruins_gather_choice","sites":[{"table":"choice_ancient_fragment","label":"고대 파편 줍기","x":2.5,"y":3.5,"seconds":0.9,"color":"b1a48d"},{"table":"choice_rune_dust","label":"룬 가루 모으기","x":5.5,"y":3.5,"seconds":1.1,"color":"bd9bd7"}]}
+{"id":"hidden_ruins_gather_choice","sites":[{"table":"choice_ancient_fragment","label":"고대 파편 줍기","x":2.5,"y":3.5,"seconds":0.9,"color":"b1a48d"},{"table":"choice_rune_dust","label":"룬 가루 모으기","x":5.5,"y":3.5,"seconds":1.1,"color":"bd9bd7"}]},
+{"id":"meadow_gather_choice","sites":[{"table":"gather_wheat","label":"밀이삭 거두기","x":2.5,"y":3.5,"seconds":0.9,"color":"d1bd77"},{"table":"choice_wild_berry","label":"들열매 따기","x":5.5,"y":3.5,"seconds":1.1,"color":"d58ba0"}]},
+{"id":"river_valley_gather_choice","sites":[{"table":"gather_water","label":"맑은 물 긷기","x":2.5,"y":3.5,"seconds":0.9,"color":"89becb"},{"table":"choice_marsh_reed","label":"물가 갈대 베기","x":5.5,"y":3.5,"seconds":1.1,"color":"b1bf83"}]},
+{"id":"forest_budling_gather","sites":[{"table":"climate_spring_bud","label":"봄 새순 모으기","x":4,"y":3.5,"seconds":1.0,"color":"8fbf72"}]},
+{"id":"meadow_budling_gather","sites":[{"table":"climate_spring_bud","label":"봄 새순 모으기","x":4,"y":3.5,"seconds":1.0,"color":"8fbf72"}]},
+{"id":"swamp_mintling_gather","sites":[{"table":"climate_summer_mint","label":"여름 물박하 모으기","x":4,"y":3.5,"seconds":1.0,"color":"68bda0"}]},
+{"id":"river_valley_mintling_gather","sites":[{"table":"climate_summer_mint","label":"여름 물박하 모으기","x":4,"y":3.5,"seconds":1.0,"color":"68bda0"}]},
+{"id":"forest_nutling_gather","sites":[{"table":"climate_autumn_nut","label":"가을 들밤 모으기","x":4,"y":3.5,"seconds":1.0,"color":"b69563"}]},
+{"id":"meadow_nutling_gather","sites":[{"table":"climate_autumn_nut","label":"가을 들밤 모으기","x":4,"y":3.5,"seconds":1.0,"color":"b69563"}]},
+{"id":"mine_frostling_gather","sites":[{"table":"climate_winter_frost","label":"서리 얼음 모으기","x":4,"y":3.5,"seconds":1.0,"color":"9dd6dd"}]},
+{"id":"river_valley_frostling_gather","sites":[{"table":"climate_winter_frost","label":"서리 얼음 모으기","x":4,"y":3.5,"seconds":1.0,"color":"9dd6dd"}]},
+{"id":"forest_rainling_gather","sites":[{"table":"climate_rain_pearl","label":"빗방울 구슬 모으기","x":4,"y":3.5,"seconds":1.0,"color":"83b9d0"}]},
+{"id":"swamp_rainling_gather","sites":[{"table":"climate_rain_pearl","label":"빗방울 구슬 모으기","x":4,"y":3.5,"seconds":1.0,"color":"83b9d0"}]},
+{"id":"meadow_snowling_gather","sites":[{"table":"climate_snow_bloom","label":"눈꽃 이끼 모으기","x":4,"y":3.5,"seconds":1.0,"color":"d6e5ed"}]},
+{"id":"river_valley_snowling_gather","sites":[{"table":"climate_snow_bloom","label":"눈꽃 이끼 모으기","x":4,"y":3.5,"seconds":1.0,"color":"d6e5ed"}]}
+])
+region_profiles = Array[Dictionary]([
+{"id":"forest","floor":"grass","color":"253e32"},
+{"id":"mine","floor":"paving","color":"343d49"},
+{"id":"swamp","floor":"grass","color":"354235"},
+{"id":"hidden_ruins","floor":"paving","color":"43394b"},
+{"id":"meadow","floor":"grass","color":"535e32","map_x":0.22,"map_y":0.72,"map_icon":"res://art/expedition/region_forest_pixel.png","layouts":[[[1,3,1,1],[6,5,1,1]],[[1,5,1,1],[6,3,1,1]]]},
+{"id":"river_valley","floor":"grass","color":"33574a","map_x":0.50,"map_y":0.61,"map_icon":"res://art/expedition/region_swamp_pixel.png","layouts":[[[1,4,1,2],[6,2,1,2]],[[1,2,1,2],[6,4,1,2]]]}
 ])

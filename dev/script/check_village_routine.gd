@@ -11,6 +11,7 @@ func settle() -> void:
 func _ready() -> void: call_deferred("run")
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false # Post-tutorial fixture; opening is tested separately.
 	add_child(world)
 	await settle()
 	var life: VillageLifeDirector = world.get_node("VillageLifeDirector")

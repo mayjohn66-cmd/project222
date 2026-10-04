@@ -13,7 +13,9 @@ static func pending_introduction() -> Dictionary:
 		var type_id := str(introduction["type"])
 		if PlayerProgress.story_beat_days.has(ResidentRequestFlow.PREFIX + "visited:" + type_id) \
 				and not introduction_read(type_id):
-			return RequestTextData.enrich(introduction, "resident_introduction")
+			var result := RequestTextData.enrich(introduction, "resident_introduction")
+			if type_id == "peddler" and OpeningJourneyFlow.traded(): result["lines"] = RequestTextData.lines("service_text", "arrival_peddler_return")
+			return result
 	return {}
 
 static func meet(type_id: String) -> bool:

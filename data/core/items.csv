@@ -101,3 +101,14 @@ shadow_dagger,그림자 단검,equipment,tool,0,1,1,false,false,res://art/items/
 moon_bow,달빛 활,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1/moon_bow.png,달빛처럼 하얀 화살이 날아가 일렬로 선 적 둘을 꿰뚫는다.,10,0,bag,expedition,2
 night_cloak,심야의 망토,equipment,tool,0,2,1,false,false,res://art/items/pixel_v1/night_cloak.png,밤하늘색 망토다. 어둠 속에서도 공격을 잘 흘려 보낸다.,0,6,bag,expedition,2
 starlight_boots,별빛 장화,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/starlight_boots.png,걸을 때마다 은은한 별빛이 남는 가벼운 장화다.,0,3,bag,expedition,2
+camp_bread,현지식 빵,store_product,food,100,0,0,true,true,res://art/items/pixel_v1/bread.png,이곳의 밀로 구운 소박한 빵이다. 처음 가게에 남아 있던 빵과는 다르다.,0,0,inventory,shelf,0
+scroll_camp_bread,현지식 빵 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,이곳의 밀로 소박한 빵을 굽는 법을 적은 두루마리다.,0,0,bag,expedition,2
+spring_bud,봄 새순,material,material,30,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,봄에만 채집하는 새순. 봄이 지난 뒤 아침에 시든 풀잎이 된다. 냉장·냉동 보관하거나 베이킹 작업대에서 말려 보존한다.,0,0,inventory,shelf,1
+summer_mint,여름 물박하,material,material,30,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,여름 물가의 물박하. 여름이 지난 뒤 아침에 시든 풀잎이 된다. 냉장·냉동 보관하거나 베이킹 작업대에서 말려 보존한다.,0,0,inventory,shelf,1
+autumn_nut,가을 들밤,material,material,35,1,1,true,true,res://art/items/pixel_v1/forest_mushroom.png,가을 숲과 초원에서만 여무는 들밤. 창고에 보관해 두고 나눌 수 있다.,0,0,inventory,shelf,1
+winter_frost,서리 얼음,material,material,35,1,1,true,true,res://art/items/pixel_v1/mine_crystal.png,겨울에만 채집하는 서리 얼음. 상온에서는 다음 아침에 채집한 물로 녹는다. 냉동함에 보관해 여름에 꺼낼 수 있다.,0,0,inventory,shelf,1
+rain_pearl,빗방울 구슬,material,material,40,1,1,true,true,res://art/items/pixel_v1/raw_water.png,비가 내리는 숲과 늪의 잎에 맺히는 구슬. 창고에 오래 보관할 수 있다.,0,0,inventory,shelf,1
+snow_bloom,눈꽃 이끼,material,material,40,1,1,true,true,res://art/items/pixel_v1/swamp_moss.png,겨울 눈이 내릴 때 초원과 계곡에서 피어나는 이끼. 보관해도 사라지지 않는다.,0,0,inventory,shelf,1
+wilted_greens,시든 풀잎,material,material,5,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,상온에서 계절을 넘긴 새순과 물박하. 향이 약해져 계절 부탁의 재료로는 사용할 수 없다. 소량의 값에 판매할 수 있다.,0,0,inventory,shelf,1
+dried_spring_bud,말린 봄 새순,material,material,35,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,베이킹 작업대에서 봄 새순을 말려 향을 보존했다. 상온에서도 계절을 넘길 수 있고 가을의 이세르가 찾는다.,0,0,inventory,shelf,1
+dried_summer_mint,말린 물박하,material,material,35,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,베이킹 작업대에서 여름 물박하를 말려 보존했다. 상온에서도 계절을 넘길 수 있고 겨울의 코르빈이 찾는다.,0,0,inventory,shelf,1

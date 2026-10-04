@@ -101,6 +101,7 @@ func create_data() -> Dictionary:
 		"phase": int(host.current_expedition_phase),
 		"region_id": saved_region_id,
 		"difficulty": host.get_run_difficulty(),
+		"environment": host.expedition_map.environment.duplicate(true) if host.expedition_map != null else {},
 
 		"bag_placements": (
 			host.expedition_bag.placements.duplicate(true)
@@ -295,6 +296,9 @@ func restore() -> bool:
 	var restored_map := ExpeditionMap.new()
 
 	restored_map.region_id = host.current_region_id
+	var saved_environment: Variant = checkpoint.get("environment", {})
+	restored_map.environment = saved_environment.duplicate(true) if saved_environment is Dictionary and not saved_environment.is_empty() else ExpeditionEnvironment.capture()
+	host.expedition_loot_service.environment = restored_map.environment.duplicate(true)
 
 	restored_map.difficulty = ExpeditionDifficultyData.clamp_level(
 		int(

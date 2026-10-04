@@ -67,6 +67,7 @@ func _ready() -> void:
 	map_content.region_changed.connect(_on_region_changed)
 	back_to_map_button.pressed.connect(select_tab.bind(PrepTab.MAP))
 	_build_difficulty_selector()
+	ExpeditionEnvironmentCard.install(self)
 
 	select_tab(PrepTab.MAP)
 
@@ -140,7 +141,7 @@ func _refresh_region_card() -> void:
 	var data: Dictionary = ExpeditionMapData.get_region_data(get_selected_region_id())
 	region_name_label.text = str(data.get("name", "지역 선택"))
 	_refresh_difficulty_selector()
-	region_description_label.text = str(data.get("description", ""))
+	region_description_label.text = ExpeditionEnvironment.preparation(get_selected_region_id()) + "\n" + str(data.get("description", ""))
 	region_requirement_label.hide()
 	var item_id: String = str(data.get("entry_item_id", ""))
 	if not item_id.is_empty():

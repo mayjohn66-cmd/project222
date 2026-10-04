@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CommunityRequestSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/community_request_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+requests = Array[Dictionary]([
+{"id":"naru_summer_frost","resident":"naru","friendship":3,"stockpile_season":"summer","requirements":[{"item":"winter_frost","amount":2}],"reputation":2,"money":180,"title":"여름에 꺼낸 겨울","summary":"타블렌이 여름길에 쓸 서리 얼음을 찾는다. 냉동함에서 보존한 얼음을 꺼내 창고에서 전하자.","completion":"냉동해 둔 서리 얼음이 타블렌의 여름길에 쓰였다."},
+{"id":"sora_autumn_buds","resident":"sora","friendship":3,"stockpile_season":"autumn","requirements":[{"item":"dried_spring_bud","amount":2}],"reputation":2,"money":150,"title":"낙엽 사이 봄의 향","summary":"이세르가 지난 봄의 향을 찾는다. 베이킹 작업대에서 말린 봄 새순을 창고에서 전하자.","completion":"말린 봄 새순으로 이세르와 지난 계절의 향을 나눴다."},
+{"id":"doyun_winter_mint","resident":"doyun","friendship":3,"stockpile_season":"winter","requirements":[{"item":"dried_summer_mint","amount":2}],"reputation":2,"money":150,"title":"겨울 찻잔의 여름","summary":"코르빈이 따뜻한 차에 넣을 여름 물박하를 찾는다. 베이킹 작업대에서 말린 물박하를 창고에서 전하자.","completion":"말린 물박하로 코르빈의 겨울 차 준비를 도왔다."}
+])

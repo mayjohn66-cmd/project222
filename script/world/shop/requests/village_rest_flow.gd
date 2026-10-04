@@ -8,7 +8,7 @@ const JOURNAL_ID := "event:trail_rest_corner"
 static func title() -> String: return RequestTextData.text("community_request", SETTINGS.preparation, "title", "길목에 놓는 작은 쉼터")
 static func completed() -> bool: return PlayerProgress.story_beat_days.has(PREFIX + "done")
 static func locked_reason() -> String:
-	if not ResidentRequestFlow.tutorial_finished(): return "델빈의 안내를 먼저 마쳐 주세요."
+	if not ResidentRequestFlow.tutorial_finished(): return "첫 거래와 원정 재료 판매를 먼저 마쳐 주세요."
 	if not VillageMarketFlow.completed(): return "첫 장터를 마친 뒤 이웃들과 이야기를 이어 가세요."
 	var last_day := int(PlayerProgress.story_beat_days[VillageMarketFlow.PREFIX + "done"])
 	for id in SETTINGS.afterglow_requests:

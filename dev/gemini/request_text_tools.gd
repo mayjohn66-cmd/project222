@@ -27,13 +27,22 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/requests/default_resident_trade.tres": KIND_TRADE_OFFER,
 	"res://scenes/shop/tutorial/default_tutorial.tres": KIND_TUTORIAL_STEP,
 	"res://scenes/shop/requests/default_personal_requests.tres": KIND_PERSONAL_REQUEST,
+	"res://scenes/shop/requests/default_season_stockpile.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_market_afterglow.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_trail_errands.tres": KIND_PERSONAL_REQUEST,
+	"res://scenes/shop/requests/default_store_event_followups.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_village_gathering.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_lantern_wayfarer.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_village_story.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_village_market.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_village_rest.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/requests/default_village_goodwill.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/requests/default_seasonal_village.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/requests/default_seasonal_life_requests.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/requests/default_resident_memories.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/requests/default_crafting_path.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/requests/default_preservation_lessons.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/events/default_store_event_story.tres": KIND_SERVICE_TEXT,
 }
 
 
@@ -87,7 +96,19 @@ static func load_sources() -> Dictionary:
 
 		for raw_line in FileAccess.get_file_as_string(path).split("\n"):
 			var line: String = raw_line.strip_edges().trim_suffix(",")
-			if path.ends_with("default_market_afterglow.tres") or path.ends_with("default_trail_errands.tres"):
+			if path.ends_with("default_preservation_lessons.tres"):
+				if line.begins_with("events ="): kind = ""
+				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT
+				if kind.is_empty(): continue
+			if path.ends_with("default_crafting_path.tres"):
+				if line.begins_with("stages ="): kind = ""
+				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT
+				if kind.is_empty(): continue
+			if path.ends_with("default_seasonal_village.tres") or path.ends_with("default_seasonal_life_requests.tres") or path.ends_with("default_resident_memories.tres"):
+				if line.begins_with("events ="): kind = ""
+				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT
+				if kind.is_empty(): continue
+			if path.ends_with("default_market_afterglow.tres") or path.ends_with("default_trail_errands.tres") or path.ends_with("default_store_event_followups.tres"):
 				if line.begins_with("requests ="): kind = KIND_PERSONAL_REQUEST
 				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT
 			if path.ends_with("default_resident_story.tres"):
@@ -110,9 +131,9 @@ static func load_sources() -> Dictionary:
 			if kind == KIND_SERVICE_TEXT and not data.has("id"): id = "landmark_" + id
 			data["id"] = id
 			result[kind][id] = TextData.enrich(data,kind)
-	for id in ["trade_panel", "smithy_panel", "trade_first_greeting"]:
+	for id in ["trade_panel", "smithy_panel", "trade_first_greeting", "arrival_peddler_return"]:
 		result[KIND_SERVICE_TEXT][id] = {"id":id}
-	for id in ["checkout_intro", "checkout_checkout", "checkout_finished"]:
+	for id in ["checkout_intro", "checkout_checkout", "checkout_finished", "raw_checkout_intro", "raw_checkout_checkout", "raw_checkout_finished"]:
 		result[KIND_TUTORIAL_DIALOGUE][id] = {"id":id}
 
 	return result
@@ -317,6 +338,13 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 				_need_lines(errors,warns,tag,lines)
 			KIND_SERVICE_TEXT:
 				if title.is_empty() and summary.is_empty() and lines.is_empty(): errors.append("%s 안내 글이 비어 있음" % tag)
+				var source: Dictionary = known.get(kind, {}).get(id, {})
+				if source.has("event_id"):
+					_need(errors, tag, "title", title, MAX_TITLE)
+					_need_lines(errors, warns, tag, lines)
+					if summary.length() > MAX_SUMMARY: errors.append("%s summary가 너무 김" % tag)
+					if str(source.get("context", "")).contains("{item}") and not "|".join(lines).contains("{item}"):
+						errors.append("%s 실제 상품 이름을 표시하는 {item}을 유지하세요" % tag)
 			KIND_RESIDENT_REQUEST:
 				_need(errors, tag, "title", title, MAX_TITLE)
 				_need_lines(errors, warns, tag, lines)

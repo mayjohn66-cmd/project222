@@ -1,0 +1,25 @@
+[gd_resource type="Resource" script_class="CraftingPathSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/crafting_path_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+gated_recipes = Array[String](["bake_bread", "bottled_water"])
+stages = Array[Dictionary]([
+{"id":"craft_trail_food","giver":"naru","friendship":2,"recipes":["camp_bread","dried_fruit","berry_juice"],"requirements":[{"item":"camp_bread","amount":2},{"item":"dried_fruit","amount":1}],"reputation":1},
+{"id":"craft_clear_water","giver":"doyun","friendship":3,"after":"craft_trail_food","days_after":1,"recipes":["mineral_water","hand_warmer"],"requirements":[{"item":"mineral_water","amount":2},{"item":"hand_warmer","amount":1}],"reputation":1},
+{"id":"craft_shared_meal","giver":"sora","friendship":3,"after":"craft_clear_water","days_after":1,"recipes":["mushroom_stew","reed_tea"],"requirements":[{"item":"mushroom_stew","amount":1},{"item":"reed_tea","amount":1}],"reputation":1},
+{"id":"craft_first_shelf","giver":"naru","friendship":5,"after":"craft_shared_meal","days_after":1,"modern_products":true,"recipes":["bake_bread","bottled_water"],"requirements":[{"item":"bread","amount":2},{"item":"water","amount":2}],"reputation":1}
+])
+moments = Array[Dictionary]([
+{"id":"craft_trail_food_intro","npc":"행상인 타블렌","stage":"현지식 빵 첫 제작 이후. 안부2일. 현지식 빵·말린 열매·열매 주스 제조법을 소개 완독 때 배움. 현대 시작 빵/물 아님"},
+{"id":"craft_trail_food_preparing","npc":"행상인 타블렌","stage":"배운 현지식 빵과 말린 열매를 실제 제작 수령하고 창고에 준비해 주민 E 재대화. 선물/구매품 소유만으로 완료 안 됨"},
+{"id":"craft_trail_food_finish","npc":"행상인 타블렌","stage":"현지식 빵과 말린 열매 시제품 나눔. 최종 완독 때 창고 재확인/정확 소비/평판1 최초1회. completion은 수첩 기억"},
+{"id":"craft_clear_water_intro","npc":"채굴꾼 코르빈","stage":"타블렌 시제품 나눔 다음 날. 코르빈 정착/안부3일. 미네랄 워터·손난로 제조법 소개 완독 때 배움"},
+{"id":"craft_clear_water_preparing","npc":"채굴꾼 코르빈","stage":"미네랄 워터와 손난로를 실제 제작 수령하고 창고에 준비해 주민 E 재대화. 장비/능력치 변경 없음"},
+{"id":"craft_clear_water_finish","npc":"채굴꾼 코르빈","stage":"물과 손난로 시제품 나눔. 최종 완독 소비/평판1 최초1회. completion은 수첩 기억"},
+{"id":"craft_shared_meal_intro","npc":"여행자 이세르","stage":"코르빈 시제품 나눔 다음 날. 이세르 정착/안부3일. 버섯 스튜·갈대 차 제조법 소개 완독 때 배움"},
+{"id":"craft_shared_meal_preparing","npc":"여행자 이세르","stage":"버섯 스튜와 갈대 차 실제 제작 수령/창고 준비 후 주민 E. 별도 식사 회복 기능 없음"},
+{"id":"craft_shared_meal_finish","npc":"여행자 이세르","stage":"스튜와 차 시제품 나눔. 최종 완독 소비/평판1 최초1회. completion은 수첩 기억"},
+{"id":"craft_first_shelf_intro","npc":"행상인 타블렌","stage":"세 주민과 시제품을 나눈 다음 날. 타블렌 안부5일. 플레이어의 기억과 현지 기술로 처음 판매했던 빵/생수를 재현. 소개 완독 후 두 제조법 해금"},
+{"id":"craft_first_shelf_preparing","npc":"행상인 타블렌","stage":"시작에 팔던 bread/water와 같은 상품ID를 실제 제조법으로 생산해 수령. 초기 남은 식품이나 구매/선물만으로 완료 안 됨. 창고 준비 후 주민 E"},
+{"id":"craft_first_shelf_finish","npc":"행상인 타블렌","stage":"첫 가게 맛을 재현한 빵과 물을 나눔. 최종 완독 소비/평판1 최초1회. 이후 같은 제조법 반복 생산/판매 가능. 현대 공장/포장 기계 연출 없음"}
+])

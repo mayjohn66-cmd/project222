@@ -79,17 +79,6 @@ const DEMAND_RARITY_WEIGHTS: Dictionary = {
 const DEFAULT_REGION_ID: String = "forest"
 
 
-# 시작 재고. 판매 상품은 2~3일치를 넉넉하게, 건축·제작 재료는 첫 설비 하나를 지을 만큼만 준다.
-# 손님 유형별 취향(customer_demands.csv)과 재고 가중치를 반영하면, 방문객 27명(규칙서의 시간 제안 기준)일 때
-# 하루 물 약 3.9개, 빵 약 4.7개, 포션 약 4.2개가 팔린다(방문객 8명이면 약 0.3배).
-const STARTING_INVENTORY: Dictionary = {
-	"water": 12,
-	"bread": 14,
-	"potion": 12,
-	"iron_ore": 20,
-	"mine_crystal": 6,
-	"wheat": 6,
-	"wild_berry": 10 # 아이콘 스타일 비교용 임시 지급(Pixel Lab 시험작)
-}
-
-const STARTING_MONEY: int = 500000
+# 가게와 함께 옮겨 온 식품. 현지 장비/원재료는 거래와 원정에서 얻는다.
+const STARTING_INVENTORY: Dictionary = {"water": 6, "bread": 8}
+const STARTING_MONEY: int = 0

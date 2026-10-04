@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="PreservationLessonSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/preservation/preservation_lesson_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+events = Array[Dictionary]([
+{"id":"preserve_first_frost","giver":"naru","friendship":1,"raw":"winter_frost","paths":[{"id":"cold","item":"winter_frost","amount":1}],"gifts":[{"item":"coal","amount":2}],"reputation":1},
+{"id":"preserve_spring_scent","giver":"sora","friendship":1,"raw":"spring_bud","paths":[{"id":"cold","item":"spring_bud","amount":1},{"id":"dry","item":"dried_spring_bud","amount":1}],"gifts":[{"item":"wheat","amount":2}],"reputation":1},
+{"id":"preserve_summer_aroma","giver":"doyun","friendship":1,"raw":"summer_mint","paths":[{"id":"cold","item":"summer_mint","amount":1},{"id":"dry","item":"dried_summer_mint","amount":1}],"gifts":[{"item":"dry_branch","amount":2}],"reputation":1}
+])
+moments = Array[Dictionary]([
+{"id":"preserve_first_frost_intro","npc":"타블렌","stage":"처음 서리 얼음을 얻은 뒤 정착한 타블렌과 안부를 나눈 경우. 재료를 잃지 않아도 제안. 최종 소개 완독으로 시작, 기한/계절 제한 없음. 현지인은 얼음이 녹는 경험과 차갑게 두는 방법만 이야기하고 현대 설비 설치/키는 UI가 설명. 소개 후 실제 냉동함 입고→날짜가 바뀐 뒤 출고→일반 창고 얼음을 주민 E 직접 전달. 게시판 아님."},
+{"id":"preserve_first_frost_wait","npc":"타블렌","stage":"맡은 얼음 보존 체험의 준비 안내. 소개 뒤 냉동함에 넣고 다음 날 이후 꺼낸 기록과 일반 창고 얼음이 필요. 같은 날 넣기/꺼내기, 냉장함, 기존 얼음 보유만으로 완료 불가. 꺼낸 얼음은 다음 아침에 물로 변하므로 전달할 날 출고. 잃었다면 다음 원정까지 기다려도 다른 이야기/기본 시스템은 막지 않음."},
+{"id":"preserve_first_frost_cold","npc":"타블렌","stage":"실제 소개 후 하룻밤 이상 냉동 입출고 기록과 일반 창고 얼음을 확인한 마무리. 최종 E 대화 완독 때만 얼음 소비·석탄 답례/평판 최초1회. 중단/재고 감소/다른 방식으로 변경하면 소비 없음. 석탄은 다음 가게 준비에 쓰는 작은 선물. 냉동함 무료 설치/여름 매출/새 고객을 약속하지 않음."},
+{"id":"preserve_spring_scent_intro","npc":"이세르","stage":"봄 새순이나 말린 새순을 처음 접한 뒤 정착한 이세르와 안부를 나눔. 소개 완독 시작, 기한/계절 제한 없음. 새순은 봄이 지난 아침 시들고 냉장/냉동 또는 약한 열로 말려 보존. 플레이어가 두 방법 중 하나를 실제 해보고 일반 창고 시료를 주민 E로 직접 전달. 소개 후 보관 입고→다음 날 출고 또는 실제 베이킹 생산 수령 기록 필요. 두 방법 모두 할 필요 없음."},
+{"id":"preserve_spring_scent_wait","npc":"이세르","stage":"맡은 새순 보존 체험의 두 준비 경로 안내. 새순을 소개 후 냉장/냉동함에 넣고 날짜가 바뀐 뒤 출고하거나, 소개 후 베이킹 작업대에서 실제 말린 새순을 생산 수령. 각 방법에 맞는 일반 창고 시료가 필요. 그냥 받은 가공품/기존 보유만으로 실제 가공 기록을 대신할 수 없음. 수량·설비 버튼은 UI, 주민은 보존 경험을 설명."},
+{"id":"preserve_spring_scent_cold","npc":"이세르","stage":"소개 후 하룻밤 이상 냉장/냉동 입출고한 새순 경로. 일반 창고 새순을 이세르에게 E 최종 완독 때 소비하고 밀·평판 최초1회. 말린 새순을 전달했다고 서술하지 않음. 새순이 봄 밖에서 다음 아침 시드는 성질을 유지. completion은 차갑게 남겨 둔 향의 기억. 다른 경로와 같은 답례, 중복 없음."},
+{"id":"preserve_spring_scent_dry","npc":"이세르","stage":"소개 후 기존 베이킹 작업대에서 실제 생산/수령한 말린 봄 새순 경로. 일반 창고 가공품을 이세르에게 E 최종 완독 때 소비하고 밀·평판 최초1회. 실제로 말린 향은 상온 장기 보존. completion은 말려 남긴 향의 기억. 냉장·냉동을 반드시 했다는 서술 금지. 다른 경로와 같은 답례, 중복 없음."},
+{"id":"preserve_summer_aroma_intro","npc":"코르빈","stage":"여름 물박하/말린 물박하를 처음 접한 뒤 정착한 코르빈과 안부를 나눔. 소개 완독 시작, 기한/계절 제한 없음. 여름이 지난 아침 물박하가 시듦. 소개 후 냉장/냉동 입고→날짜가 바뀐 뒤 출고 또는 실제 베이킹 말리기 생산 수령 중 하나를 선택해 일반 창고 시료를 코르빈에게 E 직접 전달. 따뜻한 차에 향을 남기는 준비 이야기, 실제 음용/회복/차 제조 장면 아님."},
+{"id":"preserve_summer_aroma_wait","npc":"코르빈","stage":"맡은 물박하 보존 체험 준비. 소개 후 하룻밤 이상 냉장/냉동 입출고하거나 소개 후 베이킹 작업대 말리기 생산/수령 후 일반 창고의 해당 재료를 코르빈에게 E로 전달. 냉장 생잎과 말린 잎을 서로 구분. 두 방법 강제 없음/기한 없음. 설치·조작·수량은 플레이어 UI."},
+{"id":"preserve_summer_aroma_cold","npc":"코르빈","stage":"실제 하룻밤 이상 보관 후 출고한 물박하 경로. 일반 창고 생잎을 E 최종 완독 때 소비하고 마른 가지·평판 최초1회. 겨울 차를 위한 보존 경험이나 실제 차 제조/음용/회복은 없음. 말린 잎을 건넸다는 표현 금지. 완료 기억은 차갑게 남긴 물가의 향. 같은 사건의 건조 경로로 재지급 불가."},
+{"id":"preserve_summer_aroma_dry","npc":"코르빈","stage":"소개 후 실제 생산 수령한 말린 물박하 경로. 일반 창고 가공품을 E 최종 완독 때 소비하고 마른 가지·평판 최초1회. 향을 말려 남긴 기억, 실제 차 제조/음용/회복/새 시설 해금 없음. 냉장·냉동도 했다고 단정하지 않음. 같은 사건의 생잎 경로로 재지급 불가."}
+])

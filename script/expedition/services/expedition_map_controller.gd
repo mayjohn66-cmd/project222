@@ -267,12 +267,14 @@ func start_event_node(
 		< host.combat_player_max_hp
 	)
 
+	host.expedition_loot_service.environment = host.expedition_map.environment.duplicate(true)
 	var event: Dictionary = (
 		ExpeditionEventData.get_random_event(
 			host.current_region_id,
 			node_type,
 			GameState.current_day,
-			allow_heal_event
+			allow_heal_event,
+			host.expedition_map.environment
 		)
 	)
 	if event.is_empty():

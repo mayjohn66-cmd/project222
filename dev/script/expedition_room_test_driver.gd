@@ -5,6 +5,7 @@ extends RefCounted
 static func play(controller: ExpeditionRoomController) -> bool:
 	controller.view.set_physics_process(false)
 	var room := controller.model
+	var grid := _walk_grid(room)
 	var steps := 0
 	var dodge_direction := Vector2.ZERO
 	while controller.is_active() and not room.finished and steps < 30000:
@@ -36,17 +37,17 @@ static func play(controller: ExpeditionRoomController) -> bool:
 			if not danger:
 				dodge_direction = Vector2.ZERO
 				if distance > room.attack_profile.reach * 0.85:
-					movement = toward
+					movement = _walk_direction(room, nearest["position"], grid)
 				else:
 					attacking = true
 		elif not room.object_kind.is_empty() and not room.object_consumed:
 			if room.player_position.distance_to(room.object_position) > room.settings.interaction_reach * 0.75:
-				movement = (room.object_position - room.player_position).normalized()
+				movement = _walk_direction(room, room.object_position, grid)
 			else:
 				room.interact()
 		else:
 			if room.player_position.distance_to(room.exit_position) > room.settings.interaction_reach * 0.75:
-				movement = (room.exit_position - room.player_position).normalized()
+				movement = _walk_direction(room, room.exit_position, grid)
 			else:
 				room.interact()
 		room.step(1.0 / 60.0, movement, attacking)
@@ -58,3 +59,48 @@ static func play(controller: ExpeditionRoomController) -> bool:
 	if controller.is_active():
 		print("[방 막힘] steps=", steps, " 위치=", room.player_position, " 적=", room.alive_enemies())
 	return not controller.is_active() and room.player_hp > 0
+
+# Random object positions require walking around obstacles, just as a player does.
+# The driver continues to use movement/attack/interact; it never teleports or removes walls.
+static func _walk_grid(room: ExpeditionRoomModel) -> AStarGrid2D:
+	var grid := AStarGrid2D.new()
+	grid.region = Rect2i(0,0,33,33)
+	grid.cell_size = Vector2.ONE * 0.25
+	grid.diagonal_mode = AStarGrid2D.DIAGONAL_MODE_ONLY_IF_NO_OBSTACLES
+	grid.update()
+	for y in range(33):
+		for x in range(33):
+			var at := Vector2(x,y) * 0.25
+			var radius: float = room.settings.actor_radius + 0.03
+			var solid: bool = at.x < radius or at.y < radius or at.x > 8-radius or at.y > 8-radius
+			for obstacle in room.obstacles:
+				if obstacle.grow(radius).has_point(at): solid = true
+			grid.set_point_solid(Vector2i(x,y),solid)
+	return grid
+
+static func _free_cell(at: Vector2, grid: AStarGrid2D) -> Vector2i:
+	var cell := Vector2i(roundi(at.x * 4),roundi(at.y * 4))
+	var best := cell
+	var distance := INF
+	for y in range(cell.y-2,cell.y+3):
+		for x in range(cell.x-2,cell.x+3):
+			var candidate := Vector2i(x,y)
+			if not grid.region.has_point(candidate) or grid.is_point_solid(candidate): continue
+			var d := at.distance_squared_to(Vector2(candidate) * 0.25)
+			if d < distance:
+				best = candidate
+				distance = d
+	return best
+
+static func _walk_direction(room: ExpeditionRoomModel, target: Vector2, grid: AStarGrid2D) -> Vector2:
+	var origin := room.player_position
+	var clear := true
+	for obstacle in room.obstacles:
+		var rect := obstacle.grow(room.settings.actor_radius + 0.03)
+		var corners := [rect.position,rect.position+Vector2(rect.size.x,0),rect.end,rect.position+Vector2(0,rect.size.y)]
+		for i in range(4):
+			if Geometry2D.segment_intersects_segment(origin,target,corners[i],corners[(i+1)%4]) != null: clear = false
+	if clear: return (target-origin).normalized()
+	var path := grid.get_point_path(_free_cell(origin,grid),_free_cell(target,grid))
+	if path.size() < 2: return (target-origin).normalized()
+	return (path[1]-origin).normalized()

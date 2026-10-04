@@ -40,6 +40,8 @@ func drain() -> void:
 func _ready() -> void: call_deferred("run")
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false
+	world.get_node("VillageLifeDirector").crafting_path_enabled = false
 	add_child(world)
 	await settle()
 	life = world.get_node("VillageLifeDirector")
@@ -50,7 +52,7 @@ func run() -> void:
 	manager.hour_timer.paused = false
 	player.set_physics_process(false)
 	var sources := Tools.load_sources()
-	check(PersonalRequestFlow.entries().size() == 12 and MarketAfterglowFlow.moments().size() == 6, "three errands and three afterglows coexist with previous content")
+	check(PersonalRequestFlow.entries().size() == 12 + StoreEventFollowupFlow.SETTINGS.requests.size() + SeasonStockpileFlow.SETTINGS.requests.size() and MarketAfterglowFlow.moments().size() == 6 + StoreEventFollowupFlow.SETTINGS.moments.size(), "three errands and three afterglows coexist with previous content")
 	for entry in MarketAfterglowFlow.FOLLOWUPS.requests:
 		GameState.total_day = 100
 		PlayerProgress.reset()

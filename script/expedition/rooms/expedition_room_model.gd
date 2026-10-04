@@ -77,6 +77,17 @@ func setup(config: ExpeditionRoomSettings, profile: ExpeditionAttackProfile,
 	if not kind.is_empty():
 		object_position = _place_objects(1)[0]
 
+func configure_region(profile: Dictionary) -> void:
+	var layouts: Array = profile.get("layouts", [])
+	if layouts.is_empty(): return
+	var chosen: Array = layouts[randi_range(0,layouts.size() - 1)]
+	var placed: Array[Rect2] = []
+	for rect in chosen:
+		placed.append(Rect2(float(rect[0]),float(rect[1]),float(rect[2]),float(rect[3])))
+	obstacles = placed
+	# 3D 무작위 오브젝트도 최종 지역 장애물 배치에서 빈 자리를 고른다.
+	if not object_kind.is_empty(): object_position = _place_objects(1)[0]
+
 func step(delta: float, movement: Vector2, attacking: bool) -> void:
 	if finished:
 		return
@@ -253,6 +264,7 @@ func alive_enemies() -> int:
 # 오브젝트 count 개의 자리를 고른다(타일 좌표). 후보를 흩뿌려 유효한 곳(장애물·시작·출구·적과 거리 확보)만 남기고,
 # 1개면 다른 것들에서 가장 먼 쪽, 2개 이상이면 서로 가장 먼 조합을 상위권에서 무작위로 고른다. 후보가 모자라면 예전 고정 자리로 돌아간다.
 func _place_objects(count: int) -> Array[Vector2]:
+	if count <= 0: return []
 	var fallback: Array[Vector2] = [Vector2(2.5, 3.5), Vector2(5.5, 3.5), Vector2(4.0, 5.0)]
 	var fixed: Array[Vector2] = [player_position, exit_position]
 	for enemy in enemies:

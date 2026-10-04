@@ -29,13 +29,10 @@ func run() -> void:
 		{"build_id":"register","anchor":Vector2i(4,3),"rotation_index":0},
 		{"build_id":"shelf_1x1","anchor":Vector2i(2,2),"rotation_index":0}]
 	build._restore_current_area_layout(layout)
-	tutorial.refresh()
-	check(tutorial.npc.global_position.distance_to(player.global_position) > 90, "guide spawns away from player")
+	# The current opening is self-narrated; the local visitor is the first buyer.
+	drain(tutorial.dialogue)
+	check(not is_instance_valid(tutorial.npc), "self narration creates no local cashier instructor")
 	var register = get_tree().get_nodes_in_group("register")[0]
-	for cell in register.get_worker_cells() + register.get_checkout_cells():
-		check(tutorial.npc.global_position.distance_to(build.get_cell_world_position(cell)) > 90, "guide separated from register interaction cells")
-	player.global_position = tutorial.npc.global_position + Vector2(60, 0)
-	check(not tutorial.try_interact(), "NPC no longer intercepts E from 60 pixels away")
 	for i in range(2):
 		var worker = workers[i]
 		register.try_reserve_worker_cell(register.get_worker_cells()[i], worker)
@@ -45,11 +42,18 @@ func run() -> void:
 	workers[0].pending_register = register
 	manager.open_shop()
 	check(not is_instance_valid(checkout.guide), "no practice before preparation steps")
-	# 이미 개점한 저장 상태에서 추가 대화 없이 연습 손님을 만든다.
+	# First buyer takes actual shelf stock, including when resuming an already-open shop.
+	var shelf = get_tree().get_nodes_in_group("shelf")[0]
+	check(GameState.remove_item("bread", 3) == 3, "fixture stocks owned goods for real purchases")
+	shelf.slots[0]["item_id"] = "bread"
+	shelf.slots[0]["stock"] = 3
+	shelf.update_visual()
+	tutorial.flow.mark("arrival", "done")
 	tutorial.flow.mark("setup", "done")
 	tutorial.flow.mark("stock", "done")
 	check(not tutorial.flow.seen("checkout"), "saved checkout stage has no extra dialogue flag")
 	tutorial.refresh()
+	drain(tutorial.dialogue)
 	checkout.try_start()
 	check(is_instance_valid(checkout.guide), "already-open shop creates guide despite staff reservations")
 	if not is_instance_valid(checkout.guide):
@@ -58,7 +62,7 @@ func run() -> void:
 	check(workers[0].pending_register == null, "stale employee task released")
 	drain(checkout.dialogue)
 	var guide = checkout.guide
-	check(register.get_waiting_customer() == guide and guide.carried_amount == 1, "one forced customer waits even with empty shelves")
+	check(register.get_waiting_customer() == guide and guide.carried_amount == 1, "one forced customer waits with one actual shelf item")
 	check(tutorial.flow.seen("checkout"), "event itself introduces checkout step")
 	check(not is_instance_valid(tutorial.npc), "guide and first customer are not duplicated")
 	guide.complete_checkout_by_worker()
@@ -76,8 +80,11 @@ func run() -> void:
 	world.get_node("ManualCheckoutController")._process(2)
 	check(checkout.completed() and player.successful_sales == sales + 1, "forced customer can be paid by player")
 	drain(checkout.dialogue)
-	tutorial.refresh()
-	check(is_instance_valid(tutorial.npc), "guide returns away from cashier for completion reward")
+	for i in range(8):
+		tutorial.refresh()
+		if not tutorial.dialogue.open: break
+		drain(tutorial.dialogue)
+	check(tutorial.flow.current().get("id") == "barter", "first payment leads to merchant barter")
 	world.queue_free()
 	await get_tree().process_frame
 	print("CHECK_CHECKOUT_EVENT failures=", failures)

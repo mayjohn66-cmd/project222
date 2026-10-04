@@ -18,6 +18,7 @@ var expedition_checkpoint: Dictionary = {}
 
 var current_day: int = 1
 var total_day: int = 1
+var preservation_state: Dictionary = {}
 
 
 # =========================
@@ -179,6 +180,7 @@ func initialize_new_game():
 		if has_meta(key): remove_meta(key)
 	current_day = 1
 	total_day = 1
+	preservation_state = PreservationService.initial_state(total_day)
 
 	PlayerProgress.reset()
 
@@ -204,6 +206,7 @@ func initialize_new_game():
 	discovered_store_events.clear()
 	daily_shop_history.clear()
 
+	employee_states.clear()
 	employee_salary_records.clear()
 	unpaid_employee_salary = 0
 	ensure_employee_salary_records()
@@ -399,6 +402,7 @@ func get_inventory_slots() -> Array[Dictionary]:
 func get_item_count(
 	item_id: String
 ) -> int:
+	PreservationService.settle()
 	return int(
 		inventory.get(
 			item_id,
@@ -425,6 +429,7 @@ func add_item(
 		get_item_count(item_id)
 		+ amount
 	)
+	PreservationLessonRecords.record_found(item_id)
 
 
 func remove_item(
@@ -451,6 +456,7 @@ func remove_item(
 
 
 func get_inventory_data() -> Dictionary:
+	PreservationService.settle()
 	return inventory.duplicate(true)
 
 
@@ -800,6 +806,7 @@ func find_build_quick_slot(
 # =========================
 
 func create_save_data() -> Dictionary:
+	PreservationService.settle()
 	return {
 		"save_version": SAVE_VERSION,
 		"current_day": current_day,
@@ -813,6 +820,7 @@ func create_save_data() -> Dictionary:
 		"unpaid_employee_salary": unpaid_employee_salary,
 		"player_state": player_state.duplicate(true),
 		"inventory": inventory.duplicate(true),
+		"preservation": preservation_state.duplicate(true),
 		"furniture_inventory": furniture_inventory.duplicate(true),
 		"build_quick_slots": build_quick_slots.duplicate(),
 		"store_layout": store_layout.duplicate(true),
@@ -942,6 +950,8 @@ func test_save_file_round_trip() -> void:
 	)
 
 func is_save_data_valid(data: Dictionary) -> bool:
+	if data.has("preservation") and not PreservationService.valid_state(data["preservation"], int(data.get("total_day", data.get("current_day", 1)))):
+		return false
 	if data.get("save_version", -1) != SAVE_VERSION:
 		return false
 
@@ -1558,6 +1568,7 @@ func apply_save_data(data: Dictionary) -> bool:
 
 	player_state = data["player_state"].duplicate(true)
 	inventory = data["inventory"].duplicate(true)
+	preservation_state = data.get("preservation", PreservationService.initial_state(total_day)).duplicate(true)
 
 	if not rebuild_inventory_slots_from_counts():
 		push_error(
@@ -1770,6 +1781,7 @@ func advance_calendar_day() -> int:
 	)
 
 	total_day += 1
+	PreservationService.settle()
 	current_day += 1
 
 	if current_day > 7:

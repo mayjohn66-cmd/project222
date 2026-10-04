@@ -565,7 +565,7 @@ func _process(delta: float) -> void:
 
 func _sync_camera() -> void:
 	var base_size: Vector2 = get_viewport().get_visible_rect().size
-	_viewport.size = Vector2i(ceili(base_size.x / shrink), ceili(base_size.y / shrink))
+	# The stretched container owns its child viewport size; manual assignment warns every frame.
 	_id_viewport.size = _viewport.size
 	var zoom: float = camera2d.zoom.x if camera2d != null else 1.0
 	_camera.size = base_size.y / (GAME_TILE.x * zoom / sqrt(2.0))

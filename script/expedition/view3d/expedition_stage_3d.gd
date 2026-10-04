@@ -130,8 +130,14 @@ func _layout() -> void:
 # ---------------------------------------------------------------- 방 만들기
 
 func _ready_theme(region: String) -> void:
-	_theme = THEMES.get(region, THEMES["forest"])
-	_theme_id = region if THEMES.has(region) else "forest"
+	# 새 지역도 기존 자연물 메시를 재사용하고, 원정 출발 환경으로 바닥 색을 정한다.
+	var style_id: String = {"meadow":"forest", "river_valley":"swamp"}.get(region, region)
+	_theme = THEMES.get(style_id, THEMES["forest"]).duplicate(true)
+	_theme_id = style_id if THEMES.has(style_id) else "forest"
+	if region in ["meadow", "river_valley"]:
+		var profile: Dictionary = view.model.CONTENT.region_profile(region)
+		_theme["floor_tint"] = Color(str(profile["color"])).lightened(0.2)
+	_theme["floor_tint"] = ExpeditionEnvironment.floor_tint(_theme["floor_tint"], view.weather_overlay.environment, _theme["floor"] == "grass")
 	_env.background_color = _theme["bg"]
 	_env.ambient_light_color = _theme["ambient"]
 	_env.ambient_light_energy = 0.62
@@ -386,18 +392,20 @@ func _make_object(kind: String, table: String, at: Vector2, color: Color) -> Nod
 		node = _object_chest(rng) if kind == "chest" else _object_spring(rng)
 	else:
 		match table:
-			"choice_forest_herb":
+			"choice_forest_herb", "climate_spring_bud", "climate_summer_mint":
 				node = _object_herbs(rng)
-			"choice_wild_berry":
+			"choice_wild_berry", "climate_autumn_nut":
 				node = _object_berry_tree(rng)
 			"choice_iron_ore":
 				node = _object_ore(rng)
 			"choice_stone_shard":
 				node = _object_stones(rng)
-			"choice_swamp_moss":
+			"choice_swamp_moss", "climate_snow_bloom":
 				node = _object_moss(rng)
-			"choice_marsh_reed":
+			"choice_marsh_reed", "gather_wheat":
 				node = _object_reeds(rng)
+			"gather_water":
+				node = _object_spring(rng)
 			"choice_ancient_fragment":
 				node = _object_ruin_fragments(rng)
 			"choice_rune_dust":
