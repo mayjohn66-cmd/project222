@@ -35,6 +35,7 @@ func blocked() -> bool:
  if bool(world.get_meta("village_market_open",false)): return true
  if bool(world.get_meta("village_rest_open",false)): return true
  if bool(world.get_meta("seasonal_village_open",false)): return true
+ if bool(world.get_meta("regular_customer_open",false)): return true
  if bool(world.get_meta("lantern_wayfarer_open",false)): return true
  if world.get_node("BuildManager").build_mode or get_tree().paused: return true
  if manager.closing_shop or manager.summary_open: return true
@@ -61,6 +62,10 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var regular = get_parent().get_node_or_null("VillageLifeDirector/RegularCustomerDirector")
+ if regular != null and not regular.interaction_hint().is_empty():
+  prompt.text = regular.interaction_hint()
+  return
  var seasonal = get_parent().get_node_or_null("VillageLifeDirector/SeasonalVillageDirector")
  if seasonal != null and not seasonal.interaction_hint().is_empty():
   prompt.text = seasonal.interaction_hint()
@@ -104,6 +109,8 @@ func _process(_delta: float) -> void:
  else: prompt.text = ""
 
 func try_interact() -> bool:
+ var regular = get_parent().get_node_or_null("VillageLifeDirector/RegularCustomerDirector")
+ if regular != null and regular.try_interact(): return true
  if blocked(): return false
  var seasonal = get_parent().get_node_or_null("VillageLifeDirector/SeasonalVillageDirector")
  if seasonal != null and seasonal.try_interact(): return true

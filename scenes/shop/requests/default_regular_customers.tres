@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="RegularCustomerSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/regular_customer_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+events = Array[Dictionary]([
+{"id":"regular_trail_bread","type":"trail_courier","purchase_item":"bread","repeat_amount":2,"days_after":1,"requirements":[{"item":"wild_berry","amount":2}],"gifts":[{"item":"wheat","amount":2}],"reputation":1},
+{"id":"regular_orchard_water","type":"orchard_keeper","purchase_item":"water","repeat_amount":2,"days_after":1,"requirements":[{"item":"forest_herb","amount":2}],"gifts":[{"item":"dry_branch","amount":2}],"reputation":1},
+{"id":"regular_cook_aroma","type":"field_cook","purchase_item":"forest_herb","repeat_amount":2,"days_after":1,"requirements":[{"item":"wheat","amount":2},{"item":"raw_water","amount":2}],"gifts":[{"item":"wild_berry","amount":2}],"reputation":1}
+])
+moments = Array[Dictionary]([
+{"id":"regular_trail_bread_intro","npc":"길잡이 배달부","stage":"실제 첫 구매 다음 날 이후 E 소개 완독. 같은 직군의 대표 단골, 새 고유 이름 없음. 동료의 실제 신규 등장 없음. 소개 완독 다음 날 이후에 같은 상품 재구매 준비."},
+{"id":"regular_trail_bread_request","npc":"길잡이 배달부","stage":"실제 다른 날 동료 몫 재구매 후 다음 날 E로 부탁 소개 완독. 일반 창고 재료만 직접 전달. 게시판 부탁/기한/새 손님 해금 없음."},
+{"id":"regular_trail_bread_wait","npc":"길잡이 배달부","stage":"맡은 재료를 창고에 준비하여 같은 손님 E. 직접 전달 전 소비/지급 없음. 기다리는 데 불이익 없음."},
+{"id":"regular_trail_bread_finish","npc":"길잡이 배달부","stage":"일반 창고 재고를 최종 E 완독 때 재확인하고 정확 소비, 설정 재료 답례/평판 최초1회. 설비/새 제조법/회복/추가 손님 없음. 현지의 생활 경험으로 표현."},
+{"id":"regular_trail_bread_after","npc":"길잡이 배달부","stage":"완료 다음 날 이후 E 후일담 완독. 실제 동료 등장/확정 방문/수요 증가/추가 답례 약속 없음. completion은 수첩 기억."},
+{"id":"regular_trail_bread_first_sale","npc":"길잡이 배달부","stage":"실제 첫 상품 결제 직후 스쳐 들리는 짧은 말. 1줄, 조작/시간을 멈추지 않음. 전달 부탁/답례 없음."},
+{"id":"regular_trail_bread_repeat_sale","npc":"길잡이 배달부","stage":"실제 동료 몫 상품 결제 후 짧은 말. 1줄, 구매 이유. 인파/추가 동료 등장 보장 없음."},
+{"id":"regular_orchard_water_intro","npc":"과수원지기","stage":"실제 첫 구매 다음 날 이후 E 소개 완독. 같은 직군의 대표 단골, 새 고유 이름 없음. 동료의 실제 신규 등장 없음. 소개 완독 다음 날 이후에 같은 상품 재구매 준비."},
+{"id":"regular_orchard_water_request","npc":"과수원지기","stage":"실제 다른 날 동료 몫 재구매 후 다음 날 E로 부탁 소개 완독. 일반 창고 재료만 직접 전달. 게시판 부탁/기한/새 손님 해금 없음."},
+{"id":"regular_orchard_water_wait","npc":"과수원지기","stage":"맡은 재료를 창고에 준비하여 같은 손님 E. 직접 전달 전 소비/지급 없음. 기다리는 데 불이익 없음."},
+{"id":"regular_orchard_water_finish","npc":"과수원지기","stage":"일반 창고 재고를 최종 E 완독 때 재확인하고 정확 소비, 설정 재료 답례/평판 최초1회. 설비/새 제조법/회복/추가 손님 없음. 현지의 생활 경험으로 표현."},
+{"id":"regular_orchard_water_after","npc":"과수원지기","stage":"완료 다음 날 이후 E 후일담 완독. 실제 동료 등장/확정 방문/수요 증가/추가 답례 약속 없음. completion은 수첩 기억."},
+{"id":"regular_orchard_water_first_sale","npc":"과수원지기","stage":"실제 첫 상품 결제 직후 스쳐 들리는 짧은 말. 1줄, 조작/시간을 멈추지 않음. 전달 부탁/답례 없음."},
+{"id":"regular_orchard_water_repeat_sale","npc":"과수원지기","stage":"실제 동료 몫 상품 결제 후 짧은 말. 1줄, 구매 이유. 인파/추가 동료 등장 보장 없음."},
+{"id":"regular_cook_aroma_intro","npc":"야영 요리사","stage":"실제 첫 구매 다음 날 이후 E 소개 완독. 같은 직군의 대표 단골, 새 고유 이름 없음. 동료의 실제 신규 등장 없음. 소개 완독 다음 날 이후에 같은 상품 재구매 준비."},
+{"id":"regular_cook_aroma_request","npc":"야영 요리사","stage":"실제 다른 날 동료 몫 재구매 후 다음 날 E로 부탁 소개 완독. 일반 창고 재료만 직접 전달. 게시판 부탁/기한/새 손님 해금 없음."},
+{"id":"regular_cook_aroma_wait","npc":"야영 요리사","stage":"맡은 재료를 창고에 준비하여 같은 손님 E. 직접 전달 전 소비/지급 없음. 기다리는 데 불이익 없음."},
+{"id":"regular_cook_aroma_finish","npc":"야영 요리사","stage":"일반 창고 재고를 최종 E 완독 때 재확인하고 정확 소비, 설정 재료 답례/평판 최초1회. 설비/새 제조법/회복/추가 손님 없음. 현지의 생활 경험으로 표현."},
+{"id":"regular_cook_aroma_after","npc":"야영 요리사","stage":"완료 다음 날 이후 E 후일담 완독. 실제 동료 등장/확정 방문/수요 증가/추가 답례 약속 없음. completion은 수첩 기억."},
+{"id":"regular_cook_aroma_first_sale","npc":"야영 요리사","stage":"실제 첫 상품 결제 직후 스쳐 들리는 짧은 말. 1줄, 조작/시간을 멈추지 않음. 전달 부탁/답례 없음."},
+{"id":"regular_cook_aroma_repeat_sale","npc":"야영 요리사","stage":"실제 동료 몫 상품 결제 후 짧은 말. 1줄, 구매 이유. 인파/추가 동료 등장 보장 없음."}
+])

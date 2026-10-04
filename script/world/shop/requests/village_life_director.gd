@@ -38,6 +38,9 @@ func _ready() -> void:
 	var seasonal := SeasonalVillageDirector.new()
 	seasonal.name = "SeasonalVillageDirector"
 	add_child(seasonal)
+	var regular := RegularCustomerDirector.new()
+	regular.name = "RegularCustomerDirector"
+	add_child(regular)
 	call_deferred("refresh")
 
 func _process(delta: float) -> void:

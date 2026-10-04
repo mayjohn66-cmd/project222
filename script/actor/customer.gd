@@ -304,6 +304,9 @@ func choose_customer_type() -> void:
 func choose_wanted_item() -> String:
 	wanted_amount = 1
 	wanted_event_id = ""
+	if has_meta("regular_story_item"):
+		wanted_amount = maxi(1,int(get_meta("regular_story_amount",1)))
+		return str(get_meta("regular_story_item"))
 
 	var request: Dictionary = (
 		CustomerDemandData.get_random_wanted_request(
@@ -768,6 +771,7 @@ func checkout_item() -> void:
 		carried_item_id,
 		carried_amount
 	)
+	if RegularCustomerRecords.record_sale(self,carried_item_id,carried_amount): RegularCustomerVisits.remark(self)
 	StoreEventRemark.tell(self, "bought", carried_item_id)
 
 	# 결제 완료 상품은 더 이상 미결제 상태가 아님

@@ -41,6 +41,7 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/requests/default_seasonal_life_requests.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_resident_memories.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_crafting_path.tres": KIND_SERVICE_TEXT,
+	"res://scenes/shop/requests/default_regular_customers.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_preservation_lessons.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/events/default_store_event_story.tres": KIND_SERVICE_TEXT,
 }
@@ -96,7 +97,7 @@ static func load_sources() -> Dictionary:
 
 		for raw_line in FileAccess.get_file_as_string(path).split("\n"):
 			var line: String = raw_line.strip_edges().trim_suffix(",")
-			if path.ends_with("default_preservation_lessons.tres"):
+			if path.ends_with("default_preservation_lessons.tres") or path.ends_with("default_regular_customers.tres"):
 				if line.begins_with("events ="): kind = ""
 				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT
 				if kind.is_empty(): continue
