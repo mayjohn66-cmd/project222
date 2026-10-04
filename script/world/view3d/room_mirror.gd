@@ -4,8 +4,8 @@ extends RefCounted
 ## 방 칸 (0,0) 이 놓인 세계 칸(origin)을 더해 3D 좌표로 옮긴다. 방 크기(columns × rows)와 입구(0, rows/2)는 방 노드에서 읽는다.
 
 const ROOMS: Array = [
-	{"node": "WarehouseRoom", "door": "warehouse_door", "floor": "plank", "tint": Color(0.9, 0.78, 0.62)},
-	{"node": "ProductionRoom", "door": "production_door", "floor": "brick", "tint": Color(0.86, 0.8, 0.9)},
+	{"node": "WarehouseRoom", "door": "warehouse_door", "floor": "tile", "tint": Color(0.78, 0.81, 0.86), "accent": Color(0.35, 0.42, 0.55)},
+	{"node": "ProductionRoom", "door": "production_door", "floor": "tile", "tint": Color(1.0, 0.95, 0.84), "accent": Color(0.9, 0.55, 0.15)},
 ]
 const WALL_BLOCKS: float = 2.0
 
@@ -114,16 +114,17 @@ func _build_walls(name: String, info: Dictionary, origin: Vector2, cols: int, ro
 		["w2", Vector2(x0 - t, ey1), Vector2(x0, y1), false],
 		["e", Vector2(x1, y0), Vector2(x1 + t, y1), true],
 	]
-	var tint: Color = Color(1.2, 1.08, 0.92) if PlaceholderTextures.clean else Color(0.85, 0.7, 0.55)
+	var accent: Color = info.get("accent", StoreShell.BRAND)
 
 	for w in walls:
 		var key: String = "rwall_%s_%s" % [name, w[0]]
 		var lo: Vector2 = w[1]
 		var hi: Vector2 = w[2]
-		view._set_item(key, lo, hi, WALL_BLOCKS, "brick", tint, "")
+		var shell: Dictionary = StoreShell.build_wall(lo, hi, true, accent, {"ts": view.texture_size})
+		view._set_mesh_item(key, shell["mesh"], VillageAssets.make_materials(shell["specs"]), lo, hi, float(shell["total_blocks"]), "", NAN, true)
 
 		if w[3]:
-			view._items[key]["cutaway"] = {"rect": Rect2(lo, hi - lo), "h": view.block_height(WALL_BLOCKS), "factor": 1.0}
+			view._items[key]["cutaway"] = {"rect": Rect2(lo, hi - lo), "h": view.block_height(WALL_BLOCKS), "factor": 1.0, "base_origin": true}
 
 	# 입구 문(서쪽 벽, 방 안쪽 = +x 를 본다)
 	var door_id: String = str(info["door"])

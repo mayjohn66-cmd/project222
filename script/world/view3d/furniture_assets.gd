@@ -386,6 +386,9 @@ static func _banner(f: Frame) -> Dictionary:
 # ---------------------------------------------------------------- 문: 틀(기둥 둘 + 윗가로대) + 열린 문짝 + 손잡이/장식
 
 static func _door(f: Frame, build_id: String) -> Dictionary:
+	if build_id == "door":
+		return _glass_door(f)
+
 	var L: float = f.length
 	var D: float = f.depth
 	var frame_col := Color(0.55, 0.38, 0.24)
@@ -416,4 +419,32 @@ static func _door(f: Frame, build_id: String) -> Dictionary:
 	f.box(leaf, post, post + 0.05, D, D + 0.62, 0.02, 1.52)
 	f.box(frame, post + 0.005, post + 0.045, D, D + 0.62, 0.7, 0.76)
 	f.box(plate, post + 0.045, post + 0.075, D + 0.5, D + 0.56, 0.76, 0.84)  # 손잡이
+	return f.finish(1.9)
+
+
+# 매장 출입문: 현대 편의점의 알루미늄 틀 유리 자동문. 두 짝이 살짝 열려 있고, 위에 브랜드색 간판 띠와 센서가 있다.
+static func _glass_door(f: Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var alu: Dictionary = f.flat(Color(0.78, 0.8, 0.84), "gd_alu")
+	var glass: Dictionary = f.flat(Color(0.6, 0.82, 0.94), "gd_glass", 0.3)
+	var brand: Dictionary = f.flat(StoreShell.BRAND, "gd_brand", 0.2)
+	var white: Dictionary = f.flat(Color(0.95, 0.95, 0.92), "gd_white")
+	var dark: Dictionary = f.flat(Color(0.16, 0.17, 0.2), "gd_dark")
+	var post: float = 0.08
+	f.box(alu, 0.0, post, 0.0, D, 0.0, 1.9)  # 양옆 기둥
+	f.box(alu, L - post, L, 0.0, D, 0.0, 1.9)
+	f.box(white, 0.0, L, 0.0, D, 1.62, 1.9)  # 위 간판 칸
+	f.box(brand, 0.04, L - 0.04, D - 0.02, D + 0.02, 1.7, 1.82)  # 브랜드색 띠(양면으로 보임)
+	f.box(alu, 0.0, L, 0.0, D, 1.58, 1.64)
+	f.box(dark, L * 0.5 - 0.08, L * 0.5 + 0.08, D * 0.3, D * 0.7, 1.52, 1.58)  # 센서
+	# 유리문 두 짝(가운데가 한 뼘 열림) + 가운데 손잡이 막대
+	var gap: float = 0.1
+	f.box(alu, post, L * 0.5 - gap, D * 0.35, D * 0.65, 0.0, 0.05)
+	f.box(glass, post, L * 0.5 - gap, D * 0.4, D * 0.6, 0.05, 1.56)
+	f.box(alu, L * 0.5 - gap - 0.03, L * 0.5 - gap, D * 0.35, D * 0.65, 0.05, 1.56)
+	f.box(alu, L * 0.5 + gap, L - post, D * 0.35, D * 0.65, 0.0, 0.05)
+	f.box(glass, L * 0.5 + gap, L - post, D * 0.4, D * 0.6, 0.05, 1.56)
+	f.box(alu, L * 0.5 + gap, L * 0.5 + gap + 0.03, D * 0.35, D * 0.65, 0.05, 1.56)
+	f.box(dark, 0.0, L, D * 0.45, D * 0.55, 0.0, 0.02)  # 바닥 레일
 	return f.finish(1.9)

@@ -552,7 +552,7 @@ func _sync_floor() -> void:
 	if _ground_mesh == null:
 		_ground_mesh = MeshInstance3D.new()
 		_ground_mesh.layers = 1
-		_ground_material = _make_surface_material("plank", Color(1.0, 0.92, 0.8) if PlaceholderTextures.clean else Color(0.62, 0.38, 0.28))
+		_ground_material = _make_surface_material("tile", Color(1.0, 1.0, 1.0))  # 현대 편의점: 흰 타일 바닥
 		_ground_mesh.material_override = _ground_material
 		_viewport.add_child(_ground_mesh)
 		_ground_id_mesh = MeshInstance3D.new()
@@ -650,10 +650,12 @@ func _sync_walls() -> void:
 			lo_v = Vector2(x0, r["lo"])
 			hi_v = Vector2(x0 + WALL_THICKNESS, r["hi"])
 
+		# 현대 편의점 벽: 안쪽은 흰 벽 + 브랜드색 띠, 길 쪽 낮은 벽은 유리 진열창(StoreShell)
 		var wall_blocks: float = WALL_TALL_BLOCKS if r["tall"] else WALL_LOW_BLOCKS
-		_set_item("wall%d" % index, lo_v, hi_v, wall_blocks, "brick", Color(1.2, 1.08, 0.92) if PlaceholderTextures.clean else Color(0.85, 0.7, 0.55), "")
+		var shell: Dictionary = StoreShell.build_wall(lo_v, hi_v, bool(r["tall"]), StoreShell.BRAND, {"ts": texture_size})
+		_set_mesh_item("wall%d" % index, shell["mesh"], VillageAssets.make_materials(shell["specs"]), lo_v, hi_v, float(shell["total_blocks"]), "", NAN, true)
 		# 앞쪽 벽(카메라에 가까운 동·남쪽 면)은 플레이어가 가까이 오면 낮아진다(벽 뒤에 서면 몸이 가려지므로). 뒤쪽 벽은 그대로.
-		_items["wall%d" % index]["cutaway"] = {"rect": Rect2(lo_v, hi_v - lo_v), "h": block_height(wall_blocks), "factor": 1.0} if r["direction"] == 1 or r["direction"] == 2 else {}
+		_items["wall%d" % index]["cutaway"] = {"rect": Rect2(lo_v, hi_v - lo_v), "h": block_height(wall_blocks), "factor": 1.0, "base_origin": true} if r["direction"] == 1 or r["direction"] == 2 else {}
 		index += 1
 
 
@@ -696,7 +698,7 @@ func _update_wall_cutaway(delta: float) -> void:
 
 			if inst != null and is_instance_valid(inst):
 				inst.scale.y = f
-				inst.position.y = h * 0.5 * f
+				inst.position.y = 0.0 if bool(cut.get("base_origin", false)) else h * 0.5 * f
 
 
 # ---------------------------------------------------------------- 가구

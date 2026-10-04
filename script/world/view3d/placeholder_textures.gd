@@ -21,6 +21,11 @@ static func is_seam(kind: String, x: int, y: int, size: int) -> bool:
 	if kind == "plank":
 		return y % row_h == 0
 
+	if kind == "tile":
+		# 편의점 바닥 타일: 한 변을 둘로 나눈 큰 타일 사이에 줄눈
+		var half: int = maxi(1, size / 2)
+		return x % half == 0 or y % half == 0
+
 	return false
 
 
@@ -46,6 +51,12 @@ static func albedo(kind: String, size: int) -> ImageTexture:
 					# 눈밭: 거의 흰색에 푸른 그늘 점과 반짝이는 점(잡음 없는 규칙 무늬)
 					var sp: int = (x * 5 + y * 11) % 37
 					c = Color(0.8, 0.86, 0.95) if sp == 0 else (Color(1.0, 1.0, 1.0) if sp == 9 else Color(0.93, 0.96, 1.0))
+				"tile":
+					# 흰색·연회색 체크 타일 + 옅은 줄눈 + 타일 윗면 반사 점
+					var half: int = maxi(1, size / 2)
+					var chk: bool = ((x / half) + (y / half)) % 2 == 0
+					var glint: bool = (x % half) == 2 and (y % half) == 2
+					c = Color(0.74, 0.77, 0.8) if seam else (Color(1.0, 1.0, 1.0) if glint else (Color(0.95, 0.96, 0.97) if chk else Color(0.88, 0.9, 0.92)))
 				"brick":
 					if clean:
 						var edge: bool = x == 0 or y == 0
