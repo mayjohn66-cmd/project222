@@ -235,6 +235,7 @@ func sync_ground() -> void:
 		_ground[kind] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material}
 
 	_snow_cells = per_kind.get("grass", [])
+	_bush_sig = ""
 
 	_puddle_per_kind = per_kind
 	_puddle_dirty = true
@@ -257,6 +258,7 @@ func is_snow_ground(cell: Vector2) -> bool:
 func clear_ground() -> void:
 	_clear_tufts()
 	_clear_snowmen()
+	_clear_bushes()
 
 	for kind in _ground.keys():
 		(_ground[kind]["mesh"] as Node).queue_free()
@@ -293,6 +295,7 @@ func set_season(season_id: String) -> void:
 
 func reset_signatures() -> void:
 	_hidden.clear()
+	_bush_sig = ""
 	_puddle_dirty = true
 	_snow_dirty = true
 	_ground_signature = ""
@@ -556,6 +559,8 @@ var _snow_cells: Array = []
 var _snow_keys: Array = []
 var _snow_bodies: Array = []  # 눈사람 충돌 몸체(2D). 3D 를 끄면 지운다
 var _snow_dirty: bool = true
+var _bush_keys: Array = []
+var _bush_sig: String = ""
 var _puddle_per_kind: Dictionary = {}
 var _puddle_dirty: bool = true
 
@@ -632,6 +637,83 @@ func _sync_snowmen() -> void:
 			_snow_bodies.append(body)
 
 
+func _clear_bushes() -> void:
+	for k in _bush_keys:
+		view._remove_item(str(k))
+
+	_bush_keys.clear()
+	_bush_sig = ""
+
+
+# 날짜 기준 자람 상태: seed(계절 단위, 계절이 바뀌면 배치가 새로 정해진다), day(계절 안 며칠째, 1~28). 개발용으로 계절을 강제하면 다 자란 날(20일)로 본다.
+func _grow_state() -> Dictionary:
+	var gs: Node = view.get_node_or_null("/root/GameState")
+
+	if view.season_override != "" or gs == null:
+		return {"seed": hash(season), "day": 20}
+
+	var td: int = int(gs.get("total_day"))
+	return {"seed": (td - 1) / CalendarData.DAYS_PER_SEASON, "day": ((td - 1) % CalendarData.DAYS_PER_SEASON) + 1}
+
+
+# 풀밭에 덤불이 "자란다": 칸 위치와 계절 번호로 자리가 정해지고(같은 계절엔 같은 자리), 계절 안에서 싹 트는 날이 제각각이라
+# 처음엔 작고 점점 커지며 늘어난다. 건물·소품 발자국에서 떨어진 곳에만 난다. 충돌은 없는 장식.
+func _sync_bushes() -> void:
+	var st: Dictionary = SeasonStyle.style(season if season != "" else "spring")
+	var rate: float = float(st.get("bush_rate", 0.0))
+	var gstate: Dictionary = _grow_state()
+	var gday: int = int(gstate["day"])
+	var sig: String = "%s|%d|%d|%d" % [season, int(gstate["seed"]), gday / 2, _footprints.size()]
+
+	if sig == _bush_sig:
+		return
+
+	_clear_bushes()
+	_bush_sig = sig
+
+	if rate <= 0.0:
+		return
+
+	var p: Dictionary = _params()
+	var seed_v: int = int(gstate["seed"]) * 1000003 + 12345
+
+	for cell in _snow_cells:
+		var h: int = absi(((cell.x * 73856093) ^ (cell.y * 19349663)) + seed_v) % 10000
+
+		if float(h) >= rate * 10000.0:
+			continue
+
+		var sprout: int = 1 + (h / 7) % 20  # 계절 안에서 싹 트는 날
+		var age: int = gday - sprout
+
+		if age < 0:
+			continue
+
+		var scale_f: float = 0.5 if age < 3 else (0.78 if age < 7 else 1.0)
+		var spot := Rect2(float(cell.x) - 0.5 - 0.7, float(cell.y) - 0.5 - 0.7, 1.0 + 1.4, 1.0 + 1.4)
+		var blocked: bool = false
+
+		for fp in _footprints.values():
+			if (fp as Rect2).intersects(spot):
+				blocked = true
+				break
+
+		if blocked:
+			continue
+
+		var rule: Dictionary = {"variant": "berry" if (h / 3) % 4 == 0 else ""}
+		var half := Vector2(0.5, 0.5)
+		var built: Dictionary = VillageAssets.build_prop("flower_bush", -half, half, rule, p)  # 원점 기준으로 만들고 칸 위치로 옮긴다
+		SeasonStyle.tint_specs(built["specs"], rule, season if season != "" else "spring")
+		var key: String = "bush_%d_%d" % [cell.x, cell.y]
+		var lo := Vector2(float(cell.x) - 0.5, float(cell.y) - 0.5)
+		view._set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), lo, lo + Vector2.ONE, float(built["total_blocks"]) * scale_f, "bush", NAN, true)
+		var inst: MeshInstance3D = view._items[key]["mesh"]
+		inst.position = Vector3(float(cell.x), 0.0, float(cell.y))
+		inst.scale = Vector3.ONE * scale_f
+		_bush_keys.append(key)
+
+
 func sync_objects(world: Node) -> void:
 	var seen: Dictionary = {}
 	var parts: PackedStringArray = PackedStringArray()
@@ -690,6 +772,8 @@ func sync_objects(world: Node) -> void:
 	if _snow_dirty:
 		_snow_dirty = false
 		_sync_snowmen()
+
+	_sync_bushes()
 
 	if _puddle_dirty and view.decals != null:
 		_puddle_dirty = false
