@@ -716,7 +716,10 @@ func _sync_furniture() -> void:
 			_sync_wall_mounted(node, build_id, row, alive)
 			continue
 
-		if row["kind"] != "box":
+		# 진열대: 미리보기는 색 상자, 실제 진열대는 틀 + 상품이 놓인 모델(ShelfAssets). 행의 kind 가 shelf 면 아래에서 따로 만든다.
+		var is_shelf: bool = row["kind"] == "shelf"
+
+		if row["kind"] != "box" and not is_shelf:
 			continue
 
 		var visual: Node = node.get_node_or_null("Visual")
@@ -733,7 +736,14 @@ func _sync_furniture() -> void:
 
 		var key: String = "furn%d" % node.get_instance_id()
 		alive[key] = true
-		var sig: String = "%s|%s|%d|%d|%d|%d|%s|%s" % [build_id, str(anchor), rotation_index, fx, fy, stack, str(is_preview), str(preview_valid)]
+		var as_model: bool = is_shelf and not is_preview
+		var stock_sig: String = ""
+
+		if as_model and node.get("slots") != null:
+			for sl in node.get("slots"):
+				stock_sig += "%s:%d," % [str((sl as Dictionary).get("item_id", "")), mini(int((sl as Dictionary).get("stock", 0)), ShelfAssets.MAX_VISIBLE)]
+
+		var sig: String = "%s|%s|%d|%d|%d|%d|%s|%s|%s" % [build_id, str(anchor), rotation_index, fx, fy, stack, str(is_preview), str(preview_valid), stock_sig]
 
 		if _items.has(key) and _items[key]["signature"] == sig:
 			continue
@@ -759,6 +769,13 @@ func _sync_furniture() -> void:
 
 		if is_preview:
 			item_tint = item_tint.lerp(Color(0.55, 1.0, 0.9) if preview_valid else Color(1.0, 0.25, 0.25), 0.4 if preview_valid else 0.65)
+
+		if as_model:
+			var spl: int = int(node.get("slots_per_level")) if node.get("slots_per_level") != null else 2
+			var slot_list: Array = node.get("slots") if node.get("slots") != null else []
+			var built: Dictionary = ShelfAssets.build(lo, hi, rotation_index, stack, slot_list, spl, {"ts": texture_size, "block_px": block_px, "unit_px_z": (tile_low / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))})
+			_set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), lo, hi, float(built["total_blocks"]), sig, NAN, true)
+			continue
 
 		_set_item(key, lo, hi, height_blocks, str(row["texture"]), item_tint, sig)
 
