@@ -172,6 +172,8 @@ func get_available_entrance_doors() -> Array[Node]:
 	return result
 
 func spawn_customer() -> void:
+	var tutorial = get_parent().get_node_or_null("TutorialDirector")
+	if tutorial != null and tutorial.enabled and not OpeningJourneyFlow.core_finished(): return
 	var doors: Array[Node] = (
 		get_available_entrance_doors()
 	)

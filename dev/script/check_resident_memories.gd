@@ -37,6 +37,7 @@ func save_reload() -> bool:
 	return GameState.is_save_data_valid(saved) and GameState.apply_save_data(saved)
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false
 	add_child(world)
 	await settle()
 	life = world.get_node("VillageLifeDirector")

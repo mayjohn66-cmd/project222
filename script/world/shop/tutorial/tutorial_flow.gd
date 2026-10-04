@@ -11,7 +11,10 @@ func done(id: String) -> bool:
 
 func current() -> Dictionary:
 	for step in settings.steps:
-		if not done(str(step["id"])): return RequestTextData.enrich(step, "tutorial_step")
+		if done(str(step["id"])): continue
+		if not bool(step.get("optional", false)) and OpeningJourneyFlow.legacy_finished(): continue
+		if bool(step.get("optional", false)) and not OpeningJourneyFlow.optional_available(step): continue
+		return RequestTextData.enrich(step, "tutorial_step")
 	return {}
 
 func mark(id: String, suffix: String) -> void:
@@ -32,6 +35,8 @@ func goal_met(step: Dictionary, world: Node) -> bool:
 					if int(slot.get("stock", 0)) > 0 and ItemData.get_sellable_items().has(str(slot.get("item_id", ""))): return true
 			return false
 		"checkout": return PlayerProgress.story_beat_days.has(CheckoutTutorial.BEAT_ID)
+		"barter": return OpeningJourneyFlow.traded()
+		"raw_sale": return PlayerProgress.story_beat_days.has(OpeningJourneyFlow.RAW_SALE)
 		"expedition": return PlayerProgress.has_completed_expedition()
 		"production": return PlayerProgress.story_beat_days.has("tutorial_event:produced_bread")
 	return false

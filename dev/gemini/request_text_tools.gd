@@ -120,9 +120,9 @@ static func load_sources() -> Dictionary:
 			if kind == KIND_SERVICE_TEXT and not data.has("id"): id = "landmark_" + id
 			data["id"] = id
 			result[kind][id] = TextData.enrich(data,kind)
-	for id in ["trade_panel", "smithy_panel", "trade_first_greeting"]:
+	for id in ["trade_panel", "smithy_panel", "trade_first_greeting", "arrival_peddler_return"]:
 		result[KIND_SERVICE_TEXT][id] = {"id":id}
-	for id in ["checkout_intro", "checkout_checkout", "checkout_finished"]:
+	for id in ["checkout_intro", "checkout_checkout", "checkout_finished", "raw_checkout_intro", "raw_checkout_checkout", "raw_checkout_finished"]:
 		result[KIND_TUTORIAL_DIALOGUE][id] = {"id":id}
 
 	return result

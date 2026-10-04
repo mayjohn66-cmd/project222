@@ -684,11 +684,15 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 			Tools.KIND_TRADE_OFFER:
 				info = "건네는 재료: %s / 받는 재료: %s" % [_item_name(str(d.get("give",""))), _item_name(str(d.get("receive","")))]
 			Tools.KIND_TUTORIAL_STEP:
-				info = "안내 목표: %s" % d.get("goal","")
+				info = "안내 목표: %s / 화자: %s / 장면: %s / 조작 키는 summary의 UI 안내에 유지, 현지인 대사로 이동하지 않음" % [d.get("goal",""), d.get("npc",""), d.get("stage","")]
 			Tools.KIND_TUTORIAL_DIALOGUE, Tools.KIND_SERVICE_TEXT:
 				info = "기존 기능 안내를 유지하는 문장: " + id
 				if d.has("stage"):
 					info = "마을 이야기·이벤트 / 말하는 사람: %s / 장면: %s / 새 정착·구매·해금을 약속하지 않음" % [d.get("npc", ""), d["stage"]]
+				if kind == Tools.KIND_TUTORIAL_DIALOGUE:
+					info = "초반 현지 손님의 실제 구매 / " + ("원정 원재료를 다시 구매" if id.begins_with("raw_") else "함께 온 가게 식품을 처음 구매") + " / 조작·매출 기록·현대 기기 설명은 UI와 플레이어 몫 / 연습용 물건이나 추가 선물 없음"
+				if id == "arrival_peddler_return":
+					info = "이전에 실제 식품과 검·갑옷을 바꾼 타블렌의 재방문 / 처음 만나는 자기소개 금지 / 주민 부탁·정착은 기존 조건 유지"
 				if d.has("event_id") and d.has("context"):
 					info = "매장 행사 / 장면: %s / %s / 날짜·배율·판매 보장 안내 금지 / {item}이 있다면 유지 / 없는 날씨·인파·오브젝트 연출 추가 금지" % [d["stage"], d["context"]]
 				if d.has("speaker") and not d.has("stage"):

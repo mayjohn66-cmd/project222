@@ -13,7 +13,7 @@ static func heard(id: String) -> bool: return PlayerProgress.story_beat_days.has
 static func completed() -> bool: return PlayerProgress.story_beat_days.has(PREFIX + "done")
 
 static func locked_reason() -> String:
-	if not ResidentRequestFlow.tutorial_finished(): return "델빈의 안내를 마치고 주민들과 인연을 이어 가세요."
+	if not ResidentRequestFlow.tutorial_finished(): return "첫 거래와 원정 재료 판매를 마치고 주민들과 인연을 이어 가세요."
 	var residents: Array[String] = SETTINGS.participants.duplicate()
 	residents.append(SETTINGS.giver)
 	for id in residents:

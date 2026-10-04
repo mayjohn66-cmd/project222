@@ -13,6 +13,8 @@ var talking: bool = false
 var timer_was_paused: bool = false
 var physics_was_enabled: bool = true
 var elapsed: float = 0.0
+var pending: Dictionary = {}
+var barter_panel: ArrivalBarterPanel
 
 func _ready() -> void:
 	flow.settings = SETTINGS
@@ -21,12 +23,16 @@ func _ready() -> void:
 	dialogue = StoryDialoguePanel.new()
 	add_child(dialogue)
 	dialogue.finished.connect(_end_talk)
+	barter_panel = ArrivalBarterPanel.new()
+	add_child(barter_panel)
+	barter_panel.action_requested.connect(_on_trade)
+	barter_panel.closed.connect(_end_talk)
 	panel = TutorialGoalPanel.new()
 	add_child(panel)
 	call_deferred("refresh")
 
 func is_guiding() -> bool:
-	return enabled and not flow.current().is_empty()
+	return enabled and not OpeningJourneyFlow.core_finished()
 
 func permits_first_checkout() -> bool:
 	var step := flow.current()
@@ -59,6 +65,7 @@ func refresh() -> void:
 		if is_instance_valid(npc): npc.queue_free()
 		npc = null
 		return
+	OpeningJourneyFlow.initialize(get_parent())
 	for facility in get_tree().get_nodes_in_group("production_facility"):
 		if not facility.output_collected.is_connected(_on_output_collected):
 			facility.output_collected.connect(_on_output_collected)
@@ -69,7 +76,8 @@ func refresh() -> void:
 		npc = null
 		return
 	var ready: bool = flow.seen(str(step["id"])) and flow.goal_met(step, get_parent())
-	panel.display("안내 · " + str(step["title"]), "완료! %s에게 보상을 받으세요. [E]" % SETTINGS.guide_name if ready else str(step["objective"]))
+	var completion_hint := "타블렌에게 이야기를 마저 들으세요. [E]" if step.get("actor", "self") == "merchant" else "완료했습니다. 이야기를 이어갑니다."
+	panel.display("안내 · " + str(step["title"]), completion_hint if ready else str(step["objective"]))
 	var menu = get_parent().get_node_or_null("UI/GameMenu")
 	# 실제 목표를 수행하는 건축/생산 구역에서는 안내를 계속 보여 준다.
 	panel.root.visible = not talking and not get_tree().paused and not manager.summary_open \
@@ -78,10 +86,12 @@ func refresh() -> void:
 		and not (is_instance_valid(player.facility_dialog) and player.facility_dialog.visible) \
 		and not (menu != null and (menu.menu_open or menu.settings_panel.visible or menu.save_slot_panel.visible))
 	if talking or _blocked(): return
-	if str(step["id"]) == "checkout" and not ready:
-		# 같은 안내 인물이 첫 손님 역할을 맡는다. 두 NPC를 동시에 세우지 않는다.
+	var actor := str(step.get("actor", "self"))
+	if actor != "merchant":
 		if is_instance_valid(npc): npc.queue_free()
 		npc = null
+		if actor == "self" or ready:
+			if not flow.seen(str(step["id"])) or ready: _begin_step(step)
 		return
 	if is_instance_valid(npc) and _npc_needs_relocation():
 		npc.global_position = _guidance_position()
@@ -89,9 +99,8 @@ func refresh() -> void:
 		npc = StoryNpc.new()
 		npc.setup({"beat_id": "tutorial", "lines": step["lines"]})
 		get_parent().get_node("Actors").add_child(npc)
-		var floor_node = get_parent().get_node("Floor")
 		npc.global_position = _guidance_position()
-		npc.mark.text = SETTINGS.guide_name + " [E]"
+		npc.mark.text = SETTINGS.merchant_name + " [E]"
 		npc.mark.size.x = 180
 		npc.mark.position.x = -90
 		npc.mark.add_theme_font_size_override("font_size", 18)
@@ -101,27 +110,35 @@ func try_interact() -> bool:
 	if player.global_position.distance_to(npc.global_position) > talk_distance: return false
 	var step := flow.current()
 	if step.is_empty(): return false
+	_begin_step(step)
+	return true
+
+func _begin_step(step: Dictionary) -> void:
+	var id := str(step["id"])
+	var ready := flow.seen(id) and flow.goal_met(step, get_parent())
 	var lines: Array[String] = []
-	var gifts: Array[String] = []
-	if not flow.seen(str(step["id"])):
-		gifts = flow.introduce(step)
-		lines.assign(step["lines"])
-	elif flow.goal_met(step, get_parent()):
-		gifts = flow.claim(step, get_parent())
-		lines.assign(step["completion"])
-	else:
-		lines.assign(step["lines"])
-	if not gifts.is_empty(): lines.append("받은 물건: " + ", ".join(gifts))
-	talking = true
+	lines.assign(step["completion"] if ready else step["lines"])
+	pending = {"step":step, "action":"claim" if ready else ("intro" if not flow.seen(id) else "repeat")}
+	if not talking:
+		talking = true
+		timer_was_paused = manager.hour_timer.paused
+		physics_was_enabled = player.is_physics_processing()
 	panel.root.hide()
-	timer_was_paused = manager.hour_timer.paused
 	manager.hour_timer.paused = true
-	physics_was_enabled = player.is_physics_processing()
 	player.set_physics_process(false)
 	player.velocity = Vector2.ZERO
 	get_parent().set_meta("progressive_tutorial_dialogue", true)
-	dialogue.start(SETTINGS.guide_name, ArtLoader.load_texture("res://art/npc/npc_placeholder.png"), lines)
-	return true
+	var merchant: bool = str(step.get("actor", "self")) == "merchant"
+	dialogue.start(SETTINGS.merchant_name if merchant else "나", ArtLoader.load_texture("res://art/npc/npc_placeholder.png") if merchant else null, lines)
+
+func _on_trade(_id: String) -> void:
+	if not OpeningJourneyFlow.trade():
+		barter_panel.refresh()
+		return
+	# 닫기 신호로 대화 상태를 풀지 않고 교환 결과 대화로 이어 간다.
+	barter_panel.root.hide()
+	barter_panel.backdrop.hide()
+	_begin_step(flow.current())
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("interact") and not event.is_echo() and try_interact():
@@ -129,10 +146,22 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _end_talk() -> void:
 	if not talking: return
+	var completed_read: bool = dialogue.line_index >= dialogue.lines.size()
+	var result := pending.duplicate(true)
+	pending.clear()
+	if not result.is_empty() and completed_read:
+		var step: Dictionary = result["step"]
+		if flow.current().get("id", "") == step.get("id", ""):
+			if result["action"] == "intro": flow.introduce(step)
+			elif result["action"] == "claim": flow.claim(step, get_parent())
+			if step["id"] == "barter" and not OpeningJourneyFlow.traded():
+				barter_panel.display()
+				return
 	talking = false
 	get_parent().remove_meta("progressive_tutorial_dialogue")
 	if is_instance_valid(manager): manager.hour_timer.paused = timer_was_paused
 	if is_instance_valid(player): player.set_physics_process(physics_was_enabled)
+	if not is_inside_tree() or is_queued_for_deletion(): return
 	call_deferred("refresh")
 	var checkout = get_parent().get_node_or_null("CheckoutTutorial")
 	if checkout != null: checkout.call_deferred("try_start")
@@ -183,4 +212,5 @@ func _on_output_collected(item_id: String, amount: int) -> void:
 		PlayerProgress.record_story_beat("tutorial_event:produced_bread", GameState.total_day)
 
 func _exit_tree() -> void:
+	pending.clear()
 	_end_talk()

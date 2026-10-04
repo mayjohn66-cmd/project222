@@ -204,6 +204,7 @@ func initialize_new_game():
 	discovered_store_events.clear()
 	daily_shop_history.clear()
 
+	employee_states.clear()
 	employee_salary_records.clear()
 	unpaid_employee_salary = 0
 	ensure_employee_salary_records()

@@ -33,6 +33,7 @@ func drain() -> void:
 	check(false, "dialogue ends")
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("TutorialDirector").enabled = false
 	add_child(world)
 	await settle()
 	life = world.get_node("VillageLifeDirector")

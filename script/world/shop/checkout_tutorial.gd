@@ -4,11 +4,11 @@ extends Node
 const GUIDE_SCENE = preload("res://scenes/shop/actors/checkout_guide.tscn")
 const BEAT_ID: String = "tutorial_manual_checkout"
 var intro_lines: Array[String]:
-	get: return RequestTextData.lines("tutorial_dialogue", "checkout_intro")
+	get: return RequestTextData.lines("tutorial_dialogue", ("raw_checkout_" if material_visit else "checkout_") + "intro")
 var checkout_lines: Array[String]:
-	get: return RequestTextData.lines("tutorial_dialogue", "checkout_checkout")
+	get: return RequestTextData.lines("tutorial_dialogue", ("raw_checkout_" if material_visit else "checkout_") + "checkout")
 var finished_lines: Array[String]:
-	get: return RequestTextData.lines("tutorial_dialogue", "checkout_finished")
+	get: return RequestTextData.lines("tutorial_dialogue", ("raw_checkout_" if material_visit else "checkout_") + "finished")
 var manager
 var player
 var cashier: ManualCheckoutController
@@ -18,6 +18,7 @@ var guide_register
 var guide_cell := Vector2i(-1, -1)
 var customer_cell := Vector2i(-1, -1)
 var stage: String = ""
+var material_visit: bool = false
 var dialogue_open: bool = false
 var previous_timer_paused: bool = false
 var previous_player_physics: bool = true
@@ -49,15 +50,17 @@ func _process(_delta: float) -> void:
 			guide_register.request_checkout(guide)
 		return
 	if not stage.is_empty(): _abort()
-	if not completed(): try_start()
+	try_start()
 
 func try_start() -> void:
+	if is_instance_valid(guide): return
 	var tutorial = get_parent().get_node_or_null("TutorialDirector")
-	if tutorial != null and not tutorial.permits_first_checkout():
-		if manager.shop_open and not completed():
-			manager.customer_spawner.process_mode = Node.PROCESS_MODE_DISABLED
-		return
-	if completed() or is_instance_valid(guide) or not manager.shop_open \
+	material_visit = completed()
+	if material_visit:
+		if tutorial == null or not tutorial.enabled or tutorial.flow.current().get("id", "") != "raw_sale" \
+				or PlayerProgress.story_beat_days.has(OpeningJourneyFlow.RAW_SALE): return
+	elif tutorial != null and not tutorial.permits_first_checkout(): return
+	if not manager.shop_open \
 			or manager.closing_shop or manager.summary_open or cashier.blocked(): return
 	var story = get_parent().get_node_or_null("StoryDirector")
 	var merchant = get_parent().get_node_or_null("SecretMerchantDirector")
@@ -65,7 +68,8 @@ func try_start() -> void:
 	var items := ShopStock.get_stocked_item_ids(get_tree())
 	items = items.filter(func(item_id: String) -> bool:
 		return ItemData.get_item_price(item_id) > 0 and ItemData.get_sellable_items().has(item_id))
-	if items.is_empty(): items.append("water")
+	if material_visit: items = items.filter(func(id: String) -> bool: return OpeningJourneyFlow.is_raw_material(id))
+	if items.is_empty(): return
 	var door
 	for candidate in get_tree().get_nodes_in_group("door"):
 		if candidate.get_parent() == get_parent().get_node("Objects") \
@@ -92,9 +96,6 @@ func try_start() -> void:
 			break
 		if is_instance_valid(guide_register): break
 	if not is_instance_valid(guide_register): return
-	if tutorial != null:
-		var step: Dictionary = tutorial.flow.current()
-		if str(step.get("id", "")) == "checkout": tutorial.flow.introduce(step)
 	guide = GUIDE_SCENE.instantiate()
 	guide.guide_register = guide_register
 	guide.guide_item_id = items[0]
@@ -128,7 +129,14 @@ func _restore_dialogue_state() -> void:
 func _on_dialogue_finished() -> void:
 	_restore_dialogue_state()
 	if aborting or not is_instance_valid(guide): return
+	if dialogue.line_index < dialogue.lines.size():
+		_abort()
+		return
 	if stage == "intro":
+		var tutorial = get_parent().get_node_or_null("TutorialDirector")
+		if tutorial != null:
+			var step: Dictionary = tutorial.flow.current()
+			if step.get("id", "") == ("raw_sale" if material_visit else "checkout"): tutorial.flow.introduce(step)
 		if guide.prepare_practice_checkout(customer_cell):
 			stage = "checkout"
 			_show_dialogue(checkout_lines)
@@ -142,7 +150,7 @@ func _on_dialogue_finished() -> void:
 
 func _on_checkout_completed(customer, _amount: int) -> void:
 	if customer != guide: return
-	PlayerProgress.record_story_beat(BEAT_ID, GameState.total_day)
+	PlayerProgress.record_story_beat(OpeningJourneyFlow.RAW_SALE if material_visit else BEAT_ID, GameState.total_day)
 	stage = "finished"
 	_show_dialogue(finished_lines)
 

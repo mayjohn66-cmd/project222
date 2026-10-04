@@ -4,11 +4,17 @@
 
 [resource]
 script = ExtResource("1")
-guide_name = "안내인 델빈"
+guide_name = "델빈"
+merchant_name = "행상인 타블렌"
+opening_layout = Array[Dictionary]([{"build_id":"door", "anchor":Vector2i(0,4), "rotation_index":3}, {"build_id":"register", "anchor":Vector2i(4,3), "rotation_index":0}, {"build_id":"shelf_1x1", "anchor":Vector2i(2,2), "rotation_index":0}])
+barter_requirements = Array[Dictionary]([{"id":"bread", "amount":2}, {"id":"water", "amount":1}])
+barter_gifts = Array[Dictionary]([{"id":"rusty_sword", "amount":1, "missing_only":true}, {"id":"leather_armor", "amount":1, "missing_only":true}])
 steps = Array[Dictionary]([
-{"id":"setup","goal":"fixtures","starter":[{"kind":"furniture","id":"door","amount":1,"missing_only":true},{"kind":"furniture","id":"register","amount":1,"missing_only":true},{"kind":"furniture","id":"shelf_1x1","amount":1,"missing_only":true},{"kind":"item","id":"water","amount":4}],"rewards":[{"kind":"item","id":"bread","amount":4}]},
-{"id":"stock","goal":"stock","rewards":[{"kind":"item","id":"water","amount":4}]},
-{"id":"checkout","goal":"checkout","rewards":[{"kind":"item","id":"rusty_sword","amount":1,"missing_only":true},{"kind":"item","id":"leather_armor","amount":1,"missing_only":true}]},
-{"id":"expedition","goal":"expedition","rewards":[{"kind":"furniture","id":"production_door","amount":1,"missing_only":true},{"kind":"furniture","id":"magic_oven","amount":1,"missing_only":true},{"kind":"item","id":"scroll_bake_bread","amount":1,"missing_only":true,"recipe":"bake_bread"},{"kind":"item","id":"wheat","amount":4}]},
-{"id":"production","goal":"production","rewards":[{"kind":"item","id":"wheat","amount":4},{"kind":"item","id":"iron_ore","amount":4},{"kind":"item","id":"mine_crystal","amount":2}]}
+{"id":"setup","goal":"fixtures","actor":"self","npc":"플레이어 독백","stage":"가게와 함께 낯선 숲으로 이동. 기존 문·계산대·진열대는 함께 옴. 현대 기기는 플레이어만 이해","starter":[],"rewards":[]},
+{"id":"stock","goal":"stock","actor":"self","npc":"플레이어 독백","stage":"함께 온 식품을 진열. 현지인이 식품이나 현대 기기를 지급/설명하지 않음","rewards":[]},
+{"id":"checkout","goal":"checkout","actor":"customer","npc":"델빈과 플레이어 독백","stage":"낯선 유리문과 포장에 놀란 첫 손님이 실제 식품 하나를 현지 화폐로 삼. 완료는 플레이어 독백","rewards":[]},
+{"id":"barter","goal":"barter","actor":"merchant","npc":"행상인 타블렌","stage":"낯선 식품에 관심. 창고 빵2·물1과 낡은 검1·가죽 갑옷1을 한 번 물물교환. 메뉴/조작 키는 UI","rewards":[]},
+{"id":"expedition","goal":"expedition","actor":"self","npc":"플레이어 독백","stage":"검과 갑옷을 챙겨 원정. 기본 공격·채집·귀환. 아직 제작을 요구하지 않음","rewards":[]},
+{"id":"raw_sale","goal":"raw_sale","actor":"self","npc":"플레이어 독백","stage":"원정에서 가져온 판매 가능 원재료를 진열. 델빈의 실제 재료 구매/결제 뒤 완료. 빈손 귀환 시 다시 탐험","rewards":[]},
+{"id":"production","goal":"production","actor":"merchant","npc":"행상인 타블렌","stage":"첫 주민 노점 정착 이후 선택 안내. 현지 마법 오븐·두루마리·밀로 제작. 기존 구역 문은 가게 물품","optional":true,"after_request":"settle_naru","starter":[{"kind":"furniture","id":"magic_oven","amount":1,"missing_only":true},{"kind":"item","id":"scroll_bake_bread","amount":1,"missing_only":true,"recipe":"bake_bread"},{"kind":"item","id":"wheat","amount":4}],"rewards":[]}
 ])
