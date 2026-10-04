@@ -37,7 +37,7 @@ const ID_SHADER: Shader = preload("res://script/world/view3d/shader/sorted_id.gd
 const OUTLINE_SHADER: Shader = preload("res://script/world/view3d/shader/outline_post.gdshader")
 const FACADE_SHADER: Shader = preload("res://script/world/view3d/shader/facade.gdshader")
 
-var mode: Mode = Mode.OFF:
+var mode: Mode = Mode.ON:  # 게임은 항상 3D. 다른 값은 dev/ 비교 장면에서만 쓴다
 	set(value):
 		mode = value
 		_apply_mode()
@@ -85,7 +85,7 @@ var _lamps: Array = []
 var _lamp_signature: String = ""
 var day_manager: Node
 var exterior: Node2D
-## 마을(매장 바깥)도 3D 로 그릴지. F9 로 켜고 끈다(매장만 3D / 마을 전체 3D 비교용).
+## 마을(매장 바깥)도 3D 로 그린다(항상 true. dev/ 비교 장면에서만 끈다).
 var village_enabled: bool = true
 var weather_override: String = ""  # 개발용: clear / rain / snow. 비우면 날씨 계산(WeatherSystem)을 따른다
 var weather_override_intensity: float = 0.85
@@ -297,9 +297,6 @@ func cycle_mode() -> void:
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
-		cycle_mode()
-
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F8:
 		reload_village_art()
 
@@ -311,9 +308,6 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F6:
 		var sl: Array = ["", "spring", "summer", "autumn", "winter"]
 		season_override = sl[(sl.find(season_override) + 1) % sl.size()]
-
-	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
-		set_village_enabled(not village_enabled)
 
 
 # ---------------------------------------------------------------- 2D 그림 숨기기 (기존 게임 파일은 수정하지 않고 visible 만 바꿈)

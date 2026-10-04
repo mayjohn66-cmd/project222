@@ -23,7 +23,7 @@ var notice: String = ""
 var player_frames: SpriteFrames
 var floor_color := Color("253e32")
 var region_id: String = "forest"  # 3D 무대의 지역별 꾸밈(forest/mine/swamp/hidden_ruins)
-var use_3d: bool = true  # 던전 방을 3D 로 그린다(F10 으로 끄고 켠다)
+var use_3d: bool = true  # 던전 방을 3D 로 그린다(항상 3D)
 var stage: ExpeditionStage3D
 
 func _ready() -> void:
@@ -104,11 +104,6 @@ func _can_play() -> bool:
 	return visible and model != null and not model.finished and (not blocked.is_valid() or not blocked.call())
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if visible and event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F10:
-		use_3d = not use_3d
-		get_viewport().set_input_as_handled()
-		return
-
 	if _can_play() and event.is_action_pressed("interact"):
 		model.interact()
 		get_viewport().set_input_as_handled()
