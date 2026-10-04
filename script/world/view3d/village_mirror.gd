@@ -166,7 +166,7 @@ func _cell_kind(cell: Vector2i) -> String:
 func sync_ground() -> void:
 	var cells: Array[Vector2i] = exterior.get_connected_map_cells()
 	var store_rect: Rect2i = view.floor_node.get_store_rect()
-	var sig: String = "%d|%s|%d|%s|%s" % [cells.size(), str(exterior.get_village_map_extent()), exterior._layout_tiles.hash(), str(store_rect), season]
+	var sig: String = "%d|%s|%d|%s|%s|%d" % [cells.size(), str(exterior.get_village_map_extent()), exterior._layout_tiles.hash(), str(store_rect), season, _footprints.hash()]
 
 	if sig == _ground_signature:
 		return
@@ -332,6 +332,40 @@ func _cutout_material(texture: Texture2D) -> ShaderMaterial:
 	return m
 
 
+# 풀·덤불·나무·눈사람·웅덩이·낙엽이 놓이면 안 되는 자리(칸 좌표 Rect2): 마을 건물·소품 발자국 + 매장·복도·생산 구역(벽 두께만큼 바깥까지).
+# 3D 벽과 건물 밑동에 식물이 파묻히지 않게 한다. 바닥 판이 바뀌면 다시 계산한다.
+func _floor_sig() -> String:
+	var fl: Node = view.floor_node
+	return "" if fl == null else "%s%s%s" % [str(fl.get_store_rect()), str(fl.get_production_rect()), str(fl.get_corridor_rect())]
+
+
+func _blockers() -> Array:
+	var out: Array = _footprints.values()
+	var fl: Node = view.floor_node
+
+	if fl != null:
+		var m: float = StoreView3D.WALL_THICKNESS + 0.2
+
+		for r in [fl.get_store_rect(), fl.get_production_rect(), fl.get_corridor_rect()]:
+			var ri: Rect2i = r
+
+			if ri.size.x <= 0 or ri.size.y <= 0:
+				continue
+
+			out.append(Rect2(float(ri.position.x) - 0.5 - m, float(ri.position.y) - 0.5 - m, float(ri.size.x) + 2.0 * m, float(ri.size.y) + 2.0 * m))
+
+	return out
+
+
+# 점 (x, z) 가 막힌 자리(여유 margin 칸)에 들어가는지.
+func _is_blocked_point(x: float, z: float, margin: float, blockers: Array) -> bool:
+	for fp in blockers:
+		if (fp as Rect2).grow(margin).has_point(Vector2(x, z)):
+			return true
+
+	return false
+
+
 func _clear_tufts() -> void:
 	for k in _tuft_keys:
 		view._remove_item(str(k))
@@ -372,6 +406,7 @@ func _sync_tufts(grass_cells: Array) -> void:
 	var tuft_h: float = float(sst.get("tuft_height", 1.0))
 	var half_w: float = 0.2 * (1.0 + 0.25 * (tuft_h - 1.0))
 	var height: float = 0.32 * tuft_h
+	var tuft_blockers: Array = _blockers()
 
 	for ck in chunks.keys():
 		var st_plain := SurfaceTool.new()
@@ -409,6 +444,9 @@ func _sync_tufts(grass_cells: Array) -> void:
 				var cz: float = float(cell.y) + (float((hh / 100) % 10) / 10.0 - 0.5) * 0.8
 				var flower: bool = float(hh % 97) < 14.0 * flower_rate
 				var fv: int = (hh / 7) % 4
+
+				if _is_blocked_point(cx, cz, half_w + 0.05, tuft_blockers):
+					continue
 
 				if flower:
 					_add_tuft(st_flowers[fv], cx, cz, half_w, height)
@@ -600,7 +638,7 @@ func _sync_snowmen() -> void:
 		var spot := Rect2(float(cell.x) - 0.9, float(cell.y) - 0.9, 1.8, 1.8)
 		var blocked: bool = false
 
-		for fp in _footprints.values():
+		for fp in _blockers():
 			if (fp as Rect2).intersects(spot):
 				blocked = true
 				break
@@ -655,7 +693,7 @@ func _sync_trees() -> void:
 	var rate: float = float(st.get("tree_rate", 0.0))
 	var gstate: Dictionary = _grow_state()
 	var total_day: int = int(gstate["total"])
-	var sig: String = "%s|%d|%d" % [season, total_day / 5, _footprints.size()]
+	var sig: String = "%s|%d|%d|%s" % [season, total_day / 5, _footprints.size(), _floor_sig()]
 
 	if sig == _tree_sig:
 		return
@@ -685,7 +723,7 @@ func _sync_trees() -> void:
 		var spot := Rect2(float(cell.x) - 0.5 - 1.2, float(cell.y) - 0.5 - 1.2, 1.0 + 2.4, 1.0 + 2.4)
 		var blocked: bool = false
 
-		for fp in _footprints.values():
+		for fp in _blockers():
 			if (fp as Rect2).intersects(spot):
 				blocked = true
 				break
@@ -756,7 +794,7 @@ func _sync_bushes() -> void:
 	var rate: float = float(st.get("bush_rate", 0.0))
 	var gstate: Dictionary = _grow_state()
 	var gday: int = int(gstate["day"])
-	var sig: String = "%s|%d|%d|%d" % [season, int(gstate["seed"]), gday / 2, _footprints.size()]
+	var sig: String = "%s|%d|%d|%d|%s" % [season, int(gstate["seed"]), gday / 2, _footprints.size(), _floor_sig()]
 
 	if sig == _bush_sig:
 		return
@@ -786,7 +824,7 @@ func _sync_bushes() -> void:
 		var spot := Rect2(float(cell.x) - 0.5 - 0.7, float(cell.y) - 0.5 - 0.7, 1.0 + 1.4, 1.0 + 1.4)
 		var blocked: bool = false
 
-		for fp in _footprints.values():
+		for fp in _blockers():
 			if (fp as Rect2).intersects(spot):
 				blocked = true
 				break
@@ -876,8 +914,8 @@ func sync_objects(world: Node) -> void:
 	if _puddle_dirty and view.decals != null:
 		_puddle_dirty = false
 		var snowy: bool = str(SeasonStyle.style(season if season != "" else "spring").get("grass_kind", "grass")) == "snow"
-		view.decals.rebuild_puddles(_puddle_per_kind, snowy, _footprints.values())
-		view.decals.rebuild_litter(_puddle_per_kind.get("grass", []), float(SeasonStyle.style(season if season != "" else "spring").get("litter_rate", 0.0)), _footprints.values())
+		view.decals.rebuild_puddles(_puddle_per_kind, snowy, _blockers())
+		view.decals.rebuild_litter(_puddle_per_kind.get("grass", []), float(SeasonStyle.style(season if season != "" else "spring").get("litter_rate", 0.0)), _blockers())
 
 	# 사라진 물체 정리
 	for k in _keys.keys():
