@@ -6,7 +6,7 @@ extends RefCounted
 const CSV_PATH := "res://data/shop/catalogs/season_3d.csv"
 const SEASONS: Array = ["spring", "summer", "autumn", "winter"]
 const COLOR_KEYS: Array = ["grass_tint", "road_tint", "paving_tint", "leaf_tint", "pine_tint", "bush_tint", "tuft_tint", "sun_tint", "ambient_tint"]
-const NUM_KEYS: Array = ["bare_trees", "roof_white", "tufts", "flower_rate", "tree_keep", "hide_shrubs", "snowman_rate", "bush_rate"]
+const NUM_KEYS: Array = ["bare_trees", "roof_white", "tufts", "flower_rate", "tree_keep", "hide_shrubs", "snowman_rate", "bush_rate", "tuft_density", "tuft_height", "leaf_fall", "tree_rate", "litter_rate"]
 # 낙엽수(겨울에 맨가지가 되고, 가을에는 단풍이 드는 나무)
 const DECIDUOUS: Array = ["round", "birch", "big_oak", "autumn", "cherry", "willow", "poplar"]
 # 가을 단풍 색 곱(나무마다 번호로 고른다): 주황 그대로 / 붉게 / 노랗게
@@ -59,7 +59,7 @@ static func _load() -> void:
 
 
 static func _fallback() -> Dictionary:
-	return {"season": "spring", "grass_kind": "grass", "grass_tint": Color.WHITE, "road_tint": Color.WHITE, "paving_tint": Color.WHITE, "leaf_tint": Color.WHITE, "pine_tint": Color.WHITE, "bush_tint": Color.WHITE, "tuft_tint": Color.WHITE, "sun_tint": Color.WHITE, "ambient_tint": Color.WHITE, "bare_trees": 0.0, "roof_white": 0.0, "tufts": 1.0, "flower_rate": 1.0, "tree_keep": 1.0, "hide_shrubs": 0.0, "snowman_rate": 0.0, "bush_rate": 0.03}
+	return {"season": "spring", "grass_kind": "grass", "grass_tint": Color.WHITE, "road_tint": Color.WHITE, "paving_tint": Color.WHITE, "leaf_tint": Color.WHITE, "pine_tint": Color.WHITE, "bush_tint": Color.WHITE, "tuft_tint": Color.WHITE, "sun_tint": Color.WHITE, "ambient_tint": Color.WHITE, "bare_trees": 0.0, "roof_white": 0.0, "tufts": 1.0, "flower_rate": 1.0, "tree_keep": 1.0, "hide_shrubs": 0.0, "snowman_rate": 0.0, "bush_rate": 0.03, "tuft_density": 0.56, "tuft_height": 1.0, "leaf_fall": 0.0, "tree_rate": 0.01, "litter_rate": 0.0}
 
 
 # 규칙(rule)을 계절에 맞게 고친다: 나무 종류(벚꽃은 봄에만, 겨울엔 낙엽수가 맨가지)와 지붕 눈.
@@ -86,6 +86,10 @@ static func adjust_rule(rule: Dictionary, season_id: String, seed_value: int) ->
 		if float(st.get("bare_trees", 0.0)) > 0.5 and DECIDUOUS.has(v):
 			v = "dead"
 
+		# 손으로 놓은 나무도 3D 에서는 그 자리에 고정하지 않는다(채집 자리 제외): 풀밭에 랜덤하게 자라는 나무(VillageMirror._sync_trees)가 대신한다.
+		if not bool(rule.get("fixed_spot", false)) and not bool(rule.get("generated", false)):
+			r["season_hide"] = true
+
 		# 겨울 등 tree_keep < 1: 낙엽수 중 일부만 남기고(맨가지) 나머지는 안 보이게 한다. 소나무·고목은 그대로.
 		if DECIDUOUS.has(str(rule.get("variant", ""))) or str(rule.get("variant", "")) == "":
 			if float(st.get("tree_keep", 1.0)) < 1.0 and float(absi(seed_value * 31 + 7) % 100) >= float(st["tree_keep"]) * 100.0 and v != "pine":
@@ -94,7 +98,7 @@ static func adjust_rule(rule: Dictionary, season_id: String, seed_value: int) ->
 		r["variant"] = v
 
 	# 손으로 놓은 덤불(꽃 덤불·산딸기 덤불)은 3D 에서 그 자리에 고정하지 않는다: 안 보이게 하고, 풀밭에 계절·날짜에 따라 새로 자라는 덤불(VillageMirror._sync_bushes)이 대신한다.
-	if str(rule.get("style", "")) == "flower_bush" and str(rule.get("variant", "")) != "hedge":
+	if str(rule.get("style", "")) == "flower_bush" and str(rule.get("variant", "")) != "hedge" and not bool(rule.get("fixed_spot", false)) and not bool(rule.get("generated", false)):
 		r["season_hide"] = true
 
 	# 덤불·꽃밭·산울타리는 겨울에 눈에 묻혀 안 보인다. 집 옆 덤불(extras)과 창 화분도 뺀다.

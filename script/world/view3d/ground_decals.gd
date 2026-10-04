@@ -155,6 +155,97 @@ static func _add_flat_quad(st: SurfaceTool, cx: float, cz: float, w: float, _unu
 	BuildingMesh._quad(st, Vector3(x0, y, z0), Vector3(x1, y, z0), Vector3(x1, y, z1), Vector3(x0, y, z1), Vector3.UP, Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1))
 
 
+# ---------------------------------------------------------------- 낙엽 더미(가을 땅 장식)
+
+var _litter_keys: Array = []
+var _litter_mats: Array = []
+
+
+func clear_litter() -> void:
+	for k in _litter_keys:
+		view._remove_item(str(k))
+
+	_litter_keys.clear()
+
+
+# 풀밭 칸 일부에 낙엽이 흩어진다(rate = 칸 비율). 칸 위치로 정해져서 항상 같은 자리, 물체 근처(0.4칸)는 피한다.
+func rebuild_litter(grass_cells: Array, rate: float, blockers: Array) -> void:
+	clear_litter()
+
+	if rate <= 0.0:
+		return
+
+	if _litter_mats.is_empty():
+		for v in range(4):
+			_litter_mats.append(_material(PlaceholderTextures.leaf_litter(v)))
+
+	var chunks: Dictionary = {}
+
+	for cell in grass_cells:
+		var h: int = absi((cell.x * 1597334677) ^ (cell.y * 3812015801)) % 10000
+
+		if float(h) >= rate * 10000.0:
+			continue
+
+		var spot := Rect2(float(cell.x) - 0.5 - 0.4, float(cell.y) - 0.5 - 0.4, 1.8, 1.8)
+		var near_object: bool = false
+
+		for bl in blockers:
+			if (bl as Rect2).intersects(spot):
+				near_object = true
+				break
+
+		if near_object:
+			continue
+
+		var ck := Vector2i(int(floorf(float(cell.x) / float(PUDDLE_CHUNK))), int(floorf(float(cell.y) / float(PUDDLE_CHUNK))))
+
+		if not chunks.has(ck):
+			chunks[ck] = []
+
+		(chunks[ck] as Array).append([cell, h])
+
+	for ck in chunks.keys():
+		var sts: Array = []
+
+		for v in range(4):
+			var st := SurfaceTool.new()
+			st.begin(Mesh.PRIMITIVE_TRIANGLES)
+			sts.append(st)
+
+		var counts: Array = [0, 0, 0, 0]
+		var lo := Vector2(INF, INF)
+		var hi := Vector2(-INF, -INF)
+
+		for entry in chunks[ck]:
+			var cell: Vector2i = entry[0]
+			var h: int = entry[1]
+			var v: int = h % 4
+			var size: float = 0.5 + float((h / 4) % 5) * 0.1
+			var cx: float = float(cell.x) + (float((h / 9) % 10) / 10.0 - 0.5) * 0.5
+			var cz: float = float(cell.y) + (float((h / 13) % 10) / 10.0 - 0.5) * 0.5
+			_add_flat_quad(sts[v], cx, cz, size, 0.0, 0.022, size)
+			counts[v] += 1
+			lo = Vector2(minf(lo.x, cx - size), minf(lo.y, cz - size))
+			hi = Vector2(maxf(hi.x, cx + size), maxf(hi.y, cz + size))
+
+		var mesh := ArrayMesh.new()
+		var cmats: Array = []
+
+		for v in range(4):
+			if counts[v] > 0:
+				(sts[v] as SurfaceTool).commit(mesh)
+				cmats.append(_litter_mats[v])
+
+		if cmats.is_empty():
+			continue
+
+		var key: String = "litter_%d_%d" % [ck.x, ck.y]
+		view._set_mesh_item(key, mesh, cmats, lo, hi, 0.1, "litter", DECAL_RANK - 0.03, false)
+		(view._items[key]["mesh"] as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		_litter_keys.append(key)
+
+
 # ---------------------------------------------------------------- 발자국
 
 # 사람이 움직인 만큼(칸) 걸음을 쌓고, 한 걸음마다 왼발·오른발을 번갈아 찍는다. snow_here: 지금 밟는 땅이 눈밭인지.

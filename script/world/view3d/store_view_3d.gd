@@ -91,6 +91,7 @@ var weather_override: String = ""  # 개발용: clear / rain / snow. 비우면 �
 var weather_override_intensity: float = 0.85
 var weather: Dictionary = {"kind": "clear", "intensity": 0.0}  # 지금 날씨(부드럽게 변하는 값)
 var _weather_overlay: WeatherOverlay
+var _leaf_overlay: LeafOverlay
 var decals: GroundDecals  # 물웅덩이·눈 발자국
 var wetness: float = 0.0  # 젖은 정도 0~1(비가 오면 빨리 오르고, 그친 뒤 천천히 마른다)
 var season_override: String = ""  # 개발용: 비우면 달력(GameState.total_day)을 따른다
@@ -154,6 +155,10 @@ func _build_view() -> void:
 	_weather_overlay.pixel = shrink
 	_weather_overlay.visible = false
 	_canvas.add_child(_weather_overlay)
+	_leaf_overlay = LeafOverlay.new()
+	_leaf_overlay.pixel = shrink
+	_leaf_overlay.visible = false
+	_canvas.add_child(_leaf_overlay)
 
 	_viewport = SubViewport.new()
 	_viewport.own_world_3d = true
@@ -409,6 +414,11 @@ func _update_weather(delta: float) -> void:
 		_post_material.set_shader_parameter("wet", wetness)
 	_weather_overlay.pixel = shrink
 	_weather_overlay.set_weather(str(weather["kind"]), k)
+
+	# 가을 낙엽: leaf_fall 이 켜진 계절에만. 비·눈이 오면 줄어든다.
+	var leaf_on: float = float(SeasonStyle.style(current_season()).get("leaf_fall", 0.0))
+	_leaf_overlay.pixel = shrink
+	_leaf_overlay.set_amount(leaf_on * (1.0 - clampf(k * 1.5, 0.0, 1.0)))
 
 
 # 지금 계절(spring/summer/autumn/winter). season_override 가 있으면 그것, 아니면 달력.

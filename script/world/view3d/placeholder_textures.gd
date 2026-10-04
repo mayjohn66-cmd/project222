@@ -490,7 +490,7 @@ static func bread_sign() -> ImageTexture:
 
 
 # 풀 다발(십자로 세우는 컷아웃용): 투명 배경에 풀잎 몇 가닥. flower 면 끝에 점 하나(분홍/흰). 8×7 도트.
-static func grass_tuft(flower: bool) -> ImageTexture:
+static func grass_tuft(flower: bool, variant: int = 0) -> ImageTexture:
 	var w: int = 8
 	var h: int = 7
 	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
@@ -511,9 +511,13 @@ static func grass_tuft(flower: bool) -> ImageTexture:
 			img.set_pixel(bx, y, c)
 
 	if flower:
-		img.set_pixel(4, 0, Color(1.0, 0.85, 0.9))
-		img.set_pixel(3, 1, Color(0.95, 0.5, 0.65))
-		img.set_pixel(5, 1, Color(0.95, 0.5, 0.65))
+		# 꽃 색 4가지: 분홍 / 노랑 / 흰색 / 연보라
+		var heads: Array = [[Color(1.0, 0.85, 0.9), Color(0.95, 0.5, 0.65)], [Color(1.0, 0.97, 0.7), Color(1.0, 0.8, 0.2)], [Color(1.0, 1.0, 1.0), Color(0.88, 0.9, 0.98)], [Color(0.9, 0.82, 1.0), Color(0.65, 0.5, 0.92)]]
+		var hc: Array = heads[variant % heads.size()]
+		img.set_pixel(4, 0, hc[0])
+		img.set_pixel(3, 1, hc[1])
+		img.set_pixel(5, 1, hc[1])
+		img.set_pixel(1, 2, hc[1])
 
 	return ImageTexture.create_from_image(img)
 
@@ -1717,5 +1721,22 @@ static func footprint() -> ImageTexture:
 		for x in range(0, 8):
 			if img.get_pixel(x, y).a > 0.5 and y > 0 and img.get_pixel(x, y - 1).a < 0.5:
 				img.set_pixel(x, y, rim)
+
+	return ImageTexture.create_from_image(img)
+
+
+# 낙엽 도트 그림(8×8 투명 배경): 땅에 흩어진 낙엽 두세 장. variant 0 주황 / 1 붉은 / 2 노랑 / 3 갈색.
+static func leaf_litter(variant: int) -> ImageTexture:
+	var img := Image.create(8, 8, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var cols: Array = [Color(0.92, 0.5, 0.15), Color(0.78, 0.22, 0.14), Color(0.95, 0.78, 0.25), Color(0.55, 0.36, 0.2)]
+	var c: Color = cols[variant % cols.size()]
+	var dark: Color = c.darkened(0.25)
+
+	for p in [Vector2i(1, 1), Vector2i(2, 1), Vector2i(2, 2), Vector2i(5, 3), Vector2i(6, 3), Vector2i(5, 4), Vector2i(2, 6), Vector2i(3, 6)]:
+		img.set_pixelv(p, c)
+
+	for p in [Vector2i(3, 2), Vector2i(6, 4), Vector2i(4, 6)]:
+		img.set_pixelv(p, dark)
 
 	return ImageTexture.create_from_image(img)

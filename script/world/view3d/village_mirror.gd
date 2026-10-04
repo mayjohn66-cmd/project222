@@ -236,6 +236,7 @@ func sync_ground() -> void:
 
 	_snow_cells = per_kind.get("grass", [])
 	_bush_sig = ""
+	_tree_sig = ""
 
 	_puddle_per_kind = per_kind
 	_puddle_dirty = true
@@ -259,6 +260,7 @@ func clear_ground() -> void:
 	_clear_tufts()
 	_clear_snowmen()
 	_clear_bushes()
+	_clear_trees()
 
 	for kind in _ground.keys():
 		(_ground[kind]["mesh"] as Node).queue_free()
@@ -296,6 +298,7 @@ func set_season(season_id: String) -> void:
 func reset_signatures() -> void:
 	_hidden.clear()
 	_bush_sig = ""
+	_tree_sig = ""
 	_puddle_dirty = true
 	_snow_dirty = true
 	_ground_signature = ""
@@ -356,48 +359,68 @@ func _sync_tufts(grass_cells: Array) -> void:
 		return  # 겨울: 눈에 덮여 풀 다발이 없다
 
 	var mat_plain: ShaderMaterial = _cutout_material(PlaceholderTextures.grass_tuft(false))
-	var mat_flower: ShaderMaterial = _cutout_material(PlaceholderTextures.grass_tuft(true))
 	mat_plain.set_shader_parameter("tint", sst["tuft_tint"])
-	mat_flower.set_shader_parameter("tint", sst["tuft_tint"])
+	var mat_flowers: Array = []  # 꽃 색 4가지마다 재질 하나
+
+	for fv in range(4):
+		var mf: ShaderMaterial = _cutout_material(PlaceholderTextures.grass_tuft(true, fv))
+		mf.set_shader_parameter("tint", sst["tuft_tint"])
+		mat_flowers.append(mf)
+
+	var density: float = float(sst.get("tuft_density", 0.56))
 	var flower_rate: float = float(sst["flower_rate"])
-	var half_w: float = 0.2
-	var height: float = 0.32
+	var tuft_h: float = float(sst.get("tuft_height", 1.0))
+	var half_w: float = 0.2 * (1.0 + 0.25 * (tuft_h - 1.0))
+	var height: float = 0.32 * tuft_h
 
 	for ck in chunks.keys():
 		var st_plain := SurfaceTool.new()
 		st_plain.begin(Mesh.PRIMITIVE_TRIANGLES)
-		var st_flower := SurfaceTool.new()
-		st_flower.begin(Mesh.PRIMITIVE_TRIANGLES)
+		var st_flowers: Array = []
+
+		for fv in range(4):
+			var stf := SurfaceTool.new()
+			stf.begin(Mesh.PRIMITIVE_TRIANGLES)
+			st_flowers.append(stf)
+
 		var n_plain: int = 0
-		var n_flower: int = 0
+		var n_flower: Array = [0, 0, 0, 0]
 		var lo := Vector2(INF, INF)
 		var hi := Vector2(-INF, -INF)
 
 		for cell in chunks[ck]:
 			var h: int = absi((cell.x * 73856093) ^ (cell.y * 19349663)) % 1000
 
-			if h >= 560:
+			if float(h) >= density * 1000.0:
 				continue
 
-			var count: int = 2 if h < 140 else 1
+			# 풀이 무성한 계절(density 높음)은 한 칸에 최대 셋까지 난다.
+			var count: int = 1
+
+			if float(h) < density * 250.0:
+				count = 2
+
+			if density > 0.8 and float(h) < density * 90.0:
+				count = 3
 
 			for k in range(count):
 				var hh: int = absi(h * 31 + k * 977) % 1000
-				var cx: float = float(cell.x) + (float(hh % 100) / 100.0 - 0.5) * 0.7
-				var cz: float = float(cell.y) + (float((hh / 100) % 10) / 10.0 - 0.5) * 0.7
+				var cx: float = float(cell.x) + (float(hh % 100) / 100.0 - 0.5) * 0.8
+				var cz: float = float(cell.y) + (float((hh / 100) % 10) / 10.0 - 0.5) * 0.8
 				var flower: bool = float(hh % 97) < 14.0 * flower_rate
-				var st: SurfaceTool = st_flower if flower else st_plain
-				_add_tuft(st, cx, cz, half_w, height)
+				var fv: int = (hh / 7) % 4
 
 				if flower:
-					n_flower += 1
+					_add_tuft(st_flowers[fv], cx, cz, half_w, height)
+					n_flower[fv] += 1
 				else:
+					_add_tuft(st_plain, cx, cz, half_w, height * (0.85 + float(hh % 5) * 0.08))  # 키도 제각각
 					n_plain += 1
 
 				lo = Vector2(minf(lo.x, cx - half_w), minf(lo.y, cz - half_w))
 				hi = Vector2(maxf(hi.x, cx + half_w), maxf(hi.y, cz + half_w))
 
-		if n_plain + n_flower == 0:
+		if n_plain + int(n_flower[0]) + int(n_flower[1]) + int(n_flower[2]) + int(n_flower[3]) == 0:
 			continue
 
 		var mesh := ArrayMesh.new()
@@ -407,9 +430,10 @@ func _sync_tufts(grass_cells: Array) -> void:
 			st_plain.commit(mesh)
 			mats.append(mat_plain)
 
-		if n_flower > 0:
-			st_flower.commit(mesh)
-			mats.append(mat_flower)
+		for fv in range(4):
+			if int(n_flower[fv]) > 0:
+				(st_flowers[fv] as SurfaceTool).commit(mesh)
+				mats.append(mat_flowers[fv])
 
 		var key: String = "tuft_%d_%d" % [ck.x, ck.y]
 		view._set_mesh_item(key, mesh, mats, lo, hi, 0.3, "tuft", TUFT_RANK, false)
@@ -529,6 +553,7 @@ func restore_collisions(world: Node) -> void:
 		return
 
 	_clear_snowmen()
+	_clear_trees()
 	_snow_dirty = true
 
 	for container_name in CONTAINERS:
@@ -561,6 +586,9 @@ var _snow_bodies: Array = []  # 눈사람 충돌 몸체(2D). 3D 를 끄면 지�
 var _snow_dirty: bool = true
 var _bush_keys: Array = []
 var _bush_sig: String = ""
+var _tree_keys: Array = []
+var _tree_bodies: Array = []
+var _tree_sig: String = ""
 var _puddle_per_kind: Dictionary = {}
 var _puddle_dirty: bool = true
 
@@ -637,6 +665,103 @@ func _sync_snowmen() -> void:
 			_snow_bodies.append(body)
 
 
+func _clear_trees() -> void:
+	for k in _tree_keys:
+		view._remove_item(str(k))
+
+	_tree_keys.clear()
+
+	for body in _tree_bodies:
+		if is_instance_valid(body):
+			(body as Node).queue_free()
+
+	_tree_bodies.clear()
+	_tree_sig = ""
+
+
+# 풀밭에 나무가 "자란다": 자리와 종류는 칸 위치로 영구히 정해지고(계절이 바뀌어도 같은 자리), 심어진 날(칸마다 다름)에서 시간이 지날수록
+# 묘목 → 어린 나무 → 큰 나무로 커진다. 종류는 계절 규칙(벚꽃은 봄만, 가을 단풍, 겨울 맨가지·일부 사라짐)을 따른다.
+# 건물·소품에서 떨어진 곳에만 나고, 줄기 크기의 충돌이 있다. 3그룹(3×3칸 구역)마다 하나까지.
+func _sync_trees() -> void:
+	var st: Dictionary = SeasonStyle.style(season if season != "" else "spring")
+	var rate: float = float(st.get("tree_rate", 0.0))
+	var gstate: Dictionary = _grow_state()
+	var total_day: int = int(gstate["total"])
+	var sig: String = "%s|%d|%d" % [season, total_day / 5, _footprints.size()]
+
+	if sig == _tree_sig:
+		return
+
+	_clear_trees()
+	_tree_sig = sig
+
+	if rate <= 0.0:
+		return
+
+	var p: Dictionary = _params()
+	var placed: Dictionary = {}
+
+	for cell in _snow_cells:
+		var h: int = absi(((cell.x * 2654435761) ^ (cell.y * 97531)) + 9173) % 10000
+
+		if float(h) >= rate * 10000.0:
+			continue
+
+		var gk := Vector2i(int(floorf(float(cell.x) / 3.0)), int(floorf(float(cell.y) / 3.0)))
+
+		if placed.has(gk):
+			continue
+
+		var age: int = total_day + (h % 150)
+		var scale_f: float = 0.45 if age < 20 else (0.65 if age < 50 else (0.85 if age < 90 else 1.0))
+		var spot := Rect2(float(cell.x) - 0.5 - 1.2, float(cell.y) - 0.5 - 1.2, 1.0 + 2.4, 1.0 + 2.4)
+		var blocked: bool = false
+
+		for fp in _footprints.values():
+			if (fp as Rect2).intersects(spot):
+				blocked = true
+				break
+
+		if blocked:
+			continue
+
+		var variant: String = TREE_VARIANTS[(h / 16) % TREE_VARIANTS.size()]
+		var rule: Dictionary = {"style": "tree", "kind": "prop", "variant": variant, "generated": true}
+		rule = SeasonStyle.adjust_rule(rule, season if season != "" else "spring", h)
+
+		if bool(rule.get("season_hide", false)):
+			continue
+
+		placed[gk] = true
+		var half := Vector2(0.5, 0.5)
+		var built: Dictionary = VillageAssets.build_prop("tree", -half, half, rule, p)
+		SeasonStyle.tint_specs(built["specs"], rule, season if season != "" else "spring")
+		var key: String = "tree_%d_%d" % [cell.x, cell.y]
+		var lo := Vector2(float(cell.x) - 0.5, float(cell.y) - 0.5)
+		view._set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), lo, lo + Vector2.ONE, float(built["total_blocks"]) * scale_f, "tree", NAN, true)
+		var inst: MeshInstance3D = view._items[key]["mesh"]
+		inst.position = Vector3(float(cell.x), 0.0, float(cell.y))
+		inst.scale = Vector3.ONE * scale_f
+		_tree_keys.append(key)
+
+		if view.sync_collision and view.world != null:
+			var body := StaticBody2D.new()
+			body.name = "TreeCollider%d_%d" % [cell.x, cell.y]
+			body.collision_layer = 1
+			body.collision_mask = 0
+			view.world.add_child(body)
+			var poly := CollisionPolygon2D.new()
+			var pts := PackedVector2Array()
+			var r: float = 0.22 * maxf(scale_f, 0.6)
+
+			for corner in [Vector2(-r, -r), Vector2(r, -r), Vector2(r, r), Vector2(-r, r)]:
+				pts.append(body.to_local(view.cell_to_world(Vector2(cell.x, cell.y) + corner)))
+
+			poly.polygon = pts
+			body.add_child(poly)
+			_tree_bodies.append(body)
+
+
 func _clear_bushes() -> void:
 	for k in _bush_keys:
 		view._remove_item(str(k))
@@ -650,10 +775,10 @@ func _grow_state() -> Dictionary:
 	var gs: Node = view.get_node_or_null("/root/GameState")
 
 	if view.season_override != "" or gs == null:
-		return {"seed": hash(season), "day": 20}
+		return {"seed": hash(season), "day": 20, "total": 400}
 
 	var td: int = int(gs.get("total_day"))
-	return {"seed": (td - 1) / CalendarData.DAYS_PER_SEASON, "day": ((td - 1) % CalendarData.DAYS_PER_SEASON) + 1}
+	return {"seed": (td - 1) / CalendarData.DAYS_PER_SEASON, "day": ((td - 1) % CalendarData.DAYS_PER_SEASON) + 1, "total": td}
 
 
 # 풀밭에 덤불이 "자란다": 칸 위치와 계절 번호로 자리가 정해지고(같은 계절엔 같은 자리), 계절 안에서 싹 트는 날이 제각각이라
@@ -737,6 +862,10 @@ func sync_objects(world: Node) -> void:
 			var text: String = (str(body.name) + " " + str(sprite_info["path"])).to_lower()
 			var obj_seed: int = absi(hash(container_name + "/" + str(body.name))) % 100003
 			var rule: Dictionary = apply_variation(_find_rule(text), obj_seed)
+			if container_name == "VillageGathering":
+				rule = rule.duplicate()
+				rule["fixed_spot"] = true  # 채집 자리: 덤불·나무를 랜덤 배치로 바꾸지 않고 그 자리에 둔다
+
 			rule = SeasonStyle.adjust_rule(rule, season if season != "" else "spring", obj_seed)
 			var key: String = "vil%d" % body.get_instance_id()
 			var sig: String = "%s|%s|%s|%s" % [str(rect.position.snapped(Vector2(0.02, 0.02))), str(rect.size.snapped(Vector2(0.02, 0.02))), text, season]
@@ -774,11 +903,13 @@ func sync_objects(world: Node) -> void:
 		_sync_snowmen()
 
 	_sync_bushes()
+	_sync_trees()
 
 	if _puddle_dirty and view.decals != null:
 		_puddle_dirty = false
 		var snowy: bool = str(SeasonStyle.style(season if season != "" else "spring").get("grass_kind", "grass")) == "snow"
 		view.decals.rebuild_puddles(_puddle_per_kind, snowy, _footprints.values())
+		view.decals.rebuild_litter(_puddle_per_kind.get("grass", []), float(SeasonStyle.style(season if season != "" else "spring").get("litter_rate", 0.0)), _footprints.values())
 
 	# 사라진 물체 정리
 	for k in _keys.keys():
