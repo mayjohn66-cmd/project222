@@ -336,6 +336,12 @@ static func _standard_roof_faces(mesh: ArrayMesh, present: Array, lo: Vector2, h
 		var r_b: Vector3 = _p(ridge_x, (r1 if hip else ub), vc, peak)
 		var r_a: Vector3 = _p(ridge_x, (r0 if hip else ua), vc, peak)
 
+		# 박공 가장자리(보이는 +u 끝) 두께와 아래로 늘어진 널: 지붕과 같은 면(재질)에 넣어 그리기 순서가 지붕과 섞이지 않게 하고, 어두운 선으로 튀지 않게 한다.
+		if not hip:
+			var rdown: Vector3 = -n * t
+			var fd := Vector3(0.0, -FASCIA_DROP * 0.6, 0.0)
+			_quad(st, q_b, r_b, r_b + rdown + fd, q_b + rdown + fd, _n(ridge_x, 1.0, 0.0, 0.0), Vector2(0, 0), Vector2(slope_len, 0), Vector2(slope_len, 0.3), Vector2(0, 0.3))
+
 		if hip:
 			_quad(st, q_a, q_b, r_b, r_a, n, Vector2(0, slope_len), Vector2(ub - ua, slope_len), Vector2(r1 - ua, 0), Vector2(r0 - ua, 0))
 		else:
@@ -383,15 +389,6 @@ static func _standard_roof_faces(mesh: ArrayMesh, present: Array, lo: Vector2, h
 			_fascia(st, top_eave_a, top_eave_b, _n(ridge_x, 0.0, side, 0.0), ub - ua)
 			continue
 
-		# 박공 가장자리 둘(경사를 따라 달리는 두께 면): 용마루 축 바깥 방향 법선
-		# 처마·박공 가장자리 아래로 늘어지는 목재 가장자리 널(fascia). 지붕이 종잇장처럼 얇아 보이지 않게 한다.
-		_fascia(st, top_eave_a, top_eave_b, _n(ridge_x, 0.0, side, 0.0), ub - ua)
-		_fascia(st, top_eave_b, top_ridge_b, _n(ridge_x, 1.0, 0.0, 0.0), slope_len)
-		_fascia(st, top_ridge_a, top_eave_a, _n(ridge_x, -1.0, 0.0, 0.0), slope_len)
-		_quad(st, top_eave_b, top_ridge_b, bot_ridge_b, bot_eave_b, _n(ridge_x, 1.0, 0.0, 0.0), Vector2(0, 0), Vector2(slope_len, 0), Vector2(slope_len, 1), Vector2(0, 1))
-		_quad(st, top_ridge_a, top_eave_a, bot_eave_a, bot_ridge_a, _n(ridge_x, -1.0, 0.0, 0.0), Vector2(0, 0), Vector2(slope_len, 0), Vector2(slope_len, 1), Vector2(0, 1))
-		# 밑면
-		_quad(st, bot_eave_a, bot_eave_b, bot_ridge_b, bot_ridge_a, -n_roof, Vector2(0, 0), Vector2(ub - ua, 0), Vector2(ub - ua, slope_len), Vector2(0, slope_len))
 
 	if hip:
 		# 양 끝 처마 단면(두께)
@@ -406,6 +403,28 @@ static func _standard_roof_faces(mesh: ArrayMesh, present: Array, lo: Vector2, h
 
 
 
+# 굴뚝 치수(몸통 반폭 ch, 머릿돌 윗면 높이 cap_y, 구멍 위치). village_assets 가 같은 값으로 연통 구멍을 얹는다.
+static func chimney_info(lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, options: Dictionary, ridge_x: bool) -> Dictionary:
+	var peak: float = wall_h + roof_h
+	var u1: float = (hi.x if ridge_x else hi.y)
+	var v0: float = (lo.y if ridge_x else lo.x)
+	var v1: float = (hi.y if ridge_x else hi.x)
+	var vc: float = (v0 + v1) * 0.5
+	var hs: float = (v1 - v0) * 0.5 + options.get("overhang", 0.14)
+	var cv: float = vc + 0.2  # 보이는 쪽(+) 경사 위
+	var big: bool = bool(options.get("chimney_big", false))
+	var ch: float = 0.34 if big else 0.22
+	# 몸통 바닥은 지붕에서 가장 낮은 모서리 높이에 맞춘다(모임지붕은 끝쪽 경사도 고려). 안 그러면 굴뚝이 지붕에서 떠 보인다.
+	var frac: float = (hs - 0.2 - ch) / hs
+
+	if bool(options.get("hip", false)):
+		frac = minf(frac, (CHIMNEY_INSET + options.get("overhang", 0.14) - ch) / hs)
+
+	var slope_y: float = wall_h + roof_h * clampf(frac, 0.0, 1.0) + 0.24
+	var top_y: float = peak + (0.65 if big else 0.28)
+	return {"cu": u1 - CHIMNEY_INSET, "cv": cv, "ch": ch, "base_y": slope_y - 0.12, "top_y": top_y, "cap_y": top_y + 0.1}
+
+
 static func _chimney_and_awning(mesh: ArrayMesh, present: Array, lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, options: Dictionary, ridge_x: bool) -> void:
 	var peak: float = wall_h + roof_h
 	var u1: float = (hi.x if ridge_x else hi.y)
@@ -418,15 +437,13 @@ static func _chimney_and_awning(mesh: ArrayMesh, present: Array, lo: Vector2, hi
 	st = _begin()
 
 	if options.get("chimney", true):
-		var cu: float = u1 - CHIMNEY_INSET
-		var cv: float = vc + 0.2  # 보이는 쪽(+) 경사 위
-		var slope_y: float = wall_h + roof_h * (1.0 - 0.2 / hs * 1.0)  # cv 위치의 지붕 표면 높이(근사)
-		var base_y: float = slope_y - 0.12
-		var big: bool = bool(options.get("chimney_big", false))
-		var ch: float = 0.26 if big else 0.15
-		var top_y: float = peak + (0.65 if big else 0.2)
-		_box_uv(st, ridge_x, cu - ch, cu + ch, cv - ch, cv + ch, base_y, top_y)
-		_box_uv(st, ridge_x, cu - ch - 0.05, cu + ch + 0.05, cv - ch - 0.05, cv + ch + 0.05, top_y, top_y + 0.06)  # 머릿돌
+		var info: Dictionary = chimney_info(lo, hi, wall_h, roof_h, options, ridge_x)
+		var cu: float = info["cu"]
+		var cv: float = info["cv"]
+		var ch: float = info["ch"]
+		var top_y: float = info["top_y"]
+		_box_uv(st, ridge_x, cu - ch, cu + ch, cv - ch, cv + ch, info["base_y"], top_y)
+		_box_uv(st, ridge_x, cu - ch - 0.07, cu + ch + 0.07, cv - ch - 0.07, cv + ch + 0.07, top_y - 0.04, top_y + 0.1)  # 머릿돌(두껍게)
 
 	present.append(_commit(st, mesh))
 

@@ -155,6 +155,8 @@ static func _bay(c: Dictionary) -> void:
 	win_on_x(parts, hi.y + depth * 0.5, wy0, wy1, depth * 0.3, cx + half, false)
 	var rt: Dictionary = c["roof_spec"]
 	VillageAssets.slope(b, "bay_roof", rt, Vector3(cx - half - 0.05, y1 + 0.16, hi.y), Vector3(cx + half + 0.05, y1 + 0.16, hi.y), Vector3(cx + half + 0.05, y1, hi.y + depth + 0.08), Vector3(cx - half - 0.05, y1, hi.y + depth + 0.08), Vector3(0.0, depth + 0.08, 0.16).normalized(), 2.0 * half + 0.1, depth + 0.1)
+	_cheek(b, wall, Vector3(cx + half + 0.03, y1, hi.y), Vector3(cx + half + 0.03, y1 + 0.16, hi.y), Vector3(cx + half + 0.03, y1, hi.y + depth + 0.06))
+	VillageAssets.box(b, "bay_plinth", VillageAssets.stone_spec(p, Color(0.8, 0.78, 0.74), "bay_plinth"), Vector3(cx - half - 0.03, y0 - 0.1, hi.y), Vector3(cx + half + 0.03, y0 + 0.02, hi.y + depth + 0.03))
 
 
 static func _annex(c: Dictionary) -> void:
@@ -181,6 +183,25 @@ static func _annex(c: Dictionary) -> void:
 	var drop: float = 0.3
 	VillageAssets.slope(b, "annex_roof", rt, Vector3(hi.x - 0.02, ah + drop, z0 - 0.1), Vector3(hi.x - 0.02, ah + drop, z1 + 0.1), Vector3(hi.x + run + 0.12, ah, z1 + 0.1), Vector3(hi.x + run + 0.12, ah, z0 - 0.1), Vector3(drop, run + 0.14, 0.0).normalized(), z1 - z0 + 0.2, run + 0.16)
 	VillageAssets.box(b, "annex_fascia", c["trim_spec"], Vector3(hi.x + run + 0.08, ah - 0.06, z0 - 0.1), Vector3(hi.x + run + 0.14, ah + 0.02, z1 + 0.1))
+	# 지붕 옆 틈 메우기(삼각 볼) + 돌 밑단 + 모서리 기둥: 본채 벽과 같은 차림으로 맞춰 "덧붙인 상자"처럼 보이지 않게 한다.
+	_cheek(b, wall, Vector3(hi.x - 0.02, ah, z1 + 0.06), Vector3(hi.x - 0.02, ah + drop, z1 + 0.06), Vector3(hi.x + run + 0.1, ah, z1 + 0.06))
+	VillageAssets.box(b, "annex_plinth", VillageAssets.stone_spec(p, Color(0.8, 0.78, 0.74), "annex_plinth"), Vector3(hi.x - 0.05, 0.0, z0 - 0.03), Vector3(xe + 0.03, 0.14, z1 + 0.03))
+	var post_spec: Dictionary = VillageAssets.spec(PlaceholderTextures.flat_color(ts, c["timber"]), Color.WHITE, "annex_post", "별채 모서리 기둥·윗보 목재 단색 %d×%d" % [ts, ts])
+	VillageAssets.box(b, "annex_post", post_spec, Vector3(xe - 0.04, 0.12, z1 - 0.02), Vector3(xe + 0.05, ah, z1 + 0.05))
+	VillageAssets.box(b, "annex_post", post_spec, Vector3(xe - 0.04, 0.12, z0 - 0.03), Vector3(xe + 0.05, ah, z0 + 0.04))
+	VillageAssets.box(b, "annex_beam", post_spec, Vector3(hi.x - 0.05, ah - 0.09, z1 - 0.02), Vector3(xe + 0.05, ah, z1 + 0.05))
+	VillageAssets.box(b, "annex_beam", post_spec, Vector3(xe - 0.04, ah - 0.09, z0 - 0.03), Vector3(xe + 0.05, ah, z1 + 0.05))
+
+
+# 세 점(a,b,c)으로 이루어진 삼각 판 하나(지붕 아래 옆 틈을 벽 재질로 막는다). 바깥을 향한 면은 자동으로 맞춘다.
+static func _cheek(b, spec: Dictionary, pa: Vector3, pb: Vector3, pc: Vector3) -> void:
+	var st: SurfaceTool = b.new_part(spec, pa, pc)
+	var n: Vector3 = (pb - pa).cross(pc - pa).normalized()
+
+	if n.x + n.z < 0.0:
+		n = -n
+
+	BuildingMesh._tri(st, pa, pb, pc, n, Vector2(0, 1), Vector2(0, 0), Vector2(1, 1))
 
 
 static func _tower(c: Dictionary) -> void:

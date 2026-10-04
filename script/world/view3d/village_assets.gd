@@ -535,6 +535,9 @@ static func build_gable(lo: Vector2, hi: Vector2, rule: Dictionary, p: Dictionar
 		_add_fascia(b, p, lo, hi, wall_h, h_texels, str(rule.get("sign_text", "BAKERY")), str(rule.get("sign_icon", "bread")))
 		_add_cloth_awning(b, p, lo, hi, wall_h, cells_z, cells_z / 2, awning_tint)
 
+	if bool(rule.get("chimney", true)):
+		_add_flue(b, lo, hi, wall_h, roof_h, options, width >= depth, p)
+
 	var smoke_anims: Array = []
 
 	if bool(rule.get("chimney", true)):
@@ -626,6 +629,19 @@ static func _add_eave_nubs(b: PartBuilder, lo: Vector2, hi: Vector2, wall_h: flo
 			box(b, "eave", cap, Vector3(v_edge - 0.02, wall_h - 0.07, a), Vector3(v_edge + 0.09, wall_h + 0.03, c))
 
 
+# 굴뚝 머릿돌 위의 어두운 연통 구멍(검은 사각 속)과 안쪽 그을음 띠. 평범한 사각 기둥으로 보이지 않게 한다.
+static func _add_flue(b: PartBuilder, lo: Vector2, hi: Vector2, wall_h: float, roof_h: float, options: Dictionary, ridge_x: bool, p: Dictionary) -> void:
+	var info: Dictionary = BuildingMesh.chimney_info(lo, hi, wall_h, roof_h, options, ridge_x)
+	var ts: int = p["ts"]
+	var cx: float = info["cu"] if ridge_x else info["cv"]
+	var cz: float = info["cv"] if ridge_x else info["cu"]
+	var y: float = info["cap_y"]
+	var ch: float = info["ch"]
+	var soot: Dictionary = spec(PlaceholderTextures.flat_color(ts, Color(0.1, 0.07, 0.06)), Color.WHITE, "flue", "굴뚝 연통 구멍 단색 %d×%d 거의 검정" % [ts, ts])
+	var h: float = ch * 0.62
+	box(b, "flue", soot, Vector3(cx - h, y - 0.01, cz - h), Vector3(cx + h, y + 0.02, cz + h), 20.0)
+
+
 # 굴뚝 연기: 위로 갈수록 커지고 옆으로 번지는 흰 덩어리 셋(정지 상태). 2D 그림의 연기를 대신한다.
 # 굴뚝 연기 부품 목록: 연기 덩어리 셋이 굴뚝 위에서 위로 떠오르며 커졌다 작아지길 반복한다(drift). 위상을 어긋나게 해서 끊기지 않고 이어져 보인다.
 static func _smoke_anims(lo: Vector2, hi: Vector2, peak: float, p: Dictionary, big: bool = false) -> Array:
@@ -636,7 +652,7 @@ static func _smoke_anims(lo: Vector2, hi: Vector2, peak: float, p: Dictionary, b
 	var cx: float = cu if ridge_x else cv
 	var cz: float = cv if ridge_x else cu
 	var puff: Dictionary = spec(PlaceholderTextures.flat_color(ts, Color(0.92, 0.9, 0.9)), Color.WHITE, "smoke", "굴뚝 연기 단색 %d×%d 연한 회백색" % [ts, ts])
-	var y: float = peak + (0.8 if big else 0.34)
+	var y: float = peak + (0.95 if big else 0.52)
 	var out: Array = []
 
 	for k in range(3):
@@ -657,7 +673,7 @@ static func _add_smoke(b: PartBuilder, lo: Vector2, hi: Vector2, peak: float, p:
 	var cx: float = cu if ridge_x else cv
 	var cz: float = cv if ridge_x else cu
 	var puff: Dictionary = spec(PlaceholderTextures.flat_color(ts, Color(0.92, 0.9, 0.9)), Color.WHITE, "smoke", "굴뚝 연기 단색 %d×%d 연한 회백색" % [ts, ts])
-	var y: float = peak + (0.8 if big else 0.34)
+	var y: float = peak + (0.95 if big else 0.52)
 
 	pass
 
