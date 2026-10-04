@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cf44lif584cbk"
+
+[deps]
+
+files=["res://data/expedition/expedition_environment_hints.season.translation", "res://data/expedition/expedition_environment_hints.weather.translation", "res://data/expedition/expedition_environment_hints.hint.translation"]
+
+source_file="res://data/expedition/expedition_environment_hints.csv"
+dest_files=["res://data/expedition/expedition_environment_hints.season.translation", "res://data/expedition/expedition_environment_hints.weather.translation", "res://data/expedition/expedition_environment_hints.hint.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

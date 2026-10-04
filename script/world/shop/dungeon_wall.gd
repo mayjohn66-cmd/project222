@@ -1,6 +1,6 @@
 extends Node2D
 ## A straight village boundary with an open road through its center.
-static var LOW_WALL: Texture2D = ArtLoader.load_texture("res://art/world/village_decor_v1/low_wall.png")
+const LOW_WALL := "res://art/world/village_decor_v1/low_wall.png"
 const SEGMENT_COLUMNS := [-7,-3,3,7]
 const SEGMENT_SCALE := Vector2(0.15,0.2)
 const SEGMENT_ANCHOR := Vector2(768,710)
@@ -20,11 +20,9 @@ func rebuild(terrain: Node2D) -> void:
 		segment.position = to_local(terrain.to_global(terrain.grid_to_local(cell)))
 		add_child(segment)
 
-		var sprite := Sprite2D.new()
+		var sprite := VillageArt.new()
 		sprite.name = "WallSprite"
-		sprite.texture = LOW_WALL
-		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		sprite.centered = false
+		sprite.art_path = LOW_WALL
 		# Mirror onto the other 2:1 ground axis without bending the artwork.
 		sprite.scale = Vector2(-SEGMENT_SCALE.x,SEGMENT_SCALE.y)
 		sprite.position = Vector2(SEGMENT_ANCHOR.x*SEGMENT_SCALE.x,-SEGMENT_ANCHOR.y*SEGMENT_SCALE.y)

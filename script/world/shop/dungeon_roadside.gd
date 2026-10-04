@@ -1,8 +1,8 @@
 extends Node2D
 ## Sparse landmarks along the lane leading out through the village fence.
-const SIGN = preload("res://art/world/route_props_v1/road_sign.png")
-const FENCE = preload("res://art/world/route_props_v1/wood_fence.png")
-const BUSH = preload("res://art/world/route_props_v1/flower_bush.png")
+const SIGN := "res://art/world/route_props_v1/road_sign.png"
+const FENCE := "res://art/world/route_props_v1/wood_fence.png"
+const BUSH := "res://art/world/route_props_v1/flower_bush.png"
 
 func rebuild(terrain: Node2D) -> void:
 	y_sort_enabled = true
@@ -28,11 +28,9 @@ func rebuild(terrain: Node2D) -> void:
 		body.set_meta("tile_cell",cell)
 		add_child(body)
 
-		var sprite := Sprite2D.new()
+		var sprite := VillageArt.new()
 		sprite.name = "PropSprite"
-		sprite.texture = placement[2]
-		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		sprite.centered = false
+		sprite.art_path = placement[2]
 		var size: float = placement[3]
 		var anchor: Vector2 = placement[4]
 		sprite.scale = Vector2.ONE*size

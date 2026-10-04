@@ -6,10 +6,10 @@ uid="uid://buf2gg6ke1ee7"
 
 [deps]
 
-files=["res://data/shop/events/store_events.title.translation", "res://data/shop/events/store_events.discovery.translation", "res://data/shop/events/store_events.discovery.translation", "res://data/shop/events/store_events.start.translation", "res://data/shop/events/store_events.end.translation", "res://data/shop/events/store_events.rumor.translation", "res://data/shop/events/store_events.dialogue.translation", "res://data/shop/events/store_events.description.translation"]
+files=["res://data/shop/events/store_events.title.translation", "res://data/shop/events/store_events.discovery.translation", "res://data/shop/events/store_events.discovery.translation", "res://data/shop/events/store_events.start.translation", "res://data/shop/events/store_events.end.translation", "res://data/shop/events/store_events.rumor.translation", "res://data/shop/events/store_events.dialogue.translation", "res://data/shop/events/store_events.description.translation", "res://data/shop/events/store_events.event.translation", "res://data/shop/events/store_events.season.translation", "res://data/shop/events/store_events.repeat.translation"]
 
 source_file="res://data/shop/events/store_events.csv"
-dest_files=["res://data/shop/events/store_events.title.translation", "res://data/shop/events/store_events.discovery.translation", "res://data/shop/events/store_events.discovery.translation", "res://data/shop/events/store_events.start.translation", "res://data/shop/events/store_events.end.translation", "res://data/shop/events/store_events.rumor.translation", "res://data/shop/events/store_events.dialogue.translation", "res://data/shop/events/store_events.description.translation"]
+dest_files=["res://data/shop/events/store_events.title.translation", "res://data/shop/events/store_events.discovery.translation", "res://data/shop/events/store_events.discovery.translation", "res://data/shop/events/store_events.start.translation", "res://data/shop/events/store_events.end.translation", "res://data/shop/events/store_events.rumor.translation", "res://data/shop/events/store_events.dialogue.translation", "res://data/shop/events/store_events.description.translation", "res://data/shop/events/store_events.event.translation", "res://data/shop/events/store_events.season.translation", "res://data/shop/events/store_events.repeat.translation"]
 
 [params]
 

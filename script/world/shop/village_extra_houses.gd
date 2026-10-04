@@ -1,10 +1,9 @@
 extends Node2D
 
 ## Rear-facing dwellings grouped beyond the east edge of the shared square.
-const COTTAGE = preload("res://art/world/village_houses_v2/moss_cottage_rear.png")
-const COTTAGE_180 = preload("res://art/world/village_houses_v2/moss_cottage_180.png")
-const TOWNHOUSE = preload("res://art/world/village_houses_v2/ochre_townhouse_rear_aligned.png")
-const COTTAGE_ROOF_SHADER = preload("res://art/world/village_houses_v2/cottage_roof_recolor.gdshader")
+const COTTAGE := "res://art/world/village_houses_v2/moss_cottage_rear.png"
+const COTTAGE_180 := "res://art/world/village_houses_v2/moss_cottage_180.png"
+const TOWNHOUSE := "res://art/world/village_houses_v2/ochre_townhouse_rear_aligned.png"
 const COTTAGE_ROOF_COLORS := {
 	"blue":"597d9c",
 	"terracotta":"ad6547",
@@ -19,7 +18,7 @@ func rebuild(terrain: Node2D) -> void:
 	_add_house(terrain,"SouthTownhouse",terrain.get_extra_house_cell(0),TOWNHOUSE,0.36,Vector2(768,1017),false,0.93)
 	_add_house(terrain,"EastCottage",terrain.get_extra_house_cell(1),COTTAGE,0.38,Vector2(770,1016),true)
 
-func _add_house(terrain: Node2D, house_name: String, cell: Vector2i, art: Texture2D, display_scale: float, anchor: Vector2, mirrored: bool, width_factor: float = 1.0) -> void:
+func _add_house(terrain: Node2D, house_name: String, cell: Vector2i, art: String, display_scale: float, anchor: Vector2, mirrored: bool, width_factor: float = 1.0) -> void:
 	var house := StaticBody2D.new()
 	house.name = house_name
 	house.collision_layer = 1
@@ -27,11 +26,9 @@ func _add_house(terrain: Node2D, house_name: String, cell: Vector2i, art: Textur
 	house.position = to_local(terrain.to_global(terrain.grid_to_local(cell)))
 	house.set_meta("tile_cell",cell)
 	add_child(house)
-	var sprite := Sprite2D.new()
+	var sprite := VillageArt.new()
 	sprite.name = "HouseSprite"
-	sprite.texture = art
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.centered = false
+	sprite.art_path = art
 	var horizontal_scale := display_scale*width_factor
 	sprite.scale = Vector2(-horizontal_scale if mirrored else horizontal_scale,display_scale)
 	sprite.position = Vector2(anchor.x*horizontal_scale if mirrored else -anchor.x*horizontal_scale,-anchor.y*display_scale)
@@ -52,11 +49,11 @@ func _add_house(terrain: Node2D, house_name: String, cell: Vector2i, art: Textur
 	house.add_child(footprint)
 
 func apply_cottage_roof_variant(house: StaticBody2D, variant: String) -> void:
-	var sprite := house.get_node_or_null("HouseSprite") as Sprite2D
-	if sprite == null or sprite.texture != COTTAGE: return
+	var sprite := house.get_node_or_null("HouseSprite") as VillageArt
+	if sprite == null or sprite.art_path != COTTAGE: return
 	var roof_color := variant
 	if variant == "front" or variant.begins_with("front_"):
-		sprite.texture = COTTAGE_180
+		sprite.art_path = COTTAGE_180
 		sprite.scale = Vector2(0.38,0.38)
 		sprite.position = Vector2(-768.0, -985.0)*0.38
 		var footprint := house.get_node_or_null("Footprint") as CollisionPolygon2D
@@ -66,8 +63,6 @@ func apply_cottage_roof_variant(house: StaticBody2D, variant: String) -> void:
 			])
 		roof_color = variant.trim_prefix("front_")
 	if not COTTAGE_ROOF_COLORS.has(roof_color): return
-	var roof_material := ShaderMaterial.new()
-	roof_material.shader = COTTAGE_ROOF_SHADER
-	roof_material.set_shader_parameter("roof_color",Color(COTTAGE_ROOF_COLORS[roof_color]))
-	roof_material.set_shader_parameter("front_facing",variant == "front" or variant.begins_with("front_"))
-	sprite.material = roof_material
+	# 지붕 색은 2D 셰이더 대신 값으로만 기록한다(3D 거울이 필요하면 읽는다).
+	sprite.set_meta("roof_color", COTTAGE_ROOF_COLORS[roof_color])
+	sprite.set_meta("front_facing", variant == "front" or variant.begins_with("front_"))

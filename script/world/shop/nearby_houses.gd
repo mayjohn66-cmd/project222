@@ -3,7 +3,7 @@ extends Node2D
 const DEFINITIONS = [
  ["RedRoofHouse","res://art/world/houses_v1/red_house.png",Vector2i(-5,7),Vector2(880,974),0.375]
 ]
-const RED_QUARTER_TURN = preload("res://art/world/houses_v1/red_house_quarter_turn.png")
+const RED_QUARTER_TURN := "res://art/world/houses_v1/red_house_quarter_turn.png"
 
 func rebuild(terrain: Node2D) -> void:
  y_sort_enabled = true
@@ -18,11 +18,9 @@ func rebuild(terrain: Node2D) -> void:
   house.collision_mask = 0
   house.position = to_local(terrain.to_global(terrain.grid_to_local(terrain.get_house_cell())))
   add_child(house)
-  var sprite := Sprite2D.new()
+  var sprite := VillageArt.new()
   sprite.name = "HouseSprite"
-  sprite.texture = load(definition[1])
-  sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-  sprite.centered = false
+  sprite.art_path = definition[1]
   # Front doors are about 60px high against the roughly 50px player.
   var display_scale: float = definition[4]
   var faces_right := true
@@ -43,12 +41,12 @@ func rebuild(terrain: Node2D) -> void:
 
 func apply_house_variant(house: StaticBody2D, source: String, variant: String) -> void:
  if variant != "quarter_turn" or not source.ends_with("/RedRoofHouse"): return
- var sprite := house.get_node_or_null("HouseSprite") as Sprite2D
+ var sprite := house.get_node_or_null("HouseSprite") as VillageArt
  var footprint := house.get_node_or_null("Footprint") as CollisionPolygon2D
  if sprite == null or footprint == null: return
  var display_scale := 0.375
  var anchor := Vector2(768,985)
- sprite.texture = RED_QUARTER_TURN
+ sprite.art_path = RED_QUARTER_TURN
  sprite.scale = Vector2(display_scale,display_scale)
  sprite.position = Vector2(-anchor.x*display_scale,-anchor.y*display_scale)
  var half_width := 205.0

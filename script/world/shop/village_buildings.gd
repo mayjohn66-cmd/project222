@@ -22,11 +22,9 @@ func rebuild(terrain: Node2D) -> void:
 		building.position = to_local(terrain.to_global(terrain.grid_to_local(cell)))
 		building.set_meta("tile_cell",cell)
 		add_child(building)
-		var sprite := Sprite2D.new()
+		var sprite := VillageArt.new()
 		sprite.name = "BuildingSprite"
-		sprite.texture = load(definition[1])
-		sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-		sprite.centered = false
+		sprite.art_path = definition[1]
 		var scale_value: float = definition[3]
 		var anchor: Vector2 = definition[2]
 		sprite.scale = Vector2.ONE*scale_value

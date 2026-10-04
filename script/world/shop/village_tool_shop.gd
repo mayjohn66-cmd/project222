@@ -11,11 +11,9 @@ func rebuild(terrain: Node2D) -> void:
 	body.collision_mask = 0
 	body.position = to_local(terrain.to_global(terrain.grid_to_local(terrain.get_tool_shop_cell())))
 	add_child(body)
-	var sprite := Sprite2D.new()
+	var sprite := VillageArt.new()
 	sprite.name = "BuildingSprite"
-	sprite.texture = load("res://art/world/tool_shop_v1/tool_shop.png")
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.centered = false
+	sprite.art_path = "res://art/world/tool_shop_v1/tool_shop.png"
 	sprite.scale = Vector2.ONE * 0.4
 	sprite.position = -Vector2(850,970) * 0.4
 	body.add_child(sprite)

@@ -543,11 +543,12 @@ func _footprint_cell_rect(body: StaticBody2D) -> Rect2:
 	return Rect2(lo, hi - lo)
 
 
+# 몸체 아래의 그림 자리표(VillageArt)에서 원래 그림 경로와 화면 높이(원본 높이 × 배율)를 읽는다.
 func _sprite_info(body: StaticBody2D) -> Dictionary:
 	for child in body.get_children():
-		if child is Sprite2D and (child as Sprite2D).texture != null:
-			var sprite := child as Sprite2D
-			return {"path": sprite.texture.resource_path.to_lower(), "height_px": float(sprite.texture.get_height()) * absf(sprite.scale.y)}
+		if child is VillageArt and not (child as VillageArt).art_path.is_empty():
+			var art := child as VillageArt
+			return {"path": art.art_path.to_lower(), "height_px": art.get_art_size().y * absf(art.scale.y)}
 
 	return {"path": "", "height_px": 0.0}
 

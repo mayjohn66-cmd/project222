@@ -59,7 +59,6 @@ var stroke_changed := false
 var drag_start := Vector2i.ZERO
 var stroke_snapshot: Dictionary = {}
 var undo_stack: Array[Dictionary] = []
-var image_cache: Dictionary = {}
 var previous_paused := false
 var previous_grid := false
 var previous_camera_position := Vector2.ZERO
@@ -396,29 +395,32 @@ func _cell_at(world_position: Vector2) -> Vector2i:
 	var pos := terrain.to_local(world_position)
 	return Vector2i(roundi(pos.x/terrain.tile_width+pos.y/terrain.tile_height),roundi(pos.y/terrain.tile_height-pos.x/terrain.tile_width))
 
+# 클릭한 자리의 오브젝트를 3D 발자국(칸 좌표 사각형)으로 고른다. 여러 개가 겹치면 화면 앞쪽(칸 x+y 가 큰 것)이 먼저다.
 func _pick_object(world_position: Vector2) -> StaticBody2D:
 	var best: StaticBody2D
-	var best_y := -INF
+	var best_depth := -INF
+	var view: Node = get_parent().get_node_or_null("StoreView3D")
+	var village = view.get("village") if view != null else null
+	var local := terrain.to_local(world_position)
+	var cell_pos := Vector2(local.x / terrain.tile_width + local.y / terrain.tile_height, local.y / terrain.tile_height - local.x / terrain.tile_width)
+
 	for group_name in GROUPS:
 		var group := get_parent().get_node_or_null(group_name)
 		if group == null: continue
 		for child in group.get_children():
 			if not child is StaticBody2D: continue
 			if not child.visible: continue
-			for piece in child.get_children():
-				var sprite := piece as Sprite2D
-				if sprite == null or sprite.texture == null: continue
-				var pixel: Vector2 = sprite.to_local(world_position)
-				var size: Vector2i = sprite.texture.get_size()
-				if pixel.x < 0 or pixel.y < 0 or pixel.x >= size.x or pixel.y >= size.y: continue
-				var image_id: int = sprite.texture.get_instance_id()
-				if not image_cache.has(image_id):
-					image_cache[image_id] = sprite.texture.get_image()
-				var image: Image = image_cache[image_id]
-				if image == null or image.get_pixelv(Vector2i(pixel)).a < 0.10: continue
-				if child.global_position.y > best_y:
-					best = child
-					best_y = child.global_position.y
+			var rect: Rect2
+			if village != null:
+				rect = village._footprint_cell_rect(child)
+			else:
+				var c: Vector2i = child.get_meta("tile_cell", Vector2i.ZERO)
+				rect = Rect2(Vector2(c) - Vector2(0.5, 0.5), Vector2.ONE)
+			if rect.size == Vector2.ZERO or not rect.grow(0.15).has_point(cell_pos): continue
+			var depth: float = rect.get_center().x + rect.get_center().y
+			if depth > best_depth:
+				best = child
+				best_depth = depth
 	return best
 
 func _draw() -> void:

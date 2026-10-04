@@ -6,10 +6,10 @@ uid="uid://dk1mopdcsnyog"
 
 [deps]
 
-files=["res://data/expedition/expedition_loot.item.translation", "res://data/expedition/expedition_loot.weight.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation"]
+files=["res://data/expedition/expedition_loot.item.translation", "res://data/expedition/expedition_loot.weight.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation", "res://data/expedition/expedition_loot.season.translation", "res://data/expedition/expedition_loot.weather.translation"]
 
 source_file="res://data/expedition/expedition_loot.csv"
-dest_files=["res://data/expedition/expedition_loot.item.translation", "res://data/expedition/expedition_loot.weight.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation"]
+dest_files=["res://data/expedition/expedition_loot.item.translation", "res://data/expedition/expedition_loot.weight.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation", "res://data/expedition/expedition_loot.min.translation", "res://data/expedition/expedition_loot.max.translation", "res://data/expedition/expedition_loot.season.translation", "res://data/expedition/expedition_loot.weather.translation"]
 
 [params]
 

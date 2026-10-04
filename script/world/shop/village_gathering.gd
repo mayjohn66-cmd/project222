@@ -1,10 +1,10 @@
 extends Node2D
 
 ## A few shared landmarks give the paved square a lived-in center.
-const NOTICEBOARD = preload("res://art/world/village_gathering_v1/village_noticeboard.png")
-const BENCH = preload("res://art/world/village_gathering_v1/oak_bench.png")
-const LANTERN = preload("res://art/world/village_gathering_v1/street_lantern.png")
-const FLOWER_BUSH = preload("res://art/world/route_props_v1/flower_bush.png")
+const NOTICEBOARD := "res://art/world/village_gathering_v1/village_noticeboard.png"
+const BENCH := "res://art/world/village_gathering_v1/oak_bench.png"
+const LANTERN := "res://art/world/village_gathering_v1/street_lantern.png"
+const FLOWER_BUSH := "res://art/world/route_props_v1/flower_bush.png"
 
 func rebuild(terrain: Node2D) -> void:
 	y_sort_enabled = true
@@ -21,7 +21,7 @@ func rebuild(terrain: Node2D) -> void:
 	_add_prop(terrain,"EastFlowerBed",square+Vector2i(10,-3),FLOWER_BUSH,0.075,Vector2(887,776),Vector2(0,-6),13.0)
 	_add_prop(terrain,"CottageFlowerBed",square+Vector2i(12,0),FLOWER_BUSH,0.07,Vector2(887,776),Vector2(0,-6),13.0)
 
-func _add_prop(terrain: Node2D, prop_name: String, cell: Vector2i, art: Texture2D, display_scale: float, anchor: Vector2, collider_offset: Vector2, radius: float) -> void:
+func _add_prop(terrain: Node2D, prop_name: String, cell: Vector2i, art: String, display_scale: float, anchor: Vector2, collider_offset: Vector2, radius: float) -> void:
 	cell = terrain.get_layout_cell("VillageGathering/"+prop_name,cell)
 	var body := StaticBody2D.new()
 	body.name = prop_name
@@ -30,11 +30,9 @@ func _add_prop(terrain: Node2D, prop_name: String, cell: Vector2i, art: Texture2
 	body.position = to_local(terrain.to_global(terrain.grid_to_local(cell)))
 	body.set_meta("tile_cell",cell)
 	add_child(body)
-	var sprite := Sprite2D.new()
+	var sprite := VillageArt.new()
 	sprite.name = "PropSprite"
-	sprite.texture = art
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.centered = false
+	sprite.art_path = art
 	sprite.scale = Vector2.ONE*display_scale
 	sprite.position = -anchor*display_scale
 	body.add_child(sprite)

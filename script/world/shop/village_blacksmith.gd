@@ -11,11 +11,9 @@ func rebuild(terrain: Node2D) -> void:
 	body.collision_mask = 0
 	body.position = to_local(terrain.to_global(terrain.grid_to_local(terrain.get_blacksmith_cell())))
 	add_child(body)
-	var sprite := Sprite2D.new()
+	var sprite := VillageArt.new()
 	sprite.name = "BuildingSprite"
-	sprite.texture = load("res://art/world/blacksmith_v2/blacksmith_iso.png")
-	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	sprite.centered = false
+	sprite.art_path = "res://art/world/blacksmith_v2/blacksmith_iso.png"
 	# The new stone apron is calibrated to the map's 2:1 ground axes.
 	sprite.scale = Vector2(0.292,0.36)
 	sprite.position = -Vector2(771*0.292,1019*0.36)
