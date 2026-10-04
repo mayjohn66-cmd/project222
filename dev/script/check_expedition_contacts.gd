@@ -83,7 +83,7 @@ func verify() -> void:
 	await frames()
 	shelf = get_tree().get_nodes_in_group("shelf")[0]
 	check(ExpeditionContactFlow.SETTINGS.events.size() == 3,"three expedition contacts")
-	check(PersonalRequestFlow.entries().size() == 20 and RegularCustomerFlow.SETTINGS.events.size() == 3,"existing content counts unchanged")
+	check(PersonalRequestFlow.entries().size() == 20 + WorkshopRequestFlow.SETTINGS.requests.size() and RegularCustomerFlow.SETTINGS.events.size() == 3,"existing content counts unchanged")
 	for entry in ExpeditionContactFlow.SETTINGS.events:
 		var id := str(entry["id"])
 		var region := str(entry["region"])

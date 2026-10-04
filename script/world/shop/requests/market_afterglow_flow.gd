@@ -9,6 +9,7 @@ static func moments() -> Array[Dictionary]:
 	var entries: Array[Dictionary] = SETTINGS.moments.duplicate(true)
 	entries.append_array(FOLLOWUPS.moments)
 	entries.append_array(StoreEventFollowupFlow.SETTINGS.moments)
+	entries.append_array(WorkshopRequestFlow.SETTINGS.moments)
 	return entries
 
 static func moment(request_id: String) -> Dictionary:
@@ -22,7 +23,10 @@ static func pending(resident_id: String) -> String:
 	for entry in moments():
 		if bool(entry.get("after_market", true)) and not VillageMarketFlow.completed(): continue
 		var id := str(entry["request"])
-		if str(entry["resident"]) == resident_id and PersonalRequestFlow.done(id) and not heard(id): return id
+		if str(entry["resident"]) != resident_id or not PersonalRequestFlow.done(id) or heard(id): continue
+		var delivered := int(PlayerProgress.story_beat_days[PersonalRequestFlow.PREFIX + id + ":done"])
+		if GameState.total_day < delivered + maxi(0,int(entry.get("days_after_delivery",0))): continue
+		return id
 	return ""
 static func listen(request_id: String) -> bool:
 	var entry := moment(request_id)
@@ -35,5 +39,8 @@ static func lines(request_id: String) -> Array[String]:
 static func information(request_id: String) -> String:
 	var entry := moment(request_id)
 	if entry.is_empty() or not PersonalRequestFlow.done(request_id): return ""
+	if not heard(request_id) and int(entry.get("days_after_delivery",0)) > 0:
+		var earliest := int(PlayerProgress.story_beat_days[PersonalRequestFlow.PREFIX + request_id + ":done"]) + int(entry["days_after_delivery"])
+		if GameState.total_day < earliest: return "전달한 다음 날 이후 %s에게 사용 후일담 듣기 [E] · 추가 물품은 필요 없습니다." % VillageLifeFlow.resident(str(entry["resident"]))["name"]
 	if not heard(request_id): return "전달 뒤 %s에게 후일담 듣기 [E] · 추가 물품은 필요 없습니다." % VillageLifeFlow.resident(str(entry["resident"]))["name"]
 	return "후일담을 들은 날: %d일차\n%s" % [PlayerProgress.story_beat_days[PREFIX + request_id + ":heard"], RequestTextData.text("service_text", str(entry["id"]), "completion")]

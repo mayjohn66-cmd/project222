@@ -11,6 +11,7 @@ static func entries() -> Array[Dictionary]:
 	all_requests.append_array(MarketAfterglowFlow.FOLLOWUPS.requests)
 	all_requests.append_array(StoreEventFollowupFlow.SETTINGS.requests)
 	all_requests.append_array(SeasonStockpileFlow.SETTINGS.requests)
+	all_requests.append_array(WorkshopRequestFlow.SETTINGS.requests)
 	for data in all_requests:
 		var entry: Dictionary = data.duplicate(true)
 		for field in ["title","summary","completion"]:
@@ -51,6 +52,8 @@ static func locked_reason(entry: Dictionary) -> String:
 	var wait_days := maxi(0,int(entry.get("days_after",0)))
 	if last_day >= 0 and GameState.total_day < last_day + wait_days:
 		return "앞선 이야기를 마친 뒤 %d일 후부터 부탁을 들을 수 있어요." % wait_days
+	var workshop_reason := WorkshopRequestFlow.locked_reason(entry)
+	if not workshop_reason.is_empty(): return workshop_reason
 	var recipe_id := str(entry.get("recipe", ""))
 	if not recipe_id.is_empty() and not RecipeUnlockData.is_recipe_available(recipe_id):
 		return "%s 레시피를 배우면 준비할 수 있어요. 원정에서 두루마리를 찾아 사용해 주세요." % ItemData.get_item_name(recipe_id)

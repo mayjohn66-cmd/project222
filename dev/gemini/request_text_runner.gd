@@ -675,6 +675,8 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 					info += " / 우물 곁 첫 저녁 모임 뒤 이웃이 된 관계의 후속 이야기 / 새 건물·장비·책 지급이나 별도 기능을 약속하지 않음"
 				if bool(d.get("after_market", false)):
 					info += " / 첫 장터를 함께 마친 다음 날 이후 / 배운 레시피의 완제품을 전달하고 주민에게 E로 후일담을 끝까지 듣기 / 후일담에 추가 답례 없음"
+				if d.has("after_craft"):
+					info += " / 교류로 배운 상품의 생활 사용 / 해당 제품 이야기의 시제품 나눔 완료 다음 날 이후 / 기존 제조법 완제품만 전달, 맡은 뒤 재제작 필수 아님 / 상품 대금과 작은 사례비는 전달 최초1회, 가격·수량은 UI / 전달 다음 날 주민 E 사용 후일담 완독, 추가 답례·능력치·실제 사용 연출·손님 해금 없음"
 				if d.has("recipe"):
 					info += " / 기존 레시피: " + _item_name(str(d["recipe"]))
 				if bool(d.get("after_rest", false)):
@@ -697,6 +699,8 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 					info = "실제 구매로 시작하는 단골 이야기 / 화자: %s / 장면: %s / 상품/수량/재료/답례는 UI, 새 고유 이름·자동 판매·실제 동료 등장·판매 보장·추가 답례 약속 없음 / introduction→실제 재구매→부탁→최종 완독→다음 날 후일담, 기간 제한 없음" % [d.get("npc",""),d.get("stage","")]
 				if id.begins_with("weather_"):
 					info = "날씨에서 이어진 실제 구매 / 화자: %s / 장면: %s / 날씨·계절은 최초 소개 조건, 소개 후에는 변화해도 계속 / 진열 상품을 대표 손님이 실제 구매한 다음 날 E 최종 완독에 재료 답례·평판 최초1회 / 직접 전달·무료 상품·자동 판매·가격 상승·기간 제한·새 시설/고유 이름 없음 / 현재 날씨 단정 없이 지난 구매 회상, 수량·가격은 UI" % [d.get("npc",""),d.get("stage","")]
+				if id.begins_with("workshop_afterglow_"):
+					info = "교류로 배운 상품의 사용 후일담 / 화자: %s / 장면: %s / 게시판에서 완제품 전달 다음 날 이후 주민 E 완독으로 수첩 기억 / 상품 대금·작은 사례비는 이전 전달 때 이미 지급, 추가 지급 없음 / 현재 날씨 단정·새 이름/건물/무료 물품/회복/능력치/판매 보장 없음 / 수량·가격·조작은 UI" % [d.get("npc", ""),d.get("stage", "")]
 				if id.begins_with("prologue_"):
 					info = "튜토리얼 전 플레이어 독백 / 화자: 나 / 장면: %s / 익숙한 가게에서 낯선 풍경 발견→함께 온 가게 확인→가게 정리 결심 / 아직 첫 손님·현지 화폐·물물교환·원정을 만나지 않았음 / 전이 원인·신·사고·고유 이름·세계의 확정 법칙·새 장비/재료 지급 없음 / 마지막 완독 후 기존 튜토리얼, 현실 지도/연출 영상을 약속하지 않음" % d.get("stage","")
 				if id.begins_with("contact_"):

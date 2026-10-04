@@ -25,6 +25,7 @@ func run() -> void:
 	check(board.panel.cards.has("personal:naru_provisions"),"personal cards coexist with community cards")
 	for entry in PersonalRequestFlow.entries():
 		if entry.has("after"): continue # 후속 부탁은 아래에서 선행·모임·날짜 조건을 함께 검증한다.
+		if entry.has("after_craft"): continue # 제품/날짜/실제 제작·전달은 check_workshop_requests에서 검증한다.
 		if entry.has("stockpile_season"): continue # 계절·장기 보관은 check_seasonal_expedition에서 실제 전달로 검사한다.
 		var id := str(entry["id"])
 		var resident := str(entry["resident"])

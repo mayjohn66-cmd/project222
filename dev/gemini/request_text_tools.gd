@@ -31,6 +31,7 @@ const SOURCE_FILES: Dictionary = {
 	"res://scenes/shop/requests/default_season_stockpile.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_market_afterglow.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_trail_errands.tres": KIND_PERSONAL_REQUEST,
+	"res://scenes/shop/requests/default_workshop_requests.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_store_event_followups.tres": KIND_PERSONAL_REQUEST,
 	"res://scenes/shop/requests/default_village_gathering.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_lantern_wayfarer.tres": KIND_SERVICE_TEXT,
@@ -112,7 +113,7 @@ static func load_sources() -> Dictionary:
 				if line.begins_with("events ="): kind = ""
 				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT
 				if kind.is_empty(): continue
-			if path.ends_with("default_market_afterglow.tres") or path.ends_with("default_trail_errands.tres") or path.ends_with("default_store_event_followups.tres"):
+			if path.ends_with("default_market_afterglow.tres") or path.ends_with("default_trail_errands.tres") or path.ends_with("default_store_event_followups.tres") or path.ends_with("default_workshop_requests.tres"):
 				if line.begins_with("requests ="): kind = KIND_PERSONAL_REQUEST
 				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT
 			if path.ends_with("default_resident_story.tres"):

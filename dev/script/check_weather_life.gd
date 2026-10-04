@@ -79,7 +79,7 @@ func verify() -> void:
 	await frames()
 	shelf = get_tree().get_nodes_in_group("shelf")[0]
 	check(WeatherLifeFlow.SETTINGS.events.size() == 3,"three weather stories")
-	check(PersonalRequestFlow.entries().size() == 20 and RegularCustomerFlow.SETTINGS.events.size() == 3 and ExpeditionContactFlow.SETTINGS.events.size() == 3,"prior content retained")
+	check(PersonalRequestFlow.entries().size() == 20 + WorkshopRequestFlow.SETTINGS.requests.size() and RegularCustomerFlow.SETTINGS.events.size() == 3 and ExpeditionContactFlow.SETTINGS.events.size() == 3,"prior content retained")
 	for entry in WeatherLifeFlow.SETTINGS.events:
 		var id := str(entry["id"])
 		PlayerProgress.reset()
@@ -127,7 +127,7 @@ func verify() -> void:
 		store._sync_actors(0.0)
 		store._collect_2d_to_hide()
 		check(store._actors.has(visitor.npc.get_instance_id()),"visitor registered as an actual 3D figure")
-		check(not visitor.npc.get_node("Visual").visible and visitor.npc.visible,"3D hides only sprite and keeps actor interactive")
+		check(visitor.npc.get_node_or_null("Visual") == null and visitor.npc.visible and visitor.npc.is_in_group("story_npc"),"3D-only visitor keeps its root visible and interaction identity")
 		check(world.get_node("WorldInteractions").blocked() and manager.hour_timer.paused,"shared blocked state and clock pause")
 		check(VillageJournalFlow.destination(world,WeatherLifeFlow.JOURNAL_PREFIX+id) == visitor.npc,"journal points to actual NPC")
 		visitor.dialogue.close()

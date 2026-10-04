@@ -52,7 +52,7 @@ func run() -> void:
 	manager.hour_timer.paused = false
 	player.set_physics_process(false)
 	var sources := Tools.load_sources()
-	check(PersonalRequestFlow.entries().size() == 12 + StoreEventFollowupFlow.SETTINGS.requests.size() + SeasonStockpileFlow.SETTINGS.requests.size() and MarketAfterglowFlow.moments().size() == 6 + StoreEventFollowupFlow.SETTINGS.moments.size(), "three errands and three afterglows coexist with previous content")
+	check(PersonalRequestFlow.entries().size() == 12 + StoreEventFollowupFlow.SETTINGS.requests.size() + SeasonStockpileFlow.SETTINGS.requests.size() + WorkshopRequestFlow.SETTINGS.requests.size() and MarketAfterglowFlow.moments().size() == 6 + StoreEventFollowupFlow.SETTINGS.moments.size() + WorkshopRequestFlow.SETTINGS.moments.size(), "three errands and three afterglows coexist with previous content")
 	for entry in MarketAfterglowFlow.FOLLOWUPS.requests:
 		GameState.total_day = 100
 		PlayerProgress.reset()

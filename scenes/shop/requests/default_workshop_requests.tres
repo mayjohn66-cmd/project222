@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="MarketAfterglowSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/market_afterglow_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+requests = Array[Dictionary]([
+{"id":"naru_trail_snacks","resident":"naru","friendship":3,"after_craft":"craft_trail_food","days_after":1,"recipe":"dried_fruit","requirements":[{"item":"dried_fruit","amount":2}],"reputation":1,"money":530},
+{"id":"doyun_pocket_warmth","resident":"doyun","friendship":3,"after_craft":"craft_clear_water","days_after":1,"recipe":"hand_warmer","requirements":[{"item":"hand_warmer","amount":1}],"reputation":1,"money":250},
+{"id":"sora_evening_tea","resident":"sora","friendship":3,"after_craft":"craft_shared_meal","days_after":1,"recipe":"reed_tea","requirements":[{"item":"reed_tea","amount":2}],"reputation":1,"money":530}
+])
+moments = Array[Dictionary]([
+{"id":"workshop_afterglow_naru","npc":"타블렌","resident":"naru","request":"naru_trail_snacks","after_market":false,"days_after_delivery":1,"stage":"현지식 간식 시제품 나눔 완료 다음 날 이후. 말린 열매를 보통 창고에서 게시판으로 전달하여 길 위 간식으로 준비. 전달 다음 날 이후 타블렌 E 후일담 완독. 실제 여행 이동/가방 확장/회복 효과 없음. 상품 대금과 작은 사례비/평판은 전달 때 최초1회. 후일담 추가 지급 없음. 기한/계절 제한 없음. 수량/가격/조작은 UI."},
+{"id":"workshop_afterglow_doyun","npc":"코르빈","resident":"doyun","request":"doyun_pocket_warmth","after_market":false,"days_after_delivery":1,"stage":"물과 온기 시제품 나눔 완료 다음 날 이후. 손난로를 보통 창고에서 게시판으로 전달하여 작업 뒤 손을 쉬게 함. 전달 다음 날 이후 코르빈 E 후일담 완독. 실제 장비 착용/공격력/추위 피해/능력치 변화 없음. 상품 대금과 작은 사례비/평판은 전달 때 최초1회. 후일담 추가 지급 없음. 기한/계절 제한 없음. 수량/가격/조작은 UI."},
+{"id":"workshop_afterglow_sora","npc":"이세르","resident":"sora","request":"sora_evening_tea","after_market":false,"days_after_delivery":1,"stage":"함께 먹는 식사 시제품 나눔 완료 다음 날 이후. 갈대 차를 보통 창고에서 게시판으로 전달하여 기록 뒤 저녁에 마심. 전달 다음 날 이후 이세르 E 후일담 완독. 실제 음용 연출/회복/수요 증가 없음. 상품 대금과 작은 사례비/평판은 전달 때 최초1회. 후일담 추가 지급 없음. 기한/계절 제한 없음. 수량/가격/조작은 UI."}
+])

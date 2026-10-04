@@ -96,7 +96,7 @@ func verify() -> void:
 	await frames()
 	shelf = get_tree().get_nodes_in_group("shelf")[0]
 	check(RegularCustomerFlow.SETTINGS.events.size() == 3,"three recurring customer stories registered")
-	check(PersonalRequestFlow.entries().size() == 20 and MarketAfterglowFlow.moments().size() == 11,"existing personal requests and afterglows unchanged")
+	check(PersonalRequestFlow.entries().size() == 20 + WorkshopRequestFlow.SETTINGS.requests.size() and MarketAfterglowFlow.moments().size() == 11 + WorkshopRequestFlow.SETTINGS.moments.size(),"existing personal requests and afterglows unchanged")
 	for entry in RegularCustomerFlow.SETTINGS.events:
 		var id := str(entry["id"])
 		var type_id := str(entry["type"])
