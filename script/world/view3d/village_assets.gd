@@ -1632,6 +1632,24 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			var saspecs: Array = sab.commit_into(samesh)
 			anim_parts.append({"mesh": samesh, "specs": saspecs, "pos": Vector3(c.x, 0.55, c.y), "mode": "sway", "speed": 1.5, "amp": 0.06, "axis": Vector3(0.0, 0.0, 1.0), "half": 1.0})
 			total = 1.7
+		"snowman":
+			var snow_w: Dictionary = _noise_spec(ts, Color(0.93, 0.95, 1.0), Color(1.0, 1.0, 1.0), "snowman_snow", 33, Color.WHITE, 0.1)
+			var coal: Dictionary = _flat_spec(ts, Color(0.1, 0.1, 0.12), "snowman_coal")
+			var carrot: Dictionary = _flat_spec(ts, Color(0.95, 0.5, 0.15), "snowman_nose")
+			var scarf: Dictionary = _flat_spec(ts, Color(0.82, 0.2, 0.24), "snowman_scarf")
+			dome(b, "snow_low", snow_w, c.x, c.y, 0.36, 0.0, 0.52, 3, 10)
+			dome(b, "snow_mid", snow_w, c.x, c.y, 0.27, 0.4, 0.86, 3, 10)
+			dome(b, "snow_head", snow_w, c.x, c.y, 0.2, 0.76, 1.1, 3, 10)
+			oct(b, "scarf", scarf, c.x, c.y, 0.2, 0.74, 0.8)
+			# 얼굴은 카메라 쪽(+x,+z) 대각선 앞에: 숯 눈 둘 + 당근 코
+			box(b, "eye", coal, Vector3(c.x + 0.13, 0.95, c.y + 0.1), Vector3(c.x + 0.16, 0.99, c.y + 0.13))
+			box(b, "eye", coal, Vector3(c.x + 0.08, 0.95, c.y + 0.15), Vector3(c.x + 0.11, 0.99, c.y + 0.18))
+			box(b, "nose", carrot, Vector3(c.x + 0.14, 0.88, c.y + 0.14), Vector3(c.x + 0.27, 0.92, c.y + 0.27))
+			box(b, "arm", bark, Vector3(c.x + 0.22, 0.62, c.y - 0.34), Vector3(c.x + 0.27, 0.66, c.y - 0.05))
+			box(b, "arm", bark, Vector3(c.x - 0.34, 0.62, c.y + 0.22), Vector3(c.x - 0.05, 0.66, c.y + 0.27))
+			oct(b, "hat_brim", coal, c.x, c.y, 0.22, 1.06, 1.1)
+			oct(b, "hat", coal, c.x, c.y, 0.13, 1.1, 1.32, 0.12)
+			total = 1.4
 		"campfire":
 			var stones: Dictionary = _noise_spec(ts, Color(0.42, 0.43, 0.48), Color(0.58, 0.59, 0.64), "fire_stone", 29)
 			var ember: Dictionary = _flat_spec(ts, Color(0.92, 0.26, 0.05), "flame_outer")

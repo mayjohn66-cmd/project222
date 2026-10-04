@@ -5,6 +5,7 @@ extends RefCounted
 ## 높이·질감은 data/shop/catalogs/village_3d.csv 의 규칙(노드 이름 또는 스프라이트 그림 파일 이름에 포함된 글자)으로 정한다. 규칙이 없으면 스프라이트 높이로 추정한다.
 ## 게임 코드는 수정하지 않는다(2D 숨김은 StoreView3D 가 visible 만 바꿈).
 
+var _hidden: Dictionary = {}  # 계절로 숨긴 물체 key → 서명
 var _footprints: Dictionary = {}  # 물체 key → 3D 발자국(칸 좌표 Rect2)
 const COLLISION_3D := "Collision3D"
 const COLLISION_INSET := 0.04  # 보이는 발자국보다 살짝 안쪽(칸)
@@ -233,11 +234,14 @@ func sync_ground() -> void:
 		view._viewport.add_child(id_inst)
 		_ground[kind] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material}
 
+	_snow_cells = per_kind.get("grass", [])
+	_snow_dirty = true
 	_sync_tufts(per_kind.get("grass", []))
 
 
 func clear_ground() -> void:
 	_clear_tufts()
+	_clear_snowmen()
 
 	for kind in _ground.keys():
 		(_ground[kind]["mesh"] as Node).queue_free()
@@ -273,6 +277,8 @@ func set_season(season_id: String) -> void:
 
 
 func reset_signatures() -> void:
+	_hidden.clear()
+	_snow_dirty = true
 	_ground_signature = ""
 	_object_signature = ""
 
@@ -466,7 +472,7 @@ func _sprite_info(body: StaticBody2D) -> Dictionary:
 
 
 # 3D 로 보이는 발자국(칸 좌표 사각형)과 같은 충돌 다각형을 몸체에 달고, 옛 2D 충돌 모양은 꺼 둔다(3D 를 끄면 restore_collisions 가 되돌림).
-func _apply_collision(body: StaticBody2D, lo: Vector2, hi: Vector2) -> void:
+func _apply_collision(body: StaticBody2D, lo: Vector2, hi: Vector2, blocked_off: bool = false) -> void:
 	var poly := body.get_node_or_null(COLLISION_3D) as CollisionPolygon2D
 
 	if poly == null:
@@ -481,6 +487,12 @@ func _apply_collision(body: StaticBody2D, lo: Vector2, hi: Vector2) -> void:
 				off.append(str(child.name))
 
 		body.set_meta("c3_off", off)
+
+	poly.disabled = blocked_off
+
+	if blocked_off:
+		poly.polygon = PackedVector2Array([Vector2(0, 0), Vector2(1, 0), Vector2(0, 1)])  # 숨긴 물체: 충돌 없음(다각형은 자리만 채움)
+		return
 
 	var inset := Vector2(COLLISION_INSET, COLLISION_INSET)
 	var a: Vector2 = lo + inset
@@ -521,6 +533,60 @@ func restore_collisions(world: Node) -> void:
 
 
 
+var _snow_cells: Array = []
+var _snow_keys: Array = []
+var _snow_dirty: bool = true
+
+
+func _clear_snowmen() -> void:
+	for k in _snow_keys:
+		view._remove_item(str(k))
+
+	_snow_keys.clear()
+
+
+# 겨울(snowman_rate > 0): 풀밭 칸 중 아주 일부에 눈사람을 세운다. 칸 위치로 정해지는 값이라 다시 만들어도 같은 자리이고,
+# 8칸 구역마다 하나까지, 건물·소품 발자국 근처는 피한다. 충돌은 없는 장식.
+func _sync_snowmen() -> void:
+	_clear_snowmen()
+	var rate: float = float(SeasonStyle.style(season if season != "" else "spring").get("snowman_rate", 0.0))
+
+	if rate <= 0.0:
+		return
+
+	var placed: Dictionary = {}
+	var p: Dictionary = _params()
+
+	for cell in _snow_cells:
+		var h: int = absi((cell.x * 2654435761) ^ (cell.y * 40503 + 17)) % 10000
+
+		if float(h) >= rate * 10000.0:
+			continue
+
+		var ck := Vector2i(int(floorf(float(cell.x) / 8.0)), int(floorf(float(cell.y) / 8.0)))
+
+		if placed.has(ck):
+			continue
+
+		var spot := Rect2(float(cell.x) - 0.9, float(cell.y) - 0.9, 1.8, 1.8)
+		var blocked: bool = false
+
+		for fp in _footprints.values():
+			if (fp as Rect2).intersects(spot):
+				blocked = true
+				break
+
+		if blocked:
+			continue
+
+		placed[ck] = true
+		var lo := Vector2(float(cell.x) - 0.5, float(cell.y) - 0.5)
+		var built: Dictionary = VillageAssets.build_prop("snowman", lo, lo + Vector2.ONE, {}, p)
+		var key: String = "snowman_%d_%d" % [cell.x, cell.y]
+		view._set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), built["lo"], built["hi"], float(built["total_blocks"]), "snowman", NAN, true)
+		_snow_keys.append(key)
+
+
 func sync_objects(world: Node) -> void:
 	var seen: Dictionary = {}
 	var parts: PackedStringArray = PackedStringArray()
@@ -550,6 +616,22 @@ func sync_objects(world: Node) -> void:
 			seen[key] = true
 			parts.append(sig)
 
+			# 계절 때문에 안 보이는 물체(겨울의 덤불·일부 나무): 3D 물체를 만들지 않고 충돌도 끈다.
+			if bool(rule.get("season_hide", false)):
+				if _hidden.get(key, "") != sig or body.get_node_or_null(COLLISION_3D) == null:
+					_remove_keys(key)
+					_footprints.erase(key)
+					_snow_dirty = true
+
+					if view.sync_collision:
+						_apply_collision(body, Vector2.ZERO, Vector2.ZERO, true)
+
+					_hidden[key] = sig
+
+				continue
+
+			_hidden.erase(key)
+
 			if view._items.has(key + "a") and view._items[key + "a"]["signature"] == sig:
 				if view.sync_collision and _footprints.has(key) and body.get_node_or_null(COLLISION_3D) == null:
 					_apply_collision(body, (_footprints[key] as Rect2).position, (_footprints[key] as Rect2).end)
@@ -558,6 +640,10 @@ func sync_objects(world: Node) -> void:
 
 			_remove_keys(key)
 			_create_object(key, rect, rule, float(sprite_info["height_px"]), sig, body)
+
+	if _snow_dirty:
+		_snow_dirty = false
+		_sync_snowmen()
 
 	# 사라진 물체 정리
 	for k in _keys.keys():
@@ -616,6 +702,7 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 	hi = center + half
 
 	_footprints[key] = Rect2(lo, hi - lo)
+	_snow_dirty = true  # 새 건물이 생기면 눈사람 자리를 다시 고른다(건물 안에 서지 않게)
 
 	if body != null and view.sync_collision:
 		_apply_collision(body, lo, hi)

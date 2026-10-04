@@ -47,6 +47,8 @@ func _ready() -> void:
 		view.weather_override = args[i_weather + 1]
 		view.weather["kind"] = args[i_weather + 1]
 		view.weather["intensity"] = view.weather_override_intensity
+		if args[i_weather + 1] == "rain":
+			view.wetness = view.weather_override_intensity
 	var i_shot := args.find("--shot")
 	if i_shot >= 0 and i_shot + 1 < args.size():
 		await _shots(args[i_shot + 1], view)

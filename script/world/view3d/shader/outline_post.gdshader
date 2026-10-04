@@ -12,6 +12,7 @@ uniform float knee = 0.78;
 uniform float exposure = 1.0;
 uniform vec3 shadow_tint = vec3(0.86, 0.92, 1.12);
 uniform float shadow_amount = 0.45;
+uniform float wet = 0.0;  // 0 = 마른 상태, 1 = 흠뻑 젖음(비가 오면 오르고 그친 뒤 서서히 마른다)
 
 void fragment() {
 	vec4 tint = COLOR;  // modulate(투명도 등)가 들어 있는 기본 색
@@ -31,6 +32,13 @@ void fragment() {
 		c.rgb = mix(c.rgb, c.rgb * outline_dark, edge);
 	}
 	c.rgb *= exposure;
+	if (wet > 0.001) {
+		// 젖은 효과: 어둡고 푸르게, 채도는 높이고 명암은 또렷하게(물기 먹은 느낌)
+		float l0 = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
+		vec3 sat = mix(vec3(l0), c.rgb, 1.0 + 0.35 * wet);
+		sat = (sat - 0.5) * (1.0 + 0.18 * wet) + 0.5;
+		c.rgb = mix(c.rgb, sat * vec3(0.8, 0.87, 1.0) * 0.82, wet);
+	}
 	float lum = dot(c.rgb, vec3(0.2126, 0.7152, 0.0722));
 	if (knee < 0.999 && lum > knee) {
 		float room = 1.0 - knee;

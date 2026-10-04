@@ -17,14 +17,14 @@ static func table(season_id: String) -> Dictionary:
 	if _cache.is_empty():
 		_load()
 
-	return _cache.get(season_id, {"rain_chance": 0.0, "snow_chance": 0.0, "min_hours": 3.0, "max_hours": 6.0})
+	return _cache.get(season_id, {"rain_chance": 0.0, "snow_chance": 0.0, "min_hours": 3.0, "max_hours": 6.0, "rain_min": 0.4, "rain_max": 0.8, "snow_min": 0.5, "snow_max": 0.8})
 
 
 static func _load() -> void:
 	var file := FileAccess.open(CSV_PATH, FileAccess.READ)
 
 	if file == null:
-		_cache["spring"] = {"rain_chance": 0.1, "snow_chance": 0.0, "min_hours": 3.0, "max_hours": 6.0}
+		_cache["spring"] = {"rain_chance": 0.1, "snow_chance": 0.0, "min_hours": 3.0, "max_hours": 6.0, "rain_min": 0.4, "rain_max": 0.8, "snow_min": 0.5, "snow_max": 0.8}
 		return
 
 	var header: PackedStringArray = file.get_csv_line()
@@ -59,7 +59,9 @@ static func day_plan(total_day: int) -> Dictionary:
 
 	var length: float = rng.randf_range(float(t["min_hours"]), float(t["max_hours"]))
 	var start: float = rng.randf_range(5.0, maxf(5.1, 22.0 - length))
-	return {"kind": kind, "start": start, "end": start + length, "peak": rng.randf_range(0.55, 1.0)}
+	var lo_k: float = float(t.get("snow_min", 0.5)) if kind == "snow" else float(t.get("rain_min", 0.5))
+	var hi_k: float = float(t.get("snow_max", 0.9)) if kind == "snow" else float(t.get("rain_max", 0.9))
+	return {"kind": kind, "start": start, "end": start + length, "peak": rng.randf_range(lo_k, hi_k)}
 
 
 # 지금(날짜, 시각 0~24) 날씨: {"kind": 종류, "intensity": 0~1}. 맑으면 intensity 0.

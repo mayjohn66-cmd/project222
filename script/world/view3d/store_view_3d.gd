@@ -91,6 +91,7 @@ var weather_override: String = ""  # 개발용: clear / rain / snow. 비우면 �
 var weather_override_intensity: float = 0.85
 var weather: Dictionary = {"kind": "clear", "intensity": 0.0}  # 지금 날씨(부드럽게 변하는 값)
 var _weather_overlay: WeatherOverlay
+var wetness: float = 0.0  # 젖은 정도 0~1(비가 오면 빨리 오르고, 그친 뒤 천천히 마른다)
 var season_override: String = ""  # 개발용: 비우면 달력(GameState.total_day)을 따른다
 var sync_collision: bool = true  # 3D 로 보이는 건물·소품의 발자국을 실제 충돌 모양으로 쓴다
 ## 색 단계 수(채널당). 256 = 제한 없음, 낮출수록 색이 뭉쳐서 도트 그림 같은 느낌(예: 12). 시험용 값.
@@ -391,6 +392,15 @@ func _update_weather(delta: float) -> void:
 		weather["kind"] = kind
 
 	weather["intensity"] = k
+
+	# 젖음: 비가 올 때 비의 세기만큼 빠르게 오르고, 아니면 천천히 마른다(눈은 젖게 하지 않는다).
+	if str(weather["kind"]) == "rain" and k > 0.01:
+		wetness = move_toward(wetness, minf(1.0, k * 1.15), delta * 0.25)
+	else:
+		wetness = move_toward(wetness, 0.0, delta * 0.03)
+
+	if _post_material != null:
+		_post_material.set_shader_parameter("wet", wetness)
 	_weather_overlay.pixel = shrink
 	_weather_overlay.set_weather(str(weather["kind"]), k)
 

@@ -46,8 +46,8 @@ func _draw() -> void:
 func _draw_rain(size_px: Vector2) -> void:
 	var n: int = int(float(MAX_RAIN) * intensity)
 	var col := Color(0.78, 0.86, 1.0, 0.55)
-	var len_px: float = float(pixel) * 4.0
-	var slant: float = 0.28
+	var len_px: float = float(pixel) * (3.0 + 2.0 * intensity)
+	var slant: float = 0.18 + 0.22 * intensity  # 센 비는 더 비스듬히(바람)
 
 	for i in range(n):
 		var s: Vector3 = _seeds[i]
