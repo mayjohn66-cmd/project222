@@ -165,7 +165,7 @@ func _cell_kind(cell: Vector2i) -> String:
 func sync_ground() -> void:
 	var cells: Array[Vector2i] = exterior.get_connected_map_cells()
 	var store_rect: Rect2i = view.floor_node.get_store_rect()
-	var sig: String = "%d|%s|%d|%s" % [cells.size(), str(exterior.get_village_map_extent()), exterior._layout_tiles.hash(), str(store_rect)]
+	var sig: String = "%d|%s|%d|%s|%s" % [cells.size(), str(exterior.get_village_map_extent()), exterior._layout_tiles.hash(), str(store_rect), season]
 
 	if sig == _ground_signature:
 		return
@@ -206,6 +206,17 @@ func sync_ground() -> void:
 		var mesh: ArrayMesh = st.commit()
 		var ground_table: Dictionary = GROUND_TEXTURES_CLEAN if PlaceholderTextures.clean else GROUND_TEXTURES
 		var info: Array = ground_table.get(kind, ground_table["grass"])
+		var sst: Dictionary = SeasonStyle.style(season if season != "" else "spring")
+		info = [info[0], info[1]]
+
+		if kind == "grass":
+			info[0] = str(sst["grass_kind"])
+			info[1] = (info[1] as Color) * (sst["grass_tint"] as Color)
+		elif kind == "road":
+			info[1] = (info[1] as Color) * (sst["road_tint"] as Color)
+		else:
+			info[1] = (info[1] as Color) * (sst["paving_tint"] as Color)
+
 		var material: ShaderMaterial = view._make_surface_material(str(info[0]), info[1])
 		var inst := MeshInstance3D.new()
 		inst.mesh = mesh
@@ -247,6 +258,18 @@ func tick(delta: float) -> void:
 
 		if is_instance_valid(inst):
 			VillageAnim.apply(inst, view._items[k]["materials"], _anims[k], _time, delta)
+
+
+var season: String = ""
+
+
+# 계절이 바뀌면 땅(색·종류)·풀 다발·모든 물체(잎·지붕 눈)를 다시 만들게 한다.
+func set_season(season_id: String) -> void:
+	if season_id == season:
+		return
+
+	season = season_id
+	reset_signatures()
 
 
 func reset_signatures() -> void:
@@ -302,8 +325,16 @@ func _sync_tufts(grass_cells: Array) -> void:
 
 		(chunks[ck] as Array).append(cell)
 
+	var sst: Dictionary = SeasonStyle.style(season if season != "" else "spring")
+
+	if float(sst["tufts"]) < 0.5:
+		return  # 겨울: 눈에 덮여 풀 다발이 없다
+
 	var mat_plain: ShaderMaterial = _cutout_material(PlaceholderTextures.grass_tuft(false))
 	var mat_flower: ShaderMaterial = _cutout_material(PlaceholderTextures.grass_tuft(true))
+	mat_plain.set_shader_parameter("tint", sst["tuft_tint"])
+	mat_flower.set_shader_parameter("tint", sst["tuft_tint"])
+	var flower_rate: float = float(sst["flower_rate"])
 	var half_w: float = 0.2
 	var height: float = 0.32
 
@@ -329,7 +360,7 @@ func _sync_tufts(grass_cells: Array) -> void:
 				var hh: int = absi(h * 31 + k * 977) % 1000
 				var cx: float = float(cell.x) + (float(hh % 100) / 100.0 - 0.5) * 0.7
 				var cz: float = float(cell.y) + (float((hh / 100) % 10) / 10.0 - 0.5) * 0.7
-				var flower: bool = (hh % 7) == 0
+				var flower: bool = float(hh % 97) < 14.0 * flower_rate
 				var st: SurfaceTool = st_flower if flower else st_plain
 				_add_tuft(st, cx, cz, half_w, height)
 
@@ -511,9 +542,11 @@ func sync_objects(world: Node) -> void:
 
 			var sprite_info: Dictionary = _sprite_info(body)
 			var text: String = (str(body.name) + " " + str(sprite_info["path"])).to_lower()
-			var rule: Dictionary = apply_variation(_find_rule(text), absi(hash(container_name + "/" + str(body.name))) % 100003)
+			var obj_seed: int = absi(hash(container_name + "/" + str(body.name))) % 100003
+			var rule: Dictionary = apply_variation(_find_rule(text), obj_seed)
+			rule = SeasonStyle.adjust_rule(rule, season if season != "" else "spring", obj_seed)
 			var key: String = "vil%d" % body.get_instance_id()
-			var sig: String = "%s|%s|%s" % [str(rect.position.snapped(Vector2(0.02, 0.02))), str(rect.size.snapped(Vector2(0.02, 0.02))), text]
+			var sig: String = "%s|%s|%s|%s" % [str(rect.position.snapped(Vector2(0.02, 0.02))), str(rect.size.snapped(Vector2(0.02, 0.02))), text, season]
 			seen[key] = true
 			parts.append(sig)
 
@@ -595,6 +628,8 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 			built = VillageAssets.build_gable(lo, hi, rule, p)
 		else:
 			built = VillageAssets.build_prop(str(rule.get("style", "")), lo, hi, rule, p)
+
+		SeasonStyle.tint_specs(built["specs"], rule, season if season != "" else "spring")
 
 		var has_cutout: bool = false
 

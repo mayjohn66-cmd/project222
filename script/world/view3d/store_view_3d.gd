@@ -87,6 +87,7 @@ var day_manager: Node
 var exterior: Node2D
 ## 마을(매장 바깥)도 3D 로 그릴지. F9 로 켜고 끈다(매장만 3D / 마을 전체 3D 비교용).
 var village_enabled: bool = true
+var season_override: String = ""  # 개발용: 비우면 달력(GameState.total_day)을 따른다
 var sync_collision: bool = true  # 3D 로 보이는 건물·소품의 발자국을 실제 충돌 모양으로 쓴다
 ## 색 단계 수(채널당). 256 = 제한 없음, 낮출수록 색이 뭉쳐서 도트 그림 같은 느낌(예: 12). 시험용 값.
 # 빛 세기 배율(낮 해·환경광). 참조 화면보다 밝게 날아갈 때 낮춘다. 후처리의 knee(하이라이트 눌림)와 같이 쓴다.
@@ -350,6 +351,19 @@ func _current_hour() -> float:
 	return hour
 
 
+# 지금 계절(spring/summer/autumn/winter). season_override 가 있으면 그것, 아니면 달력.
+func current_season() -> String:
+	if season_override != "":
+		return season_override
+
+	var gs: Node = get_node_or_null("/root/GameState")
+
+	if gs == null:
+		return "spring"
+
+	return SeasonStyle.season_of_day(int(gs.get("total_day")))
+
+
 # 해/달 방향·색·세기, 환경광, 매장 등을 시각에 맞춘다. 색조는 data/shop/time_of_day.csv(2D 와 같은 표)에서 가져온다.
 func apply_hour(h: float) -> void:
 	if _env == null:
@@ -360,6 +374,8 @@ func apply_hour(h: float) -> void:
 	var luminance: float = raw_tint.get_luminance()
 	# 해·환경광 색은 시간대 색을 그대로 쓰지 않고 흰색 쪽으로 당겨(저녁·새벽이 붉게 쏠리지 않게) 쓴다.
 	var tint: Color = Color.WHITE.lerp(raw_tint, tint_strength)
+	var sst: Dictionary = SeasonStyle.style(current_season())
+	tint = tint * (sst["sun_tint"] as Color).lerp(Color.WHITE, 0.4)
 	var dark: float = 1.0 - clampf((luminance - 0.35) / 0.65, 0.0, 1.0)  # 0 = 낮, 1 = 한밤
 	var day_amt: float = smoothstep(5.0, 7.0, hour) * (1.0 - smoothstep(17.0, 19.0, hour))
 	var sun_curve: float = clampf(sin((hour - 6.0) / 12.0 * PI), 0.0, 1.0)
@@ -371,7 +387,7 @@ func apply_hour(h: float) -> void:
 	var sun_k: float = 0.3 if PlaceholderTextures.clean else 1.0
 	var amb_k: float = 1.05 if PlaceholderTextures.clean else 1.0
 	_sun.light_energy = light_scale * sun_k * lerpf(0.9, lerpf(0.8, 1.2, sun_curve), day_amt)
-	_env.ambient_light_color = Color(0.74, 0.76, 0.84) * tint
+	_env.ambient_light_color = Color(0.74, 0.76, 0.84) * tint * (sst["ambient_tint"] as Color)
 	_env.ambient_light_energy = light_scale * lerpf(1.35, 1.3 * amb_k, day_amt)
 	_fill.light_color = tint.lerp(Color(0.85, 0.9, 1.0), 0.35)
 	_fill.light_energy = lerpf(0.3, 0.3 if PlaceholderTextures.clean else 0.5, day_amt)
@@ -456,6 +472,7 @@ func _process(delta: float) -> void:
 		_sync_furniture()
 
 		if village != null and village_enabled:
+			village.set_season(current_season())
 			village.sync_ground()
 			village.sync_objects(world)
 

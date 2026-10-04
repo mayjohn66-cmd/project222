@@ -39,6 +39,9 @@ func _ready() -> void:
 	view.mode = StoreView3D.Mode.OVERLAY
 	_teleport(0)
 	var args := OS.get_cmdline_user_args()
+	var i_season := args.find("--season")
+	if i_season >= 0 and i_season + 1 < args.size():
+		view.season_override = args[i_season + 1]
 	var i_shot := args.find("--shot")
 	if i_shot >= 0 and i_shot + 1 < args.size():
 		await _shots(args[i_shot + 1], view)
