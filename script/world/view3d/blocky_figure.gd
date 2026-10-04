@@ -461,6 +461,7 @@ func _apply_attack_pose(d2r: float) -> void:
 	else:
 		s_sweep = lerpf(1.0, 0.0, smoothstep(0.5, 1.0, p))
 
+	s_sweep = -s_sweep  # 오른쪽에서 왼쪽으로 휘두른다(플레이어 기준)
 	var arm_up: float = smoothstep(0.0, 0.2, p) * (1.0 - smoothstep(0.55, 1.0, p))
 	var half_deg: float = _atk_arc * 0.5 + 8.0
 	# 회전 순서가 yaw(Y) → pitch(X) 라서, 팔을 앞으로 든 뒤 전체를 수직축으로 돌리는 것이 된다.

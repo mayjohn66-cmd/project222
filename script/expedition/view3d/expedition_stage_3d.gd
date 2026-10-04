@@ -590,8 +590,8 @@ func _build_slash_mesh(f: Dictionary, head_u: float, tail_u: float, alpha: float
 	var st := SurfaceTool.new()
 	st.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var c: Vector2 = f["center"]
-	var a0: float = float(f["angle"]) + float(f["half"])  # 시작(위쪽 오른쪽)
-	var a1: float = float(f["angle"]) - float(f["half"])
+	var a0: float = float(f["angle"]) - float(f["half"])  # 시작(오른쪽): 팔 휘두름과 같은 방향
+	var a1: float = float(f["angle"]) + float(f["half"])
 	var r_out: float = float(f["reach"]) * 1.0
 	var r_in: float = float(f["reach"]) * 0.4
 	var n: int = 14
