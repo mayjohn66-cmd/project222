@@ -28,6 +28,7 @@ func _ready() -> void:
 	fig.set_sorted(false)
 	fig.weapon_always = true
 	fig.set_weapon("sword")
+	print("WEAPON_SORT ", (fig.parts[fig.parts.size() - 1]["material"] as ShaderMaterial).get_shader_parameter("use_sort"))
 	fig.facing_yaw_deg = 90.0  # +x 쪽을 본다
 	fig.position = Vector3(0, 0, 0)
 	for i in 10: await get_tree().process_frame

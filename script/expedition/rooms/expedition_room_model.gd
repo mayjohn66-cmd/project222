@@ -73,6 +73,9 @@ func setup(config: ExpeditionRoomSettings, profile: ExpeditionAttackProfile,
 				"cooldown": 0.0, "windup": -1.0, "target": Vector2.ZERO
 			})
 	exit_open = enemies.is_empty()
+	# 오브젝트(상자·휴식·채집)의 자리는 방마다 랜덤: 시작 지점·출구·적·장애물에서 떨어지고 서로도 최대한 떨어지게 고른다.
+	if not kind.is_empty():
+		object_position = _place_objects(1)[0]
 
 func step(delta: float, movement: Vector2, attacking: bool) -> void:
 	if finished:
@@ -247,9 +250,74 @@ func alive_enemies() -> int:
 			count += 1
 	return count
 
+# 오브젝트 count 개의 자리를 고른다(타일 좌표). 후보를 흩뿌려 유효한 곳(장애물·시작·출구·적과 거리 확보)만 남기고,
+# 1개면 다른 것들에서 가장 먼 쪽, 2개 이상이면 서로 가장 먼 조합을 상위권에서 무작위로 고른다. 후보가 모자라면 예전 고정 자리로 돌아간다.
+func _place_objects(count: int) -> Array[Vector2]:
+	var fallback: Array[Vector2] = [Vector2(2.5, 3.5), Vector2(5.5, 3.5), Vector2(4.0, 5.0)]
+	var fixed: Array[Vector2] = [player_position, exit_position]
+	for enemy in enemies:
+		fixed.append(enemy["position"])
+	var candidates: Array[Vector2] = []
+	for i in range(240):
+		var c := Vector2(randf_range(0.9, 7.1), randf_range(1.3, 6.6))
+		var ok := true
+		for obstacle in obstacles:
+			if obstacle.grow(0.9).has_point(c):
+				ok = false
+				break
+		if not ok:
+			continue
+		if c.distance_to(player_position) < 1.9 or c.distance_to(exit_position) < 1.8:
+			continue
+		for enemy in enemies:
+			if c.distance_to(enemy["position"]) < 1.3:
+				ok = false
+				break
+		if ok:
+			candidates.append(c)
+	if candidates.size() < count * 3:
+		var out: Array[Vector2] = []
+		for i in range(count):
+			out.append(fallback[i % fallback.size()])
+		return out
+	var clearance := func(c: Vector2) -> float:
+		var best := INF
+		for f in fixed:
+			best = minf(best, c.distance_to(f))
+		return best
+	if count == 1:
+		candidates.sort_custom(func(a: Vector2, b: Vector2) -> bool: return clearance.call(a) > clearance.call(b))
+		return [candidates[randi() % maxi(1, candidates.size() / 5)]]
+	# 둘 이상: 첫 두 개를 서로 가장 먼 쌍으로(상위 12% 중 무작위), 셋째 이후는 기존 것들에서 가장 먼 후보
+	var pairs: Array = []
+	var limit := mini(candidates.size(), 70)
+	for i in range(limit):
+		for j in range(i + 1, limit):
+			var score: float = candidates[i].distance_to(candidates[j]) + 0.35 * (clearance.call(candidates[i]) + clearance.call(candidates[j]))
+			pairs.append([score, candidates[i], candidates[j]])
+	pairs.sort_custom(func(a, b) -> bool: return a[0] > b[0])
+	var pick: Array = pairs[randi() % maxi(1, pairs.size() / 8)]
+	var result: Array[Vector2] = [pick[1], pick[2]]
+	while result.size() < count:
+		var best_c: Vector2 = candidates[0]
+		var best_d := -1.0
+		for c in candidates:
+			var d := INF
+			for r in result:
+				d = minf(d, c.distance_to(r))
+			if d > best_d:
+				best_d = d
+				best_c = c
+		result.append(best_c)
+	return result
+
 func configure_gathering(sites: Array[Dictionary]) -> void:
 	if object_kind != "gather": return
 	gathering_sites = sites.duplicate(true)
+	var spots: Array[Vector2] = _place_objects(gathering_sites.size())
+	for i in range(gathering_sites.size()):
+		gathering_sites[i]["x"] = spots[i].x
+		gathering_sites[i]["y"] = spots[i].y
 	if not gathering_sites.is_empty(): _select_site(0)
 
 func _select_site(index: int) -> void:

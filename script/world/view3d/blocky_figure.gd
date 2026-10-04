@@ -33,6 +33,7 @@ var _atk_arc: float = 80.0  # 공격 부채꼴 각도(도). 팔을 이만큼 휩
 var _weapon: Node3D = null
 var _hurt_t: float = -1.0  # 피격 진행 시간(초), -1 = 아님
 var _hurt_dur: float = 0.4
+var _sorted: bool = true  # set_sorted 로 정해 둔 깊이 방식(나중에 만든 무기 부품에도 적용)
 var weapon_always: bool = false  # true 면 무기를 늘 들고 있다(원정 방)
 var _weapon_hold: float = 0.0  # 공격이 끝난 뒤에도 무기를 잠깐 더 보인다
 var _idle_t: float = 0.0
@@ -221,6 +222,8 @@ func set_tint(c: Color) -> void:
 
 # 순번 깊이를 쓸지(기본) / 진짜 깊이를 쓸지. 순번 정렬이 없는 장면(원정 방)에서는 false.
 func set_sorted(sorted: bool) -> void:
+	_sorted = sorted
+
 	for part in parts:
 		(part["material"] as ShaderMaterial).set_shader_parameter("use_sort", sorted)
 
@@ -397,6 +400,7 @@ func set_weapon(kind: String) -> void:
 		_weapon.rotation.x = deg_to_rad(-50.0)  # 칼끝이 손에서 앞쪽 아래로 비스듬히(팔을 들면 앞쪽 위)
 
 	_weapon.visible = weapon_always
+	set_sorted(_sorted)  # 새 부품(무기)에도 같은 깊이 방식을 적용해 몸에 가려지게 한다
 
 
 # 공격 동작을 시작한다. duration 은 휘두르는 전체 시간. ranged 면 두 팔을 앞으로 뻗어 쏘는 동작.

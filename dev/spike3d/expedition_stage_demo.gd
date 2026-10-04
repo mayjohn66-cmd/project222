@@ -2,7 +2,7 @@ extends Node
 ## 원정 던전 방 3D 점검(개발용). 인자: --out <폴더> [--regions forest,mine,swamp,hidden_ruins]
 func _ready() -> void:
 	var out := ""
-	var regions: PackedStringArray = ["forest", "mine", "swamp", "hidden_ruins"]
+	var regions: PackedStringArray = ["forest", "mine", "swamp", "hidden_ruins", "forest", "mine", "swamp", "hidden_ruins"]
 	var args := OS.get_cmdline_user_args()
 	for i in range(args.size()):
 		if args[i] == "--out" and i + 1 < args.size():
@@ -16,8 +16,15 @@ func _ready() -> void:
 	for region in regions:
 		var model := ExpeditionRoomModel.new()
 		var enemy := {"id": "", "name": "슬라임", "max_hp": 40, "attack": 6, "defense": 1}
-		var kind: String = ["chest", "gather", "heal", ""][n % 4]
-		model.setup(settings, settings.default_attack, 100, 100, 12, 3, enemy, 1, n == 3, kind)
+		var kind: String = "gather"
+		model.setup(settings, settings.default_attack, 100, 100, 12, 3, enemy, 1, false, kind)
+		model.configure_gathering(model.CONTENT.gathering(region + "_gather_choice"))
+		var sd: String = ""
+		for site in model.gathering_sites:
+			sd += " %s(%.1f,%.1f)" % [site["label"], site["x"], site["y"]]
+		if model.gathering_sites.size() == 2:
+			sd += " 거리 %.2f" % Vector2(model.gathering_sites[0]["x"], model.gathering_sites[0]["y"]).distance_to(Vector2(model.gathering_sites[1]["x"], model.gathering_sites[1]["y"]))
+		print("SITES ", region, sd)
 		view.region_id = region
 		view.model = model
 		view.title_label.text = region
@@ -27,6 +34,6 @@ func _ready() -> void:
 			model.step(0.05, Vector2(0.6, -0.8), false)
 			await get_tree().process_frame
 		for i in 6: await get_tree().process_frame
-		get_viewport().get_texture().get_image().save_png("%s/stage_%s.png" % [out, region])
+		get_viewport().get_texture().get_image().save_png("%s/stage_%d_%s.png" % [out, n, region])
 		n += 1
 	get_tree().quit()

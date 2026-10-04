@@ -320,43 +320,297 @@ func _build_objects(model: RefCounted) -> void:
 		return
 
 	if model.gathering_sites.is_empty():
-		_object_nodes.append(_make_object(str(model.object_kind), model.object_position, Color("edd18a")))
+		_object_nodes.append(_make_object(str(model.object_kind), "", model.object_position, Color("edd18a")))
 	else:
 		for site in model.gathering_sites:
-			_object_nodes.append(_make_object("gather_site", Vector2(float(site["x"]), float(site["y"])), Color(str(site["color"]))))
+			_object_nodes.append(_make_object("gather_site", str(site.get("table", "")), Vector2(float(site["x"]), float(site["y"])), Color(str(site["color"]))))
 
 
-func _make_object(kind: String, at: Vector2, color: Color) -> Node3D:
-	var b := VillageAssets.PartBuilder.new()
-	var ts: int = int(_p["ts"])
+func _rng_for(at: Vector2, salt: int) -> RandomNumberGenerator:
+	var r := RandomNumberGenerator.new()
+	r.seed = hash(Vector3i(roundi(at.x * 100.0), roundi(at.y * 100.0), salt))
+	return r
 
-	if kind == "chest":
-		var wood_s: Dictionary = VillageAssets.wood(_p, Color(0.62, 0.42, 0.24), "chest_wood")
-		var gold: Dictionary = VillageAssets._flat_spec(ts, Color(0.95, 0.78, 0.25), "chest_gold")
-		gold["emit"] = 0.25
-		VillageAssets.box(b, "body", wood_s, Vector3(-0.3, 0, -0.22), Vector3(0.3, 0.3, 0.22))
-		VillageAssets.box(b, "lid", wood_s, Vector3(-0.32, 0.3, -0.24), Vector3(0.32, 0.46, 0.24))
-		VillageAssets.box(b, "band", gold, Vector3(-0.34, 0.1, -0.06), Vector3(0.34, 0.2, 0.06))
-		VillageAssets.box(b, "lock", gold, Vector3(-0.06, 0.28, 0.22), Vector3(0.06, 0.4, 0.28))
-	elif kind == "heal":
-		var spring: Dictionary = VillageAssets._flat_spec(ts, Color(0.45, 0.8, 0.95), "heal_water")
-		spring["emit"] = 0.5
-		var rim: Dictionary = VillageAssets.stone_spec(_p, Color(0.8, 0.82, 0.88), "heal_rim")
-		VillageAssets.oct(b, "rim", rim, 0.0, 0.0, 0.45, 0.0, 0.22, 0.42)
-		VillageAssets.oct(b, "water", spring, 0.0, 0.0, 0.34, 0.2, 0.26, 0.33)
+
+# 한 부품(면)에 여러 도형을 모으는 도우미: 같은 재질 여러 개를 한 면으로 합쳐 면 수를 줄인다.
+func _part(b: VillageAssets.PartBuilder, spec: Dictionary) -> SurfaceTool:
+	return b.new_part(spec, Vector3(-1, 0, -1), Vector3(1, 1.5, 1))
+
+
+func _make_object(kind: String, table: String, at: Vector2, color: Color) -> Node3D:
+	var rng: RandomNumberGenerator = _rng_for(at, 7)
+	var node: Node3D
+
+	if kind == "chest" or kind == "heal":
+		node = _object_chest(rng) if kind == "chest" else _object_spring(rng)
 	else:
-		# 채집 지점: 색 수정/풀 다발 여러 개
-		var cry: Dictionary = VillageAssets._flat_spec(ts, color, "gather_crystal")
-		cry["emit"] = 0.6
-		var dark: Dictionary = VillageAssets._flat_spec(ts, color.darkened(0.35), "gather_crystal_dark")
-		VillageAssets.oct(b, "c1", dark, 0.0, 0.0, 0.2, 0.0, 0.42, 0.03)
-		VillageAssets.oct(b, "c2", cry, -0.2, 0.08, 0.13, 0.0, 0.62, 0.02)
-		VillageAssets.oct(b, "c3", cry, 0.18, -0.1, 0.12, 0.0, 0.5, 0.02)
-		VillageAssets.oct(b, "c4", dark, 0.08, 0.2, 0.1, 0.0, 0.34, 0.02)
+		match table:
+			"choice_forest_herb":
+				node = _object_herbs(rng)
+			"choice_wild_berry":
+				node = _object_berry_tree(rng)
+			"choice_iron_ore":
+				node = _object_ore(rng)
+			"choice_stone_shard":
+				node = _object_stones(rng)
+			"choice_swamp_moss":
+				node = _object_moss(rng)
+			"choice_marsh_reed":
+				node = _object_reeds(rng)
+			"choice_ancient_fragment":
+				node = _object_ruin_fragments(rng)
+			"choice_rune_dust":
+				node = _object_rune_crystals(rng)
+			_:
+				node = _object_crystals(rng, color)
 
-	var inst: MeshInstance3D = _node(b)
-	inst.position = Vector3(at.x, 0.0, at.y)
-	return inst
+	node.position = Vector3(at.x, 0.0, at.y)
+	node.rotation.y = rng.randf() * TAU
+	return node
+
+
+func _flat(color: Color, name: String, emit: float = 0.0) -> Dictionary:
+	var sp: Dictionary = VillageAssets._flat_spec(int(_p["ts"]), color, name)
+
+	if emit > 0.0:
+		sp["emit"] = emit
+
+	return sp
+
+
+func _object_chest(rng: RandomNumberGenerator) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var ornate: bool = rng.randf() < 0.4
+	var wood_s: Dictionary = VillageAssets.wood(_p, Color(0.5, 0.32, 0.2) if ornate else Color(0.62, 0.42, 0.24), "chest_wood")
+	var gold: Dictionary = _flat(Color(0.95, 0.78, 0.25), "chest_gold", 0.25)
+	VillageAssets.box(b, "body", wood_s, Vector3(-0.3, 0, -0.22), Vector3(0.3, 0.3, 0.22))
+	VillageAssets.box(b, "lid", wood_s, Vector3(-0.32, 0.3, -0.24), Vector3(0.32, 0.46, 0.24))
+	VillageAssets.box(b, "band", gold, Vector3(-0.34, 0.1, -0.06), Vector3(0.34, 0.2, 0.06))
+	VillageAssets.box(b, "lock", gold, Vector3(-0.06, 0.28, 0.22), Vector3(0.06, 0.4, 0.28))
+
+	if ornate:
+		VillageAssets.box(b, "corner", gold, Vector3(-0.34, 0, -0.26), Vector3(-0.26, 0.46, -0.18))
+		VillageAssets.box(b, "corner", gold, Vector3(0.26, 0, -0.26), Vector3(0.34, 0.46, -0.18))
+
+	return _node(b)
+
+
+func _object_spring(rng: RandomNumberGenerator) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var water: Dictionary = _flat(Color(0.45, 0.8, 0.95), "heal_water", 0.5)
+	var rim: Dictionary = VillageAssets.stone_spec(_p, Color(0.8, 0.82, 0.88), "heal_rim")
+	var r: float = 0.4 + rng.randf() * 0.1
+	VillageAssets.oct(b, "rim", rim, 0.0, 0.0, r, 0.0, 0.22, r - 0.03)
+	VillageAssets.oct(b, "water", water, 0.0, 0.0, r - 0.11, 0.2, 0.26, r - 0.12)
+	# 샘 옆에 빛나는 작은 돌 둘(형태 변주)
+	var glow: Dictionary = _flat(Color(0.7, 0.95, 1.0), "heal_glow", 0.8)
+
+	for k in range(2):
+		var a: float = rng.randf() * TAU
+		VillageAssets.oct(b, "stone", glow, cos(a) * (r + 0.12), sin(a) * (r + 0.12), 0.06, 0.0, 0.16, 0.0)
+
+	return _node(b)
+
+
+# 약초: 풀 무더기 — 여러 갈래의 풀잎(가늘고 뾰족)과 몇 송이 꽃
+func _object_herbs(rng: RandomNumberGenerator) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var greens: Array = [Color(0.22, 0.52, 0.22), Color(0.3, 0.62, 0.26), Color(0.4, 0.72, 0.3)]
+	var sts: Array = []
+
+	for k in range(3):
+		sts.append(_part(b, _flat(greens[k], "herb_%d" % k)))
+
+	var n: int = 15 + rng.randi() % 8
+
+	for i in range(n):
+		var a: float = rng.randf() * TAU
+		var d: float = sqrt(rng.randf()) * 0.44
+		var h: float = 0.2 + rng.randf() * 0.34
+		VillageAssets.oct_st(sts[i % 3], cos(a) * d, sin(a) * d, 0.04 + rng.randf() * 0.03, 0.0, h, 0.0)
+
+	var flower_cols: Array = [Color(1.0, 0.95, 0.95), Color(1.0, 0.8, 0.25), Color(0.85, 0.6, 1.0)]
+	var fst: SurfaceTool = _part(b, _flat(flower_cols[rng.randi() % 3], "herb_flower", 0.2))
+
+	for i in range(3 + rng.randi() % 3):
+		var a2: float = rng.randf() * TAU
+		var d2: float = sqrt(rng.randf()) * 0.36
+		VillageAssets.dome_st(fst, cos(a2) * d2, sin(a2) * d2, 0.05, 0.3, 0.42, 2, 6)
+
+	return _node(b)
+
+
+# 열매 따기: 열매가 맺힌 나무(작은 나무 + 붉은 열매 알갱이)
+func _object_berry_tree(rng: RandomNumberGenerator) -> Node3D:
+	var half := Vector2(0.5, 0.5)
+	var variant: String = ["round", "round", "big_oak"][rng.randi() % 3]
+	var built: Dictionary = VillageAssets.build_prop("tree", -half, half, {"variant": variant}, _p)
+	var mats: Array = VillageAssets.make_materials(built["specs"])
+
+	for m in mats:
+		(m as ShaderMaterial).set_shader_parameter("use_sort", false)
+
+	var tree := MeshInstance3D.new()
+	tree.mesh = built["mesh"]
+
+	for i in range(mats.size()):
+		tree.set_surface_override_material(i, mats[i])
+
+	var sc: float = 0.62 + rng.randf() * 0.1
+	tree.scale = Vector3.ONE * sc
+	_content.add_child(tree)
+	# 열매: 수관 둘레에 붉은 알갱이를 박는다(나무 좌표계 = 확대 전)
+	var b := VillageAssets.PartBuilder.new()
+	var cols: Array = [Color(0.9, 0.15, 0.2), Color(0.95, 0.35, 0.15), Color(0.8, 0.1, 0.45)]
+	var st: SurfaceTool = _part(b, _flat(cols[rng.randi() % 3], "berry", 0.35))
+
+	for i in range(14):
+		var yaw: float = rng.randf() * TAU
+		var pitch: float = rng.randf_range(-0.2, 1.0)
+		var rad: float = 0.9 if variant == "round" else 1.0
+		var dir := Vector3(cos(yaw) * cos(pitch), sin(pitch), sin(yaw) * cos(pitch))
+		var pos: Vector3 = Vector3(0.0, 1.45, 0.0) + dir * rad
+		VillageAssets.dome_st(st, pos.x, pos.z, 0.075, pos.y - 0.04, pos.y + 0.07, 2, 6)
+
+	var berries: MeshInstance3D = _node(b)
+	_content.remove_child(berries)
+	tree.add_child(berries)
+	return tree
+
+
+# 철광맥: 어두운 바위 무더기 + 녹슨 쇳덩이와 은빛 광석 알갱이
+func _object_ore(rng: RandomNumberGenerator) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var rock: Dictionary = VillageAssets._noise_spec(int(_p["ts"]), Color(0.3, 0.3, 0.34), Color(0.45, 0.45, 0.5), "ore_rock", 51, Color.WHITE, 0.12)
+	var rst: SurfaceTool = _part(b, rock)
+
+	for i in range(4 + rng.randi() % 2):
+		var a: float = rng.randf() * TAU
+		var d: float = 0.12 + rng.randf() * 0.22
+		VillageAssets.dome_st(rst, cos(a) * d, sin(a) * d, 0.2 + rng.randf() * 0.12, 0.0, 0.3 + rng.randf() * 0.3, 2, 8)
+
+	var rust: SurfaceTool = _part(b, _flat(Color(0.62, 0.34, 0.2), "ore_rust"))
+	var silver: SurfaceTool = _part(b, _flat(Color(0.72, 0.8, 0.9), "ore_silver", 0.25))
+
+	for i in range(7):
+		var a2: float = rng.randf() * TAU
+		var d2: float = 0.16 + rng.randf() * 0.26
+		var x: float = cos(a2) * d2
+		var z: float = sin(a2) * d2
+		var y: float = 0.08 + rng.randf() * 0.35
+		VillageAssets.box_st(rust if i % 2 == 0 else silver, Vector3(x - 0.05, y, z - 0.05), Vector3(x + 0.06, y + 0.1, z + 0.06))
+
+	return _node(b)
+
+
+# 돌 조각: 납작한 작은 돌 여러 개
+func _object_stones(rng: RandomNumberGenerator) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var st: SurfaceTool = _part(b, VillageAssets._noise_spec(int(_p["ts"]), Color(0.52, 0.55, 0.58), Color(0.7, 0.72, 0.76), "shard_stone", 53, Color.WHITE, 0.12))
+
+	for i in range(7 + rng.randi() % 4):
+		var a: float = rng.randf() * TAU
+		var d: float = sqrt(rng.randf()) * 0.42
+		VillageAssets.dome_st(st, cos(a) * d, sin(a) * d, 0.07 + rng.randf() * 0.1, 0.0, 0.05 + rng.randf() * 0.1, 2, 6)
+
+	return _node(b)
+
+
+# 이끼: 낮고 넓은 초록 이끼 덩이와 작은 버섯
+func _object_moss(rng: RandomNumberGenerator) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var moss_a: SurfaceTool = _part(b, VillageAssets._noise_spec(int(_p["ts"]), Color(0.3, 0.5, 0.24), Color(0.5, 0.7, 0.34), "moss_a", 55, Color.WHITE, 0.14))
+	var moss_b: SurfaceTool = _part(b, VillageAssets._noise_spec(int(_p["ts"]), Color(0.22, 0.42, 0.28), Color(0.4, 0.6, 0.4), "moss_b", 57, Color.WHITE, 0.14))
+
+	for i in range(7 + rng.randi() % 3):
+		var a: float = rng.randf() * TAU
+		var d: float = sqrt(rng.randf()) * 0.4
+		VillageAssets.dome_st(moss_a if i % 2 == 0 else moss_b, cos(a) * d, sin(a) * d, 0.16 + rng.randf() * 0.14, 0.0, 0.1 + rng.randf() * 0.12, 2, 8)
+
+	var stem: SurfaceTool = _part(b, _flat(Color(0.9, 0.88, 0.8), "mush_stem"))
+	var cap: SurfaceTool = _part(b, _flat(Color(0.8, 0.3, 0.3), "mush_cap"))
+
+	for i in range(2 + rng.randi() % 2):
+		var a2: float = rng.randf() * TAU
+		var d2: float = 0.15 + rng.randf() * 0.25
+		var x: float = cos(a2) * d2
+		var z: float = sin(a2) * d2
+		VillageAssets.box_st(stem, Vector3(x - 0.02, 0.1, z - 0.02), Vector3(x + 0.02, 0.24, z + 0.02))
+		VillageAssets.dome_st(cap, x, z, 0.07, 0.22, 0.31, 2, 6)
+
+	return _node(b)
+
+
+# 갈대: 가늘고 긴 줄기 다발과 끝의 갈색 이삭
+func _object_reeds(rng: RandomNumberGenerator) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var cols: Array = [Color(0.72, 0.7, 0.4), Color(0.6, 0.66, 0.34)]
+	var sts: Array = [_part(b, _flat(cols[0], "reed_a")), _part(b, _flat(cols[1], "reed_b"))]
+	var tip: SurfaceTool = _part(b, _flat(Color(0.45, 0.3, 0.18), "reed_tip"))
+
+	for i in range(16 + rng.randi() % 6):
+		var a: float = rng.randf() * TAU
+		var d: float = sqrt(rng.randf()) * 0.4
+		var h: float = 0.6 + rng.randf() * 0.5
+		var x: float = cos(a) * d
+		var z: float = sin(a) * d
+		VillageAssets.oct_st(sts[i % 2], x, z, 0.03, 0.0, h, 0.012)
+
+		if i % 3 == 0:
+			VillageAssets.oct_st(tip, x, z, 0.04, h - 0.02, h + 0.14, 0.03)
+
+	return _node(b)
+
+
+# 고대 파편: 부서진 석판·기둥 조각과 희미하게 빛나는 문양
+func _object_ruin_fragments(rng: RandomNumberGenerator) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var stone: Dictionary = VillageAssets._noise_spec(int(_p["ts"]), Color(0.62, 0.58, 0.5), Color(0.78, 0.74, 0.66), "frag_stone", 59, Color.WHITE, 0.1)
+	var sst: SurfaceTool = _part(b, stone)
+
+	for i in range(3 + rng.randi() % 2):
+		var a: float = rng.randf() * TAU
+		var d: float = rng.randf() * 0.32
+		var x: float = cos(a) * d
+		var z: float = sin(a) * d
+		var w: float = 0.1 + rng.randf() * 0.12
+		VillageAssets.box_st(sst, Vector3(x - w, 0.0, z - 0.05), Vector3(x + w, 0.18 + rng.randf() * 0.4, z + 0.06))
+
+	for i in range(4):
+		VillageAssets.dome_st(sst, rng.randf_range(-0.4, 0.4), rng.randf_range(-0.4, 0.4), 0.08 + rng.randf() * 0.05, 0.0, 0.07, 2, 6)
+
+	var rune: SurfaceTool = _part(b, _flat(Color(0.5, 0.9, 1.0), "frag_rune", 1.0))
+	var rx: float = rng.randf_range(-0.1, 0.1)
+	VillageAssets.box_st(rune, Vector3(rx - 0.03, 0.12, 0.07), Vector3(rx + 0.03, 0.34, 0.1))
+	return _node(b)
+
+
+# 룬 가루: 보랏빛 룬 수정 몇 개와 바닥에 희미하게 빛나는 원
+func _object_rune_crystals(rng: RandomNumberGenerator) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var glow: SurfaceTool = _part(b, _flat(Color(0.7, 0.45, 1.0), "rune_crystal", 0.8))
+	var dark: SurfaceTool = _part(b, _flat(Color(0.4, 0.25, 0.65), "rune_crystal_dark", 0.3))
+
+	for i in range(4 + rng.randi() % 3):
+		var a: float = rng.randf() * TAU
+		var d: float = rng.randf() * 0.28
+		var h: float = 0.3 + rng.randf() * 0.42
+		VillageAssets.oct_st(glow if i % 2 == 0 else dark, cos(a) * d, sin(a) * d, 0.09 + rng.randf() * 0.05, 0.0, h, 0.0)
+
+	var ring: SurfaceTool = _part(b, _flat(Color(0.65, 0.4, 0.95), "rune_ring", 0.6))
+	VillageAssets.oct_st(ring, 0.0, 0.0, 0.46, 0.0, 0.015, 0.45)
+	return _node(b)
+
+
+# 그 밖의 채집 지점: 색 수정 다발(기본)
+func _object_crystals(rng: RandomNumberGenerator, color: Color) -> Node3D:
+	var b := VillageAssets.PartBuilder.new()
+	var cry: Dictionary = _flat(color, "gather_crystal", 0.6)
+	var dark: Dictionary = _flat(color.darkened(0.35), "gather_crystal_dark")
+	VillageAssets.oct(b, "c1", dark, 0.0, 0.0, 0.2, 0.0, 0.42, 0.03)
+	VillageAssets.oct(b, "c2", cry, -0.2, 0.08, 0.13, 0.0, 0.62, 0.02)
+	VillageAssets.oct(b, "c3", cry, 0.18, -0.1, 0.12, 0.0, 0.5, 0.02)
+	return _node(b)
 
 
 func _build_enemies(model: RefCounted) -> void:
