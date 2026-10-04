@@ -1,0 +1,24 @@
+[gd_resource type="Resource" script_class="SeasonalVillageSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/requests/seasonal_village_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+events = Array[Dictionary]([
+{"id":"spring_snack_ingredients","season":"spring","giver":"naru","mode":"delivery","after_request":"naru_lunch_extra","after_request_heard":true,"days_after_request":1,"friendship":3,"continue_outside_season":true,"requirements":[{"item":"forest_herb","amount":2},{"item":"wild_berry","amount":2}],"gifts":[{"item":"wheat","amount":2}],"reputation":1},
+{"id":"summer_reed_tea_materials","season":"summer","giver":"doyun","mode":"delivery","after_request":"doyun_waterside_flask","after_request_heard":true,"days_after_request":1,"friendship":3,"continue_outside_season":true,"requirements":[{"item":"marsh_reed","amount":2},{"item":"raw_water","amount":2}],"gifts":[{"item":"stone_shard","amount":2}],"reputation":1},
+{"id":"autumn_lamp_materials","season":"autumn","giver":"doyun","mode":"delivery","after_request":"sora_autumn_tea","after_request_heard":true,"days_after_request":1,"friendship":3,"continue_outside_season":true,"requirements":[{"item":"glow_algae","amount":2},{"item":"marsh_reed","amount":1}],"gifts":[{"item":"coal","amount":2}],"reputation":1},
+{"id":"winter_shared_meal_materials","season":"winter","giver":"naru","mode":"delivery","after_request":"doyun_winter_breakfast","after_request_heard":true,"days_after_request":1,"friendship":3,"continue_outside_season":true,"requirements":[{"item":"forest_mushroom","amount":2},{"item":"wheat","amount":2}],"gifts":[{"item":"dry_branch","amount":2}],"reputation":1}
+])
+moments = Array[Dictionary]([
+{"id":"spring_snack_ingredients_intro","npc":"타블렌","stage":"봄에 도시락 후속 약초 빵 부탁과 타블렌 후일담 완독 다음 날 이후. 봄 간식에 보탤 숲 약초·야생 열매 원재료 부탁. 소개 완독으로 시작. 창고 재료를 타블렌에게 직접 E로 전달하며 게시판 전달 아님. 맡은 뒤에는 계절 밖에도 유지. 새 레시피·실제 간식 제조·판매 보장 없음."},
+{"id":"spring_snack_ingredients_wait","npc":"타블렌","stage":"맡은 봄 간식 재료 부탁의 원재료가 부족함. 수첩의 각 창고 수량을 확인하고 타블렌에게 직접 E로 돌아오기. 준비한 완제품·가방·진열 재고는 세지 않음. 맡은 후 계절 밖에도 기다림."},
+{"id":"spring_snack_ingredients_finish","npc":"타블렌","stage":"창고 약초·열매를 준비하고 타블렌에게 직접 E 최종 대화 완독 시 원재료 소비, 밀 답례·평판 최초1회. 수량은 UI가 표시. 중단/재고 부족은 소비 없음. 맡은 후 계절 밖에도 완료 가능. completion은 준비를 도운 기억, 실제 제작·새 아이템·추가 후일담 없음."},
+{"id":"summer_reed_tea_materials_intro","npc":"코르빈","stage":"여름에 미네랄 워터 개인 부탁과 코르빈 후일담 완독 다음 날 이후. 기존 갈대 차에 쓰는 늪 갈대·채집한 물 원재료 부탁. 플레이어는 차 제조법을 배우거나 완제품을 만들 필요 없이 창고 재료를 코르빈에게 직접 E 전달. 소개 완독 시작. 맡으면 계절 밖에도 유지. 물가 이동·냉각·회복 없음."},
+{"id":"summer_reed_tea_materials_wait","npc":"코르빈","stage":"맡은 여름 차 재료 부탁의 원재료 부족. 완제품 차/생수가 아닌 늪 갈대·채집한 물을 창고에 모아 코르빈에게 E로 직접 전달. 기한 없고 이미 맡았다면 현재 계절 무관."},
+{"id":"summer_reed_tea_materials_finish","npc":"코르빈","stage":"갈대·채집한 물이 창고에 있고 코르빈에게 최종 E 완독 시 소비하고 돌 조각·평판 최초1회 답례. 실제 차 제조·음료 회복·새 장소·제조법 학습 없음. 중단/재고 감소 때 소비 없음. completion은 준비를 나눈 기억이며 여름이 지나도 맞는 서술."},
+{"id":"autumn_lamp_materials_intro","npc":"코르빈","stage":"가을에 이세르 갈대 차 부탁과 이세르 후일담 완독 다음 날 이후. 다른 이웃 코르빈이 저녁 채비에 쓸 발광 해초·늪 갈대 원재료를 부탁. 소개 완독으로 시작, 창고에서 코르빈에게 직접 E 전달. 발광 등불 판매 상품이나 기존 길목 등불 시설의 지급/설치/수리 아님. 맡으면 계절 밖에도 유지."},
+{"id":"autumn_lamp_materials_wait","npc":"코르빈","stage":"맡은 가을 저녁 준비의 발광 해초·늪 갈대 원재료 부족. 창고 수량을 수첩에서 확인해 코르빈에게 직접 E로 돌아오기. 실제 등불 완제품을 요구하지 않음. 기한 없음."},
+{"id":"autumn_lamp_materials_finish","npc":"코르빈","stage":"창고 해초·갈대를 준비하고 코르빈에게 최종 E 완독 시 소비하고 석탄·평판 최초1회 답례. 새 불빛·시설 수리·등불 아이템 지급·날씨·시간 변경 없음. completion은 이웃들의 저녁 준비를 도운 기억. 계절 밖에도 완료 가능."},
+{"id":"winter_shared_meal_materials_intro","npc":"타블렌","stage":"겨울에 코르빈 여행자 스튜 부탁과 코르빈 후일담 완독 다음 날 이후. 타블렌이 함께 먹을 준비에 보탤 숲 버섯·밀 원재료 부탁. 실제 정해진 레시피를 제조/해금하는 이벤트 아님. 소개 완독으로 시작하여 창고에서 타블렌에게 직접 E 전달. 맡으면 계절 밖에도 유지. 새 식탁·군중·섭취·난방 없음."},
+{"id":"winter_shared_meal_materials_wait","npc":"타블렌","stage":"맡은 겨울 식사 준비의 버섯·밀 부족. 창고에 두 원재료를 준비하여 타블렌에게 직접 E로 돌아오기. 스튜 완제품이나 진열 재고는 요구하지 않음. 아침/저녁 시간 제한과 기한 없음."},
+{"id":"winter_shared_meal_materials_finish","npc":"타블렌","stage":"창고 버섯·밀을 준비하고 타블렌에게 최종 E 완독 시 소비하고 마른 가지·평판 최초1회 답례. 돈·실제 식사 회복·새 모임·새 고객·시설 없음. completion은 함께 먹을 준비에 보탠 기억, 실제 군중 장면이나 현재 겨울이라는 단정 없음. 계절 밖에도 완료 가능."}
+])

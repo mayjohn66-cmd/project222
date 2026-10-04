@@ -23,7 +23,7 @@ static func entries() -> Array[Dictionary]:
 	result.append({"id":VillageMarketFlow.JOURNAL_ID,"title":VillageMarketFlow.title()})
 	result.append({"id":VillageRestFlow.JOURNAL_ID,"title":"쉼터에서 처음 함께 쉬기"})
 	result.append({"id":VillageGoodwillFlow.JOURNAL_ID,"title":VillageGoodwillFlow.title()})
-	for event in SeasonalVillageFlow.SETTINGS.events:
+	for event in SeasonalVillageFlow.events():
 		result.append({"id":SeasonalVillageFlow.JOURNAL_PREFIX + str(event["id"]), "title":SeasonalVillageFlow.title(str(event["id"]))})
 	return result
 

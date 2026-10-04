@@ -19,7 +19,7 @@ func _ready() -> void:
 	dialogue.finished.connect(_end_talk)
 func nearest() -> String:
 	if talking or life._blocked() or world.get_node("CommunityBoardDirector").near_board(): return ""
-	for entry in SeasonalVillageFlow.SETTINGS.events:
+	for entry in SeasonalVillageFlow.events():
 		var id := str(entry["id"])
 		if not SeasonalVillageFlow.can_observe(id, world, manager.current_hour): continue
 		var target := SeasonalVillageFlow.site(world, id)

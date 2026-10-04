@@ -5,8 +5,13 @@ const PREFIX := "seasonal_village:"
 const JOURNAL_PREFIX := "seasonal:"
 const SEASON_NAMES := {"spring":"봄", "summer":"여름", "autumn":"가을", "winter":"겨울"}
 
+static func events() -> Array[Dictionary]:
+	var result: Array[Dictionary] = SETTINGS.events.duplicate(true)
+	result.append_array(SeasonalLifeRequestFlow.SETTINGS.events)
+	return result
+
 static func event(id: String) -> Dictionary:
-	for entry in SETTINGS.events:
+	for entry in events():
 		if str(entry["id"]) == id: return entry
 	return {}
 static func key(id: String, stage: String) -> String: return PREFIX + id + ":" + stage
@@ -18,7 +23,11 @@ static func title(id: String) -> String: return RequestTextData.text("service_te
 static func locked_reason(entry: Dictionary) -> String:
 	if entry.is_empty(): return ""
 	if not CommunityRequestFlow.board_available(): return "안내를 마치고 첫 이웃의 정착을 도와 주세요."
-	if CalendarData.get_season_id(GameState.total_day) != str(entry["season"]): return "%s에 이어갈 수 있어요. 진행 기록은 다음 %s에도 유지됩니다." % [SEASON_NAMES[entry["season"]], SEASON_NAMES[entry["season"]]]
+	var prerequisite := SeasonalLifeRequestFlow.locked_reason(entry)
+	if not prerequisite.is_empty(): return prerequisite
+	if not SeasonalLifeRequestFlow.season_available(entry, accepted(str(entry["id"]))):
+		if bool(entry.get("continue_outside_season", false)): return "%s에 제안을 들을 수 있어요. 맡은 뒤에는 계절이 바뀌어도 준비할 수 있습니다." % SEASON_NAMES[entry["season"]]
+		return "%s에 이어갈 수 있어요. 진행 기록은 다음 %s에도 유지됩니다." % [SEASON_NAMES[entry["season"]], SEASON_NAMES[entry["season"]]]
 	var after := str(entry.get("after", ""))
 	if not after.is_empty() and not CommunityRequestFlow.done(after): return "먼저 %s 공동 부탁을 마쳐 주세요." % RequestTextData.text("community_request", after, "title", after)
 	var residents: Array = entry.get("participants", []).duplicate()
@@ -88,23 +97,26 @@ static func requirements_description(id: String) -> String:
 	for item in totals: parts.append("%s %d/%d · 창고" % [ItemData.get_item_name(item), GameState.get_item_count(item), int(totals[item])])
 	return " · ".join(parts)
 static func action(resident: String) -> Dictionary:
-	for entry in SETTINGS.events:
-		var id := str(entry["id"])
-		if completed(id) or not locked_reason(entry).is_empty(): continue
-		var stage := ""
-		var scene := ""
-		if not accepted(id):
-			if resident != entry["giver"]: continue
-			stage = "introduction"
-			scene = id + "_intro"
-		elif entry["mode"] == "neighbors" and resident in entry["participants"] and not heard(id, resident):
-			stage = "listen"
-			scene = id + "_" + resident
-		elif resident == entry["giver"]:
-			stage = "finish" if ready(id) else "reminder"
-			scene = id + ("_finish" if ready(id) else "_wait")
-		else: continue
-		return {"flow":"seasonal", "event":id, "resident":resident, "stage":stage, "id":scene}
+	var all_events := events()
+	# 계절이 바뀌어도 맡은 부탁의 안내를 새 계절 제안으로 덮지 않는다.
+	for started in [true, false]:
+		for entry in all_events:
+			var id := str(entry["id"])
+			if accepted(id) != started or completed(id) or not locked_reason(entry).is_empty(): continue
+			var stage := ""
+			var scene := ""
+			if not started:
+				if resident != entry["giver"]: continue
+				stage = "introduction"
+				scene = id + "_intro"
+			elif entry["mode"] == "neighbors" and resident in entry["participants"] and not heard(id, resident):
+				stage = "listen"
+				scene = id + "_" + resident
+			elif resident == entry["giver"]:
+				stage = "finish" if ready(id) else "reminder"
+				scene = id + ("_finish" if ready(id) else "_wait")
+			else: continue
+			return {"flow":"seasonal", "event":id, "resident":resident, "stage":stage, "id":scene}
 	return {}
 static func complete_action(entry: Dictionary) -> bool:
 	if entry.is_empty() or entry != action(str(entry.get("resident", ""))): return false
@@ -131,7 +143,7 @@ static func information(id: String) -> String:
 	if ready(id): return "%s에게 돌아가 마무리 [E]\n답례: %s" % [VillageLifeFlow.resident(str(entry["giver"]))["name"], reward_description(id)]
 	match str(entry["mode"]):
 		"observe": return "%s에서 살펴보기 [E] · %02d~%02d시" % [entry["site_name"], entry["start_hour"], entry["end_hour"]]
-		"delivery": return requirements_description(id) + "\n창고에 준비하고 타블렌에게 직접 전달 [E]"
+		"delivery": return requirements_description(id) + "\n창고에 준비하고 %s에게 직접 전달 [E]" % VillageLifeFlow.resident(str(entry["giver"]))["name"]
 		"neighbors":
 			var parts: Array[String] = []
 			for resident in entry["participants"]: parts.append("%s · %s" % [VillageLifeFlow.resident(str(resident))["name"], "들었어요" if heard(id, str(resident)) else "이야기 듣기 [E]"])
