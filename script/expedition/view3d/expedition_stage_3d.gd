@@ -205,17 +205,20 @@ func _build_floor() -> void:
 	# 타일마다 살짝 다른 밝기(3종)로 격자·얼룩이 보이게. 방 바깥(뒤쪽 두 변 너머 2칸)도 어둡게 이어 깔아 주변 풍경이 떠 보이지 않게 한다.
 	var ring: float = float(_theme["ring_tint"])
 
-	for y in range(-2, GRID):
-		for x in range(-2, GRID):
+	for y in range(-3, GRID + 2):
+		for x in range(-3, GRID + 2):
 			var v: int = absi(x * 7 + y * 13 + x * y) % 3
-			var br: float = (0.9 + 0.07 * float(v)) * (1.0 if (x >= 0 and y >= 0) else ring)
-			var spec: Dictionary = _spec_tex(kind, tint * Color(br, br, br), "floor_%d_%s" % [v, str(x >= 0 and y >= 0)])
+			# 방 안(0~7)은 그대로, 바깥은 방에서 멀수록 조금씩 어둡게. 주변 풍경이 놓인 곳 전부 바닥 위에 서게 사방으로 넓게 깐다.
+			var out_d: int = maxi(maxi(-x, x - (GRID - 1)), maxi(-y, y - (GRID - 1)))
+			var dim: float = 1.0 if out_d <= 0 else maxf(0.55, ring - 0.05 * float(out_d - 1))
+			var br: float = (0.9 + 0.07 * float(v)) * dim
+			var spec: Dictionary = _spec_tex(kind, tint * Color(br, br, br), "floor_%d_%d" % [v, clampi(out_d, 0, 4)])
 			var st: SurfaceTool = b.new_part(spec, Vector3(x, 0, y), Vector3(x + 1, 0, y + 1))
 			BuildingMesh._quad(st, Vector3(x, 0, y), Vector3(x + 1, 0, y), Vector3(x + 1, 0, y + 1), Vector3(x, 0, y + 1), Vector3.UP, Vector2(0, 0), Vector2(1, 0), Vector2(1, 1), Vector2(0, 1))
 
 	# 판 옆면(앞쪽 둘): 지역 색(숲 = 흙, 광산 = 바위 …)
 	var side: Dictionary = VillageAssets._noise_spec(ts, _theme["slab"], (_theme["slab"] as Color).lightened(0.12), "floor_side", 63, Color.WHITE, 0.1)
-	VillageAssets.box(b, "slab", side, Vector3(-2, -0.7, -2), Vector3(GRID, -0.02, GRID))
+	VillageAssets.box(b, "slab", side, Vector3(-3, -0.7, -3), Vector3(GRID + 2, -0.02, GRID + 2))
 	_node(b)
 
 	# 바닥 이음 틈과 잔돌·풀(작은 소품): 칸 해시로 흩뿌림
