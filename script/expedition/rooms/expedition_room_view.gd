@@ -1,10 +1,8 @@
 class_name ExpeditionRoomView
 extends Control
 
-const TILE_ART = preload("res://script/world/shop/world_tile_art.gd")
 const GRID = preload("res://script/world/shared/isometric_grid.gd")
 @export var tile_size := Vector2(96, 48)
-var floor_texture: Texture2D = TILE_ART.GRASS
 var tile_scale: float = 1.0
 
 signal retreat_requested
@@ -20,7 +18,6 @@ var swap_button: Button
 var move_buttons: Dictionary = {}
 var board: Rect2
 var notice: String = ""
-var floor_color := Color("253e32")
 var region_id: String = "forest"  # 3D 무대의 지역별 꾸밈(초원·계곡 포함)
 var use_3d: bool = true  # 던전 방을 3D 로 그린다(항상 3D)
 var stage: ExpeditionStage3D

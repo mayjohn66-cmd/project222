@@ -37,30 +37,9 @@ func rebuild(floor_node: Node2D, boundary: StaticBody2D) -> void:
 		panel.set_meta("wall_direction",direction)
 		add_child(panel)
 
+# 벽 한 칸의 선분 데이터. 3D 거울(StoreView3D)이 start/end/direction/wall_height 를 읽어 벽을 만든다(2D 그리기는 제거됨).
 class TimberPanel extends Node2D:
 	var start: Vector2
 	var end: Vector2
 	var wall_height: float
 	var direction: int
-	func _draw() -> void:
-		var lift := Vector2(0,-wall_height)
-		var base := Color("b7814c") if direction in [0,2] else Color("956339")
-		# Horizontal timber boards follow the same 2:1 tile axes as the floor.
-		var count := ceili(wall_height/12.0)
-		for i in range(count):
-			var low := Vector2(0,-minf(float(i)*12.0,wall_height))
-			var high := Vector2(0,-minf(float(i+1)*12.0,wall_height))
-			var tint := base.lightened(0.035) if i%2==0 else base.darkened(0.025)
-			draw_colored_polygon(PackedVector2Array([start+low,end+low,end+high,start+high]),tint)
-			draw_line(start+high,end+high,Color("674527"),1)
-			draw_line(start+high+Vector2(0,1),end+high+Vector2(0,1),Color("d29e61"),1)
-			for grain in range(2):
-				var from := start.lerp(end,0.16+grain*0.43)+low+Vector2(0,-4-grain*2)
-				draw_line(from,from+(end-start)*0.22,base.darkened(0.12),1)
-		# Foot rail, top cap, and narrow posts join consecutive tiles.
-		draw_line(start+Vector2(0,-3),end+Vector2(0,-3),Color("68452a"),6)
-		draw_line(start+lift,end+lift,Color("5b3c25"),7)
-		draw_line(start+lift+Vector2(0,-2),end+lift+Vector2(0,-2),Color("e0af6d"),3)
-		for point in [start,end]:
-			draw_line(point,point+lift,Color("72502e"),5)
-			draw_line(point+Vector2(-1,0),point+lift+Vector2(-1,0),Color("c99b5f"),2)

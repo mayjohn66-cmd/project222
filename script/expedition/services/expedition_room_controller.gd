@@ -81,8 +81,6 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	view.weather_overlay.environment["indoors"] = region_profile.get("floor", "grass") == "paving"
 	view.weather_overlay.queue_redraw()
 	view.ground_overlay = ExpeditionEnvironment.ground_overlay(host.expedition_map.environment, region_profile.get("floor", "grass") == "grass")
-	view.floor_color = ExpeditionEnvironment.floor_tint(Color(str(region_profile.get("color","253e32"))), host.expedition_map.environment, region_profile.get("floor", "grass") == "grass")
-	view.floor_texture = view.TILE_ART.PAVING if region_profile.get("floor","grass") == "paving" else view.TILE_ART.GRASS
 	host.map_panel.hide()
 	host.bag_panel.hide()
 	host.battle_panel.hide()
