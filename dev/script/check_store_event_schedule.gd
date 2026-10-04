@@ -20,7 +20,7 @@ func run() -> void:
 	StoreEventData.ensure_loaded()
 	var common := 0
 	var seasonal := 0
-	var expected: Dictionary = {"spring_market":["bread","berry_juice"],"summer_cool_break":["water","berry_juice"],"autumn_shared_table":["bread","mushroom_stew"],"winter_evening_warmth":["herb_drink","hand_warmer"]}
+	var expected: Dictionary = {"spring_market":["bread","berry_juice"],"summer_cool_break":["water","berry_juice"],"autumn_shared_table":["bread","mushroom_stew"],"winter_evening_warmth":["herb_drink","hand_warmer"],"spring_packed_lunch":["herbal_bread","dried_fruit"],"summer_waterside_tea":["mineral_water","reed_tea"],"autumn_lantern_preparation":["glow_lamp","reed_tea"],"winter_morning_table":["herbal_bread","traveler_stew"]}
 	for event in StoreEventData.events.values():
 		var id := str(event["event_id"])
 		var is_seasonal := str(event["event_kind"]) == "seasonal"
@@ -47,7 +47,7 @@ func run() -> void:
 			for reference in [1,29,57,85]:
 				var occurrence := StoreEventData.get_event_occurrence(id, reference)
 				check(StoreEventData.is_event_active(id, int(occurrence["start_day"])), "common event works regardless of season: " + id + ":" + str(reference))
-	check(common == 2 and seasonal == 4, "two common and four seasonal sale events")
+	check(common == 3 and seasonal == 8, "three common and eight seasonal sale events")
 	var invalid := StoreEventData.get_event("spring_market")
 	invalid["season_id"] = "rain"
 	check(not StoreEventSchedule.valid(invalid), "unknown season rejected")
@@ -108,12 +108,13 @@ func run() -> void:
 		GameState.total_day = int(next["end_day"]) + 1
 		customer.rumor_event_id = id
 		check(not customer.can_share_rumor() and customer.share_rumor_event().is_empty(), "stale customer cannot announce expired occurrence: " + id)
-	check(notifications.size() == 12, "discovery notification once per occurrence")
+	check(notifications.size() == StoreEventData.events.size() * 2, "discovery notification once per occurrence")
 	GameState.store_event_discovered.disconnect(observer)
 	var saved := GameState.create_save_data().duplicate(true)
+	var saved_discoveries: Dictionary = GameState.discovered_store_events.duplicate(true)
 	check(GameState.is_save_data_valid(saved), "recurring discovery uses valid existing save format")
 	GameState.discovered_store_events.clear()
-	check(GameState.apply_save_data(saved) and GameState.get_store_event_discovery_day("winter_evening_warmth") == 207, "save roundtrip preserves latest annual discovery")
+	check(GameState.apply_save_data(saved) and GameState.discovered_store_events == saved_discoveries and not saved_discoveries.is_empty(), "save roundtrip preserves latest annual discovery")
 	GameState.total_day = 120
 	GameState.discovered_store_events = {"spring_market":8,"dungeon_raid":2}
 	check(has_rumor("spring_market",120,"villager") and has_rumor("dungeon_raid",114,"backpacker"), "legacy first-year discoveries do not block later-year rumors")

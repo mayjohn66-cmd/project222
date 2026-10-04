@@ -5,3 +5,8 @@ trail_supplies,길손들의 여행 준비,18,21,22,24,any,trail_supplies_rumor,�
 summer_cool_break,여름 길목의 쉼,4,7,8,12,any,summer_cool_break_rumor,잠깐 쉬어 가려는 이웃들이 물과 열매 주스를 챙깁니다.,seasonal,summer,0
 autumn_shared_table,가을 먹거리 나눔,8,11,12,16,any,autumn_shared_table_rumor,함께 먹을 자리를 준비하는 이웃들이 빵과 버섯 스튜를 찾습니다.,seasonal,autumn,0
 winter_evening_warmth,겨울 밤길의 온기,11,14,15,19,any,winter_evening_warmth_rumor,긴 저녁길을 준비하는 이웃들이 약초 음료와 손난로를 챙깁니다.,seasonal,winter,0
+neighbor_thanks,작은 감사 꾸러미,22,25,26,27,any,neighbor_thanks_rumor,도움을 받았던 이웃들이 감사의 뜻으로 말린 열매와 은 펜던트를 고릅니다.,common,,28
+spring_packed_lunch,봄길의 도시락,3,7,8,11,any,spring_packed_lunch_rumor,봄길을 천천히 걸으려는 이웃들이 약초 빵과 말린 열매를 챙깁니다.,seasonal,spring,0
+summer_waterside_tea,물가에서 쉬는 오후,12,15,16,19,any,summer_waterside_tea_rumor,물가에서 여름 오후를 보내려는 손님들이 미네랄 워터와 갈대 차를 찾습니다.,seasonal,summer,0
+autumn_lantern_preparation,가을 등불 준비,3,7,8,10,any,autumn_lantern_preparation_rumor,가을 저녁을 준비하는 이웃들이 발광 등불과 갈대 차를 고릅니다.,seasonal,autumn,0
+winter_morning_table,겨울 아침의 식탁,3,7,8,10,any,winter_morning_table_rumor,겨울 아침 끼니를 챙기는 손님들이 약초 빵과 여행자 스튜를 찾습니다.,seasonal,winter,0

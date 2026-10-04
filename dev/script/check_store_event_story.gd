@@ -41,7 +41,7 @@ func run() -> void:
 	var menu = world.get_node("UI/ManagementMenu")
 	var sources := Tools.load_sources()
 	var prose := RequestTextData.read_file(RequestTextData.CSV_PATH)
-	check(StoreEventStory.SETTINGS.moments.size() == 36, "six common/seasonal events have six narrative stages each")
+	check(StoreEventStory.SETTINGS.moments.size() == 66, "eleven common/seasonal events have six narrative stages each")
 	var token_id := "store_trail_bought"
 	var bad_token := PackedStringArray([token_id, "service_text", "길손의 말", "", "준비를 다 했어.", ""])
 	check(not Tools.validate_rows(Tools.COLUMNS, [bad_token], sources)["errors"].is_empty(), "Gemini cannot remove actual purchased item token")
