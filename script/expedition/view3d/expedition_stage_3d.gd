@@ -366,6 +366,10 @@ func _make_object(kind: String, table: String, at: Vector2, color: Color) -> Nod
 
 	node.position = Vector3(at.x, 0.0, at.y)
 	node.rotation.y = rng.randf() * TAU
+
+	if kind == "gather_site" and table != "choice_wild_berry":
+		node.scale = Vector3.ONE * 1.25  # 방에 비해 작아 보이던 채집 오브젝트를 조금 키운다
+
 	return node
 
 
@@ -403,11 +407,11 @@ func _object_spring(rng: RandomNumberGenerator) -> Node3D:
 	VillageAssets.oct(b, "rim", rim, 0.0, 0.0, r, 0.0, 0.22, r - 0.03)
 	VillageAssets.oct(b, "water", water, 0.0, 0.0, r - 0.11, 0.2, 0.26, r - 0.12)
 	# 샘 옆에 빛나는 작은 돌 둘(형태 변주)
-	var glow: Dictionary = _flat(Color(0.7, 0.95, 1.0), "heal_glow", 0.8)
+	var glow: Dictionary = _flat(Color(0.55, 0.8, 0.9), "heal_glow", 0.35)
 
 	for k in range(2):
 		var a: float = rng.randf() * TAU
-		VillageAssets.oct(b, "stone", glow, cos(a) * (r + 0.12), sin(a) * (r + 0.12), 0.06, 0.0, 0.16, 0.0)
+		VillageAssets.oct(b, "stone", glow, cos(a) * (r + 0.14), sin(a) * (r + 0.14), 0.09, 0.0, 0.2, 0.02)
 
 	return _node(b)
 
@@ -459,18 +463,28 @@ func _object_berry_tree(rng: RandomNumberGenerator) -> Node3D:
 	var sc: float = 0.62 + rng.randf() * 0.1
 	tree.scale = Vector3.ONE * sc
 	_content.add_child(tree)
-	# 열매: 수관 둘레에 붉은 알갱이를 박는다(나무 좌표계 = 확대 전)
+	# 열매: 실제 잎 덩어리 표면(정점)에서 위치를 골라 박는다 — 허공에 뜨지 않게(나무 좌표계 = 확대 전)
 	var b := VillageAssets.PartBuilder.new()
 	var cols: Array = [Color(0.9, 0.15, 0.2), Color(0.95, 0.35, 0.15), Color(0.8, 0.1, 0.45)]
 	var st: SurfaceTool = _part(b, _flat(cols[rng.randi() % 3], "berry", 0.35))
+	var verts: Array = []
+	var specs: Array = built["specs"]
+	var mesh: ArrayMesh = built["mesh"]
 
-	for i in range(14):
-		var yaw: float = rng.randf() * TAU
-		var pitch: float = rng.randf_range(-0.2, 1.0)
-		var rad: float = 0.9 if variant == "round" else 1.0
-		var dir := Vector3(cos(yaw) * cos(pitch), sin(pitch), sin(yaw) * cos(pitch))
-		var pos: Vector3 = Vector3(0.0, 1.45, 0.0) + dir * rad
-		VillageAssets.dome_st(st, pos.x, pos.z, 0.075, pos.y - 0.04, pos.y + 0.07, 2, 6)
+	for si in range(mini(specs.size(), mesh.get_surface_count())):
+		if str((specs[si] as Dictionary).get("name", "")).contains("foliage"):
+			var arr: Array = mesh.surface_get_arrays(si)
+			var vs: PackedVector3Array = arr[Mesh.ARRAY_VERTEX]
+			var ns: PackedVector3Array = arr[Mesh.ARRAY_NORMAL]
+
+			for vi in range(vs.size()):
+				# 위쪽·바깥쪽을 향한 표면만(아래 그늘진 면 제외)
+				if vs[vi].y > 0.9 and ns[vi].y > -0.1:
+					verts.append(vs[vi] + ns[vi].normalized() * 0.03)
+
+	for i in range(mini(14, verts.size())):
+		var v: Vector3 = verts[rng.randi() % verts.size()]
+		VillageAssets.dome_st(st, v.x, v.z, 0.07, v.y - 0.05, v.y + 0.06, 2, 6)
 
 	var berries: MeshInstance3D = _node(b)
 	_content.remove_child(berries)
@@ -483,22 +497,28 @@ func _object_ore(rng: RandomNumberGenerator) -> Node3D:
 	var b := VillageAssets.PartBuilder.new()
 	var rock: Dictionary = VillageAssets._noise_spec(int(_p["ts"]), Color(0.3, 0.3, 0.34), Color(0.45, 0.45, 0.5), "ore_rock", 51, Color.WHITE, 0.12)
 	var rst: SurfaceTool = _part(b, rock)
+	var rocks: Array = []
 
 	for i in range(4 + rng.randi() % 2):
 		var a: float = rng.randf() * TAU
 		var d: float = 0.12 + rng.randf() * 0.22
-		VillageAssets.dome_st(rst, cos(a) * d, sin(a) * d, 0.2 + rng.randf() * 0.12, 0.0, 0.3 + rng.randf() * 0.3, 2, 8)
+		var rr: float = 0.2 + rng.randf() * 0.12
+		var hh: float = 0.3 + rng.randf() * 0.3
+		rocks.append([cos(a) * d, sin(a) * d, rr, hh])
+		VillageAssets.dome_st(rst, cos(a) * d, sin(a) * d, rr, 0.0, hh, 2, 8)
 
 	var rust: SurfaceTool = _part(b, _flat(Color(0.62, 0.34, 0.2), "ore_rust"))
 	var silver: SurfaceTool = _part(b, _flat(Color(0.72, 0.8, 0.9), "ore_silver", 0.25))
 
-	for i in range(7):
+	# 광석 알갱이는 바위 표면에 박힌다(바위 높이 곡선 위): 바위 중심에서 반지름의 55~80% 지점
+	for i in range(8):
+		var rk: Array = rocks[rng.randi() % rocks.size()]
 		var a2: float = rng.randf() * TAU
-		var d2: float = 0.16 + rng.randf() * 0.26
-		var x: float = cos(a2) * d2
-		var z: float = sin(a2) * d2
-		var y: float = 0.08 + rng.randf() * 0.35
-		VillageAssets.box_st(rust if i % 2 == 0 else silver, Vector3(x - 0.05, y, z - 0.05), Vector3(x + 0.06, y + 0.1, z + 0.06))
+		var frac: float = 0.45 + rng.randf() * 0.35
+		var x: float = float(rk[0]) + cos(a2) * float(rk[2]) * frac
+		var z: float = float(rk[1]) + sin(a2) * float(rk[2]) * frac
+		var y: float = float(rk[3]) * sqrt(maxf(0.0, 1.0 - frac * frac)) - 0.05
+		VillageAssets.box_st(rust if i % 2 == 0 else silver, Vector3(x - 0.05, y, z - 0.05), Vector3(x + 0.05, y + 0.09, z + 0.05))
 
 	return _node(b)
 
@@ -597,8 +617,8 @@ func _object_rune_crystals(rng: RandomNumberGenerator) -> Node3D:
 		var h: float = 0.3 + rng.randf() * 0.42
 		VillageAssets.oct_st(glow if i % 2 == 0 else dark, cos(a) * d, sin(a) * d, 0.09 + rng.randf() * 0.05, 0.0, h, 0.0)
 
-	var ring: SurfaceTool = _part(b, _flat(Color(0.65, 0.4, 0.95), "rune_ring", 0.6))
-	VillageAssets.oct_st(ring, 0.0, 0.0, 0.46, 0.0, 0.015, 0.45)
+	var ring: SurfaceTool = _part(b, _flat(Color(0.42, 0.3, 0.62), "rune_ring", 0.15))
+	VillageAssets.oct_st(ring, 0.0, 0.0, 0.36, 0.0, 0.012, 0.35)
 	return _node(b)
 
 

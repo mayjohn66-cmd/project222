@@ -255,12 +255,24 @@ func _draw() -> void:
 			draw_arc(note_at, cell * (0.3 + 0.35 * (1.0 - hurt_life)), 0, TAU, 24, Color(1, 0.3, 0.3, hurt_life), 4)
 		else:
 			draw_string(ThemeDB.fallback_font, note_at - Vector2(0, cell * 0.5), str(note["text"]), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
-	# 피격: 화면 가장자리가 붉게 번쩍인다(무적 시간 동안 서서히 사라짐)
+	# 피격: 화면 가장자리가 붉게 번쩍인다(무적 시간 동안 서서히 사라짐). 네 변을 대각선으로 맞닿는 사다리꼴 그라데이션으로 그려
+	# 모서리에서 겹쳐 더 진해지지 않게 한다(바깥 = 붉음, 안쪽 = 투명).
 	if model.hurt_remaining > 0.0:
 		var hv: float = clampf(model.hurt_remaining / maxf(0.01, model.settings.hurt_grace), 0.0, 1.0)
-		var edge_w: float = 90.0
-		for r in [Rect2(0, 0, size.x, edge_w), Rect2(0, size.y - edge_w, size.x, edge_w), Rect2(0, 0, edge_w, size.y), Rect2(size.x - edge_w, 0, edge_w, size.y)]:
-			draw_rect(r, Color(0.9, 0.1, 0.1, 0.28 * hv))
+		var e: float = 110.0
+		var outer := Color(0.9, 0.1, 0.1, 0.34 * hv)
+		var inner := Color(0.9, 0.1, 0.1, 0.0)
+		var w: float = size.x
+		var h2: float = size.y
+		var quads: Array = [
+			[Vector2(0, 0), Vector2(w, 0), Vector2(w - e, e), Vector2(e, e)],
+			[Vector2(w, 0), Vector2(w, h2), Vector2(w - e, h2 - e), Vector2(w - e, e)],
+			[Vector2(w, h2), Vector2(0, h2), Vector2(e, h2 - e), Vector2(w - e, h2 - e)],
+			[Vector2(0, h2), Vector2(0, 0), Vector2(e, e), Vector2(e, h2 - e)],
+		]
+
+		for q in quads:
+			draw_polygon(PackedVector2Array([q[0], q[1], q[2], q[3]]), PackedColorArray([outer, outer, inner, inner]))
 
 
 func _draw_block(rect: Rect2, height: float, color: Color) -> void:
