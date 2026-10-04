@@ -8,6 +8,9 @@ const CSV_PATH := "res://data/shop/catalogs/weather_3d.csv"
 const FADE_HOURS: float = 1.0  # 시작·끝에서 서서히 세지고 약해지는 시간
 
 static var _cache: Dictionary = {}
+# 개발용 강제 날씨("" = 끔, clear/rain/snow). F7 키나 --weather 인자로 StoreView3D 가 넣는다.
+static var debug_kind: String = ""
+static var debug_intensity: float = 0.85
 
 
 static func table(season_id: String) -> Dictionary:
@@ -61,6 +64,9 @@ static func day_plan(total_day: int) -> Dictionary:
 
 # 지금(날짜, 시각 0~24) 날씨: {"kind": 종류, "intensity": 0~1}. 맑으면 intensity 0.
 static func forecast(total_day: int, hour: float) -> Dictionary:
+	if debug_kind != "":
+		return {"kind": debug_kind, "intensity": 0.0 if debug_kind == "clear" else debug_intensity}
+
 	var plan: Dictionary = day_plan(total_day)
 
 	if plan["kind"] == "clear":
@@ -75,3 +81,13 @@ static func forecast(total_day: int, hour: float) -> Dictionary:
 		return {"kind": "clear", "intensity": 0.0}
 
 	return {"kind": plan["kind"], "intensity": k}
+
+
+static func kind_name(kind: String) -> String:
+	match kind:
+		"rain":
+			return "비"
+		"snow":
+			return "눈"
+
+	return "맑음"

@@ -291,6 +291,15 @@ func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F8:
 		reload_village_art()
 
+	# F7: 날씨 강제 순환(자동 → 비 → 눈 → 맑음 → 자동), F6: 계절 강제 순환(자동 → 봄 → 여름 → 가을 → 겨울 → 자동). 개발·확인용.
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F7:
+		var wl: Array = ["", "rain", "snow", "clear"]
+		weather_override = wl[(wl.find(weather_override) + 1) % wl.size()]
+
+	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F6:
+		var sl: Array = ["", "spring", "summer", "autumn", "winter"]
+		season_override = sl[(sl.find(season_override) + 1) % sl.size()]
+
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F9:
 		set_village_enabled(not village_enabled)
 
@@ -363,11 +372,10 @@ func _current_hour() -> float:
 func _update_weather(delta: float) -> void:
 	var target: Dictionary
 
-	if weather_override != "":
-		target = {"kind": weather_override, "intensity": 0.0 if weather_override == "clear" else weather_override_intensity}
-	else:
-		var gs: Node = get_node_or_null("/root/GameState")
-		target = WeatherSystem.forecast(int(gs.get("total_day")) if gs != null else 1, _current_hour())
+	WeatherSystem.debug_kind = weather_override
+	WeatherSystem.debug_intensity = weather_override_intensity
+	var gs: Node = get_node_or_null("/root/GameState")
+	target = WeatherSystem.forecast(int(gs.get("total_day")) if gs != null else 1, _current_hour())
 
 	var kind: String = str(target["kind"])
 	var k: float = float(weather["intensity"])

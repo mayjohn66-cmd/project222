@@ -6,6 +6,8 @@ const COIN = preload("res://art/ui/pixel_theme/icon_coin.png")
 const DAY = preload("res://art/ui/clock_hud/day.png")
 const NIGHT = preload("res://art/ui/clock_hud/night.png")
 var sky: TextureRect
+var weather_icon: TextureRect
+var _weather_kind: String = "?"
 var period: Label
 var elapsed: float = 0.0
 var money_digits: Control
@@ -18,6 +20,8 @@ func _ready() -> void:
 	_panel("MoneyPaper", PAPER, Rect2(-328,134,304,44), 10)
 	sky = _icon("DayNight", DAY, Rect2(-326,28,72,72))
 	_icon("Coin", COIN, Rect2(-314,143,24,24))
+	weather_icon = _icon("WeatherIcon", null, Rect2(-290,26,40,40))
+	weather_icon.visible = false
 	period = Label.new()
 	period.name = "PeriodCaption"
 	add_child(period)
@@ -93,6 +97,7 @@ func _update_sky() -> void:
 	var hour: int = int(manager.current_hour)
 	sky.texture = NIGHT if hour >= 18 or hour < 6 else DAY
 	period.text = manager.get_period_name()
+	_update_weather(manager)
 	$TimeLabel.add_theme_font_size_override("font_size",16 if $TimeLabel.text.length() > 16 else 20)
 
 func _update_money_digits() -> void:
@@ -133,3 +138,55 @@ func _update_money_digits() -> void:
 		digit.add_theme_color_override("font_color",Color("77311e"))
 		digit.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(digit)
+
+
+# 날씨(비·눈)를 하늘 그림 옆 작은 도트 아이콘과 시간대 글자 뒤에 보여 준다. 맑으면 아이콘은 숨긴다.
+func _update_weather(manager) -> void:
+	var gs: Node = get_node_or_null("/root/GameState")
+	var total_day: int = int(gs.get("total_day")) if gs != null else 1
+	var w: Dictionary = WeatherSystem.forecast(total_day, float(manager.current_hour))
+	var kind: String = str(w["kind"])
+
+	if kind != "clear":
+		period.text += " · " + WeatherSystem.kind_name(kind)
+
+	if kind == _weather_kind:
+		return
+
+	_weather_kind = kind
+	weather_icon.visible = kind != "clear"
+	weather_icon.texture = _weather_texture(kind) if kind != "clear" else null
+
+
+# 16×16 도트 구름(비: 파란 빗방울, 눈: 흰 눈송이)
+static func _weather_texture(kind: String) -> ImageTexture:
+	var img := Image.create(16, 16, false, Image.FORMAT_RGBA8)
+	img.fill(Color(0, 0, 0, 0))
+	var line := Color(0.2, 0.22, 0.3)
+	var body := Color(0.8, 0.84, 0.92)
+	var rows: Array = [[6, 10], [4, 12], [2, 13], [1, 14], [1, 14], [2, 13]]
+	var mask: Dictionary = {}
+
+	for i in range(rows.size()):
+		for x in range(rows[i][0], rows[i][1] + 1):
+			mask[Vector2i(x, 2 + i)] = true
+
+	for c in mask.keys():
+		for d in [Vector2i(1, 0), Vector2i(-1, 0), Vector2i(0, 1), Vector2i(0, -1)]:
+			var n: Vector2i = c + d
+
+			if not mask.has(n) and n.x >= 0 and n.x < 16 and n.y >= 0 and n.y < 16:
+				img.set_pixelv(n, line)
+
+	for c in mask.keys():
+		img.set_pixelv(c, body)
+
+	if kind == "rain":
+		for p in [Vector2i(4, 10), Vector2i(8, 11), Vector2i(12, 10), Vector2i(6, 13), Vector2i(10, 13)]:
+			img.set_pixel(p.x, p.y, Color(0.35, 0.6, 1.0))
+			img.set_pixel(p.x, p.y + 1, Color(0.35, 0.6, 1.0))
+	else:
+		for p in [Vector2i(4, 10), Vector2i(8, 12), Vector2i(12, 10), Vector2i(6, 14), Vector2i(11, 14)]:
+			img.set_pixel(p.x, p.y, Color.WHITE)
+
+	return ImageTexture.create_from_image(img)
