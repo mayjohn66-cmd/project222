@@ -235,10 +235,11 @@ func sync_ground() -> void:
 		_ground[kind] = {"mesh": inst, "material": material, "id_mesh": id_inst, "id_material": id_material}
 
 	_snow_cells = per_kind.get("grass", [])
-	var snowy: bool = str(SeasonStyle.style(season if season != "" else "spring").get("grass_kind", "grass")) == "snow"
+
+	_puddle_per_kind = per_kind
+	_puddle_dirty = true
 
 	if view.decals != null:
-		view.decals.rebuild_puddles(per_kind, snowy)
 		view.decals.clear_prints()
 
 	_snow_dirty = true
@@ -292,6 +293,7 @@ func set_season(season_id: String) -> void:
 
 func reset_signatures() -> void:
 	_hidden.clear()
+	_puddle_dirty = true
 	_snow_dirty = true
 	_ground_signature = ""
 	_object_signature = ""
@@ -554,6 +556,8 @@ var _snow_cells: Array = []
 var _snow_keys: Array = []
 var _snow_bodies: Array = []  # 눈사람 충돌 몸체(2D). 3D 를 끄면 지운다
 var _snow_dirty: bool = true
+var _puddle_per_kind: Dictionary = {}
+var _puddle_dirty: bool = true
 
 
 func _clear_snowmen() -> void:
@@ -663,6 +667,7 @@ func sync_objects(world: Node) -> void:
 					_remove_keys(key)
 					_footprints.erase(key)
 					_snow_dirty = true
+					_puddle_dirty = true
 
 					if view.sync_collision:
 						_apply_collision(body, Vector2.ZERO, Vector2.ZERO, true)
@@ -685,6 +690,11 @@ func sync_objects(world: Node) -> void:
 	if _snow_dirty:
 		_snow_dirty = false
 		_sync_snowmen()
+
+	if _puddle_dirty and view.decals != null:
+		_puddle_dirty = false
+		var snowy: bool = str(SeasonStyle.style(season if season != "" else "spring").get("grass_kind", "grass")) == "snow"
+		view.decals.rebuild_puddles(_puddle_per_kind, snowy, _footprints.values())
 
 	# 사라진 물체 정리
 	for k in _keys.keys():
@@ -743,6 +753,7 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 	hi = center + half
 
 	_footprints[key] = Rect2(lo, hi - lo)
+	_puddle_dirty = true
 	_snow_dirty = true  # 새 건물이 생기면 눈사람 자리를 다시 고른다(건물 안에 서지 않게)
 
 	if body != null and view.sync_collision:

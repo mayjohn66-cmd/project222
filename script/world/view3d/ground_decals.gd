@@ -5,8 +5,9 @@ extends RefCounted
 
 const DECAL_RANK: float = -0.55
 const CUTOUT_SHADER: Shader = preload("res://script/world/view3d/shader/cutout.gdshader")
-const PUDDLE_RATE: float = 0.09  # 땅 칸 중 웅덩이가 생기는 비율
+const PUDDLE_RATE: float = 0.05  # 땅 칸 중 웅덩이가 생기는 비율
 const PUDDLE_CHUNK: int = 8
+const PUDDLE_MARGIN: float = 1.0  # 건물·소품 발자국에서 이만큼(칸) 떨어진 곳에만 웅덩이가 생긴다
 const RIPPLE_FPS: float = 5.0
 const WET_SHOW: float = 0.3  # 이 젖음 이상이면 웅덩이가 보인다
 const PRINT_LIFE: float = 70.0  # 발자국이 눈에 덮여 사라지는 시간(초)
@@ -59,7 +60,7 @@ func clear_puddles() -> void:
 
 
 # 땅 종류별 칸 목록(per_kind: {"grass": [...], "road": [...], "paving": [...]})에서 일부 칸에 웅덩이를 만든다. 칸 위치로 정해져서 항상 같은 자리.
-func rebuild_puddles(per_kind: Dictionary, snowy: bool) -> void:
+func rebuild_puddles(per_kind: Dictionary, snowy: bool, blockers: Array = []) -> void:
 	clear_puddles()
 
 	if snowy:
@@ -73,6 +74,18 @@ func rebuild_puddles(per_kind: Dictionary, snowy: bool) -> void:
 			var rate: float = PUDDLE_RATE * (0.5 if kind == "grass" else 1.0)
 
 			if float(h) >= rate * 10000.0:
+				continue
+
+			# 물체(건물·소품·나무 등)의 판정 사각형 근처는 피한다: 웅덩이 크기(최대 약 1.5칸)와 여유를 더해 겹치면 건너뜀.
+			var spot := Rect2(float(cell.x) - 0.75 - PUDDLE_MARGIN, float(cell.y) - 0.75 - PUDDLE_MARGIN, 1.5 + PUDDLE_MARGIN * 2.0, 1.5 + PUDDLE_MARGIN * 2.0)
+			var near_object: bool = false
+
+			for bl in blockers:
+				if (bl as Rect2).intersects(spot):
+					near_object = true
+					break
+
+			if near_object:
 				continue
 
 			var ck := Vector2i(int(floorf(float(cell.x) / float(PUDDLE_CHUNK))), int(floorf(float(cell.y) / float(PUDDLE_CHUNK))))
@@ -107,7 +120,7 @@ func rebuild_puddles(per_kind: Dictionary, snowy: bool) -> void:
 			var cell: Vector2i = entry[0]
 			var h: int = entry[1]
 			var g: int = h % 3
-			var size: float = 1.0 + float((h / 3) % 8) * 0.12
+			var size: float = 0.9 + float((h / 3) % 8) * 0.09
 			var cx: float = float(cell.x) + (float((h / 7) % 10) / 10.0 - 0.5) * 0.4
 			var cz: float = float(cell.y) + (float((h / 11) % 10) / 10.0 - 0.5) * 0.4
 			_add_flat_quad(sts[g], cx, cz, size, 0.0, 0.025, size * 0.8)
