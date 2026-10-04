@@ -9,6 +9,7 @@ static func entries() -> Array[Dictionary]:
 	var all_requests: Array[Dictionary] = SETTINGS.requests.duplicate(true)
 	all_requests.append_array(MarketAfterglowFlow.SETTINGS.requests)
 	all_requests.append_array(MarketAfterglowFlow.FOLLOWUPS.requests)
+	all_requests.append_array(StoreEventFollowupFlow.SETTINGS.requests)
 	for data in all_requests:
 		var entry: Dictionary = data.duplicate(true)
 		for field in ["title","summary","completion"]:
@@ -52,6 +53,10 @@ static func locked_reason(entry: Dictionary) -> String:
 	var recipe_id := str(entry.get("recipe", ""))
 	if not recipe_id.is_empty() and not RecipeUnlockData.is_recipe_available(recipe_id):
 		return "%s 레시피를 배우면 준비할 수 있어요. 원정에서 두루마리를 찾아 사용해 주세요." % ItemData.get_item_name(recipe_id)
+	# 맡은 부탁은 이후 계절·행사 설정이나 영업 기록의 변경으로 취소하지 않는다.
+	if not accepted(str(entry["id"])) and not done(str(entry["id"])):
+		var event_reason := StoreEventFollowupFlow.locked_reason(entry)
+		if not event_reason.is_empty(): return event_reason
 	return ""
 
 static func accept(id: String) -> bool:
