@@ -3,7 +3,8 @@ extends RefCounted
 ## 마을 3D 부품 애니메이션. 건물·소품 빌더가 돌려주는 anim 목록의 각 항목이 어떻게 움직일지(mode)를 한곳에서 정한다.
 ## 항목: {mesh, specs, pos, mode, speed, axis, phase, amp, rise, drift}
 ##   rotate  : axis 둘레로 speed(rad/s) 돈다(풍차 날개)
-##   flicker : 위로 길쭉했다 납작했다 일렁이고 밝기가 흔들린다(불꽃). 부품의 바닥이 pos 에 오도록 만든다
+##   flicker : 위로 길쭉했다 납작했다 일렁이고 밝기가 흔들린다. 부품의 바닥이 pos 에 오도록 만든다
+##   flame   : 불길 한 갈래. 높이가 불규칙하게 늘고 줄며(두 박자를 섞음) 위쪽이 좌우로 기울고 끝이 가늘어졌다 굵어진다. 갈래마다 phase·speed 를 달리 준다
 ##   sway    : axis 둘레로 ±amp(rad) 흔들린다(허수아비). 흔들림의 중심(받침)이 pos 에 오도록 만든다
 ##   bob     : 위아래로 ±amp 출렁인다(분수 물)
 ##   drift   : speed(1/s)마다 한 번, pos 에서 rise 만큼 올라가며 drift 만큼 옆으로 흘러가고, 커졌다가 작아진다(연기·불똥)
@@ -25,6 +26,16 @@ static func apply(node: Node3D, mats: Array, an: Dictionary, t: float, dt: float
 			var w: float = 1.0 + (1.0 - s) * 0.5
 			node.scale = Vector3(w, s, w)
 			_emit(mats, an, 1.0 + 0.25 * sin(t * speed * 1.9 + phase))
+		"flame":
+			var a1: float = sin(t * speed + phase)
+			var a2: float = sin(t * speed * 2.3 + phase * 1.9)
+			var a3: float = sin(t * speed * 0.55 + phase * 0.7)
+			var hs: float = clampf(1.0 + amp * (0.55 * a1 + 0.3 * a2 + 0.25 * a3), 0.45, 1.5)
+			var ws: float = 1.0 + (1.0 - hs) * 0.45 + 0.06 * a2
+			var lean_x: float = 0.22 * a3 + 0.1 * a2
+			var lean_z: float = 0.18 * sin(t * speed * 0.8 + phase * 1.3)
+			node.basis = Basis(Vector3(0.0, 0.0, 1.0), lean_x) * Basis(Vector3(1.0, 0.0, 0.0), lean_z) * Basis.from_scale(Vector3(ws, hs, ws))
+			_emit(mats, an, 1.0 + 0.2 * a2)
 		"sway":
 			var axis: Vector3 = (an.get("axis", Vector3(0.0, 0.0, 1.0)) as Vector3).normalized()
 			node.basis = Basis(axis, amp * sin(t * speed + phase))

@@ -92,7 +92,14 @@ func _ready() -> void:
 
 
 func _shoot(out: String) -> void:
-	for pg in range(PAGES.size()):
+	var first: int = 0
+	var args := OS.get_cmdline_user_args()
+	var fi: int = args.find("--from")
+
+	if fi >= 0 and fi + 1 < args.size():
+		first = int(args[fi + 1]) - 1
+
+	for pg in range(first, PAGES.size()):
 		_show_page(pg)
 
 		for f in range(10):
@@ -100,14 +107,15 @@ func _shoot(out: String) -> void:
 
 		get_viewport().get_texture().get_image().save_png("%s/gallery_%d.png" % [out, pg + 1])
 
-		# 움직임 확인: 0.7초 뒤 한 장 더(애니메이션이 있는 쪽 비교용)
+		# 움직임 확인(4쪽부터): 0.2초 간격으로 세 장 더(…_t1~t3)
 		if pg >= 3:
-			var t_end: float = anim_time + 0.7
+			for k in range(1, 4):
+				var t_end: float = anim_time + 0.2
 
-			while anim_time < t_end:
-				await get_tree().process_frame
+				while anim_time < t_end:
+					await get_tree().process_frame
 
-			get_viewport().get_texture().get_image().save_png("%s/gallery_%d_later.png" % [out, pg + 1])
+				get_viewport().get_texture().get_image().save_png("%s/gallery_%d_t%d.png" % [out, pg + 1, k])
 
 	get_tree().quit()
 

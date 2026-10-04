@@ -1081,6 +1081,19 @@ static func _goods_obj(b: PartBuilder, cache: Dictionary, token: String, x: floa
 			dome_st(st_d, x, z, 0.08, y, y + 0.14, 2, 8)
 
 
+# 불길 한 갈래: 아래가 둥글고 위가 뾰족한 물방울 모양(팔각 토막 4개를 쌓음). 바닥이 원점, 높이 h, 폭 w.
+static func _flame_tongue(spec_f: Dictionary, h: float, w: float) -> Dictionary:
+	var fb := PartBuilder.new()
+	var st: SurfaceTool = fb.new_part(spec_f, Vector3(-w, 0.0, -w), Vector3(w, h, w))
+	oct_st(st, 0.0, 0.0, w * 0.75, 0.0, h * 0.22, w * 1.0)
+	oct_st(st, 0.0, 0.0, w * 1.0, h * 0.22, h * 0.5, w * 0.7)
+	oct_st(st, 0.0, 0.0, w * 0.7, h * 0.5, h * 0.8, w * 0.32)
+	oct_st(st, 0.0, 0.0, w * 0.32, h * 0.8, h, w * 0.04)
+	var m := ArrayMesh.new()
+	var specs: Array = fb.commit_into(m)
+	return {"mesh": m, "specs": specs}
+
+
 # 천막/지붕 네 면(사방으로 경사진 피라미드): 중심 (cx, cz), 반폭 (hx, hz), 아래 y0(처마), 꼭대기 y1.
 static func pyramid(b: PartBuilder, key: String, spec: Dictionary, cx: float, cz: float, hx: float, hz: float, y0: float, y1: float) -> void:
 	var st: SurfaceTool = b.new_part(spec, Vector3(cx - hx, y0, cz - hz), Vector3(cx + hx, y1, cz + hz))
@@ -1602,10 +1615,10 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			total = 1.7
 		"campfire":
 			var stones: Dictionary = _noise_spec(ts, Color(0.42, 0.43, 0.48), Color(0.58, 0.59, 0.64), "fire_stone", 29)
-			var ember: Dictionary = _flat_spec(ts, Color(1.0, 0.5, 0.14), "flame_outer")
-			ember["emit"] = 1.0
-			var ember2: Dictionary = _flat_spec(ts, Color(1.0, 0.84, 0.3), "flame_inner")
-			ember2["emit"] = 1.0
+			var ember: Dictionary = _flat_spec(ts, Color(0.92, 0.26, 0.05), "flame_outer")
+			ember["emit"] = 0.55
+			var ember2: Dictionary = _flat_spec(ts, Color(1.0, 0.72, 0.18), "flame_inner")
+			ember2["emit"] = 0.8
 			var ring_st: SurfaceTool = b.new_part(stones, Vector3(c.x - 0.6, 0.0, c.y - 0.6), Vector3(c.x + 0.6, 0.3, c.y + 0.6))
 
 			for si in range(8):
@@ -1615,13 +1628,29 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			var logs_s: Dictionary = wood(p, Color(0.4, 0.28, 0.18), "fire_logs")
 			box(b, "log", logs_s, Vector3(c.x - 0.34, 0.05, c.y - 0.05), Vector3(c.x + 0.34, 0.18, c.y + 0.08))
 			box(b, "log", logs_s, Vector3(c.x - 0.06, 0.18, c.y - 0.32), Vector3(c.x + 0.06, 0.31, c.y + 0.32))
-			# 불꽃은 바닥(0)에서 시작하는 별도 부품으로 만들어 일렁이게 한다(flicker). 불똥 셋은 위로 떠올랐다 사라진다(drift).
-			var fb := PartBuilder.new()
-			pyramid(fb, "flame", ember, 0.0, 0.0, 0.22, 0.22, 0.0, 0.62)
-			pyramid(fb, "flame", ember2, 0.0, 0.0, 0.12, 0.12, 0.0, 0.46)
-			var fmesh := ArrayMesh.new()
-			var fspecs: Array = fb.commit_into(fmesh)
-			anim_parts.append({"mesh": fmesh, "specs": fspecs, "pos": Vector3(c.x, 0.2, c.y), "mode": "flicker", "speed": 8.0, "amp": 0.22, "half": 0.8, "emit_base": 1.0})
+			# 불꽃은 여러 갈래(불길 혀)로 나눠 갈래마다 높이·기울기·박자를 달리 일렁이게 한다(flame). 바닥에는 깜빡이는 숯불 층.
+			var tongues: Array = [
+				{"dx": 0.0, "dz": 0.0, "h": 0.66, "w": 0.1, "ph": 0.0, "sp": 7.0, "outer": true},
+				{"dx": -0.13, "dz": 0.05, "h": 0.46, "w": 0.085, "ph": 1.7, "sp": 9.0, "outer": true},
+				{"dx": 0.12, "dz": -0.06, "h": 0.5, "w": 0.085, "ph": 3.1, "sp": 8.0, "outer": true},
+				{"dx": 0.04, "dz": 0.14, "h": 0.4, "w": 0.075, "ph": 4.4, "sp": 10.0, "outer": true},
+				{"dx": -0.05, "dz": -0.13, "h": 0.42, "w": 0.075, "ph": 5.6, "sp": 9.5, "outer": true},
+				{"dx": 0.0, "dz": 0.0, "h": 0.42, "w": 0.055, "ph": 0.9, "sp": 11.0, "outer": false},
+				{"dx": -0.1, "dz": 0.05, "h": 0.28, "w": 0.045, "ph": 2.5, "sp": 12.0, "outer": false},
+				{"dx": 0.09, "dz": -0.05, "h": 0.3, "w": 0.045, "ph": 3.8, "sp": 11.5, "outer": false},
+			]
+
+			for tg in tongues:
+				var tm: Dictionary = _flame_tongue(ember if bool(tg["outer"]) else ember2, float(tg["h"]), float(tg["w"]))
+				anim_parts.append({"mesh": tm["mesh"], "specs": tm["specs"], "pos": Vector3(c.x + float(tg["dx"]), 0.2, c.y + float(tg["dz"])), "mode": "flame", "speed": float(tg["sp"]), "phase": float(tg["ph"]), "amp": 0.28, "half": 0.8, "emit_base": 0.55 if bool(tg["outer"]) else 0.8})
+
+			var bedb := PartBuilder.new()
+			var bed_spec: Dictionary = _flat_spec(ts, Color(0.95, 0.35, 0.1), "ember_bed")
+			bed_spec["emit"] = 1.0
+			oct(bedb, "bed", bed_spec, 0.0, 0.0, 0.2, 0.0, 0.04, 0.17)
+			var bed_mesh := ArrayMesh.new()
+			var bed_specs: Array = bedb.commit_into(bed_mesh)
+			anim_parts.append({"mesh": bed_mesh, "specs": bed_specs, "pos": Vector3(c.x, 0.16, c.y), "mode": "pulse", "speed": 6.0, "amp": 0.35, "half": 0.6, "emit_base": 1.0})
 
 			for sk in range(3):
 				var sb := PartBuilder.new()
