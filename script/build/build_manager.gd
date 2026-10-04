@@ -322,6 +322,11 @@ func _process(_delta: float) -> void:
 		and target_shelf != null
 	):
 		build_preview_controller.show_preview()
+		build_preview_controller.set_preview_cell(
+			target_shelf.get_meta("anchor", cell),
+			build_selection_state.rotation_index,
+			int(target_shelf.get("stack_level")) + 1 if target_shelf.get("stack_level") != null else 2
+		)
 
 		if target_shelf.has_method(
 			"get_next_level_world_position"
@@ -342,6 +347,10 @@ func _process(_delta: float) -> void:
 
 	# 일반 가구 설치 미리보기
 	build_preview_controller.show_preview()
+	build_preview_controller.set_preview_cell(
+		cell,
+		build_selection_state.rotation_index
+	)
 
 	build_preview_controller.set_preview_position(
 		get_current_furniture_world_position(
@@ -543,6 +552,53 @@ func _draw() -> void:
 				continue
 
 			draw_shelf_access_cell(cell)
+
+
+# 3D 거울이 건축 안내(발자국 윤곽·점유 칸·직원/결제/접근 칸)를 그리도록 데이터만 넘긴다. _draw 의 2D 안내와 같은 조건·같은 칸이다.
+func get_build_overlay() -> Dictionary:
+	if not build_mode or build_confirm_center.visible or build_quick_slot_bar.is_inventory_active():
+		return {}
+
+	if not has_valid_build_selection():
+		return {}
+
+	var anchor: Vector2i = get_mouse_cell()
+
+	if not floor.is_cell_inside(anchor):
+		return {}
+
+	var selected_id := get_selected_build_id()
+	var size: Vector2i = get_current_size()
+	var base_cells: Array = []
+
+	if selected_id == "register" or selected_id.begins_with("shelf_"):
+		for cell in get_occupied_cells(anchor):
+			base_cells.append(cell)
+
+	var guides: Array = []
+
+	if is_register_selected():
+		for offset in get_register_worker_offsets():
+			if floor.is_cell_inside(anchor + offset):
+				guides.append({"cell": anchor + offset, "color": Color(1.0, 0.65, 0.15, 0.4)})
+
+		for offset in get_register_checkout_offsets():
+			if floor.is_cell_inside(anchor + offset):
+				guides.append({"cell": anchor + offset, "color": Color(0.2, 0.8, 0.3, 0.45)})
+	elif is_shelf_selected():
+		for offset in get_shelf_access_offsets():
+			if floor.is_cell_inside(anchor + offset):
+				guides.append({"cell": anchor + offset, "color": Color(0.25, 0.55, 1.0, 0.4)})
+
+	return {
+		"build_id": selected_id,
+		"anchor": anchor,
+		"size": size,
+		"rotation": build_selection_state.rotation_index,
+		"valid": can_place(anchor),
+		"base_cells": base_cells,
+		"guides": guides,
+	}
 
 
 func draw_checkout_preview_cell(
