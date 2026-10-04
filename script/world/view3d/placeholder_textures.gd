@@ -1620,3 +1620,23 @@ static func door_plank(w: int, h: int, wood: Color = Color(0.6, 0.37, 0.2), wind
 				img.set_pixel(x, y, dark if edge else Color(0.5, 0.74, 0.92))
 
 	return ImageTexture.create_from_image(img)
+
+
+# 잡티가 있는 단색 질감(잎·돌·건초 등): 바탕색 + 밝은 점(density) + 어두운 점. seed 로 모양이 정해진다.
+static func noise_tex(size: int, base: Color, dot: Color, seed_value: int = 1, density: float = 0.14) -> ImageTexture:
+	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)
+	var rng := RandomNumberGenerator.new()
+	rng.seed = seed_value * 7919 + int(base.r * 255.0) * 31 + int(base.g * 255.0)
+
+	for y in range(size):
+		for x in range(size):
+			var r: float = rng.randf()
+
+			if r < density:
+				img.set_pixel(x, y, dot)
+			elif r < density * 1.7:
+				img.set_pixel(x, y, base.darkened(0.14))
+			else:
+				img.set_pixel(x, y, base)
+
+	return ImageTexture.create_from_image(img)

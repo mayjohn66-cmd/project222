@@ -13,10 +13,15 @@ const PAGES: Array = [
 		["house", "half_hip", "annex;porch"], ["house", "hip", "tower;porch"], ["house", "gable", "jetty;dormer:2"], ["house", "cross", "bay;annex"],
 		["house", "gambrel", "jetty;porch"], ["ochre_townhouse", "mansard", "jetty;dormer:2"], ["moss_cottage", "half_hip", "porch;bay;dormer:1"], ["red_house", "gable", "annex;dormer:1"],
 	]},
-	{"title": "나무 변형과 소품 (둥근·소나무·자작·큰 참나무·가을 / 건초·통·우물·수레)", "cols": 3, "kind": "propvar", "cases": [
-		["apple_tree", "round", "tree"], ["apple_tree", "pine", "tree"], ["apple_tree", "birch", "tree"],
-		["apple_tree", "big_oak", "tree"], ["apple_tree", "autumn", "tree"], ["apple_tree", "", "hay"],
-		["apple_tree", "", "barrels"], ["village_well", "", "well"], ["supply_cart", "", "cart"],
+	{"title": "나무 12종 (둥근·소나무·자작·큰 참나무·가을·벚꽃·버드나무·고사목·포플러) + 덤불", "cols": 4, "kind": "propvar", "cases": [
+		["apple_tree", "round", "tree"], ["pine_tree", "pine", "tree"], ["birch_tree", "birch", "tree"], ["oak_tree", "big_oak", "tree"],
+		["apple_tree", "autumn", "tree"], ["cherry_tree", "cherry", "tree"], ["willow_tree", "willow", "tree"], ["dead_tree", "dead", "tree"],
+		["poplar_tree", "poplar", "tree"], ["berry_bush", "berry", "flower_bush"], ["bush", "", "flower_bush"], ["hedge", "hedge", "flower_bush"],
+	]},
+	{"title": "소품 (바위·그루터기·통나무·버섯·분수·허수아비·모닥불·꽃밭·건초·통·우물·수레)", "cols": 4, "kind": "propvar", "cases": [
+		["rock", "", "rock"], ["stump", "", "stump"], ["log_pile", "", "log"], ["mushrooms", "", "mushroom"],
+		["fountain", "", "fountain"], ["scarecrow", "", "scarecrow"], ["campfire", "", "campfire"], ["flowerbed", "", "flowerbed"],
+		["apple_tree", "", "hay"], ["apple_tree", "", "barrels"], ["village_well", "", "well"], ["supply_cart", "", "cart"],
 	]},
 ]
 
@@ -133,6 +138,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_show_page(3)
 		KEY_5:
 			_show_page(4)
+		KEY_6:
+			_show_page(5)
 		KEY_EQUAL, KEY_KP_ADD:
 			cam_zoom = maxf(cam_zoom - 1.5, 5.0)
 			_place_camera()
@@ -166,7 +173,7 @@ func _step(pg: Dictionary) -> Vector2:
 		return Vector2(8.5, 8.5)
 
 	if kind == "propvar":
-		return Vector2(4.2, 4.2)
+		return Vector2(4.8, 4.8)
 
 	return Vector2(7.5, 7.5)
 
@@ -175,7 +182,7 @@ func _show_page(i: int) -> void:
 	page = i
 	cam_pan = Vector2.ZERO
 	var zk: String = str(PAGES[i]["kind"])
-	cam_zoom = 14.0 if zk == "stall" else (24.0 if zk == "shape" else (12.0 if zk == "propvar" else 15.0))
+	cam_zoom = 14.0 if zk == "stall" else (24.0 if zk == "shape" else (16.0 if zk == "propvar" else 15.0))
 	spinners.clear()
 
 	if holder != null:
@@ -279,7 +286,7 @@ func _show_page(i: int) -> void:
 				var node := _add_mesh(an["mesh"], an["specs"], an["pos"])
 				spinners.append({"node": node, "speed": float(an["speed"]), "axis": an.get("axis", Vector3(0.7071, 0.0, 0.7071))})
 
-	label.text = "%d) %s   — 1~5 쪽 전환 / 방향키 이동 / +- 확대 / R 색 다시 뽑기" % [i + 1, str(pg["title"])]
+	label.text = "%d) %s   — 1~6 쪽 전환 / 방향키 이동 / +- 확대 / R 색 다시 뽑기" % [i + 1, str(pg["title"])]
 	_place_camera()
 
 

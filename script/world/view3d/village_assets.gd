@@ -927,6 +927,36 @@ static func _goods_spec(token: String, ts: int) -> Dictionary:
 	return sp
 
 
+# ---------------------------------------------------------------- 나무·소품 도우미
+
+# 잡티 단색 질감 사양(잎·돌·건초 등)
+static func _noise_spec(ts: int, base: Color, dot: Color, name: String, seed_value: int = 1, tint_c: Color = Color.WHITE, density: float = 0.14) -> Dictionary:
+	return spec(PlaceholderTextures.noise_tex(ts, base, dot, seed_value, density), tint_c, name, "%s 잡티 단색 %d×%d" % [name, ts, ts])
+
+
+# 단색 사양
+static func _flat_spec(ts: int, color: Color, name: String) -> Dictionary:
+	return spec(_tex("flat", ts, color), Color.WHITE, name, "%s 단색 %d×%d" % [name, ts, ts])
+
+
+# 잎 덩어리 여러 개를 한 면에 모은다. 한 면 안에서는 넣은 순서대로 그려지므로 먼(x+z 작은)·낮은 것부터 정렬해서 넣는다.
+# lobes: [{dx, dz, r, y0, y1}]
+static func _crown(b: PartBuilder, sp: Dictionary, cx: float, cz: float, lobes: Array, rings: int = 3, segs: int = 12) -> void:
+	var sorted: Array = lobes.duplicate()
+	sorted.sort_custom(func(a, c): return float(a["dx"]) + float(a["dz"]) + (float(a["y0"]) + float(a["y1"])) * 0.01 < float(c["dx"]) + float(c["dz"]) + (float(c["y0"]) + float(c["y1"])) * 0.01)
+	var lo_v := Vector3(INF, INF, INF)
+	var hi_v := Vector3(-INF, -INF, -INF)
+
+	for l in sorted:
+		lo_v = Vector3(minf(lo_v.x, cx + float(l["dx"]) - float(l["r"])), minf(lo_v.y, float(l["y0"])), minf(lo_v.z, cz + float(l["dz"]) - float(l["r"])))
+		hi_v = Vector3(maxf(hi_v.x, cx + float(l["dx"]) + float(l["r"])), maxf(hi_v.y, float(l["y1"])), maxf(hi_v.z, cz + float(l["dz"]) + float(l["r"])))
+
+	var st: SurfaceTool = b.new_part(sp, lo_v, hi_v)
+
+	for l in sorted:
+		dome_st(st, cx + float(l["dx"]), cz + float(l["dz"]), float(l["r"]), float(l["y0"]), float(l["y1"]), rings, segs)
+
+
 # ---------------------------------------------------------------- 가판대 상품(3D 오브젝트)
 
 # 색별로 부품 하나(SurfaceTool)를 모아 쓴다(같은 색은 면 하나). cache: 색 문자열 → SurfaceTool. 만든 순서대로 나중에 그려진다(bias).
@@ -1179,41 +1209,78 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 		"tree":
 			var leaf: Dictionary = spec(_tex("foliage", ts, Color(0.9, 0.3, 0.3)), tint, "tree_foliage", "나뭇잎 %d×%d 반복(짙은 초록 + 밝은 점 + 빨간 열매 점)" % [ts, ts])
 			var variant: String = str(rule.get("variant", "round"))
+			var bark_dark: Dictionary = wood(p, Color(0.34, 0.24, 0.17), "bark_dark")
+			var root_spec: Dictionary = wood(p, Color(0.4, 0.28, 0.19), "bark_root")
 
 			if variant == "pine":
-				var pine: Dictionary = spec(_tex("foliage", ts, Color(0.2, 0.3, 0.25)), Color(0.55, 0.8, 0.65), "pine_foliage", "침엽수 잎 %d×%d (어두운 초록)" % [ts, ts])
-				oct(b, "bark", bark, c.x, c.y, 0.12, 0.0, 0.8, 0.1)
-				oct(b, "cone", pine, c.x, c.y, 0.66, 0.5, 1.35, 0.2)
-				oct(b, "cone", pine, c.x, c.y, 0.52, 1.1, 1.95, 0.15)
-				oct(b, "cone", pine, c.x, c.y, 0.38, 1.7, 2.6, 0.03)
-				total = 2.65
+				var pine: Dictionary = _noise_spec(ts, Color(0.16, 0.38, 0.24), Color(0.3, 0.55, 0.36), "pine_foliage", 3)
+				oct(b, "root", root_spec, c.x, c.y, 0.17, 0.0, 0.16, 0.12)
+				oct(b, "bark", bark, c.x, c.y, 0.12, 0.1, 0.8, 0.09)
+				oct(b, "cone", pine, c.x, c.y, 0.7, 0.45, 1.2, 0.28)
+				oct(b, "cone", pine, c.x, c.y, 0.56, 0.95, 1.7, 0.22)
+				oct(b, "cone", pine, c.x, c.y, 0.42, 1.45, 2.2, 0.16)
+				oct(b, "cone", pine, c.x, c.y, 0.28, 1.95, 2.7, 0.03)
+				total = 2.75
 			elif variant == "birch":
-				var white: Dictionary = spec(_tex("flat", ts, Color(0.9, 0.9, 0.84)), Color.WHITE, "birch_bark", "자작나무 줄기 흰 단색 %d×%d" % [ts, ts])
-				var light_leaf: Dictionary = spec(_tex("foliage", ts, Color(0.95, 0.85, 0.4)), Color(0.95, 1.1, 0.8), "birch_foliage", "자작나무 잎 %d×%d (연한 초록)" % [ts, ts])
-				oct(b, "bark", white, c.x, c.y, 0.09, 0.0, 1.55, 0.07)
-				dome(b, "leaf", light_leaf, c.x, c.y, 0.55, 1.15, 2.1, 3, 12)
-				dome(b, "leaf", light_leaf, c.x + 0.18, c.y - 0.1, 0.34, 1.6, 2.3, 2, 10)
-				total = 2.3
+				var white: Dictionary = _noise_spec(ts, Color(0.92, 0.92, 0.86), Color(0.3, 0.28, 0.26), "birch_bark", 5, Color.WHITE, 0.06)
+				var light_leaf: Dictionary = _noise_spec(ts, Color(0.4, 0.62, 0.3), Color(0.58, 0.78, 0.4), "birch_foliage", 7)
+				oct(b, "bark", white, c.x, c.y, 0.09, 0.0, 1.5, 0.07)
+				_crown(b, light_leaf, c.x, c.y, [{"dx": -0.2, "dz": -0.12, "r": 0.4, "y0": 1.2, "y1": 1.9}, {"dx": 0.0, "dz": 0.0, "r": 0.5, "y0": 1.35, "y1": 2.15}, {"dx": 0.18, "dz": 0.12, "r": 0.36, "y0": 1.25, "y1": 1.95}, {"dx": 0.04, "dz": 0.02, "r": 0.3, "y0": 1.9, "y1": 2.4}], 2, 10)
+				total = 2.45
 			elif variant == "big_oak":
-				oct(b, "bark", bark, c.x, c.y, 0.2, 0.0, 1.1, 0.14)
-				# 같은 부품은 중심 x+z 가 큰 것이 나중(앞)에 그려진다. 위로 쌓이는 덩어리일수록 x+z 가 커지게 놓아 큰 덩어리가 작은 덩어리를 파먹지 않게 한다.
-				dome(b, "leaf", leaf, c.x, c.y, 0.95, 0.9, 1.85, 3, 14)
-				dome(b, "leaf", leaf, c.x + 0.06, c.y + 0.04, 0.68, 1.55, 2.45, 3, 12)
-				dome(b, "leaf", leaf, c.x + 0.14, c.y + 0.08, 0.4, 2.1, 2.65, 2, 10)
+				oct(b, "root", root_spec, c.x, c.y, 0.3, 0.0, 0.2, 0.2)
+				oct(b, "bark", bark, c.x, c.y, 0.2, 0.15, 1.1, 0.15)
+				_crown(b, leaf, c.x, c.y, [{"dx": -0.45, "dz": -0.3, "r": 0.5, "y0": 0.95, "y1": 1.6}, {"dx": 0.0, "dz": 0.0, "r": 0.95, "y0": 0.95, "y1": 1.9}, {"dx": 0.5, "dz": 0.3, "r": 0.5, "y0": 0.95, "y1": 1.6}, {"dx": 0.04, "dz": 0.03, "r": 0.68, "y0": 1.55, "y1": 2.45}, {"dx": 0.12, "dz": 0.08, "r": 0.4, "y0": 2.1, "y1": 2.65}], 3, 14)
 				total = 2.7
 			elif variant == "autumn":
-				var fall: Dictionary = spec(_tex("foliage", ts, Color(0.9, 0.5, 0.2)), Color(1.6, 0.8, 0.4), "autumn_foliage", "가을 잎 %d×%d (주황 계열)" % [ts, ts])
-				oct(b, "bark", bark, c.x, c.y, 0.13, 0.0, 1.0, 0.1)
-				dome(b, "leaf", fall, c.x, c.y, 0.66, 0.85, 1.55, 3, 12)
-				dome(b, "leaf", fall, c.x, c.y, 0.5, 1.4, 2.0, 3, 12)
-				dome(b, "leaf", fall, c.x, c.y, 0.3, 1.9, 2.35, 2, 10)
-				total = 2.25
+				var fall: Dictionary = _noise_spec(ts, Color(0.86, 0.5, 0.18), Color(0.96, 0.78, 0.3), "autumn_foliage", 9)
+				oct(b, "root", root_spec, c.x, c.y, 0.17, 0.0, 0.16, 0.12)
+				oct(b, "bark", bark, c.x, c.y, 0.13, 0.1, 1.0, 0.1)
+				_crown(b, fall, c.x, c.y, [{"dx": -0.3, "dz": -0.2, "r": 0.42, "y0": 0.9, "y1": 1.5}, {"dx": 0.0, "dz": 0.0, "r": 0.66, "y0": 0.85, "y1": 1.6}, {"dx": 0.3, "dz": 0.22, "r": 0.4, "y0": 0.9, "y1": 1.45}, {"dx": 0.06, "dz": 0.04, "r": 0.5, "y0": 1.4, "y1": 2.05}, {"dx": 0.1, "dz": 0.07, "r": 0.28, "y0": 1.9, "y1": 2.35}])
+				total = 2.35
+			elif variant == "cherry":
+				var bloom: Dictionary = _noise_spec(ts, Color(0.93, 0.5, 0.66), Color(1.0, 0.8, 0.88), "cherry_blossom", 11, Color.WHITE, 0.18)
+				oct(b, "root", bark_dark, c.x, c.y, 0.15, 0.0, 0.14, 0.11)
+				oct(b, "bark", bark_dark, c.x, c.y, 0.11, 0.1, 1.05, 0.08)
+				box(b, "limb", bark_dark, Vector3(c.x - 0.38, 0.95, c.y - 0.03), Vector3(c.x + 0.0, 1.03, c.y + 0.03))
+				box(b, "limb", bark_dark, Vector3(c.x, 1.0, c.y - 0.03), Vector3(c.x + 0.36, 1.08, c.y + 0.03))
+				_crown(b, bloom, c.x, c.y, [{"dx": -0.45, "dz": -0.25, "r": 0.4, "y0": 1.0, "y1": 1.6}, {"dx": 0.0, "dz": 0.0, "r": 0.7, "y0": 1.0, "y1": 1.85}, {"dx": 0.44, "dz": 0.26, "r": 0.4, "y0": 1.02, "y1": 1.6}, {"dx": 0.05, "dz": 0.04, "r": 0.5, "y0": 1.6, "y1": 2.25}])
+				total = 2.3
+			elif variant == "willow":
+				var wleaf: Dictionary = _noise_spec(ts, Color(0.38, 0.58, 0.3), Color(0.55, 0.74, 0.4), "willow_foliage", 13)
+				oct(b, "root", bark_dark, c.x, c.y, 0.2, 0.0, 0.18, 0.15)
+				oct(b, "bark", bark_dark, c.x, c.y, 0.15, 0.12, 1.2, 0.11)
+				var wst: SurfaceTool = b.new_part(wleaf, Vector3(c.x - 0.95, 0.4, c.y - 0.95), Vector3(c.x + 0.95, 1.9, c.y + 0.95))
+				dome_st(wst, c.x, c.y, 0.9, 1.2, 1.95, 3, 12)
+
+				for wi in range(12):
+					var wa: float = float(wi) * TAU / 12.0
+					var wr: float = 0.78 + (0.1 if wi % 2 == 0 else 0.0)
+					var wx: float = c.x + cos(wa) * wr
+					var wz: float = c.y + sin(wa) * wr
+					var wl: float = 0.55 + float((wi * 5) % 4) * 0.12
+					box_st(wst, Vector3(wx - 0.025, 1.3 - wl, wz - 0.025), Vector3(wx + 0.025, 1.3, wz + 0.025))
+
+				total = 2.0
+			elif variant == "dead":
+				oct(b, "root", bark_dark, c.x, c.y, 0.2, 0.0, 0.16, 0.14)
+				oct(b, "bark", bark_dark, c.x, c.y, 0.13, 0.1, 1.9, 0.05)
+				box(b, "limb", bark_dark, Vector3(c.x - 0.5, 1.15, c.y - 0.03), Vector3(c.x, 1.22, c.y + 0.03))
+				box(b, "limb", bark_dark, Vector3(c.x - 0.5, 1.22, c.y - 0.03), Vector3(c.x - 0.43, 1.6, c.y + 0.03))
+				box(b, "limb", bark_dark, Vector3(c.x, 1.35, c.y - 0.03), Vector3(c.x + 0.42, 1.42, c.y + 0.03))
+				box(b, "limb", bark_dark, Vector3(c.x + 0.36, 1.42, c.y - 0.03), Vector3(c.x + 0.43, 1.78, c.y + 0.03))
+				box(b, "limb", bark_dark, Vector3(c.x - 0.03, 1.55, c.y), Vector3(c.x + 0.03, 1.62, c.y + 0.32))
+				total = 1.95
+			elif variant == "poplar":
+				var pl: Dictionary = _noise_spec(ts, Color(0.28, 0.52, 0.26), Color(0.46, 0.7, 0.36), "poplar_foliage", 15)
+				oct(b, "bark", bark, c.x, c.y, 0.1, 0.0, 0.8, 0.08)
+				_crown(b, pl, c.x, c.y, [{"dx": 0.0, "dz": 0.0, "r": 0.42, "y0": 0.6, "y1": 1.4}, {"dx": 0.02, "dz": 0.01, "r": 0.4, "y0": 1.15, "y1": 2.0}, {"dx": 0.04, "dz": 0.02, "r": 0.3, "y0": 1.75, "y1": 2.6}, {"dx": 0.06, "dz": 0.03, "r": 0.16, "y0": 2.3, "y1": 2.95}], 3, 10)
+				total = 3.0
 			else:
-				oct(b, "bark", bark, c.x, c.y, 0.13, 0.0, 1.0, 0.1)
-				dome(b, "leaf", leaf, c.x, c.y, 0.66, 0.85, 1.55, 3, 12)
-				dome(b, "leaf", leaf, c.x, c.y, 0.5, 1.4, 2.0, 3, 12)
-				dome(b, "leaf", leaf, c.x, c.y, 0.3, 1.9, 2.35, 2, 10)
-				total = 2.25
+				oct(b, "root", root_spec, c.x, c.y, 0.2, 0.0, 0.16, 0.14)
+				oct(b, "bark", bark, c.x, c.y, 0.13, 0.1, 1.0, 0.1)
+				_crown(b, leaf, c.x, c.y, [{"dx": -0.34, "dz": -0.2, "r": 0.4, "y0": 0.9, "y1": 1.5}, {"dx": 0.0, "dz": 0.0, "r": 0.66, "y0": 0.85, "y1": 1.6}, {"dx": 0.32, "dz": 0.22, "r": 0.38, "y0": 0.9, "y1": 1.45}, {"dx": 0.06, "dz": 0.04, "r": 0.5, "y0": 1.4, "y1": 2.05}, {"dx": 0.1, "dz": 0.07, "r": 0.3, "y0": 1.9, "y1": 2.35}])
+				total = 2.35
 		"hay":
 			var hay: Dictionary = spec(_tex("plank", ts), Color(1.1, 0.95, 0.5), "hay_bale", "건초 단 %d×%d (노란 결)" % [ts, ts])
 			box(b, "bale", hay, Vector3(c.x - 0.5, 0.0, c.y - 0.3), Vector3(c.x + 0.0, 0.4, c.y + 0.3))
@@ -1400,8 +1467,125 @@ static func build_prop(style: String, lo: Vector2, hi: Vector2, rule: Dictionary
 			box(b, "cap", iron, Vector3(c.x - 0.13, 1.86, c.y - 0.13), Vector3(c.x + 0.13, 1.92, c.y + 0.13))
 			total = 1.95
 		"flower_bush":
-			dome(b, "bush", spec(_tex("foliage", ts, Color(0.95, 0.4, 0.55)), tint, "flower_bush", "꽃 덤불 %d×%d 반복(짙은 초록 + 분홍 꽃 점)" % [ts, ts]), c.x, c.y, 0.32, 0.0, 0.4)
-			total = 0.45
+			var bvar: String = str(rule.get("variant", ""))
+
+			if bvar == "berry":
+				var berry: Dictionary = _noise_spec(ts, Color(0.24, 0.46, 0.26), Color(0.82, 0.18, 0.22), "berry_bush", 17, Color.WHITE, 0.1)
+				_crown(b, berry, c.x, c.y, [{"dx": -0.18, "dz": -0.1, "r": 0.3, "y0": 0.0, "y1": 0.42}, {"dx": 0.0, "dz": 0.0, "r": 0.34, "y0": 0.0, "y1": 0.5}, {"dx": 0.2, "dz": 0.12, "r": 0.28, "y0": 0.0, "y1": 0.4}], 2, 10)
+				total = 0.55
+			elif bvar == "hedge":
+				var hedge: Dictionary = _noise_spec(ts, Color(0.22, 0.44, 0.24), Color(0.4, 0.62, 0.34), "hedge_foliage", 19)
+				var h0: float = lo.x if along_x else lo.y
+				var h1: float = hi.x if along_x else hi.y
+				var hc: float = c.y if along_x else c.x
+				_cart_box(b, along_x, hedge, h0, h1, hc - 0.2, hc + 0.2, 0.0, 0.62)
+				_cart_box(b, along_x, hedge, h0 + 0.06, h1 - 0.06, hc - 0.16, hc + 0.16, 0.62, 0.74)
+				total = 0.78
+			else:
+				dome(b, "bush", spec(_tex("foliage", ts, Color(0.95, 0.4, 0.55)), tint, "flower_bush", "꽃 덤불 %d×%d 반복(짙은 초록 + 분홍 꽃 점)" % [ts, ts]), c.x, c.y, 0.32, 0.0, 0.4)
+				total = 0.45
+		"rock":
+			var rs: Dictionary = _noise_spec(ts, Color(0.42, 0.43, 0.48), Color(0.58, 0.59, 0.64), "rock_stone", 21, Color.WHITE, 0.12)
+			_crown(b, rs, c.x, c.y, [{"dx": -0.2, "dz": -0.12, "r": 0.3, "y0": 0.0, "y1": 0.3}, {"dx": 0.0, "dz": 0.0, "r": 0.42, "y0": 0.0, "y1": 0.44}, {"dx": 0.34, "dz": 0.24, "r": 0.24, "y0": 0.0, "y1": 0.24}, {"dx": 0.1, "dz": 0.4, "r": 0.14, "y0": 0.0, "y1": 0.14}], 2, 8)
+			total = 0.5
+		"stump":
+			var ring: Dictionary = _flat_spec(ts, Color(0.76, 0.58, 0.38), "stump_rings")
+			oct(b, "root", bark, c.x, c.y, 0.32, 0.0, 0.1, 0.26)
+			oct(b, "stump", bark, c.x, c.y, 0.25, 0.08, 0.36, 0.23)
+			oct(b, "top", ring, c.x, c.y, 0.22, 0.36, 0.375, 0.21)
+			oct(b, "ring", wood(p, Color(0.58, 0.4, 0.26), "stump_ring"), c.x, c.y, 0.12, 0.375, 0.38, 0.11)
+			total = 0.4
+		"log":
+			var lg: float = lo.x if along_x else lo.y
+			var lg1: float = hi.x if along_x else hi.y
+			var lc: float = c.y if along_x else c.x
+			var endc: Dictionary = _flat_spec(ts, Color(0.76, 0.58, 0.38), "log_end")
+			_cart_box(b, along_x, bark, lg, lg1, lc - 0.24, lc - 0.02, 0.0, 0.22)
+			_cart_box(b, along_x, bark, lg + 0.05, lg1 - 0.02, lc + 0.02, lc + 0.24, 0.0, 0.22)
+			_cart_box(b, along_x, bark, lg + 0.02, lg1 - 0.05, lc - 0.11, lc + 0.11, 0.22, 0.44)
+			_cart_box(b, along_x, endc, lg1 - 0.02, lg1 + 0.01, lc - 0.2, lc - 0.04, 0.02, 0.2)
+			total = 0.46
+		"mushroom":
+			var stem: Dictionary = _flat_spec(ts, Color(0.94, 0.9, 0.8), "mushroom_stem")
+			var cap_r: Dictionary = _noise_spec(ts, Color(0.82, 0.2, 0.2), Color(0.98, 0.96, 0.9), "mushroom_cap", 23, Color.WHITE, 0.12)
+			var cap_b: Dictionary = _noise_spec(ts, Color(0.7, 0.5, 0.3), Color(0.86, 0.72, 0.5), "mushroom_cap_brown", 25, Color.WHITE, 0.1)
+
+			for mi in [[-0.3, -0.15, 0.16, 0.29, 0], [0.18, 0.08, 0.22, 0.42, 1], [-0.03, 0.34, 0.13, 0.22, 0]]:
+				oct(b, "stem", stem, c.x + float(mi[0]), c.y + float(mi[1]), 0.035 + float(mi[2]) * 0.2, 0.0, float(mi[3]), 0.035 + float(mi[2]) * 0.16)
+				dome(b, "cap", cap_r if int(mi[4]) == 0 else cap_b, c.x + float(mi[0]), c.y + float(mi[1]), float(mi[2]) + 0.04, float(mi[3]) - 0.03, float(mi[3]) + float(mi[2]) * 0.9, 2, 8)
+
+			total = 0.4
+		"fountain":
+			var fs: Dictionary = stone_spec(p, Color(1.1, 1.06, 1.0), "fountain_stone")
+			var fs2: Dictionary = stone_spec(p, Color(0.88, 0.86, 0.82), "fountain_stone_dark")
+			var water: Dictionary = spec(_tex("flat", ts, Color(0.35, 0.62, 0.86)), Color.WHITE, "fountain_water", "분수 물 단색 %d×%d" % [ts, ts])
+			water["emit"] = 0.15
+			var fr: float = minf(sx, sz) * 0.5 - 0.05
+			oct(b, "base", fs2, c.x, c.y, fr, 0.0, 0.14, fr - 0.04)
+			oct(b, "wall", fs, c.x, c.y, fr - 0.1, 0.12, 0.42, fr - 0.14)
+			oct(b, "water", water, c.x, c.y, fr - 0.22, 0.4, 0.43, fr - 0.22)
+			oct(b, "pillar", fs, c.x, c.y, 0.15, 0.4, 1.0, 0.11)
+			oct(b, "bowl", fs, c.x, c.y, 0.42, 0.88, 1.06, 0.5)
+			oct(b, "bowl_water", water, c.x, c.y, 0.38, 1.04, 1.07, 0.38)
+			dome(b, "spout", water, c.x, c.y, 0.1, 1.06, 1.3, 2, 8)
+			total = 1.35
+		"scarecrow":
+			var straw: Dictionary = _noise_spec(ts, Color(0.88, 0.74, 0.34), Color(0.98, 0.9, 0.5), "straw", 27, Color.WHITE, 0.16)
+			var cloth_s: Dictionary = _flat_spec(ts, Color(0.5, 0.32, 0.62), "scarecrow_shirt")
+			var hat_s: Dictionary = _flat_spec(ts, Color(0.46, 0.3, 0.18), "scarecrow_hat")
+			oct(b, "pole", bark, c.x, c.y, 0.04, 0.0, 1.4, 0.035)
+			box(b, "arms", wood(p, Color(0.5, 0.36, 0.22), "scarecrow_arms"), Vector3(c.x - 0.5, 0.95, c.y - 0.03), Vector3(c.x + 0.5, 1.01, c.y + 0.03))
+			box(b, "shirt", cloth_s, Vector3(c.x - 0.15, 0.55, c.y - 0.1), Vector3(c.x + 0.15, 1.05, c.y + 0.1))
+			box(b, "hand", straw, Vector3(c.x - 0.58, 0.9, c.y - 0.05), Vector3(c.x - 0.46, 1.04, c.y + 0.05))
+			box(b, "hand", straw, Vector3(c.x + 0.46, 0.9, c.y - 0.05), Vector3(c.x + 0.58, 1.04, c.y + 0.05))
+			dome(b, "head", straw, c.x, c.y, 0.14, 1.12, 1.38, 2, 8)
+			oct(b, "brim", hat_s, c.x, c.y, 0.24, 1.36, 1.39, 0.24)
+			oct(b, "hat", hat_s, c.x, c.y, 0.14, 1.39, 1.62, 0.07)
+			total = 1.7
+		"campfire":
+			var stones: Dictionary = _noise_spec(ts, Color(0.42, 0.43, 0.48), Color(0.58, 0.59, 0.64), "fire_stone", 29)
+			var ember: Dictionary = _flat_spec(ts, Color(1.0, 0.5, 0.14), "flame_outer")
+			ember["emit"] = 1.0
+			var ember2: Dictionary = _flat_spec(ts, Color(1.0, 0.84, 0.3), "flame_inner")
+			ember2["emit"] = 1.0
+			var ring_st: SurfaceTool = b.new_part(stones, Vector3(c.x - 0.6, 0.0, c.y - 0.6), Vector3(c.x + 0.6, 0.3, c.y + 0.6))
+
+			for si in range(8):
+				var sa: float = float(si) * TAU / 8.0 + 0.2
+				dome_st(ring_st, c.x + cos(sa) * 0.44, c.y + sin(sa) * 0.44, 0.13, 0.0, 0.18 + float(si % 2) * 0.06, 2, 6)
+
+			var logs_s: Dictionary = wood(p, Color(0.4, 0.28, 0.18), "fire_logs")
+			box(b, "log", logs_s, Vector3(c.x - 0.34, 0.05, c.y - 0.05), Vector3(c.x + 0.34, 0.18, c.y + 0.08))
+			box(b, "log", logs_s, Vector3(c.x - 0.06, 0.18, c.y - 0.32), Vector3(c.x + 0.06, 0.31, c.y + 0.32))
+			pyramid(b, "flame", ember, c.x, c.y, 0.22, 0.22, 0.2, 0.82)
+			pyramid(b, "flame", ember2, c.x, c.y, 0.12, 0.12, 0.2, 0.66)
+			total = 0.65
+		"flowerbed":
+			var soil: Dictionary = _flat_spec(ts, Color(0.36, 0.26, 0.18), "bed_soil")
+			var edge: Dictionary = stone_spec(p, Color(1.05, 1.0, 0.95), "bed_edge")
+			var f0: float = lo.x + 0.04
+			var f1: float = hi.x - 0.04
+			var g0: float = lo.y + 0.04
+			var g1: float = hi.y - 0.04
+			box(b, "soil", soil, Vector3(f0, 0.0, g0), Vector3(f1, 0.1, g1))
+			box(b, "edge", edge, Vector3(f0 - 0.04, 0.0, g0 - 0.04), Vector3(f1 + 0.04, 0.14, g0 + 0.06))
+			box(b, "edge", edge, Vector3(f0 - 0.04, 0.0, g1 - 0.06), Vector3(f1 + 0.04, 0.14, g1 + 0.04))
+			box(b, "edge", edge, Vector3(f0 - 0.04, 0.0, g0 + 0.06), Vector3(f0 + 0.06, 0.14, g1 - 0.06))
+			box(b, "edge", edge, Vector3(f1 - 0.06, 0.0, g0 + 0.06), Vector3(f1 + 0.04, 0.14, g1 - 0.06))
+			var fcache: Dictionary = {}
+			var fa := Vector3(f0, 0.1, g0)
+			var fb := Vector3(f1, 0.4, g1)
+			var cols: Array = ["#e06080", "#f0e050", "#b070e0", "#ffffff", "#f09040"]
+			var fnx: int = maxi(int((f1 - f0) / 0.34), 1)
+			var fnz: int = maxi(int((g1 - g0) / 0.34), 1)
+
+			for ix in range(fnx):
+				for iz in range(fnz):
+					var fx: float = f0 + (float(ix) + 0.5) * (f1 - f0) / float(fnx)
+					var fz: float = g0 + (float(iz) + 0.5) * (g1 - g0) / float(fnz)
+					_goods_obj(b, fcache, "flower:" + str(cols[(ix * 2 + iz) % cols.size()]), fx, 0.1, fz, ts, fa, fb)
+
+			total = 0.4
 		"sign":
 			box(b, "pole", bark, Vector3(c.x - 0.04, 0.0, c.y - 0.04), Vector3(c.x + 0.04, 1.4, c.y + 0.04))
 			box(b, "board", spec(PlaceholderTextures.sign_board(ts), Color.WHITE, "road_sign_board", "표지판 %d×%d 나무 판 + 흰 화살표" % [ts, ts]), Vector3(c.x - 0.28, 1.05, c.y - 0.04), Vector3(c.x + 0.28, 1.4, c.y + 0.04))

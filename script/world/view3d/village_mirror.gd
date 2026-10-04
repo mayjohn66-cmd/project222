@@ -17,7 +17,7 @@ const WALL_PALETTE: Array = ["eadfc8", "f2e6c0", "dcc8a0", "e8d0c0", "d8e0d0", "
 const TRIM_PALETTE: Array = ["5c8a7a", "9a5a3a", "4a6a9a", "7a9a4a", "8a5a8a", "c08a3a"]
 
 
-const TREE_VARIANTS: Array = ["round", "pine", "birch", "big_oak", "round", "autumn", "pine", "birch"]
+const TREE_VARIANTS: Array = ["round", "pine", "birch", "big_oak", "round", "autumn", "pine", "cherry", "poplar", "birch", "willow", "round", "big_oak", "cherry", "dead"]
 
 
 static func apply_variation(rule: Dictionary, seed_value: int) -> Dictionary:
