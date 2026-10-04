@@ -27,9 +27,12 @@ static func entries() -> Array[Dictionary]:
 		result.append({"id":SeasonalVillageFlow.JOURNAL_PREFIX + str(event["id"]), "title":SeasonalVillageFlow.title(str(event["id"]))})
 	for event in ResidentMemoryFlow.SETTINGS.events:
 		result.append({"id":ResidentMemoryFlow.JOURNAL_PREFIX + str(event["id"]), "title":ResidentMemoryFlow.title(str(event["id"]))})
+	for entry in CraftingPathFlow.SETTINGS.stages:
+		result.append({"id":CraftingPathFlow.JOURNAL_PREFIX + str(entry["id"]),"title":CraftingPathFlow.title(str(entry["id"]))})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with(CraftingPathFlow.JOURNAL_PREFIX): return CraftingPathFlow.information(id.trim_prefix(CraftingPathFlow.JOURNAL_PREFIX))
 	if id.begins_with(ResidentMemoryFlow.JOURNAL_PREFIX): return ResidentMemoryFlow.information(id.trim_prefix(ResidentMemoryFlow.JOURNAL_PREFIX))
 	if id.begins_with(SeasonalVillageFlow.JOURNAL_PREFIX): return SeasonalVillageFlow.information(id.trim_prefix(SeasonalVillageFlow.JOURNAL_PREFIX))
 	if id == VillageGoodwillFlow.JOURNAL_ID: return VillageGoodwillFlow.information()
@@ -71,6 +74,10 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id.begins_with(CraftingPathFlow.JOURNAL_PREFIX):
+		var entry := CraftingPathFlow.stage(id.trim_prefix(CraftingPathFlow.JOURNAL_PREFIX))
+		if entry.is_empty() or not CraftingPathFlow.locked_reason(entry).is_empty(): return null
+		return destination(world,"resident:" + str(entry["giver"]))
 	if not available(): return null
 	if id.begins_with(ResidentMemoryFlow.JOURNAL_PREFIX):
 		var memory := ResidentMemoryFlow.event(id.trim_prefix(ResidentMemoryFlow.JOURNAL_PREFIX))

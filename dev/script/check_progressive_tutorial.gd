@@ -77,6 +77,7 @@ func run() -> void:
 	player = world.get_node("Actors/Player")
 	player.set_physics_process(false)
 	check(player.money == 0 and GameState.get_item_count("bread") == 8 and GameState.get_item_count("water") == 6, "first money is earned; only carried shop food starts")
+	check(PlayerProgress.story_beat_days.has(CraftingPathFlow.NEW_GAME) and not CraftingPathFlow.recipe_ready("bake_bread"), "genuine new game records the product evolution gate")
 	check(GameState.get_item_count("potion") == 0 and GameState.get_item_count("iron_ore") == 0 and GameState.get_item_count("rusty_sword") == 0, "native supplies are not free starter stock")
 	var no_staff := true
 	for worker in get_tree().get_nodes_in_group("worker"):
@@ -173,13 +174,13 @@ func run() -> void:
 	director.refresh()
 	check(director.flow.current()["id"] == "production" and not director.is_guiding(), "first settlement makes crafting available without locking resident flow")
 	talk_merchant()
-	check(GameState.get_furniture_count("magic_oven") == 1 and GameState.get_item_count("scroll_bake_bread") == 1 and GameState.get_item_count("wheat") == 4, "later starter gifts are local goods only")
+	check(GameState.get_furniture_count("magic_oven") == 1 and GameState.get_item_count("scroll_camp_bread") == 1 and GameState.get_item_count("wheat") == 4, "later starter gifts are local goods only")
 	check(not director.flow.goal_met(director.flow.current(),world), "owned bread is not proof of production")
 	var facility = load("res://scenes/shop/production/production_facility.tscn").instantiate()
 	world.get_node("Objects").add_child(facility)
 	director.refresh()
 	facility.configure_facility("magic_oven")
-	facility.pending_item_id = "bread"
+	facility.pending_item_id = "camp_bread"
 	facility.pending_amount = 1
 	facility.production_state = ProductionFacility.ProductionState.READY
 	check(facility.collect_production(), "real output collected")

@@ -38,6 +38,8 @@ static func initialize(world: Node) -> void:
 		GameState.remove_furniture(str(entry["build_id"]), 1)
 	GameState.save_store_layout(SETTINGS.opening_layout.duplicate(true))
 	PlayerProgress.record_story_beat(VERSION, GameState.total_day)
+	# 부트스트랩은 제작/주민 흐름의 클래스 의존 순환을 만들지 않는다.
+	PlayerProgress.record_story_beat("tutorial_event:crafting_path_v1", GameState.total_day)
 
 static func traded() -> bool:
 	return PlayerProgress.story_beat_days.has(TRADE)

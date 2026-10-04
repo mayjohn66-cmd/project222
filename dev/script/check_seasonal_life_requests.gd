@@ -34,6 +34,7 @@ func drain() -> void:
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
 	world.get_node("TutorialDirector").enabled = false
+	world.get_node("VillageLifeDirector").crafting_path_enabled = false
 	add_child(world)
 	await settle()
 	life = world.get_node("VillageLifeDirector")

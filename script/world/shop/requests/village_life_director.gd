@@ -1,5 +1,6 @@
 class_name VillageLifeDirector
 extends Node
+@export var crafting_path_enabled: bool = true
 
 var residents: Dictionary = {}
 var player
@@ -46,6 +47,9 @@ func _process(delta: float) -> void:
 	if not talking: refresh()
 
 func refresh() -> void:
+	for facility in get_tree().get_nodes_in_group("production_facility"):
+		if not facility.output_collected.is_connected(CraftingPathFlow.record_output):
+			facility.output_collected.connect(CraftingPathFlow.record_output)
 	var world := get_parent()
 	var editor = world.get_node_or_null("VillageMapEditor")
 	for entry in VillageLifeFlow.SETTINGS.residents:
@@ -131,6 +135,8 @@ func nearest() -> Dictionary:
 	return best
 
 func _next_story_action(resident_id: String) -> Dictionary:
+	var crafting := CraftingPathFlow.action(resident_id) if crafting_path_enabled else {}
+	if not crafting.is_empty() and crafting["stage"] != "preparing": return crafting
 	var goodwill := VillageGoodwillFlow.action(resident_id)
 	if not goodwill.is_empty(): return goodwill
 	var story := VillageStoryFlow.action(resident_id)
@@ -140,6 +146,7 @@ func _next_story_action(resident_id: String) -> Dictionary:
 	var memory := ResidentMemoryFlow.action(resident_id)
 	if not memory.is_empty() and not ResidentMemoryFlow.completed(str(memory["event"])): return memory
 	if not seasonal.is_empty(): return seasonal
+	if not crafting.is_empty(): return crafting
 	return memory if not memory.is_empty() else story
 
 func interaction_hint() -> String:
@@ -149,6 +156,7 @@ func interaction_hint() -> String:
 	if not MarketAfterglowFlow.pending(str(target["id"])).is_empty(): return "[E] %s · 부탁 뒤 후일담" % target["name"]
 	var action := _next_story_action(str(target["id"]))
 	if not action.is_empty():
+		if action.get("flow", "") == "crafting_path": return "[E] %s · %s" % [target["name"],CraftingPathFlow.title(str(action["event"]))]
 		if action.get("flow", "") == "resident_memory": return "[E] %s · %s" % [target["name"], ResidentMemoryFlow.title(str(action["event"]))]
 		if action.get("flow", "") == "seasonal": return "[E] %s · %s" % [target["name"], SeasonalVillageFlow.title(str(action["event"]))]
 		if action.get("flow", "") == "goodwill":
@@ -191,7 +199,10 @@ func try_interact() -> bool:
 		story_action = _next_story_action(str(target["id"])) if afterglow_action.is_empty() else {}
 		if not story_action.is_empty():
 			lines.append_array(RequestTextData.lines("service_text", str(story_action["id"]), str(story_action.get("field", "lines"))))
-			if story_action.get("flow", "") == "seasonal":
+			if story_action.get("flow", "") == "crafting_path":
+				lines.append_array(CraftingPathFlow.description(str(story_action["event"])).split("\n", false))
+				if story_action["stage"] == "finish": lines.append("이번 시제품을 함께 나눈 뒤 평판 +%d" % CraftingPathFlow.stage(str(story_action["event"]))["reputation"])
+			elif story_action.get("flow", "") == "seasonal":
 				var materials := SeasonalVillageFlow.requirements_description(str(story_action["event"]))
 				if not materials.is_empty(): lines.append(materials)
 				if story_action["stage"] == "finish": lines.append("답례: " + SeasonalVillageFlow.reward_description(str(story_action["event"])))
@@ -212,7 +223,9 @@ func _end_talk() -> void:
 	if not talking: return
 	if dialogue.line_index >= dialogue.lines.size():
 		if not afterglow_action.is_empty(): MarketAfterglowFlow.listen(afterglow_action)
-		if story_action.get("flow", "") == "resident_memory":
+		if story_action.get("flow", "") == "crafting_path":
+			if CraftingPathFlow.complete_action(story_action) and story_action["stage"] == "finish": manager.customer_spawner.refresh_spawn_interval()
+		elif story_action.get("flow", "") == "resident_memory":
 			if ResidentMemoryFlow.complete_action(story_action):
 				if story_action["stage"] == "choose":
 					memory_panel.event_id = str(story_action["event"])

@@ -20,6 +20,8 @@ func _ready() -> void: call_deferred("run")
 
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()
+	world.get_node("VillageLifeDirector").crafting_path_enabled = false
+	world.get_node("TutorialDirector").enabled = false
 	add_child(world)
 	await settle()
 	var life: VillageLifeDirector = world.get_node("VillageLifeDirector")
@@ -76,10 +78,10 @@ func run() -> void:
 	var well := VillageSettlement.find_site(world, "VillageDecor/VillageWell")
 	player.global_position = well.global_position + Vector2(0, -60)
 	check(life.nearest().get("id") == "well", "well has its own reachable interaction")
-	var water_before: int = GameState.get_item_count("water")
+	var water_before: int = GameState.get_item_count(VillageLifeFlow.SETTINGS.well_item)
 	check(interactions.try_interact(), "E draws water at unlocked well")
 	drain(life.dialogue)
-	check(GameState.get_item_count("water") == water_before + 1 and VillageLifeFlow.well_used_today(), "well adds water once")
+	check(GameState.get_item_count(VillageLifeFlow.SETTINGS.well_item) == water_before + 1 and VillageLifeFlow.well_used_today(), "well adds water once")
 	check(not VillageLifeFlow.draw_water(), "well repeat cannot duplicate water")
 	saved = PlayerProgress.to_save_data()
 	PlayerProgress.reset()

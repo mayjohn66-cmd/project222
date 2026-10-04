@@ -208,7 +208,8 @@ func _npc_needs_relocation() -> bool:
 	return false
 
 func _on_output_collected(item_id: String, amount: int) -> void:
-	if enabled and amount > 0 and item_id == "bread" and flow.seen("production"):
+	var local_bread: bool = item_id == "camp_bread" or (item_id == "bread" and not PlayerProgress.story_beat_days.has(CraftingPathFlow.NEW_GAME))
+	if enabled and amount > 0 and local_bread and flow.seen("production"):
 		PlayerProgress.record_story_beat("tutorial_event:produced_bread", GameState.total_day)
 
 func _exit_tree() -> void:

@@ -168,6 +168,7 @@ func can_start_production(
 	recipe_id: String,
 	production_count: int = 1
 ) -> bool:
+	if not CraftingPathFlow.recipe_ready(recipe_id): return false
 	if production_state != ProductionState.IDLE:
 		return false
 

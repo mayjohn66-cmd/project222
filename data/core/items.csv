@@ -101,3 +101,5 @@ shadow_dagger,그림자 단검,equipment,tool,0,1,1,false,false,res://art/items/
 moon_bow,달빛 활,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1/moon_bow.png,달빛처럼 하얀 화살이 날아가 일렬로 선 적 둘을 꿰뚫는다.,10,0,bag,expedition,2
 night_cloak,심야의 망토,equipment,tool,0,2,1,false,false,res://art/items/pixel_v1/night_cloak.png,밤하늘색 망토다. 어둠 속에서도 공격을 잘 흘려 보낸다.,0,6,bag,expedition,2
 starlight_boots,별빛 장화,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/starlight_boots.png,걸을 때마다 은은한 별빛이 남는 가벼운 장화다.,0,3,bag,expedition,2
+camp_bread,현지식 빵,store_product,food,100,0,0,true,true,res://art/items/pixel_v1/bread.png,이곳의 밀로 구운 소박한 빵이다. 처음 가게에 남아 있던 빵과는 다르다.,0,0,inventory,shelf,0
+scroll_camp_bread,현지식 빵 레시피,special,etc,0,1,1,false,false,res://art/items/pixel_v1/scroll_rarity_2.png,이곳의 밀로 소박한 빵을 굽는 법을 적은 두루마리다.,0,0,bag,expedition,2
