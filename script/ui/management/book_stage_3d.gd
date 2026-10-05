@@ -146,8 +146,9 @@ func set_state(rise: float,open: float) -> void:
 	_open = open
 	var th := PI * smoothstep(0.0,1.0,open)
 	cover_pivot.rotation.z = th
-	left_block.visible = th > 0.04
-	left_block.scale.y = clampf(smoothstep(0.0,PI,th) * 1.6,0.02,1.0)
+	# 왼쪽 덩어리(펼친 책의 왼쪽 두께)는 표지가 거의 다 넘어가 내려앉을 때만 나타난다. 그 전에 보이면 표지 없이 어두운 판이 떠 있게 된다.
+	left_block.visible = th > PI * 0.88
+	left_block.scale.y = clampf(smoothstep(PI * 0.88,PI,th),0.02,1.0)
 	outer_mat.albedo_color = _gray(lerpf(1.0,0.74,sin(minf(th,PI * 0.5))))
 	inner_page_mat.albedo_color = _gray(lerpf(0.58,1.0,smoothstep(PI * 0.55,PI,th)))
 	var pitch := deg_to_rad(lerpf(PITCH_START,90.0,smoothstep(0.0,1.0,open)))
