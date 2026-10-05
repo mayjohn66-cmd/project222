@@ -1,38 +1,14 @@
 class_name FoodShelfLifePanel
 extends AcceptDialog
 
-var inventory_view: Control
 var rows: VBoxContainer
 var scroll: ScrollContainer
-
-static func install(view: Control) -> void:
-	var ancestor := view.get_parent()
-	while ancestor != null and not ancestor is ManagementMenu: ancestor = ancestor.get_parent()
-	if ancestor == null: return
-	var world := ancestor.get_parent()
-	while world != null:
-		if world.scene_file_path == "res://scenes/expedition/expedition.tscn": return
-		world = world.get_parent()
-	var panel := FoodShelfLifePanel.new()
-	panel.inventory_view = view
-	view.add_child(panel)
-	var button := Button.new()
-	button.name = "FoodShelfLifeButton"
-	button.text = "식품 관리"
-	button.tooltip_text = "유통기한 · 마감 할인 · 기한 지난 식품 정리"
-	# The book's inventory list occupies its left page. Keep extra actions on
-	# their own row so they do not overflow the category tabs into the detail page.
-	var actions := HBoxContainer.new()
-	actions.name = "FoodCareActions"
-	var column := view.get_node("MainVBox")
-	column.add_child(actions)
-	column.move_child(actions, 1)
-	actions.add_child(button)
-	button.pressed.connect(panel.open)
+var pause_owned := false
+var previous_pause := false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	title = "먼저 내놓을 식품"
+	title = "마감 정리"
 	ok_button_text = "돌아가기"
 	var paper := StyleBoxFlat.new()
 	paper.bg_color = Color("f5e5c9")
@@ -52,9 +28,10 @@ func _ready() -> void:
 	about_to_popup.connect(_fit)
 	confirmed.connect(_acknowledge)
 	close_requested.connect(_acknowledge)
+	visibility_changed.connect(_restore_pause)
 
 func _fit() -> void:
-	var bounds := inventory_view.get_viewport().get_visible_rect().size
+	var bounds := get_parent().get_viewport().get_visible_rect().size
 	scroll.custom_minimum_size = Vector2(minf(560, bounds.x - 64), minf(330, bounds.y - 150))
 	size = Vector2i(minf(610, bounds.x - 32), minf(450, bounds.y - 40))
 
@@ -67,9 +44,13 @@ func _label(text_value: String) -> void:
 	rows.add_child(label)
 
 func open() -> void:
+	if visible: return
 	FoodShelfLife.settle()
 	refresh()
 	_fit()
+	previous_pause = get_tree().paused
+	pause_owned = true
+	get_tree().paused = true
 	popup_centered(size)
 
 func refresh() -> void:
@@ -77,24 +58,18 @@ func refresh() -> void:
 	for child in rows.get_children():
 		rows.remove_child(child)
 		child.queue_free()
-	_label("빵을 언제까지 내놓을 수 있을까?\n오래된 재고부터 손님에게 건네고, 기한이 가까우면 할인해 보자.\n메뉴 → 운영 → 인벤토리에서 냉장·냉동 보관도 할 수 있다.")
+	_label("오래된 재고부터 자동으로 판매합니다.\n오래 남겨 둘 식품은 냉장함·냉동함에서 보관하세요.")
 	if FoodShelfLife.learning(): _label("첫 거래와 원재료 판매를 배우는 동안 식품의 기한은 줄어들지 않습니다.")
 	var markdown := CheckButton.new()
-	markdown.text = "마감 %d일 전부터 %d%% 할인" % [FoodShelfLife.SETTINGS.markdown_days, FoodShelfLife.SETTINGS.markdown_percent]
+	markdown.text = "자동 할인 · 기한 %d일 전부터 %d%%" % [FoodShelfLife.SETTINGS.markdown_days, FoodShelfLife.SETTINGS.markdown_percent]
 	markdown.button_pressed = FoodShelfLife.state()["markdown"]
 	markdown.add_theme_color_override("font_color", Color("51382d"))
 	rows.add_child(markdown)
 	markdown.toggled.connect(func(on: bool) -> void:
 		FoodShelfLife.state()["markdown"] = on
-		refresh()
-		_refresh_inventory())
+		refresh())
 	_label(FoodShelfLife.morning_summary())
-	for item in FoodShelfLife.rules():
-		var food := FoodShelfLife.state()
-		var owned: int = GameState.get_item_count(item)
-		var cold := int(GameState.preservation_state["fridge"].get(item, 0)) + int(GameState.preservation_state["freezer"].get(item, 0))
-		if owned + cold > 0:
-			_label("%s · 창고 %d / 냉장·냉동 %d\n%s" % [ItemData.get_item_name(item), owned, cold, FoodShelfLife.describe(item, food["inventory"].get(item, []))])
+	if FoodShelfLife.state()["waste"].is_empty(): _label("따로 정리할 식품이 없습니다.")
 	for item in FoodShelfLife.state()["waste"]:
 		var amount := int(FoodShelfLife.state()["waste"][item])
 		_label("%s %d개 · 기한 지남 / 판매 불가" % [ItemData.get_item_name(item), amount])
@@ -110,11 +85,17 @@ func refresh() -> void:
 func _clear(item: String, amount: int, recycle: bool) -> void:
 	FoodShelfLife.discard(item, amount, recycle)
 	refresh()
-	_refresh_inventory()
-
-func _refresh_inventory() -> void:
-	if is_instance_valid(inventory_view): inventory_view.refresh_inventory()
 
 func _acknowledge() -> void:
 	FoodShelfLife.state()["learned"] = true
-	_refresh_inventory()
+	hide()
+
+func _restore_pause() -> void:
+	if not visible and pause_owned:
+		get_tree().paused = previous_pause
+		pause_owned = false
+
+func _exit_tree() -> void:
+	if pause_owned:
+		get_tree().paused = previous_pause
+		pause_owned = false

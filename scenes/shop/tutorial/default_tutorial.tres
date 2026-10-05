@@ -16,6 +16,6 @@ steps = Array[Dictionary]([
 {"id":"barter","goal":"barter","actor":"merchant","npc":"행상인 타블렌","stage":"낯선 식품에 관심. 창고 빵2·물1과 낡은 검1·가죽 갑옷1을 한 번 물물교환. 메뉴/조작 키는 UI","rewards":[]},
 {"id":"expedition","goal":"expedition","actor":"self","npc":"플레이어 독백","stage":"검과 갑옷을 챙겨 원정. 기본 공격·채집·귀환. 아직 제작을 요구하지 않음","rewards":[]},
 {"id":"raw_sale","goal":"raw_sale","actor":"self","npc":"플레이어 독백","stage":"원정에서 가져온 판매 가능 원재료를 진열. 델빈의 실제 재료 구매/결제 뒤 완료. 빈손 귀환 시 다시 탐험","rewards":[]},
-{"id":"food_care","goal":"food_care","actor":"self","npc":"플레이어 독백","stage":"첫 원재료 판매 이후 선택 안내. 원래 편의점 일을 아는 플레이어가 식품 관리에서 유통기한/마감 할인 상태를 직접 확인한다. 냉장 반속도/냉동 가능한 식품 정지/기한 지난 식품 분리 규칙은 UI. 현지인이 현대 운영을 가르치거나 무료 시설/상품/보상을 지급하지 않음.","optional":true,"after_core":true,"starter":[],"rewards":[]},
+{"id":"food_care","goal":"food_care","actor":"self","npc":"플레이어 독백","stage":"첫 원재료 판매 이후 선택 안내. 원래 편의점 일을 아는 플레이어가 손님이 없는 계산대의 마감 정리를 직접 확인한다. 오래된 재고 우선 판매와 할인은 자동, 장기 보관은 실물 냉장함/냉동함에서 한다. 냉장 반속도/냉동 가능한 식품 정지/기한 지난 식품 분리 규칙은 UI. 현지인이 현대 운영을 가르치거나 무료 시설/상품/보상을 지급하지 않음.","optional":true,"after_core":true,"starter":[],"rewards":[]},
 {"id":"production","goal":"production","actor":"merchant","npc":"행상인 타블렌","stage":"첫 주민 노점 정착 이후 선택 안내. 현지 마법 오븐·현지식 빵 두루마리·밀로 제작. 시작 빵 재현은 이후 주민 교류에서 진행. 기존 구역 문은 가게 물품","optional":true,"after_request":"settle_naru","starter":[{"kind":"furniture","id":"magic_oven","amount":1,"missing_only":true},{"kind":"item","id":"scroll_camp_bread","amount":1,"missing_only":true,"recipe":"camp_bread"},{"kind":"item","id":"wheat","amount":4}],"rewards":[]}
 ])

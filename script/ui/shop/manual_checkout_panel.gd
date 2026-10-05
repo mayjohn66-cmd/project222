@@ -45,11 +45,12 @@ func _ready() -> void:
 	row.add_child(cancel)
 	root.hide()
 
-func display(caption: String, value: float, busy: bool, enabled: bool) -> void:
+func display(caption: String, value: float, busy: bool, enabled: bool, action_text: String = "결제 [E]") -> void:
 	root.visible = not caption.is_empty()
 	info.text = caption
 	progress.visible = busy
 	progress.value = value
 	action.disabled = busy or not enabled
+	action.text = action_text
 	cancel.visible = busy
 

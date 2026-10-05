@@ -355,7 +355,7 @@ static func morning_summary() -> String:
 	var parts: Array[String] = []
 	for item in totals: parts.append("%s %d개" % [ItemData.get_item_name(item), totals[item]])
 	var message := "오늘 먼저 살펴볼 식품: " + " · ".join(parts) if not parts.is_empty() else "오늘은 서둘러 내놓을 식품이 없네요."
-	if not state()["waste"].is_empty(): message += "\n기한이 지난 식품은 판매 재고에서 분리했습니다. 식품 관리에서 정리해 주세요."
+	if not state()["waste"].is_empty(): message += "\n기한이 지난 식품은 판매 재고에서 분리했습니다. 계산대에서 정리해 주세요."
 	return message
 
 static func claim_morning_notice() -> String:

@@ -82,6 +82,9 @@ func run() -> void:
 	cashier.try_interact()
 	cashier._process(2.0)
 	check(player.successful_sales == sales_before + 1, "repeated interaction does not duplicate sale")
+	check(cashier.food_cleanup.visible and get_tree().paused, "empty register switches from checkout to cleanup")
+	cashier.food_cleanup.confirmed.emit()
+	check(not get_tree().paused, "leaving cleanup resumes ordinary customers and clock")
 	check(not is_instance_valid(tutorial.guide), "completed guide exits and normal customers resume")
 	# 일반 손님도 같은 결제 경로를 사용하고 직원 예약과 충돌하지 않는다.
 	var customer = load("res://scenes/shop/actors/customer.tscn").instantiate()

@@ -163,17 +163,12 @@ func run() -> void:
 	check(player.money == money_before + ItemData.get_item_price("forest_herb") and PlayerProgress.story_beat_days.has(OpeningJourneyFlow.RAW_SALE), "native material actual payment records completion")
 	advance_self()
 	check(director.flow.current().get("id") == "food_care" and ResidentRequestFlow.tutorial_finished() and not director.is_guiding(), "optional food care never locks resident flow")
-	var management = manager.management_menu
-	management.open_menu(ManagementMenu.MenuTab.INVENTORY)
-	var inventory_view = management.get_node("DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/InventoryContent/ManagementInventory")
-	var food_panel: FoodShelfLifePanel
-	for node in inventory_view.get_children():
-		if node is FoodShelfLifePanel: food_panel = node
-	food_panel.open()
-	check(food_panel.visible and not director.flow.goal_met(director.flow.current(),world), "food lesson waits for actual panel acknowledgment")
+	var cashier = world.get_node("ManualCheckoutController")
+	var food_panel: FoodShelfLifePanel = cashier.food_cleanup
+	check(cashier.try_interact() and food_panel.visible, "optional lesson opens at actual empty cashier station")
+	check(get_tree().paused and not director.flow.goal_met(director.flow.current(),world), "food lesson waits for acknowledgment while world pauses")
 	food_panel.confirmed.emit()
-	food_panel.hide()
-	management.close_menu()
+	check(not get_tree().paused, "returning from cleanup restores world processing")
 	advance_self()
 	check(director.flow.done("food_care") and director.flow.current().is_empty() and ResidentRequestFlow.tutorial_finished(), "read food-care panel completes optional guidance; production still waits")
 	check(not director.flow.done("production"), "production remains a later option")

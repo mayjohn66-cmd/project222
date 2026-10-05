@@ -44,7 +44,6 @@ var minimum_display_rows: int = 3
 
 func _ready() -> void:
 	PreservationPanel.install(self)
-	FoodShelfLifePanel.install(self)
 	default_item_grid_columns = (
 		item_grid.columns
 	)

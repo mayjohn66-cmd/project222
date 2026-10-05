@@ -201,7 +201,7 @@ func run() -> void:
 	player.set_physics_process(false)
 	player.global_position = world.get_node("BuildManager").get_cell_world_position(register.get_worker_cells()[0])
 	var money: int = GameState.money
-	check(cashier.try_interact() and cashier.is_busy(), "real cashier reserves current customer")
+	check(cashier.try_interact() and cashier.is_busy() and not cashier.food_cleanup.visible, "waiting customer takes priority over cleanup")
 	if cashier.is_busy(): cashier._finish_checkout()
 	check(customer.purchase_completed and GameState.money == money + 70, "manual checkout charges markdown price")
 	customer.checkout_item()
@@ -241,27 +241,45 @@ func run() -> void:
 	var menu = manager.management_menu
 	menu.open_menu(ManagementMenu.MenuTab.INVENTORY)
 	await get_tree().create_timer(0.8).timeout
-	var book_animation: Tween = menu.get_meta("book_anim", null)
+	var book_animation: Tween = menu.get_meta("book_anim") if menu.has_meta("book_anim") else null
 	if book_animation != null and book_animation.is_running(): await book_animation.finished
 	var view = menu.get_node("DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/InventoryContent/ManagementInventory")
-	var food_button: Button = view.get_node("MainVBox/FoodCareActions/FoodShelfLifeButton")
-	check(food_button.is_visible_in_tree() and food_button.get_global_rect().end.x <= view.get_node("MainVBox").get_global_rect().end.x, "food management action fits the inventory page")
-	var panel: FoodShelfLifePanel
-	for node in view.get_children():
-		if node is FoodShelfLifePanel: panel = node
-	food_button.pressed.emit()
+	check(not view.has_node("MainVBox/FoodCareActions"), "inventory has no food management action row")
+	menu.close_menu()
+	await get_tree().create_timer(0.8).timeout
+	book_animation = menu.get_meta("book_anim") if menu.has_meta("book_anim") else null
+	if book_animation != null and book_animation.is_running(): await book_animation.finished
+	var panel: FoodShelfLifePanel = cashier.food_cleanup
+	player.global_position = Vector2(-999, -999)
+	check(not cashier.try_interact() and not panel.visible, "cleanup requires standing at cashier side")
+	player.global_position = world.get_node("BuildManager").get_cell_world_position(register.get_worker_cells()[0])
+	check(world.get_node("WorldInteractions").try_interact() and panel.visible, "empty register E opens cleanup in actual shop")
 	await frames()
-	check(panel.visible and panel.get_ok_button().get_global_rect().end.y <= get_viewport().get_visible_rect().size.y, "management dialog fits screen with return button visible")
+	check(get_tree().paused and not cashier.is_busy() and not cashier.try_interact(), "cleanup pauses world and blocks duplicate checkout input")
+	check(panel.get_ok_button().get_global_rect().end.y <= get_viewport().get_visible_rect().size.y, "cleanup fits screen with return button visible")
 	var args := OS.get_cmdline_user_args()
 	if args.has("--shot"):
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png(args[args.find("--shot") + 1])
 	panel.confirmed.emit()
-	check(FoodShelfLife.state()["learned"], "actual food-panel acknowledgment completes learning")
+	check(FoodShelfLife.state()["learned"] and not panel.visible and not get_tree().paused, "cleanup acknowledgment completes learning and resumes world")
+	var cleanup_size := panel.size
+	manager.shop_open = false
+	cashier._update_panel()
+	check(cashier.panel.action.text == "마감 정리 [E]" and not cashier.panel.action.disabled, "closed shop offers cleanup action")
+	check(cashier.try_interact() and panel.visible and get_tree().paused, "cleanup accessible after shop closes")
+	check(panel.size == cleanup_size, "reopening cleanup keeps size based on shop viewport")
+	panel.close_requested.emit()
+	check(not get_tree().paused and not panel.visible, "window close also restores pause")
+	get_tree().paused = true
+	panel.open()
 	panel.hide()
-	menu.close_menu()
+	check(get_tree().paused, "cleanup never cancels an existing pause")
+	get_tree().paused = false
+	panel.open()
 	world.queue_free()
 	await frames()
+	check(not get_tree().paused, "removing shop with open cleanup restores processing")
 	check(GameState.apply_save_data(saved), "real shop state restore")
 	check(not RequestTextData.lines("service_text", "prologue_food_dates").is_empty(), "opening food worry registered for runtime")
 	var prose := Tools.validate_file(Tools.TEXT_PATH, Tools.load_sources())

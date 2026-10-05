@@ -9,6 +9,7 @@ var player
 var manager
 var floor_node
 var panel: ManualCheckoutPanel
+var food_cleanup: FoodShelfLifePanel
 var active_register
 var active_customer
 var active_cell := Vector2i(-1, -1)
@@ -22,6 +23,8 @@ func _ready() -> void:
 	add_child(panel)
 	panel.checkout_requested.connect(try_interact)
 	panel.cancel_requested.connect(cancel_checkout)
+	food_cleanup = FoodShelfLifePanel.new()
+	add_child(food_cleanup)
 
 func is_busy() -> bool:
 	return is_instance_valid(active_register)
@@ -55,11 +58,16 @@ func nearest_register():
 	return null
 
 func try_interact() -> bool:
-	if blocked() or not manager.shop_open: return false
+	if blocked(): return false
 	if is_busy(): return true
 	var register = nearest_register()
 	if register == null: return false
 	var customer = register.get_waiting_customer()
+	if customer == null:
+		panel.display("", 0.0, false, false)
+		food_cleanup.open()
+		return true
+	if not manager.shop_open: return false
 	if not _can_charge(customer): return true
 	var cell := _cashier_cell(register)
 	if not register.try_reserve_worker(player): return true
@@ -121,7 +129,7 @@ func cancel_checkout() -> void:
 	if is_inside_tree(): checkout_cancelled.emit()
 
 func _update_panel() -> void:
-	if blocked() or not manager.shop_open:
+	if blocked():
 		panel.display("", 0.0, false, false)
 		return
 	var register = active_register if is_busy() else nearest_register()
@@ -129,6 +137,12 @@ func _update_panel() -> void:
 		panel.display("", 0.0, false, false)
 		return
 	var customer = register.get_waiting_customer()
+	if customer == null:
+		panel.display("계산대 · 식품 마감 정리", 0.0, false, true, "마감 정리 [E]")
+		return
+	if not manager.shop_open:
+		panel.display("", 0.0, false, false)
+		return
 	if not _can_charge(customer):
 		panel.display("계산을 기다리는 손님이 없습니다", 0.0, false, false)
 		return
