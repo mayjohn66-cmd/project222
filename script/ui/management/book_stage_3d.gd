@@ -141,7 +141,7 @@ func set_state(rise: float,open: float) -> void:
 	# 책: 올라오며(rise) 닫힌 상태에서는 가운데에 오도록 왼쪽 반만큼 치우쳤다가 펼치며 제자리로
 	var drop := (1.0 - rise)
 	var rise_ease := drop * drop
-	book.position = Vector3(lerpf(-_half_w * 0.5,0.0,smoothstep(0.0,1.0,open)),0.0,rise_ease * (_vp_h / PX) * 0.9)
+	book.position = Vector3(lerpf(-_half_w * 0.5,0.0,smoothstep(0.0,1.0,open)),0.0,rise_ease * (_vp_h / PX) * 1.9)  # 비스듬히 본 화면에서도 책 윗부분이 아래 가장자리에 먼저 비치지 않도록 충분히 멀리
 
 
 func _gray(v: float) -> Color:
