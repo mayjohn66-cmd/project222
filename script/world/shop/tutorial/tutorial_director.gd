@@ -30,6 +30,7 @@ func _ready() -> void:
 	barter_panel.closed.connect(_end_talk)
 	panel = TutorialGoalPanel.new()
 	add_child(panel)
+	add_to_group("tutorial_director")
 	call_deferred("refresh")
 
 func is_guiding() -> bool:
@@ -53,6 +54,10 @@ func _blocked() -> bool:
 		or (cashier != null and cashier.is_busy()) \
 		or (checkout != null and is_instance_valid(checkout.guide)) \
 		or (story != null and story.talking) or (merchant != null and merchant.shopping)
+
+# 관리 메뉴(영업 일지)를 열 때 안내 패널을 바로 숨긴다. 게임이 멈춰 있는 동안에는 refresh 가 돌지 않으므로 직접 숨겨야 한다. 닫은 뒤에는 refresh 가 다시 보여 준다.
+func hide_panel_for_menu() -> void:
+	if panel != null: panel.root.hide()
 
 func _process(delta: float) -> void:
 	elapsed += delta

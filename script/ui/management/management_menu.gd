@@ -233,6 +233,7 @@ func open_menu(
 		return
 
 	visible = true
+	get_tree().call_group("tutorial_director","hide_panel_for_menu")  # 책에 가리지 않도록 안내 패널을 숨긴다
 	PRESENTATION.play_open(self)
 
 	get_tree().call_group(
