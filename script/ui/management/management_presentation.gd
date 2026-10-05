@@ -217,6 +217,8 @@ static func apply_tab(menu: Control) -> void:
 # 닫기: UI 가 사라지고 표지가 다시 덮인 뒤 책이 아래로 내려간다. 트리가 멈춰 있어도 돌아가도록 PROCESS 모드 트윈을 쓴다.
 # false 면 책 여닫기 연출을 건너뛴다(검사 장면이 창이 움직이는 도중의 위치를 재지 않도록).
 static var animations_enabled: bool = true
+# true 면 열고 닫을 때 3D 책(BookStage3D)을 쓰고, false 면 2D 로 그린 표지 연출을 쓴다.
+static var book_3d: bool = true
 const BOOK_RISE := 0.34
 const BOOK_SWING := 0.62
 const BOOK_SINK := 0.24
@@ -231,6 +233,11 @@ static func _book_nodes(menu: Control) -> Dictionary:
 static func _kill_book_anim(menu: Control) -> void:
 	var old = menu.get_meta("book_anim") if menu.has_meta("book_anim") else null
 	if old is Tween and old.is_valid(): old.kill()
+	var stage = menu.get_meta("book_stage") if menu.has_meta("book_stage") else null
+	if is_instance_valid(stage): stage.queue_free()
+	menu.set_meta("book_stage",null)
+	var main = menu.get_node_or_null("DimBackground/CenterContainer/MainPanel")
+	if main: main.modulate.a = 1.0
 
 static func _book_settle(menu: Control,n: Dictionary,visible_book: bool) -> void:
 	n["cc"].position = Vector2.ZERO
@@ -241,6 +248,7 @@ static func _book_settle(menu: Control,n: Dictionary,visible_book: bool) -> void
 	n["cover"].mouse_filter = Control.MOUSE_FILTER_IGNORE
 	n["cover"].angle = 0.0
 	n["paper"].set_left_visible(true)
+	n["main"].modulate.a = 1.0
 	menu.set_meta("book_opening",false)
 
 # 닫힌 책을 가운데에 놓으려면 펼친 책 기준 위치에서 쪽 폭의 4분의 1만큼 왼쪽으로 옮긴다.
@@ -252,6 +260,9 @@ static func play_open(menu: Control) -> void:
 	var n := _book_nodes(menu)
 	_kill_book_anim(menu)
 	if not menu.has_meta("dim_alpha"): menu.set_meta("dim_alpha",n["dim"].color.a)
+	if book_3d:
+		_open_3d(menu,n)
+		return
 	var dim_alpha: float = menu.get_meta("dim_alpha")
 	var cover: Control = n["cover"]
 	var paper: Control = n["paper"]
@@ -292,6 +303,9 @@ static func play_close(menu: Control) -> bool:
 	var n := _book_nodes(menu)
 	_kill_book_anim(menu)
 	if not menu.has_meta("dim_alpha"): menu.set_meta("dim_alpha",n["dim"].color.a)
+	if book_3d:
+		_close_3d(menu,n)
+		return true
 	var cover: Control = n["cover"]
 	var paper: Control = n["paper"]
 	var area: Control = n["area"]
@@ -322,3 +336,102 @@ static func play_close(menu: Control) -> bool:
 		_book_settle(menu,n,false))
 	menu.set_meta("book_anim",tw)
 	return true
+
+
+# ---------------------------------------------------------------- 3D 책 연출
+# 열기: 3D 책이 화면 아래에서 올라오고 → 표지가 제본선을 축으로 왼쪽으로 넘어가며 카메라가 바로 위로 돌고 → 3D 를 걷어 내며 2D 펼침면(UI)이 나타난다.
+# 닫기: 2D → 3D 로 바꾼 뒤 표지가 덮이고 책이 아래로 내려간다. 3D 쪽은 쪽에 글이 없다(펼침이 끝난 뒤에 UI 가 나타난다).
+
+# 3D 책을 만든다: 2D 펼침면(Paper)과 같은 자리·크기, 포스트잇은 내비게이션 버튼의 현재 위치에 맞춘다.
+static func _make_stage(menu: Control,n: Dictionary) -> BookStage3D:
+	var paper: Control = n["paper"]
+	var page_w := BookViews.page_width(paper.size)
+	var page_h := paper.size.y - 3.0
+	var origin := paper.get_global_rect().position
+	var spine := origin + Vector2(page_w * 0.5,page_h * 0.5)
+	var flags: Array = []
+	var nav: Control = n["main"].get_node("MainVBox/Body/Navigation")
+	for i in range(nav.get_child_count()):
+		var b: Control = nav.get_child(i)
+		flags.append({"rect": b.get_global_rect(),"color": Color(INDEX_COLORS[i % INDEX_COLORS.size()])})
+	var stage := BookStage3D.new()
+	stage.name = "BookStage3D"
+	menu.add_child(stage)
+	stage.build(page_w,page_h,spine,flags,menu.get_viewport_rect().size,"영업 일지",PlayerProgress.display_player_name())
+	menu.set_meta("book_stage",stage)
+	return stage
+
+static func _open_3d(menu: Control,n: Dictionary) -> void:
+	var main: Control = n["main"]
+	var dim: ColorRect = n["dim"]
+	var dim_alpha: float = menu.get_meta("dim_alpha")
+	menu.set_meta("book_opening",true)
+	menu.set_meta("book_closing",false)
+	main.modulate.a = 0.0
+	dim.color.a = 0.0
+	n["cc"].position = Vector2.ZERO
+	n["cover"].visible = false
+	n["paper"].set_left_visible(true)
+	await menu.get_tree().process_frame  # 레이아웃이 확정된 뒤에 위치를 읽는다
+	if not menu.visible or bool(menu.get_meta("book_closing",false)): return
+	var stage := _make_stage(menu,n)
+	await menu.get_tree().process_frame  # 표지 질감이 한 번 그려지도록
+	if not is_instance_valid(stage): return
+	var st := {"rise": 0.0,"open": 0.0}
+	var rise_cb := func(v: float) -> void:
+		st["rise"] = v
+		stage.set_state(st["rise"],st["open"])
+	var open_cb := func(v: float) -> void:
+		st["open"] = v
+		stage.set_state(st["rise"],st["open"])
+	stage.set_state(0.0,0.0)
+	var tw := menu.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.set_parallel(true)
+	tw.tween_method(rise_cb,0.0,1.0,0.42).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
+	tw.tween_property(dim,"color:a",dim_alpha,0.42)
+	tw.set_parallel(false)
+	tw.tween_interval(0.08)
+	tw.tween_method(open_cb,0.0,1.0,0.85).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_interval(0.03)
+	tw.set_parallel(true)
+	tw.tween_property(stage,"modulate:a",0.0,0.22)
+	tw.tween_property(main,"modulate:a",1.0,0.22)
+	tw.set_parallel(false)
+	tw.tween_callback(func() -> void:
+		if is_instance_valid(stage): stage.queue_free()
+		menu.set_meta("book_stage",null)
+		_book_settle(menu,n,true))
+	menu.set_meta("book_anim",tw)
+
+static func _close_3d(menu: Control,n: Dictionary) -> void:
+	var main: Control = n["main"]
+	var dim: ColorRect = n["dim"]
+	menu.set_meta("book_closing",true)
+	var stage := _make_stage(menu,n)
+	stage.set_state(1.0,1.0)
+	stage.modulate.a = 0.0
+	var st := {"rise": 1.0,"open": 1.0}
+	var rise_cb := func(v: float) -> void:
+		st["rise"] = v
+		stage.set_state(st["rise"],st["open"])
+	var open_cb := func(v: float) -> void:
+		st["open"] = v
+		stage.set_state(st["rise"],st["open"])
+	var tw := menu.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.set_parallel(true)
+	tw.tween_property(stage,"modulate:a",1.0,0.14)
+	tw.tween_property(main,"modulate:a",0.0,0.14)
+	tw.set_parallel(false)
+	tw.tween_method(open_cb,1.0,0.0,0.7).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_interval(0.05)
+	tw.set_parallel(true)
+	tw.tween_method(rise_cb,1.0,0.0,0.3).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(dim,"color:a",0.0,0.3)
+	tw.set_parallel(false)
+	tw.tween_callback(func() -> void:
+		menu.visible = false
+		menu.set_meta("book_closing",false)
+		if is_instance_valid(stage): stage.queue_free()
+		menu.set_meta("book_stage",null)
+		_book_settle(menu,n,false))
+	menu.set_meta("book_anim",tw)

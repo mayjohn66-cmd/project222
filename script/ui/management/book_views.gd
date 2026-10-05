@@ -22,6 +22,57 @@ const TAB_PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1
 static func page_width(control_size: Vector2) -> float:
 	return control_size.x - NAV_W
 
+# 닫힌 책의 표지 한 면을 canvas 에 그린다(2D 표지 연출과 3D 책의 표지 질감이 같은 그림을 쓴다).
+# x_spine = 제본선, x_end = 바깥 끝, k = 가로로 눌린 정도(1 = 활짝), lift = 자유 모서리가 들린 만큼, tint = 밝기 곱.
+static func paint_cover(canvas: CanvasItem,font: Font,x_spine: float,x_end: float,y0: float,y1: float,k: float,lift: float,tint: Color,title_text: String,owner_text: String) -> void:
+	var wc := (x_end - x_spine) * k
+	var poly := PackedVector2Array([Vector2(x_spine,y0),Vector2(x_spine + wc,y0 - lift),Vector2(x_spine + wc,y1 + lift),Vector2(x_spine,y1)])
+	canvas.draw_colored_polygon(poly,LEATHER * tint)
+	# 아래쪽 두께와 왼쪽 제본(척추) 띠
+	canvas.draw_rect(Rect2(x_spine,y1 - 4.0,wc,8.0),LEATHER_DARK * tint)
+	canvas.draw_rect(Rect2(x_spine,y0,minf(14.0 * k,wc),y1 - y0),LEATHER_DARK * tint)
+	canvas.draw_line(Vector2(x_spine + 14.0 * k,y0),Vector2(x_spine + 14.0 * k,y1),GOLD * tint,2.0)
+	# 금박 테두리와 모서리 징
+	var inset := 16.0
+	var fx0 := x_spine + 26.0 * k
+	var fx1 := x_spine + wc - inset * k
+	if fx1 - fx0 > 12.0:
+		canvas.draw_rect(Rect2(fx0,y0 + inset,fx1 - fx0,y1 - y0 - inset * 2.0),GOLD * tint,false,2.0)
+		for c in [Vector2(fx0,y0 + inset),Vector2(fx1,y0 + inset),Vector2(fx0,y1 - inset),Vector2(fx1,y1 - inset)]:
+			canvas.draw_circle(c,4.0 * k,GOLD * tint)
+	# 제목 명패(위)와 점장 명패(아래)
+	if k > 0.5:
+		var cx := x_spine + wc * 0.5 + 6.0
+		var alpha := clampf((k - 0.5) * 3.0,0.0,1.0)
+		var plate_w := minf(wc * 0.62,240.0)
+		var top := Rect2(cx - plate_w * 0.5,y0 + (y1 - y0) * 0.16,plate_w,74.0)
+		canvas.draw_rect(top,BRAND * tint)
+		canvas.draw_rect(top,GOLD * tint,false,3.0)
+		var low := Rect2(cx - plate_w * 0.36,y1 - (y1 - y0) * 0.2,plate_w * 0.72,40.0)
+		canvas.draw_rect(low,LEATHER_DARK * tint)
+		canvas.draw_rect(low,GOLD * tint,false,2.0)
+		if font != null:
+			_centered(canvas,font,title_text,top,30,Color(1,1,1,alpha))
+			_centered(canvas,font,owner_text,low,19,Color(0.98,0.92,0.75,alpha))
+		# 초록 책갈피 끈
+		canvas.draw_rect(Rect2(x_spine + wc * 0.82,y1 - 4.0,10.0,30.0),Color("2f7a58") * tint)
+
+
+static func _centered(canvas: CanvasItem,font: Font,text: String,box: Rect2,font_size: int,color: Color) -> void:
+	var sz := font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size)
+	var asc := font.get_ascent(font_size)
+	canvas.draw_string(font,Vector2(box.position.x + (box.size.x - sz.x) * 0.5,box.position.y + (box.size.y - sz.y) * 0.5 + asc),text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size,color)
+
+
+# 3D 책의 표지 질감 그리기용: 자기 크기 전체에 표지 한 면(제본선이 왼쪽)을 그린다.
+class CoverFace extends Control:
+	var title_text: String = "영업 일지"
+	var owner_text: String = "점장"
+
+	func _draw() -> void:
+		BookViews.paint_cover(self,get_theme_default_font(),0.0,size.x,0.0,size.y,1.0,0.0,Color.WHITE,title_text,owner_text)
+
+
 
 # ---------------------------------------------------------------- 펼친 두 쪽
 class Paper extends Control:
@@ -142,43 +193,7 @@ class Cover extends Control:
 			draw_line(poly[0],poly[3],Color(0.33,0.24,0.14,0.5),2.0)
 
 	func _draw_cover(x_spine: float,x_end: float,y0: float,y1: float,k: float,lift: float,tint: Color) -> void:
-		var wc := (x_end - x_spine) * k
-		var poly := PackedVector2Array([Vector2(x_spine,y0),Vector2(x_spine + wc,y0 - lift),Vector2(x_spine + wc,y1 + lift),Vector2(x_spine,y1)])
-		draw_colored_polygon(poly,BookViews.LEATHER * tint)
-		# 아래쪽 두께와 왼쪽 제본(척추) 띠
-		draw_rect(Rect2(x_spine,y1 - 4.0,wc,8.0),BookViews.LEATHER_DARK * tint)
-		draw_rect(Rect2(x_spine,y0,minf(14.0 * k,wc),y1 - y0),BookViews.LEATHER_DARK * tint)
-		draw_line(Vector2(x_spine + 14.0 * k,y0),Vector2(x_spine + 14.0 * k,y1),BookViews.GOLD * tint,2.0)
-		# 금박 테두리와 모서리 징
-		var inset := 16.0
-		var fx0 := x_spine + 26.0 * k
-		var fx1 := x_spine + wc - inset * k
-		if fx1 - fx0 > 12.0:
-			draw_rect(Rect2(fx0,y0 + inset,fx1 - fx0,y1 - y0 - inset * 2.0),BookViews.GOLD * tint,false,2.0)
-			for c in [Vector2(fx0,y0 + inset),Vector2(fx1,y0 + inset),Vector2(fx0,y1 - inset),Vector2(fx1,y1 - inset)]:
-				draw_circle(c,4.0 * k,BookViews.GOLD * tint)
-		# 제목 명패(위)와 점장 명패(아래)
-		if k > 0.5:
-			var cx := x_spine + wc * 0.5 + 6.0
-			var font := get_theme_default_font()
-			var alpha := clampf((k - 0.5) * 3.0,0.0,1.0)
-			var plate_w := minf(wc * 0.62,240.0)
-			var top := Rect2(cx - plate_w * 0.5,y0 + (y1 - y0) * 0.16,plate_w,74.0)
-			draw_rect(top,BookViews.BRAND * tint)
-			draw_rect(top,BookViews.GOLD * tint,false,3.0)
-			var low := Rect2(cx - plate_w * 0.36,y1 - (y1 - y0) * 0.2,plate_w * 0.72,40.0)
-			draw_rect(low,BookViews.LEATHER_DARK * tint)
-			draw_rect(low,BookViews.GOLD * tint,false,2.0)
-			if font != null:
-				_centered(font,title_text,top,30,Color(1,1,1,alpha))
-				_centered(font,owner_text,low,19,Color(0.98,0.92,0.75,alpha))
-			# 초록 책갈피 끈
-			draw_rect(Rect2(x_spine + wc * 0.82,y1 - 4.0,10.0,30.0),Color("2f7a58") * tint)
-
-	func _centered(font: Font,text: String,box: Rect2,font_size: int,color: Color) -> void:
-		var sz := font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size)
-		var asc := font.get_ascent(font_size)
-		draw_string(font,Vector2(box.position.x + (box.size.x - sz.x) * 0.5,box.position.y + (box.size.y - sz.y) * 0.5 + asc),text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size,color)
+		BookViews.paint_cover(self,get_theme_default_font(),x_spine,x_end,y0,y1,k,lift,tint,title_text,owner_text)
 
 
 # ---------------------------------------------------------------- 책장 넘기기(탭 이동)

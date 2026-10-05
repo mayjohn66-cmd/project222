@@ -94,3 +94,19 @@
 1. 원정 접선 방(`script/.../expedition_contact_room.gd`, AnimatedSprite2D 사용) 3D 전환.
 2. 위 7장 PC 확인 결과 반영.
 3. 남은 미사용 이미지 정리(삭제는 계획·승인 후).
+
+## 10. UI 개편: 관리 창 = 펼치는 노트 (2026-10-05)
+
+사용자 콘셉트: 관리 창을 여는 것은 **영업 일지(책)를 꺼내 펼치는 것**, 탭은 책에 붙은 포스트잇 책갈피. 와이어프레임(세로형 닫힌 책 + 포스트잇 → 펼침면 두 쪽, 탭을 옮기면 해당 포스트잇으로 책장이 넘어감)을 그대로 구현했다. 코드는 `script/ui/management/`.
+
+| 부분 | 파일 | 요약 |
+|---|---|---|
+| 펼침면·표지·책장 넘김 그리기 | `book_views.gd` | `Paper`(두 쪽·가운데 홈·탭별 종이색/무늬), `Cover`(닫힌 표지), `Flip`(탭 이동 시 앞/뒤 방향 책장 넘김, 옛/새 화면 사진을 한 장의 앞뒤면으로 씀) |
+| 3D 책(열고 닫기) | `book_stage_3d.gd` | 정사영 카메라로 비스듬히 보다가 펼침이 끝나면 정확히 위에서 내려다봐 2D 펼침면과 같은 자리·크기로 겹침. 표지 바깥 질감은 2D 표지 그림을 SubViewport 로 한 번 그려 사용. 포스트잇은 내비게이션 버튼 위치에서 가져와 3D 로 붙임 |
+| 연출 순서 | `management_presentation.gd` | 열기: 3D 책 상승 → 표지가 제본선 축으로 넘어감 → 3D 를 걷고 2D UI 나타남. 닫기: 반대. `book_3d`(3D/2D 선택), `animations_enabled`(끄기, 검사 장면용) |
+| 탭별 두 쪽 배치 | `book_layout.gd`, `book_flow_vbox.gd`, `inventory_detail_pane.gd` | 인벤토리(왼쪽 목록 / 오른쪽 상세 + 가구는 3D 미리보기), 설계도·생산·직원·건설·일정·정보. 긴 목록은 `BookFlowVBox` 가 두 쪽에 걸쳐 흐름 |
+| 이름 | `player_progress.gd`, `title_screen.gd` | 새 게임 전에 점장 이름을 지음(최대 8자), 저장·불러오기, 표지 명패에 표시 |
+
+- 조정 값: 책 두께 `BookViews.COVER_PAD/FORE_W/BOTTOM_T`, 두 쪽 간격 `BookLayout.GUTTER`(48), 탭 길이 `FLAG_LENGTHS`, 3D 시작 각도 `BookStage3D.PITCH_START`, 연출 시간은 `management_presentation.gd`의 `_open_3d/_close_3d` 트윈.
+- 확인 도구(`dev/spike3d/`): `book_anim_shot`(열기·닫기 연속 장면), `book_flip_shot`(탭 넘김), `book_tabs_shot`(전 탭 배치), `ui_audit_shot`(UI 현황), `ui_style_preview`(스타일 시안).
+- 알려진 한계: 소프트웨어 렌더로만 확인. 탭 넘김은 화면 사진 방식이라 새 화면 사진을 뜨는 한 프레임 동안 깜빡임 가능. 정보 탭처럼 긴 글은 두 쪽을 채운 뒤 스크롤. 3D 책의 쪽에는 UI 가 없고(펼침 뒤 2D 로 교체) 쪽 옆면 줄무늬는 3D 쪽에 일부만 있음.
