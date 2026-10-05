@@ -101,13 +101,13 @@
 
 | 부분 | 파일 | 요약 |
 |---|---|---|
-| 펼침면·표지·책장 넘김 그리기 | `book_views.gd` | `Paper`(두 쪽·가운데 홈·탭별 종이색/무늬), `Cover`(닫힌 표지), `Flip`(탭 이동 시 앞/뒤 방향 책장 넘김, 옛/새 화면 사진을 한 장의 앞뒤면으로 씀) |
-| 3D 책(열고 닫기) | `book_stage_3d.gd` | 정사영 카메라로 비스듬히 보다가 펼침이 끝나면 정확히 위에서 내려다봐 2D 펼침면과 같은 자리·크기로 겹침. 표지 바깥 질감은 2D 표지 그림을 SubViewport 로 한 번 그려 사용. 포스트잇은 내비게이션 버튼 위치에서 가져와 3D 로 붙임 |
-| 연출 순서 | `management_presentation.gd` | 열기: 3D 책 상승 → 표지가 제본선 축으로 넘어감 → 3D 를 걷고 2D UI 나타남. 닫기: 반대. `book_3d`(3D/2D 선택), `animations_enabled`(끄기, 검사 장면용) |
-| 탭 넘김(3D 책장) | `book_flip_3d.gd`, `book_views.gd`(Flip) | 탭을 옮기면 옛/새 화면을 사진으로 떠 한 장의 앞뒤면 + 바닥 두 쪽으로 쓴다. 한 장은 14마디로 자유 모서리가 뒤처지며 휘고 그림자가 진다. 뒤쪽 탭 = 오른쪽 쪽이 왼쪽으로, 앞쪽 탭 = 왼쪽 쪽이 오른쪽으로. **탭이 멀수록 종이를 더 넘긴다**(건너뛰는 탭 수만큼, 최대 6장, 장마다 0.09초씩 늦게 시작; 맨 위 한 장의 앞면만 옛 화면, 맨 마지막 한 장의 뒷면만 새 화면, 나머지는 빈 종이). `book_3d` 를 끄면 2D 책장 넘김 |
+| 쪽 그리기 부품 | `book_views.gd` | `Paper`(두 쪽 종이면·가운데 홈·탭별 종이색/무늬; 3D 에서는 `pages_only` 로 종이면만), `Strip`/`Note`(포스트잇), `Hint`(ESC 닫기), `CoverFace`(표지 질감) |
+| 3D 책(UI 가 곧 책) | `book_stage_3d.gd` | **메뉴 UI(MainPanel)를 SubViewport 에 넣고 그 화면을 3D 책의 두 쪽·포스트잇 질감으로 쓴다**(2D 와 3D 를 갈아끼우는 순간이 없음). 정사영 카메라, 펼침이 끝나면 바로 위에서 1:1 로 내려다봄. 마우스는 화면 좌표를 UI 좌표로 바꿔 `push_input`, 입력칸 키 입력도 전달, 책 바깥 클릭 = 닫기. 표지 바깥 질감만 2D 표지 그림을 한 번 그려 사용 |
+| 연출 순서 | `management_presentation.gd` | 열기: 책이 화면 아래에서 올라옴(시작 전엔 표지가 보이지 않음) → 표지가 제본선 축으로 넘어가며 쪽의 UI 가 표지 밑에서 드러남. 닫기: 반대. 메뉴가 보이는 동안만 UI 화면을 그리고 3D 책을 세움. 헤드리스(검사)는 SubViewport 없이 기존 2D 배치. `animations_enabled`(끄기, 검사 장면용) |
+| 탭 넘김(3D 책장) | `book_flip_3d.gd`, `management_presentation.gd`(`_flip_tabs`) | 탭을 옮기면 옛 두 쪽을 사진으로 떠 쪽에 입혀 두고, 새 화면이 그려진 뒤 새 두 쪽 사진을 떠서 넘어가는 한 장의 앞뒤면 + 바닥 두 쪽으로 쓴다. 14마디 곡면·그림자. **탭이 멀수록 종이를 더 넘긴다**(최대 6장, 장마다 0.09초 늦게 시작) |
 | 탭별 두 쪽 배치 | `book_layout.gd`, `book_flow_vbox.gd`, `inventory_detail_pane.gd` | 인벤토리(왼쪽 목록 / 오른쪽 상세 + 가구는 3D 미리보기), 설계도·생산·직원·건설·일정·정보. 긴 목록은 `BookFlowVBox` 가 두 쪽에 걸쳐 흐름 |
 | 이름 | `player_progress.gd`, `title_screen.gd` | 새 게임 전에 점장 이름을 지음(최대 8자), 저장·불러오기, 표지 명패에 표시 |
 
-- 조정 값: 책 두께 `BookViews.COVER_PAD/FORE_W/BOTTOM_T`, 두 쪽 간격 `BookLayout.GUTTER`(48), 포스트잇 `FLAG_OUT`(튀어나온 길이)·`FLAG_GAP`(간격)·`ONTO`(펼친 탭이 쪽 위로 넘어오는 길이), 3D 시작 각도 `BookStage3D.PITCH_START`, 연출 시간은 `management_presentation.gd`의 `_open_3d/_close_3d` 트윈.
-- 확인 도구(`dev/spike3d/`): `book_anim_shot`(열기·닫기 연속 장면), `book_flip_shot`(탭 넘김), `book_tabs_shot`(전 탭 배치), `ui_audit_shot`(UI 현황), `ui_style_preview`(스타일 시안).
-- 알려진 한계: 소프트웨어 렌더로만 확인. 탭 넘김은 화면 사진 방식이라 새 화면 사진을 뜨는 한 프레임 동안 깜빡임 가능. 정보 탭처럼 긴 글은 두 쪽을 채운 뒤 스크롤. 3D 책의 쪽에는 UI 가 없고(펼침 뒤 2D 로 교체) 쪽 옆면 줄무늬는 3D 쪽에 일부만 있음.
+- 조정 값: 책 두께 `BookViews.COVER_PAD/FORE_W/BOTTOM_T`, 두 쪽 간격 `BookLayout.GUTTER`(48), 포스트잇 `FLAG_OUT`(튀어나온 길이)·`FLAG_GAP`(간격)·`ONTO`(펼친 탭이 쪽 위로 넘어오는 길이), 3D 시작 각도 `BookStage3D.PITCH_START`, 연출 시간은 `management_presentation.gd`의 `BOOK_RISE/BOOK_SWING/BOOK_SINK`.
+- 확인 도구(`dev/spike3d/`): `book_anim_shot`(열기·닫기 연속 장면), `book_flip_shot`(탭 넘김), `book_click_shot`(3D 책 위 클릭 입력), `book_tabs_shot`(전 탭 배치), `ui_audit_shot`(UI 현황), `ui_style_preview`(스타일 시안).
+- 알려진 한계: 소프트웨어 렌더로만 확인(실제 PC GPU 미확인). 정보 탭처럼 긴 글은 두 쪽을 채운 뒤 스크롤. UI 안의 대화상자는 UI 화면(1040×580) 안에 떠서 책 쪽 위에 놓임. 툴팁·드래그는 PC 에서 확인 필요.
