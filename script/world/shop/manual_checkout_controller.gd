@@ -9,7 +9,7 @@ var player
 var manager
 var floor_node
 var panel: ManualCheckoutPanel
-var food_cleanup: FoodShelfLifePanel
+var food_cleanup: RegisterDashboardPanel
 var active_register
 var active_customer
 var active_cell := Vector2i(-1, -1)
@@ -23,7 +23,7 @@ func _ready() -> void:
 	add_child(panel)
 	panel.checkout_requested.connect(try_interact)
 	panel.cancel_requested.connect(cancel_checkout)
-	food_cleanup = FoodShelfLifePanel.new()
+	food_cleanup = RegisterDashboardPanel.new()
 	add_child(food_cleanup)
 
 func is_busy() -> bool:
@@ -138,7 +138,7 @@ func _update_panel() -> void:
 		return
 	var customer = register.get_waiting_customer()
 	if customer == null:
-		panel.display("계산대 · 식품 마감 정리", 0.0, false, true, "마감 정리 [E]")
+		panel.display("계산대 · 진열 상품 확인", 0.0, false, true, "상품 조회 [E]")
 		return
 	if not manager.shop_open:
 		panel.display("", 0.0, false, false)

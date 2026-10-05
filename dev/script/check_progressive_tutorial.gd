@@ -164,9 +164,11 @@ func run() -> void:
 	advance_self()
 	check(director.flow.current().get("id") == "food_care" and ResidentRequestFlow.tutorial_finished() and not director.is_guiding(), "optional food care never locks resident flow")
 	var cashier = world.get_node("ManualCheckoutController")
-	var food_panel: FoodShelfLifePanel = cashier.food_cleanup
+	var food_panel: RegisterDashboardPanel = cashier.food_cleanup
 	check(cashier.try_interact() and food_panel.visible, "optional lesson opens at actual empty cashier station")
 	check(get_tree().paused and not director.flow.goal_met(director.flow.current(),world), "food lesson waits for acknowledgment while world pauses")
+	check(not food_panel.cleanup_page, "idle register starts with products instead of cleanup")
+	food_panel.show_page(true)
 	food_panel.confirmed.emit()
 	check(not get_tree().paused, "returning from cleanup restores world processing")
 	advance_self()

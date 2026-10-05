@@ -16,4 +16,4 @@ func _process(delta: float) -> void:
 	if guide != null and guide.talking: return
 	if get_tree().paused or interactions.blocked(): return
 	var notice := FoodShelfLife.claim_morning_notice()
-	if not notice.is_empty(): interactions.show_message(notice + "\n손님이 없는 계산대 안쪽에서 마감 정리 [E]")
+	if not notice.is_empty(): interactions.show_message(notice + "\n손님이 없는 계산대 안쪽에서 상품 조회 [E] → 마감 정리")

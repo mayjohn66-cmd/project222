@@ -169,6 +169,35 @@ func run() -> void:
 	GameState.add_item("camp_bread", 3)
 	step_day(2)
 	check(FoodShelfLife.restock_slot(shelf, 0, 3) == 3, "real shop stocking retains last-day batch")
+	var extra = load("res://scenes/shop/objects/shelf.tscn").instantiate()
+	extra.slots = [{"item_id":"camp_bread", "stock":0, "capacity":5}, {"item_id":"water", "stock":2, "capacity":5}, {"item_id":"forest_herb", "stock":0, "capacity":5}]
+	world.get_node("Objects").add_child(extra)
+	GameState.add_item("camp_bread", 1)
+	FoodShelfLife.restock_slot(extra, 0, 1)
+	var preview = load("res://scenes/shop/objects/shelf.tscn").instantiate()
+	preview.slots = [{"item_id":"water", "stock":5, "capacity":5}]
+	preview.set_meta("is_build_preview", true)
+	world.get_node("Objects").add_child(preview)
+	var outside = load("res://scenes/shop/objects/shelf.tscn").instantiate()
+	outside.slots = [{"item_id":"water", "stock":5, "capacity":5}]
+	add_child(outside)
+	var overview := RegisterProductOverview.entries(world)
+	check(overview.size() == 3, "register groups actual assignments without inventory-only products")
+	for product in overview:
+		match product["item_id"]:
+			"camp_bread":
+				check(product["stock"] == 4 and product["capacity"] == 10, "same product across shelves has one combined quantity")
+				check(product["days_left"] == 1 and product["discounted"] == 3 and RegisterProductOverview.price_text(product) == "70~100G", "mixed ages show true receipt price range and earliest expiry")
+			"water": check(product["stock"] == 2 and product["days_left"] == -1 and RegisterProductOverview.price_text(product) == "100G", "stable goods exclude preview and other-world shelves and keep normal price")
+			"forest_herb": check(product["stock"] == 0 and RegisterProductOverview.status_text(product).begins_with("품절"), "empty assigned slot remains visible as sold out")
+	FoodShelfLife.state()["markdown"] = false
+	for product in RegisterProductOverview.entries(world):
+		if product["item_id"] == "camp_bread": check(RegisterProductOverview.price_text(product) == "100G" and product["discounted"] == 0, "register overview follows markdown setting")
+	FoodShelfLife.state()["markdown"] = true
+	extra.queue_free()
+	preview.queue_free()
+	outside.queue_free()
+	await frames()
 	var customer = load("res://scenes/shop/actors/customer.tscn").instantiate()
 	world.get_node("Actors").add_child(customer)
 	customer.set_physics_process(false)
@@ -249,12 +278,21 @@ func run() -> void:
 	await get_tree().create_timer(0.8).timeout
 	book_animation = menu.get_meta("book_anim") if menu.has_meta("book_anim") else null
 	if book_animation != null and book_animation.is_running(): await book_animation.finished
-	var panel: FoodShelfLifePanel = cashier.food_cleanup
+	extra = load("res://scenes/shop/objects/shelf.tscn").instantiate()
+	extra.slots = [{"item_id":"bread", "stock":0, "capacity":5}, {"item_id":"water", "stock":2, "capacity":5}, {"item_id":"forest_herb", "stock":0, "capacity":5}]
+	world.get_node("Objects").add_child(extra)
+	FoodShelfLife.restock_slot(extra, 0, 1)
+	var panel: RegisterDashboardPanel = cashier.food_cleanup
 	player.global_position = Vector2(-999, -999)
 	check(not cashier.try_interact() and not panel.visible, "cleanup requires standing at cashier side")
 	player.global_position = world.get_node("BuildManager").get_cell_world_position(register.get_worker_cells()[0])
 	check(world.get_node("WorldInteractions").try_interact() and panel.visible, "empty register E opens cleanup in actual shop")
 	await frames()
+	check(not panel.cleanup_page and panel.products.size() == 4, "idle register opens combined product overview by default")
+	var first_row := panel.product_table.get_root().get_first_child()
+	first_row.select(0)
+	panel.product_table.item_selected.emit()
+	check(panel.detail.text.contains(str(first_row.get_metadata(0)["name"])) and panel.detail.text.contains("진열"), "selecting actual table row shows product description and shelf information")
 	check(get_tree().paused and not cashier.is_busy() and not cashier.try_interact(), "cleanup pauses world and blocks duplicate checkout input")
 	check(panel.get_ok_button().get_global_rect().end.y <= get_viewport().get_visible_rect().size.y, "cleanup fits screen with return button visible")
 	var args := OS.get_cmdline_user_args()
@@ -262,11 +300,18 @@ func run() -> void:
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png(args[args.find("--shot") + 1])
 	panel.confirmed.emit()
+	check(not FoodShelfLife.state()["learned"] and not get_tree().paused, "reading products alone does not complete cleanup lesson")
+	panel.open()
+	panel.rows.get_child(0).get_node("CleanupTab").pressed.emit()
+	check(panel.cleanup_page and panel.cleanup_seen, "actual cleanup tab opens existing food actions")
+	panel.rows.get_child(0).get_node("ProductsTab").pressed.emit()
+	check(not panel.cleanup_page and panel.products.size() == 4, "returning from cleanup restores product overview")
+	panel.confirmed.emit()
 	check(FoodShelfLife.state()["learned"] and not panel.visible and not get_tree().paused, "cleanup acknowledgment completes learning and resumes world")
 	var cleanup_size := panel.size
 	manager.shop_open = false
 	cashier._update_panel()
-	check(cashier.panel.action.text == "마감 정리 [E]" and not cashier.panel.action.disabled, "closed shop offers cleanup action")
+	check(cashier.panel.action.text == "상품 조회 [E]" and not cashier.panel.action.disabled, "closed shop offers product information action")
 	check(cashier.try_interact() and panel.visible and get_tree().paused, "cleanup accessible after shop closes")
 	check(panel.size == cleanup_size, "reopening cleanup keeps size based on shop viewport")
 	panel.close_requested.emit()
