@@ -4,7 +4,7 @@ const PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef"]
 const INDEX_COLORS := ["f2cf5b","ef8fa6","8fcf9a","7bbbe0","eeb06a","b79bdb","7fd0c8"]
 # 포스트잇 책갈피: 책 옆면에서 튀어나온 길이를 탭마다 다르게(들쭉날쭉), 선택하면 +SELECTED_EXTRA 만큼 더 나온다. 가장 긴 값이 내비게이션 폭 104 를 넘지 않게 한다.
 const FLAG_LENGTHS := [72.0,84.0,76.0,88.0,70.0,86.0,78.0]
-const FLAG_HEIGHT := 34.0
+const FLAG_HEIGHT := 30.0
 const SELECTED_EXTRA := 16.0
 const ADHESIVE := 14.0  # 책 옆면에 붙는 부분(반투명하게 보이는 띠) 폭
 
@@ -89,7 +89,7 @@ static func install(menu: Control) -> void:
 	row.get_node("LeafIcon").hide()
 	var nav: VBoxContainer = v.get_node("Body/Navigation")
 	nav.custom_minimum_size.x = 104
-	nav.add_theme_constant_override("separation",9)
+	nav.add_theme_constant_override("separation",2)  # 포스트잇이 거의 맞닿게(참고 사진처럼 촘촘히)
 	v.get_node("Body").move_child(nav,v.get_node("Body").get_child_count()-1)
 	v.get_node("Body").add_theme_constant_override("separation",0)
 	var buttons: Array = nav.get_children()
@@ -110,6 +110,7 @@ static func install(menu: Control) -> void:
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	row.add_child(spacer)
 	row.move_child(spacer,0)
+	menu.close_button.hide()  # 닫기 버튼은 없애고 책 아래 "ESC 닫기" 안내(BookViews.Paper)와 바깥 클릭·ESC 로 닫는다
 	menu.close_button.custom_minimum_size = Vector2(32,32)
 	menu.close_button.add_theme_constant_override("icon_max_width",28)
 	row.move_child(menu.close_button,row.get_child_count()-1)
@@ -176,6 +177,11 @@ static func install(menu: Control) -> void:
 	main.add_child(flip)
 	flip.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	InventoryDetailPane.install(menu.management_inventory)
+	var dim_area: Control = menu.get_node("DimBackground")
+	dim_area.gui_input.connect(func(event: InputEvent) -> void:
+		# 책 바깥(어두운 바닥)을 누르면 닫는다. 연출 중에는 무시한다.
+		if event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT and not bool(menu.get_meta("book_opening",false)) and not bool(menu.get_meta("book_closing",false)) and not main.get_global_rect().has_point(event.global_position):
+			menu.close_menu())
 	BookLayout.apply(menu)
 	apply_tab(menu)
 

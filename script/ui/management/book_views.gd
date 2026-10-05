@@ -79,6 +79,17 @@ class Paper extends Control:
 	var mode: int = 0  # 현재 탭: 종이 색과 바탕무늬(설계도 모눈, 건설 모눈, 일정 왼쪽 띠)를 정한다
 	var left_visible: bool = true  # false 면 닫히는 중·열리기 전이라 오른쪽 반만 그린다(왼쪽 쪽은 표지가 넘어와 덮은 뒤 나타난다)
 
+	# 책 오른쪽 아래, 표지 바깥에 키캡 모양 "ESC" 와 "닫기"를 적는다(바닥 어두운 곳에 밝게).
+	func _draw_hint(width: float,h: float) -> void:
+		var font := get_theme_default_font()
+		if font == null: return
+		var y := h + BookViews.BOTTOM_T + BookViews.COVER_PAD + 8.0
+		var key := Rect2(width - 112.0,y,46.0,22.0)
+		draw_rect(key,Color("f5eddc"))
+		draw_rect(key,Color("b9a582"),false,2.0)
+		draw_string(font,Vector2(key.position.x + 7.0,key.position.y + 16.0),"ESC",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("44392e"))
+		draw_string(font,Vector2(key.end.x + 8.0,key.position.y + 17.0),"닫기",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("f5eddc"))
+
 	func set_mode(value: int) -> void:
 		mode = clampi(value,0,BookViews.TAB_PAPERS.size() - 1)
 		queue_redraw()
@@ -139,6 +150,8 @@ class Paper extends Control:
 		draw_rect(Rect2(2 if left_visible else mid,h - 3.0,width + fw - (2.0 if left_visible else mid),bt),Color("efe3c7"))
 		for k in range(1,3):
 			draw_line(Vector2(2 if left_visible else mid,h - 3.0 + k * 2.0),Vector2(width + fw,h - 3.0 + k * 2.0),Color("b9a582"),1)
+		# 책 아래의 조작 안내: 닫기 버튼 대신 키 표기로 알린다
+		_draw_hint(width,h)
 		# 가운데 제본 홈: 양쪽 쪽이 안쪽으로 휘며 어두워진다
 		if left_visible:
 			for i in range(20):
@@ -148,7 +161,7 @@ class Paper extends Control:
 			draw_line(Vector2(mid,0),Vector2(mid,h - 3.0),Color(0.33,0.24,0.14,0.45),2.0)
 
 
-# ---------------------------------------------------------------- 표지와 펼침
+
 class Cover extends Control:
 	func _host_size() -> Vector2:
 		var host := _ref()
