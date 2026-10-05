@@ -3,7 +3,7 @@ extends Node2D
 
 
 # 심야에 가게를 찾아오는 비밀 상인. 머리 위 보라색 물음표가 "말을 걸 수 있다"는 표시다.
-# 그림은 임시(도형)이며 스프라이트로 바꿀 수 있다.
+# 모습은 3D 거울(StoreView3D)이 그린다.
 
 var offers: Array[Dictionary] = []
 var bob_time: float = 0.0
@@ -34,15 +34,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	bob_time += delta
 	mark.position.y = -100 + sin(bob_time * 4.0) * 4.0
-
-
-# 임시 그림: 스프라이트가 준비되면 이 함수를 지우고 Sprite2D를 쓴다.
-func _draw() -> void:
-	draw_circle(Vector2(0, -56), 15, Color(0.85, 0.72, 0.6))
-	draw_rect(Rect2(-18, -42, 36, 48), Color(0.3, 0.2, 0.45))
-	draw_rect(Rect2(-18, -42, 36, 48), Color(0.12, 0.08, 0.2), false, 2.0)
-	# 두건
-	draw_rect(Rect2(-16, -74, 32, 16), Color(0.24, 0.15, 0.36))
 
 
 func has_offers() -> bool:

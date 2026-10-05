@@ -491,6 +491,7 @@ func _process(delta: float) -> void:
 		if _room_mirror != null:
 			_room_mirror.sync()
 
+		_event_decor.sync(floor_node.get_store_rect())
 		_sync_furniture()
 		_sync_build_guides()
 
@@ -828,6 +829,7 @@ func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, al
 
 var _build_guide: MeshInstance3D
 var _room_mirror: RoomMirror
+var _event_decor: StoreEventDecor3D = StoreEventDecor3D.new(self)  # 행사 장식(벽에 거는 줄)
 var _build_guide_sig: String = ""
 
 

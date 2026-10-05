@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://d1t3mwp7vl5i2"
+
+[deps]
+
+files=["res://data/shop/events/store_event_decor_3d.style.translation", "res://data/shop/events/store_event_decor_3d.colors.translation", "res://data/shop/events/store_event_decor_3d.lane.translation"]
+
+source_file="res://data/shop/events/store_event_decor_3d.csv"
+dest_files=["res://data/shop/events/store_event_decor_3d.style.translation", "res://data/shop/events/store_event_decor_3d.colors.translation", "res://data/shop/events/store_event_decor_3d.lane.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

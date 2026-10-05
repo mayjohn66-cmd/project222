@@ -3,7 +3,7 @@ extends Node2D
 
 
 # 가게 안에서 대화를 기다리는 스토리 NPC.
-# 머리 위 느낌표가 "대화할 수 있다"는 표시다. 그림은 임시(도형)이며 스프라이트로 바꿀 수 있다.
+# 머리 위 느낌표가 "대화할 수 있다"는 표시다. 모습은 3D 거울(StoreView3D)이 그린다.
 
 var beat: Dictionary = {}
 var bob_time: float = 0.0
@@ -34,13 +34,6 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	bob_time += delta
 	mark.position.y = -92 + sin(bob_time * 4.0) * 4.0
-
-
-# 임시 그림: 스프라이트가 준비되면 이 함수를 지우고 Sprite2D를 쓴다.
-func _draw() -> void:
-	draw_circle(Vector2(0, -52), 15, Color(0.91, 0.77, 0.63))
-	draw_rect(Rect2(-16, -38, 32, 44), Color(0.35, 0.49, 0.38))
-	draw_rect(Rect2(-16, -38, 32, 44), Color(0.24, 0.18, 0.12), false, 2.0)
 
 
 func can_talk() -> bool:

@@ -1,0 +1,16 @@
+event_id,style,colors,lane
+dungeon_raid,bunting,#c0392b|#4a5568|#d4a017,0
+spring_market,bunting,#f7b6c8|#fff2a8|#a8e0b0,0
+trail_supplies,bunting,#8a6a3a|#d8c08a|#4a6a8a,0
+summer_cool_break,bunting,#5ab8e8|#ffffff|#8ae0d0,0
+autumn_shared_table,lanterns,#e8892b|#c0501f,0
+winter_evening_warmth,lights,#ffd27a|#ffb347,0
+neighbor_thanks,bunting,#f2a0b0|#ffd966,0
+spring_packed_lunch,garland,#7ac26b|#f7b6c8|#fff2a8,1
+summer_waterside_tea,lanterns,#6ac4e8|#ffffff,1
+autumn_lantern_preparation,lanterns,#ffb347|#ff8c42|#ffd27a,1
+winter_morning_table,lights,#fff0c8|#bfe3ff,1
+village_festival_spring,garland,#7ac26b|#f7b6c8|#ffffff,0
+village_festival_summer,bunting,#5ab8e8|#ffffff|#ffd966,0
+village_festival_autumn,lanterns,#e8892b|#d4a017|#c0501f,0
+village_festival_winter,lights,#ffe9a0|#ff9a7a|#bfe3ff,0
