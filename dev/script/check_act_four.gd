@@ -46,6 +46,13 @@ func prerequisites() -> void:
 	neighbors()
 	VillageSettlement.apply_world(world)
 	life.refresh()
+func blank_economics() -> void:
+	for entry in F.SETTINGS.events:
+		for field in ["money","reputation","minimum_reputation","minimum_ruins"]:
+			if entry.has(field): entry[field] = null
+		for current in entry["steps"]:
+			for field in ["requirements","furniture","sales"]:
+				for requirement in current.get(field,[]): requirement["amount"] = null
 func configure_fixture() -> void:
 	# 검증 전용 수치. 실제 .tres에 저장하거나 플레이어 저장에 넣지 않는다.
 	for entry in F.SETTINGS.events:
@@ -78,7 +85,9 @@ func settle(region: String, explored: bool = true) -> void:
 	var result: Dictionary = ResultService.new().deposit_items(bag,{"region":region,"explored":explored})
 	check(result["success"],"successful expedition settlement")
 func run() -> void:
-	original = F.SETTINGS.events.duplicate(true)
+	original = []
+	for source in F.SETTINGS.events: original.append(source.duplicate(true))  # 형식 있는 배열의 duplicate(true)는 안쪽 사전을 복사하지 않으므로 하나씩 깊게 복사한다
+	blank_economics()  # 아래 검증은 "수치 미정" 상태에서 시작한다(실제 수치는 맨 끝에서 따로 검사)
 	GameState.initialize_new_game()
 	world = load("res://scenes/shop/main.tscn").instantiate()
 	add_child(world)
@@ -295,6 +304,17 @@ func run() -> void:
 	check(prose["errors"].is_empty() and prose["warns"].is_empty(),"all prose passes strict rules " + str(prose))
 	var settings: Resource = F.SETTINGS
 	settings.set("events",original)
+	# 실제 설정(Claude 가 채운 수치): 파일을 새로 읽어 모든 수치가 정수로 채워져 있고, 보상이 기존 사건 규모(제품 가치 + 소액)를 넘지 않는지
+	var real: Resource = ResourceLoader.load("res://scenes/shop/requests/default_act_four.tres","",ResourceLoader.CACHE_MODE_IGNORE)
+	for entry in real.events:
+		var id := str(entry["id"])
+		for field in ["money","reputation","minimum_reputation","minimum_ruins"]:
+			if entry.has(field): check(entry[field] is int and int(entry[field]) >= 0,"real settings filled " + id + ":" + field)
+		for current in entry["steps"]:
+			for field in ["requirements","furniture","sales"]:
+				for requirement in current.get(field,[]): check(requirement.get("amount") is int and int(requirement["amount"]) > 0,"real amount filled " + id + ":" + str(requirement.get("item")))
+		if entry["branch"] == "B": check(not entry.has("money") and not entry.has("reputation"),"B clue stories have no economic reward " + id)
+		elif entry.has("money"): check(int(entry["money"]) <= 600 and int(entry["reputation"]) == 1,"A reward within existing scale " + id)
 	PlayerProgress.reset()
 	book.select_info_tab(ManagementMenu.InfoTab.MILESTONES)
 	check(not F.started() and F.milestone_count() == 0 and F.clues().is_empty() and book.current_info_tab == ManagementMenu.InfoTab.BASIC,"new game resets progress and falls back from hidden tab")
