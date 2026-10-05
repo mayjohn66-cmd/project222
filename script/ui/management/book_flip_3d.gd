@@ -27,6 +27,7 @@ var _half: float = 4.5
 var _z0: float = 0.0
 var _z1: float = 0.0
 var _target: Vector3 = Vector3.ZERO
+var _cam_p: float = 0.0
 
 
 # count: 건너뛰는 탭 수(= 넘길 종이 수)
@@ -135,28 +136,44 @@ func _plane(lo: Vector3,hi: Vector3,tex: Texture2D) -> void:
 func set_progress(p: float) -> void:
 	var n := leaves.size()
 	var t := clampf(p,0.0,1.0) * duration
+	_cam_p = p
 	for i in range(n):
-		var info: Dictionary = leaves[i]
 		var pi_ := clampf((t - LEAF_STAGGER * float(i)) / LEAF_TIME,0.0,1.0)
-		var theta := PI * smoothstep(0.0,1.0,pi_)
-		_rebuild_leaf(info,theta)
-		var s := sin(theta)
-		(info["front"] as StandardMaterial3D).albedo_color = _gray(lerpf(1.0,0.8,minf(s * 1.4,1.0)) if theta < PI * 0.5 else 0.8, i == 0)
-		(info["back"] as StandardMaterial3D).albedo_color = _gray(lerpf(0.62,1.0,smoothstep(PI * 0.5,PI,theta)), i == n - 1)
-		# 쌓인 높이: 처음엔 먼저 넘어갈 종이가 맨 위, 넘어간 뒤엔 나중에 넘어간 종이가 맨 위
-		var y_start := float(n - 1 - i) * GAP + 0.01
-		var y_end := float(i) * GAP + 0.01
-		(info["node"] as Node3D).position.y = lerpf(y_start,y_end,smoothstep(0.0,1.0,pi_))
-		# 그림자
-		var tip := absf(_tip_x(theta))
-		var under_right := (forward and theta < PI * 0.5) or (not forward and theta >= PI * 0.5)
-		var width := maxf(tip,0.001)
-		var sh: MeshInstance3D = info["shadow"]
-		sh.scale = Vector3(width,1.0,1.0)
-		sh.position = Vector3((width * 0.5) * (1.0 if under_right else -1.0),-0.02,(_z0 + _z1) * 0.5)
-		(info["shadow_mat"] as StandardMaterial3D).albedo_color = Color(0.12,0.08,0.04,0.3 * s * (1.0 - 0.4 * s) / sqrt(float(n)))
-	# 카메라: 한가운데에서 가장 기울고 양 끝에서는 정확히 위
-	var pitch := deg_to_rad(90.0 - TILT_DEG * sin(PI * clampf(p,0.0,1.0)))
+		_apply_leaf(i,n,PI * smoothstep(0.0,1.0,pi_),pi_)
+	_place_camera()
+
+
+# 손가락을 따라 넘길 때: 종이 한 장(첫 장)의 각도를 직접 정한다. theta 0 = 넘기기 전, PI = 다 넘김.
+func set_theta(theta: float) -> void:
+	var th := clampf(theta,0.0,PI)
+	for i in range(leaves.size()):
+		_apply_leaf(i,leaves.size(),th,th / PI)
+	_place_camera()
+
+
+func _apply_leaf(i: int,n: int,theta: float,pi_: float) -> void:
+	var info: Dictionary = leaves[i]
+	_rebuild_leaf(info,theta)
+	var s := sin(theta)
+	(info["front"] as StandardMaterial3D).albedo_color = _gray(lerpf(1.0,0.8,minf(s * 1.4,1.0)) if theta < PI * 0.5 else 0.8, i == 0)
+	(info["back"] as StandardMaterial3D).albedo_color = _gray(lerpf(0.62,1.0,smoothstep(PI * 0.5,PI,theta)), i == n - 1)
+	# 쌓인 높이: 처음엔 먼저 넘어갈 종이가 맨 위, 넘어간 뒤엔 나중에 넘어간 종이가 맨 위
+	var y_start := float(n - 1 - i) * GAP + 0.01
+	var y_end := float(i) * GAP + 0.01
+	(info["node"] as Node3D).position.y = lerpf(y_start,y_end,smoothstep(0.0,1.0,pi_))
+	# 그림자
+	var tip := absf(_tip_x(theta))
+	var under_right := (forward and theta < PI * 0.5) or (not forward and theta >= PI * 0.5)
+	var width := maxf(tip,0.001)
+	var sh: MeshInstance3D = info["shadow"]
+	sh.scale = Vector3(width,1.0,1.0)
+	sh.position = Vector3((width * 0.5) * (1.0 if under_right else -1.0),-0.02,(_z0 + _z1) * 0.5)
+	(info["shadow_mat"] as StandardMaterial3D).albedo_color = Color(0.12,0.08,0.04,0.3 * s * (1.0 - 0.4 * s) / sqrt(float(n)))
+
+
+func _place_camera() -> void:
+	# 카메라는 늘 바로 위(TILT_DEG 가 0 이 아니면 넘기는 한가운데에서 기운다)
+	var pitch := deg_to_rad(90.0 - TILT_DEG * sin(PI * clampf(_cam_p,0.0,1.0)))
 	camera.position = _target + Vector3(0.0,sin(pitch),cos(pitch)) * 30.0
 	camera.look_at(_target,Vector3(0.0,0.0,-1.0))
 

@@ -320,9 +320,10 @@ static func _ensure_stage(menu: Control) -> BookStage3D:
 	menu.add_child(stage)
 	menu.move_child(stage,menu.get_node("DimBackground").get_index() + 1)
 	stage.build(sv,menu.get_viewport_rect().size,"영업 일지",PlayerProgress.display_player_name())
-	stage.page_dragged.connect(func(dir: int) -> void:
-		var t := clampi(menu.current_tab + dir,0,6)
-		if t != menu.current_tab: menu.select_tab(t))
+	stage.drag_allowed = func(dir: int) -> bool: return clampi(menu.current_tab + dir,0,6) != menu.current_tab
+	stage.drag_started.connect(func(dir: int) -> void: _drag_begin(menu,stage,dir))
+	stage.drag_moved.connect(func(th: float) -> void: _drag_move(menu,th))
+	stage.drag_ended.connect(func() -> void: _drag_end(menu,stage))
 	stage.tab_picked.connect(func(t: int) -> void: menu.select_tab(t))
 	_sync_note.call_deferred(menu)
 	stage.set_state(1.0,1.0)
@@ -353,6 +354,7 @@ static func _kill_anim(menu: Control) -> void:
 	var flip = menu.get_meta("book_flip") if menu.has_meta("book_flip") else null
 	if is_instance_valid(flip): flip.queue_free()
 	menu.set_meta("book_flip",null)
+	menu.set_meta("book_drag",null)
 	var stage := _stage_of(menu)
 	if stage != null: stage.unfreeze_pages()
 	if menu.has_meta("book_moving") and not (menu.get_meta("book_moving") as Array).is_empty():
@@ -450,6 +452,16 @@ static func _flip_tabs(menu: Control,stage: BookStage3D,old_tab: int) -> void:
 	stage.freeze_pages(old[0],old[1])
 	menu.set_meta("book_moving",moving)
 	_sync_note(menu)
+	var flip := _make_flip(menu,stage,forward,order,old,fresh)
+	menu.set_meta("book_flip",flip)
+	var tw := menu.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_method(flip.set_progress,0.0,1.0,flip.duration)
+	tw.tween_callback(func() -> void: _kill_anim(menu))
+	menu.set_meta("book_anim",tw)
+
+
+# 책장 넘김 한 장을 만든다. order = 종이에 붙어 함께 넘어갈 포스트잇 탭들(먼저 넘어가는 종이부터).
+static func _make_flip(menu: Control,stage: BookStage3D,forward: bool,order: Array,old: Array,fresh: Array) -> BookFlip3D:
 	var nav: Control = menu.get_node("DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation")
 	var carry: Array = []
 	for t in order:
@@ -461,8 +473,64 @@ static func _flip_tabs(menu: Control,stage: BookStage3D,old_tab: int) -> void:
 	menu.add_child(flip)
 	menu.move_child(flip,stage.get_index() + 1)
 	flip.build(geo["page_w"],geo["page_h"],geo["spine"],menu.get_viewport_rect().size,old[0],old[1],fresh[0],fresh[1],forward,order.size(),carry)
+	return flip
+
+
+# ---------------------------------------------------------------- 쪽 끌어 넘기기
+# 손가락(마우스)이 끄는 대로 종이가 따라오고, 놓을 때 절반(제본선)을 넘었으면 다음/이전 탭으로 넘어가고 못 넘었으면 되돌아간다.
+# 끌기가 시작되면 지금 두 쪽을 사진으로 떠 두고 탭을 새 탭으로 옮겨 새 화면이 그려지면(두 프레임) 그 사진으로 종이 뒷면을 만든다.
+static func _drag_begin(menu: Control,stage: BookStage3D,dir: int) -> void:
+	var old_tab: int = menu.current_tab
+	var new_tab := old_tab + dir
+	var old: Array = stage.capture_halves()
+	if old.is_empty(): return
+	var st := {"ready": false,"ended": false,"theta": 0.0,"old_tab": old_tab,"new_tab": new_tab,"dir": dir,"flip": null}
+	menu.set_meta("book_drag",st)
+	stage.freeze_pages(old[0],old[1])
+	var order: Array = [old_tab] if dir > 0 else [new_tab]
+	menu.set_meta("book_moving",order)
+	menu.select_tab(new_tab)
+	await RenderingServer.frame_post_draw
+	await RenderingServer.frame_post_draw
+	if not is_instance_valid(menu) or not is_instance_valid(stage) or menu.get_meta("book_drag") != st: return
+	var fresh: Array = stage.capture_halves()
+	if fresh.is_empty():
+		_kill_anim(menu)
+		return
+	var flip := _make_flip(menu,stage,dir > 0,order,old,fresh)
+	flip.set_theta(float(st["theta"]))
+	st["flip"] = flip
+	st["ready"] = true
 	menu.set_meta("book_flip",flip)
+	if bool(st["ended"]): _drag_finish(menu,st)
+
+
+static func _drag_move(menu: Control,theta: float) -> void:
+	var st = menu.get_meta("book_drag") if menu.has_meta("book_drag") else null
+	if not (st is Dictionary): return
+	st["theta"] = theta
+	if bool(st["ready"]) and is_instance_valid(st["flip"]): (st["flip"] as BookFlip3D).set_theta(theta)
+
+
+static func _drag_end(menu: Control,_stage: BookStage3D) -> void:
+	var st = menu.get_meta("book_drag") if menu.has_meta("book_drag") else null
+	if not (st is Dictionary): return
+	st["ended"] = true
+	if bool(st["ready"]): _drag_finish(menu,st)
+
+
+# 놓았다: 절반(PI/2)을 넘었으면 끝까지 넘기고, 아니면 되돌린 뒤 탭도 원래대로 돌린다.
+static func _drag_finish(menu: Control,st: Dictionary) -> void:
+	var flip: BookFlip3D = st["flip"]
+	var theta: float = st["theta"]
+	var complete := theta >= PI * 0.5
+	var target := PI if complete else 0.0
 	var tw := menu.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
-	tw.tween_method(flip.set_progress,0.0,1.0,flip.duration)
-	tw.tween_callback(func() -> void: _kill_anim(menu))
+	tw.tween_method(flip.set_theta,theta,target,0.08 + 0.22 * absf(target - theta) / PI).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	tw.tween_callback(func() -> void:
+		if not complete:
+			menu.select_tab(int(st["old_tab"]))  # 쪽은 아직 사진이라 되돌리는 모습은 보이지 않는다
+			await RenderingServer.frame_post_draw
+			await RenderingServer.frame_post_draw
+		if is_instance_valid(menu): _kill_anim(menu))
 	menu.set_meta("book_anim",tw)

@@ -26,7 +26,7 @@ func click(pos: Vector2) -> void:
 	Input.parse_input_event(up)
 	await wait(0.1)
 
-func drag(a: Vector2, b: Vector2) -> void:
+func drag(a: Vector2, b: Vector2, shot: String = "") -> void:
 	var down := InputEventMouseButton.new()
 	down.button_index = MOUSE_BUTTON_LEFT
 	down.pressed = true
@@ -41,6 +41,9 @@ func drag(a: Vector2, b: Vector2) -> void:
 		m.button_mask = MOUSE_BUTTON_MASK_LEFT
 		Input.parse_input_event(m)
 		await wait(0.03)
+	if shot != "":
+		await wait(0.4)
+		get_viewport().get_texture().get_image().save_png(shot)
 	var up := down.duplicate()
 	up.pressed = false
 	up.position = b
@@ -78,15 +81,21 @@ func run() -> void:
 	await click(Vector2(5, 5))
 	await wait(0.5)
 	print("바깥 클릭 후 visible=", mm.visible, " (기대 true: 바깥을 눌러도 닫히지 않음)")
-	# 오른쪽 쪽을 왼쪽으로 끌면 다음 탭
 	var spine: Vector2 = stage._spine_screen
-	await drag(spine + Vector2(250, 0), spine + Vector2(60, 0))
-	await wait(1.5)
-	print("오른쪽 쪽 왼쪽으로 끌기 후 탭=", mm.current_tab, " (기대 1)")
-	await drag(spine + Vector2(-250, 0), spine + Vector2(-40, 0))
-	await wait(1.5)
-	print("왼쪽 쪽 오른쪽으로 끌기 후 탭=", mm.current_tab, " (기대 0)")
-	await drag(spine + Vector2(-250, 0), spine + Vector2(-40, 0))
+	var half: float = stage.page_geometry()["page_w"] * 0.5
+	# 오른쪽 쪽을 왼쪽으로 제본선 너머까지 끌고 놓으면 다음 탭
+	await drag(spine + Vector2(half - 40, 0), spine + Vector2(-60, 0), dir + "/drag_mid.png")
+	await wait(1.2)
+	print("제본선 넘겨 놓기 후 탭=", mm.current_tab, " (기대 1)")
+	# 왼쪽 쪽을 오른쪽으로 끌다 절반 못 넘기고 놓으면 되돌아감
+	await drag(spine + Vector2(-half + 40, 0), spine + Vector2(-60, 0))
+	await wait(1.2)
+	print("절반 못 넘기고 놓기 후 탭=", mm.current_tab, " (기대 1, 되돌아감)")
+	# 왼쪽 쪽을 오른쪽으로 제본선 너머까지 끌면 이전 탭
+	await drag(spine + Vector2(-half + 40, 0), spine + Vector2(60, 0))
+	await wait(1.2)
+	print("왼쪽 쪽 끌어 넘기기 후 탭=", mm.current_tab, " (기대 0)")
+	await drag(spine + Vector2(-half + 40, 0), spine + Vector2(60, 0))
 	await wait(0.6)
 	print("첫 탭에서 이전으로 끌기 후 탭=", mm.current_tab, " (기대 0)")
 	mm.close_menu()

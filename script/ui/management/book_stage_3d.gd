@@ -7,7 +7,9 @@ extends Control
 ## 월드 1칸 = 화면 100px. 제본선 x = 0, 책등 방향 z, 위가 y. 오른쪽 쪽은 x > 0, 표지는 제본선에서 오른쪽으로 놓인 채 시작해
 ## 제본선을 축으로(z 축 회전) 왼쪽으로 넘어가 왼쪽 쪽(= 표지 안쪽 면지)이 된다.
 
-signal page_dragged(direction: int)  # +1 = 다음 탭(오른쪽 쪽을 왼쪽으로 끌어 넘김), -1 = 이전 탭
+signal drag_started(direction: int)  # +1 = 다음 탭(오른쪽 쪽을 왼쪽으로 끌기), -1 = 이전 탭(왼쪽 쪽을 오른쪽으로 끌기)
+signal drag_moved(theta: float)  # 종이가 넘어간 각도(0 = 그대로, PI = 다 넘어감). 손가락 위치를 따라간다
+signal drag_ended
 signal tab_picked(tab: int)
 
 const PX := 100.0
@@ -16,7 +18,7 @@ const BACK_T := 0.05
 const PAGES_T := 0.16
 const PITCH_START := 54.0  # 시작할 때 카메라가 내려다보는 각도(도). 90 = 바로 위
 const LEFT_FLAG_SHIFT := 40.0  # 책을 오른쪽으로 옮기는 정도(px)
-const DRAG_DIST := 110.0  # 쪽을 이만큼 가로로 끌면 책장이 넘어간다(px)
+const DRAG_START := 12.0  # 쪽을 이만큼 가로로 끌면 종이가 따라오기 시작한다(px)
 const PAGE_MARGIN := 18.0  # UI 화면(MainPanel) 안에서 쪽이 시작하는 여백(= 둘레 여백)
 
 var ui_viewport: SubViewport
@@ -44,7 +46,9 @@ var _rise: float = 0.0
 var _open: float = 0.0
 var _frozen: bool = false
 var _drag_from: Vector2 = Vector2(-1.0,-1.0)  # 왼쪽 버튼을 누른 자리(UI 좌표), 끌기 중이 아니면 (-1,-1)
-var _drag_used: bool = false  # 이번 누름에서 이미 책장을 넘겼는지
+var _dragging: bool = false  # 종이를 끌고 있는 중
+var _drag_dir: int = 0
+var drag_allowed: Callable = Callable()  # (direction: int) -> bool, 그 방향으로 넘길 탭이 있는지
 
 
 # ui: 메뉴 UI(MainPanel)가 들어 있는 SubViewport. 쪽(BookViews.Paper)은 그 안에서 둘레 여백 PAGE_MARGIN 만큼 안쪽에 놓인다.
@@ -213,36 +217,43 @@ func at_rest() -> bool:
 func _gui_input(event: InputEvent) -> void:
 	if not (event is InputEventMouse): return
 	accept_event()
-	if not at_rest(): return
 	var p: Vector2 = (event as InputEventMouse).position - _offset
+	var spine_x := _spine_screen.x - _offset.x
+	# 종이를 끄는 중: 손가락 위치를 종이 각도로 바꿔 알리고, 놓으면 끝낸다(UI 로는 보내지 않는다)
+	if _dragging:
+		if event is InputEventMouseMotion:
+			# 종이의 자유 모서리가 손가락 가로 위치를 따라간다: 모서리 x = 반폭 × cos(각도)
+			var c := clampf((p.x - spine_x) / (_page_w_px * 0.5),-1.0,1.0)
+			drag_moved.emit(acos(c if _drag_dir > 0 else -c))
+		elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+			_dragging = false
+			_drag_from = Vector2(-1.0,-1.0)
+			drag_ended.emit()
+		return
+	if not at_rest(): return
 	# 책 바깥을 눌러도 닫히지 않는다(잘못 눌러서 꺼지는 것을 막는다). 닫기는 ESC·관리 메뉴 키.
 	var inside := Rect2(Vector2.ZERO,_ui_size).has_point(p)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed:
-			_drag_from = p if inside else Vector2(-1.0,-1.0)
-			_drag_used = false
-		else:
-			var was_used := _drag_used
-			_drag_from = Vector2(-1.0,-1.0)
-			_drag_used = false
-			if was_used: return  # 책장을 넘긴 누름의 떼기는 UI 로 보내지 않는다(버튼이 눌린 것으로 처리되지 않게)
-	elif event is InputEventMouseMotion and _drag_from.x >= 0.0 and not _drag_used and ((event as InputEventMouseMotion).button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
+		_drag_from = p if (event.pressed and inside) else Vector2(-1.0,-1.0)
+	elif event is InputEventMouseMotion and _drag_from.x >= 0.0 and ((event as InputEventMouseMotion).button_mask & MOUSE_BUTTON_MASK_LEFT) != 0:
 		# 오른쪽 쪽에서 왼쪽으로 끌면 다음 탭, 왼쪽 쪽에서 오른쪽으로 끌면 이전 탭
 		var d := p - _drag_from
-		if absf(d.x) >= DRAG_DIST and absf(d.x) > absf(d.y) * 1.5:
-			var spine_x := _spine_screen.x - _offset.x
+		if absf(d.x) >= DRAG_START and absf(d.x) > absf(d.y) * 1.5:
 			var dir := 0
 			if _drag_from.x > spine_x and d.x < 0.0: dir = 1
 			elif _drag_from.x < spine_x and d.x > 0.0: dir = -1
-			if dir != 0:
-				_drag_used = true
+			if dir != 0 and (not drag_allowed.is_valid() or drag_allowed.call(dir)):
+				_dragging = true
+				_drag_dir = dir
 				var cancel := InputEventMouseButton.new()  # UI 쪽에서 누른 채로 남지 않도록 바깥에서 뗀 것으로 알린다
 				cancel.button_index = MOUSE_BUTTON_LEFT
 				cancel.pressed = false
 				cancel.position = Vector2(-9999.0,-9999.0)
 				cancel.global_position = cancel.position
 				ui_viewport.push_input(cancel,true)
-				page_dragged.emit(dir)
+				drag_started.emit(dir)
+				var c := clampf((p.x - spine_x) / (_page_w_px * 0.5),-1.0,1.0)
+				drag_moved.emit(acos(c if dir > 0 else -c))
 				return
 	if not inside and not (event is InputEventMouseMotion): return
 	var e: InputEventMouse = event.duplicate()
