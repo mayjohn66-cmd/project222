@@ -265,12 +265,34 @@ class Flip extends Control:
 			return
 		tex_new_left = fresh[0]
 		tex_new_right = fresh[1]
+		if ManagementMenu.PRESENTATION.book_3d:
+			_begin_3d()
+			return
 		tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 		tween.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 		tween.tween_method(_set_t,0.0,1.0,DURATION)
 		tween.tween_callback(func() -> void:
 			active = false
 			hide())
+
+	# 3D 책장 넘김으로 넘긴다: 같은 사진 네 장을 넘어가는 한 장의 앞뒤면과 바닥 두 쪽으로 쓴다(BookFlip3D).
+	func _begin_3d() -> void:
+		var menu: Control = get_parent().get_parent().get_parent().get_parent()
+		var ref := _ref()
+		var page_w := BookViews.page_width(_host_size())
+		var page_h := _host_size().y - 3.0
+		var spine := ref.get_global_rect().position + Vector2(page_w * 0.5,page_h * 0.5)
+		var flip3d := BookFlip3D.new()
+		flip3d.name = "BookFlip3D"
+		menu.add_child(flip3d)
+		flip3d.build(page_w,page_h,spine,menu.get_viewport_rect().size,tex_old_left,tex_old_right,tex_new_left,tex_new_right,forward)
+		active = false
+		hide()
+		tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+		tween.set_trans(Tween.TRANS_LINEAR)
+		tween.tween_method(flip3d.set_progress,0.0,1.0,0.7)
+		tween.tween_callback(func() -> void:
+			if is_instance_valid(flip3d): flip3d.queue_free())
 
 	func _set_t(value: float) -> void:
 		t = value
