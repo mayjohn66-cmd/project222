@@ -1,6 +1,0 @@
-[gd_scene load_steps=2 format=3]
-
-[ext_resource type="Script" path="res://dev/script/check_iso_box.gd" id="1"]
-
-[node name="CheckIsoBox" type="Node"]
-script = ExtResource("1")
