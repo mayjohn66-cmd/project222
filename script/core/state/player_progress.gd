@@ -11,6 +11,10 @@ static var starter_scroll_granted: bool = false
 static var expeditions_completed: int = 0
 # 스토리 장면(비트)이 마지막으로 발생한 날. 없으면 아직 발생하지 않음.
 static var story_beat_days: Dictionary = {}
+# 새 게임을 시작하기 전에 짓는 플레이어(점장) 이름. 관리 창 표지 등에 표시한다. 비어 있으면 기본 호칭을 쓴다.
+static var player_name: String = ""
+const PLAYER_NAME_MAX := 8
+const DEFAULT_PLAYER_NAME := "점장"
 
 
 static func reset() -> void:
@@ -19,6 +23,7 @@ static func reset() -> void:
 	starter_scroll_granted = false
 	expeditions_completed = 0
 	story_beat_days.clear()
+	player_name = ""
 
 
 # =========================
@@ -152,7 +157,8 @@ static func to_save_data() -> Dictionary:
 		"cleared_difficulty": cleared_difficulty.duplicate(true),
 		"starter_scroll_granted": starter_scroll_granted,
 		"expeditions_completed": expeditions_completed,
-		"story_beat_days": story_beat_days.duplicate(true)
+		"story_beat_days": story_beat_days.duplicate(true),
+		"player_name": player_name
 	}
 
 
@@ -187,6 +193,8 @@ static func load_save_data(
 		0
 	)
 
+	player_name = clean_player_name(str(data.get("player_name","")))
+
 	var saved_beats: Variant = data.get(
 		"story_beat_days",
 		{}
@@ -208,3 +216,13 @@ static func load_save_data(
 			cleared_difficulty[str(region_id)] = int(
 				saved_clears[region_id]
 			)
+
+
+# 이름에서 앞뒤 공백을 걷고 최대 글자 수로 자른다.
+static func clean_player_name(raw: String) -> String:
+	return raw.strip_edges().substr(0,PLAYER_NAME_MAX)
+
+
+# 화면에 보여 줄 이름(짓지 않았으면 기본 호칭).
+static func display_player_name() -> String:
+	return player_name if not player_name.is_empty() else DEFAULT_PLAYER_NAME

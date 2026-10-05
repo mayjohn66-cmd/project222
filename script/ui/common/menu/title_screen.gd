@@ -97,8 +97,10 @@ func _ready() -> void:
 	new_game_dialog.get_cancel_button().text = "취소"
 
 	new_game_dialog.confirmed.connect(
-		_start_new_game
+		_ask_nickname
 	)
+
+	_build_nickname_dialog()
 
 	refresh_continue_button()
 
@@ -153,7 +155,7 @@ func _on_new_game_pressed() -> void:
 		new_game_dialog.popup_centered()
 		return
 
-	_start_new_game()
+	_ask_nickname()
 
 
 func _on_continue_pressed() -> void:
@@ -283,11 +285,56 @@ func _on_delete_save_confirmed() -> void:
 	refresh_continue_button()
 	_refresh_load_slot_buttons()
 
+# ---------------------------------------------------------------- 닉네임(새 게임 시작 전에 짓는다)
+
+var nickname_dialog: ConfirmationDialog
+var nickname_edit: LineEdit
+
+
+func _build_nickname_dialog() -> void:
+	nickname_dialog = ConfirmationDialog.new()
+	nickname_dialog.title = "이름 짓기"
+	nickname_dialog.get_ok_button().text = "이 이름으로 시작"
+	nickname_dialog.get_cancel_button().text = "취소"
+	var box := VBoxContainer.new()
+	box.add_theme_constant_override("separation",10)
+	var hint := Label.new()
+	hint.text = "이세계의 편의점을 이끌 점장의 이름을 지어 주세요.\n영업 일지(관리 창) 표지에 적힙니다."
+	box.add_child(hint)
+	nickname_edit = LineEdit.new()
+	nickname_edit.max_length = PlayerProgress.PLAYER_NAME_MAX
+	nickname_edit.placeholder_text = "이름 (최대 %d자)" % PlayerProgress.PLAYER_NAME_MAX
+	nickname_edit.custom_minimum_size = Vector2(320,0)
+	nickname_edit.text_changed.connect(_on_nickname_changed)
+	nickname_edit.text_submitted.connect(func(_text: String) -> void:
+		if not nickname_dialog.get_ok_button().disabled: nickname_dialog.get_ok_button().pressed.emit())
+	box.add_child(nickname_edit)
+	nickname_dialog.add_child(box)
+	nickname_dialog.confirmed.connect(_start_new_game)
+	add_child(nickname_dialog)
+
+
+func _on_nickname_changed(_text: String) -> void:
+	nickname_dialog.get_ok_button().disabled = PlayerProgress.clean_player_name(nickname_edit.text).is_empty()
+
+
+func _ask_nickname() -> void:
+	if entering_game:
+		return
+
+	nickname_edit.text = ""
+	nickname_dialog.get_ok_button().disabled = true
+	nickname_dialog.popup_centered()
+	nickname_edit.grab_focus()
+
+
 func _start_new_game() -> void:
 	if entering_game:
 		return
 
+	var chosen_name := PlayerProgress.clean_player_name(nickname_edit.text if nickname_edit != null else "")
 	GameState.initialize_new_game()
+	PlayerProgress.player_name = chosen_name  # 새 게임 초기화가 진행 기록을 비우므로 그 뒤에 넣는다
 
 	GameState.set_build_quick_slot(
 		0,

@@ -721,9 +721,9 @@ func _render_facility_cards() -> void:
 		old.queue_free()
 	var cards := GridContainer.new()
 	cards.name = "FacilityCards"
-	cards.columns = 1
+	cards.columns = 2  # 펼친 책의 두 쪽: 설비 하나가 한 쪽씩
 	cards.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	cards.add_theme_constant_override("h_separation",16)
+	cards.add_theme_constant_override("h_separation",int(BookLayout.GUTTER))
 	cards.add_theme_constant_override("v_separation",16)
 	facility_status_scroll.add_child(cards)
 	var found := {}

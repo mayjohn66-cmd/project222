@@ -7,6 +7,7 @@ func shot(dir: String, name: String, frames: int = 20) -> void:
 	print("저장: ", name)
 
 func _ready() -> void:
+	ManagementMenu.PRESENTATION.animations_enabled = false
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("run")
 
@@ -32,7 +33,7 @@ func run() -> void:
 		await shot(dir, "03_game_menu", 40)
 		gm.toggle_main_menu()
 	if mm:
-		for tab in range(0, 5):
+		for tab in range(0, 7):
 			mm.visible = false
 			mm.open_menu(tab)
 			await shot(dir, "04_management_tab%d" % tab, 20)

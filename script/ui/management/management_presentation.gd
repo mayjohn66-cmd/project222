@@ -183,6 +183,7 @@ static func install(menu: Control) -> void:
 	main.add_child(flip)
 	flip.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	InventoryDetailPane.install(menu.management_inventory)
+	BookLayout.apply(menu)
 	apply_tab(menu)
 
 static func fit_inventory(inv: Control) -> void:
@@ -284,6 +285,7 @@ static func play_open(menu: Control) -> void:
 	var cc: Control = n["cc"]
 	var dim: ColorRect = n["dim"]
 	var shift := _closed_shift(n["main"])
+	cover.owner_text = PlayerProgress.display_player_name()
 	menu.set_meta("book_opening",true)
 	menu.set_meta("book_closing",false)
 	paper.set_left_visible(false)

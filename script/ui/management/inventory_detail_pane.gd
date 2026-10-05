@@ -13,6 +13,7 @@ const ACQUIRE_TEXT := {"material": "채집·원정", "store_product": "제작", 
 var _name: Label
 var _frame: PanelContainer
 var _icon: TextureRect
+var _preview: FurniturePreview  # 가구는 그림 대신 실제 배치에 쓰는 3D 모델을 보여 준다
 var _price: Label
 var _acquire: Label
 var _desc: Label
@@ -72,6 +73,9 @@ func _build() -> void:
 	_icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	_icon.custom_minimum_size = Vector2(0,160)
 	_frame.add_child(_icon)
+	_preview = FurniturePreview.new()
+	_preview.visible = false
+	_frame.add_child(_preview)
 	_price = _label(20)
 	add_child(_price)
 	_acquire = _label(18)
@@ -119,6 +123,7 @@ func _on_entry(entry_type: String,entry_id: Variant,card: ItemCard) -> void:
 			icon = FurnitureData.get_furniture_icon(str(entry_id))
 			acquire = "획득 방법 : 설계도에서 제작"
 			desc = str(data.get("description",""))
+			_preview.show_furniture(str(entry_id))
 		_:
 			var data := ItemData.get_item(item_id)
 			title = ItemData.get_item_name(item_id)
@@ -127,8 +132,10 @@ func _on_entry(entry_type: String,entry_id: Variant,card: ItemCard) -> void:
 			if price > 0: price_text = "가격 : %d G" % price
 			acquire = "획득 방법 : %s" % ACQUIRE_TEXT.get(str(ItemData.get_item_type(item_id)),"알 수 없음")
 			desc = str(data.get("description",""))
+	if entry_type != ItemCard.ENTRY_TYPE_FURNITURE: _preview.visible = false
 	_name.text = title
 	_icon.texture = icon
+	_icon.visible = not _preview.visible
 	_price.text = price_text
 	_price.visible = not price_text.is_empty()
 	_acquire.text = acquire

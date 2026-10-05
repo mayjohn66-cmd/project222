@@ -24,7 +24,7 @@ func _ready() -> void:
 	viewport.add_child(sun)
 	var environment := Environment.new()
 	environment.background_mode = Environment.BG_COLOR
-	environment.background_color = Color(0.19, 0.22, 0.2)
+	environment.background_color = Color(0.93, 0.87, 0.74)  # 양피지 쪽에 놓이므로 종이색 바탕
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.ambient_light_color = Color.WHITE
 	environment.ambient_light_energy = 0.65
