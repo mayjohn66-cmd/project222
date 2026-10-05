@@ -69,24 +69,21 @@ static func _centered(canvas: CanvasItem,font: Font,text: String,box: Rect2,font
 # 포스트잇 한 장을 그린다(오른쪽 줄·왼쪽 줄·책장에 실려 넘어가는 3D 포스트잇이 모두 이 그림을 쓴다 → 어디서나 같은 모양).
 # r = 포스트잇 전체 자리(쪽 위에 붙은 부분 포함), mirrored = 왼쪽 가장자리용(거울상), fold = 쪽 가장자리가 r 안쪽 어디에 있는지(r 의 붙은 쪽 끝에서부터의 거리, 쪽 위에 붙은 만큼).
 static func paint_flag(c: CanvasItem,font: Font,r: Rect2,color: Color,label: String,mirrored: bool,fold: float,with_text: bool,with_shadow: bool = true) -> void:
-	var dir := -1.0 if mirrored else 1.0
 	var ax := r.end.x - fold if mirrored else r.position.x + fold  # 쪽 가장자리의 x
 	var top := r.position.y
 	var bottom := r.end.y
 	if with_shadow:
-		c.draw_rect(Rect2(r.position + Vector2(-3.0 if mirrored else 3.0,4.0),r.size),Color(0.16,0.11,0.06,0.28))
-	# 본체: 한 장의 종이. 위가 밝고 아래가 살짝 짙다
-	c.draw_polygon(PackedVector2Array([Vector2(r.position.x,top),Vector2(r.end.x,top),Vector2(r.end.x,bottom),Vector2(r.position.x,bottom)]),PackedColorArray([color.lightened(0.10),color.lightened(0.08),color.darkened(0.03),color.darkened(0.03)]))
-	# 쪽 가장자리에서 꺾이는 곳: 바깥쪽으로 12px 가 어두워졌다가 풀린다
-	var shade := Color(0.2,0.14,0.08,0.34)
-	var clear := Color(0.2,0.14,0.08,0.0)
-	c.draw_polygon(PackedVector2Array([Vector2(ax,top),Vector2(ax + dir * 12.0,top),Vector2(ax + dir * 12.0,bottom),Vector2(ax,bottom)]),PackedColorArray([shade,clear,clear,shade]))
-	if fold > 0.5:
-		c.draw_line(Vector2(ax,top),Vector2(ax,bottom),color.darkened(0.22),1.0)
-	# 윤곽과 붙은 쪽 끝의 접착 자국
-	c.draw_rect(r,color.darkened(0.25),false,1.5)
-	var glue_x := r.end.x if mirrored else r.position.x
-	c.draw_line(Vector2(glue_x,top),Vector2(glue_x,bottom),color.darkened(0.3),2.0)
+		# 그림자는 쪽 가장자리 바깥(책 밖으로 나온 부분)에만 드리운다. 쪽 위에 붙은 부분 밑에 깔리면 계단처럼 보인다
+		var sh := Rect2(r.position + Vector2(-3.0 if mirrored else 3.0,4.0),r.size)
+		if mirrored: sh.size.x = minf(sh.size.x,ax - sh.position.x)
+		else:
+			var cut := maxf(0.0,ax - sh.position.x)
+			sh.position.x += cut
+			sh.size.x -= cut
+		if sh.size.x > 0.0: c.draw_rect(sh,Color(0.16,0.11,0.06,0.28))
+	# 본체: 하나로 이어진 한 장의 종이. 위가 밝고 아래가 살짝 짙다(접힌 선·붙은 자국 없이 일체형)
+	c.draw_polygon(PackedVector2Array([Vector2(r.position.x,top),Vector2(r.end.x,top),Vector2(r.end.x,bottom),Vector2(r.position.x,bottom)]),PackedColorArray([color.lightened(0.10),color.lightened(0.10),color.darkened(0.03),color.darkened(0.03)]))
+	c.draw_rect(r,color.darkened(0.2),false,1.0)
 	if with_text and font != null:
 		var sz := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,15)
 		var ty := top + (bottom - top) * 0.5 + sz.y * 0.5 - font.get_descent(15)
