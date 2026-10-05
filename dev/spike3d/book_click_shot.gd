@@ -26,6 +26,28 @@ func click(pos: Vector2) -> void:
 	Input.parse_input_event(up)
 	await wait(0.1)
 
+func drag(a: Vector2, b: Vector2) -> void:
+	var down := InputEventMouseButton.new()
+	down.button_index = MOUSE_BUTTON_LEFT
+	down.pressed = true
+	down.position = a
+	down.global_position = a
+	Input.parse_input_event(down)
+	await wait(0.05)
+	for i in range(1, 9):
+		var m := InputEventMouseMotion.new()
+		m.position = a.lerp(b, i / 8.0)
+		m.global_position = m.position
+		m.button_mask = MOUSE_BUTTON_MASK_LEFT
+		Input.parse_input_event(m)
+		await wait(0.03)
+	var up := down.duplicate()
+	up.pressed = false
+	up.position = b
+	up.global_position = b
+	Input.parse_input_event(up)
+	await wait(0.1)
+
 func run() -> void:
 	var dir: String = OS.get_cmdline_user_args()[0] if OS.get_cmdline_user_args().size() > 0 else "/tmp/book_click"
 	DirAccess.make_dir_recursive_absolute(dir)
@@ -54,6 +76,20 @@ func run() -> void:
 	print("왼쪽 클릭 후 탭=", mm.current_tab, " (기대 0)")
 	get_viewport().get_texture().get_image().save_png(dir + "/after_back.png")
 	await click(Vector2(5, 5))
+	await wait(0.5)
+	print("바깥 클릭 후 visible=", mm.visible, " (기대 true: 바깥을 눌러도 닫히지 않음)")
+	# 오른쪽 쪽을 왼쪽으로 끌면 다음 탭
+	var spine: Vector2 = stage._spine_screen
+	await drag(spine + Vector2(250, 0), spine + Vector2(60, 0))
+	await wait(1.5)
+	print("오른쪽 쪽 왼쪽으로 끌기 후 탭=", mm.current_tab, " (기대 1)")
+	await drag(spine + Vector2(-250, 0), spine + Vector2(-40, 0))
+	await wait(1.5)
+	print("왼쪽 쪽 오른쪽으로 끌기 후 탭=", mm.current_tab, " (기대 0)")
+	await drag(spine + Vector2(-250, 0), spine + Vector2(-40, 0))
+	await wait(0.6)
+	print("첫 탭에서 이전으로 끌기 후 탭=", mm.current_tab, " (기대 0)")
+	mm.close_menu()
 	await wait(1.2)
-	print("바깥 클릭 후 visible=", mm.visible, " (기대 false)")
+	print("close_menu 후 visible=", mm.visible, " (기대 false)")
 	get_tree().quit()

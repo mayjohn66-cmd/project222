@@ -320,7 +320,9 @@ static func _ensure_stage(menu: Control) -> BookStage3D:
 	menu.add_child(stage)
 	menu.move_child(stage,menu.get_node("DimBackground").get_index() + 1)
 	stage.build(sv,menu.get_viewport_rect().size,"영업 일지",PlayerProgress.display_player_name())
-	stage.outside_clicked.connect(func() -> void: menu.close_menu())
+	stage.page_dragged.connect(func(dir: int) -> void:
+		var t := clampi(menu.current_tab + dir,0,6)
+		if t != menu.current_tab: menu.select_tab(t))
 	stage.tab_picked.connect(func(t: int) -> void: menu.select_tab(t))
 	_sync_note.call_deferred(menu)
 	stage.set_state(1.0,1.0)
