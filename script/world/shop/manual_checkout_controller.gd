@@ -25,6 +25,9 @@ func _ready() -> void:
 	panel.cancel_requested.connect(cancel_checkout)
 	food_cleanup = RegisterDashboardPanel.new()
 	add_child(food_cleanup)
+	var repair := PowerRepairDirector.new()
+	repair.name = "PowerRepairDirector"
+	add_child(repair)
 
 func is_busy() -> bool:
 	return is_instance_valid(active_register)
@@ -138,7 +141,7 @@ func _update_panel() -> void:
 		return
 	var customer = register.get_waiting_customer()
 	if customer == null:
-		panel.display("계산대 · 진열 상품 확인", 0.0, false, true, "상품 조회 [E]")
+		panel.display("계산대 · 진열 상품 확인" if PowerRepairFlow.powered() else "계산대 전원 꺼짐 · 옆 장부로 상품 확인", 0.0, false, true, "상품 조회 [E]" if PowerRepairFlow.powered() else "장부 조회 [E]")
 		return
 	if not manager.shop_open:
 		panel.display("", 0.0, false, false)
@@ -151,7 +154,7 @@ func _update_panel() -> void:
 	var caption := "%s ×%d · %dG" % [ItemData.get_item_name(customer.carried_item_id),
 		customer.carried_amount, FoodShelfLife.customer_total(customer)]
 	if not available: caption = "직원이 계산 중입니다"
-	panel.display(caption, elapsed / maxf(checkout_seconds, 0.01), is_busy(), available)
+	panel.display(caption, elapsed / maxf(checkout_seconds, 0.01), is_busy(), available, "결제 [E]" if PowerRepairFlow.powered() else "손으로 계산 [E]")
 
 func _exit_tree() -> void:
 	cancel_checkout()

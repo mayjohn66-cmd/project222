@@ -19,6 +19,8 @@ func _fit() -> void:
 
 func open() -> void:
 	if visible: return
+	title = "계산대" if PowerRepairFlow.powered() else "계산대 옆 장부 · 전원 꺼짐"
+	if PowerRepairFlow.marked("restored"): title = "계산대 · 마석 발전기 연결"
 	cleanup_page = false
 	cleanup_seen = false
 	super.open()

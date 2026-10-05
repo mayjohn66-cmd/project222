@@ -42,6 +42,7 @@ static func initialize(world: Node) -> void:
 	GameState.save_store_layout(SETTINGS.opening_layout.duplicate(true))
 	PlayerProgress.record_story_beat(VERSION, GameState.total_day)
 	PlayerProgress.record_story_beat(PROLOGUE, GameState.total_day)
+	PlayerProgress.record_story_beat("shop_power:broken", GameState.total_day)
 	# 부트스트랩은 제작/주민 흐름의 클래스 의존 순환을 만들지 않는다.
 	PlayerProgress.record_story_beat("tutorial_event:crafting_path_v1", GameState.total_day)
 

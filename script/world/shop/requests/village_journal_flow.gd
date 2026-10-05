@@ -6,6 +6,7 @@ static func available() -> bool:
 
 static func entries() -> Array[Dictionary]:
 	var result: Array[Dictionary] = [{"id":"next_request", "title":"다음 주민 부탁"}]
+	if PowerRepairFlow.opted_in(): result.append({"id":PowerRepairFlow.JOURNAL_ID, "title":PowerRepairFlow.title()})
 	for resident in VillageLifeFlow.entries():
 		result.append({"id":"resident:" + str(resident["id"]), "title":str(resident["name"])})
 	for landmark in ResidentStoryFlow.SETTINGS.landmarks:
@@ -42,6 +43,7 @@ static func entries() -> Array[Dictionary]:
 	return result
 
 static func information(id: String) -> String:
+	if id == PowerRepairFlow.JOURNAL_ID: return PowerRepairFlow.information()
 	if id.begins_with(VillageExpansionFlow.JOURNAL_PREFIX): return VillageExpansionFlow.information(id.trim_prefix(VillageExpansionFlow.JOURNAL_PREFIX))
 	if id.begins_with(WeatherLifeFlow.JOURNAL_PREFIX): return WeatherLifeFlow.information(id.trim_prefix(WeatherLifeFlow.JOURNAL_PREFIX))
 	if id.begins_with(ExpeditionContactFlow.JOURNAL_PREFIX): return ExpeditionContactFlow.information(id.trim_prefix(ExpeditionContactFlow.JOURNAL_PREFIX))

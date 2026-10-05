@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PowerRepairSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/power/power_repair_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+fee = 120
+work_days = 1
+requirements = Array[Dictionary]([{"item":"iron_ore","amount":2}, {"item":"coal","amount":2}])
+moments = Array[Dictionary]([
+{"id":"power_stone_intro","npc":"행상인 타블렌","stage":"첫 핵심 안내와 타블렌 정착 뒤. 꺼진 계산대 이야기를 듣고 마석을 동력으로 쓰는 현지 문화를 전한다. 현대 계산대 사용법은 가르치지 않는다. 노점 근처 순회 기술자에게 점검받도록 연결. 마석/돈 무료 지급 없음."},
+{"id":"power_inspection","npc":"순회 기술자","stage":"새 역할 이름만 사용하는 현지 기술자. 전선이 전부 사라진 것이 아니라 가게 안 배선/콘센트는 남고 외부 공급과 계산대 회로가 끊긴 상황을 점검한다. 마석 발전기와 조절 장치를 기존 회로에 맞추는 일을 기술자가 맡는다. 플레이어가 독학 수리하지 않는다."},
+{"id":"power_work_started","npc":"순회 기술자","stage":"플레이어가 UI의 개조 맡기기를 눌러 일반 창고 재료와 개조비를 실제 전달한 뒤. 마석은 개조비에 포함해 기술자가 조달하며 원정 룬석 드롭이나 무료 마석 아이템을 요구하지 않는다. 작업은 다음 게임 날짜 이후 완료 대화를 끝까지 읽어야 마침. 대기 중 수기 영업 가능."},
+{"id":"power_work_waiting","npc":"순회 기술자","stage":"맡긴 당일 작업 중. 발전기 조절/접합을 현지 기술자가 수행한다. 재료/돈 재소비 없음. 정확한 날짜와 수량은 UI에 안내. 문 닫힌 채 현실 시간 기다리기로 진행되지 않는다."},
+{"id":"power_restored","npc":"순회 기술자","stage":"작업일 경과 뒤 계산대 배선에 마석 발전기를 연결하여 전원 복구. 최종 대화 완독 후에만 복구 저장. 추가 상품/돈/평판/능력치 보상이나 냉장함/가게 전체 전력 복구 약속 없음. 플레이어가 직접 수리하거나 전이 원인을 밝혔다는 설정 금지."},
+{"id":"power_memory","npc":"순회 기술자","stage":"이미 복구한 발전기와 계산대의 기억을 다시 듣는다. 반복 개조비/연료 재충전/무료 지급/새 기계/운영비 약속 없음."}
+])

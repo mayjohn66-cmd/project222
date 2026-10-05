@@ -20,6 +20,7 @@ const TextData = preload("res://script/data/production/request_text_data.gd")
 
 # 원본(기계 부분이 들어 있는) 파일. 없는 파일은 건너뛴다.
 const SOURCE_FILES: Dictionary = {
+	"res://scenes/shop/power/default_power_repair.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_resident_requests.tres": KIND_RESIDENT_REQUEST,
 	"res://scenes/shop/requests/default_community_requests.tres": KIND_COMMUNITY_REQUEST,
 	"res://scenes/shop/requests/default_village_life.tres": KIND_RESIDENT_GREETING,

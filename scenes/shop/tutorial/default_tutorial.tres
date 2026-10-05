@@ -10,7 +10,7 @@ opening_layout = Array[Dictionary]([{"build_id":"door", "anchor":Vector2i(0,4), 
 barter_requirements = Array[Dictionary]([{"id":"bread", "amount":2}, {"id":"water", "amount":1}])
 barter_gifts = Array[Dictionary]([{"id":"rusty_sword", "amount":1, "missing_only":true}, {"id":"leather_armor", "amount":1, "missing_only":true}])
 steps = Array[Dictionary]([
-{"id":"setup","goal":"fixtures","actor":"self","npc":"플레이어 독백","stage":"가게와 함께 낯선 숲으로 이동. 기존 문·계산대·진열대는 함께 옴. 현대 기기는 플레이어만 이해","starter":[],"rewards":[]},
+{"id":"setup","goal":"fixtures","actor":"self","npc":"플레이어 독백","stage":"가게와 함께 낯선 숲으로 이동. 기존 문·계산대·진열대는 함께 옴. 계산대는 전원과 회로가 끊겨 꺼져 있고 장부/가격표로 수기 계산. 첫 판매를 수리로 막지 않는다. 현대 기기는 플레이어만 이해","starter":[],"rewards":[]},
 {"id":"stock","goal":"stock","actor":"self","npc":"플레이어 독백","stage":"함께 온 식품을 진열. 현지인이 식품이나 현대 기기를 지급/설명하지 않음","rewards":[]},
 {"id":"checkout","goal":"checkout","actor":"customer","npc":"델빈과 플레이어 독백","stage":"낯선 유리문과 포장에 놀란 첫 손님이 실제 식품 하나를 현지 화폐로 삼. 완료는 플레이어 독백","rewards":[]},
 {"id":"barter","goal":"barter","actor":"merchant","npc":"행상인 타블렌","stage":"낯선 식품에 관심. 창고 빵2·물1과 낡은 검1·가죽 갑옷1을 한 번 물물교환. 메뉴/조작 키는 UI","rewards":[]},

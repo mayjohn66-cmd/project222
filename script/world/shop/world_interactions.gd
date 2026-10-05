@@ -65,6 +65,10 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var power = get_parent().get_node_or_null("ManualCheckoutController/PowerRepairDirector")
+ if power != null and not power.interaction_hint().is_empty():
+  prompt.text = power.interaction_hint()
+  return
  var weather = get_parent().get_node_or_null("VillageLifeDirector/WeatherLifeDirector")
  if weather != null and not weather.interaction_hint().is_empty():
   prompt.text = weather.interaction_hint()
@@ -124,6 +128,8 @@ func _process(_delta: float) -> void:
  else: prompt.text = ""
 
 func try_interact() -> bool:
+ var power = get_parent().get_node_or_null("ManualCheckoutController/PowerRepairDirector")
+ if power != null and power.try_interact(): return true
  var weather = get_parent().get_node_or_null("VillageLifeDirector/WeatherLifeDirector")
  if weather != null and weather.try_interact(): return true
  var contact = get_parent().get_node_or_null("VillageLifeDirector/ExpeditionContactDirector")

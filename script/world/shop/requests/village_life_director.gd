@@ -161,6 +161,8 @@ func nearest() -> Dictionary:
 	return best
 
 func _next_story_action(resident_id: String) -> Dictionary:
+	var power := PowerRepairFlow.action(resident_id)
+	if not power.is_empty(): return power
 	var crafting := CraftingPathFlow.action(resident_id) if crafting_path_enabled else {}
 	if not crafting.is_empty() and crafting["stage"] != "preparing": return crafting
 	var preservation := PreservationLessonFlow.action(resident_id)
@@ -185,6 +187,7 @@ func interaction_hint() -> String:
 	if not MarketAfterglowFlow.pending(str(target["id"])).is_empty(): return "[E] %s · 부탁 뒤 후일담" % target["name"]
 	var action := _next_story_action(str(target["id"]))
 	if not action.is_empty():
+		if action.get("flow", "") == "power_repair": return "[E] %s · %s" % [target["name"], PowerRepairFlow.title()]
 		if action.get("flow", "") == "preservation": return "[E] %s · %s" % [target["name"],PreservationLessonFlow.title(str(action["event"]))]
 		if action.get("flow", "") == "crafting_path": return "[E] %s · %s" % [target["name"],CraftingPathFlow.title(str(action["event"]))]
 		if action.get("flow", "") == "resident_memory": return "[E] %s · %s" % [target["name"], ResidentMemoryFlow.title(str(action["event"]))]
@@ -255,7 +258,9 @@ func _end_talk() -> void:
 	if not talking: return
 	if dialogue.line_index >= dialogue.lines.size():
 		if not afterglow_action.is_empty(): MarketAfterglowFlow.listen(afterglow_action)
-		if story_action.get("flow", "") == "preservation":
+		if story_action.get("flow", "") == "power_repair":
+			PowerRepairFlow.complete_action(story_action)
+		elif story_action.get("flow", "") == "preservation":
 			if PreservationLessonFlow.complete_action(story_action) and story_action["stage"] == "finish": manager.customer_spawner.refresh_spawn_interval()
 		elif story_action.get("flow", "") == "crafting_path":
 			if CraftingPathFlow.complete_action(story_action) and story_action["stage"] == "finish": manager.customer_spawner.refresh_spawn_interval()
