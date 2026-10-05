@@ -233,6 +233,7 @@ class Flip extends Control:
 	var tex_new_right: Texture2D
 	var tween: Tween
 	var last_tab: int = -1
+	var leaf_count: int = 1  # 이번에 넘길 종이 수(건너뛰는 탭 수)
 
 	# 쪽 영역(= 이 컨트롤의 왼쪽 위에서 쪽 폭 × (높이-3))을 화면 사진으로 떠서 왼쪽/오른쪽 반으로 돌려준다. 헤드리스면 빈 배열.
 	func capture_halves() -> Array:
@@ -251,7 +252,7 @@ class Flip extends Control:
 		return [ImageTexture.create_from_image(shot.get_region(left)),ImageTexture.create_from_image(shot.get_region(right))]
 
 	# 탭을 옮기기 직전(옛 화면이 아직 보일 때) 부른다. 새 화면이 그려진 뒤 한 번 더 사진을 떠 책장 넘김을 시작한다.
-	func begin(is_forward: bool) -> void:
+	func begin(is_forward: bool,count: int = 1) -> void:
 		if tween and tween.is_valid(): tween.kill()
 		var old := capture_halves()
 		if old.is_empty():
@@ -259,6 +260,7 @@ class Flip extends Control:
 			hide()
 			return
 		forward = is_forward
+		leaf_count = maxi(count,1)
 		tex_old_left = old[0]
 		tex_old_right = old[1]
 		tex_new_left = null
@@ -298,12 +300,12 @@ class Flip extends Control:
 		var flip3d := BookFlip3D.new()
 		flip3d.name = "BookFlip3D"
 		menu.add_child(flip3d)
-		flip3d.build(page_w,page_h,spine,menu.get_viewport_rect().size,tex_old_left,tex_old_right,tex_new_left,tex_new_right,forward)
+		flip3d.build(page_w,page_h,spine,menu.get_viewport_rect().size,tex_old_left,tex_old_right,tex_new_left,tex_new_right,forward,leaf_count)
 		active = false
 		hide()
 		tween = create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 		tween.set_trans(Tween.TRANS_LINEAR)
-		tween.tween_method(flip3d.set_progress,0.0,1.0,0.7)
+		tween.tween_method(flip3d.set_progress,0.0,1.0,flip3d.duration)
 		tween.tween_callback(func() -> void:
 			if is_instance_valid(flip3d): flip3d.queue_free())
 

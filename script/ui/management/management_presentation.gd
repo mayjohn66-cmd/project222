@@ -214,7 +214,7 @@ static func apply_tab(menu: Control) -> void:
 	var flip = area.get_parent().get_parent().get_parent().get_node_or_null("BookFlip")
 	if flip:
 		if menu.visible and flip.last_tab >= 0 and flip.last_tab != menu.current_tab and not bool(menu.get_meta("book_opening",false)) and not bool(menu.get_meta("book_closing",false)):
-			flip.begin(menu.current_tab > flip.last_tab)
+			flip.begin(menu.current_tab > flip.last_tab,absi(menu.current_tab - flip.last_tab))
 		flip.last_tab = menu.current_tab
 
 # ---------------------------------------------------------------- 책 여닫기 연출

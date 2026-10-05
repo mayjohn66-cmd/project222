@@ -3,6 +3,7 @@ extends Control
 ## 탭을 옮길 때의 3D 책장 넘김. 정사영 카메라는 2D 펼침면과 같은 자리·크기로 시작하고(첫 장면 = 옛 화면 그대로), 넘기는 동안 살짝 기울었다가 끝나면 다시 바로 위로 돌아온다(끝 장면 = 새 화면 그대로).
 ## 바닥에는 넘어가지 않는 쪽의 사진 두 장(옛 화면의 한 쪽, 새 화면의 한 쪽)이 깔리고, 넘어가는 한 장은 앞면(옛 화면의 그 쪽)과 뒷면(새 화면의 반대쪽)을 가진다.
 ## 한 장은 여러 마디로 나뉘어 자유 모서리가 뒤처지며 휘어 오르고, 밑에는 그림자가 진다. 앞으로 가면(뒤쪽 탭) 오른쪽 쪽이 왼쪽으로, 뒤로 가면(앞쪽 탭) 왼쪽 쪽이 오른쪽으로 넘어간다.
+## 탭이 멀수록 종이를 더 넘긴다: 건너뛰는 탭 수만큼(최대 MAX_LEAVES) 겹쳐 있는 종이가 차례로 넘어가고, 맨 위 한 장의 앞면만 옛 화면, 맨 마지막 한 장의 뒷면만 새 화면이며 나머지는 빈 종이다.
 
 const PX := 100.0
 const SEGMENTS := 14
@@ -10,22 +11,28 @@ const CURL := 0.6  # 자유 모서리가 뒤처지는 정도(라디안)
 const TILT_DEG := 22.0  # 넘기는 한가운데에서 카메라가 기우는 정도(도)
 const SKIN := 0.006  # 앞면·뒷면 사이 두께의 절반
 
+const LEAF_TIME := 0.55  # 종이 한 장이 넘어가는 시간(초)
+const LEAF_STAGGER := 0.09  # 다음 장이 넘어가기 시작하기까지의 간격(초)
+const MAX_LEAVES := 6
+const GAP := 0.012  # 겹친 종이 사이 높이
+const PARCHMENT := Color("f5eddc")
+
 var viewport: SubViewport
 var camera: Camera3D
-var leaf: MeshInstance3D
-var front_mat: StandardMaterial3D
-var back_mat: StandardMaterial3D
-var shadow: MeshInstance3D
-var shadow_mat: StandardMaterial3D
+var leaves: Array = []  # [{node, front, back, shadow, shadow_mat}]
 var forward: bool = true
+var duration: float = LEAF_TIME
 var _half: float = 4.5
 var _z0: float = 0.0
 var _z1: float = 0.0
 var _target: Vector3 = Vector3.ZERO
 
 
-func build(page_w_px: float,page_h_px: float,spine_px: Vector2,vp_size: Vector2,old_left: Texture2D,old_right: Texture2D,new_left: Texture2D,new_right: Texture2D,is_forward: bool) -> void:
+# count: 건너뛰는 탭 수(= 넘길 종이 수)
+func build(page_w_px: float,page_h_px: float,spine_px: Vector2,vp_size: Vector2,old_left: Texture2D,old_right: Texture2D,new_left: Texture2D,new_right: Texture2D,is_forward: bool,count: int = 1) -> void:
 	forward = is_forward
+	var n := clampi(count,1,MAX_LEAVES)
+	duration = LEAF_TIME + LEAF_STAGGER * float(n - 1)
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	_half = page_w_px * 0.5 / PX
@@ -54,29 +61,42 @@ func build(page_w_px: float,page_h_px: float,spine_px: Vector2,vp_size: Vector2,
 	var base_right: Texture2D = new_right if forward else old_right
 	_plane(Vector3(-_half,-0.03,_z0),Vector3(0.0,-0.03,_z1),base_left)
 	_plane(Vector3(0.0,-0.03,_z0),Vector3(_half,-0.03,_z1),base_right)
-	# 그림자(넘어가는 한 장 밑)
-	shadow_mat = StandardMaterial3D.new()
-	shadow_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	shadow_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	shadow_mat.albedo_color = Color(0.12,0.08,0.04,0.0)
-	shadow_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
-	shadow = MeshInstance3D.new()
-	var sm := QuadMesh.new()
-	sm.orientation = PlaneMesh.FACE_Y
-	sm.size = Vector2(1.0,_z1 - _z0)
-	shadow.mesh = sm
-	shadow.material_override = shadow_mat
-	viewport.add_child(shadow)
-	# 넘어가는 한 장
 	var front_tex: Texture2D = old_right if forward else old_left
 	var back_tex: Texture2D = new_left if forward else new_right
-	front_mat = _tex_mat(front_tex)
-	back_mat = _tex_mat(back_tex)
-	leaf = MeshInstance3D.new()
-	viewport.add_child(leaf)
-	if not forward:
-		leaf.scale.x = -1.0  # 왼쪽 쪽에서 오른쪽으로: 거울상으로 뒤집어 같은 마디 계산을 쓴다
+	for i in range(n):
+		var info := {}
+		info["front"] = _tex_mat(front_tex) if i == 0 else _blank_mat()
+		info["back"] = _tex_mat(back_tex) if i == n - 1 else _blank_mat()
+		var inst := MeshInstance3D.new()
+		viewport.add_child(inst)
+		if not forward:
+			inst.scale.x = -1.0  # 왼쪽 쪽에서 오른쪽으로: 거울상으로 뒤집어 같은 마디 계산을 쓴다
+		info["node"] = inst
+		# 그림자(이 종이 밑)
+		var sm := QuadMesh.new()
+		sm.orientation = PlaneMesh.FACE_Y
+		sm.size = Vector2(1.0,_z1 - _z0)
+		var smat := StandardMaterial3D.new()
+		smat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		smat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		smat.albedo_color = Color(0.12,0.08,0.04,0.0)
+		smat.cull_mode = BaseMaterial3D.CULL_DISABLED
+		var sh := MeshInstance3D.new()
+		sh.mesh = sm
+		sh.material_override = smat
+		viewport.add_child(sh)
+		info["shadow"] = sh
+		info["shadow_mat"] = smat
+		leaves.append(info)
 	set_progress(0.0)
+
+
+func _blank_mat() -> StandardMaterial3D:
+	var m := StandardMaterial3D.new()
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.albedo_color = PARCHMENT
+	m.cull_mode = BaseMaterial3D.CULL_DISABLED
+	return m
 
 
 func _tex_mat(tex: Texture2D) -> StandardMaterial3D:
@@ -104,28 +124,39 @@ func _plane(lo: Vector3,hi: Vector3,tex: Texture2D) -> void:
 	viewport.add_child(inst)
 
 
-# p: 0 = 넘기기 전(옛 화면), 1 = 다 넘김(새 화면)
+# p: 0 = 넘기기 전(옛 화면), 1 = 다 넘김(새 화면). 종이마다 LEAF_STAGGER 씩 늦게 시작한다.
 func set_progress(p: float) -> void:
-	var theta := PI * smoothstep(0.0,1.0,p)
-	_rebuild_leaf(theta)
-	var s := sin(theta)
-	front_mat.albedo_color = _gray(lerpf(1.0,0.8,minf(s * 1.4,1.0)) if theta < PI * 0.5 else 0.8)
-	back_mat.albedo_color = _gray(lerpf(0.62,1.0,smoothstep(PI * 0.5,PI,theta)))
+	var n := leaves.size()
+	var t := clampf(p,0.0,1.0) * duration
+	for i in range(n):
+		var info: Dictionary = leaves[i]
+		var pi_ := clampf((t - LEAF_STAGGER * float(i)) / LEAF_TIME,0.0,1.0)
+		var theta := PI * smoothstep(0.0,1.0,pi_)
+		_rebuild_leaf(info,theta)
+		var s := sin(theta)
+		(info["front"] as StandardMaterial3D).albedo_color = _gray(lerpf(1.0,0.8,minf(s * 1.4,1.0)) if theta < PI * 0.5 else 0.8, i == 0)
+		(info["back"] as StandardMaterial3D).albedo_color = _gray(lerpf(0.62,1.0,smoothstep(PI * 0.5,PI,theta)), i == n - 1)
+		# 쌓인 높이: 처음엔 먼저 넘어갈 종이가 맨 위, 넘어간 뒤엔 나중에 넘어간 종이가 맨 위
+		var y_start := float(n - 1 - i) * GAP + 0.01
+		var y_end := float(i) * GAP + 0.01
+		(info["node"] as Node3D).position.y = lerpf(y_start,y_end,smoothstep(0.0,1.0,pi_))
+		# 그림자
+		var tip := absf(_tip_x(theta))
+		var under_right := (forward and theta < PI * 0.5) or (not forward and theta >= PI * 0.5)
+		var width := maxf(tip,0.001)
+		var sh: MeshInstance3D = info["shadow"]
+		sh.scale = Vector3(width,1.0,1.0)
+		sh.position = Vector3((width * 0.5) * (1.0 if under_right else -1.0),-0.02,(_z0 + _z1) * 0.5)
+		(info["shadow_mat"] as StandardMaterial3D).albedo_color = Color(0.12,0.08,0.04,0.3 * s * (1.0 - 0.4 * s) / sqrt(float(n)))
 	# 카메라: 한가운데에서 가장 기울고 양 끝에서는 정확히 위
 	var pitch := deg_to_rad(90.0 - TILT_DEG * sin(PI * clampf(p,0.0,1.0)))
 	camera.position = _target + Vector3(0.0,sin(pitch),cos(pitch)) * 30.0
 	camera.look_at(_target,Vector3(0.0,0.0,-1.0))
-	# 그림자: 한 장이 일어서며 바닥에 드리우는 길쭉한 그림. 한 장의 자유 모서리 아래까지
-	var tip := absf(_tip_x(theta))
-	var under_right := (forward and theta < PI * 0.5) or (not forward and theta >= PI * 0.5)
-	var width := maxf(tip,0.001)
-	shadow.scale = Vector3(width,1.0,1.0)
-	shadow.position = Vector3((width * 0.5) * (1.0 if under_right else -1.0),-0.02,(_z0 + _z1) * 0.5)
-	shadow_mat.albedo_color = Color(0.12,0.08,0.04,0.34 * s * (1.0 - 0.4 * s))
 
 
-func _gray(v: float) -> Color:
-	return Color(v,v,v,1.0)
+# 사진이 있는 면(textured)만 밝기를 줄이고, 빈 종이는 종이색 그대로 밝기만 곱한다(두 경우 모두 곱셈이라 같은 식).
+func _gray(v: float,textured: bool) -> Color:
+	return Color(v,v,v,1.0) if textured else Color(PARCHMENT.r * v,PARCHMENT.g * v,PARCHMENT.b * v,1.0)
 
 
 # 마디마다 각도를 달리해 휜 한 장의 단면(x, y). 자유 모서리일수록 theta 보다 뒤처진다.
@@ -146,7 +177,7 @@ func _tip_x(theta: float) -> float:
 	return (pr[0] as Array)[SEGMENTS].x * (1.0 if forward else -1.0)
 
 
-func _rebuild_leaf(theta: float) -> void:
+func _rebuild_leaf(info: Dictionary,theta: float) -> void:
 	var pr := _profile(theta)
 	var pts: Array = pr[0]
 	var angles: Array = pr[1]
@@ -154,18 +185,17 @@ func _rebuild_leaf(theta: float) -> void:
 	for face in [0,1]:  # 0 = 앞면, 1 = 뒷면
 		var st := SurfaceTool.new()
 		st.begin(Mesh.PRIMITIVE_TRIANGLES)
-		st.set_material(front_mat if face == 0 else back_mat)
+		st.set_material(info["front"] if face == 0 else info["back"])
 		var sign_n := 1.0 if face == 0 else -1.0
 		for j in range(SEGMENTS):
 			var corners: Array = []
 			for k in [j,j + 1]:
 				var a: float = angles[mini(k,SEGMENTS - 1)]
-				var n := Vector2(-sin(a),cos(a)) * SKIN * sign_n
-				var q: Vector2 = (pts[k] as Vector2) + n
+				var nrm := Vector2(-sin(a),cos(a)) * SKIN * sign_n
+				var q: Vector2 = (pts[k] as Vector2) + nrm
 				corners.append(q)
 			var u0 := float(j) / float(SEGMENTS)
 			var u1 := float(j + 1) / float(SEGMENTS)
-			# 앞으로 가는 한 장의 앞면은 왼→오른 순서로 그림이 펼쳐지고, 뒷면은 반대(넘어간 뒤 거울상이 되므로)
 			var flip_u: bool = (face == 0) != forward
 			if flip_u:
 				u0 = 1.0 - u0
@@ -178,4 +208,4 @@ func _rebuild_leaf(theta: float) -> void:
 				st.set_uv(uv[i])
 				st.add_vertex(v[i])
 		st.commit(mesh)
-	leaf.mesh = mesh
+	(info["node"] as MeshInstance3D).mesh = mesh

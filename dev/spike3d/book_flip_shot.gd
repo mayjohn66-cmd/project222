@@ -32,17 +32,17 @@ func run() -> void:
 	await wait(0.3)
 	await snap(dir, "a_detail")
 	# 뒤쪽 탭(설계도)으로: 오른쪽 쪽이 왼쪽으로 넘어간다
-	mm.select_tab(3)
-	for i in range(7):
+	mm.select_tab(5)
+	for i in range(12):
 		await snap(dir, "b_fwd_%d" % i)
-		await wait(0.07)
+		await wait(0.06)
 	await wait(0.6)
 	await snap(dir, "c_blueprint")
 	# 앞쪽 탭(인벤토리)으로: 왼쪽 쪽이 오른쪽으로 넘어간다
-	mm.select_tab(0)
-	for i in range(7):
+	mm.select_tab(1)
+	for i in range(12):
 		await snap(dir, "d_back_%d" % i)
-		await wait(0.07)
+		await wait(0.06)
 	await wait(0.6)
 	await snap(dir, "e_inventory")
 	get_tree().quit()
