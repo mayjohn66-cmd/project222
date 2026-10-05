@@ -2,10 +2,11 @@ extends RefCounted
 const ACCENTS := ["98703e","b06b3d","4b8068","527e9a","97754c","897299","567d86"]
 const PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef"]
 const INDEX_COLORS := ["f2cf5b","ef8fa6","8fcf9a","7bbbe0","eeb06a","b79bdb","7fd0c8"]
-# 포스트잇 책갈피: 책 옆면에서 튀어나온 길이를 탭마다 다르게(들쭉날쭉), 선택하면 +SELECTED_EXTRA 만큼 더 나온다. 가장 긴 값이 내비게이션 폭 104 를 넘지 않게 한다.
-const FLAG_LENGTHS := [72.0,84.0,76.0,88.0,70.0,86.0,78.0]
+# 포스트잇 책갈피: 지금 펼친 탭의 포스트잇만 FLAG_LENGTHS(탭마다 조금씩 다른 길이)만큼 전부 나오고, 나머지는 책 사이에 꽂혀 PEEK_LENGTH 만큼만 보인다(첫 글자만 적힘). 가장 긴 값이 내비게이션 폭 104 를 넘지 않게 한다.
+const FLAG_LENGTHS := [92.0,98.0,94.0,100.0,90.0,98.0,94.0]
 const FLAG_HEIGHT := 30.0
-const SELECTED_EXTRA := 16.0
+const PEEK_LENGTH := 46.0  # 펼치지 않은 탭의 포스트잇이 보이는 길이
+const FLAG_GAP := 14  # 포스트잇 사이 간격
 const ADHESIVE := 14.0  # 책 옆면에 붙는 부분(반투명하게 보이는 띠) 폭
 
 static func flag_style(color: String) -> StyleBoxFlat:
@@ -18,8 +19,8 @@ static func flag_style(color: String) -> StyleBoxFlat:
 	s.shadow_color = Color("30231340")
 	s.shadow_size = 0
 	s.shadow_offset = Vector2(1,2)
-	s.content_margin_left = ADHESIVE+8.0
-	s.content_margin_right = 6
+	s.content_margin_left = ADHESIVE+4.0
+	s.content_margin_right = 2
 	s.content_margin_top = 4
 	s.content_margin_bottom = 4
 	return s
@@ -89,13 +90,15 @@ static func install(menu: Control) -> void:
 	row.get_node("LeafIcon").hide()
 	var nav: VBoxContainer = v.get_node("Body/Navigation")
 	nav.custom_minimum_size.x = 104
-	nav.add_theme_constant_override("separation",2)  # 포스트잇이 거의 맞닿게(참고 사진처럼 촘촘히)
+	nav.add_theme_constant_override("separation",FLAG_GAP)  # 포스트잇 사이 간격
 	v.get_node("Body").move_child(nav,v.get_node("Body").get_child_count()-1)
 	v.get_node("Body").add_theme_constant_override("separation",0)
 	var buttons: Array = nav.get_children()
 	for i in range(buttons.size()):
 		var b: Button = buttons[i]
-		b.custom_minimum_size = Vector2(FLAG_LENGTHS[i],FLAG_HEIGHT)
+		b.custom_minimum_size = Vector2(PEEK_LENGTH,FLAG_HEIGHT)
+		if not b.has_meta("full_text"): b.set_meta("full_text",b.text)
+		b.clip_text = true
 		b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		b.add_theme_font_size_override("font_size",15)
@@ -209,7 +212,17 @@ static func apply_tab(menu: Control) -> void:
 		if previous and previous.is_valid(): previous.kill()
 		var slide := button.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 		slide.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		slide.tween_property(button,"custom_minimum_size:x",FLAG_LENGTHS[i]+(SELECTED_EXTRA if i == menu.current_tab else 0.0),0.18)
+		var selected: bool = i == menu.current_tab
+		if not button.has_meta("full_text"): button.set_meta("full_text",button.text)
+		var full: String = str(button.get_meta("full_text"))
+		var target_w: float = FLAG_LENGTHS[i] if selected else PEEK_LENGTH
+		if selected: button.text = full  # 펼친 탭은 이름이 다 보이고, 나머지는 첫 글자만 보인다
+		else: button.text = full.substr(0,1)
+		if not menu.visible or bool(menu.get_meta("book_opening",false)):
+			button.custom_minimum_size.x = target_w  # 열리는 중에는 바로 맞춘다(3D 책의 포스트잇과 어긋나지 않게)
+			slide.kill()
+		else:
+			slide.tween_property(button,"custom_minimum_size:x",target_w,0.18)
 		button.set_meta("index_slide",slide)
 	var flip = area.get_parent().get_parent().get_parent().get_node_or_null("BookFlip")
 	if flip:
