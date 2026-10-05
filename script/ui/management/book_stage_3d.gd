@@ -106,10 +106,18 @@ func build(page_w_px: float,page_h_px: float,spine_px: Vector2,flags: Array,vp_s
 	# 포스트잇: 2D 내비게이션 버튼의 화면 위치를 월드로 옮겨 쪽 오른쪽 옆면에 붙인다
 	for f in flags:
 		var r: Rect2 = f["rect"]
+		var onto: float = float(f.get("onto",0.0))
 		var m := _flat(f["color"])
+		var y_top := y_pages + PAGES_T + 0.012
 		var flag := MeshInstance3D.new()
-		flag.mesh = _box_mesh(Vector3((r.position.x - spine_px.x) / PX,y_pages + PAGES_T * 0.55,(r.position.y - spine_px.y) / PX),Vector3((r.end.x - spine_px.x) / PX,y_pages + PAGES_T * 0.55 + 0.025,(r.end.y - spine_px.y) / PX),[m,m,m])
+		flag.mesh = _box_mesh(Vector3((r.position.x - spine_px.x) / PX,y_top,(r.position.y - spine_px.y) / PX),Vector3((r.end.x - spine_px.x) / PX,y_top + 0.025,(r.end.y - spine_px.y) / PX),[m,m,m])
 		book.add_child(flag)
+		if onto > 0.0:
+			# 펼친 탭의 포스트잇: 쪽 위로 넘어온 연한 부분(2D 의 BookViews.Note 와 같은 자리)
+			var light := _flat(Color(f["color"]).lerp(Color.WHITE,0.72))
+			var part := MeshInstance3D.new()
+			part.mesh = _box_mesh(Vector3((r.position.x - onto - spine_px.x) / PX,y_top,(r.position.y - spine_px.y) / PX),Vector3((r.position.x - spine_px.x) / PX,y_top + 0.025,(r.end.y - spine_px.y) / PX),[light,light,light])
+			book.add_child(part)
 	set_state(0.0,0.0)
 
 

@@ -209,6 +209,24 @@ class Cover extends Control:
 		BookViews.paint_cover(self,get_theme_default_font(),x_spine,x_end,y0,y1,k,lift,tint,title_text,owner_text)
 
 
+# ---------------------------------------------------------------- 펼친 탭의 포스트잇(쪽 위로 넘어온 부분)
+class Note extends Control:
+	var rect: Rect2 = Rect2()
+	var color: Color = Color.WHITE
+
+	func set_note(r: Rect2,c: Color) -> void:
+		rect = r
+		color = c
+		queue_redraw()
+
+	func _draw() -> void:
+		if rect.size.x <= 0.0: return
+		draw_rect(Rect2(rect.position + Vector2(1,2),rect.size),Color(0.2,0.14,0.08,0.18))  # 쪽에 드리우는 그림자
+		draw_rect(rect,color.lerp(Color.WHITE,0.72))
+		draw_rect(rect,Color(0.40,0.31,0.20,0.9),false,2.0)
+		draw_line(rect.position + Vector2(0,rect.size.y - 1.0),rect.position + rect.size - Vector2(0,1.0),color.darkened(0.1),2.0)
+
+
 # ---------------------------------------------------------------- 책장 넘기기(탭 이동)
 class Flip extends Control:
 	# 숨겨져 있는 동안은 컨테이너가 크기를 다시 맞춰 주지 않아 size 가 낡을 수 있으므로, 기준은 늘 부모(MainPanel)의 크기다.

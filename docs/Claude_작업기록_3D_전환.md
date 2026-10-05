@@ -108,6 +108,6 @@
 | 탭별 두 쪽 배치 | `book_layout.gd`, `book_flow_vbox.gd`, `inventory_detail_pane.gd` | 인벤토리(왼쪽 목록 / 오른쪽 상세 + 가구는 3D 미리보기), 설계도·생산·직원·건설·일정·정보. 긴 목록은 `BookFlowVBox` 가 두 쪽에 걸쳐 흐름 |
 | 이름 | `player_progress.gd`, `title_screen.gd` | 새 게임 전에 점장 이름을 지음(최대 8자), 저장·불러오기, 표지 명패에 표시 |
 
-- 조정 값: 책 두께 `BookViews.COVER_PAD/FORE_W/BOTTOM_T`, 두 쪽 간격 `BookLayout.GUTTER`(48), 탭 길이 `FLAG_LENGTHS`, 3D 시작 각도 `BookStage3D.PITCH_START`, 연출 시간은 `management_presentation.gd`의 `_open_3d/_close_3d` 트윈.
+- 조정 값: 책 두께 `BookViews.COVER_PAD/FORE_W/BOTTOM_T`, 두 쪽 간격 `BookLayout.GUTTER`(48), 포스트잇 `FLAG_OUT`(튀어나온 길이)·`FLAG_GAP`(간격)·`ONTO`(펼친 탭이 쪽 위로 넘어오는 길이), 3D 시작 각도 `BookStage3D.PITCH_START`, 연출 시간은 `management_presentation.gd`의 `_open_3d/_close_3d` 트윈.
 - 확인 도구(`dev/spike3d/`): `book_anim_shot`(열기·닫기 연속 장면), `book_flip_shot`(탭 넘김), `book_tabs_shot`(전 탭 배치), `ui_audit_shot`(UI 현황), `ui_style_preview`(스타일 시안).
 - 알려진 한계: 소프트웨어 렌더로만 확인. 탭 넘김은 화면 사진 방식이라 새 화면 사진을 뜨는 한 프레임 동안 깜빡임 가능. 정보 탭처럼 긴 글은 두 쪽을 채운 뒤 스크롤. 3D 책의 쪽에는 UI 가 없고(펼침 뒤 2D 로 교체) 쪽 옆면 줄무늬는 3D 쪽에 일부만 있음.
