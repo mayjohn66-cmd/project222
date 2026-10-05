@@ -20,7 +20,14 @@ static func install(view: Control) -> void:
 	button.name = "FoodShelfLifeButton"
 	button.text = "식품 관리"
 	button.tooltip_text = "유통기한 · 마감 할인 · 기한 지난 식품 정리"
-	view.get_node("MainVBox/CategoryTabs").add_child(button)
+	# The book's inventory list occupies its left page. Keep extra actions on
+	# their own row so they do not overflow the category tabs into the detail page.
+	var actions := HBoxContainer.new()
+	actions.name = "FoodCareActions"
+	var column := view.get_node("MainVBox")
+	column.add_child(actions)
+	column.move_child(actions, 1)
+	actions.add_child(button)
 	button.pressed.connect(panel.open)
 
 func _ready() -> void:

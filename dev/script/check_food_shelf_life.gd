@@ -241,12 +241,15 @@ func run() -> void:
 	var menu = manager.management_menu
 	menu.open_menu(ManagementMenu.MenuTab.INVENTORY)
 	await get_tree().create_timer(0.8).timeout
+	var book_animation: Tween = menu.get_meta("book_anim", null)
+	if book_animation != null and book_animation.is_running(): await book_animation.finished
 	var view = menu.get_node("DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/InventoryContent/ManagementInventory")
-	check(view.get_node("MainVBox/CategoryTabs").has_node("FoodShelfLifeButton"), "food management entry is visible in real inventory")
+	var food_button: Button = view.get_node("MainVBox/FoodCareActions/FoodShelfLifeButton")
+	check(food_button.is_visible_in_tree() and food_button.get_global_rect().end.x <= view.get_node("MainVBox").get_global_rect().end.x, "food management action fits the inventory page")
 	var panel: FoodShelfLifePanel
 	for node in view.get_children():
 		if node is FoodShelfLifePanel: panel = node
-	panel.open()
+	food_button.pressed.emit()
 	await frames()
 	check(panel.visible and panel.get_ok_button().get_global_rect().end.y <= get_viewport().get_visible_rect().size.y, "management dialog fits screen with return button visible")
 	var args := OS.get_cmdline_user_args()
