@@ -7,7 +7,10 @@ extends Control
 
 const PX := 100.0
 const SEGMENTS := 14
-const CURL := 0.22  # 자유 모서리가 뒤처지는 정도(라디안). 0 = 판판하게, 값이 클수록 휜다
+const CURL := 0.7  # 자유 모서리가 뒤처지는 정도(라디안). 0 = 판판하게, 값이 클수록 휜다
+const LAG := 0.55  # 위아래 끝이 가운데보다 뒤처지는 정도(라디안): 자유 모서리가 곡선으로 보인다
+const ZSEG := 8  # 종이를 위아래로 나눈 칸 수
+const CURVE_SHADE := 0.5  # 종이가 서 있는 부분일수록 어두워지는 정도(휜 곡선이 보이게 하는 음영)
 const TILT_DEG := 0.0  # 넘기는 한가운데에서 카메라가 기우는 정도(도). 0 = 늘 바로 위에서 본다
 const FLAG_LEN := 0.9  # 종이에 붙은 포스트잇이 종이 바깥으로 뻗은 길이(월드)
 const SKIN := 0.006  # 앞면·뒷면 사이 두께의 절반
@@ -103,6 +106,7 @@ func _blank_mat() -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()
 	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	m.albedo_color = PARCHMENT
+	m.vertex_color_use_as_albedo = true
 	m.cull_mode = BaseMaterial3D.CULL_DISABLED
 	return m
 
@@ -111,6 +115,7 @@ func _tex_mat(tex: Texture2D) -> StandardMaterial3D:
 	var m := StandardMaterial3D.new()
 	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	m.albedo_texture = tex
+	m.vertex_color_use_as_albedo = true
 	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
 	m.cull_mode = BaseMaterial3D.CULL_DISABLED
 	return m
@@ -184,12 +189,14 @@ func _gray(v: float,textured: bool) -> Color:
 
 
 # 마디마다 각도를 달리해 휜 한 장의 단면(x, y). 자유 모서리일수록 theta 보다 뒤처진다.
-func _profile(theta: float) -> Array:
+# u = 종이의 위아래 위치(-1 ~ 1, 0 = 가운데): 위아래 끝일수록 LAG 만큼 더 뒤처져서 바로 위에서 봐도 자유 모서리가 곡선으로 보인다.
+func _profile(theta: float,u: float = 0.0) -> Array:
 	var seg := _half / float(SEGMENTS)
 	var pts: Array = [Vector2(0.0,0.0)]
 	var angles: Array = []
+	var th := maxf(theta - LAG * sin(theta) * u * u,0.0)
 	for j in range(SEGMENTS):
-		var a := theta - CURL * sin(theta) * (float(j) + 0.5) / float(SEGMENTS)
+		var a := th - CURL * sin(th) * (float(j) + 0.5) / float(SEGMENTS)
 		angles.append(a)
 		var last: Vector2 = pts[pts.size() - 1]
 		pts.append(last + Vector2(cos(a),sin(a)) * seg)
@@ -202,40 +209,46 @@ func _tip_x(theta: float) -> float:
 
 
 func _rebuild_leaf(info: Dictionary,theta: float) -> void:
-	var pr := _profile(theta)
-	var pts: Array = pr[0]
-	var angles: Array = pr[1]
+	var profiles: Array = []  # 위아래 방향 ZSEG+1 개의 단면
+	for zi in range(ZSEG + 1):
+		profiles.append(_profile(theta,float(zi) / float(ZSEG) * 2.0 - 1.0))
 	var mesh := ArrayMesh.new()
 	for face in [0,1]:  # 0 = 앞면, 1 = 뒷면
 		var st := SurfaceTool.new()
 		st.begin(Mesh.PRIMITIVE_TRIANGLES)
 		st.set_material(info["front"] if face == 0 else info["back"])
 		var sign_n := 1.0 if face == 0 else -1.0
-		for j in range(SEGMENTS):
-			var corners: Array = []
-			for k in [j,j + 1]:
-				var a: float = angles[mini(k,SEGMENTS - 1)]
-				var nrm := Vector2(-sin(a),cos(a)) * SKIN * sign_n
-				var q: Vector2 = (pts[k] as Vector2) + nrm
-				corners.append(q)
-			var u0 := float(j) / float(SEGMENTS)
-			var u1 := float(j + 1) / float(SEGMENTS)
-			var flip_u: bool = (face == 0) != forward
-			if flip_u:
-				u0 = 1.0 - u0
-				u1 = 1.0 - u1
-			var qa: Vector2 = corners[0]
-			var qb: Vector2 = corners[1]
-			var v := [Vector3(qa.x,qa.y,_z0),Vector3(qb.x,qb.y,_z0),Vector3(qb.x,qb.y,_z1),Vector3(qa.x,qa.y,_z1)]
-			var uv := [Vector2(u0,0),Vector2(u1,0),Vector2(u1,1),Vector2(u0,1)]
-			for i in [0,1,2,0,2,3]:
-				st.set_uv(uv[i])
-				st.add_vertex(v[i])
+		var flip_u: bool = (face == 0) != forward
+		for zi in range(ZSEG):
+			var za := lerpf(_z0,_z1,float(zi) / float(ZSEG))
+			var zb := lerpf(_z0,_z1,float(zi + 1) / float(ZSEG))
+			var va := float(zi) / float(ZSEG)
+			var vb := float(zi + 1) / float(ZSEG)
+			for j in range(SEGMENTS):
+				var verts: Array = []
+				var uvs: Array = []
+				var cols: Array = []
+				# 모서리 순서: (j,za) (j+1,za) (j+1,zb) (j,zb)
+				for c in [[j,zi,za,va],[j + 1,zi,za,va],[j + 1,zi + 1,zb,vb],[j,zi + 1,zb,vb]]:
+					var pr: Array = profiles[c[1]]
+					var a: float = (pr[1] as Array)[mini(c[0],SEGMENTS - 1)]
+					var q: Vector2 = (pr[0] as Array)[c[0]] + Vector2(-sin(a),cos(a)) * SKIN * sign_n
+					verts.append(Vector3(q.x,q.y,c[2]))
+					var uu := float(c[0]) / float(SEGMENTS)
+					uvs.append(Vector2(1.0 - uu if flip_u else uu,c[3]))
+					var sh_v := 1.0 - CURVE_SHADE * pow(absf(sin(a)),1.3)
+					cols.append(Color(sh_v,sh_v,sh_v,1.0))
+				for i in [0,1,2,0,2,3]:
+					st.set_uv(uvs[i])
+					st.set_color(cols[i])
+					st.add_vertex(verts[i])
 		st.commit(mesh)
 	if info.has("flag_mat"):
 		var fz: Vector2 = info["flag_z"]
-		var base: Vector2 = pts[SEGMENTS]
-		var a_last: float = angles[SEGMENTS - 1]
+		var zc := (fz.x + fz.y) * 0.5
+		var pr := _profile(theta,clampf((zc - (_z0 + _z1) * 0.5) / ((_z1 - _z0) * 0.5),-1.0,1.0))
+		var base: Vector2 = (pr[0] as Array)[SEGMENTS]
+		var a_last: float = (pr[1] as Array)[SEGMENTS - 1]
 		var tip := base + Vector2(cos(a_last),sin(a_last)) * FLAG_LEN
 		var fst := SurfaceTool.new()
 		fst.begin(Mesh.PRIMITIVE_TRIANGLES)

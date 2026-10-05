@@ -477,8 +477,11 @@ static func _make_flip(menu: Control,stage: BookStage3D,forward: bool,order: Arr
 
 
 # ---------------------------------------------------------------- 쪽 끌어 넘기기
-# 손가락(마우스)이 끄는 대로 종이가 따라오고, 놓을 때 절반(제본선)을 넘었으면 다음/이전 탭으로 넘어가고 못 넘었으면 되돌아간다.
+# 손가락(마우스)이 끄는 대로 종이가 따라오고, 놓을 때 35% 이상 넘어갔으면 다음/이전 탭으로 넘어가고 못 넘었으면 되돌아간다.
 # 끌기가 시작되면 지금 두 쪽을 사진으로 떠 두고 탭을 새 탭으로 옮겨 새 화면이 그려지면(두 프레임) 그 사진으로 종이 뒷면을 만든다.
+const DRAG_COMPLETE := 0.35
+
+
 static func _drag_begin(menu: Control,stage: BookStage3D,dir: int) -> void:
 	var old_tab: int = menu.current_tab
 	var new_tab := old_tab + dir
@@ -519,11 +522,11 @@ static func _drag_end(menu: Control,_stage: BookStage3D) -> void:
 	if bool(st["ready"]): _drag_finish(menu,st)
 
 
-# 놓았다: 절반(PI/2)을 넘었으면 끝까지 넘기고, 아니면 되돌린 뒤 탭도 원래대로 돌린다.
+# 놓았다: DRAG_COMPLETE(35%)를 넘었으면 끝까지 넘기고, 아니면 되돌린 뒤 탭도 원래대로 돌린다.
 static func _drag_finish(menu: Control,st: Dictionary) -> void:
 	var flip: BookFlip3D = st["flip"]
 	var theta: float = st["theta"]
-	var complete := theta >= PI * 0.5
+	var complete := theta >= PI * DRAG_COMPLETE  # 종이가 이만큼(각도 비율) 넘어갔으면 끝까지 넘긴다
 	var target := PI if complete else 0.0
 	var tw := menu.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tw.tween_method(flip.set_theta,theta,target,0.08 + 0.22 * absf(target - theta) / PI).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)

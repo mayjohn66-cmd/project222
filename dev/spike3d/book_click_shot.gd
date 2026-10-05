@@ -84,15 +84,15 @@ func run() -> void:
 	var spine: Vector2 = stage._spine_screen
 	var half: float = stage.page_geometry()["page_w"] * 0.5
 	# 오른쪽 쪽을 왼쪽으로 제본선 너머까지 끌고 놓으면 다음 탭
-	await drag(spine + Vector2(half - 40, 0), spine + Vector2(-60, 0), dir + "/drag_mid.png")
+	await drag(spine + Vector2(half - 40, 0), spine + Vector2(half * 0.3, 0), dir + "/drag_mid.png")
 	await wait(1.2)
 	print("제본선 넘겨 놓기 후 탭=", mm.current_tab, " (기대 1)")
 	# 왼쪽 쪽을 오른쪽으로 끌다 절반 못 넘기고 놓으면 되돌아감
-	await drag(spine + Vector2(-half + 40, 0), spine + Vector2(-60, 0))
+	await drag(spine + Vector2(-half + 40, 0), spine + Vector2(-half + 110, 0))
 	await wait(1.2)
-	print("절반 못 넘기고 놓기 후 탭=", mm.current_tab, " (기대 1, 되돌아감)")
+	print("35% 못 넘기고 놓기 후 탭=", mm.current_tab, " (기대 1, 되돌아감)")
 	# 왼쪽 쪽을 오른쪽으로 제본선 너머까지 끌면 이전 탭
-	await drag(spine + Vector2(-half + 40, 0), spine + Vector2(60, 0))
+	await drag(spine + Vector2(-half + 40, 0), spine + Vector2(-half * 0.45, 0))
 	await wait(1.2)
 	print("왼쪽 쪽 끌어 넘기기 후 탭=", mm.current_tab, " (기대 0)")
 	await drag(spine + Vector2(-half + 40, 0), spine + Vector2(60, 0))
