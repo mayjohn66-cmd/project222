@@ -772,6 +772,7 @@ func checkout_item() -> void:
 		carried_item_id,
 		carried_amount
 	)
+	ActFourRecords.record_sale(self,carried_item_id,carried_amount)
 	if RegularCustomerRecords.record_sale(self,carried_item_id,carried_amount): RegularCustomerVisits.remark(self)
 	if ExpeditionContactFlow.record_sale(self,carried_item_id,carried_amount): ExpeditionContactVisits.remark(self)
 	if WeatherLifeFlow.record_sale(self,carried_item_id,carried_amount): WeatherLifeVisits.remark(self)

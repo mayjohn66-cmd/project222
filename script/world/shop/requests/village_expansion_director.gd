@@ -52,7 +52,7 @@ func refresh() -> void:
 			visitors[id] = npc
 			npc.set_physics_process(false)
 		npc.title.text = str(entry["name"]) + " [E]\n" + ("정착 이야기 이어가기" if VillageExpansionFlow.accepted(str(entry["expansion_event"])) else "정착 제안 듣기")
-func visitor_position(board: StaticBody2D) -> Vector2:
+func visitor_position(board: StaticBody2D, extra_visitors: Array = []) -> Vector2:
 	var terrain = world.get_node("StoreExterior")
 	var shape := CircleShape2D.new()
 	shape.radius = VillageLifeFlow.SETTINGS.resident_radius
@@ -64,7 +64,7 @@ func visitor_position(board: StaticBody2D) -> Vector2:
 			if player.global_position.distance_to(point) < VillageExpansionFlow.SETTINGS.visitor_spacing: continue
 			if not VillageRoutine.clear(world.get_world_2d().direct_space_state,shape,point): continue
 			var occupied := false
-			for npc in visitors.values() + life.residents.values():
+			for npc in visitors.values() + life.residents.values() + extra_visitors + get_tree().get_nodes_in_group("story_npc"):
 				if is_instance_valid(npc) and not npc.is_queued_for_deletion() and npc.global_position.distance_to(point) < VillageExpansionFlow.SETTINGS.visitor_spacing: occupied = true
 			if not occupied: return point
 	return Vector2.INF

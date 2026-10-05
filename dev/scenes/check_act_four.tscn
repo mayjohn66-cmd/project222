@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://dev/script/check_act_four.gd" id="1"]
+[node name="CheckActFour" type="Node"]
+script = ExtResource("1")

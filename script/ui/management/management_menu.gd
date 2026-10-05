@@ -20,7 +20,8 @@ enum InfoTab {
 	BASIC,
 	DETAIL,
 	TREND,
-	RECORD
+	RECORD,
+	MILESTONES
 }
 
 var current_info_tab: InfoTab = InfoTab.BASIC
@@ -222,6 +223,7 @@ func _ready() -> void:
 		select_info_tab.bind(InfoTab.RECORD)
 	)
 
+	ActFourBookView.install(self)
 	PRESENTATION.install(self)
 	visible = false
 
@@ -413,6 +415,7 @@ func refresh_schedule() -> void:
 	for child in schedule_list.get_children():
 		schedule_list.remove_child(child)
 		child.queue_free()
+	ActFourBookView.add_schedule(self)
 
 	schedule_current_date_label.text = (
 		"현재 날짜: "
@@ -1214,6 +1217,7 @@ func select_info_tab(tab: InfoTab) -> void:
 
 
 func refresh_shop_history() -> void:
+	ActFourBookView.refresh_button(self)
 	# 현재 선택한 버튼 하나만 비활성화
 	basic_info_button.disabled = (
 		current_info_tab == InfoTab.BASIC
@@ -1235,6 +1239,9 @@ func refresh_shop_history() -> void:
 	refresh_common_info()
 
 	match current_info_tab:
+		InfoTab.MILESTONES:
+			history_title_label.text = "길목의 이정표"
+			ActFourBookView.render(self)
 		InfoTab.BASIC:
 			history_title_label.text = "편의점 기본 정보"
 			_show_basic_store_info()

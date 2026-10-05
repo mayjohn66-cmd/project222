@@ -62,6 +62,9 @@ func _ready() -> void:
 	var expansion := VillageExpansionDirector.new()
 	expansion.name = "VillageExpansionDirector"
 	add_child(expansion)
+	var act_four := ActFourDirector.new()
+	act_four.name = "ActFourDirector"
+	add_child(act_four)
 	call_deferred("refresh")
 
 func _process(delta: float) -> void:

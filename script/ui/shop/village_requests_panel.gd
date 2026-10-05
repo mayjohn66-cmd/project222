@@ -9,10 +9,20 @@ func entries() -> Array[Dictionary]:
 		result.append(card)
 	for event in VillageExpansionFlow.SETTINGS.events:
 		result.append({"id":VillageExpansionFlow.JOURNAL_PREFIX + str(event["id"]),"title":VillageExpansionFlow.title(str(event["id"]))})
+	for event in ActFourFlow.SETTINGS.events:
+		result.append({"id":ActFourFlow.JOURNAL_PREFIX + str(event["id"]),"title":ActFourFlow.title(str(event["id"]))})
 	return result
 
 func refresh() -> void:
 	super.refresh()
+	for entry in ActFourFlow.SETTINGS.events:
+		var id := str(entry["id"])
+		var card: Dictionary = cards[ActFourFlow.JOURNAL_PREFIX + id]
+		card["info"].get_parent().visible = ActFourFlow.started()
+		card["info"].text = ActFourFlow.information(id) if ActFourFlow.started() else ""
+		var reason := ActFourFlow.locked_reason(id)
+		card["action"].disabled = ActFourFlow.accepted(id) or not reason.is_empty()
+		card["action"].text = "이야기 이어 듣기 [E]" if ActFourFlow.accepted(id) else ("이야기 맡기" if reason.is_empty() else "다음 소식을 기다리는 중")
 	# The base panel handles the existing community cards only.
 	for entry in PersonalRequestFlow.entries():
 		var id := str(entry["id"])

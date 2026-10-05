@@ -40,9 +40,13 @@ static func entries() -> Array[Dictionary]:
 		result.append({"id":WeatherLifeFlow.JOURNAL_PREFIX + str(event["id"]),"title":WeatherLifeFlow.title(str(event["id"]))})
 	for event in VillageExpansionFlow.SETTINGS.events:
 		result.append({"id":VillageExpansionFlow.JOURNAL_PREFIX + str(event["id"]),"title":VillageExpansionFlow.title(str(event["id"]))})
+	if ActFourFlow.started():
+		for event in ActFourFlow.SETTINGS.events:
+			result.append({"id":ActFourFlow.JOURNAL_PREFIX + str(event["id"]),"title":ActFourFlow.title(str(event["id"]))})
 	return result
 
 static func information(id: String) -> String:
+	if id.begins_with(ActFourFlow.JOURNAL_PREFIX): return ActFourFlow.information(id.trim_prefix(ActFourFlow.JOURNAL_PREFIX))
 	if id == PowerRepairFlow.JOURNAL_ID: return PowerRepairFlow.information()
 	if id.begins_with(VillageExpansionFlow.JOURNAL_PREFIX): return VillageExpansionFlow.information(id.trim_prefix(VillageExpansionFlow.JOURNAL_PREFIX))
 	if id.begins_with(WeatherLifeFlow.JOURNAL_PREFIX): return WeatherLifeFlow.information(id.trim_prefix(WeatherLifeFlow.JOURNAL_PREFIX))
@@ -91,6 +95,14 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id.begins_with(ActFourFlow.JOURNAL_PREFIX):
+		var event_id := id.trim_prefix(ActFourFlow.JOURNAL_PREFIX)
+		var current := ActFourFlow.step(event_id)
+		if current.is_empty():
+			if not ActFourFlow.locked_reason(event_id).is_empty(): return null
+			return VillageSettlement.find_site(world,CommunityRequestFlow.SETTINGS.board_path)
+		var director = world.get_node_or_null("VillageLifeDirector/ActFourDirector")
+		return director.npc_for(str(current["resident"])) if director != null else null
 	if id.begins_with(VillageExpansionFlow.JOURNAL_PREFIX):
 		var event_id := id.trim_prefix(VillageExpansionFlow.JOURNAL_PREFIX)
 		var current := VillageExpansionFlow.step(event_id)

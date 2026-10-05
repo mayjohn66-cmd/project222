@@ -29,6 +29,7 @@ func _ready() -> void:
 	panel = SecretMerchantPanel.new()
 	add_child(panel)
 	panel.closed.connect(_on_panel_closed)
+	panel.purchased.connect(_on_purchased)
 
 	day_manager.hour_changed.connect(_on_hour_changed)
 
@@ -70,6 +71,7 @@ func spawn_merchant() -> void:
 	npc.global_position = _get_npc_position()
 	actors.add_child(npc)
 	active_npc = npc
+	ActFourRecords.record_merchant_visit()
 
 	DebugLog.write(
 		"[비밀 상인] 등장 / 진열 ",
@@ -137,6 +139,8 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 
 	get_viewport().set_input_as_handled()
+	var act_four = get_parent().get_node_or_null("VillageLifeDirector/ActFourDirector")
+	if act_four != null and act_four.try_interact(): return
 	_start_shopping()
 
 
@@ -150,3 +154,6 @@ func _start_shopping() -> void:
 func _on_panel_closed() -> void:
 	shopping = false
 	player.set_physics_process(true)
+
+func _on_purchased(item: String) -> void:
+	if shopping and is_instance_valid(active_npc): ActFourRecords.record_map_purchase(item)

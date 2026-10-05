@@ -20,6 +20,7 @@ const TextData = preload("res://script/data/production/request_text_data.gd")
 
 # 원본(기계 부분이 들어 있는) 파일. 없는 파일은 건너뛴다.
 const SOURCE_FILES: Dictionary = {
+	"res://scenes/shop/requests/default_act_four.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/power/default_power_repair.tres": KIND_SERVICE_TEXT,
 	"res://scenes/shop/requests/default_resident_requests.tres": KIND_RESIDENT_REQUEST,
 	"res://scenes/shop/requests/default_community_requests.tres": KIND_COMMUNITY_REQUEST,
@@ -103,6 +104,10 @@ static func load_sources() -> Dictionary:
 
 		for raw_line in FileAccess.get_file_as_string(path).split("\n"):
 			var line: String = raw_line.strip_edges().trim_suffix(",")
+			if path.ends_with("default_act_four.tres"):
+				if line.begins_with("events =") or line.begins_with("milestones ="): kind = ""
+				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT
+				if kind.is_empty(): continue
 			if path.ends_with("default_preservation_lessons.tres") or path.ends_with("default_regular_customers.tres") or path.ends_with("default_expedition_contacts.tres") or path.ends_with("default_weather_life.tres"):
 				if line.begins_with("events ="): kind = ""
 				if line.begins_with("moments ="): kind = KIND_SERVICE_TEXT

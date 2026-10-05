@@ -24,6 +24,7 @@ func _ready() -> void:
 
 func blocked() -> bool:
  var world = get_parent()
+ if bool(world.get_meta("act_four_open",false)): return true
  if bool(world.get_meta("checkout_tutorial_dialogue",false)): return true
  if bool(world.get_meta("progressive_tutorial_dialogue",false)): return true
  if bool(world.get_meta("village_life_dialogue",false)): return true
@@ -65,6 +66,10 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var act_four = get_parent().get_node_or_null("VillageLifeDirector/ActFourDirector")
+ if act_four != null and not act_four.interaction_hint().is_empty():
+  prompt.text = act_four.interaction_hint()
+  return
  var power = get_parent().get_node_or_null("ManualCheckoutController/PowerRepairDirector")
  if power != null and not power.interaction_hint().is_empty():
   prompt.text = power.interaction_hint()
@@ -128,6 +133,8 @@ func _process(_delta: float) -> void:
  else: prompt.text = ""
 
 func try_interact() -> bool:
+ var act_four = get_parent().get_node_or_null("VillageLifeDirector/ActFourDirector")
+ if act_four != null and act_four.try_interact(): return true
  var power = get_parent().get_node_or_null("ManualCheckoutController/PowerRepairDirector")
  if power != null and power.try_interact(): return true
  var weather = get_parent().get_node_or_null("VillageLifeDirector/WeatherLifeDirector")

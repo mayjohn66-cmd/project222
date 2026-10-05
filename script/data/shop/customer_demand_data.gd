@@ -65,6 +65,7 @@ static func get_merged_base_entries(
 	if not group_id.is_empty() and group_id != customer_type_id:
 		owner_ids.append(group_id)
 
+	if ActFourCustomers.TYPES.has(customer_type_id): owner_ids.append(str(ActFourCustomers.TYPES[customer_type_id]["source"]))
 	owner_ids.append(customer_type_id)
 
 	for owner_id in owner_ids:

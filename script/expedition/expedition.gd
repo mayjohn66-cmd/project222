@@ -1203,7 +1203,8 @@ func confirm_result_phase() -> void:
 
 	var settlement: Dictionary = (
 		expedition_result_service.deposit_items(
-			expedition_bag
+			expedition_bag,
+			{"region":current_region_id,"explored":visited_map_node_ids.size() > 1}
 		)
 	)
 

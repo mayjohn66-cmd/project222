@@ -20,6 +20,7 @@ static func get_look(key: String) -> Dictionary:
 
 # 손님 소분류 id → 외형 키. 소분류 행이 없으면 대분류 id 로 대신한다.
 static func customer_key(customer_type_id: String) -> String:
+	if ActFourCustomers.TYPES.has(customer_type_id): customer_type_id = str(ActFourCustomers.TYPES[customer_type_id]["source"])
 	if not _loaded:
 		_load()
 

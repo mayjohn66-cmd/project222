@@ -218,7 +218,8 @@ func spawn_customer() -> void:
 	if not introduced_type.is_empty():
 		customer.customer_type_id = introduced_type
 		customer.customer_group_id = CustomerTypeData.get_group_id(introduced_type)
-	var regular_visit := RegularCustomerVisits.prepare(customer,introduced_type)
+	var regular_visit := ActFourVisits.prepare(customer,introduced_type)
+	if not regular_visit: regular_visit = RegularCustomerVisits.prepare(customer,introduced_type)
 	if not regular_visit: regular_visit = ExpeditionContactVisits.prepare(customer,introduced_type)
 	if not regular_visit: regular_visit = WeatherLifeVisits.prepare(customer,introduced_type)
 

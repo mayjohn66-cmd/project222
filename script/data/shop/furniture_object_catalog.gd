@@ -75,6 +75,7 @@ static func craft(id: String) -> bool:
 	var recipe := FurnitureRecipeData.get_recipe(id)
 	if recipe.is_empty() or not ProductionRecipeService.consume_ingredients(recipe, 1): return false
 	GameState.add_furniture(id, 1)
+	ActFourRecords.record_furniture(id,1)
 	var row := get_object(id)
 	if not row.is_empty(): PlayerProgress.record_story_beat(PREFIX + str(row["stage"]), GameState.total_day)
 	return true

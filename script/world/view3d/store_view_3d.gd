@@ -492,6 +492,7 @@ func _process(delta: float) -> void:
 			_room_mirror.sync()
 
 		_event_decor.sync(floor_node.get_store_rect())
+		ActFourDecor3D.sync(self)
 		_sync_furniture()
 		_sync_build_guides()
 

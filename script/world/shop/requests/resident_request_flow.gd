@@ -54,6 +54,7 @@ static func reputation() -> int:
 	return value
 
 static func customer_available(type_id: String) -> bool:
+	if not ActFourCustomers.available(type_id): return false
 	for milestone in SETTINGS.customer_milestones:
 		if str(milestone["type"]) == type_id:
 			return completed_count() >= int(milestone["completed"])

@@ -29,6 +29,7 @@ static func ensure_loaded() -> void:
 
 	_load_groups_csv()
 	_load_csv()
+	ActFourCustomers.install(customer_types)
 	_loaded = true
 
 	DebugLog.write(

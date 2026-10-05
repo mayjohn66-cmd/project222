@@ -66,7 +66,8 @@ func build_result_text(
 
 
 func deposit_items(
-	expedition_bag
+	expedition_bag,
+	context: Dictionary = {}
 ) -> Dictionary:
 	if expedition_bag == null:
 		return _failure(
@@ -164,6 +165,7 @@ func deposit_items(
 			amount
 		)
 
+	ActFourRecords.record_settlement(context,targets)
 	return {
 		"success": true,
 		"message": "",

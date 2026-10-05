@@ -6,6 +6,7 @@ extends CanvasLayer
 # 산 물건은 가방(일반 인벤토리)에 들어간다. Esc나 [닫기]로 닫는다.
 
 signal closed
+signal purchased(item: String)
 
 var offers: Array[Dictionary] = []
 var open: bool = false
@@ -191,6 +192,7 @@ func _on_buy_pressed(
 		GameState.add_item(item_id, 1)
 
 	offer["stock"] = int(offer["stock"]) - 1
+	purchased.emit(item_id)
 
 	message_label.text = "%s, 잘 골랐네." % _get_offer_name(offer)
 	_refresh()
