@@ -18,6 +18,15 @@ const ACCENT_RED := Color("c8553d")  # 경고·할인표
 const ACCENT_BLUE := Color("4a86a8")  # 안내
 const SHADOW := Color(0.05, 0.09, 0.07, 0.45)
 
+# ---- 혼합형(판타지 재질 + 편의점 간판) 추가 색: 양피지·나무·황동
+const PARCH := Color("f5eddc")
+const PARCH_CELL := Color("e6d3ad")
+const PARCH_LINE := Color("b9a582")
+const WOOD := Color("70503b")
+const WOOD_DARK := Color("3d2a1d")
+const BRASS := Color("d9a441")
+const INK_BROWN := Color("44392e")
+
 # 관리 메뉴 7개 구역의 표식 색(탭 위쪽 가는 띠). 순서: 인벤토리 생산 직원 설계도 건설 일정 정보
 const SECTION_COLORS: Array = [Color("e8a33d"), Color("d9735a"), Color("5f9f7a"), Color("4a86a8"), Color("b89a6a"), Color("8f78b0"), Color("4fa3a0")]
 

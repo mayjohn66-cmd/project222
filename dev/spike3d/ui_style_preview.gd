@@ -11,14 +11,23 @@ func lab(text: String, size: int = 18, color: Color = S.INK) -> Label:
 	l.add_theme_color_override("font_color", color)
 	return l
 
+var hybrid: bool = false
+
 func btn(text: String, primary: bool = false, w: float = 0.0) -> Button:
 	var b := Button.new()
 	b.text = text
 	b.custom_minimum_size = Vector2(w, 0)
 	for st in ["normal", "hover", "pressed", "disabled"]:
-		b.add_theme_stylebox_override(st, S.button(st, primary))
-	b.add_theme_color_override("font_color", S.WHITE if primary else S.INK)
-	b.add_theme_color_override("font_hover_color", S.WHITE if primary else S.BRAND_DEEP)
+		if hybrid:
+			var fill: Color = S.BRAND if primary else S.PARCH
+			if st == "hover": fill = fill.lightened(0.1)
+			if st == "pressed": fill = fill.darkened(0.12)
+			b.add_theme_stylebox_override(st, S.box(fill, S.BRASS if primary else S.WOOD, 2, Vector4(16, 9, 16, 9)))
+		else:
+			b.add_theme_stylebox_override(st, S.button(st, primary))
+	var fc: Color = S.WHITE if primary else (S.INK_BROWN if hybrid else S.INK)
+	for k in ["font_color", "font_hover_color", "font_pressed_color"]:
+		b.add_theme_color_override(k, fc)
 	return b
 
 func hud() -> Control:
@@ -68,7 +77,7 @@ func menu_buttons() -> Control:
 func slot_cell(icon_path: String, count: int, selected: bool = false) -> Control:
 	var p := PanelContainer.new()
 	p.custom_minimum_size = Vector2(62, 62)
-	p.add_theme_stylebox_override("panel", S.slot(selected))
+	p.add_theme_stylebox_override("panel", S.box(Color("fff6e0") if selected else S.PARCH_CELL, S.BRASS if selected else S.PARCH_LINE, 3 if selected else 2, Vector4(2, 2, 2, 2)) if hybrid else S.slot(selected))
 	if icon_path != "":
 		var t := TextureRect.new()
 		t.texture = load(icon_path)
@@ -86,13 +95,17 @@ func slot_cell(icon_path: String, count: int, selected: bool = false) -> Control
 
 func window() -> Control:
 	var outer := PanelContainer.new()
-	outer.add_theme_stylebox_override("panel", S.window())
+	outer.add_theme_stylebox_override("panel", S.box(S.PARCH, S.WOOD, 6, Vector4(0, 0, 0, 0), true) if hybrid else S.window())
 	outer.custom_minimum_size = Vector2(760, 440)
 	var v := VBoxContainer.new()
 	v.add_theme_constant_override("separation", 0)
 	outer.add_child(v)
 	var head := PanelContainer.new()
-	head.add_theme_stylebox_override("panel", S.header_bar())
+	var hs: StyleBoxFlat = S.header_bar()
+	if hybrid:
+		hs.border_color = S.BRASS
+		hs.border_width_bottom = 3
+	head.add_theme_stylebox_override("panel", hs)
 	var hr := HBoxContainer.new()
 	hr.add_child(lab("관리 · 인벤토리", 20, S.WHITE))
 	var sp := Control.new(); sp.size_flags_horizontal = Control.SIZE_EXPAND_FILL; hr.add_child(sp)
@@ -118,10 +131,16 @@ func window() -> Control:
 		tb.custom_minimum_size = Vector2(112, 0)
 		tb.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		for st in ["normal", "hover", "pressed", "hover_pressed"]:
-			tb.add_theme_stylebox_override(st, S.section_tab(i, i == 0))
+			var ts: StyleBoxFlat = S.section_tab(i, i == 0)
+			if hybrid:
+				ts.bg_color = S.BRAND if i == 0 else S.PARCH
+				ts.border_color = S.SECTION_COLORS[i]
+				ts.border_width_top = 0; ts.border_width_right = 0; ts.border_width_bottom = 0
+				ts.border_width_left = 10
+			tb.add_theme_stylebox_override(st, ts)
 		tb.add_theme_stylebox_override("focus", StyleBoxEmpty.new())
 		for fc in ["font_color", "font_hover_color", "font_pressed_color", "font_focus_color", "font_hover_pressed_color"]:
-			tb.add_theme_color_override(fc, S.WHITE if i == 0 else S.INK)
+			tb.add_theme_color_override(fc, S.WHITE if i == 0 else (S.INK_BROWN if hybrid else S.INK))
 		tabs.add_child(tb)
 	# 본문
 	var content := MarginContainer.new()
@@ -149,14 +168,14 @@ func window() -> Control:
 		grid.add_child(slot_cell(icons[i], 8 if i == 0 else 6, i == 0))
 	var info := PanelContainer.new()
 	info.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	info.add_theme_stylebox_override("panel", S.box(S.WHITE, S.LINE, 2, Vector4(14, 12, 14, 12)))
+	info.add_theme_stylebox_override("panel", S.box(Color("fbf6ea") if hybrid else S.WHITE, S.PARCH_LINE if hybrid else S.LINE, 2, Vector4(14, 12, 14, 12)))
 	var iv := VBoxContainer.new()
 	iv.add_theme_constant_override("separation", 8)
 	info.add_child(iv)
-	iv.add_child(lab("바게트", 22))
+	iv.add_child(lab("바게트", 22, S.INK_BROWN if hybrid else S.INK))
 	var price := PanelContainer.new()
 	price.add_theme_stylebox_override("panel", S.tag())
-	price.add_child(lab("개당 120 G", 16, S.INK))
+	price.add_child(lab("● 개당 120 G" if hybrid else "개당 120 G", 16, S.INK))
 	price.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 	iv.add_child(price)
 	var d := lab("갓 구운 빵. 진열대에 올려 손님에게 판매합니다.", 16, S.INK_DIM)
@@ -195,5 +214,12 @@ func run() -> void:
 	var w := window(); layer.add_child(w); w.position = Vector2(190, 90)
 	for i in 30: await get_tree().process_frame
 	get_viewport().get_texture().get_image().save_png(dir + "/ui_style_preview.png")
+	for n in [h, mb, w]: n.queue_free()
+	hybrid = true
+	var h2 := hud(); layer.add_child(h2); h2.position = Vector2(1152 - 270, 14)
+	var mb2 := menu_buttons(); layer.add_child(mb2); mb2.position = Vector2(14, 90)
+	var w2 := window(); layer.add_child(w2); w2.position = Vector2(190, 90)
+	for i in 30: await get_tree().process_frame
+	get_viewport().get_texture().get_image().save_png(dir + "/ui_style_hybrid.png")
 	print("저장: ", dir)
 	get_tree().quit()
