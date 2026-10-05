@@ -7,9 +7,12 @@ extends Control
 
 const PX := 100.0
 const SEGMENTS := 14
-const CURL := 0.7  # 자유 모서리가 뒤처지는 정도(라디안). 0 = 판판하게, 값이 클수록 휜다
-const LAG := 0.55  # 위아래 끝이 가운데보다 뒤처지는 정도(라디안): 자유 모서리가 곡선으로 보인다
-const ZSEG := 8  # 종이를 위아래로 나눈 칸 수
+const CURL := 0.55  # 자유 모서리가 뒤처지는 정도(라디안). 0 = 판판하게, 값이 클수록 휜다
+const LAG := 0.32  # 위아래 끝이 가운데보다 뒤처지는 정도(라디안): 자유 모서리가 곡선으로 보인다
+const WAVE := 0.10  # 종이 위아래 방향 물결(라디안): 손으로 넘기는 종이처럼 자유 모서리가 일렁인다
+const COMPANIONS := 2  # 한 장 넘길 때 뒤따라 들리는 빈 종이 수
+const COMP_LAG := 0.10  # 뒤따르는 종이가 맨 위 종이보다 늦는 정도(라디안)
+const ZSEG := 16  # 종이를 위아래로 나눈 칸 수
 const CURVE_SHADE := 0.5  # 종이가 서 있는 부분일수록 어두워지는 정도(휜 곡선이 보이게 하는 음영)
 const TILT_DEG := 0.0  # 넘기는 한가운데에서 카메라가 기우는 정도(도). 0 = 늘 바로 위에서 본다
 const FLAG_LEN := 0.9  # 종이에 붙은 포스트잇이 종이 바깥으로 뻗은 길이(월드)
@@ -24,6 +27,7 @@ const PARCHMENT := Color("f5eddc")
 var viewport: SubViewport
 var camera: Camera3D
 var leaves: Array = []  # [{node, front, back, shadow, shadow_mat}]
+var companions: Array = []  # 한 장만 넘길 때 뒤따라 들리는 빈 종이들 [{node, front, back, k, phase}]
 var forward: bool = true
 var duration: float = LEAF_TIME
 var _half: float = 4.5
@@ -98,7 +102,18 @@ func build(page_w_px: float,page_h_px: float,spine_px: Vector2,vp_size: Vector2,
 		viewport.add_child(sh)
 		info["shadow"] = sh
 		info["shadow_mat"] = smat
+		info["phase"] = 0.0
 		leaves.append(info)
+	if n == 1:
+		# 쌓인 종이의 윗장들이 함께 들리는 모습: 맨 위 종이를 따라 빈 종이 몇 장이 조금씩 늦게, 다른 물결로 따라 넘어온다
+		for k in range(1,COMPANIONS + 1):
+			var ci := {"front": _blank_mat(),"back": _blank_mat(),"k": k,"phase": 1.9 * float(k)}
+			var cnode := MeshInstance3D.new()
+			viewport.add_child(cnode)
+			if not forward:
+				cnode.scale.x = -1.0
+			ci["node"] = cnode
+			companions.append(ci)
 	set_progress(0.0)
 
 
@@ -174,6 +189,15 @@ func _apply_leaf(i: int,n: int,theta: float,pi_: float) -> void:
 	sh.scale = Vector3(width,1.0,1.0)
 	sh.position = Vector3((width * 0.5) * (1.0 if under_right else -1.0),-0.02,(_z0 + _z1) * 0.5)
 	(info["shadow_mat"] as StandardMaterial3D).albedo_color = Color(0.12,0.08,0.04,0.3 * s * (1.0 - 0.4 * s) / sqrt(float(n)))
+	if n == 1 and i == 0:
+		for ci in companions:
+			var kk: int = ci["k"]
+			var th_c := theta - COMP_LAG * float(kk) * sin(theta)  # 처음과 끝에서는 맨 위 종이와 같은 자리
+			_rebuild_leaf(ci,maxf(th_c,0.0))
+			var sc := sin(maxf(th_c,0.0))
+			(ci["front"] as StandardMaterial3D).albedo_color = _gray(lerpf(1.0,0.8,minf(sc * 1.4,1.0)) if th_c < PI * 0.5 else 0.8,false)
+			(ci["back"] as StandardMaterial3D).albedo_color = _gray(lerpf(0.62,1.0,smoothstep(PI * 0.5,PI,th_c)),false)
+			(ci["node"] as Node3D).position.y = (info["node"] as Node3D).position.y - 0.004 * float(kk)
 
 
 func _place_camera() -> void:
@@ -190,11 +214,11 @@ func _gray(v: float,textured: bool) -> Color:
 
 # 마디마다 각도를 달리해 휜 한 장의 단면(x, y). 자유 모서리일수록 theta 보다 뒤처진다.
 # u = 종이의 위아래 위치(-1 ~ 1, 0 = 가운데): 위아래 끝일수록 LAG 만큼 더 뒤처져서 바로 위에서 봐도 자유 모서리가 곡선으로 보인다.
-func _profile(theta: float,u: float = 0.0) -> Array:
+func _profile(theta: float,u: float = 0.0,phase: float = 0.0) -> Array:
 	var seg := _half / float(SEGMENTS)
 	var pts: Array = [Vector2(0.0,0.0)]
 	var angles: Array = []
-	var th := maxf(theta - LAG * sin(theta) * u * u,0.0)
+	var th := maxf(theta - LAG * sin(theta) * u * u + WAVE * sin(theta) * sin(u * 3.2 + phase),0.0)
 	for j in range(SEGMENTS):
 		var a := th - CURL * sin(th) * (float(j) + 0.5) / float(SEGMENTS)
 		angles.append(a)
@@ -211,7 +235,7 @@ func _tip_x(theta: float) -> float:
 func _rebuild_leaf(info: Dictionary,theta: float) -> void:
 	var profiles: Array = []  # 위아래 방향 ZSEG+1 개의 단면
 	for zi in range(ZSEG + 1):
-		profiles.append(_profile(theta,float(zi) / float(ZSEG) * 2.0 - 1.0))
+		profiles.append(_profile(theta,float(zi) / float(ZSEG) * 2.0 - 1.0,float(info.get("phase",0.0))))
 	var mesh := ArrayMesh.new()
 	for face in [0,1]:  # 0 = 앞면, 1 = 뒷면
 		var st := SurfaceTool.new()
@@ -246,7 +270,7 @@ func _rebuild_leaf(info: Dictionary,theta: float) -> void:
 	if info.has("flag_mat"):
 		var fz: Vector2 = info["flag_z"]
 		var zc := (fz.x + fz.y) * 0.5
-		var pr := _profile(theta,clampf((zc - (_z0 + _z1) * 0.5) / ((_z1 - _z0) * 0.5),-1.0,1.0))
+		var pr := _profile(theta,clampf((zc - (_z0 + _z1) * 0.5) / ((_z1 - _z0) * 0.5),-1.0,1.0),float(info.get("phase",0.0)))
 		var base: Vector2 = (pr[0] as Array)[SEGMENTS]
 		var a_last: float = (pr[1] as Array)[SEGMENTS - 1]
 		var tip := base + Vector2(cos(a_last),sin(a_last)) * FLAG_LEN
