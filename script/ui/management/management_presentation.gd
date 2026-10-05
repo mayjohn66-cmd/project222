@@ -9,19 +9,11 @@ const FLAG_HEIGHT := 44.0
 const FLAG_GAP := 20  # 포스트잇 사이 간격
 const ONTO := 46.0  # 펼친 탭의 포스트잇이 쪽 위로 넘어오는 길이
 
-static func flag_style(color: String) -> StyleBoxFlat:
-	var base := Color(color)
-	var s := StyleBoxFlat.new()
-	s.bg_color = base
-	s.corner_radius_top_right = 6
-	s.corner_radius_bottom_right = 6
-	s.border_width_bottom = 2
-	s.border_color = base.darkened(0.18)
-	s.shadow_color = Color("30231340")
-	s.shadow_size = 0
-	s.shadow_offset = Vector2(1,2)
-	s.content_margin_left = 14
-	s.content_margin_right = 4
+# 포스트잇의 모양은 BookViews.Strip(책 밖)·BookViews.Note(쪽 위)가 그린다. 버튼은 글자와 클릭만 맡는다.
+static func flag_style(_color: String) -> StyleBoxEmpty:
+	var s := StyleBoxEmpty.new()
+	s.content_margin_left = 16
+	s.content_margin_right = 6
 	s.content_margin_top = 4
 	s.content_margin_bottom = 4
 	return s
@@ -103,7 +95,7 @@ static func install(menu: Control) -> void:
 		b.add_theme_font_size_override("font_size",15)
 		for state in ["normal","hover","pressed","hover_pressed"]:
 			b.add_theme_stylebox_override(state,flag_style(INDEX_COLORS[i]))
-		b.add_theme_color_override("font_color",Color("514333"))
+		b.add_theme_color_override("font_color",Color("2b2f55"))
 		b.add_theme_color_override("font_pressed_color",Color("493e33"))
 		b.add_theme_color_override("font_hover_pressed_color",Color("493e33"))
 		b.add_theme_stylebox_override("focus",StyleBoxEmpty.new())
@@ -171,6 +163,16 @@ static func install(menu: Control) -> void:
 	main.add_child(cover_view)
 	main.move_child(cover_view,1)
 	cover_view.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	var strip := BookViews.Strip.new()
+	strip.name = "BookStrip"
+	strip.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	main.add_child(strip)
+	main.move_child(strip,2)  # 내비게이션 버튼(글자) 아래, 쪽 위
+	strip.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	for bi in range(nav.get_child_count()):
+		var nb: Button = nav.get_child(bi)
+		nb.mouse_entered.connect(func() -> void: strip.set_hover(bi))
+		nb.mouse_exited.connect(func() -> void: strip.set_hover(-1))
 	var note_view := BookViews.Note.new()
 	note_view.name = "BookNote"
 	note_view.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -228,6 +230,14 @@ static func _sync_note(menu: Control) -> void:
 	var note = main.get_node_or_null("BookNote")
 	var nav: Control = main.get_node("MainVBox/Body/Navigation")
 	if note == null or menu.current_tab >= nav.get_child_count(): return
+	var strip = main.get_node_or_null("BookStrip")
+	if strip != null:
+		var list: Array = []
+		for bi in range(nav.get_child_count()):
+			var nb: Control = nav.get_child(bi)
+			var nr := nb.get_global_rect()
+			list.append({"rect": Rect2(nr.position - strip.get_global_rect().position,nr.size),"color": Color(INDEX_COLORS[bi % INDEX_COLORS.size()])})
+		strip.set_items(list)
 	var button: Control = nav.get_child(menu.current_tab)
 	var r := button.get_global_rect()
 	note.set_note(Rect2(r.position - note.get_global_rect().position - Vector2(ONTO,0.0),Vector2(ONTO,r.size.y)),Color(INDEX_COLORS[menu.current_tab]))

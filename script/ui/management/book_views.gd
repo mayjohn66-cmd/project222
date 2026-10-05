@@ -209,8 +209,51 @@ class Cover extends Control:
 		BookViews.paint_cover(self,get_theme_default_font(),x_spine,x_end,y0,y1,k,lift,tint,title_text,owner_text)
 
 
-# ---------------------------------------------------------------- 펼친 탭의 포스트잇(쪽 위로 넘어온 부분)
+# ---------------------------------------------------------------- 포스트잇 책갈피
+# 진짜 포스트잇처럼: 책 밖으로 나온 부분은 살짝 기울고 쪽 가장자리에서 꺾이는 그림자가 있으며, 쪽 위로 넘어온 부분(펼친 탭)은 반투명 필름이라 쪽의 글이 비친다.
+class Strip extends Control:
+	## 책 밖으로 튀어나온 포스트잇들(내비게이션 버튼 아래에 깔리는 그림). items = [{rect: Rect2(이 컨트롤 기준 버튼 자리), color: Color}]
+	var items: Array = []
+	var hover: int = -1
+
+	func set_items(list: Array) -> void:
+		items = list
+		queue_redraw()
+
+	func set_hover(i: int) -> void:
+		hover = i
+		queue_redraw()
+
+	func _draw() -> void:
+		for i in range(items.size()):
+			var r: Rect2 = items[i]["rect"]
+			var c: Color = items[i]["color"]
+			var h := r.size.y
+			var length := r.size.x - float((i * 13) % 9) + (6.0 if i == hover else 0.0)  # 손으로 붙인 듯 길이가 조금씩 다르다
+			var ang := deg_to_rad(1.5) * (1.0 if i % 2 == 0 else -1.0) * (0.6 + 0.2 * float(i % 3))
+			var pivot := Vector2(r.position.x,r.position.y + h * 0.5 + float((i * 37) % 5 - 2))
+			var local := [Vector2(0.0,-h * 0.5),Vector2(length,-h * 0.5),Vector2(length,h * 0.5),Vector2(0.0,h * 0.5)]
+			var pts := PackedVector2Array()
+			for v in local:
+				pts.append(pivot + (v as Vector2).rotated(ang))
+			# 그림자(아래 쪽 모서리에 드리움)
+			var sh := PackedVector2Array()
+			for v in pts:
+				sh.append(v + Vector2(3.0,4.0))
+			draw_colored_polygon(sh,Color(0.16,0.11,0.06,0.30))
+			# 본체: 위가 밝고 아래가 살짝 짙다
+			draw_polygon(pts,PackedColorArray([c.lightened(0.10),c.lightened(0.04),c.darkened(0.04),c.darkened(0.02)]))
+			# 쪽 가장자리에서 꺾이는 부분: 왼쪽 12px 가 어두워졌다가 풀린다
+			var fold := 12.0
+			var fpts := PackedVector2Array([pts[0],pts[0].lerp(pts[1],fold / length),pts[3].lerp(pts[2],fold / length),pts[3]])
+			draw_polygon(fpts,PackedColorArray([Color(0.2,0.14,0.08,0.38),Color(0.2,0.14,0.08,0.0),Color(0.2,0.14,0.08,0.0),Color(0.2,0.14,0.08,0.38)]))
+			# 가장자리 선과 끝 접착 자국
+			draw_polyline(PackedVector2Array([pts[0],pts[1],pts[2],pts[3]]),c.darkened(0.25),1.5)
+			draw_line(pts[3],pts[2],c.darkened(0.3),2.0)
+
+
 class Note extends Control:
+	## 펼친 탭의 포스트잇이 쪽 위로 넘어온 부분: 반투명 필름(쪽의 글이 비침) + 쪽 가장자리에서 꺾이는 그림자 + 끝의 접착 자국.
 	var rect: Rect2 = Rect2()
 	var color: Color = Color.WHITE
 
@@ -221,10 +264,19 @@ class Note extends Control:
 
 	func _draw() -> void:
 		if rect.size.x <= 0.0: return
-		draw_rect(Rect2(rect.position + Vector2(1,2),rect.size),Color(0.2,0.14,0.08,0.18))  # 쪽에 드리우는 그림자
-		draw_rect(rect,color.lerp(Color.WHITE,0.72))
-		draw_rect(rect,Color(0.40,0.31,0.20,0.9),false,2.0)
-		draw_line(rect.position + Vector2(0,rect.size.y - 1.0),rect.position + rect.size - Vector2(0,1.0),color.darkened(0.1),2.0)
+		# 필름 아래 쪽에 드리우는 그림자
+		draw_rect(Rect2(rect.position + Vector2(1.5,3.0),rect.size),Color(0.2,0.14,0.08,0.20))
+		# 반투명 필름
+		var film := color.lerp(Color.WHITE,0.30)
+		draw_rect(rect,Color(film.r,film.g,film.b,0.50))
+		# 쪽 가장자리(오른쪽 끝) 꺾임: 오른쪽으로 갈수록 어두워짐
+		var steps := 10
+		for k in range(steps):
+			var f := float(k) / float(steps)
+			draw_rect(Rect2(rect.end.x - rect.size.x * 0.28 * (1.0 - f) - 1.0,rect.position.y,rect.size.x * 0.28 / float(steps) + 1.0,rect.size.y),Color(0.2,0.14,0.08,0.22 * f))
+		# 윤곽과 끝(접착) 자국
+		draw_rect(rect,Color(color.r * 0.7,color.g * 0.7,color.b * 0.7,0.85),false,1.5)
+		draw_rect(Rect2(rect.position,Vector2(5.0,rect.size.y)),Color(color.r * 0.85,color.g * 0.85,color.b * 0.85,0.75))
 
 
 # ---------------------------------------------------------------- 책장 넘기기(탭 이동)
