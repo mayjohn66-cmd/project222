@@ -229,10 +229,11 @@ func _ready() -> void:
 func open_menu(
 	tab: MenuTab = MenuTab.INVENTORY
 ) -> void:
-	if visible:
+	if visible and not bool(get_meta("book_closing", false)):
 		return
 
 	visible = true
+	PRESENTATION.play_open(self)
 
 	get_tree().call_group(
 		"build_manager",
@@ -253,10 +254,11 @@ func open_menu(
 
 
 func close_menu() -> void:
-	if not visible:
+	if not visible or bool(get_meta("book_closing", false)):
 		return
 
-	visible = false
+	if not PRESENTATION.play_close(self):
+		visible = false
 
 	get_tree().call_group(
 		"build_manager",
@@ -394,7 +396,7 @@ func refresh_common_info() -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("management_menu"):
-		if visible:
+		if visible and not bool(get_meta("book_closing", false)):
 			close_menu()
 		else:
 			open_menu(current_tab)
@@ -402,7 +404,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		return
 
-	if visible and event.is_action_pressed("ui_cancel"):
+	if visible and not bool(get_meta("book_closing", false)) and event.is_action_pressed("ui_cancel"):
 		close_menu()
 		get_viewport().set_input_as_handled()
 

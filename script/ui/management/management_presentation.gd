@@ -200,7 +200,7 @@ static func apply_tab(menu: Control) -> void:
 		slide.tween_property(button,"custom_minimum_size:x",FLAG_LENGTHS[i]+(SELECTED_EXTRA if i == menu.current_tab else 0.0),0.18)
 		button.set_meta("index_slide",slide)
 	var turn = area.get_node_or_null("PageTurn")
-	if turn and menu.visible and turn.last_tab != menu.current_tab: turn.flip()
+	if turn and menu.visible and turn.last_tab != menu.current_tab and not bool(menu.get_meta("book_opening", false)): turn.flip()
 	if turn: turn.last_tab = menu.current_tab
 	var pattern = area.get_node_or_null("TabPaperPattern")
 	if pattern:
@@ -216,6 +216,146 @@ class PaperPattern extends Control:
 			for y in range(0,int(size.y),24): draw_line(Vector2(0,y),Vector2(size.x,y),color)
 		elif mode==5:
 			draw_rect(Rect2(0,0,8,size.y),Color("897299"))
+
+# ---------------------------------------------------------------- 책 여닫기 연출
+# 열기: 닫힌 책이 화면 아래에서 올라온 뒤 표지가 왼쪽 제본선을 축으로 넘어가며 펼쳐지고, 그제야 쪽 안의 UI 가 나타난다.
+# 닫기: 표지가 덮이고 책이 아래로 내려간다. 트리가 멈춰 있어도 돌아가도록 PROCESS 모드 트윈을 쓴다.
+const BOOK_RISE := 0.34
+const BOOK_SWING := 0.42
+const BOOK_SINK := 0.24
+
+static func _book_nodes(menu: Control) -> Dictionary:
+	var dim: ColorRect = menu.get_node("DimBackground")
+	var cc: Control = dim.get_node("CenterContainer")
+	var main: Control = cc.get_node("MainPanel")
+	var cover: BookCover = main.get_node_or_null("BookCover")
+	if cover == null:
+		cover = BookCover.new()
+		cover.name = "BookCover"
+		main.add_child(cover)
+		cover.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		cover.visible = false
+	return {"dim": dim, "cc": cc, "main": main, "vbox": main.get_node("MainVBox"), "cover": cover}
+
+static func _kill_book_anim(menu: Control) -> void:
+	var old = menu.get_meta("book_anim") if menu.has_meta("book_anim") else null
+	if old is Tween and old.is_valid(): old.kill()
+
+static func _book_settle(menu: Control, n: Dictionary) -> void:
+	n["cc"].position = Vector2.ZERO
+	n["dim"].color.a = float(menu.get_meta("dim_alpha", 0.85))
+	n["vbox"].modulate.a = 1.0
+	n["cover"].visible = false
+	n["cover"].angle = 0.0
+	menu.set_meta("book_opening", false)
+
+static func play_open(menu: Control) -> void:
+	if DisplayServer.get_name() == "headless": return
+	var n := _book_nodes(menu)
+	_kill_book_anim(menu)
+	if not menu.has_meta("dim_alpha"): menu.set_meta("dim_alpha", n["dim"].color.a)
+	var dim_alpha: float = menu.get_meta("dim_alpha")
+	var cover: BookCover = n["cover"]
+	var vbox: Control = n["vbox"]
+	var cc: Control = n["cc"]
+	var dim: ColorRect = n["dim"]
+	menu.set_meta("book_opening", true)
+	menu.set_meta("book_closing", false)
+	cover.angle = 0.0
+	cover.visible = true
+	cover.mouse_filter = Control.MOUSE_FILTER_STOP
+	cover.queue_redraw()
+	vbox.modulate.a = 0.0
+	dim.color.a = 0.0
+	cc.position.y = menu.get_viewport_rect().size.y * 0.6
+	var tw := menu.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.set_parallel(true)
+	tw.tween_property(cc,"position:y",0.0,BOOK_RISE).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+	tw.tween_property(dim,"color:a",dim_alpha,BOOK_RISE)
+	tw.set_parallel(false)
+	tw.tween_interval(0.06)
+	tw.tween_method(func(a: float) -> void:
+		cover.set_angle(a)
+		vbox.modulate.a = smoothstep(0.45,0.95,a),0.0,1.0,BOOK_SWING).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tw.tween_callback(func() -> void: _book_settle(menu,n))
+	menu.set_meta("book_anim",tw)
+
+# 닫기 연출을 시작한다. 연출을 못 쓰면(헤드리스 등) false 를 돌려주고 호출한 쪽이 바로 숨긴다.
+static func play_close(menu: Control) -> bool:
+	if DisplayServer.get_name() == "headless": return false
+	var n := _book_nodes(menu)
+	_kill_book_anim(menu)
+	if not menu.has_meta("dim_alpha"): menu.set_meta("dim_alpha", n["dim"].color.a)
+	var cover: BookCover = n["cover"]
+	var vbox: Control = n["vbox"]
+	var cc: Control = n["cc"]
+	var dim: ColorRect = n["dim"]
+	menu.set_meta("book_closing", true)
+	cover.angle = 1.0
+	cover.visible = true
+	cover.mouse_filter = Control.MOUSE_FILTER_STOP
+	var tw := menu.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
+	tw.tween_method(func(a: float) -> void:
+		cover.set_angle(a)
+		vbox.modulate.a = smoothstep(0.45,0.95,a),1.0,0.0,BOOK_SWING * 0.75).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN_OUT)
+	tw.set_parallel(true)
+	tw.tween_property(cc,"position:y",menu.get_viewport_rect().size.y * 0.6,BOOK_SINK).set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_IN)
+	tw.tween_property(dim,"color:a",0.0,BOOK_SINK)
+	tw.set_parallel(false)
+	tw.tween_callback(func() -> void:
+		menu.visible = false
+		menu.set_meta("book_closing", false)
+		_book_settle(menu,n))
+	menu.set_meta("book_anim",tw)
+	return true
+
+# 닫힌 책의 표지. angle 0 = 닫힘, 1 = 펼쳐져 사라짐. 왼쪽 제본선을 축으로 폭이 cos 로 줄어든다.
+class BookCover extends Control:
+	var angle: float = 0.0
+	func set_angle(a: float) -> void:
+		angle = a
+		queue_redraw()
+	func _draw() -> void:
+		var width := size.x - 104.0
+		var full := Rect2(-12.0,-12.0,width + 46.0,size.y + 26.0)
+		var k := cos(clampf(angle,0.0,1.0) * PI * 0.5)
+		if k <= 0.02: return
+		var cw := full.size.x * k
+		var lift := 12.0 * sin(clampf(angle,0.0,1.0) * PI)  # 펼칠 때 자유 쪽 모서리가 눈앞으로 들려 위아래로 커 보인다
+		var x0 := full.position.x
+		var y0 := full.position.y
+		var y1 := y0 + full.size.y
+		var shade := 1.0 - 0.35 * (1.0 - k)
+		var leather := Color("70503b") * Color(shade,shade,shade,1.0)
+		var dark := Color("3d2a1d") * Color(shade,shade,shade,1.0)
+		var gold := Color("d9a441") * Color(shade,shade,shade,1.0)
+		var poly := PackedVector2Array([Vector2(x0,y0),Vector2(x0 + cw,y0 - lift),Vector2(x0 + cw,y1 + lift),Vector2(x0,y1)])
+		draw_colored_polygon(poly,leather)
+		# 두께: 아래쪽 어두운 띠, 왼쪽 제본(척추)
+		draw_rect(Rect2(x0,y1 - 4.0,cw,10.0),dark)
+		draw_rect(Rect2(x0,y0,minf(26.0 * k,cw),full.size.y),dark)
+		draw_line(Vector2(x0 + 26.0 * k,y0),Vector2(x0 + 26.0 * k,y1),gold,2.0)
+		# 금박 테두리와 모서리 징
+		var inset := 18.0
+		var fx0 := x0 + 40.0 * k
+		var fx1 := x0 + cw - inset * k
+		if fx1 > fx0 + 10.0:
+			draw_rect(Rect2(fx0,y0 + inset,fx1 - fx0,full.size.y - inset * 2.0),gold,false,2.0)
+			for corner in [Vector2(fx0,y0 + inset),Vector2(fx1,y0 + inset),Vector2(fx0,y1 - inset),Vector2(fx1,y1 - inset)]:
+				draw_circle(corner,4.0 * k,gold)
+		# 표제: 편의점 초록 명패 + 글자(폭이 좁아지면 숨긴다)
+		if k > 0.45:
+			var plate := Rect2(x0 + cw * 0.5 - 130.0 * k,y0 + full.size.y * 0.5 - 38.0,260.0 * k,76.0)
+			draw_rect(plate,Color("235740") * Color(shade,shade,shade,1.0))
+			draw_rect(plate,gold,false,3.0)
+			var font := get_theme_default_font()
+			if font != null:
+				var text := "영업 일지"
+				var fs := 30
+				var w := font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,fs).x
+				draw_string(font,Vector2(plate.position.x + (plate.size.x - w) * 0.5,plate.position.y + 49.0),text,HORIZONTAL_ALIGNMENT_LEFT,-1,fs,Color(1,1,1,clampf((k - 0.45) * 3.0,0.0,1.0)))
+		# 책갈피 끈(편의점 초록)이 아래로 늘어진다
+		draw_rect(Rect2(x0 + cw * 0.78,y1 - 4.0,10.0 * k,34.0),Color("2f7a58") * Color(shade,shade,shade,1.0))
 
 class BookPaper extends Control:
 	## 두꺼운 책을 비스듬히 본 모습: 단단한 표지(아래·오른쪽으로 두께가 보임), 겹쳐진 종이 가장자리(가는 줄무늬), 옆면에서 튀어나온 포스트잇 책갈피가 붙는 자리.
