@@ -3,11 +3,10 @@ const ACCENTS := ["98703e","b06b3d","4b8068","527e9a","97754c","897299","567d86"
 const PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef"]
 const INDEX_COLORS := ["f2cf5b","ef8fa6","8fcf9a","7bbbe0","eeb06a","b79bdb","7fd0c8"]
 # 포스트잇 책갈피: 포스트잇은 쪽에 붙어 있고 책 옆면 밖으로 FLAG_OUT 만큼 튀어나와 있다(탭 이름이 적힘). 지금 펼친 탭의 포스트잇만
-# 쪽 위로 ONTO 만큼 더 넘어와 전체가 보인다(쪽 위의 연한 부분은 BookViews.Note 가 그림). 나머지는 밖으로 튀어나온 부분만 보인다.
+# 쪽 안쪽 여백으로 BookViews.ONTO 만큼 붙는다(한 장의 포스트잇이 쪽 가장자리를 감싼 모양, Strip 이 그림). 나머지는 밖으로 튀어나온 부분만 보인다.
 const FLAG_OUT := 100.0
 const FLAG_HEIGHT := 44.0
 const FLAG_GAP := 20  # 포스트잇 사이 간격
-const ONTO := 46.0  # 펼친 탭의 포스트잇이 쪽 위로 넘어오는 길이
 
 # 포스트잇의 모양은 BookViews.Strip(책 밖)·BookViews.Note(쪽 위)가 그린다. 버튼은 글자와 클릭만 맡는다.
 static func flag_style(_color: String) -> StyleBoxEmpty:
@@ -233,19 +232,13 @@ static func _sync_note(menu: Control) -> void:
 		var nr := nb.get_global_rect()
 		var color := Color(INDEX_COLORS[bi % INDEX_COLORS.size()])
 		if strip != null:
-			list.append({"rect": Rect2(nr.position - strip.get_global_rect().position,nr.size),"color": color,"hidden": not on_right})
+			list.append({"rect": Rect2(nr.position - strip.get_global_rect().position,nr.size),"color": color,"hidden": not on_right,"current": bi == menu.current_tab})
 		if side == "left":
 			left_list.append({"tab": bi,"rect": nr,"color": color,"label": nb.text})
 	if strip != null: strip.set_items(list)
 	var stage := _stage_of(menu)
 	if stage != null: stage.set_left_flags(left_list)
-	var button: Control = nav.get_child(menu.current_tab)
-	var r := button.get_global_rect()
-	var moving: Array = menu.get_meta("book_moving") if menu.has_meta("book_moving") else []
-	if moving.is_empty():
-		note.set_note(Rect2(r.position - note.get_global_rect().position - Vector2(ONTO,0.0),Vector2(ONTO,r.size.y)),Color(INDEX_COLORS[menu.current_tab]))
-	else:
-		note.set_note(Rect2(),Color.WHITE)  # 책장이 넘어가는 동안은 쪽 위로 넘어온 부분을 감춘다
+	note.set_note(Rect2(),Color.WHITE)  # 쪽 위의 반투명 필름은 쓰지 않는다(포스트잇은 Strip 이 한 장으로 그린다)
 
 
 # ---------------------------------------------------------------- 3D 책
@@ -347,7 +340,7 @@ static func _restore_dim(menu: Control) -> void:
 
 
 # 진행 중인 연출(트윈)과 책장 넘김 덮개를 걷고 쪽 질감을 UI 화면으로 되돌린다.
-static func _kill_anim(menu: Control) -> void:
+static func _kill_anim(menu: Control,keep_art: bool = false) -> void:
 	var old = menu.get_meta("book_anim") if menu.has_meta("book_anim") else null
 	if old is Tween and old.is_valid(): old.kill()
 	menu.set_meta("book_anim",null)
@@ -355,6 +348,10 @@ static func _kill_anim(menu: Control) -> void:
 	if is_instance_valid(flip): flip.queue_free()
 	menu.set_meta("book_flip",null)
 	menu.set_meta("book_drag",null)
+	if not keep_art:
+		var art = menu.get_meta("book_flag_art") if menu.has_meta("book_flag_art") else null
+		if is_instance_valid(art): art.queue_free()
+		menu.set_meta("book_flag_art",null)
 	var stage := _stage_of(menu)
 	if stage != null: stage.unfreeze_pages()
 	if menu.has_meta("book_moving") and not (menu.get_meta("book_moving") as Array).is_empty():
@@ -441,6 +438,7 @@ static func _flip_tabs(menu: Control,stage: BookStage3D,old_tab: int) -> void:
 	stage.freeze_pages(old[0],old[1])
 	menu.set_meta("book_moving",moving)
 	_sync_note.call_deferred(menu)
+	var arts := _flag_arts(menu,order)  # 두 프레임을 기다리는 동안 포스트잇 질감도 그려 둔다
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	if not is_instance_valid(menu) or not is_instance_valid(stage) or not stage.is_inside_tree(): return
@@ -448,11 +446,11 @@ static func _flip_tabs(menu: Control,stage: BookStage3D,old_tab: int) -> void:
 	if fresh.is_empty():
 		_kill_anim(menu)
 		return
-	_kill_anim(menu)  # 앞서 넘기던 것이 있으면 걷는다(쪽 질감은 곧 다시 사진으로)
+	_kill_anim(menu,true)  # 앞서 넘기던 것이 있으면 걷는다(쪽 질감은 곧 다시 사진으로). 방금 그린 포스트잇 질감은 남긴다
 	stage.freeze_pages(old[0],old[1])
 	menu.set_meta("book_moving",moving)
 	_sync_note(menu)
-	var flip := _make_flip(menu,stage,forward,order,old,fresh)
+	var flip := _make_flip(menu,stage,forward,order,old,fresh,arts)
 	menu.set_meta("book_flip",flip)
 	var tw := menu.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tw.tween_method(flip.set_progress,0.0,1.0,flip.duration)
@@ -461,12 +459,13 @@ static func _flip_tabs(menu: Control,stage: BookStage3D,old_tab: int) -> void:
 
 
 # 책장 넘김 한 장을 만든다. order = 종이에 붙어 함께 넘어갈 포스트잇 탭들(먼저 넘어가는 종이부터).
-static func _make_flip(menu: Control,stage: BookStage3D,forward: bool,order: Array,old: Array,fresh: Array) -> BookFlip3D:
+static func _make_flip(menu: Control,stage: BookStage3D,forward: bool,order: Array,old: Array,fresh: Array,arts: Array) -> BookFlip3D:
 	var nav: Control = menu.get_node("DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation")
 	var carry: Array = []
 	for t in order:
 		var zr := stage.flag_z_range(nav.get_child(t).get_global_rect())
-		carry.append({"z0": zr.x,"z1": zr.y,"color": Color(INDEX_COLORS[t % INDEX_COLORS.size()])})
+		var art: Dictionary = arts[carry.size()]
+		carry.append({"z0": zr.x,"z1": zr.y,"color": Color(INDEX_COLORS[t % INDEX_COLORS.size()]),"tex_right": art["right"].get_texture(),"tex_left": art["left"].get_texture(),"len": nav.get_child(t).size.x / 100.0})
 	var geo: Dictionary = stage.page_geometry()
 	var flip := BookFlip3D.new()
 	flip.name = "BookFlip3D"
@@ -493,6 +492,7 @@ static func _drag_begin(menu: Control,stage: BookStage3D,dir: int) -> void:
 	var order: Array = [old_tab] if dir > 0 else [new_tab]
 	menu.set_meta("book_moving",order)
 	menu.select_tab(new_tab)
+	var arts := _flag_arts(menu,order)
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	if not is_instance_valid(menu) or not is_instance_valid(stage) or menu.get_meta("book_drag") != st: return
@@ -500,7 +500,7 @@ static func _drag_begin(menu: Control,stage: BookStage3D,dir: int) -> void:
 	if fresh.is_empty():
 		_kill_anim(menu)
 		return
-	var flip := _make_flip(menu,stage,dir > 0,order,old,fresh)
+	var flip := _make_flip(menu,stage,dir > 0,order,old,fresh,arts)
 	flip.set_theta(float(st["theta"]))
 	st["flip"] = flip
 	st["ready"] = true
@@ -537,3 +537,20 @@ static func _drag_finish(menu: Control,st: Dictionary) -> void:
 			await RenderingServer.frame_post_draw
 		if is_instance_valid(menu): _kill_anim(menu))
 	menu.set_meta("book_anim",tw)
+
+
+# 책장에 실려 넘어가는 포스트잇(탭 order)의 질감을 그린다: [{right, left}] SubViewport. 넘김이 끝나면 함께 지운다.
+static func _flag_arts(menu: Control,order: Array) -> Array:
+	var holder := Node.new()
+	holder.name = "BookFlagArt"
+	menu.add_child(holder)
+	var old = menu.get_meta("book_flag_art") if menu.has_meta("book_flag_art") else null
+	if is_instance_valid(old): old.queue_free()
+	menu.set_meta("book_flag_art",holder)
+	var nav: Control = menu.get_node("DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation")
+	var out: Array = []
+	for t in order:
+		var nb: Button = nav.get_child(t)
+		var color := Color(INDEX_COLORS[t % INDEX_COLORS.size()])
+		out.append({"right": BookViews.make_flag_art(holder,color,nb.text,false,nb.size),"left": BookViews.make_flag_art(holder,color,nb.text,true,nb.size)})
+	return out

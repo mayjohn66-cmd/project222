@@ -10,6 +10,8 @@ const COVER_PAD := 6.0  # 표지가 쪽 둘레로 보이는 두께
 const FORE_W := 10.0  # 오른쪽 쪽 옆면 폭
 const BOTTOM_T := 6.0  # 아래쪽 쪽 옆면 두께
 const NAV_W := 104.0  # 포스트잇 내비게이션 폭
+const ONTO := 12.0  # 펼친 탭의 포스트잇이 쪽 안쪽 여백으로 붙는 길이(쪽 내용 여백 안이라 UI 를 가리지 않는다)
+const FLAG_TEXT := Color("2b2f55")
 const PAGE := Color("f5eddc")
 const LEATHER := Color("70503b")
 const LEATHER_DARK := Color("3d2a1d")
@@ -62,6 +64,61 @@ static func _centered(canvas: CanvasItem,font: Font,text: String,box: Rect2,font
 	var sz := font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size)
 	var asc := font.get_ascent(font_size)
 	canvas.draw_string(font,Vector2(box.position.x + (box.size.x - sz.x) * 0.5,box.position.y + (box.size.y - sz.y) * 0.5 + asc),text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size,color)
+
+
+# 포스트잇 한 장을 그린다(오른쪽 줄·왼쪽 줄·책장에 실려 넘어가는 3D 포스트잇이 모두 이 그림을 쓴다 → 어디서나 같은 모양).
+# r = 포스트잇 전체 자리(쪽 위에 붙은 부분 포함), mirrored = 왼쪽 가장자리용(거울상), fold = 쪽 가장자리가 r 안쪽 어디에 있는지(r 의 붙은 쪽 끝에서부터의 거리, 쪽 위에 붙은 만큼).
+static func paint_flag(c: CanvasItem,font: Font,r: Rect2,color: Color,label: String,mirrored: bool,fold: float,with_text: bool,with_shadow: bool = true) -> void:
+	var dir := -1.0 if mirrored else 1.0
+	var ax := r.end.x - fold if mirrored else r.position.x + fold  # 쪽 가장자리의 x
+	var top := r.position.y
+	var bottom := r.end.y
+	if with_shadow:
+		c.draw_rect(Rect2(r.position + Vector2(-3.0 if mirrored else 3.0,4.0),r.size),Color(0.16,0.11,0.06,0.28))
+	# 본체: 한 장의 종이. 위가 밝고 아래가 살짝 짙다
+	c.draw_polygon(PackedVector2Array([Vector2(r.position.x,top),Vector2(r.end.x,top),Vector2(r.end.x,bottom),Vector2(r.position.x,bottom)]),PackedColorArray([color.lightened(0.10),color.lightened(0.08),color.darkened(0.03),color.darkened(0.03)]))
+	# 쪽 가장자리에서 꺾이는 곳: 바깥쪽으로 12px 가 어두워졌다가 풀린다
+	var shade := Color(0.2,0.14,0.08,0.34)
+	var clear := Color(0.2,0.14,0.08,0.0)
+	c.draw_polygon(PackedVector2Array([Vector2(ax,top),Vector2(ax + dir * 12.0,top),Vector2(ax + dir * 12.0,bottom),Vector2(ax,bottom)]),PackedColorArray([shade,clear,clear,shade]))
+	if fold > 0.5:
+		c.draw_line(Vector2(ax,top),Vector2(ax,bottom),color.darkened(0.22),1.0)
+	# 윤곽과 붙은 쪽 끝의 접착 자국
+	c.draw_rect(r,color.darkened(0.25),false,1.5)
+	var glue_x := r.end.x if mirrored else r.position.x
+	c.draw_line(Vector2(glue_x,top),Vector2(glue_x,bottom),color.darkened(0.3),2.0)
+	if with_text and font != null:
+		var sz := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,15)
+		var ty := top + (bottom - top) * 0.5 + sz.y * 0.5 - font.get_descent(15)
+		var tx := ax - 16.0 - sz.x if mirrored else ax + 16.0
+		c.draw_string(font,Vector2(tx,ty),label,HORIZONTAL_ALIGNMENT_LEFT,-1,15,FLAG_TEXT)
+
+
+# 책장에 실려 넘어가는 포스트잇의 질감용(3D): 자기 크기 전체에 포스트잇 한 장(그림자 없음). 2 배로 그려 또렷하게 한다.
+class FlagFace extends Control:
+	var color: Color = Color.WHITE
+	var label: String = ""
+	var mirrored: bool = false
+
+	func _draw() -> void:
+		draw_set_transform(Vector2.ZERO,0.0,Vector2(2.0,2.0))
+		BookViews.paint_flag(self,get_theme_default_font(),Rect2(0.0,0.0,size.x * 0.5,size.y * 0.5),color,label,mirrored,0.0,true,false)
+
+
+# 포스트잇 질감 한 장을 SubViewport 로 한 번 그려 돌려준다(parent 의 자식으로 붙는다. 다 쓰면 parent 쪽에서 free).
+static func make_flag_art(parent: Node,color: Color,label: String,mirrored: bool,flag_px: Vector2) -> SubViewport:
+	var vp := SubViewport.new()
+	vp.size = Vector2i(flag_px * 2.0)
+	vp.transparent_bg = true
+	vp.render_target_update_mode = SubViewport.UPDATE_ONCE
+	var face := FlagFace.new()
+	face.color = color
+	face.label = label
+	face.mirrored = mirrored
+	face.size = Vector2(vp.size)
+	vp.add_child(face)
+	parent.add_child(vp)
+	return vp
 
 
 # 3D 책의 표지 질감 그리기용: 자기 크기 전체에 표지 한 면(제본선이 왼쪽)을 그린다.
@@ -194,29 +251,13 @@ class Strip extends Control:
 		for i in range(items.size()):
 			if bool(items[i].get("hidden",false)): continue  # 왼쪽 가장자리로 옮겨 갔거나 책장에 실려 가는 중
 			var r: Rect2 = items[i]["rect"]
-			var c: Color = items[i]["color"]
-			var h := r.size.y
-			var length := r.size.x - float((i * 13) % 9) + (6.0 if i == hover else 0.0)  # 손으로 붙인 듯 길이가 조금씩 다르다
-			var ang := deg_to_rad(1.5) * (1.0 if i % 2 == 0 else -1.0) * (0.6 + 0.2 * float(i % 3))
-			var pivot := Vector2(r.position.x,r.position.y + h * 0.5 + float((i * 37) % 5 - 2))
-			var local := [Vector2(0.0,-h * 0.5),Vector2(length,-h * 0.5),Vector2(length,h * 0.5),Vector2(0.0,h * 0.5)]
-			var pts := PackedVector2Array()
-			for v in local:
-				pts.append(pivot + (v as Vector2).rotated(ang))
-			# 그림자(아래 쪽 모서리에 드리움)
-			var sh := PackedVector2Array()
-			for v in pts:
-				sh.append(v + Vector2(3.0,4.0))
-			draw_colored_polygon(sh,Color(0.16,0.11,0.06,0.30))
-			# 본체: 위가 밝고 아래가 살짝 짙다
-			draw_polygon(pts,PackedColorArray([c.lightened(0.10),c.lightened(0.04),c.darkened(0.04),c.darkened(0.02)]))
-			# 쪽 가장자리에서 꺾이는 부분: 왼쪽 12px 가 어두워졌다가 풀린다
-			var fold := 12.0
-			var fpts := PackedVector2Array([pts[0],pts[0].lerp(pts[1],fold / length),pts[3].lerp(pts[2],fold / length),pts[3]])
-			draw_polygon(fpts,PackedColorArray([Color(0.2,0.14,0.08,0.38),Color(0.2,0.14,0.08,0.0),Color(0.2,0.14,0.08,0.0),Color(0.2,0.14,0.08,0.38)]))
-			# 가장자리 선과 끝 접착 자국
-			draw_polyline(PackedVector2Array([pts[0],pts[1],pts[2],pts[3]]),c.darkened(0.25),1.5)
-			draw_line(pts[3],pts[2],c.darkened(0.3),2.0)
+			var fold := 0.0
+			if bool(items[i].get("current",false)):
+				# 펼친 탭: 한 장의 포스트잇이 쪽 가장자리를 감싸 안쪽 여백(ONTO)까지 붙는다
+				r = Rect2(r.position - Vector2(BookViews.ONTO,0.0),r.size + Vector2(BookViews.ONTO,0.0))
+				fold = BookViews.ONTO
+			if i == hover: r.size.x += 6.0
+			BookViews.paint_flag(self,null,r,items[i]["color"],"",false,fold,false)  # 글자는 내비게이션 버튼이 쓴다
 
 
 class Note extends Control:
@@ -303,26 +344,5 @@ class LeftFlags extends Control:
 		var font := get_theme_default_font()
 		for i in range(items.size()):
 			var r: Rect2 = items[i]["rect"]
-			var c: Color = items[i]["color"]
-			var tab: int = int(items[i]["tab"])
-			var h := r.size.y
-			var length := r.size.x - float((tab * 13) % 9) + (6.0 if i == hover else 0.0)
-			var ang := deg_to_rad(1.5) * (-1.0 if tab % 2 == 0 else 1.0) * (0.6 + 0.2 * float(tab % 3))
-			var pivot := Vector2(r.end.x,r.position.y + h * 0.5 + float((tab * 37) % 5 - 2))
-			var pts := PackedVector2Array()
-			for v in [Vector2(0.0,-h * 0.5),Vector2(-length,-h * 0.5),Vector2(-length,h * 0.5),Vector2(0.0,h * 0.5)]:
-				pts.append(pivot + (v as Vector2).rotated(ang))
-			var sh := PackedVector2Array()
-			for v in pts:
-				sh.append(v + Vector2(-3.0,4.0))
-			draw_colored_polygon(sh,Color(0.16,0.11,0.06,0.30))
-			draw_polygon(pts,PackedColorArray([c.lightened(0.10),c.lightened(0.04),c.darkened(0.04),c.darkened(0.02)]))
-			var fold := 12.0
-			var fpts := PackedVector2Array([pts[0],pts[0].lerp(pts[1],fold / length),pts[3].lerp(pts[2],fold / length),pts[3]])
-			draw_polygon(fpts,PackedColorArray([Color(0.2,0.14,0.08,0.38),Color(0.2,0.14,0.08,0.0),Color(0.2,0.14,0.08,0.0),Color(0.2,0.14,0.08,0.38)]))
-			draw_polyline(PackedVector2Array([pts[0],pts[1],pts[2],pts[3]]),c.darkened(0.25),1.5)
-			draw_line(pts[3],pts[2],c.darkened(0.3),2.0)
-			if font != null:
-				var label: String = items[i]["label"]
-				var sz := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,15)
-				draw_string(font,Vector2(pivot.x - 16.0 - sz.x,pivot.y + sz.y * 0.5 - font.get_descent(15)),label,HORIZONTAL_ALIGNMENT_LEFT,-1,15,Color("2b2f55"))
+			if i == hover: r = Rect2(r.position - Vector2(6.0,0.0),r.size + Vector2(6.0,0.0))
+			BookViews.paint_flag(self,font,r,items[i]["color"],items[i]["label"],true,0.0,true)

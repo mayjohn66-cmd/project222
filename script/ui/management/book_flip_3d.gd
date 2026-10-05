@@ -79,10 +79,13 @@ func build(page_w_px: float,page_h_px: float,spine_px: Vector2,vp_size: Vector2,
 		info["front"] = _tex_mat(front_tex) if i == 0 else _blank_mat()
 		info["back"] = _tex_mat(back_tex) if i == n - 1 else _blank_mat()
 		if i < carry.size():
-			var fm := _blank_mat()
-			fm.albedo_color = (carry[i]["color"] as Color)
-			info["flag_mat"] = fm
+			# 포스트잇: 오른쪽 줄 모양(tex_right)과 왼쪽 줄 모양(tex_left)을 종이 앞뒤면에 각각 입힌다(어느 쪽에서도 글이 바로 읽힌다)
+			var ta: Texture2D = carry[i]["tex_right"]
+			var tb: Texture2D = carry[i]["tex_left"]
+			info["flag_front"] = _flag_mat(ta if forward else tb)
+			info["flag_back"] = _flag_mat(tb if forward else ta)
 			info["flag_z"] = Vector2(carry[i]["z0"],carry[i]["z1"])
+			info["flag_len"] = float(carry[i].get("len",1.0))
 		var inst := MeshInstance3D.new()
 		viewport.add_child(inst)
 		if not forward:
@@ -124,6 +127,16 @@ func _blank_mat() -> StandardMaterial3D:
 	m.albedo_color = PARCHMENT
 	m.vertex_color_use_as_albedo = true
 	m.cull_mode = BaseMaterial3D.CULL_DISABLED
+	return m
+
+
+func _flag_mat(tex: Texture2D) -> StandardMaterial3D:
+	var m := StandardMaterial3D.new()
+	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	m.albedo_texture = tex
+	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	m.texture_filter = BaseMaterial3D.TEXTURE_FILTER_LINEAR
+	m.cull_mode = BaseMaterial3D.CULL_BACK if forward else BaseMaterial3D.CULL_FRONT  # 한쪽 면에서만 보인다(거울상으로 넘기면 감는 방향이 뒤집혀 반대)
 	return m
 
 
@@ -271,18 +284,31 @@ func _rebuild_leaf(info: Dictionary,theta: float) -> void:
 					st.set_color(cols[i])
 					st.add_vertex(verts[i])
 		st.commit(mesh)
-	if info.has("flag_mat"):
+	if info.has("flag_front"):
 		var fz: Vector2 = info["flag_z"]
 		var zc := (fz.x + fz.y) * 0.5
 		var pr := _profile(theta,clampf((zc - (_z0 + _z1) * 0.5) / ((_z1 - _z0) * 0.5),-1.0,1.0),float(info.get("phase",0.0)))
 		var base: Vector2 = (pr[0] as Array)[SEGMENTS]
 		var a_last: float = (pr[1] as Array)[SEGMENTS - 1]
-		var tip := base + Vector2(cos(a_last),sin(a_last)) * FLAG_LEN
-		var fst := SurfaceTool.new()
-		fst.begin(Mesh.PRIMITIVE_TRIANGLES)
-		fst.set_material(info["flag_mat"])
-		var fv := [Vector3(base.x,base.y,fz.x),Vector3(tip.x,tip.y,fz.x),Vector3(tip.x,tip.y,fz.y),Vector3(base.x,base.y,fz.y)]
-		for i in [0,1,2,0,2,3]:
-			fst.add_vertex(fv[i])
-		fst.commit(mesh)
+		var dir := Vector2(cos(a_last),sin(a_last))
+		var tip := base + dir * float(info["flag_len"])
+		var nrm := Vector2(-dir.y,dir.x) * SKIN
+		# uv 의 가로: 종이 쪽(base)에서 바깥(tip)으로. 앞면은 앞쪽 줄 모양, 뒷면은 반대. 거울상으로 넘기는 경우(forward = false)는 가로가 뒤집혀 보이므로 반대로 준다.
+		var ub_front := 0.0
+		for face in [0,1]:
+			var sign_f := 1.0 if face == 0 else -1.0
+			var u_base := ub_front if face == 0 else 1.0 - ub_front
+			var u_tip := 1.0 - u_base
+			var fst := SurfaceTool.new()
+			fst.begin(Mesh.PRIMITIVE_TRIANGLES)
+			fst.set_material(info["flag_front"] if face == 0 else info["flag_back"])
+			var b2 := base + nrm * sign_f
+			var t2 := tip + nrm * sign_f
+			var fv := [Vector3(b2.x,b2.y,fz.x),Vector3(t2.x,t2.y,fz.x),Vector3(t2.x,t2.y,fz.y),Vector3(b2.x,b2.y,fz.y)]
+			var order_i := [0,1,2,0,2,3] if face == 0 else [0,2,1,0,3,2]  # 뒷면은 감는 방향을 뒤집어 반대쪽에서만 보이게 한다
+			var fuv := [Vector2(u_base,0.0),Vector2(u_tip,0.0),Vector2(u_tip,1.0),Vector2(u_base,1.0)]
+			for i in order_i:
+				fst.set_uv(fuv[i])
+				fst.add_vertex(fv[i])
+			fst.commit(mesh)
 	(info["node"] as MeshInstance3D).mesh = mesh
