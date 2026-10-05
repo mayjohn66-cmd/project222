@@ -191,7 +191,7 @@ class Flip extends Control:
 
 	# 쪽 영역(= 이 컨트롤의 왼쪽 위에서 쪽 폭 × (높이-3))을 화면 사진으로 떠서 왼쪽/오른쪽 반으로 돌려준다. 헤드리스면 빈 배열.
 	func capture_halves() -> Array:
-		if DisplayServer.get_name() == "headless": return []
+		if DisplayServer.get_name() == "headless" or not ManagementMenu.PRESENTATION.animations_enabled: return []
 		var shot := get_viewport().get_texture().get_image()
 		if shot == null or shot.is_empty(): return []
 		var ratio := Vector2(shot.get_size()) / get_viewport_rect().size

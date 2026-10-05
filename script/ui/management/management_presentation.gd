@@ -239,6 +239,8 @@ class PaperPattern extends Control:
 # 열기: 닫힌 책(세로형 표지 + 옆의 포스트잇)이 화면 아래에서 올라온 뒤, 표지가 가운데 제본선을 축으로 왼쪽으로 넘어가며 펼쳐지고
 #       책 전체가 가운데로 옮겨 앉은 다음에야 쪽 안의 UI 가 나타난다.
 # 닫기: UI 가 사라지고 표지가 다시 덮인 뒤 책이 아래로 내려간다. 트리가 멈춰 있어도 돌아가도록 PROCESS 모드 트윈을 쓴다.
+# false 면 책 여닫기 연출을 건너뛴다(검사 장면이 창이 움직이는 도중의 위치를 재지 않도록).
+static var animations_enabled: bool = true
 const BOOK_RISE := 0.34
 const BOOK_SWING := 0.62
 const BOOK_SINK := 0.24
@@ -270,7 +272,7 @@ static func _closed_shift(main: Control) -> float:
 	return BookViews.page_width(main.size) * 0.25
 
 static func play_open(menu: Control) -> void:
-	if DisplayServer.get_name() == "headless": return
+	if DisplayServer.get_name() == "headless" or not animations_enabled: return
 	var n := _book_nodes(menu)
 	_kill_book_anim(menu)
 	if not menu.has_meta("dim_alpha"): menu.set_meta("dim_alpha",n["dim"].color.a)
@@ -309,7 +311,7 @@ static func play_open(menu: Control) -> void:
 
 # 닫기 연출을 시작한다. 연출을 못 쓰면(헤드리스 등) false 를 돌려주고 호출한 쪽이 바로 숨긴다.
 static func play_close(menu: Control) -> bool:
-	if DisplayServer.get_name() == "headless": return false
+	if DisplayServer.get_name() == "headless" or not animations_enabled: return false
 	var n := _book_nodes(menu)
 	_kill_book_anim(menu)
 	if not menu.has_meta("dim_alpha"): menu.set_meta("dim_alpha",n["dim"].color.a)
