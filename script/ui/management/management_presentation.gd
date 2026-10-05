@@ -203,9 +203,18 @@ static func apply_tab(menu: Control) -> void:
 	menu.set_meta("book_last_tab",menu.current_tab)
 	var stage = menu.get_meta("book_stage") if menu.has_meta("book_stage") else null
 	if is_instance_valid(stage) and animations_enabled and last >= 0 and last != menu.current_tab and stage.at_rest():
-		_flip_tabs(menu,stage,menu.current_tab > last,absi(menu.current_tab - last))
+		_flip_tabs(menu,stage,last)
 
-# 펼친 탭의 포스트잇이 쪽 위로 넘어온 부분을 그린다(BookViews.Note). 내비게이션이 자리를 잡은 뒤의 버튼 위치를 따라간다.
+# 포스트잇이 어느 쪽에 있는지: 현재 탭 뒤의 탭은 오른쪽, 앞의 탭은 넘어간 종이에 붙어 왼쪽 가장자리, 책장에 실려 넘어가는 중이면 "moving".
+# 3D 책이 없으면(헤드리스) 모두 오른쪽.
+static func flag_side(menu: Control,index: int) -> String:
+	if not uses_3d(): return "right"
+	var moving: Array = menu.get_meta("book_moving") if menu.has_meta("book_moving") else []
+	if moving.has(index): return "moving"
+	return "left" if index < menu.current_tab else "right"
+
+
+# 펼친 탭의 포스트잇이 쪽 위로 넘어온 부분을 그리고(BookViews.Note), 포스트잇들의 자리를 쪽·왼쪽 가장자리에 맞춘다. 내비게이션이 자리를 잡은 뒤의 버튼 위치를 따라간다.
 static func _sync_note(menu: Control) -> void:
 	var main = menu.get_node_or_null("DimBackground/CenterContainer/MainPanel")
 	if main == null: return
@@ -213,17 +222,30 @@ static func _sync_note(menu: Control) -> void:
 	var nav: Control = main.get_node("MainVBox/Body/Navigation")
 	if note == null or menu.current_tab >= nav.get_child_count(): return
 	var strip = main.get_node_or_null("BookStrip")
-	if strip != null:
-		var list: Array = []
-		for bi in range(nav.get_child_count()):
-			var nb: Control = nav.get_child(bi)
-			var nr := nb.get_global_rect()
-			list.append({"rect": Rect2(nr.position - strip.get_global_rect().position,nr.size),"color": Color(INDEX_COLORS[bi % INDEX_COLORS.size()])})
-		strip.set_items(list)
+	var left_list: Array = []
+	var list: Array = []
+	for bi in range(nav.get_child_count()):
+		var nb: Button = nav.get_child(bi)
+		var side := flag_side(menu,bi)
+		var on_right := side == "right"
+		nb.modulate.a = 1.0 if on_right else 0.0
+		nb.mouse_filter = Control.MOUSE_FILTER_STOP if on_right else Control.MOUSE_FILTER_IGNORE
+		var nr := nb.get_global_rect()
+		var color := Color(INDEX_COLORS[bi % INDEX_COLORS.size()])
+		if strip != null:
+			list.append({"rect": Rect2(nr.position - strip.get_global_rect().position,nr.size),"color": color,"hidden": not on_right})
+		if side == "left":
+			left_list.append({"tab": bi,"rect": nr,"color": color,"label": nb.text})
+	if strip != null: strip.set_items(list)
+	var stage := _stage_of(menu)
+	if stage != null: stage.set_left_flags(left_list)
 	var button: Control = nav.get_child(menu.current_tab)
 	var r := button.get_global_rect()
-	note.set_note(Rect2(r.position - note.get_global_rect().position - Vector2(ONTO,0.0),Vector2(ONTO,r.size.y)),Color(INDEX_COLORS[menu.current_tab]))
-
+	var moving: Array = menu.get_meta("book_moving") if menu.has_meta("book_moving") else []
+	if moving.is_empty():
+		note.set_note(Rect2(r.position - note.get_global_rect().position - Vector2(ONTO,0.0),Vector2(ONTO,r.size.y)),Color(INDEX_COLORS[menu.current_tab]))
+	else:
+		note.set_note(Rect2(),Color.WHITE)  # 책장이 넘어가는 동안은 쪽 위로 넘어온 부분을 감춘다
 
 
 # ---------------------------------------------------------------- 3D 책
@@ -299,6 +321,8 @@ static func _ensure_stage(menu: Control) -> BookStage3D:
 	menu.move_child(stage,menu.get_node("DimBackground").get_index() + 1)
 	stage.build(sv,menu.get_viewport_rect().size,"영업 일지",PlayerProgress.display_player_name())
 	stage.outside_clicked.connect(func() -> void: menu.close_menu())
+	stage.tab_picked.connect(func(t: int) -> void: menu.select_tab(t))
+	_sync_note.call_deferred(menu)
 	stage.set_state(1.0,1.0)
 	menu.set_meta("book_stage",stage)
 	return stage
@@ -329,6 +353,9 @@ static func _kill_anim(menu: Control) -> void:
 	menu.set_meta("book_flip",null)
 	var stage := _stage_of(menu)
 	if stage != null: stage.unfreeze_pages()
+	if menu.has_meta("book_moving") and not (menu.get_meta("book_moving") as Array).is_empty():
+		menu.set_meta("book_moving",[])
+		_sync_note.call_deferred(menu)
 
 
 static func play_open(menu: Control) -> void:
@@ -393,26 +420,45 @@ static func play_close(menu: Control) -> bool:
 
 
 # 탭을 옮길 때 책장 넘김. 옛 두 쪽을 사진으로 떠 쪽에 입혀 두고(살아 있는 화면이 먼저 바뀌어도 보이지 않게),
-# 새 화면이 그려진 뒤 새 두 쪽 사진을 떠서 BookFlip3D 로 넘긴다.
-static func _flip_tabs(menu: Control,stage: BookStage3D,forward: bool,count: int) -> void:
+# 새 화면이 그려진 뒤 새 두 쪽 사진을 떠서 BookFlip3D 로 넘긴다. 사이를 건너는 탭들의 포스트잇은 종이에 붙어 함께 넘어간다:
+# 뒤쪽 탭으로 가면 old..new-1 탭이 왼쪽으로(맨 위 종이가 old 탭 것), 앞쪽 탭으로 가면 new..old-1 탭이 오른쪽으로(맨 위 종이가 old-1 탭 것).
+static func _flip_tabs(menu: Control,stage: BookStage3D,old_tab: int) -> void:
+	var new_tab: int = menu.current_tab
+	var forward := new_tab > old_tab
+	var moving: Array = []
+	var order: Array = []  # 종이 순서(먼저 넘어가는 종이부터)에 따른 탭
+	if forward:
+		for t in range(old_tab,new_tab): order.append(t)
+	else:
+		for t in range(old_tab - 1,new_tab - 1,-1): order.append(t)
+	moving = order.duplicate()
 	var old: Array = stage.capture_halves()
 	if old.is_empty(): return
 	stage.freeze_pages(old[0],old[1])
+	menu.set_meta("book_moving",moving)
+	_sync_note.call_deferred(menu)
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	if not is_instance_valid(menu) or not is_instance_valid(stage) or not stage.is_inside_tree(): return
 	var fresh: Array = stage.capture_halves()
 	if fresh.is_empty():
-		stage.unfreeze_pages()
+		_kill_anim(menu)
 		return
 	_kill_anim(menu)  # 앞서 넘기던 것이 있으면 걷는다(쪽 질감은 곧 다시 사진으로)
 	stage.freeze_pages(old[0],old[1])
+	menu.set_meta("book_moving",moving)
+	_sync_note(menu)
+	var nav: Control = menu.get_node("DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation")
+	var carry: Array = []
+	for t in order:
+		var zr := stage.flag_z_range(nav.get_child(t).get_global_rect())
+		carry.append({"z0": zr.x,"z1": zr.y,"color": Color(INDEX_COLORS[t % INDEX_COLORS.size()])})
 	var geo: Dictionary = stage.page_geometry()
 	var flip := BookFlip3D.new()
 	flip.name = "BookFlip3D"
 	menu.add_child(flip)
 	menu.move_child(flip,stage.get_index() + 1)
-	flip.build(geo["page_w"],geo["page_h"],geo["spine"],menu.get_viewport_rect().size,old[0],old[1],fresh[0],fresh[1],forward,count)
+	flip.build(geo["page_w"],geo["page_h"],geo["spine"],menu.get_viewport_rect().size,old[0],old[1],fresh[0],fresh[1],forward,order.size(),carry)
 	menu.set_meta("book_flip",flip)
 	var tw := menu.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 	tw.tween_method(flip.set_progress,0.0,1.0,flip.duration)

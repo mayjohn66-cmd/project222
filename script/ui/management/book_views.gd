@@ -192,6 +192,7 @@ class Strip extends Control:
 
 	func _draw() -> void:
 		for i in range(items.size()):
+			if bool(items[i].get("hidden",false)): continue  # 왼쪽 가장자리로 옮겨 갔거나 책장에 실려 가는 중
 			var r: Rect2 = items[i]["rect"]
 			var c: Color = items[i]["color"]
 			var h := r.size.y
@@ -259,3 +260,69 @@ class Hint extends Control:
 		draw_rect(key,Color("b9a582"),false,2.0)
 		draw_string(font,Vector2(7.0,16.0),"ESC",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("44392e"))
 		draw_string(font,Vector2(key.end.x + 8.0,17.0),"닫기",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("f5eddc"))
+
+
+# 현재 탭보다 앞 탭의 포스트잇: 넘어간 종이에 붙은 채 책의 왼쪽 가장자리에 모인다(오른쪽 Strip 의 거울상). 누르면 그 탭으로 돌아간다.
+class LeftFlags extends Control:
+	signal picked(tab: int)
+	## items = [{tab: int, rect: Rect2(이 컨트롤 기준, 쪽 가장자리에서 왼쪽으로 뻗는 자리), color: Color, label: String}]
+	var items: Array = []
+	var hover: int = -1
+	var enabled: bool = true
+
+	func set_items(list: Array) -> void:
+		items = list
+		queue_redraw()
+
+	func _item_at(p: Vector2) -> int:
+		for i in range(items.size()):
+			if (items[i]["rect"] as Rect2).grow(2.0).has_point(p): return i
+		return -1
+
+	func _has_point(point: Vector2) -> bool:
+		return enabled and _item_at(point) >= 0
+
+	func _gui_input(event: InputEvent) -> void:
+		if event is InputEventMouseMotion:
+			var h := _item_at((event as InputEventMouseMotion).position)
+			if h != hover:
+				hover = h
+				queue_redraw()
+		elif event is InputEventMouseButton and event.pressed and event.button_index == MOUSE_BUTTON_LEFT:
+			var i := _item_at((event as InputEventMouseButton).position)
+			if i >= 0:
+				accept_event()
+				picked.emit(int(items[i]["tab"]))
+
+	func _notification(what: int) -> void:
+		if what == NOTIFICATION_MOUSE_EXIT and hover != -1:
+			hover = -1
+			queue_redraw()
+
+	func _draw() -> void:
+		var font := get_theme_default_font()
+		for i in range(items.size()):
+			var r: Rect2 = items[i]["rect"]
+			var c: Color = items[i]["color"]
+			var tab: int = int(items[i]["tab"])
+			var h := r.size.y
+			var length := r.size.x - float((tab * 13) % 9) + (6.0 if i == hover else 0.0)
+			var ang := deg_to_rad(1.5) * (-1.0 if tab % 2 == 0 else 1.0) * (0.6 + 0.2 * float(tab % 3))
+			var pivot := Vector2(r.end.x,r.position.y + h * 0.5 + float((tab * 37) % 5 - 2))
+			var pts := PackedVector2Array()
+			for v in [Vector2(0.0,-h * 0.5),Vector2(-length,-h * 0.5),Vector2(-length,h * 0.5),Vector2(0.0,h * 0.5)]:
+				pts.append(pivot + (v as Vector2).rotated(ang))
+			var sh := PackedVector2Array()
+			for v in pts:
+				sh.append(v + Vector2(-3.0,4.0))
+			draw_colored_polygon(sh,Color(0.16,0.11,0.06,0.30))
+			draw_polygon(pts,PackedColorArray([c.lightened(0.10),c.lightened(0.04),c.darkened(0.04),c.darkened(0.02)]))
+			var fold := 12.0
+			var fpts := PackedVector2Array([pts[0],pts[0].lerp(pts[1],fold / length),pts[3].lerp(pts[2],fold / length),pts[3]])
+			draw_polygon(fpts,PackedColorArray([Color(0.2,0.14,0.08,0.38),Color(0.2,0.14,0.08,0.0),Color(0.2,0.14,0.08,0.0),Color(0.2,0.14,0.08,0.38)]))
+			draw_polyline(PackedVector2Array([pts[0],pts[1],pts[2],pts[3]]),c.darkened(0.25),1.5)
+			draw_line(pts[3],pts[2],c.darkened(0.3),2.0)
+			if font != null:
+				var label: String = items[i]["label"]
+				var sz := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,15)
+				draw_string(font,Vector2(pivot.x - 16.0 - sz.x,pivot.y + sz.y * 0.5 - font.get_descent(15)),label,HORIZONTAL_ALIGNMENT_LEFT,-1,15,Color("2b2f55"))

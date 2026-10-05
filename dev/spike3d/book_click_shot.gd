@@ -46,6 +46,13 @@ func run() -> void:
 	await wait(1.5)
 	print("클릭 후 탭=", mm.current_tab, " (기대 5)")
 	get_viewport().get_texture().get_image().save_png(dir + "/after_click.png")
+	# 앞 탭 포스트잇은 왼쪽 가장자리에 있다: 그중 인벤토리(0)를 눌러 돌아간다
+	var items: Array = stage.left_flags.items
+	print("왼쪽 포스트잇 수=", items.size(), " (기대 5)")
+	await click((items[0]["rect"] as Rect2).get_center())
+	await wait(1.5)
+	print("왼쪽 클릭 후 탭=", mm.current_tab, " (기대 0)")
+	get_viewport().get_texture().get_image().save_png(dir + "/after_back.png")
 	await click(Vector2(5, 5))
 	await wait(1.2)
 	print("바깥 클릭 후 visible=", mm.visible, " (기대 false)")

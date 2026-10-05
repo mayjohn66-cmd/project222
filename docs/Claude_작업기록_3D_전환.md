@@ -105,6 +105,7 @@
 | 3D 책(UI 가 곧 책) | `book_stage_3d.gd` | **메뉴 UI(MainPanel)를 SubViewport 에 넣고 그 화면을 3D 책의 두 쪽·포스트잇 질감으로 쓴다**(2D 와 3D 를 갈아끼우는 순간이 없음). 정사영 카메라, 펼침이 끝나면 바로 위에서 1:1 로 내려다봄. 마우스는 화면 좌표를 UI 좌표로 바꿔 `push_input`, 입력칸 키 입력도 전달, 책 바깥 클릭 = 닫기. 표지 바깥 질감만 2D 표지 그림을 한 번 그려 사용 |
 | 연출 순서 | `management_presentation.gd` | 열기: 책이 화면 아래에서 올라옴(시작 전엔 표지가 보이지 않음) → 표지가 제본선 축으로 넘어가며 쪽의 UI 가 표지 밑에서 드러남. 닫기: 반대. 메뉴가 보이는 동안만 UI 화면을 그리고 3D 책을 세움. 헤드리스(검사)는 SubViewport 없이 기존 2D 배치. `animations_enabled`(끄기, 검사 장면용) |
 | 탭 넘김(3D 책장) | `book_flip_3d.gd`, `management_presentation.gd`(`_flip_tabs`) | 탭을 옮기면 옛 두 쪽을 사진으로 떠 쪽에 입혀 두고, 새 화면이 그려진 뒤 새 두 쪽 사진을 떠서 넘어가는 한 장의 앞뒤면 + 바닥 두 쪽으로 쓴다. 14마디 곡면·그림자. **탭이 멀수록 종이를 더 넘긴다**(최대 6장, 장마다 0.09초 늦게 시작) |
+| 포스트잇 좌우 분리 | `management_presentation.gd`(`flag_side`, `_sync_note`), `book_views.gd`(`LeftFlags`), `book_flip_3d.gd`(`carry`) | 포스트잇의 세로 자리는 탭마다 고정, 현재 탭보다 앞 탭은 넘어간 종이에 붙어 **왼쪽 가장자리**(눌러서 되돌아감), 뒤 탭은 오른쪽. 책장을 넘기면 사이 탭의 포스트잇이 해당 종이에 붙은 채 함께 넘어간다(종이 순서대로). 왼쪽이 잘리지 않게 책을 `LEFT_FLAG_SHIFT`(40px) 오른쪽으로 둠 |
 | 탭별 두 쪽 배치 | `book_layout.gd`, `book_flow_vbox.gd`, `inventory_detail_pane.gd` | 인벤토리(왼쪽 목록 / 오른쪽 상세 + 가구는 3D 미리보기), 설계도·생산·직원·건설·일정·정보. 긴 목록은 `BookFlowVBox` 가 두 쪽에 걸쳐 흐름 |
 | 이름 | `player_progress.gd`, `title_screen.gd` | 새 게임 전에 점장 이름을 지음(최대 8자), 저장·불러오기, 표지 명패에 표시 |
 

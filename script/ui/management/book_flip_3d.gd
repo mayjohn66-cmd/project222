@@ -9,6 +9,7 @@ const PX := 100.0
 const SEGMENTS := 14
 const CURL := 0.22  # 자유 모서리가 뒤처지는 정도(라디안). 0 = 판판하게, 값이 클수록 휜다
 const TILT_DEG := 0.0  # 넘기는 한가운데에서 카메라가 기우는 정도(도). 0 = 늘 바로 위에서 본다
+const FLAG_LEN := 0.9  # 종이에 붙은 포스트잇이 종이 바깥으로 뻗은 길이(월드)
 const SKIN := 0.006  # 앞면·뒷면 사이 두께의 절반
 
 const LEAF_TIME := 0.55  # 종이 한 장이 넘어가는 시간(초)
@@ -29,7 +30,8 @@ var _target: Vector3 = Vector3.ZERO
 
 
 # count: 건너뛰는 탭 수(= 넘길 종이 수)
-func build(page_w_px: float,page_h_px: float,spine_px: Vector2,vp_size: Vector2,old_left: Texture2D,old_right: Texture2D,new_left: Texture2D,new_right: Texture2D,is_forward: bool,count: int = 1) -> void:
+# carry: 종이마다 붙어 함께 넘어가는 포스트잇 [{z0, z1, color}](없으면 빈 칸). 종이의 자유 모서리 바깥으로 FLAG_LEN 만큼 뻗는다
+func build(page_w_px: float,page_h_px: float,spine_px: Vector2,vp_size: Vector2,old_left: Texture2D,old_right: Texture2D,new_left: Texture2D,new_right: Texture2D,is_forward: bool,count: int = 1,carry: Array = []) -> void:
 	forward = is_forward
 	var n := clampi(count,1,MAX_LEAVES)
 	duration = LEAF_TIME + LEAF_STAGGER * float(n - 1)
@@ -67,6 +69,11 @@ func build(page_w_px: float,page_h_px: float,spine_px: Vector2,vp_size: Vector2,
 		var info := {}
 		info["front"] = _tex_mat(front_tex) if i == 0 else _blank_mat()
 		info["back"] = _tex_mat(back_tex) if i == n - 1 else _blank_mat()
+		if i < carry.size():
+			var fm := _blank_mat()
+			fm.albedo_color = (carry[i]["color"] as Color)
+			info["flag_mat"] = fm
+			info["flag_z"] = Vector2(carry[i]["z0"],carry[i]["z1"])
 		var inst := MeshInstance3D.new()
 		viewport.add_child(inst)
 		if not forward:
@@ -208,4 +215,16 @@ func _rebuild_leaf(info: Dictionary,theta: float) -> void:
 				st.set_uv(uv[i])
 				st.add_vertex(v[i])
 		st.commit(mesh)
+	if info.has("flag_mat"):
+		var fz: Vector2 = info["flag_z"]
+		var base: Vector2 = pts[SEGMENTS]
+		var a_last: float = angles[SEGMENTS - 1]
+		var tip := base + Vector2(cos(a_last),sin(a_last)) * FLAG_LEN
+		var fst := SurfaceTool.new()
+		fst.begin(Mesh.PRIMITIVE_TRIANGLES)
+		fst.set_material(info["flag_mat"])
+		var fv := [Vector3(base.x,base.y,fz.x),Vector3(tip.x,tip.y,fz.x),Vector3(tip.x,tip.y,fz.y),Vector3(base.x,base.y,fz.y)]
+		for i in [0,1,2,0,2,3]:
+			fst.add_vertex(fv[i])
+		fst.commit(mesh)
 	(info["node"] as MeshInstance3D).mesh = mesh

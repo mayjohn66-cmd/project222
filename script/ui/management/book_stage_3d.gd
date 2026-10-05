@@ -8,12 +8,14 @@ extends Control
 ## 제본선을 축으로(z 축 회전) 왼쪽으로 넘어가 왼쪽 쪽(= 표지 안쪽 면지)이 된다.
 
 signal outside_clicked
+signal tab_picked(tab: int)
 
 const PX := 100.0
 const COVER_T := 0.05
 const BACK_T := 0.05
 const PAGES_T := 0.16
 const PITCH_START := 54.0  # 시작할 때 카메라가 내려다보는 각도(도). 90 = 바로 위
+const LEFT_FLAG_SHIFT := 40.0  # 책을 오른쪽으로 옮기는 정도(px)
 const PAGE_MARGIN := 18.0  # UI 화면(MainPanel) 안에서 쪽이 시작하는 여백(= 둘레 여백)
 
 var ui_viewport: SubViewport
@@ -26,6 +28,7 @@ var inner_page_mat: StandardMaterial3D
 var right_page_mat: StandardMaterial3D
 var nav_mat: StandardMaterial3D
 var hint: Control
+var left_flags: BookViews.LeftFlags
 var _art_viewport: SubViewport
 var _viewport: SubViewport
 var _target: Vector3 = Vector3.ZERO
@@ -53,7 +56,8 @@ func build(ui: SubViewport,screen_size: Vector2,title_text: String,owner_text: S
 	_page_h_px = paper_size.y - 3.0
 	_half_w = _page_w_px * 0.5 / PX
 	# 정지 상태에서 UI 화면 한가운데가 모니터 한가운데에 오도록 놓는다
-	_offset = (screen_size - _ui_size) * 0.5
+	# 왼쪽 가장자리의 포스트잇(앞 탭)이 화면 밖으로 잘리지 않도록 책을 오른쪽으로 조금 옮긴다(오른쪽 포스트잇 줄은 UI 안에 이미 있다)
+	_offset = (screen_size - _ui_size) * 0.5 + Vector2(LEFT_FLAG_SHIFT,0.0)
 	var spine_ui := Vector2(PAGE_MARGIN,PAGE_MARGIN) + Vector2(_page_w_px * 0.5,_page_h_px * 0.5)
 	_spine_screen = spine_ui + _offset
 	_target = Vector3((screen_size.x * 0.5 - _spine_screen.x) / PX,0.0,(screen_size.y * 0.5 - _spine_screen.y) / PX)
@@ -136,6 +140,12 @@ func build(ui: SubViewport,screen_size: Vector2,title_text: String,owner_text: S
 	hint.visible = false
 	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(hint)
+	# 왼쪽 가장자리 포스트잇(앞 탭들): 화면 위에 얹는 2D. 펼침이 끝난 뒤에만 보인다
+	left_flags = BookViews.LeftFlags.new()
+	left_flags.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	left_flags.visible = false
+	left_flags.picked.connect(func(t: int) -> void: tab_picked.emit(t))
+	add_child(left_flags)
 	set_state(0.0,0.0)
 
 
@@ -157,6 +167,31 @@ func set_state(rise: float,open: float) -> void:
 	var drop := clampf(1.0 - rise,0.0,1.0)
 	book.position = Vector3(lerpf(-_half_w * 0.5,0.0,smoothstep(0.0,1.0,open)),0.0,drop * drop * (_vp_h / PX) * 1.9)
 	hint.visible = at_rest()
+	_sync_left_flags()
+
+
+# 오른쪽 포스트잇(내비게이션 버튼) 자리 rect(UI 화면 좌표)를 제본선 기준으로 뒤집어 왼쪽 가장자리 자리로 바꿔 건넨다.
+# list = [{tab, rect(UI 좌표, 오른쪽 자리), color, label}]
+func set_left_flags(list: Array) -> void:
+	var out: Array = []
+	for it in list:
+		var rs: Rect2 = Rect2((it["rect"] as Rect2).position + _offset,(it["rect"] as Rect2).size)
+		var end_x := 2.0 * _spine_screen.x - rs.position.x
+		out.append({"tab": it["tab"],"rect": Rect2(end_x - rs.size.x,rs.position.y,rs.size.x,rs.size.y),"color": it["color"],"label": it["label"]})
+	left_flags.set_items(out)
+	_sync_left_flags()
+
+
+func _sync_left_flags() -> void:
+	if left_flags == null: return
+	left_flags.visible = _rise >= 0.999 and _open >= 0.999 and not left_flags.items.is_empty()
+	left_flags.enabled = at_rest()
+
+
+# 쪽 질감 영역 rect(UI 좌표)의 위아래를 책 월드 z 로 바꾼다(책장에 실려 가는 포스트잇의 자리)
+func flag_z_range(ui_rect: Rect2) -> Vector2:
+	var sy := _spine_screen.y - _offset.y
+	return Vector2((ui_rect.position.y - sy) / PX,(ui_rect.end.y - sy) / PX)
 
 
 func rise_value() -> float:
@@ -219,6 +254,7 @@ func freeze_pages(left_tex: Texture2D,right_tex: Texture2D) -> void:
 		m.uv1_scale = Vector3.ONE
 		m.uv1_offset = Vector3.ZERO
 	hint.visible = false
+	_sync_left_flags()
 
 
 func unfreeze_pages() -> void:
@@ -226,6 +262,7 @@ func unfreeze_pages() -> void:
 	_set_ui_region(inner_page_mat,Rect2(PAGE_MARGIN,PAGE_MARGIN,_page_w_px * 0.5,_page_h_px))
 	_set_ui_region(right_page_mat,Rect2(PAGE_MARGIN + _page_w_px * 0.5,PAGE_MARGIN,_page_w_px * 0.5,_page_h_px))
 	hint.visible = at_rest()
+	_sync_left_flags()
 
 
 func page_geometry() -> Dictionary:
