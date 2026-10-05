@@ -1,0 +1,11 @@
+item_id,shelf_life_days,freezable
+bread,6,true
+camp_bread,3,true
+herbal_bread,4,true
+berry_filled_bread,3,true
+packed_mushroom_meal,2,true
+mushroom_stew,2,true
+traveler_stew,3,true
+berry_juice,3,false
+herb_drink,4,false
+dried_fruit,14,true

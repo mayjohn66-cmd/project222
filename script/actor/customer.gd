@@ -581,6 +581,7 @@ func arrive_at_target():
 
 
 			carried_item_id = wanted_item_id
+			FoodShelfLife.capture(self, target_shelf)
 			try_decoration_extra_purchase()
 
 			if carried_amount < wanted_amount:
@@ -754,10 +755,10 @@ func checkout_item() -> void:
 
 		return
 
-	var total_price: int = (
-		unit_price
-		* carried_amount
-	)
+	var total_price: int = FoodShelfLife.customer_total(self)
+	if total_price <= 0:
+		_return_unpaid_items_to_shelf()
+		return
 
 	purchase_completed = true
 	visit_result_recorded = true
@@ -1688,6 +1689,12 @@ func choose_best_stocked_shelf(
 	item_id: String,
 	requested_amount: int
 ):
+	if FoodShelfLife.tracked(item_id):
+		var food_shelves: Array = []
+		for shelf in available_shelves:
+			if is_instance_valid(shelf) and not shelf.is_queued_for_deletion() and shelf.get_item_stock(item_id) > 0: food_shelves.append(shelf)
+		if not food_shelves.is_empty(): return FoodShelfLife.ordered_shelves(food_shelves, item_id)[0]
+		return null
 	var enough_shelves: Array = []
 	var partial_shelves: Array = []
 
@@ -1730,15 +1737,20 @@ func choose_best_stocked_shelf(
 
 	# 요구 수량을 전부 제공할 수 있는 진열대 우선
 	if not enough_shelves.is_empty():
+		if FoodShelfLife.tracked(item_id): return FoodShelfLife.ordered_shelves(enough_shelves, item_id)[0]
 		return enough_shelves.pick_random()
 
 	# 전부 제공할 수 없다면 재고가 가장 많은 진열대 선택
 	if not partial_shelves.is_empty():
+		if FoodShelfLife.tracked(item_id): return FoodShelfLife.ordered_shelves(partial_shelves, item_id)[0]
 		return partial_shelves.pick_random()
 
 	return null
 
 func _return_unpaid_items_to_shelf() -> void:
+	if FoodShelfLife.tracked(carried_item_id):
+		FoodShelfLife.recover_customer(self)
+		return
 	if carried_item_id.is_empty():
 		return
 
@@ -2042,6 +2054,7 @@ func try_decoration_extra_purchase() -> void:
 		return
 
 	carried_amount += added_amount
+	FoodShelfLife.capture(self, target_shelf, true)
 
 func _record_final_visit_result() -> void:
 	if not visit_recorded:

@@ -73,6 +73,9 @@ func try_interact() -> bool:
 	return true
 
 func _can_charge(customer) -> bool:
+	if is_instance_valid(customer) and FoodShelfLife.tracked(customer.carried_item_id) and FoodShelfLife.customer_total(customer) <= 0:
+		customer.go_to_exit()
+		return false
 	return is_instance_valid(customer) and not customer.is_queued_for_deletion() \
 		and not customer.force_exit_requested and not customer.purchase_completed \
 		and not customer.carried_item_id.is_empty() and customer.carried_amount > 0
@@ -95,7 +98,7 @@ func _process(delta: float) -> void:
 func _finish_checkout() -> void:
 	var customer = active_customer
 	var register = active_register
-	var price: int = ItemData.get_item_price(customer.carried_item_id) * customer.carried_amount
+	var price: int = FoodShelfLife.customer_total(customer)
 	# 기존 매출·상품·퇴장 처리를 재사용해 결제 중복을 막는다.
 	if customer.has_method("complete_checkout_by_player"):
 		customer.complete_checkout_by_player()
@@ -132,7 +135,7 @@ func _update_panel() -> void:
 	var available: bool = not register.is_reserved_for_other(player) \
 		and register.is_worker_cell_available(_cashier_cell(register), player)
 	var caption := "%s ×%d · %dG" % [ItemData.get_item_name(customer.carried_item_id),
-		customer.carried_amount, ItemData.get_item_price(customer.carried_item_id) * customer.carried_amount]
+		customer.carried_amount, FoodShelfLife.customer_total(customer)]
 	if not available: caption = "직원이 계산 중입니다"
 	panel.display(caption, elapsed / maxf(checkout_seconds, 0.01), is_busy(), available)
 

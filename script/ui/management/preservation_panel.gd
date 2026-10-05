@@ -101,7 +101,7 @@ func _fit() -> void:
 
 func open() -> void:
 	PreservationService.settle()
-	message.text = "설비는 가게에 고정 설치됩니다. 보관 중에는 변형되지 않아요.\n부탁을 전달하려면 필요한 만큼 꺼내 게시판에 가져가세요."
+	message.text = "설비는 가게에 고정 설치됩니다. 계절 재료는 보존되고 식품은 냉장 시 천천히 변하며 냉동 시 멈춥니다.\n부탁을 전달하려면 필요한 만큼 꺼내 게시판에 가져가세요."
 	refresh()
 	popup_centered(Vector2i(minf(650, _bounds().x - 32), minf(470, _bounds().y - 40)))
 
@@ -129,6 +129,8 @@ func refresh() -> void:
 			var caption := _label()
 			caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			caption.text = "%s · 창고 %d / 보관 %d" % [ItemData.get_item_name(item), GameState.get_item_count(item), int(GameState.preservation_state[id].get(item, 0))]
+			if FoodShelfLife.tracked(item):
+				caption.tooltip_text = FoodShelfLife.describe(item, FoodShelfLife.state()[id].get(item, []))
 			row.add_child(caption)
 			var put := _button("넣기", _move.bind(id, item, true))
 			put.disabled = GameState.get_item_count(item) <= 0 or PreservationService.count(id) >= int(unit["capacity"])
@@ -166,7 +168,9 @@ func _install(id: String) -> void:
 
 func _move(id: String, item: String, putting: bool) -> void:
 	var moved := PreservationService.deposit(id, item) if putting else PreservationService.withdraw(id, item)
-	if moved > 0: message.text = "%s 1개를 %s. 꺼낸 얼음은 다음 아침 전에 사용하거나 다시 보관하세요." % [ItemData.get_item_name(item), "넣었습니다" if putting else "꺼냈습니다"]
+	if moved > 0:
+		message.text = "%s 1개를 %s." % [ItemData.get_item_name(item), "넣었습니다" if putting else "꺼냈습니다"]
+		message.text += " 남은 유통기한은 그대로 이어집니다." if FoodShelfLife.tracked(item) else " 꺼낸 얼음은 다음 아침 전에 사용하거나 다시 보관하세요."
 	else: message.text = "재고와 보관함의 빈자리를 확인해 주세요."
 	refresh()
 	_refresh_inventory()

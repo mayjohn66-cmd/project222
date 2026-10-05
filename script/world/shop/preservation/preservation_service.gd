@@ -15,6 +15,7 @@ static func installed(id: String) -> bool:
 	return GameState.preservation_state.get("installed", []).has(id)
 
 static func count(id: String) -> int:
+	FoodShelfLife.settle()
 	var total := 0
 	for amount in GameState.preservation_state.get(id, {}).values(): total += int(amount)
 	return total
@@ -33,8 +34,11 @@ static func deposit(id: String, item: String, amount: int = 1) -> int:
 	if entry.is_empty() or not installed(id) or not entry["accepts"].has(item) or amount <= 0: return 0
 	var moved := mini(amount, mini(GameState.get_item_count(item), int(entry["capacity"]) - count(id)))
 	if moved <= 0: return 0
+	var batches := FoodShelfLife.peek_inventory(item, moved) if FoodShelfLife.tracked(item) else []
 	var removed := GameState.remove_item(item, moved)
 	var contents: Dictionary = GameState.preservation_state[id]
+	if FoodShelfLife.tracked(item):
+		FoodShelfLife.zone_batches(id, item, int(contents.get(item, 0))).append_array(batches)
 	contents[item] = int(contents.get(item, 0)) + removed
 	PreservationLessonRecords.record_deposit(id, item, removed)
 	return removed
@@ -45,9 +49,11 @@ static func withdraw(id: String, item: String, amount: int = 1) -> int:
 	var contents: Dictionary = GameState.preservation_state[id]
 	var moved := mini(amount, int(contents.get(item, 0)))
 	if moved <= 0: return 0
+	var batches: Array = []
+	if FoodShelfLife.tracked(item): batches = FoodShelfLife.take(FoodShelfLife.zone_batches(id, item, int(contents[item])), moved)
 	contents[item] = int(contents[item]) - moved
 	if contents[item] == 0: contents.erase(item)
-	GameState.add_item(item, moved)
+	GameState.add_item(item, moved, batches)
 	PreservationLessonRecords.record_withdraw(id, item, moved)
 	return moved
 
@@ -76,6 +82,7 @@ static func valid_state(value: Variant, day: int) -> bool:
 # season, ice changes at the next dawn. Moving warm stock never refreshes a timer.
 # Cold stock is separate ownership, not a flag on all stock with the same item ID.
 static func settle() -> void:
+	FoodShelfLife.settle()
 	var state: Dictionary = GameState.preservation_state
 	if state.is_empty():
 		GameState.preservation_state = initial_state(GameState.total_day)

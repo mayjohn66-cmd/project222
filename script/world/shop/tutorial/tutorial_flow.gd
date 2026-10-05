@@ -34,6 +34,7 @@ func goal_met(step: Dictionary, world: Node) -> bool:
 				for slot in object.slots:
 					if int(slot.get("stock", 0)) > 0 and ItemData.get_sellable_items().has(str(slot.get("item_id", ""))): return true
 			return false
+		"food_care": return bool(FoodShelfLife.state()["learned"])
 		"checkout": return PlayerProgress.story_beat_days.has(CheckoutTutorial.BEAT_ID)
 		"barter": return OpeningJourneyFlow.traded()
 		"raw_sale": return PlayerProgress.story_beat_days.has(OpeningJourneyFlow.RAW_SALE)

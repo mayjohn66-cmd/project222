@@ -58,6 +58,12 @@ func setup(
 			+ "G"
 		)
 		tooltip_text = ItemData.get_item_name(item_id)
+		if FoodShelfLife.tracked(item_id) and stock > 0:
+			var batches := FoodShelfLife.slot_batches(slot_data)
+			var oldest := batches.duplicate(true)
+			var receipt := FoodShelfLife.take(oldest, 1)
+			stock_label.text = "%dG" % FoodShelfLife.receipt_total(item_id, receipt)
+			tooltip_text += "\n" + FoodShelfLife.describe(item_id, batches)
 
 
 func _on_pressed() -> void:

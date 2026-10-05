@@ -124,6 +124,8 @@ func setup(
 			"판매: 불가"
 		)
 
+	if FoodShelfLife.tracked(item_id):
+		tooltip_lines.append(FoodShelfLife.describe(item_id, FoodShelfLife.state()["inventory"].get(item_id, [])))
 	tooltip_text = "\n".join(
 		tooltip_lines
 	)
@@ -321,6 +323,8 @@ func setup_equipment_instance(
 		"현재 위치: " + location_text
 	]
 
+	if FoodShelfLife.tracked(item_id):
+		tooltip_lines.append(FoodShelfLife.describe(item_id, FoodShelfLife.state()["inventory"].get(item_id, [])))
 	tooltip_text = "\n".join(
 		tooltip_lines
 	)

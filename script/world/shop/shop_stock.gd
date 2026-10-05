@@ -6,6 +6,7 @@ extends RefCounted
 static func get_stocked_item_ids(
 	tree: SceneTree
 ) -> Array[String]:
+	FoodShelfLife.settle()
 	var result: Array[String] = []
 
 	for shelf in tree.get_nodes_in_group("shelf"):

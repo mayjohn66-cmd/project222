@@ -54,6 +54,7 @@ func prepare_practice_checkout(cell: Vector2i) -> bool:
 		if shelf.take_items_by_id(guide_item_id, 1) > 0:
 			target_shelf = shelf
 			carried_amount = 1
+			FoodShelfLife.capture(self, shelf)
 			break
 	if carried_amount == 0:
 		carried_item_id = ""

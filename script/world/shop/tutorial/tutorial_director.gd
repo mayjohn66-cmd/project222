@@ -17,6 +17,7 @@ var pending: Dictionary = {}
 var barter_panel: ArrivalBarterPanel
 
 func _ready() -> void:
+	add_child(FoodShelfLifeDirector.new())
 	flow.settings = SETTINGS
 	player = get_parent().get_node("Actors/Player")
 	manager = get_parent().get_node("DayManager")

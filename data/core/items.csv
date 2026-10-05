@@ -114,3 +114,4 @@ dried_spring_bud,말린 봄 새순,material,material,35,1,1,true,true,res://art/
 dried_summer_mint,말린 물박하,material,material,35,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,베이킹 작업대에서 여름 물박하를 말려 보존했다. 상온에서도 계절을 넘길 수 있고 겨울의 코르빈이 찾는다.,0,0,inventory,shelf,1
 berry_filled_bread,열매 소를 넣은 빵,store_product,food,400,0,0,true,true,res://art/items/pixel_v1/bread.png,현지 열매와 익숙한 빵을 조합해 만든 간식이다.,0,0,inventory,shelf,0
 packed_mushroom_meal,버섯 도시락,store_product,food,650,0,0,true,true,res://art/items/pixel_v1/bread.png,버섯 음식과 빵을 함께 챙긴 한 끼다.,0,0,inventory,shelf,0
+food_compost,퇴비 재료,material,material,5,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,기한이 지나 분리한 식품을 재활용한 재료다. 식품으로는 되돌릴 수 없다.,0,0,inventory,shelf,1

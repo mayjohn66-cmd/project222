@@ -1,0 +1,12 @@
+[gd_resource type="Resource" script_class="FoodShelfLifeSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/preservation/food_shelf_life_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+ambient_age = 2
+fridge_age = 1
+freezer_age = 0
+markdown_days = 1
+markdown_percent = 30
+recycle_input = 2
+recycle_output = 1
+recycle_item = "food_compost"

@@ -164,6 +164,9 @@ func run() -> void:
 	save_reload()
 	check(CraftingPathFlow.done("craft_first_shelf") and RecipeUnlockData.is_recipe_available("bake_bread"),"completed path and modern crafting persist")
 	check(CustomerDemandData._get_candidate_items({"target_type":"category","target_id":"food"}).has("camp_bread"),"native bread participates in ordinary customer food demand")
+	# Earlier sample bread has now crossed its daily shelf life. Produce a real
+	# new lot for the subsequent sale test instead of relying on expired leftovers.
+	produce("camp_bread",1)
 	await verify_sales()
 	var sources := Tools.load_sources()
 	for entry in CraftingPathFlow.SETTINGS.stages:

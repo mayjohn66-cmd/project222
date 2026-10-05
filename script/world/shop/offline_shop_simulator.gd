@@ -98,14 +98,15 @@ static func _process_customer(
 		return
 
 	var amount: int = maxi(int(request.get("amount", 1)), 1)
-	var taken: int = _take_from_shelves(tree, item_id, amount)
+	var sale := _take_sale(tree, item_id, amount)
+	var taken: int = sale["amount"]
 
 	if taken <= 0:
 		player.record_missed_sale(item_id, amount)
 		result["missed_sales"] = int(result["missed_sales"]) + 1
 		return
 
-	var total_price: int = ItemData.get_item_price(item_id) * taken
+	var total_price: int = sale["total"]
 
 	player.add_money(total_price)
 	player.record_successful_sale(total_price, item_id, taken)
@@ -114,32 +115,23 @@ static func _process_customer(
 	result["revenue"] = int(result["revenue"]) + total_price
 
 
-static func _take_from_shelves(
-	tree: SceneTree,
-	item_id: String,
-	amount: int
-) -> int:
-	var taken_total: int = 0
+static func _take_from_shelves(tree: SceneTree, item_id: String, amount: int) -> int:
+	return int(_take_sale(tree, item_id, amount)["amount"])
 
+static func _take_sale(tree: SceneTree, item_id: String, amount: int) -> Dictionary:
+	FoodShelfLife.settle()
+	var taken_total := 0
+	var total := 0
+	var shelves: Array = []
 	for shelf in tree.get_nodes_in_group("shelf"):
-		if taken_total >= amount:
-			break
-
-		if not is_instance_valid(shelf):
-			continue
-
-		if not shelf.has_method("take_items_by_id"):
-			continue
-
-		taken_total += int(
-			shelf.call(
-				"take_items_by_id",
-				item_id,
-				amount - taken_total
-			)
-		)
-
-	return taken_total
+		if shelf.is_queued_for_deletion() or shelf.get_meta("is_build_preview", false): continue
+		if shelf.has_method("take_items_by_id"): shelves.append(shelf)
+	for shelf in FoodShelfLife.ordered_shelves(shelves, item_id):
+		if taken_total >= amount: break
+		var taken: int = shelf.take_items_by_id(item_id, amount - taken_total)
+		taken_total += taken
+		total += FoodShelfLife.receipt_total(item_id, shelf.get_meta("food_receipt", [])) if FoodShelfLife.tracked(item_id) else ItemData.get_item_price(item_id) * taken
+	return {"amount":taken_total, "total":total}
 
 
 static func _has_staff_at_hour(

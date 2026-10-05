@@ -1294,6 +1294,7 @@ func close_action_menu():
 # =========================================================
 
 func clear_action_slot():
+	FoodShelfLife.settle()
 	if current_mode == PanelMode.WAREHOUSE:
 		open_warehouse_withdraw_panel()
 		return
@@ -1335,14 +1336,15 @@ func clear_action_slot():
 
 	# 남아 있는 상품은 플레이어에게 반환
 	if stock > 0:
-		current_player.add_item(
-			item_id,
-			stock
-		)
+		if FoodShelfLife.tracked(item_id):
+			GameState.add_item(item_id, stock, FoodShelfLife.take(FoodShelfLife.slot_batches(slot), stock))
+		else:
+			current_player.add_item(item_id, stock)
 
 	# 슬롯 초기화
 	slot["item_id"] = ""
 	slot["stock"] = 0
+	slot.erase("food_batches")
 
 	current_shelf.slots[
 		action_slot_index
@@ -1886,6 +1888,7 @@ func update_restock_amount_ui():
 	)
 
 func confirm_restock():
+	FoodShelfLife.settle()
 	if current_mode == PanelMode.WAREHOUSE:
 		confirm_warehouse_transfer()
 		return
@@ -1946,6 +1949,7 @@ func confirm_restock():
 		close_restock_panel()
 		return
 
+	var food_batches := FoodShelfLife.peek_inventory(item_id, amount) if FoodShelfLife.tracked(item_id) else []
 	var removed: int = (
 		current_player.remove_item(
 			item_id,
@@ -1959,16 +1963,18 @@ func confirm_restock():
 	var added: int = (
 		current_shelf.add_stock_to_slot(
 			restock_slot_index,
-			removed
+			removed,
+			food_batches
 		)
 	)
 
 	# 예상보다 적게 들어간 경우 반환
 	if added < removed:
-		current_player.add_item(
-			item_id,
-			removed - added
-		)
+		if FoodShelfLife.tracked(item_id):
+			FoodShelfLife.take(food_batches, added)
+			GameState.add_item(item_id, removed - added, food_batches)
+		else:
+			current_player.add_item(item_id, removed - added)
 
 	DebugLog.write(
 		"수동 보충 완료: ",

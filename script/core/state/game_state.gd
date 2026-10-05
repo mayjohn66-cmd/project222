@@ -413,7 +413,8 @@ func get_item_count(
 
 func add_item(
 	item_id: String,
-	amount: int
+	amount: int,
+	food_batches: Array = []
 ) -> void:
 	if not ItemData.has_item(item_id):
 		push_warning(
@@ -429,6 +430,7 @@ func add_item(
 		get_item_count(item_id)
 		+ amount
 	)
+	FoodShelfLife.inventory_added(item_id, amount, food_batches)
 	PreservationLessonRecords.record_found(item_id)
 
 
@@ -448,6 +450,7 @@ func remove_item(
 		current_count
 	)
 
+	FoodShelfLife.inventory_removed(item_id, removed_amount)
 	inventory[item_id] = (
 		current_count - removed_amount
 	)
@@ -807,6 +810,7 @@ func find_build_quick_slot(
 
 func create_save_data() -> Dictionary:
 	PreservationService.settle()
+	FoodShelfLife.prepare_save()
 	return {
 		"save_version": SAVE_VERSION,
 		"current_day": current_day,
@@ -950,6 +954,7 @@ func test_save_file_round_trip() -> void:
 	)
 
 func is_save_data_valid(data: Dictionary) -> bool:
+	if not FoodShelfLife.valid_save(data): return false
 	if data.has("preservation") and not PreservationService.valid_state(data["preservation"], int(data.get("total_day", data.get("current_day", 1)))):
 		return false
 	if data.get("save_version", -1) != SAVE_VERSION:

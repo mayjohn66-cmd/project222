@@ -83,6 +83,7 @@ func _is_valid_slot_index(
 
 
 func get_storage_slots() -> Array[Dictionary]:
+	FoodShelfLife.settle()
 	_ensure_storage_slots()
 
 	var result: Array[Dictionary] = []
@@ -183,6 +184,7 @@ func _rebuild_stored_items() -> void:
 # =========================================================
 
 func get_total_stored_amount() -> int:
+	FoodShelfLife.settle()
 	_ensure_storage_slots()
 
 	var total: int = 0
@@ -212,6 +214,7 @@ func get_remaining_capacity() -> int:
 func get_item_count(
 	item_id: String
 ) -> int:
+	FoodShelfLife.settle()
 	if item_id.is_empty():
 		return 0
 
@@ -363,6 +366,7 @@ func deposit_from_inventory_to_slot(
 	if moved_amount <= 0:
 		return 0
 
+	var batches := FoodShelfLife.peek_inventory(item_id, moved_amount) if FoodShelfLife.tracked(item_id) else []
 	var removed_amount: int = (
 		GameState.remove_item(
 			item_id,
@@ -392,6 +396,7 @@ func deposit_from_inventory_to_slot(
 		)
 		+ removed_amount
 	)
+	FoodShelfLife.add_slot(slot, removed_amount, batches, "amount")
 
 	storage_slots[
 		slot_index
@@ -488,6 +493,7 @@ func move_item_between_slots(
 	target_slot_index: int,
 	requested_amount: int
 ) -> int:
+	FoodShelfLife.settle()
 	var maximum_amount: int = (
 		get_max_move_amount_between_slots(
 			source_slot_index,
@@ -591,10 +597,13 @@ func move_item_between_slots(
 		source_amount - moved_amount
 	)
 
+	var batches: Array = []
+	if FoodShelfLife.tracked(source_item_id): batches = FoodShelfLife.take(FoodShelfLife.slot_batches(source_slot, "amount"), moved_amount)
 	target_slot["item_id"] = source_item_id
 	target_slot["amount"] = (
 		target_amount + moved_amount
 	)
+	FoodShelfLife.add_slot(target_slot, moved_amount, batches, "amount")
 
 	if remaining_source_amount <= 0:
 		source_slot = _create_empty_slot()
@@ -646,6 +655,7 @@ func withdraw_slot_to_inventory(
 	slot_index: int,
 	requested_amount: int
 ) -> int:
+	FoodShelfLife.settle()
 	if not _is_valid_slot_index(
 		slot_index
 	):
@@ -688,6 +698,8 @@ func withdraw_slot_to_inventory(
 	if moved_amount <= 0:
 		return 0
 
+	var batches: Array = []
+	if FoodShelfLife.tracked(item_id): batches = FoodShelfLife.take(FoodShelfLife.slot_batches(slot, "amount"), moved_amount)
 	var remaining_amount: int = (
 		stored_amount - moved_amount
 	)
@@ -703,7 +715,8 @@ func withdraw_slot_to_inventory(
 
 	GameState.add_item(
 		item_id,
-		moved_amount
+		moved_amount,
+		batches
 	)
 
 	_rebuild_stored_items()
@@ -730,6 +743,7 @@ func withdraw_slot_to_inventory(
 
 # 기존 Dictionary 저장 형식과의 호환용
 func get_stored_items() -> Dictionary:
+	FoodShelfLife.settle()
 	_rebuild_stored_items()
 
 	return stored_items.duplicate(
@@ -872,6 +886,9 @@ func apply_stored_slots(
 				"amount": amount
 			}
 		)
+		if slot.has("food_batches"):
+			if not FoodShelfLife.valid_batches(slot["food_batches"], amount, GameState.total_day): return false
+			restored_slots[-1]["food_batches"] = slot["food_batches"].duplicate(true)
 
 	if restored_total > storage_capacity:
 		return false

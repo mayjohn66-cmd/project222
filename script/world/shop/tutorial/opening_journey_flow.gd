@@ -23,6 +23,8 @@ static func core_finished() -> bool:
 	return true
 
 static func optional_available(step: Dictionary) -> bool:
+	if bool(step.get("after_core", false)):
+		return PlayerProgress.story_beat_days.has(PROLOGUE) and core_finished()
 	return PlayerProgress.story_beat_days.has("tutorial_step:" + str(step["id"]) + ":intro") \
 		or (core_finished() and ResidentRequestFlow.done(str(step.get("after_request", ""))))
 

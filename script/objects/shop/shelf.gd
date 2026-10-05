@@ -317,6 +317,7 @@ func get_interaction_distance(world_pos: Vector2) -> float:
 func get_item_stock(
 	item_id: String
 ) -> int:
+	FoodShelfLife.settle()
 	var total_stock: int = 0
 
 	for slot in slots:
@@ -347,6 +348,7 @@ func take_items_by_id(
 	item_id: String,
 	requested_amount: int
 ) -> int:
+	if FoodShelfLife.tracked(item_id): return FoodShelfLife.take_shelf(self, item_id, requested_amount)
 	if item_id.is_empty():
 		return 0
 
@@ -498,6 +500,7 @@ func get_customer_access_cells() -> Array[Vector2i]:
 func has_item_in_stock(
 	item_id: String
 ) -> bool:
+	FoodShelfLife.settle()
 
 	for slot in slots:
 		var slot_item_id: String = str(
@@ -520,8 +523,10 @@ func has_item_in_stock(
 
 func return_items_by_id(
 	item_id: String,
-	amount: int
+	amount: int,
+	food_batches: Array = []
 ) -> int:
+	if FoodShelfLife.tracked(item_id): return FoodShelfLife.return_shelf(self, item_id, amount, food_batches)
 	if item_id.is_empty():
 		return 0
 
@@ -649,6 +654,7 @@ func worker_restock(
 			available
 		)
 
+		var batches := FoodShelfLife.peek_inventory(item_id, amount) if FoodShelfLife.tracked(item_id) else []
 		var removed: int = (
 			inventory_owner.remove_item(
 				item_id,
@@ -662,6 +668,7 @@ func worker_restock(
 		slot["stock"] = (
 			slot_stock + removed
 		)
+		FoodShelfLife.add_slot(slot, removed, batches)
 
 		slots[index] = slot
 
@@ -735,8 +742,10 @@ func release_worker_reservation(worker_node):
 
 func add_stock_to_slot(
 	slot_index: int,
-	amount: int
+	amount: int,
+	food_batches: Array = []
 ) -> int:
+	FoodShelfLife.settle()
 	if slot_index < 0:
 		return 0
 
@@ -791,6 +800,7 @@ func add_stock_to_slot(
 	slot["stock"] = (
 		current_stock + added_amount
 	)
+	FoodShelfLife.add_slot(slot, added_amount, food_batches)
 
 	slots[slot_index] = slot
 

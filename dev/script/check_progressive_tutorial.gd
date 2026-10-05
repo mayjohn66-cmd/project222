@@ -162,7 +162,20 @@ func run() -> void:
 	pay_visit()
 	check(player.money == money_before + ItemData.get_item_price("forest_herb") and PlayerProgress.story_beat_days.has(OpeningJourneyFlow.RAW_SALE), "native material actual payment records completion")
 	advance_self()
-	check(director.flow.current().is_empty() and ResidentRequestFlow.tutorial_finished() and not director.is_guiding(), "core ends without production and unlocks residents")
+	check(director.flow.current().get("id") == "food_care" and ResidentRequestFlow.tutorial_finished() and not director.is_guiding(), "optional food care never locks resident flow")
+	var management = manager.management_menu
+	management.open_menu(ManagementMenu.MenuTab.INVENTORY)
+	var inventory_view = management.get_node("DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/InventoryContent/ManagementInventory")
+	var food_panel: FoodShelfLifePanel
+	for node in inventory_view.get_children():
+		if node is FoodShelfLifePanel: food_panel = node
+	food_panel.open()
+	check(food_panel.visible and not director.flow.goal_met(director.flow.current(),world), "food lesson waits for actual panel acknowledgment")
+	food_panel.confirmed.emit()
+	food_panel.hide()
+	management.close_menu()
+	advance_self()
+	check(director.flow.done("food_care") and director.flow.current().is_empty() and ResidentRequestFlow.tutorial_finished(), "read food-care panel completes optional guidance; production still waits")
 	check(not director.flow.done("production"), "production remains a later option")
 	for id in ["neighbor_bread", "traveler_water"]: PlayerProgress.record_story_beat(ResidentRequestFlow.PREFIX + id + ":done",1)
 	PlayerProgress.record_story_beat(ResidentRequestFlow.PREFIX + "visited:peddler",1)
@@ -187,7 +200,7 @@ func run() -> void:
 	talk_merchant()
 	check(director.flow.current().is_empty(), "optional crafting ends on collected output")
 	var sources := Tools.load_sources()
-	check(sources[Tools.KIND_TUTORIAL_STEP].size() == 7 and sources[Tools.KIND_TUTORIAL_DIALOGUE].size() == 6, "all revised tutorial prose registered in story tool")
+	check(sources[Tools.KIND_TUTORIAL_STEP].size() == 8 and sources[Tools.KIND_TUTORIAL_DIALOGUE].size() == 6, "all revised tutorial prose registered in story tool")
 	check(sources[Tools.KIND_SERVICE_TEXT].has("arrival_peddler_return"), "merchant reunion registered for prose drafting")
 	var step_prompt := Writer.build_prompt(Tools.KIND_TUTORIAL_STEP, sources, sources)
 	check(step_prompt.contains("플레이어 독백") and step_prompt.contains("현대 기기는 플레이어만 이해"), "Gemini receives player monologue and modern-knowledge boundary")
