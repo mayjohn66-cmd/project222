@@ -1,7 +1,28 @@
 extends RefCounted
 const ACCENTS := ["98703e","b06b3d","4b8068","527e9a","97754c","897299","567d86"]
 const PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef"]
-const INDEX_COLORS := ["e6c983","eca993","a5c5a5","94bed0","d5bb91","bca8cb","92c9c5"]
+const INDEX_COLORS := ["f2cf5b","ef8fa6","8fcf9a","7bbbe0","eeb06a","b79bdb","7fd0c8"]
+# 포스트잇 책갈피: 책 옆면에서 튀어나온 길이를 탭마다 다르게(들쭉날쭉), 선택하면 +SELECTED_EXTRA 만큼 더 나온다. 가장 긴 값이 내비게이션 폭 104 를 넘지 않게 한다.
+const FLAG_LENGTHS := [72.0,84.0,76.0,88.0,70.0,86.0,78.0]
+const FLAG_HEIGHT := 34.0
+const SELECTED_EXTRA := 16.0
+const ADHESIVE := 14.0  # 책 옆면에 붙는 부분(반투명하게 보이는 띠) 폭
+
+static func flag_style(color: String) -> StyleBoxFlat:
+	var base := Color(color)
+	var s := StyleBoxFlat.new()
+	s.bg_color = base
+	s.border_width_left = int(ADHESIVE)
+	s.border_color = base.lerp(Color.WHITE,0.55)  # 붙이는 부분은 연하게(종이가 비쳐 보이는 느낌)
+	s.border_width_bottom = 2
+	s.shadow_color = Color("30231340")
+	s.shadow_size = 0
+	s.shadow_offset = Vector2(1,2)
+	s.content_margin_left = ADHESIVE+8.0
+	s.content_margin_right = 6
+	s.content_margin_top = 4
+	s.content_margin_bottom = 4
+	return s
 
 static func box(color: String, padding: int = 12) -> StyleBoxFlat:
 	var s := StyleBoxFlat.new()
@@ -68,32 +89,22 @@ static func install(menu: Control) -> void:
 	row.get_node("LeafIcon").hide()
 	var nav: VBoxContainer = v.get_node("Body/Navigation")
 	nav.custom_minimum_size.x = 104
-	nav.add_theme_constant_override("separation",12)
+	nav.add_theme_constant_override("separation",9)
 	v.get_node("Body").move_child(nav,v.get_node("Body").get_child_count()-1)
 	v.get_node("Body").add_theme_constant_override("separation",0)
 	var buttons: Array = nav.get_children()
 	for i in range(buttons.size()):
 		var b: Button = buttons[i]
-		b.custom_minimum_size = Vector2(88,44)
+		b.custom_minimum_size = Vector2(FLAG_LENGTHS[i],FLAG_HEIGHT)
 		b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-		b.add_theme_font_size_override("font_size",16)
+		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		b.add_theme_font_size_override("font_size",15)
 		for state in ["normal","hover","pressed","hover_pressed"]:
-			var style := box(INDEX_COLORS[i],8)
-			style.border_width_left = 0
-			style.border_width_bottom = 0
-			style.shadow_color = Color("30231330")
-			style.shadow_size = 2
-			style.content_margin_left = 10
-			style.content_margin_right = 10
-			style.border_color = Color(ACCENTS[i])
-			b.add_theme_stylebox_override(state,style)
+			b.add_theme_stylebox_override(state,flag_style(INDEX_COLORS[i]))
 		b.add_theme_color_override("font_color",Color("514333"))
 		b.add_theme_color_override("font_pressed_color",Color("493e33"))
 		b.add_theme_color_override("font_hover_pressed_color",Color("493e33"))
-		var focus := box("ffffff00",8)
-		focus.border_color = Color(ACCENTS[i])
-		focus.set_border_width_all(2)
-		b.add_theme_stylebox_override("focus",focus)
+		b.add_theme_stylebox_override("focus",StyleBoxEmpty.new())
 	nav.show()
 	var spacer := Control.new()
 	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -186,7 +197,7 @@ static func apply_tab(menu: Control) -> void:
 		if previous and previous.is_valid(): previous.kill()
 		var slide := button.create_tween().set_pause_mode(Tween.TWEEN_PAUSE_PROCESS)
 		slide.set_trans(Tween.TRANS_CUBIC).set_ease(Tween.EASE_OUT)
-		slide.tween_property(button,"custom_minimum_size:x",104.0 if i == menu.current_tab else 88.0,0.18)
+		slide.tween_property(button,"custom_minimum_size:x",FLAG_LENGTHS[i]+(SELECTED_EXTRA if i == menu.current_tab else 0.0),0.18)
 		button.set_meta("index_slide",slide)
 	var turn = area.get_node_or_null("PageTurn")
 	if turn and menu.visible and turn.last_tab != menu.current_tab: turn.flip()
@@ -207,20 +218,43 @@ class PaperPattern extends Control:
 			draw_rect(Rect2(0,0,8,size.y),Color("897299"))
 
 class BookPaper extends Control:
+	## 두꺼운 책을 비스듬히 본 모습: 단단한 표지(아래·오른쪽으로 두께가 보임), 겹쳐진 종이 가장자리(가는 줄무늬), 옆면에서 튀어나온 포스트잇 책갈피가 붙는 자리.
 	func _draw() -> void:
 		var width := size.x-104.0
-		# The cover and layered paper stop before the exposed index strips.
-		draw_rect(Rect2(-9,-8,width+21,size.y+22),Color("24191155"))
-		draw_rect(Rect2(-12,-12,width+24,size.y+24),Color("70503b"))
-		draw_rect(Rect2(-8,-8,width+16,size.y+16),Color("c4b28f"))
-		for edge in [6,3,0]:
-			draw_rect(Rect2(edge,edge,width,size.y),Color("e4d7bb"))
-			draw_rect(Rect2(edge,edge,width,size.y),Color("b9a582"),false,1)
-		draw_rect(Rect2(0,0,width,size.y-3),Color("f5eddc"))
-		# Narrow visible left leaf and the shaded binding.
-		draw_rect(Rect2(-5,0,13,size.y-3),Color("e5d5b5"))
-		draw_line(Vector2(4,0),Vector2(4,size.y-3),Color("bca580"),2)
-		draw_line(Vector2(8,0),Vector2(8,size.y-3),Color("dfcdae"),3)
+		var h := size.y
+		var fore_w := 24.0
+		# 바닥 그림자와 표지 두께(아래·오른쪽)
+		draw_rect(Rect2(-6,-4,width+34,h+34),Color("1d141066"))
+		draw_rect(Rect2(-12,-12,width+fore_w+22.0,h+36),Color("4a3223"))  # 표지 뒷면(두께)
+		draw_rect(Rect2(-12,-12,width+fore_w+22.0,h+26),Color("70503b"))  # 표지
+		draw_rect(Rect2(-12,h+14,width+fore_w+22.0,6),Color("33231a"))  # 표지 바닥 모서리
+		draw_rect(Rect2(-8,-8,width+16,h+16),Color("c4b28f"))
+		# 종이 더미: 맨 위 종이 아래로 몇 장이 계단처럼 겹쳐 보인다
+		for edge in [9,6,3,0]:
+			draw_rect(Rect2(edge,edge,width,h),Color("e4d7bb"))
+			draw_rect(Rect2(edge,edge,width,h),Color("b9a582"),false,1)
+		draw_rect(Rect2(0,0,width,h-3),Color("f5eddc"))
+		# 책 옆면(오른쪽): 쪽수가 쌓인 가는 줄무늬. 포스트잇이 이 위에 붙는다
+		var fore_x := width-2.0
+		draw_rect(Rect2(fore_x,3,fore_w,h-6),Color("efe3c7"))
+		var y := 4.0
+		var toggle := false
+		while y < h-4.0:
+			draw_line(Vector2(fore_x,y),Vector2(fore_x+fore_w,y),Color("b9a582") if toggle else Color("fffaf0"),1)
+			toggle = not toggle
+			y += 2.0
+		draw_line(Vector2(fore_x+fore_w,3),Vector2(fore_x+fore_w,h-3),Color("9c8a68"),1)
+		# 쪽수가 둥글게 휘어 보이도록 안쪽에 어두운 세로 줄 몇 개
+		for k in range(1,4):
+			draw_line(Vector2(fore_x+fore_w*float(k)/4.0,3),Vector2(fore_x+fore_w*float(k)/4.0,h-3),Color(0.55,0.47,0.34,0.22),1)
+		# 아래쪽 종이 옆면
+		draw_rect(Rect2(3,h-3,width+fore_w-2.0,11),Color("efe3c7"))
+		for k in range(1,6):
+			draw_line(Vector2(3,h-3+k*2),Vector2(width+fore_w+1.0,h-3+k*2),Color("b9a582"),1)
+		# 왼쪽 제본 부분의 좁은 쪽과 홈
+		draw_rect(Rect2(-5,0,13,h-3),Color("e5d5b5"))
+		draw_line(Vector2(4,0),Vector2(4,h-3),Color("bca580"),2)
+		draw_line(Vector2(8,0),Vector2(8,h-3),Color("dfcdae"),3)
 
 class PageTurn extends Control:
 	var progress := 1.0
