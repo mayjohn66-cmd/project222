@@ -100,7 +100,10 @@ static func information(entry: Dictionary) -> String:
 	var totals := CommunityRequestFlow.required_items(entry)
 	for item in totals:
 		text += "%s %d/%d · 창고\n" % [ItemData.get_item_name(item),GameState.get_item_count(item),totals[item]]
-	text += "보상: 평판 +%d · %d G" % [entry["reputation"],entry["money"]]
+	if str(entry.get("payment_kind", "")) == "gift":
+		text += "나눔 부탁 · 물품 대금은 별도로 받지 않습니다.\n답례: 평판 +%d · %d G" % [entry["reputation"],entry["money"]]
+	else:
+		text += "보상: 평판 +%d · %d G" % [entry["reputation"],entry["money"]]
 	var reason := locked_reason(entry)
 	if not reason.is_empty(): text += "\n" + reason
 	return text

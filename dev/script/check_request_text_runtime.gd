@@ -21,7 +21,7 @@ func _ready() -> void:
 	check(validation["errors"].is_empty(), "all game prose passes writer rules: " + str(validation["errors"]))
 	check(validation["warns"].is_empty(), "game prose avoids obsolete quantities and long completion text: " + str(validation["warns"]))
 	var resident := RequestTextData.enrich(ResidentRequestFlow.SETTINGS.requests[0], "resident_request")
-	check(resident["id"] == "neighbor_bread" and resident["item"] == "bread" and resident["amount"] == 2 and resident["money"] == 30, "enrichment preserves gameplay fields")
+	check(resident["id"] == "neighbor_bread" and resident["item"] == "wild_berry" and resident["amount"] == 2 and resident["money"] == 30, "enrichment preserves gameplay fields")
 	var original: String = resident["title"]
 	RequestTextData._rows["resident_request:neighbor_bread"]["title"] = "CSV에서 바꾼 제목"
 	check(RequestTextData.enrich(ResidentRequestFlow.SETTINGS.requests[0], "resident_request")["title"] == "CSV에서 바꾼 제목", "runtime reads text by id without baking it into resource")

@@ -26,7 +26,10 @@ func refresh() -> void:
 	if accepted:
 		objective = "%s %d/%d · 창고 물품 전달 [E]" % [ItemData.get_item_name(str(request["item"])), mini(GameState.get_item_count(str(request["item"])), int(request["amount"])), int(request["amount"])]
 		if ready: objective = "준비 완료! 주민에게 전달 [E]"
-	objective += "\n보상: 평판 +%d · %d G" % [int(request["reputation"]), int(request["money"])]
+	if str(request.get("payment_kind", "")) == "gift":
+		objective += "\n나눔 부탁 · 물품 대금은 별도로 받지 않습니다.\n답례: 평판 +%d · %d G" % [int(request["reputation"]), int(request["money"])]
+	else:
+		objective += "\n보상: 평판 +%d · %d G" % [int(request["reputation"]), int(request["money"])]
 	var landmark := ResidentStoryFlow.landmark_for_request(str(request["id"]))
 	if not landmark.is_empty(): objective += "\n함께 만들 곳: " + landmark
 	panel.display("주민 부탁 · " + str(request["title"]) + "\n마을 평판 %d" % ResidentRequestFlow.reputation(), objective)

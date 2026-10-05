@@ -72,7 +72,9 @@ func run() -> void:
 	board.panel.refresh()
 	board.panel.cards["personal:naru_provisions"]["action"].pressed.emit()
 	check(PersonalRequestFlow.accepted("naru_provisions"),"actual card action accepts request")
-	GameState.add_item("bread",3)
+	var card_request := PersonalRequestFlow.request("naru_provisions")
+	for item in CommunityRequestFlow.required_items(card_request):
+		GameState.add_item(item, int(CommunityRequestFlow.required_items(card_request)[item]))
 	board.panel.refresh()
 	board.panel.cards["personal:naru_provisions"]["action"].pressed.emit()
 	check(PersonalRequestFlow.done("naru_provisions"),"actual card action delivers request")

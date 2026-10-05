@@ -37,7 +37,7 @@ func _run() -> void:
 	# 원본 읽기(현재 저장소에 있는 파일만)
 	var sources: Dictionary = Tools.load_sources()
 	_check(sources[Tools.KIND_RESIDENT_REQUEST].has("neighbor_bread"), "주민 부탁 원본 읽기(.tres 한 줄 JSON)")
-	_check(str(sources[Tools.KIND_RESIDENT_REQUEST]["neighbor_bread"]["item"]) == "bread", "원본의 기계 필드 보존")
+	_check(str(sources[Tools.KIND_RESIDENT_REQUEST]["neighbor_bread"]["item"]) == "wild_berry", "원본의 기계 필드 보존")
 
 	# 정상 행
 	var good := [
