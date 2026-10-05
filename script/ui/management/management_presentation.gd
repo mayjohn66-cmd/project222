@@ -220,6 +220,10 @@ class PaperPattern extends Control:
 # ---------------------------------------------------------------- 책 여닫기 연출
 # 열기: 닫힌 책이 화면 아래에서 올라온 뒤 표지가 왼쪽 제본선을 축으로 넘어가며 펼쳐지고, 그제야 쪽 안의 UI 가 나타난다.
 # 닫기: 표지가 덮이고 책이 아래로 내려간다. 트리가 멈춰 있어도 돌아가도록 PROCESS 모드 트윈을 쓴다.
+# 책 두께(px): 표지 둘레, 오른쪽 쪽 옆면, 아래쪽 쪽 옆면. 현실적인 노트 두께로 얇게 둔다
+const BOOK_COVER_PAD := 6.0
+const BOOK_FORE_W := 10.0
+const BOOK_BOTTOM_T := 6.0
 const BOOK_RISE := 0.34
 const BOOK_SWING := 0.42
 const BOOK_SINK := 0.24
@@ -317,7 +321,7 @@ class BookCover extends Control:
 		queue_redraw()
 	func _draw() -> void:
 		var width := size.x - 104.0
-		var full := Rect2(-12.0,-12.0,width + 46.0,size.y + 26.0)
+		var full := Rect2(-BOOK_COVER_PAD,-BOOK_COVER_PAD,width + BOOK_FORE_W + BOOK_COVER_PAD + 4.0,size.y + BOOK_BOTTOM_T + BOOK_COVER_PAD + 4.0)
 		var k := cos(clampf(angle,0.0,1.0) * PI * 0.5)
 		if k <= 0.02: return
 		var cw := full.size.x * k
@@ -333,11 +337,11 @@ class BookCover extends Control:
 		draw_colored_polygon(poly,leather)
 		# 두께: 아래쪽 어두운 띠, 왼쪽 제본(척추)
 		draw_rect(Rect2(x0,y1 - 4.0,cw,10.0),dark)
-		draw_rect(Rect2(x0,y0,minf(26.0 * k,cw),full.size.y),dark)
-		draw_line(Vector2(x0 + 26.0 * k,y0),Vector2(x0 + 26.0 * k,y1),gold,2.0)
+		draw_rect(Rect2(x0,y0,minf(16.0 * k,cw),full.size.y),dark)
+		draw_line(Vector2(x0 + 16.0 * k,y0),Vector2(x0 + 16.0 * k,y1),gold,2.0)
 		# 금박 테두리와 모서리 징
-		var inset := 18.0
-		var fx0 := x0 + 40.0 * k
+		var inset := 14.0
+		var fx0 := x0 + 28.0 * k
 		var fx1 := x0 + cw - inset * k
 		if fx1 > fx0 + 10.0:
 			draw_rect(Rect2(fx0,y0 + inset,fx1 - fx0,full.size.y - inset * 2.0),gold,false,2.0)
@@ -358,41 +362,39 @@ class BookCover extends Control:
 		draw_rect(Rect2(x0 + cw * 0.78,y1 - 4.0,10.0 * k,34.0),Color("2f7a58") * Color(shade,shade,shade,1.0))
 
 class BookPaper extends Control:
-	## 두꺼운 책을 비스듬히 본 모습: 단단한 표지(아래·오른쪽으로 두께가 보임), 겹쳐진 종이 가장자리(가는 줄무늬), 옆면에서 튀어나온 포스트잇 책갈피가 붙는 자리.
+	## 현실적인 두께의 노트를 비스듬히 본 모습: 얇은 표지(아래·오른쪽으로 살짝 두께), 쌓인 쪽 가장자리의 가는 줄무늬, 포스트잇 책갈피가 붙는 옆면.
 	func _draw() -> void:
 		var width := size.x-104.0
 		var h := size.y
-		var fore_w := 24.0
-		# 바닥 그림자와 표지 두께(아래·오른쪽)
-		draw_rect(Rect2(-6,-4,width+34,h+34),Color("1d141066"))
-		draw_rect(Rect2(-12,-12,width+fore_w+22.0,h+36),Color("4a3223"))  # 표지 뒷면(두께)
-		draw_rect(Rect2(-12,-12,width+fore_w+22.0,h+26),Color("70503b"))  # 표지
-		draw_rect(Rect2(-12,h+14,width+fore_w+22.0,6),Color("33231a"))  # 표지 바닥 모서리
-		draw_rect(Rect2(-8,-8,width+16,h+16),Color("c4b28f"))
-		# 종이 더미: 맨 위 종이 아래로 몇 장이 계단처럼 겹쳐 보인다
-		for edge in [9,6,3,0]:
+		var cp := BOOK_COVER_PAD
+		var fw := BOOK_FORE_W
+		var bt := BOOK_BOTTOM_T
+		# 바닥 그림자와 표지(뒷면 두께 → 앞면)
+		draw_rect(Rect2(-cp+2,-cp+2,width+fw+cp*2.0+4,h+bt+cp*2.0+4),Color("1d141055"))
+		draw_rect(Rect2(-cp,-cp,width+fw+cp+4.0,h+bt+cp+4.0),Color("4a3223"))
+		draw_rect(Rect2(-cp,-cp,width+fw+cp+4.0,h+bt+cp+1.0),Color("70503b"))
+		draw_rect(Rect2(-cp+3,-cp+3,width+fw+cp-2.0,h+bt+cp-5.0),Color("5c4130"))  # 표지 안쪽 단
+		# 종이 더미: 맨 위 종이 아래로 두세 장이 살짝 겹쳐 보인다
+		for edge in [3,2,1,0]:
 			draw_rect(Rect2(edge,edge,width,h),Color("e4d7bb"))
 			draw_rect(Rect2(edge,edge,width,h),Color("b9a582"),false,1)
 		draw_rect(Rect2(0,0,width,h-3),Color("f5eddc"))
-		# 책 옆면(오른쪽): 쪽수가 쌓인 가는 줄무늬. 포스트잇이 이 위에 붙는다
+		# 책 옆면(오른쪽): 쪽이 쌓인 가는 줄무늬. 포스트잇이 이 위에 붙는다
 		var fore_x := width-2.0
-		draw_rect(Rect2(fore_x,3,fore_w,h-6),Color("efe3c7"))
-		var y := 4.0
+		draw_rect(Rect2(fore_x,2,fw,h-4),Color("efe3c7"))
+		var y := 3.0
 		var toggle := false
-		while y < h-4.0:
-			draw_line(Vector2(fore_x,y),Vector2(fore_x+fore_w,y),Color("b9a582") if toggle else Color("fffaf0"),1)
+		while y < h-3.0:
+			draw_line(Vector2(fore_x,y),Vector2(fore_x+fw,y),Color("b9a582") if toggle else Color("fffaf0"),1)
 			toggle = not toggle
 			y += 2.0
-		draw_line(Vector2(fore_x+fore_w,3),Vector2(fore_x+fore_w,h-3),Color("9c8a68"),1)
-		# 쪽수가 둥글게 휘어 보이도록 안쪽에 어두운 세로 줄 몇 개
-		for k in range(1,4):
-			draw_line(Vector2(fore_x+fore_w*float(k)/4.0,3),Vector2(fore_x+fore_w*float(k)/4.0,h-3),Color(0.55,0.47,0.34,0.22),1)
+		draw_line(Vector2(fore_x+fw,2),Vector2(fore_x+fw,h-2),Color("9c8a68"),1)
 		# 아래쪽 종이 옆면
-		draw_rect(Rect2(3,h-3,width+fore_w-2.0,11),Color("efe3c7"))
-		for k in range(1,6):
-			draw_line(Vector2(3,h-3+k*2),Vector2(width+fore_w+1.0,h-3+k*2),Color("b9a582"),1)
+		draw_rect(Rect2(2,h-3,width+fw-2.0,bt),Color("efe3c7"))
+		for k in range(1,3):
+			draw_line(Vector2(2,h-3+k*2),Vector2(width+fw,h-3+k*2),Color("b9a582"),1)
 		# 왼쪽 제본 부분의 좁은 쪽과 홈
-		draw_rect(Rect2(-5,0,13,h-3),Color("e5d5b5"))
+		draw_rect(Rect2(-4,0,12,h-3),Color("e5d5b5"))
 		draw_line(Vector2(4,0),Vector2(4,h-3),Color("bca580"),2)
 		draw_line(Vector2(8,0),Vector2(8,h-3),Color("dfcdae"),3)
 
