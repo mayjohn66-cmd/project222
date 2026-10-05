@@ -25,3 +25,5 @@ wood_register,model,1.1,0.5,0,plank,bc8756,0
 modern_register,model,1.1,0.5,0,plank,ffffff,0
 wood_warehouse_rack,model,1.8,1,0,plank,bc8756,0
 steel_warehouse_rack,model,1.8,1,0,plank,ffffff,0
+fridge_unit,model,1.7,1,0,plank,ffffff,0
+freezer_unit,model,0.9,1,0,plank,ffffff,0

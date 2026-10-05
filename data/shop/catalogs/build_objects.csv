@@ -25,3 +25,5 @@ wood_register,res://scenes/shop/objects/register.tscn,2,1,true,true,normal,regis
 modern_register,res://scenes/shop/objects/register.tscn,2,1,true,true,normal,register,res://data/shop/catalogs/register_area_default.tres
 wood_warehouse_rack,res://scenes/shop/warehouse/warehouse_storage.tscn,2,1,true,true,normal,warehouse_storage,
 steel_warehouse_rack,res://scenes/shop/warehouse/warehouse_storage.tscn,2,1,true,true,normal,warehouse_storage,
+fridge_unit,res://scenes/shop/objects/preservation_unit.tscn,1,1,true,true,normal,decoration,
+freezer_unit,res://scenes/shop/objects/preservation_unit.tscn,2,1,true,true,normal,decoration,

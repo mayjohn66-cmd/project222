@@ -4,7 +4,7 @@ extends RefCounted
 ## 벽 장식(포스터·세계지도·깃발), 문(출입문·창고 문·생산실 문). 가구마다 부품(상자·기둥·돔)을 쌓아 만들고, 발광 부품(emit)은 어두운 곳에서도 읽히게 한다.
 ## 좌표는 (u = 길이 방향, v = 뒤→앞 방향, y = 높이). lo/hi 는 3D 발자국(칸 좌표), rot 은 앞쪽 방향(0=+z, 1=+x, 2=-z, 3=-x).
 
-const MODEL_IDS: Array = ["register", "warehouse_rack", "drink_machine", "magic_oven", "plant_small", "night_lantern", "antique_cabinet", "wall_poster", "old_world_map", "adventurer_banner", "door", "warehouse_door", "production_door"]
+const MODEL_IDS: Array = ["register", "warehouse_rack", "drink_machine", "magic_oven", "plant_small", "night_lantern", "antique_cabinet", "wall_poster", "old_world_map", "adventurer_banner", "fridge_unit", "freezer_unit", "door", "warehouse_door", "production_door"]
 
 
 # 부품을 쌓는 좌표 틀. 재질 이름 하나당 면 하나만 만든다(메시 면은 최대 256개).
@@ -81,7 +81,8 @@ static func wall_front_rot(wall_rotation: int) -> int:
 
 
 static func build(build_id: String, lo: Vector2, hi: Vector2, rot: int, p: Dictionary, extra: Dictionary = {}) -> Dictionary:
-	if FurnitureVariantAssets.has_model(build_id): return FurnitureVariantAssets.build(build_id, lo, hi, rot, p, extra)
+	# 전용 모델이 있는 가구(냉장함·냉동함 등)는 계산대형 공통 모델보다 먼저 쓴다.
+	if not MODEL_IDS.has(build_id) and FurnitureVariantAssets.has_model(build_id): return FurnitureVariantAssets.build(build_id, lo, hi, rot, p, extra)
 	var f := Frame.new(lo, hi, rot, p)
 
 	match build_id:
@@ -99,6 +100,10 @@ static func build(build_id: String, lo: Vector2, hi: Vector2, rot: int, p: Dicti
 			return _lantern(f)
 		"antique_cabinet":
 			return _cabinet(f)
+		"fridge_unit":
+			return _fridge(f)
+		"freezer_unit":
+			return _freezer(f)
 		"wall_poster":
 			return _poster(f)
 		"old_world_map":
@@ -327,6 +332,67 @@ static func _cabinet(f: Frame) -> Dictionary:
 
 
 # ---------------------------------------------------------------- 벽 장식(얇은 판) — 앞쪽 = 방 안쪽
+
+# 냉장함: 흰 세로형 냉장고. 앞면은 유리문(안에 선반과 풀잎 상자), 위쪽에 압축기 통풍구, 손잡이와 푸른 표시등.
+static func _fridge(f: Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var body: Dictionary = f.flat(Color(0.8, 0.84, 0.88), "fr_body")
+	var trim: Dictionary = f.flat(Color(0.66, 0.7, 0.76), "fr_trim")
+	var glass: Dictionary = f.flat(Color(0.62, 0.84, 0.92), "fr_glass", 0.35)
+	var inner: Dictionary = f.flat(Color(0.82, 0.93, 0.96), "fr_inner", 0.5)
+	var shelf: Dictionary = f.flat(Color(0.75, 0.8, 0.85), "fr_shelf")
+	var green: Dictionary = f.flat(Color(0.35, 0.65, 0.3), "fr_green")
+	var dark: Dictionary = f.flat(Color(0.18, 0.2, 0.24), "fr_dark")
+	var led: Dictionary = f.flat(Color(0.35, 0.8, 1.0), "fr_led", 1.0)
+	var top: float = 1.62
+	f.box(body, 0.03, L - 0.03, 0.03, D - 0.03, 0.06, top)
+	f.box(dark, 0.06, L - 0.06, 0.06, D - 0.06, 0.0, 0.08)  # 받침(기단)
+	f.box(trim, 0.0, L, 0.0, D, top, top + 0.06)  # 윗면 테두리
+	# 앞 유리문: 틀 + 유리 + 안쪽 선반과 풀잎 상자
+	f.box(trim, 0.1, L - 0.1, D - 0.05, D - 0.01, 0.22, 1.44)
+	f.box(glass, 0.15, L - 0.15, D - 0.04, D - 0.0, 0.27, 1.39)
+	for y in [0.55, 0.9, 1.25]:
+		f.box(shelf, 0.14, L - 0.14, D * 0.2, D - 0.06, y, y + 0.03)
+	for y in [0.58, 0.93, 1.28]:
+		f.box(inner, 0.2, L - 0.2, D * 0.25, D - 0.1, y + 0.03, y + 0.05)
+		f.box(green, 0.26, L * 0.5 - 0.04, D * 0.35, D - 0.14, y + 0.05, y + 0.17)
+		f.box(green, L * 0.5 + 0.04, L - 0.26, D * 0.35, D - 0.14, y + 0.05, y + 0.14)
+	# 손잡이와 표시등, 윗부분 통풍구
+	f.box(dark, L - 0.2, L - 0.15, D - 0.01, D + 0.02, 0.4, 1.2)
+	f.box(led, 0.2, 0.3, D - 0.03, D + 0.0, 1.5, 1.56)
+	for i in range(3):
+		f.box(dark, 0.22 + float(i) * 0.12, 0.28 + float(i) * 0.12, D - 0.03, D, 1.46, 1.49)
+	return f.finish(1.7)
+
+
+# 냉동함: 낮고 긴 상자형(칸 두 개 폭). 위 유리 뚜껑 아래로 서리 낀 얼음 덩어리가 보이고, 옆에 온도 표시창.
+static func _freezer(f: Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var body: Dictionary = f.flat(Color(0.78, 0.83, 0.89), "fz_body")
+	var trim: Dictionary = f.flat(Color(0.6, 0.66, 0.74), "fz_trim")
+	var lid: Dictionary = f.flat(Color(0.6, 0.8, 0.9), "fz_lid", 0.25)
+	var ice: Dictionary = f.flat(Color(0.8, 0.95, 1.0), "fz_ice", 0.6)
+	var dark: Dictionary = f.flat(Color(0.18, 0.2, 0.24), "fz_dark")
+	var led: Dictionary = f.flat(Color(0.4, 0.85, 1.0), "fz_led", 1.0)
+	var top: float = 0.8
+	f.box(dark, 0.06, L - 0.06, 0.06, D - 0.06, 0.0, 0.08)
+	f.box(body, 0.02, L - 0.02, 0.02, D - 0.02, 0.08, top - 0.06)
+	f.box(trim, 0.0, L, 0.0, D, top - 0.06, top)  # 윗 테두리
+	# 유리 뚜껑 두 장(가운데 손잡이 선) — 안에 얼음 덩어리
+	f.box(lid, 0.08, L * 0.5 - 0.03, 0.08, D - 0.08, top, top + 0.03)
+	f.box(lid, L * 0.5 + 0.03, L - 0.08, 0.08, D - 0.08, top, top + 0.03)
+	f.box(trim, L * 0.5 - 0.03, L * 0.5 + 0.03, 0.06, D - 0.06, top, top + 0.05)
+	for i in range(5):
+		var u0: float = 0.18 + float(i) * (L - 0.5) / 5.0
+		f.box(ice, u0, u0 + 0.2, D * 0.25 + float(i % 2) * 0.1, D * 0.55 + float(i % 2) * 0.1, top - 0.1, top)
+	# 앞면 온도 표시창, 앞 손잡이 홈
+	f.box(dark, L - 0.4, L - 0.1, D - 0.03, D, 0.4, 0.58)
+	f.box(led, L - 0.36, L - 0.18, D - 0.04, D + 0.0, 0.46, 0.52)
+	f.box(dark, 0.2, 0.7, D - 0.03, D, 0.46, 0.5)
+	return f.finish(0.9)
+
 
 static func _poster(f: Frame) -> Dictionary:
 	var L: float = f.length

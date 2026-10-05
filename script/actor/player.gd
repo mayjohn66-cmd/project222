@@ -140,6 +140,11 @@ func _unhandled_input(event) -> void:
 		get_viewport().set_input_as_handled()
 		return
 
+	# 냉장함·냉동함
+	if try_interact_with_preservation_unit():
+		get_viewport().set_input_as_handled()
+		return
+
 	# 마지막으로 진열대 검사
 	try_restock_shelf()
 	get_viewport().set_input_as_handled()
@@ -1389,6 +1394,32 @@ func try_use_warehouse_door() -> bool:
 	in_warehouse_room = true
 
 	return true
+
+func try_interact_with_preservation_unit() -> bool:
+	var nearest: Node2D = null
+	var nearest_distance: float = interaction_distance
+
+	for node in get_tree().get_nodes_in_group("preservation_unit"):
+		if not node is Node2D or node.is_queued_for_deletion() or bool(node.get_meta("is_build_preview", false)):
+			continue
+
+		var distance: float = global_position.distance_to((node as Node2D).global_position)
+
+		if distance < nearest_distance:
+			nearest_distance = distance
+			nearest = node as Node2D
+
+	if nearest == null:
+		return false
+
+	var unit_id: String = str(nearest.call("unit_id"))
+
+	if unit_id.is_empty():
+		return false
+
+	PreservationPanel.open_for_unit(self, unit_id)
+	return true
+
 
 func try_interact_with_warehouse_storage() -> bool:
 	if not in_warehouse_room:

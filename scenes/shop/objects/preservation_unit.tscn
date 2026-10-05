@@ -1,0 +1,15 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://script/objects/shop/preservation_unit.gd" id="1_unit"]
+[ext_resource type="Script" uid="uid://dfkx5mfkepvrj" path="res://script/objects/shop/shelf_visual.gd" id="2_438cg"]
+[ext_resource type="Script" uid="uid://byob2a2wsrk2l" path="res://script/objects/shop/furniture_collision.gd" id="3_dwjfe"]
+
+[node name="PreservationUnit" type="StaticBody2D"]
+script = ExtResource("1_unit")
+
+[node name="Visual" type="Node2D" parent="."]
+script = ExtResource("2_438cg")
+
+[node name="Collision" type="CollisionPolygon2D" parent="."]
+polygon = PackedVector2Array(0, -24, 48, 0, 0, 24, -48, 0)
+script = ExtResource("3_dwjfe")

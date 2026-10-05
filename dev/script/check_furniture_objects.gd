@@ -46,7 +46,7 @@ func run() -> void:
 	layer.layer = 100
 	add_child(layer)
 	layer.add_child(blueprint)
-	check(FurnitureObjectCatalog.all_ids().size() == 10, "ten registered functional objects")
+	check(FurnitureObjectCatalog.all_ids().size() == 12, "twelve registered functional objects")
 	materials("reinforced_shelf_2x1")
 	var before := GameState.get_item_count("iron_ore")
 	blueprint._select_furniture("reinforced_shelf_2x1")

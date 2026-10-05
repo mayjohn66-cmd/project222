@@ -19,9 +19,11 @@ static func count(id: String) -> int:
 	for amount in GameState.preservation_state.get(id, {}).values(): total += int(amount)
 	return total
 
-static func install(id: String) -> bool:
+# free = true: 설치 대금을 받지 않는다(냉장함·냉동함 가구를 만들어 놓았을 때).
+static func install(id: String, free: bool = false) -> bool:
 	var entry := unit(id)
-	if entry.is_empty() or installed(id) or not GameState.spend_money(int(entry["cost"])): return false
+	if entry.is_empty() or installed(id): return false
+	if not free and not GameState.spend_money(int(entry["cost"])): return false
 	GameState.preservation_state["installed"].append(id)
 	return true
 

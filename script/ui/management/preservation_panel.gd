@@ -5,6 +5,8 @@ var inventory_view: Control
 var rows: VBoxContainer
 var message: Label
 var contents_scroll: ScrollContainer
+var host: Node  # 월드 모드(가구에서 열 때)의 기준 노드. 크기 계산에 쓴다
+var unit_filter: String = ""  # 비어 있지 않으면 이 설비 하나만 보여 준다(월드 모드)
 
 static func install(view: Control) -> void:
 	# The compact shelf/warehouse transfer view keeps its existing controls.
@@ -25,6 +27,22 @@ static func install(view: Control) -> void:
 	button.tooltip_text = "계절 재료의 상온 변형 규칙과 보관 설비를 확인합니다."
 	view.get_node("MainVBox/CategoryTabs").add_child(button)
 	button.pressed.connect(panel.open)
+
+# 가게에 놓인 냉장함·냉동함에서 바로 연다. 가구를 만들어 놓은 것이 설치이므로 아직 설치 전이면 대금 없이 설치한다.
+static func open_for_unit(from: Node, id: String) -> void:
+	if PreservationService.unit(id).is_empty(): return
+	var panel: PreservationPanel = from.get_node_or_null("PreservationWorldPanel") as PreservationPanel
+
+	if panel == null:
+		panel = PreservationPanel.new()
+		panel.name = "PreservationWorldPanel"
+		panel.host = from
+		from.add_child(panel)
+
+	panel.unit_filter = id
+	PreservationService.settle()
+	if not PreservationService.installed(id): PreservationService.install(id, true)
+	panel.open()
 
 func _ready() -> void:
 	title = "가게 보관 설비"
@@ -69,10 +87,14 @@ func _ready() -> void:
 	close_requested.connect(_refresh_inventory)
 
 func _process(_delta: float) -> void:
-	if visible and not inventory_view.is_visible_in_tree(): hide()
+	if visible and inventory_view != null and not inventory_view.is_visible_in_tree(): hide()
+
+func _bounds() -> Vector2:
+	var anchor: Node = inventory_view if inventory_view != null else host
+	return anchor.get_viewport().get_visible_rect().size
 
 func _fit() -> void:
-	var bounds := inventory_view.get_viewport_rect().size
+	var bounds := _bounds()
 	var desired := Vector2i(minf(650, bounds.x - 32), minf(470, bounds.y - 40))
 	contents_scroll.custom_minimum_size.y = maxf(100, desired.y - 90)
 	size = desired
@@ -81,7 +103,7 @@ func open() -> void:
 	PreservationService.settle()
 	message.text = "설비는 가게에 고정 설치됩니다. 보관 중에는 변형되지 않아요.\n부탁을 전달하려면 필요한 만큼 꺼내 게시판에 가져가세요."
 	refresh()
-	popup_centered(Vector2i(minf(650, inventory_view.get_viewport_rect().size.x - 32), minf(470, inventory_view.get_viewport_rect().size.y - 40)))
+	popup_centered(Vector2i(minf(650, _bounds().x - 32), minf(470, _bounds().y - 40)))
 
 func refresh() -> void:
 	for child in rows.get_children():
@@ -89,6 +111,7 @@ func refresh() -> void:
 		child.queue_free()
 	for unit in PreservationService.SETTINGS.units:
 		var id := str(unit["id"])
+		if not unit_filter.is_empty() and id != unit_filter: continue
 		var header := _label()
 		header.text = "%s · %d/%d개 · 소지금 %d G" % [unit["name"], PreservationService.count(id), unit["capacity"], GameState.money]
 		rows.add_child(header)
@@ -149,7 +172,7 @@ func _move(id: String, item: String, putting: bool) -> void:
 	_refresh_inventory()
 
 func _refresh_inventory() -> void:
-	if not is_instance_valid(inventory_view): return
+	if inventory_view == null or not is_instance_valid(inventory_view): return
 	inventory_view.refresh_inventory()
 	var ancestor: Node = inventory_view.get_parent()
 	while ancestor != null and not ancestor is ManagementMenu: ancestor = ancestor.get_parent()

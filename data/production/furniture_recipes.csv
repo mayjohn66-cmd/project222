@@ -38,3 +38,7 @@ wood_warehouse_rack,dry_branch,6
 wood_warehouse_rack,amber_sap,2
 steel_warehouse_rack,iron_ore,10
 steel_warehouse_rack,mine_crystal,2
+fridge_unit,iron_ore,8
+fridge_unit,mine_crystal,3
+freezer_unit,iron_ore,12
+freezer_unit,mine_crystal,5
