@@ -7,14 +7,15 @@ extends Control
 
 const PX := 100.0
 const SEGMENTS := 14
-const CURL := 0.55  # 자유 모서리가 뒤처지는 정도(라디안). 0 = 판판하게, 값이 클수록 휜다
-const LAG := 0.32  # 위아래 끝이 가운데보다 뒤처지는 정도(라디안): 자유 모서리가 곡선으로 보인다
-const WAVE := 0.10  # 종이 위아래 방향 물결(라디안): 손으로 넘기는 종이처럼 자유 모서리가 일렁인다
-const COMPANIONS := 2  # 한 장 넘길 때 뒤따라 들리는 빈 종이 수
-const COMP_LAG := 0.10  # 뒤따르는 종이가 맨 위 종이보다 늦는 정도(라디안)
+const CURL := 0.9  # 자유 모서리가 뒤처지는 정도(라디안). 0 = 판판하게, 값이 클수록 휜다
+const LAG := 0.0  # 위아래 끝이 가운데보다 뒤처지는 정도(라디안): 자유 모서리가 곡선으로 보인다
+const WAVE := 0.0  # 종이 위아래 방향 물결(라디안): 손으로 넘기는 종이처럼 자유 모서리가 일렁인다
+const COMPANIONS := 1  # 한 장 넘길 때 뒤따라 들리는 빈 종이 수
+const COMP_LAG := 0.12  # 뒤따르는 종이가 맨 위 종이보다 늦는 정도(라디안)
+const LIGHT := Vector2(-0.45,0.89)  # 곡면 음영용 빛 방향(x, y)
 const ZSEG := 16  # 종이를 위아래로 나눈 칸 수
-const CURVE_SHADE := 0.5  # 종이가 서 있는 부분일수록 어두워지는 정도(휜 곡선이 보이게 하는 음영)
-const TILT_DEG := 0.0  # 넘기는 한가운데에서 카메라가 기우는 정도(도). 0 = 늘 바로 위에서 본다
+const CURVE_SHADE := 0.55  # 곡면의 명암 대비(바로 위에서 봐도 종이가 구부러진 것이 보이게 하는 음영)  # 종이가 서 있는 부분일수록 어두워지는 정도(휜 곡선이 보이게 하는 음영)
+const TILT_DEG := 24.0  # 넘기는 한가운데에서 카메라가 기우는 정도(도). 종이가 구부러진 것이 보이려면 살짝 비스듬히 봐야 한다. 0 = 늘 바로 위
 const FLAG_LEN := 0.9  # 종이에 붙은 포스트잇이 종이 바깥으로 뻗은 길이(월드)
 const SKIN := 0.006  # 앞면·뒷면 사이 두께의 절반
 
@@ -166,6 +167,7 @@ func set_progress(p: float) -> void:
 # 손가락을 따라 넘길 때: 종이 한 장(첫 장)의 각도를 직접 정한다. theta 0 = 넘기기 전, PI = 다 넘김.
 func set_theta(theta: float) -> void:
 	var th := clampf(theta,0.0,PI)
+	_cam_p = th / PI
 	for i in range(leaves.size()):
 		_apply_leaf(i,leaves.size(),th,th / PI)
 	_place_camera()
@@ -260,7 +262,9 @@ func _rebuild_leaf(info: Dictionary,theta: float) -> void:
 					verts.append(Vector3(q.x,q.y,c[2]))
 					var uu := float(c[0]) / float(SEGMENTS)
 					uvs.append(Vector2(1.0 - uu if flip_u else uu,c[3]))
-					var sh_v := 1.0 - CURVE_SHADE * pow(absf(sin(a)),1.3)
+					# 곡면 음영: 종이 면의 법선이 왼쪽 위에서 오는 빛(LIGHT)을 향할수록 밝다. 뒷면은 법선이 반대.
+					var nrm := Vector2(-sin(a),cos(a)) * sign_n
+					var sh_v := 1.0 - CURVE_SHADE * (1.0 - clampf(nrm.dot(LIGHT) * 0.5 + 0.5,0.0,1.0))
 					cols.append(Color(sh_v,sh_v,sh_v,1.0))
 				for i in [0,1,2,0,2,3]:
 					st.set_uv(uvs[i])
