@@ -15,6 +15,8 @@ const LEATHER := Color("70503b")
 const LEATHER_DARK := Color("3d2a1d")
 const GOLD := Color("d9a441")
 const BRAND := Color("235740")
+# 탭마다 쪽 종이 색이 조금씩 다르다(인벤토리·생산·직원·설계도·건설·일정·정보 순)
+const TAB_PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef"]
 
 
 static func page_width(control_size: Vector2) -> float:
@@ -23,7 +25,12 @@ static func page_width(control_size: Vector2) -> float:
 
 # ---------------------------------------------------------------- 펼친 두 쪽
 class Paper extends Control:
+	var mode: int = 0  # 현재 탭: 종이 색과 바탕무늬(설계도 모눈, 건설 모눈, 일정 왼쪽 띠)를 정한다
 	var left_visible: bool = true  # false 면 닫히는 중·열리기 전이라 오른쪽 반만 그린다(왼쪽 쪽은 표지가 넘어와 덮은 뒤 나타난다)
+
+	func set_mode(value: int) -> void:
+		mode = clampi(value,0,BookViews.TAB_PAPERS.size() - 1)
+		queue_redraw()
 
 	func set_left_visible(value: bool) -> void:
 		left_visible = value
@@ -49,9 +56,19 @@ class Paper extends Control:
 				draw_rect(Rect2(-e,e,mid + e,h),Color("b9a582"),false,1)
 			draw_rect(Rect2(mid,e,width - mid + e,h),Color("e4d7bb"))
 			draw_rect(Rect2(mid,e,width - mid + e,h),Color("b9a582"),false,1)
+		var page := Color(BookViews.TAB_PAPERS[mode])
 		if left_visible:
-			draw_rect(Rect2(0,0,mid,h - 3.0),BookViews.PAGE)
-		draw_rect(Rect2(mid,0,width - mid,h - 3.0),BookViews.PAGE)
+			draw_rect(Rect2(0,0,mid,h - 3.0),page)
+		draw_rect(Rect2(mid,0,width - mid,h - 3.0),page)
+		# 탭별 바탕무늬: 쪽 전체에 깔린다(안쪽 사각형 없이 종이 자체의 무늬)
+		if mode == 3 or mode == 4:
+			var line := Color(0.3,0.5,0.6,0.07) if mode == 3 else Color(0.5,0.4,0.2,0.06)
+			for gx in range(0,int(width),24):
+				if left_visible or float(gx) >= mid: draw_line(Vector2(gx,0),Vector2(gx,h - 3.0),line)
+			for gy in range(0,int(h - 3.0),24):
+				draw_line(Vector2(0.0 if left_visible else mid,gy),Vector2(width,gy),line)
+		elif mode == 5 and left_visible:
+			draw_rect(Rect2(0,0,8,h - 3.0),Color("897299"))
 		# 오른쪽 옆면: 쪽이 쌓인 가는 줄무늬. 포스트잇이 이 위에 붙는다
 		var fore_x := width - 2.0
 		draw_rect(Rect2(fore_x,2,fw,h - 4.0),Color("efe3c7"))

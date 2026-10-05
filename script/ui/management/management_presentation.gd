@@ -134,7 +134,7 @@ static func install(menu: Control) -> void:
 	area.clip_contents = true
 	inset(area.get_node("ContentBackdrop"),16)
 	# Flat inner paper, only the outer window keeps the decorative frame.
-	menu.production_content.add_theme_stylebox_override("panel",box(PAPERS[1],16))
+	menu.production_content.add_theme_stylebox_override("panel",StyleBoxEmpty.new())
 	for c in [menu.employee_content,menu.blueprint_content,menu.construction_content]:
 		inset(c.get_node("MainVBox"))
 		c.get_node("MainVBox").add_theme_constant_override("separation",10)
@@ -161,13 +161,6 @@ static func install(menu: Control) -> void:
 	prod.get_node("MainHBox/RightPanel/DetailVBox/DescriptionLabel").autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var bp = menu.blueprint_content
 	bp.get_node("MainVBox/Body/LeftPanel").custom_minimum_size.x = 180
-	var pattern := PaperPattern.new()
-	pattern.name = "TabPaperPattern"
-	pattern.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	area.add_child(pattern)
-	area.move_child(pattern,1)
-	inset(pattern,16)
-	pattern.resized.connect(pattern.queue_redraw)
 	var cover_view := BookViews.Cover.new()
 	cover_view.name = "BookCover"
 	cover_view.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -199,7 +192,10 @@ static func fit_inventory(inv: Control) -> void:
 
 static func apply_tab(menu: Control) -> void:
 	var area: Control = menu.get_node("DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea")
-	area.get_node("ContentBackdrop").add_theme_stylebox_override("panel",box(PAPERS[menu.current_tab],0))
+	# 종이 색과 무늬는 쪽(BookViews.Paper)이 그린다. 안쪽 사각형 바탕을 따로 두면 쪽 위에 가장자리가 보여 어색하다.
+	area.get_node("ContentBackdrop").add_theme_stylebox_override("panel",StyleBoxEmpty.new())
+	var paper = area.get_parent().get_parent().get_parent().get_child(0)
+	if paper.has_method("set_mode"): paper.set_mode(menu.current_tab)
 	var nav = area.get_parent().get_node("Navigation")
 	for i in range(nav.get_child_count()):
 		var button: Button = nav.get_child(i)
@@ -214,27 +210,6 @@ static func apply_tab(menu: Control) -> void:
 		if menu.visible and flip.last_tab >= 0 and flip.last_tab != menu.current_tab and not bool(menu.get_meta("book_opening",false)) and not bool(menu.get_meta("book_closing",false)):
 			flip.begin(menu.current_tab > flip.last_tab)
 		flip.last_tab = menu.current_tab
-	var pattern = area.get_node_or_null("TabPaperPattern")
-	if pattern:
-		pattern.mode = menu.current_tab
-		pattern.queue_redraw()
-
-class PaperPattern extends Control:
-	var mode: int = 0
-	func _draw() -> void:
-		# 가운데 제본 홈(두 쪽 사이): 어느 탭이든 책이 펼쳐진 느낌이 나도록 양쪽으로 번지는 그림자
-		var mid := size.x * 0.5
-		for i in range(18):
-			var a := 0.14 * pow(1.0 - float(i) / 18.0,2.0)
-			draw_rect(Rect2(mid - float(i) - 1.0,0,1,size.y),Color(0.33,0.24,0.14,a))
-			draw_rect(Rect2(mid + float(i),0,1,size.y),Color(0.33,0.24,0.14,a))
-		draw_line(Vector2(mid,0),Vector2(mid,size.y),Color(0.33,0.24,0.14,0.28),2.0)
-		if mode==3 or mode==4:
-			var color := Color(0.3,0.5,0.6,0.07) if mode==3 else Color(0.5,0.4,0.2,0.06)
-			for x in range(0,int(size.x),24): draw_line(Vector2(x,0),Vector2(x,size.y),color)
-			for y in range(0,int(size.y),24): draw_line(Vector2(0,y),Vector2(size.x,y),color)
-		elif mode==5:
-			draw_rect(Rect2(0,0,8,size.y),Color("897299"))
 
 # ---------------------------------------------------------------- 책 여닫기 연출
 # 열기: 닫힌 책(세로형 표지 + 옆의 포스트잇)이 화면 아래에서 올라온 뒤, 표지가 가운데 제본선을 축으로 왼쪽으로 넘어가며 펼쳐지고

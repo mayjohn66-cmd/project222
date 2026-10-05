@@ -6,7 +6,6 @@ extends VBoxContainer
 const INK := Color("44392e")
 const INK_DIM := Color("7a6a55")
 const PAPER_LINE := Color("b9a582")
-const GUTTER := 32.0  # 두 쪽 사이 간격(가운데 제본 홈 폭)
 # 아이템 종류(item_type) → 얻는 방법 문구. 문구는 임시이며 바꾸려면 여기만 고친다.
 const ACQUIRE_TEXT := {"material": "채집·원정", "store_product": "제작", "equipment": "원정 장비", "special": "특별한 곳에서"}
 
@@ -33,12 +32,12 @@ static func install(inv: Control) -> void:
 	pane.anchor_right = 1.0
 	pane.anchor_top = 0.0
 	pane.anchor_bottom = 1.0
-	pane.offset_left = GUTTER * 0.5
+	pane.offset_left = BookLayout.GUTTER * 0.5
 	pane.offset_right = -16.0
 	pane.offset_top = 14.0
 	pane.offset_bottom = -14.0
 	left.anchor_right = 0.5
-	left.offset_right = -GUTTER * 0.5
+	left.offset_right = -BookLayout.GUTTER * 0.5
 	grid.child_entered_tree.connect(pane._on_card_added)
 	pane._build()
 

@@ -4,7 +4,7 @@ extends RefCounted
 ## 탭 안의 노드와 신호는 그대로 두고 크기·간격·부모만 조정한다(탭 스크립트의 @onready 경로는 _ready 때 이미 잡혀 있다).
 ## 인벤토리 탭은 InventoryDetailPane 이 따로 맡는다.
 
-const GUTTER := 32.0  # 두 쪽 사이 간격(가운데 제본 홈 폭)
+const GUTTER := 48.0  # 두 쪽 사이 간격(가운데 제본 홈 폭, 양쪽 24px씩 비워 글이 홈에 닿지 않게 한다)
 
 
 static func apply(menu: Control) -> void:
@@ -16,13 +16,37 @@ static func apply(menu: Control) -> void:
 	_history(menu)
 
 
-# 가로 한 줄 분류 버튼 줄을 왼쪽 쪽 폭으로 제한한다(container 크기가 바뀔 때마다 따라간다).
+# 가로 한 줄 분류 버튼 줄을 왼쪽 쪽 폭으로 제한한다. 컨테이너 안이면 최소 폭으로, 앵커로 놓인 노드면 오른쪽 앵커를 가운데로 당겨서 맞춘다.
+# 글자가 쪽 폭을 넘지 않도록 버튼 좌우 여백과 글자 크기를 줄이고, 그래도 넘치면 말줄임으로 줄어든다.
 static func limit_to_left_half(node: Control,container: Control) -> void:
-	node.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-	var fit := func() -> void:
-		node.custom_minimum_size.x = maxf((container.size.x - GUTTER) * 0.5,0.0)
-	container.resized.connect(fit)
-	fit.call_deferred()
+	_compact_buttons(node)
+	if node.get_parent() is Container:
+		node.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
+		var fit := func() -> void:
+			node.custom_minimum_size.x = maxf((container.size.x - GUTTER) * 0.5,0.0)
+		container.resized.connect(fit)
+		fit.call_deferred()
+	else:
+		node.anchor_right = 0.5
+		node.offset_right = -GUTTER * 0.5
+
+
+static func _compact_buttons(row: Control) -> void:
+	for c in row.get_children():
+		if not (c is Button): continue
+		var b := c as Button
+		b.clip_text = true
+		b.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
+		b.custom_minimum_size.x = 0.0  # 장면에 박힌 최소 폭이 줄을 쪽 밖으로 밀지 않게 한다
+		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		b.add_theme_font_size_override("font_size",16)
+		for state in ["normal","hover","pressed","hover_pressed","disabled"]:
+			var sb: StyleBox = b.get_theme_stylebox(state)
+			if sb == null: continue
+			var copy: StyleBox = sb.duplicate()
+			copy.content_margin_left = 6.0
+			copy.content_margin_right = 6.0
+			b.add_theme_stylebox_override(state,copy)
 
 
 static func _expand(node: Control) -> void:
@@ -62,6 +86,7 @@ static func _employee(menu: Control) -> void:
 static func _construction(menu: Control) -> void:
 	var vbox: Control = menu.construction_content.get_node("MainVBox")
 	limit_to_left_half(vbox.get_node("AreaTabs"),vbox)
+	vbox.get_node("ContentPanel").add_theme_stylebox_override("panel",StyleBoxEmpty.new())  # 쪽 위에 따로 사각형을 깔지 않는다
 	var margin: Control = vbox.get_node("ContentPanel/ContentMargin")
 	var old: Control = margin.get_node("ContentVBox")
 	var row := HBoxContainer.new()
