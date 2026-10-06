@@ -1,7 +1,7 @@
 """스토리 전체를 파일 하나로 묶는다(제미나이 웹에 통째로 올려 분석시키는 용도).
 
 실행: python tools/export_story_bundle.py   → docs/스토리/분석용_묶음.md
-묶는 것: 요청 프롬프트 + 전체 정리 + 세계관 + 인물 설정 + 4막 흐름 + 모든 글(종류별) + 이웃 이야기(story_beats).
+묶는 것: 요청 프롬프트 + 전체 정리 + 세계관 + 인물 설정 + 4막 흐름 + 모든 글(막·사건 순서)과 이웃 이야기(story_beats).
 """
 import csv, sys
 from pathlib import Path
@@ -38,20 +38,10 @@ for title, p in [("줄거리 전체 정리", "docs/스토리/전체_정리.md"),
                  ("인물 설정", "docs/drafts/story/character_profiles.md"), ("4막 B 흐름", "docs/스토리/4막_B_흐름_보기.md")]:
     parts.append(f"\n\n# [자료] {title}\n\n{read(p)}\n")
 
-parts.append("\n\n# [자료] 게임에 들어간 모든 글(종류별)\n")
-by = {}
-for r in rows("data/shop/requests/requests_text.csv"):
-    by.setdefault(r["kind"], []).append(r)
-for kind, rs in by.items():
-    parts.append(f"\n## {kind} ({len(rs)}행)\n")
-    for r in rs:
-        bits = [x for x in (r["title"], r["summary"]) if x]
-        lines = r["lines"].replace("|", " / ")
-        parts.append(f"- `{r['id']}` " + " · ".join(bits) + (f"\n  대사: {lines}" if lines else "") + (f"\n  완료: {r['completion']}" if r["completion"] else ""))
-
-parts.append("\n\n# [자료] 이웃 이야기(story_beats)\n")
-for r in rows("data/story/story_beats.csv"):
-    parts.append(f"- `{r['beat_id']}` ({r['npc_id']}): " + r["lines"].replace("|", " / "))
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import export_story_full
+full, _ = export_story_full.build()
+parts.append("\n\n# [자료] 게임에 들어간 모든 글(이야기 순서)\n\n" + full.replace("# 전체 스토리", "## 전체 스토리", 1))
 
 out.write_text("\n".join(parts) + "\n", encoding="utf-8")
-print(f"{len(by)}종류 → {out.relative_to(root)} ({out.stat().st_size // 1024} KB)")
+print(f"→ {out.relative_to(root)} ({out.stat().st_size // 1024} KB)")
