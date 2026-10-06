@@ -104,6 +104,7 @@ docs/
 - [스토리 전체 정리 (2026-10-06, Claude)](스토리/전체_정리.md)
 - [분석용 묶음 — 제미나이에 통째로 올려 일관성 분석(`python tools/export_story_bundle.py`로 다시 생성)](스토리/분석용_묶음.md)
 - 스토리 글 자동 점검: `python tools/audit_story.py` (화자별 말투, 전이 원인 단정어, 숫자·현대어, 같은 줄 중복)
+- [막별 고쳐 쓰기 요청 6개 — 다른 모델에 통째로 붙여 넣는 요청문 (`python tools/export_rewrite_prompts.py`)](스토리/고쳐쓰기_요청/README.md)
 - [전체 스토리 — 게임에 들어간 모든 글을 막·사건 순서로 (`python tools/export_story_full.py`로 다시 생성)](스토리/전체_스토리.md)
 
 ## 6. 그림·3D
