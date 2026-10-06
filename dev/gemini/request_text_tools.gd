@@ -1,7 +1,7 @@
 extends RefCounted
 ## 부탁(주민 부탁·마을 부탁 게시판·주민 인사말)의 "글 부분" 도구 모음.
 ## 기계 부분(재료·수량·보상·landmark)은 건드리지 않고, 같은 id의 글만 CSV로 주고받는다.
-## 규격과 분업: docs/스토리_작성_가이드.md 5.1
+## 규격과 분업: docs/스토리/작성_가이드.md 5.1
 
 const COLUMNS: PackedStringArray = ["id", "kind", "title", "summary", "lines", "completion"]
 

@@ -1,6 +1,6 @@
 # 방 템플릿 데이터 규격 (초안 v0.2)
 
-> 상위 문서: `docs/원정_v2_규칙서_초안.md` 3.6. 이 문서는 **ChatGPT(새 기능 코드·아트)에게 넘길 데이터 계약**의 초안이다.
+> 상위 문서: `docs/원정_규칙서.md` 3.6. 이 문서는 **ChatGPT(새 기능 코드·아트)에게 넘길 데이터 계약**의 초안이다.
 > 방 크기·조작은 8×8 직접 조작 구현(ChatGPT, `script/expedition/rooms/`)에 맞춰 v0.2로 고쳤다. 아래 CSV 계약은 아직 게임에 연결되지 않은 초안이다. 예시 CSV(`room_templates_draft.csv`, `room_objects_draft.csv`)는 이 폴더에 있다.
 > 태그: ✅확정 / 🟡제안 / ❓미정
 

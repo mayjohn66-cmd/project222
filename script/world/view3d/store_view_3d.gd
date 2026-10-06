@@ -4,7 +4,7 @@ extends Node
 ## 게임 규칙·충돌·길찾기·건축은 지금의 2D 코드가 그대로 맡고, 이 층은 2D 노드의 상태를 **읽기만** 한다(2D 코드를 바꾸지 않음).
 ## World 노드 아래에 붙인다. 읽는 곳: Floor(칸 수), WoodWalls(벽 선분), Objects(가구: 메타 build_id/anchor, Visual 의 footprint/rotation),
 ## Actors/Player(+ Camera2D), 그룹 customer / worker / story_npc / merchant_npc.
-## 설계: docs/계획_매장_3D_적용_초안.md, 규격: docs/그림_규격서_3D도트_초안.md
+## 설계: docs/그림_3D/매장_3D_적용_계획.md, 규격: docs/그림_3D/그림_규격서_3D도트.md
 ## 칸 좌표: 2D 게임의 칸 좌표(칸 중심이 정수)를 그대로 3D 의 (x, z) 로 쓴다.
 
 

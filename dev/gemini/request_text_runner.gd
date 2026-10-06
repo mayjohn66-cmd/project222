@@ -6,7 +6,7 @@ extends Node
 ##   webprompt API 없이 제미나이 웹(구독)에 붙여 넣을 요청문을 파일로 만든다. draft 와 같은 --kind/--ids/--chunk. docs/drafts/story/web/prompt_*.txt
 ##   webimport 웹에서 받은 답을 파일로 저장해 두었다가 초안 CSV로 바꾸고 검사한다. --files 경로,경로
 ## 실행: godot --headless --path . res://dev/gemini/request_text.tscn -- --mode validate --file docs/drafts/story/<파일>.csv
-## 기계 부분(id·재료·수량·보상)은 바꾸지 않는다. 규격: docs/스토리_작성_가이드.md 5.1
+## 기계 부분(id·재료·수량·보상)은 바꾸지 않는다. 규격: docs/스토리/작성_가이드.md 5.1
 
 const Tools = preload("res://dev/gemini/request_text_tools.gd")
 const GeminiClient = preload("res://dev/gemini/gemini_client.gd")

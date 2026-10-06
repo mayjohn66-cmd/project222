@@ -5,7 +5,7 @@ extends Node
 ## 실행(프로젝트 폴더에서, 환경 변수 GEMINI_API_KEY 설정 후):
 ##   godot --headless --path . res://dev/gemini/story_draft.tscn -- --topic "첫 원정을 앞둔 날 이웃의 응원"
 ## 저장 뒤 반드시 검사: godot --headless --path . res://dev/gemini/validate_story.tscn -- --file <저장된 파일>  (또는 python tools/validate_story.py)
-## 형식과 규칙의 근거: docs/스토리_작성_가이드.md
+## 형식과 규칙의 근거: docs/스토리/작성_가이드.md
 
 # class_name 등록(전역 캐시)에 기대지 않고 직접 불러온다. 새 파일은 에디터가 한 번 열기 전에는 전역 클래스로 안 잡힌다.
 const GeminiClient = preload("res://dev/gemini/gemini_client.gd")
