@@ -49,7 +49,7 @@ func run() -> void:
 	manager.current_hour = 6
 	player.set_physics_process(false)
 	world.get_node("CustomerSpawner").set_process(false)
-	check(ResidentMemoryFlow.SETTINGS.events.size() == 3 and SeasonalVillageFlow.events().size() == 8 and PersonalRequestFlow.entries().size() == 17 + SeasonStockpileFlow.SETTINGS.requests.size(), "three relation events leave existing quest counts intact")
+	check(ResidentMemoryFlow.SETTINGS.events.size() == 3 and SeasonalVillageFlow.events().size() == 8 and PersonalRequestFlow.entries().size() == 17 + SeasonStockpileFlow.SETTINGS.requests.size() + WorkshopRequestFlow.SETTINGS.requests.size(), "three relation events leave existing quest counts intact")
 	var sources := Tools.load_sources()
 	var texts: Array[String] = []
 	for entry in ResidentMemoryFlow.SETTINGS.events:

@@ -127,8 +127,11 @@ func run() -> void:
 		check(PersonalRequestFlow.accepted(id) and not PersonalRequestFlow.accept(id),"real board accepts exactly once " + id)
 		save_reload()
 		GameState.total_day += 30
-		check(PersonalRequestFlow.can_deliver(id),"accepted request survives season change and absence " + id)
 		var amount := int(entry["requirements"][0]["amount"])
+		# 식품은 날짜가 지나면 사라진다(food_shelf_life.csv). 이 시험은 부탁이 이어지는지 보므로 재고만 다시 채운다.
+		GameState.remove_item(recipe_id,GameState.get_item_count(recipe_id))
+		GameState.add_item(recipe_id,amount)
+		check(PersonalRequestFlow.can_deliver(id),"accepted request survives season change and absence " + id)
 		GameState.remove_item(recipe_id,1)
 		var money := GameState.money
 		var reputation := ResidentRequestFlow.reputation()

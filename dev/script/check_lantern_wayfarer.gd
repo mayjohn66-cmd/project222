@@ -81,6 +81,7 @@ func run() -> void:
 	PlayerProgress.reset()
 	PlayerProgress.load_save_data(saved)
 	GameState.total_day += 30
+	GameState.add_item("bread",1) # 식품은 날짜가 지나면 사라지므로(유통기한 기능) 시간이 지난 뒤 다시 채운다
 	manager.current_hour = 12
 	director.refresh()
 	player.global_position = director.npc.global_position
