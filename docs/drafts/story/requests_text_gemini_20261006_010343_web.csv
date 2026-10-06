@@ -1,0 +1,6 @@
+id,kind,title,summary,lines,completion
+act4_b1_intro,service_text,,,"숲 너머 낡은 터에서 찾았다는 동전이 맞지? 결이 참 낯익어.|기록해 둔 문양과 닮았지만, 섣불리 단정할 수는 없겠네.",
+act4_b1_show,service_text,,,녹슨 자리를 문지르니 테두리에 작은 홈이 보여.|다른 곳에서 보았던 흔적과 맞닿는 부분이 있는지 짚어볼게.,
+act4_b1_finish,service_text,,,적어 둔 기록과 견주어 보니 짐작 가는 방향이 잡혔어.|남은 단서는 메모장에 정리해 둘 테니 언제든 꺼내 봐.,
+act4_b1_clue,service_text,,,바깥 길목 유적에도 비슷한 선이 남아 있었거든.|지나가는 소문만 믿기보다는 눈으로 한 번 더 확인하는 편이 낫겠어.,
+act4_b1_old_coin_title,service_text,낡은 주화에 남은 흔적,,,

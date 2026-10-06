@@ -1,0 +1,6 @@
+id,kind,title,summary,lines,completion
+act4_b1_intro,service_text,,,"유적에서 찾았다는 동전이 맞지? 결이 참 낯익어.|기록해 둔 문양과 닮았지만, 섣불리 단정할 수는 없겠네.",
+act4_b1_show,service_text,,,녹슨 자리를 문지르니 테두리에 작은 홈이 보여.|다른 곳에서 보았던 흔적과 맞닿는 부분이 있는지 짚어볼게.,
+act4_b1_finish,service_text,,,어제 본 선들이 가게 간판의 모서리를 떠올리게 했어.|닮아 보인다는 것만 적어 두자. 아직은 모르니까.,
+act4_b1_clue,service_text,,동전의 선과 간판의 모서리가 닮아 보였다는 이세르의 기억.,,
+act4_b1_old_coin_title,service_text,낡은 동전의 무늬,유적에서 가져온 동전을 보여 주고 이웃의 기억을 듣습니다.,,

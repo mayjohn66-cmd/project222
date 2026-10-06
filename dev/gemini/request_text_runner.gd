@@ -147,7 +147,22 @@ func _webprompt(sources: Dictionary) -> void:
 			part[kind] = subset
 			count += 1
 			var path: String = "%s/web/prompt_%s_%02d.txt" % [OUT_DIR, stamp, count]
-			var text: String = "아래 [지침]을 따라 [요청]의 항목만 쓴다. 답은 **코드블록 하나** 안에 탭으로 구분한 행만 넣고, 설명·머리말은 쓰지 않는다.\n\n[지침]\n%s\n\n[요청]\n%s\n" % [system_prompt, build_prompt(kind, part, sources)]
+			# 항목마다 채울 열을 현재 행에서 읽어 한 줄씩 적는다(웹 답이 제목/요약/대사 열을 서로 바꿔 쓰는 일을 막는다).
+			var column_notes: PackedStringArray = []
+
+			for id in chunk:
+				var row: PackedStringArray = Tools.row_from_source(kind, sources[kind][id])
+				var names: PackedStringArray = []
+
+				for column_index in range(2, 6):
+					if not str(row[column_index]).strip_edges().is_empty():
+						var cell_text: String = str(row[column_index])
+						var label: String = Tools.COLUMNS[column_index]
+						names.append("%s(%d칸)" % [label, cell_text.split("|").size()] if label in ["lines", "completion"] else label)
+
+				column_notes.append("- %s → 채울 열: %s (나머지 열은 비운다)" % [id, ", ".join(names)])
+
+			var text: String = "아래 [지침]을 따라 [요청]의 항목만 쓴다. 답은 **코드블록 하나** 안에 탭으로 구분한 행만 넣고, 설명·머리말은 쓰지 않는다.\n\n[지침]\n%s\n\n[요청]\n%s\n\n[채울 열 — 반드시 지킨다]\n%s\n열 순서는 id, kind, title, summary, lines, completion 이고 항상 탭 5개(6칸)다. 단서(clue)·제목 행은 NPC 대사가 아니므로 lines 에 쓰지 않는다.\n" % [system_prompt, build_prompt(kind, part, sources), "\n".join(column_notes)]
 			_write(path, text)
 			print("[웹 요청] %s (%s %s)" % [path, kind, ", ".join(chunk)])
 
