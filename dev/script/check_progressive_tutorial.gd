@@ -101,7 +101,7 @@ func run() -> void:
 	for i in range(OpeningCleanup.PILES.size()):
 		player.global_position = director._cell_world(OpeningCleanup.PILES[i]["stand"])
 		check(director.try_interact() and OpeningCleanup.done(i), "E cleans rubble pile %d" % i)
-	check(GameState.get_item_count("iron_ore") >= 2, "cleaning yields the iron ore for a simple shelf")
+	check(GameState.get_item_count("iron_ore") == 4 and GameState.get_item_count("dry_branch") == 0, "cleaning yields iron ore for two simple shelves and nothing else")
 	var branches_after: int = GameState.get_item_count("iron_ore")
 	player.global_position = director._cell_world(OpeningCleanup.PILES[0]["stand"])
 	director.try_interact()
