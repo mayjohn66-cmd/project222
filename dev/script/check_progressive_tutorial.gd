@@ -83,15 +83,44 @@ func run() -> void:
 	for worker in get_tree().get_nodes_in_group("worker"):
 		if worker.is_hired or worker.visible or worker.on_duty: no_staff = false
 	check(no_staff, "no automatically hired staff at arrival")
-	check(director.flow.current()["id"] == "setup" and not is_instance_valid(director.npc), "arrival starts with player alone")
+	check(director.flow.current()["id"] == "cleanup" and not is_instance_valid(director.npc), "arrival starts with player alone")
 	check(director.dialogue.open and director.dialogue.name_label.text == PlayerProgress.display_player_name(), "situation is player monologue")
-	check(director.flow.goal_met(director.flow.current(), world), "shop's existing basic furniture is already placed")
-	check(GameState.get_furniture_count("door") == 0 and GameState.get_furniture_count("shelf_1x1") == 2, "placed furniture is consumed once from ownership")
+	check(not director.flow.goal_met(director.flow.current(), world) and OpeningCleanup.cleaned_count() == 0, "shop starts smashed: nothing cleaned yet")
+	check(GameState.get_furniture_count("door") == 0 and GameState.get_furniture_count("register") == 1 and GameState.get_furniture_count("shelf_1x1") == 1 and GameState.get_furniture_count("shelf_2x1") == 0 and GameState.get_furniture_count("shelf_3x1") == 0, "only the salvaged register and one shelf wait in storage")
+	check(get_tree().get_nodes_in_group("shelf").is_empty(), "no shelf stands in the smashed shop")
 	var layout := GameState.get_store_layout().duplicate(true)
 	OpeningJourneyFlow.initialize(world)
 	check(GameState.get_store_layout() == layout and GameState.get_furniture_count("door") == 0, "bootstrap cannot duplicate or replace store")
 	director.dialogue.close()
-	check(not director.flow.seen("setup"), "aborted monologue does not mark intro")
+	check(not director.flow.seen("cleanup"), "aborted monologue does not mark intro")
+	advance_self()
+	check(director.flow.current()["id"] == "cleanup" and director.flow.seen("cleanup"), "monologue then asks to clean the rubble")
+	# 잔해 더미를 하나씩 [E]로 치운다: 서 있는 자리에서만, 한 번씩만 자재를 얻는다.
+	player.global_position = director._cell_world(Vector2(0.5, 7.0))
+	check(not director.try_interact() and OpeningCleanup.cleaned_count() == 0, "too far from rubble cleans nothing")
+	for i in range(OpeningCleanup.PILES.size()):
+		player.global_position = director._cell_world(OpeningCleanup.PILES[i]["stand"])
+		check(director.try_interact() and OpeningCleanup.done(i), "E cleans rubble pile %d" % i)
+	check(GameState.get_item_count("dry_branch") >= 4 and GameState.get_item_count("amber_sap") >= 1, "cleaning yields enough branches and sap for a wooden shelf")
+	var branches_after: int = GameState.get_item_count("dry_branch")
+	player.global_position = director._cell_world(OpeningCleanup.PILES[0]["stand"])
+	director.try_interact()
+	check(GameState.get_item_count("dry_branch") == branches_after, "a cleaned pile gives nothing again")
+	advance_self()
+	check(director.flow.current()["id"] == "craft_shelf" and director.flow.seen("craft_shelf"), "cleaning leads to crafting a shelf")
+	check(not director.flow.goal_met(director.flow.current(), world), "shelf is not crafted yet")
+	check(FurnitureObjectCatalog.craft("wood_shelf_1x1") and GameState.get_furniture_count("wood_shelf_1x1") == 1, "crafting uses the gathered materials")
+	advance_self()
+	check(director.flow.current()["id"] == "setup" and director.flow.seen("setup"), "crafting leads to rebuilding the shop")
+	check(not director.flow.goal_met(director.flow.current(), world), "register and shelf are not placed yet")
+	# 건축 모드 대신 같은 복원 경로로 건진 계산대·진열대와 새 진열대를 놓는다.
+	var rebuilt: Array[Dictionary] = [
+		{"build_id":"door", "anchor":Vector2i(0,4), "rotation_index":3},
+		{"build_id":"register", "anchor":Vector2i(4,3), "rotation_index":0},
+		{"build_id":"shelf_1x1", "anchor":Vector2i(2,2), "rotation_index":0},
+		{"build_id":"wood_shelf_1x1", "anchor":Vector2i(2,5), "rotation_index":0}]
+	world.get_node("BuildManager")._restore_current_area_layout(rebuilt)
+	check(director.flow.goal_met(director.flow.current(), world), "placing register and shelf completes rebuilding")
 	advance_self()
 	check(director.flow.current()["id"] == "stock" and director.flow.seen("stock"), "situation leads to stocking")
 	check(not director.flow.validate_gifts([{"kind":"item","id":"invalid","amount":1}]), "invalid gifts rejected before grants")
@@ -197,7 +226,7 @@ func run() -> void:
 	talk_merchant()
 	check(director.flow.current().is_empty(), "optional crafting ends on collected output")
 	var sources := Tools.load_sources()
-	check(sources[Tools.KIND_TUTORIAL_STEP].size() == 8 and sources[Tools.KIND_TUTORIAL_DIALOGUE].size() == 6, "all revised tutorial prose registered in story tool")
+	check(sources[Tools.KIND_TUTORIAL_STEP].size() == 10 and sources[Tools.KIND_TUTORIAL_DIALOGUE].size() == 6, "all revised tutorial prose registered in story tool")
 	check(sources[Tools.KIND_SERVICE_TEXT].has("arrival_peddler_return"), "merchant reunion registered for prose drafting")
 	var step_prompt := Writer.build_prompt(Tools.KIND_TUTORIAL_STEP, sources, sources)
 	check(step_prompt.contains("플레이어 독백") and step_prompt.contains("현대 기기는 플레이어만 이해"), "Gemini receives player monologue and modern-knowledge boundary")

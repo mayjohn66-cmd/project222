@@ -17,6 +17,13 @@ func check(ok: bool, message: String) -> void:
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("run")
+func place_basics(shop) -> void:
+	# 새 게임은 문만 놓인 채 시작하므로(부서진 가게) 이 검사에 필요한 계산대·진열대를 놓아 둔다.
+	var layout: Array[Dictionary] = [
+		{"build_id":"door", "anchor":Vector2i(0,4), "rotation_index":3},
+		{"build_id":"register", "anchor":Vector2i(4,3), "rotation_index":0},
+		{"build_id":"shelf_1x1", "anchor":Vector2i(2,2), "rotation_index":0}]
+	shop.get_node("BuildManager")._restore_current_area_layout(layout)
 func frames(count: int = 6) -> void:
 	for i in range(count): await get_tree().process_frame
 func saved() -> void:
@@ -91,6 +98,8 @@ func run() -> void:
 	GameState.initialize_new_game()
 	world = load("res://scenes/shop/main.tscn").instantiate()
 	add_child(world)
+	await frames()
+	place_basics(world)
 	await frames()
 	manager = world.get_node("DayManager")
 	life = world.get_node("VillageLifeDirector")
@@ -169,6 +178,7 @@ func run() -> void:
 	GameState.add_furniture("wood_warehouse_rack",1)
 	GameState.add_item("dry_branch",1)
 	check(not F.complete(F.step("a3_traveler_rest")),"owned furniture alone is not post-intro crafting")
+	PlayerProgress.record_story_beat("shop_space:warehouse",GameState.total_day)  # 새 게임은 창고 공간을 연 뒤에야 창고 선반을 만들 수 있다(ShopSpaceProgression)
 	var recipe := FurnitureRecipeData.get_recipe("wood_warehouse_rack")
 	for ingredient in recipe["ingredients"]: GameState.add_item(str(ingredient["item_id"]),int(ingredient["amount"]))
 	check(FurnitureObjectCatalog.craft("wood_warehouse_rack"),"actual material-consuming furniture craft")

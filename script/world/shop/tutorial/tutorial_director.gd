@@ -16,6 +16,10 @@ var elapsed: float = 0.0
 var pending: Dictionary = {}
 var barter_panel: ArrivalBarterPanel
 var cutscene: OpeningCutscene  # 새 게임 프롤로그 연출(새 그림 없이 카메라·빛·소리)
+var _cleanup_layer: CanvasLayer
+var _cleanup_hint: Label       # 가장 가까운 잔해 더미 위 "[E] 잔해 치우기"
+var _cleanup_note: Label       # 치운 뒤 얻은 자재 알림
+var _cleanup_prepared: bool = false
 
 func _ready() -> void:
 	add_child(FoodShelfLifeDirector.new())
@@ -64,6 +68,7 @@ func hide_panel_for_menu() -> void:
 	if panel != null: panel.root.hide()
 
 func _process(delta: float) -> void:
+	_update_cleanup_hint()
 	elapsed += delta
 	if elapsed < 0.25: return
 	elapsed = 0.0
@@ -119,7 +124,85 @@ func refresh() -> void:
 		npc.mark.position.x = -90
 		npc.mark.add_theme_font_size_override("font_size", 18)
 
+# ---- 청소 단계(OpeningCleanup): 부서진 잔해 더미를 [E]로 치워 자재를 얻는다 ----
+# ResidentRequestDirector 도 이 클래스를 상속해 같은 처리 함수를 돌리므로, 청소 안내는 원래 안내자 하나만 맡는다.
+func _is_primary() -> bool:
+	return get_script().resource_path == "res://script/world/shop/tutorial/tutorial_director.gd"
+
+func _cleanup_active() -> bool:
+	if not _is_primary() or not enabled or talking: return false
+	var step := flow.current()
+	return not step.is_empty() and str(step["id"]) == "cleanup" and flow.seen("cleanup")
+
+func _store_cell(world_position: Vector2) -> Vector2:
+	var floor_node = get_parent().get_node("Floor")
+	var local: Vector2 = floor_node.to_local(world_position)
+	return Vector2(local.x / floor_node.tile_width + local.y / floor_node.tile_height, local.y / floor_node.tile_height - local.x / floor_node.tile_width)
+
+func _cell_world(cell: Vector2) -> Vector2:
+	var floor_node = get_parent().get_node("Floor")
+	return floor_node.to_global(Vector2((cell.x - cell.y) * 0.5 * floor_node.tile_width, (cell.x + cell.y) * 0.5 * floor_node.tile_height))
+
+func _try_clean() -> bool:
+	if not _cleanup_active() or _blocked(): return false
+	var index := OpeningCleanup.nearest(_store_cell(player.global_position), OpeningCleanup.REACH_CELLS)
+	if index < 0: return false
+	var loot := OpeningCleanup.clean(index)
+	cutscene.clear_pile(index)
+	_show_cleanup_note("잔해를 치웠다 · %s (%d/%d)" % [OpeningCleanup.loot_text(loot), OpeningCleanup.cleaned_count(), OpeningCleanup.PILES.size()])
+	call_deferred("refresh")
+	return true
+
+func _ensure_cleanup_ui() -> void:
+	if _cleanup_layer != null: return
+	_cleanup_layer = CanvasLayer.new()
+	_cleanup_layer.layer = 22
+	add_child(_cleanup_layer)
+	var settings := LabelSettings.new()
+	settings.font_size = 20
+	settings.font_color = Color(1, 0.95, 0.75)
+	settings.outline_size = 6
+	settings.outline_color = Color(0, 0, 0, 0.9)
+	_cleanup_hint = Label.new()
+	_cleanup_hint.label_settings = settings
+	_cleanup_hint.text = "▼ [E] 잔해 치우기"
+	_cleanup_hint.visible = false
+	_cleanup_layer.add_child(_cleanup_hint)
+	_cleanup_note = Label.new()
+	_cleanup_note.label_settings = settings
+	_cleanup_note.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_cleanup_note.visible = false
+	_cleanup_layer.add_child(_cleanup_note)
+
+func _show_cleanup_note(text: String) -> void:
+	_ensure_cleanup_ui()
+	_cleanup_note.text = text
+	_cleanup_note.visible = true
+	var size: Vector2 = get_viewport().get_visible_rect().size
+	_cleanup_note.size = Vector2(size.x, 30)
+	_cleanup_note.position = Vector2(0, size.y * 0.3)
+	get_tree().create_timer(2.6).timeout.connect(func() -> void:
+		if is_instance_valid(_cleanup_note): _cleanup_note.visible = false)
+
+func _update_cleanup_hint() -> void:
+	if not _cleanup_active():
+		if _cleanup_hint != null: _cleanup_hint.visible = false
+		return
+	_ensure_cleanup_ui()
+	if not _cleanup_prepared:
+		_cleanup_prepared = true
+		cutscene.prepare_cleanup()  # 독백을 건너뛰고 불러온 경우에도 잔해가 보이게(기다리지 않는다)
+	var index := OpeningCleanup.nearest(_store_cell(player.global_position))
+	if index < 0 or get_tree().paused:
+		_cleanup_hint.visible = false
+		return
+	var world_pos: Vector2 = _cell_world(OpeningCleanup.PILES[index]["stand"])
+	var screen: Vector2 = get_viewport().get_canvas_transform() * world_pos
+	_cleanup_hint.visible = true
+	_cleanup_hint.position = screen + Vector2(-60, -70 + sin(Time.get_ticks_msec() / 220.0) * 5.0)
+
 func try_interact() -> bool:
+	if _try_clean(): return true
 	if not enabled or talking or _blocked() or not is_instance_valid(npc): return false
 	if player.global_position.distance_to(npc.global_position) > talk_distance: return false
 	var step := flow.current()
@@ -185,7 +268,6 @@ func _end_talk() -> void:
 	if result.has("prologue") and completed_read:
 		OpeningPrologueFlow.complete(str(result["prologue"]))
 		if str(result["prologue"]) == "prologue_unfamiliar_window": cutscene.play_outro()
-		elif str(result["prologue"]) == "prologue_keep_the_light": cutscene.play_cleanup()
 	elif not result.is_empty() and completed_read:
 		var step: Dictionary = result["step"]
 		if flow.current().get("id", "") == step.get("id", ""):

@@ -9,9 +9,20 @@ func seen(id: String) -> bool:
 func done(id: String) -> bool:
 	return PlayerProgress.story_beat_days.has(PREFIX + id + ":done")
 
+# 뒤쪽 단계를 이미 시작했거나 마친 저장이면 앞쪽 단계(청소·제작처럼 나중에 끼워 넣은 것)는 건너뛴다.
+func _later_started(step: Dictionary) -> bool:
+	var found := false
+	for other in settings.steps:
+		if other == step:
+			found = true
+			continue
+		if found and (seen(str(other["id"])) or done(str(other["id"]))): return true
+	return false
+
 func current() -> Dictionary:
 	for step in settings.steps:
 		if done(str(step["id"])): continue
+		if bool(step.get("skip_if_later_started", false)) and _later_started(step): continue
 		if not bool(step.get("optional", false)) and OpeningJourneyFlow.legacy_finished(): continue
 		if bool(step.get("optional", false)) and not OpeningJourneyFlow.optional_available(step): continue
 		return RequestTextData.enrich(step, "tutorial_step")
@@ -27,7 +38,16 @@ func goal_met(step: Dictionary, world: Node) -> bool:
 			for object in world.get_node("Objects").get_children():
 				if object.is_queued_for_deletion() or object.get_meta("is_build_preview", false): continue
 				found[str(object.get_meta("build_id", ""))] = true
-			return found.has("door") and found.has("register") and (found.has("shelf_1x1") or found.has("shelf_2x1") or found.has("shelf_3x1"))
+			var has_shelf := false
+			for object in world.get_node("Objects").get_children():
+				if object.is_in_group("shelf") and not object.is_queued_for_deletion() and not object.get_meta("is_build_preview", false): has_shelf = true
+			return found.has("door") and found.has("register") and has_shelf
+		"cleanup": return OpeningCleanup.all_done()
+		"craft_shelf":
+			if PlayerProgress.story_beat_days.has(FurnitureObjectCatalog.PREFIX + "wood"): return true
+			for object in world.get_node("Objects").get_children():
+				if str(object.get_meta("build_id", "")).begins_with("wood_shelf") and not object.is_queued_for_deletion(): return true
+			return GameState.get_furniture_count("wood_shelf_1x1") > 0
 		"stock":
 			for object in world.get_node("Objects").get_children():
 				if not object.is_in_group("shelf") or object.is_queued_for_deletion() or object.get_meta("is_build_preview", false): continue

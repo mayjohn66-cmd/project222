@@ -35,12 +35,14 @@ const PROPS := [
 	{"model": "rack", "anchor": Vector2i(1, 6), "size": Vector2i(1, 1), "depth": 0.5, "rot": 1},
 ]
 
-# 부서진 잔해를 놓지 않는 곳: 남은 진열대(2,2)·계산대 주변·문 앞 통로. (칸 좌표 사각형)
-const KEEP_CLEAR := [Rect2(1.3, 1.3, 1.4, 1.4), Rect2(3.2, 2.2, 2.6, 1.6), Rect2(-0.5, 3.3, 2.6, 1.5)]
+# 부서진 잔해를 놓지 않는 곳: 문 앞 통로. (칸 좌표 사각형)
+const KEEP_CLEAR := [Rect2(-0.5, 3.3, 2.6, 1.5)]
 
 var view: Node                      # StoreView3D
 var keys: Array[String] = []
 var debris: Array[String] = []
+var debris_by_prop: Dictionary = {}    # 집기 번호(PROPS) → 그 자리 잔해 항목 이름 목록
+var _current_prop: int = -1
 var _count: int = 0
 
 
@@ -102,8 +104,8 @@ func _put(name: String, lo: Vector2, hi: Vector2, height: float, tint: Color, ba
 	return key
 
 
-# 현대 집기를 모두 치우고 그 자리에 잔해를 깐다.
-func smash() -> void:
+# 현대 집기를 모두 치우고 그 자리에 잔해를 깐다. skip_props: 이미 치워서 잔해를 만들지 않을 집기 번호(불러온 뒤 이어서 할 때).
+func smash(skip_props: Array = []) -> void:
 	for k in keys:
 		view._remove_item(k)
 
@@ -111,7 +113,10 @@ func smash() -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = SEED_VALUE
 
-	for prop in PROPS:
+	for prop_index in range(PROPS.size()):
+		var prop: Dictionary = PROPS[prop_index]
+		_current_prop = prop_index
+
 		var rect: Rect2 = _rect_of(prop)
 		var lo: Vector2 = rect.position - Vector2(0.35, 0.35)
 		var hi: Vector2 = rect.end + Vector2(0.35, 0.35)
@@ -142,13 +147,33 @@ func smash() -> void:
 				var at4 := Vector2(rng.randf_range(lo.x, hi.x), rng.randf_range(rect.end.y, rect.end.y + 0.9))
 				_add_debris("dh", at4, Vector2(rng.randf_range(0.12, 0.3), rng.randf_range(0.12, 0.3)), 0.03, GLASS)
 
+		# 난수 순서를 같게 두려고 일단 만든 뒤, 이미 치운 자리는 지운다(불러와도 남은 잔해 모양이 같다)
+		if skip_props.has(prop_index):
+			clear_props([prop_index])
+
 
 func _add_debris(name: String, at: Vector2, size: Vector2, height: float, tint: Color) -> void:
 	for clear in KEEP_CLEAR:
 		if (clear as Rect2).intersects(Rect2(at - size * 0.5, size)):
 			return
 
-	debris.append(_put(name, at - size * 0.5, at + size * 0.5, height, tint))
+	var key: String = _put(name, at - size * 0.5, at + size * 0.5, height, tint)
+	debris.append(key)
+
+	if not debris_by_prop.has(_current_prop):
+		debris_by_prop[_current_prop] = []
+
+	(debris_by_prop[_current_prop] as Array).append(key)
+
+
+# 그 집기 자리의 잔해를 치운다(청소).
+func clear_props(prop_indices: Array) -> void:
+	for index in prop_indices:
+		for key in debris_by_prop.get(index, []):
+			view._remove_item(key)
+			debris.erase(key)
+
+		debris_by_prop.erase(index)
 
 
 # 잔해를 몇 개씩 치운다. 남은 개수를 돌려준다.
@@ -168,3 +193,4 @@ func clear_all() -> void:
 
 	keys.clear()
 	debris.clear()
+	debris_by_prop.clear()

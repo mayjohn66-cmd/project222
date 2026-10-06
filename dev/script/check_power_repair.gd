@@ -17,10 +17,19 @@ func drain(dialogue: StoryDialoguePanel) -> void:
 		if not dialogue.open: return
 		dialogue._advance()
 	check(false, "dialogue finishes")
+func place_basics(shop) -> void:
+	# 새 게임은 문만 놓인 채 시작하므로(부서진 가게) 이 검사에 필요한 계산대·진열대를 놓아 둔다.
+	var layout: Array[Dictionary] = [
+		{"build_id":"door", "anchor":Vector2i(0,4), "rotation_index":3},
+		{"build_id":"register", "anchor":Vector2i(4,3), "rotation_index":0},
+		{"build_id":"shelf_1x1", "anchor":Vector2i(2,2), "rotation_index":0}]
+	shop.get_node("BuildManager")._restore_current_area_layout(layout)
 func run() -> void:
 	GameState.initialize_new_game()
 	var world = load("res://scenes/shop/main.tscn").instantiate()
 	add_child(world)
+	await frames()
+	place_basics(world)
 	await frames()
 	var tutorial = world.get_node("TutorialDirector")
 	tutorial.dialogue.close()

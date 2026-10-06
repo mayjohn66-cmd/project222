@@ -400,13 +400,30 @@ func play_outro() -> void:
 	_phase = ""
 
 
-# 독백 4가 끝나면(가게부터 정리하기로 했으므로) 부서진 잔해를 몇 개씩 치운다. 기다리지 않는다.
-func play_cleanup() -> void:
-	if not enabled or dressing == null:
+# 청소 단계에서 부서진 잔해가 화면에 있게 한다(독백을 건너뛰고 불러온 경우에도). 이미 치운 더미는 만들지 않는다.
+# 화면이 없거나 연출이 꺼져 있으면(자동 검사) 아무것도 하지 않는다. 기다릴 수 있다.
+func prepare_cleanup() -> void:
+	if not await _ensure():
 		return
 
-	while dressing.clear_debris_step(6) > 0:
-		await get_tree().create_timer(0.12).timeout
+	_set_alpha(_black, 0.0)  # 처음 만들 때는 도입을 위해 까맣게 시작하므로, 도입 없이 불러온 경우엔 걷어 낸다
+
+	if OpeningCleanup.all_done() or not dressing.debris.is_empty() or dressing.built():
+		return
+
+	var skip: Array = []
+
+	for i in range(OpeningCleanup.PILES.size()):
+		if OpeningCleanup.done(i):
+			skip.append_array(OpeningCleanup.PILES[i]["props"])
+
+	dressing.smash(skip)
+
+
+# 더미 하나를 치운다(화면에서 잔해가 사라진다).
+func clear_pile(index: int) -> void:
+	if enabled and dressing != null:
+		dressing.clear_props(OpeningCleanup.PILES[index]["props"])
 
 
 # 연출 도중 나가거나 장면이 바뀌어도 화면과 숲이 원래대로 남게 한다.

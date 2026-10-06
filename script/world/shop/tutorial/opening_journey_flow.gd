@@ -39,6 +39,12 @@ static func initialize(world: Node) -> void:
 	world.get_node("BuildManager")._restore_current_area_layout(SETTINGS.opening_layout)
 	for entry in SETTINGS.opening_layout:
 		GameState.remove_furniture(str(entry["build_id"]), 1)
+	# 전이로 부서지고 건진 가구만 보관함에 남긴다(청소·제작·건축 튜토리얼에서 직접 설치).
+	for id in SETTINGS.salvaged_furniture:
+		var have: int = GameState.get_furniture_count(str(id))
+		var want: int = int(SETTINGS.salvaged_furniture[id])
+		if have > want: GameState.remove_furniture(str(id), have - want)
+		elif have < want: GameState.add_furniture(str(id), want - have)
 	GameState.save_store_layout(SETTINGS.opening_layout.duplicate(true))
 	PlayerProgress.record_story_beat(VERSION, GameState.total_day)
 	PlayerProgress.record_story_beat("shop_space:v1", GameState.total_day)

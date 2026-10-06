@@ -6,11 +6,14 @@
 script = ExtResource("1")
 guide_name = "델빈"
 merchant_name = "행상인 타블렌"
-opening_layout = Array[Dictionary]([{"build_id":"door", "anchor":Vector2i(0,4), "rotation_index":3}, {"build_id":"register", "anchor":Vector2i(4,3), "rotation_index":0}, {"build_id":"shelf_1x1", "anchor":Vector2i(2,2), "rotation_index":0}])
+opening_layout = Array[Dictionary]([{"build_id":"door", "anchor":Vector2i(0,4), "rotation_index":3}])
+salvaged_furniture = {"register": 1, "shelf_1x1": 1, "shelf_2x1": 0, "shelf_3x1": 0}
 barter_requirements = Array[Dictionary]([{"id":"bread", "amount":2}, {"id":"water", "amount":1}])
 barter_gifts = Array[Dictionary]([{"id":"rusty_sword", "amount":1, "missing_only":true}, {"id":"leather_armor", "amount":1, "missing_only":true}])
 steps = Array[Dictionary]([
-{"id":"setup","goal":"fixtures","actor":"self","npc":"플레이어 독백","stage":"가게와 함께 낯선 숲으로 이동. 기존 문·계산대·진열대는 함께 옴. 계산대는 전원과 회로가 끊겨 꺼져 있고 장부/가격표로 수기 계산. 첫 판매를 수리로 막지 않는다. 현대 기기는 플레이어만 이해","starter":[],"rewards":[]},
+{"id":"cleanup","goal":"cleanup","actor":"self","npc":"플레이어 독백","stage":"깨어난 뒤 부서진 가게. 바닥의 잔해 더미 6곳을 치우며 쓸 만한 마른 가지·수액·돌 조각을 모은다. 무료 완성품/식품/돈 지급 없음. 현지인 등장 없음","skip_if_later_started":true,"starter":[],"rewards":[]},
+{"id":"craft_shelf","goal":"craft_shelf","actor":"self","npc":"플레이어 독백","stage":"모은 가지와 수액으로 메뉴의 설계도에서 작은 나무 진열대 하나를 제작. 제작 UI 위치만 알려 줌. 현지인 도움 없음","skip_if_later_started":true,"starter":[],"rewards":[]},
+{"id":"setup","goal":"fixtures","actor":"self","npc":"플레이어 독백","stage":"건진 계산대와 진열대 하나, 새로 만든 나무 진열대를 건축 모드로 설치해 가게를 다시 세운다. 계산대는 전원과 회로가 끊겨 꺼져 있고 장부/가격표로 수기 계산. 첫 판매를 수리로 막지 않는다. 현대 기기는 플레이어만 이해. 건축 조작은 UI로 안내","starter":[],"rewards":[]},
 {"id":"stock","goal":"stock","actor":"self","npc":"플레이어 독백","stage":"함께 온 식품을 진열. 현지인이 식품이나 현대 기기를 지급/설명하지 않음","rewards":[]},
 {"id":"checkout","goal":"checkout","actor":"customer","npc":"델빈과 플레이어 독백","stage":"낯선 유리문과 포장에 놀란 첫 손님이 실제 식품 하나를 현지 화폐로 삼. 완료는 플레이어 독백","rewards":[]},
 {"id":"barter","goal":"barter","actor":"merchant","npc":"행상인 타블렌","stage":"낯선 식품에 관심. 창고 빵2·물1과 낡은 검1·가죽 갑옷1을 한 번 물물교환. 메뉴/조작 키는 UI","rewards":[]},
