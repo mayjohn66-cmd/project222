@@ -138,7 +138,7 @@ func _begin_prologue(moment: Dictionary) -> void:
 	player.set_physics_process(false)
 	player.velocity = Vector2.ZERO
 	get_parent().set_meta("progressive_tutorial_dialogue",true)
-	# 프롤로그 연출: 독백1 앞에 도시 거리, 독백2 앞에 숲으로 바뀌는 장면(자동 검사에서는 꺼져 있다)
+	# 프롤로그 연출: 독백1 앞에 현대 편의점과 손님·도시 거리, 독백2 앞에 깨어나 숲과 부서진 가게가 보이는 장면(자동 검사에서는 꺼져 있다)
 	if str(moment["id"]) == "prologue_last_shift": await cutscene.play_intro()
 	elif str(moment["id"]) == "prologue_unfamiliar_window": await cutscene.play_transition()
 	var moment_id := str(moment["id"])
@@ -185,6 +185,7 @@ func _end_talk() -> void:
 	if result.has("prologue") and completed_read:
 		OpeningPrologueFlow.complete(str(result["prologue"]))
 		if str(result["prologue"]) == "prologue_unfamiliar_window": cutscene.play_outro()
+		elif str(result["prologue"]) == "prologue_keep_the_light": cutscene.play_cleanup()
 	elif not result.is_empty() and completed_read:
 		var step: Dictionary = result["step"]
 		if flow.current().get("id", "") == step.get("id", ""):

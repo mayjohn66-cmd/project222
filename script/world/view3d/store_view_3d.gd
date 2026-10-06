@@ -1128,7 +1128,7 @@ func _collect_actor_nodes() -> Array:
 	if player != null:
 		nodes.append(player)
 
-	for group_name in ["customer", "worker", "story_npc", "merchant_npc"]:
+	for group_name in ["customer", "worker", "story_npc", "merchant_npc", "cutscene_actor"]:
 		for n in get_tree().get_nodes_in_group(group_name):
 			if n is Node2D and not nodes.has(n):
 				nodes.append(n)
@@ -1140,6 +1140,9 @@ func _collect_actor_nodes() -> Array:
 func _actor_look_key(n: Node) -> String:
 	if n == player:
 		return "player"
+
+	if n.has_meta("look_key"):
+		return str(n.get_meta("look_key"))  # 연출용 인물(프롤로그의 손님 등)이 외형을 직접 정한다
 
 	if n.is_in_group("worker"):
 		return "worker"
