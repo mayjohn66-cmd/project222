@@ -1,5 +1,5 @@
 beat_id,npc_id,conditions,gifts,repeat_days,lines
 welcome_oven,neighbor,day>=2;expedition_done;furniture_missing:magic_oven,,0,이곳에선 마법 오븐으로 빵을 굽기도 해요.|타블렌이라면 그 도구를 잘 알 거예요.|장을 이어 가다가 한번 물어보세요.
 help_no_stock,neighbor,day>=3;expedition_done;product_stock_empty,item:wild_berry:3,0,숲에서 딴 열매를 조금 가져왔어요.|이곳의 재료도 손님들에게 내놓을 수 있겠죠.|다음엔 숲길에서 직접 찾아보세요.
-help_no_ore,neighbor,day>=3;expedition_done;item_below:iron_ore:2,item:forest_herb:2,0,광석은 광산 길에서 찾아보면 좋겠어요.|숲에서 딴 약초는 조금 나눠 드릴게요.|장사를 이어 가며 다음 나들이를 준비해요.
+help_no_ore,neighbor,day>=3;expedition_done;item_below:iron_ore:2,,0,광석이 모자라면 광산 안쪽의 철광맥을 캐 보면 좋겠어요.|광산에서는 돌과 석탄도 함께 만날 수 있어요.|장사를 이어 가며 다음 나들이를 준비해요.
 help_broke,neighbor,day>=3;expedition_done;money<300,item:dry_branch:2;item:wild_berry:2,0,가게 앞에서 모은 가지와 열매예요.|필요한 손님에게 내놓아 보세요.|낯선 곳에서도 조금씩 길이 생길 거예요.
