@@ -19,7 +19,9 @@ var text_label: Label
 var hint_label: Label
 var hint_tween: Tween = null
 
-const HINT_HOLDER_HEIGHT := 30.0
+const HINT_HOLDER_HEIGHT := 44.0   # 움찔거리는 범위와 테두리 사이 여유까지 포함
+const HINT_MARGIN_RIGHT := 22.0    # 오른쪽 테두리에서 띄우는 거리
+const HINT_REST_Y := 6.0
 const HINT_BOB_PIXELS := 5.0      # ▼가 아래로 움찔하는 거리
 const HINT_BOB_SECONDS := 0.45
 const PLAYER_SPEAKER := "나"      # 이 이름으로 시작한 대화는 플레이어 닉네임으로 보여 준다
@@ -91,7 +93,10 @@ func _ready() -> void:
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	hint_label.add_theme_font_size_override("font_size", 18)
 	hint_label.add_theme_color_override("font_color", Color(0.85, 0.65, 0.3))
-	hint_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	# 오른쪽 위에 붙이고, 폭은 글자 크기대로 둔다(오른쪽 여백만큼 안쪽으로).
+	hint_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE)
+	hint_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	hint_label.offset_right = -HINT_MARGIN_RIGHT
 	_show_hint(false)
 	hint_holder.add_child(hint_label)
 
@@ -144,14 +149,14 @@ func _show_hint(shown: bool) -> void:
 		hint_tween = null
 
 	hint_label.visible = shown
-	hint_label.position.y = 0.0
+	hint_label.position.y = HINT_REST_Y
 
 	if not shown:
 		return
 
 	hint_tween = create_tween().set_loops()
-	hint_tween.tween_property(hint_label, "position:y", HINT_BOB_PIXELS, HINT_BOB_SECONDS).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-	hint_tween.tween_property(hint_label, "position:y", 0.0, HINT_BOB_SECONDS).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	hint_tween.tween_property(hint_label, "position:y", HINT_REST_Y + HINT_BOB_PIXELS, HINT_BOB_SECONDS).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	hint_tween.tween_property(hint_label, "position:y", HINT_REST_Y, HINT_BOB_SECONDS).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 
 func _advance() -> void:
