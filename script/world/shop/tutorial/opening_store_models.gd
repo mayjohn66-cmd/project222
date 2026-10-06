@@ -1,0 +1,145 @@
+class_name OpeningStoreModels
+extends RefCounted
+## 프롤로그 가게 안 장식용 3D 모델(실제 편의점 내부 사진을 참고). 게임 집기 모델과 같은 방식(`FurnitureAssets.Frame`)으로
+## 상자를 모아 **메시 하나**로 만든다. 상품 상자가 수백 개여도 깊이 정렬 항목은 하나라서 화면이 끊기지 않는다.
+##   cooler  유리문 음료 냉장고(벽쪽 줄): 흰 몸통, 청록 윗띠, 층마다 알록달록한 음료
+##   gondola 중앙 진열대: 흰 몸통, 층마다 과자·상품 상자, 청록 가격표 띠, 윗간판
+##   chest   아이스크림 냉동 쇼케이스: 낮고 긴 흰 상자, 유리 뚜껑 아래 알록달록한 상품
+##   rack    입구 쪽 작은 상품 걸이
+## 길이(L)·깊이(D)는 칸 단위. 앞면(손님 쪽)은 v = D.
+
+const PALETTE := [
+	Color(0.92, 0.28, 0.25), Color(0.98, 0.78, 0.22), Color(0.28, 0.62, 0.92), Color(0.4, 0.78, 0.4),
+	Color(0.95, 0.5, 0.75), Color(0.96, 0.96, 0.98), Color(0.58, 0.42, 0.88), Color(0.98, 0.58, 0.2),
+]
+const TEAL := Color(0.1, 0.72, 0.72)
+const WHITE := Color(0.93, 0.95, 0.97)
+const GRAY := Color(0.7, 0.74, 0.8)
+const DARK := Color(0.2, 0.22, 0.26)
+
+
+static func build(kind: String, lo: Vector2, hi: Vector2, rot: int, pp: Dictionary) -> Dictionary:
+	var f := FurnitureAssets.Frame.new(lo, hi, rot, pp)
+
+	match kind:
+		"cooler":
+			return _cooler(f)
+		"gondola":
+			return _gondola(f)
+		"chest":
+			return _chest(f)
+		_:
+			return _rack(f)
+
+
+# 색 번호 i 의 상품 부품(색마다 면 하나로 모인다)
+static func _goods(f: FurnitureAssets.Frame, i: int) -> Dictionary:
+	var k: int = posmod(i, PALETTE.size())
+	return f.flat(PALETTE[k], "pc%d" % k)
+
+
+static func _cooler(f: FurnitureAssets.Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var body: Dictionary = f.flat(WHITE, "co_body")
+	var back: Dictionary = f.flat(Color(0.82, 0.9, 0.95), "co_back", 0.4)
+	var shelf: Dictionary = f.flat(GRAY, "co_shelf")
+	var teal: Dictionary = f.flat(TEAL, "co_teal", 0.5)
+	var dark: Dictionary = f.flat(DARK, "co_dark")
+	var glass: Dictionary = f.flat(Color(0.75, 0.92, 1.0), "co_glass", 0.3)
+	var top: float = 1.78
+	f.box(dark, 0.0, L, 0.0, D, 0.0, 0.14)                    # 받침
+	f.box(body, 0.0, 0.06, 0.0, D, 0.14, top)                 # 왼쪽 옆판
+	f.box(body, L - 0.06, L, 0.0, D, 0.14, top)               # 오른쪽 옆판
+	f.box(back, 0.06, L - 0.06, 0.0, 0.08, 0.14, top - 0.12)  # 안쪽 뒷판(밝게)
+	f.box(body, 0.0, L, 0.0, D, top - 0.12, top)              # 윗부분
+	f.box(teal, 0.0, L, D - 0.05, D, top - 0.12, top - 0.02)  # 앞 청록 띠
+
+	for r in range(5):
+		var y0: float = 0.2 + float(r) * 0.3
+		f.box(shelf, 0.06, L - 0.06, 0.1, D - 0.04, y0, y0 + 0.03)
+
+		for j in range(6):
+			var u0: float = 0.1 + float(j) * ((L - 0.2) / 6.0)
+			f.box(_goods(f, r * 3 + j * 2), u0, u0 + (L - 0.2) / 6.0 - 0.025, D * 0.32, D - 0.1, y0 + 0.03, y0 + 0.26)
+
+	# 앞 유리문 틀(가운데 세로 손잡이)과 반사
+	f.box(dark, 0.06, L - 0.06, D - 0.03, D, 0.14, 0.2)
+	f.box(dark, 0.06, 0.1, D - 0.03, D, 0.2, top - 0.12)
+	f.box(dark, L - 0.1, L - 0.06, D - 0.03, D, 0.2, top - 0.12)
+	f.box(dark, L * 0.5 - 0.015, L * 0.5 + 0.015, D - 0.04, D + 0.01, 0.35, 1.3)
+	f.box(glass, 0.12, 0.2, D - 0.02, D, 0.3, top - 0.3)
+	return f.finish(1.8)
+
+
+static func _gondola(f: FurnitureAssets.Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var body: Dictionary = f.flat(WHITE, "go_body")
+	var board: Dictionary = f.flat(Color(0.86, 0.88, 0.92), "go_board")
+	var teal: Dictionary = f.flat(TEAL, "go_teal", 0.4)
+	var tag: Dictionary = f.flat(Color(1.0, 0.95, 0.5), "go_tag", 0.3)
+	var dark: Dictionary = f.flat(DARK, "go_dark")
+	var top: float = 1.5
+	f.box(dark, 0.0, L, 0.0, D, 0.0, 0.1)
+	f.box(body, 0.0, 0.07, 0.0, D, 0.1, top)
+	f.box(body, L - 0.07, L, 0.0, D, 0.1, top)
+	f.box(body, 0.07, L - 0.07, 0.0, 0.05, 0.1, top)          # 뒷판
+	f.box(teal, 0.0, L, 0.0, D, top, top + 0.16)              # 윗간판
+	var cols: int = maxi(3, int((L - 0.2) / 0.17))
+	var cw: float = (L - 0.2) / float(cols)
+
+	for r in range(4):
+		var y0: float = 0.16 + float(r) * 0.31
+		f.box(board, 0.07, L - 0.07, 0.04, D, y0, y0 + 0.03)
+		f.box(tag, 0.09, L - 0.09, D - 0.02, D + 0.005, y0 + 0.005, y0 + 0.03)  # 가격표 띠
+
+		for j in range(cols):
+			var u0: float = 0.1 + float(j) * cw
+			var h: float = 0.17 + 0.07 * float((j * 5 + r * 3) % 3)
+			f.box(_goods(f, r * 2 + j * 3 + 1), u0, u0 + cw - 0.02, 0.1, D - 0.06, y0 + 0.03, y0 + 0.03 + h)
+
+	return f.finish(1.66)
+
+
+static func _chest(f: FurnitureAssets.Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var body: Dictionary = f.flat(WHITE, "ch_body")
+	var teal: Dictionary = f.flat(TEAL, "ch_teal", 0.4)
+	var lid: Dictionary = f.flat(Color(0.8, 0.93, 1.0), "ch_lid", 0.45)
+	var dark: Dictionary = f.flat(DARK, "ch_dark")
+	f.box(dark, 0.0, L, 0.0, D, 0.0, 0.08)
+	f.box(body, 0.0, L, 0.0, D, 0.08, 0.7)
+	f.box(teal, 0.0, L, D - 0.04, D, 0.3, 0.44)
+	var cols: int = maxi(3, int(L / 0.2))
+	var cw: float = (L - 0.16) / float(cols)
+
+	for j in range(cols):
+		for k in range(3):
+			var v0: float = 0.1 + float(k) * ((D - 0.2) / 3.0)
+			f.box(_goods(f, j * 3 + k * 2), 0.08 + float(j) * cw, 0.08 + float(j) * cw + cw - 0.03, v0, v0 + (D - 0.2) / 3.0 - 0.03, 0.7, 0.8)
+
+	f.box(lid, 0.04, L - 0.04, 0.04, D - 0.04, 0.82, 0.86)
+	return f.finish(0.9)
+
+
+static func _rack(f: FurnitureAssets.Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var body: Dictionary = f.flat(WHITE, "rk_body")
+	var teal: Dictionary = f.flat(TEAL, "rk_teal", 0.4)
+	f.box(body, 0.0, L, 0.0, D, 0.0, 0.08)
+	f.box(body, 0.04, 0.1, 0.04, D - 0.04, 0.08, 1.2)
+	f.box(body, L - 0.1, L - 0.04, 0.04, D - 0.04, 0.08, 1.2)
+	f.box(teal, 0.0, L, 0.0, D, 1.2, 1.3)
+
+	for r in range(3):
+		var y0: float = 0.14 + float(r) * 0.36
+		f.box(body, 0.04, L - 0.04, 0.04, D - 0.04, y0, y0 + 0.03)
+
+		for j in range(3):
+			var u0: float = 0.1 + float(j) * ((L - 0.2) / 3.0)
+			f.box(_goods(f, r * 3 + j + 2), u0, u0 + (L - 0.2) / 3.0 - 0.03, 0.08, D - 0.08, y0 + 0.03, y0 + 0.3)
+
+	return f.finish(1.3)
