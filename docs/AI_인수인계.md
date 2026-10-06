@@ -32,6 +32,10 @@ Gemini는 API로만 쓰며 저장소를 직접 읽거나 쓰지 못합니다. �
 
 - 요청: `dev\gemini\run_request_text.bat draft [종류]` 또는 `sync`(새로 생긴·바뀐 요청만 작성). 종류는 `resident_request` / `community_request` / `resident_greeting`.
 - 결과: `docs/drafts/story/requests_text_gemini_<시각>.csv`(검수 전 초안). 다듬기는 `polish 파일`, 반영은 `accept 파일`.
+- **API 한도에 걸리면 웹(구독) 방식으로 쓸 수 있습니다(2026-10-06, API 호출 없음).**
+  1. `dev\gemini\run_request_text.bat webprompt service_text --ids act4_b1_intro,act4_b1_show,act4_b1_finish,act4_b1_clue,act4_b1_old_coin_title --chunk 5` → `docs/drafts/story/web/prompt_<시각>_01.txt`가 생긴다(지침+세계관+현재 문장 포함, 약 20KB). `--chunk`로 파일 하나에 담는 항목 수를 정한다.
+  2. 파일 내용을 **통째로** 제미나이 웹 대화에 붙여 넣는다. 답이 **코드블록**으로 나오면 복사 버튼으로 복사해 같은 폴더에 `answer_01.txt`로 저장한다(탭 구분이 유지되어야 한다).
+  3. `dev\gemini\run_request_text.bat webimport docs/drafts/story/web/answer_01.txt,docs/drafts/story/web/answer_02.txt` → 머리말·코드블록 표시를 걸러 `requests_text_gemini_<시각>_web.csv` 초안을 만들고 형식 검사까지 한다. 이후 `validate`·검수·`accept`는 API 방식과 같다.
 - 키(`GEMINI_API_KEY`)는 사용자 PC 환경변수에만 둡니다. 채팅·저장소·클라우드 환경에는 두지 않습니다.
 - **Gemini 몫의 일은 이 표에서 받는 AI를 `사용자(Gemini 도구 실행)`로 씁니다.** 사용자가 위 명령을 실행하면 결과 파일이 생기고, 그 파일 경로를 근거 칸에 적어 `완료`로 바꿉니다. 이후 Claude가 `tools/validate_story.py`로 형식·글자 수를 검증합니다.
 

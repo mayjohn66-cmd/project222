@@ -3,6 +3,8 @@ extends Node
 ##   export   현재 원본의 글을 CSV로 내보낸다(기준 문장). --out <경로>
 ##   validate 글 CSV를 검사한다. --file <경로>
 ##   draft    제미나이에게 글을 새로 쓰게 하고 초안 CSV로 저장한다. [--kind resident_request|community_request|resident_greeting]
+##   webprompt API 없이 제미나이 웹(구독)에 붙여 넣을 요청문을 파일로 만든다. draft 와 같은 --kind/--ids/--chunk. docs/drafts/story/web/prompt_*.txt
+##   webimport 웹에서 받은 답을 파일로 저장해 두었다가 초안 CSV로 바꾸고 검사한다. --files 경로,경로
 ## 실행: godot --headless --path . res://dev/gemini/request_text.tscn -- --mode validate --file docs/drafts/story/<파일>.csv
 ## 기계 부분(id·재료·수량·보상)은 바꾸지 않는다. 규격: docs/스토리_작성_가이드.md 5.1
 
@@ -57,6 +59,10 @@ func _run() -> void:
 			_validate(sources)
 		"draft":
 			await _draft(sources, sources)
+		"webprompt":
+			_webprompt(sources)
+		"webimport":
+			_webimport(sources)
 		"sync":
 			await _sync(sources)
 		"accept":
@@ -107,6 +113,128 @@ func _validate(sources: Dictionary) -> void:
 func _draft(sources: Dictionary, targets: Dictionary) -> void:
 	var made: Dictionary = await _make_draft(sources, targets)
 	get_tree().quit(0 if bool(made["ok"]) else 1)
+
+
+# 제미나이 웹(구독)용: API 를 부르지 않고 묶음마다 [지침]+[요청]을 한 파일로 만든다. 파일 내용을 웹 대화에 통째로 붙여 넣고,
+# 답(코드블록 안의 탭 구분 행)을 복사해 docs/drafts/story/web/answer_N.txt 로 저장한 뒤 webimport 로 초안 CSV 를 만든다.
+func _webprompt(sources: Dictionary) -> void:
+	var only_kind: String = _arg("--kind")
+	var system_prompt: String = StoryGen.append_world_setting(
+		BASE_PROMPT,
+		FileAccess.get_file_as_string(StoryGen.WORLD_SETTING_PATH) if FileAccess.file_exists(StoryGen.WORLD_SETTING_PATH) else ""
+	)
+	var only_ids: PackedStringArray = _arg("--ids").split(",", false)
+	var chunk_size: int = maxi(1, int(_arg("--chunk")) if not _arg("--chunk").is_empty() else DEFAULT_CHUNK_SIZE)
+	var stamp: String = Time.get_datetime_string_from_system().replace(":", "").replace("-", "").replace("T", "_")
+	var count: int = 0
+
+	for kind in Tools.KINDS:
+		if not only_kind.is_empty() and only_kind != kind:
+			continue
+
+		var ids: Array = filter_ids(sources[kind].keys(), only_ids)
+
+		if ids.is_empty():
+			continue
+
+		for chunk in chunk_ids(ids, chunk_size):
+			var part: Dictionary = sources.duplicate()
+			var subset: Dictionary = {}
+
+			for id in chunk:
+				subset[id] = sources[kind][id]
+
+			part[kind] = subset
+			count += 1
+			var path: String = "%s/web/prompt_%s_%02d.txt" % [OUT_DIR, stamp, count]
+			var text: String = "아래 [지침]을 따라 [요청]의 항목만 쓴다. 답은 **코드블록 하나** 안에 탭으로 구분한 행만 넣고, 설명·머리말은 쓰지 않는다.\n\n[지침]\n%s\n\n[요청]\n%s\n" % [system_prompt, build_prompt(kind, part, sources)]
+			_write(path, text)
+			print("[웹 요청] %s (%s %s)" % [path, kind, ", ".join(chunk)])
+
+	if count == 0:
+		print("[웹 요청] 대상 항목이 없습니다(--kind/--ids 확인).")
+		get_tree().quit(1)
+		return
+
+	print("[웹 요청] 파일 %d개. 각 파일 내용을 제미나이 웹 대화에 붙여 넣고, 답의 코드블록을 복사해 같은 폴더에 answer_<번호>.txt 로 저장하세요. 그다음: run_request_text.bat webimport 파일1,파일2" % count)
+	get_tree().quit(0)
+
+
+func _webimport(sources: Dictionary) -> void:
+	var files: PackedStringArray = _arg("--files").split(",", false)
+
+	if files.is_empty():
+		push_error("--files 경로,경로 가 필요합니다.")
+		get_tree().quit(2)
+		return
+
+	var rows_text: PackedStringArray = []
+
+	for file_path in files:
+		var path: String = "res://" + file_path.strip_edges().trim_prefix("res://")
+
+		if not FileAccess.file_exists(path):
+			push_error("파일이 없습니다: " + path)
+			get_tree().quit(2)
+			return
+
+		rows_text.append(fix_shifted_rows(parse_web_answer(FileAccess.get_file_as_string(path), sources), sources))
+
+	var csv_text: String = Tools.csv_line(Tools.COLUMNS) + "\n" + "".join(rows_text)
+	var stamp: String = Time.get_datetime_string_from_system().replace(":", "").replace("-", "").replace("T", "_")
+	var out: String = "%s/requests_text_gemini_%s_web.csv" % [OUT_DIR, stamp]
+	_write(out, csv_text)
+	print("[웹 가져오기] 저장: ", out)
+	var result: Dictionary = Tools.validate_file(out, sources)
+	_print_result(out, result)
+	get_tree().quit(0 if result["errors"].is_empty() else 1)
+
+
+# 웹 대화의 답(머리말·코드블록 표시가 섞일 수 있음)에서 "아이디\t종류\t제목\t요약\t줄\t완료" 행만 골라 CSV 행으로 바꾼다.
+# 끝의 빈 칸이 잘려도 6칸으로 채운다. 알려진 아이디로 시작하지 않는 줄은 무시하고, 탭이 없어 보이는 줄은 개수를 알려 준다.
+static func parse_web_answer(text: String, sources: Dictionary) -> String:
+	var known: Dictionary = {}
+
+	for kind in Tools.KINDS:
+		for id in sources[kind].keys():
+			known[str(id)] = true
+
+	var kept: PackedStringArray = []
+	var ignored: int = 0
+
+	for raw_line in text.replace("\r", "").split("\n"):
+		var line: String = raw_line.strip_edges(true, false)
+
+		if line.is_empty() or line.begins_with("```"):
+			continue
+
+		var cells: PackedStringArray = line.split("\t")
+		var id: String = cells[0].strip_edges()
+
+		if cells.size() == 1 or not known.has(id):
+			if line.begins_with("act") or line.contains("service_text") or line.contains("_request"):
+				ignored += 1
+
+			continue
+
+		while cells.size() < 6:
+			cells.append("")
+
+		if cells.size() > 6:
+			# 칸 안에 탭이 섞였으면 뒤의 칸을 마지막 칸에 합친다.
+			var tail: PackedStringArray = cells.slice(5)
+			cells = cells.slice(0, 5)
+			cells.append(" ".join(tail))
+
+		for i in range(cells.size()):
+			cells[i] = cells[i].strip_edges()
+
+		kept.append(Tools.csv_line(cells))
+
+	if ignored > 0:
+		push_warning("[웹 가져오기] 탭으로 구분되지 않은 줄 %d개를 무시했습니다. 코드블록의 복사 버튼으로 복사했는지 확인하세요." % ignored)
+
+	return "\n".join(kept) + "\n" if not kept.is_empty() else ""
 
 
 func _new_client() -> Node:

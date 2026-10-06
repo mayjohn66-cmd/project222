@@ -2,6 +2,8 @@
 rem Request text tool runner (Windows, run on YOUR PC only).
 rem Usage:
 rem   dev\gemini\run_request_text.bat draft [kind]     ask Gemini to write request texts, then validate
+rem   dev\gemini\run_request_text.bat webprompt service_text --ids a,b --chunk 5   (NO API) write prompt files to paste into the Gemini WEB app (subscription)
+rem   dev\gemini\run_request_text.bat webimport file1,file2   (NO API) turn answers saved from the web app into a draft CSV and validate it
 rem   dev\gemini\run_request_text.bat validate file    validate a CSV (path relative to the project root)
 rem   dev\gemini\run_request_text.bat export           export current texts as the baseline CSV
 rem   dev\gemini\run_request_text.bat sync [--dry]    find NEW or CHANGED requests (no text yet) and have Gemini write only those; --dry = list only, no API call
@@ -43,6 +45,18 @@ if "%MODE%"=="draft" (
   )
   goto :done
 )
+if "%MODE%"=="webprompt" (
+  if "%~2"=="" (
+    "%GODOT_EXE%" --headless --path "%CD%" res://dev/gemini/request_text.tscn -- --mode webprompt
+  ) else (
+    "%GODOT_EXE%" --headless --path "%CD%" res://dev/gemini/request_text.tscn -- --mode webprompt --kind %~2 %~3 %~4 %~5 %~6
+  )
+  goto :done
+)
+if "%MODE%"=="webimport" (
+  "%GODOT_EXE%" --headless --path "%CD%" res://dev/gemini/request_text.tscn -- --mode webimport --files "%~2"
+  goto :done
+)
 if "%MODE%"=="validate" (
   "%GODOT_EXE%" --headless --path "%CD%" res://dev/gemini/request_text.tscn -- --mode validate --file "%~2"
   goto :done
@@ -73,6 +87,6 @@ if "%MODE%"=="export" (
   "%GODOT_EXE%" --headless --path "%CD%" res://dev/gemini/request_text.tscn -- --mode export
   goto :done
 )
-echo [ERROR] unknown mode: %MODE%  (draft, validate, export, sync, polish, accept)
+echo [ERROR] unknown mode: %MODE%  (draft, webprompt, webimport, validate, export, sync, polish, accept)
 :done
 endlocal
