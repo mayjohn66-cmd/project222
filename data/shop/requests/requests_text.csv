@@ -23,7 +23,7 @@ naru_thanks_snack,personal_request,감사 인사에 곁들일 간식,타블렌�
 naru_trail_snacks,personal_request,보따리 속 작은 간식,타블렌이 길에서 먹을 간식을 부탁한다.,"전에 맛본 그 간식, 길에서 먹기 편하겠더라.|이번 보따리에는 옷감 곁에 간식도 챙기고 싶어.|창고에 보관한 간식은 게시판으로 전달해 줘.",타블렌이 길에 가져갈 간식을 받아 갔다.
 sora_autumn_buds,personal_request,낙엽 사이 봄의 향,이세르가 지난 봄의 향을 찾는다. 베이킹 작업대에서 말린 봄 새순을 창고에서 전하자.,낙엽 냄새가 짙어지니 봄에 걷던 길이 떠오르네.|새순을 그냥 두면 시들지만 말린 향은 오래 남아.|베이킹 작업대에서 말려 둔 새순을 나눠 줄래?|창고에 준비한 뒤 게시판에서 직접 전달해 줘.,말린 봄 새순으로 이세르와 지난 계절의 향을 나눴다.
 sora_autumn_tea,personal_request,기록 곁에 놓을 차,이세르가 기록을 읽을 때 곁들일 갈대 차를 부탁한다.,가을 저녁 채비에 차도 곁들였다던 이야기가 오래 남았어.|갈대 차 향을 맡으며 기록을 천천히 읽어 보고 싶네.|차가 창고에 준비되면 게시판에서 전달해 줘.,이세르에게 차를 전했다. 갈대 향과 함께 기록을 읽을 준비를 마쳤다.
-sora_evening_tea,personal_request,글을 덮은 저녁,이세르가 기록을 덮은 뒤 마실 차를 부탁한다.,오래 쓴 날에는 마지막 문장까지 급해지곤 해요.|그 차를 곁에 두고 천천히 글을 덮고 싶어요.|차를 창고에 갖춰 두면 게시판을 통해 전달해 주세요.,이세르가 저녁 찻잔에 담을 차를 가져갔다.
+sora_evening_tea,personal_request,글을 덮은 저녁,이세르가 기록을 덮은 뒤 마실 차를 부탁한다.,오래 쓴 날에는 마지막 문장까지 급해지곤 해.|그 차를 곁에 두고 천천히 글을 덮고 싶어.|차를 창고에 갖춰 두면 게시판을 통해 전달해 줘.,이세르가 저녁 찻잔에 담을 차를 가져갔다.
 sora_herbs,personal_request,이세르의 약초 꾸러미,이세르가 길에서 사용할 약초를 준비합니다.,오래 걷다 보면 작은 약초 꾸러미가 아쉬워져.|숲 약초를 창고에 두고 게시판에서 전달해 줘.,길 위에서 이 꾸러미를 열면 여기가 떠오르겠네.
 sora_market_drink,personal_request,장터 소리를 적는 오후,이세르에게 약초 음료를 전하고 남은 장터 이야기를 듣습니다.,노점에서 들은 말들이 종이 위에서 섞이네.|잠깐 음료를 마시고 차근차근 정리하려고 해.|약초 음료를 창고에 챙겨 게시판에서 전달해 줘.,이세르에게 약초 음료를 전했습니다. 정리한 이야기를 물어보세요.
 sora_page_weights,personal_request,바람에 말리는 기록,이세르에게 돌 조각과 가지를 전해 젖은 기록을 펼쳐 말릴 받침을 마련합니다.,돌아오는 길에 기록 가장자리가 젖었어.|가지를 받치고 돌로 눌러서 천천히 말리려고 해.|창고에 재료를 챙겨 게시판에서 전달해 줘.,이세르가 기록을 말릴 받침을 준비했습니다.
@@ -72,21 +72,21 @@ act4_a6_naru,service_text,,,어제는 길마다 다른 이야기가 보따리처
 act4_a6_sale,service_text,,,가게를 찾는 사람들이 각자 필요한 걸 챙겨 가네.|누가 어떤 물건을 찾는지 조금씩 눈에 들어오네.,
 act4_b1_clue,service_text,,동전의 선과 간판의 모서리가 닮아 보였다는 이세르의 기억.,,
 act4_b1_finish,service_text,,,어제 본 선들이 가게 간판의 모서리를 떠올리게 했어.|닮아 보인다는 것만 적어 두자. 아직은 모르니까.,
-act4_b1_intro,service_text,,,"유적에서 찾았다는 동전이 맞지? 결이 참 낯익어.|기록해 둔 문양과 닮았지만, 섣불리 단정할 수는 없겠네.",
+act4_b1_intro,service_text,,,"유적에서 찾았다는 동전이 맞지? 결이 참 낯익어.|기록해 둔 문양과 닮았지만, 아직 같은 것이라 말하긴 일러.",
 act4_b1_old_coin_title,service_text,낡은 동전의 무늬,유적에서 가져온 동전을 보여 주고 이웃의 기억을 듣습니다.,,
 act4_b1_show,service_text,,,녹슨 자리를 문지르니 테두리에 작은 홈이 보여.|다른 곳에서 보았던 흔적과 맞닿는 부분이 있는지 짚어볼게.,
 act4_b2_clue,service_text,,"룬석의 결이 계산대 마석과 닮았으나, 그 유래나 기원은 명확히 알 수 없다.",,
 act4_b2_finish,service_text,,,"살펴본 결은 계산대의 것과 겹치지만, 어디서 시작된 힘인지는 알 길이 없습니다.|더 이상의 해석은 짐작에 불과하니, 확인된 사실만 마음에 두시지요.",
-act4_b2_intro,service_text,,,그 돌의 결이 계산대에 연결한 마석과 비슷해 보이는군요.|겉모양만 보고 섣불리 같은 구조라 단정 짓기는 이릅니다.,
+act4_b2_intro,service_text,,,그 돌의 결이 계산대에 연결한 마석과 비슷해 보이는군요.|겉모양이 닮았다고 같은 구조라 말하기는 이릅니다.,
 act4_b2_rune_and_power_title,service_text,룬석과 발전기,복구된 계산대 곁에서 기술자에게 룬석을 보여 줍니다.,,
 act4_b2_show,service_text,,,"표면의 홈을 조심스럽게 살폈습니다만, 손은 대지 않고 돌려드립니다.|함부로 건드려 결을 흐트러뜨리는 것보다 원형을 지키는 편이 안전하니까요.",
 act4_b3_clue,service_text,,상인은 지도를 판 뒤 가게가 여기 남아 있어 다행이라고 말했다.,,
-act4_b3_finish,service_text,,,"그 상인이 두고 간 말, 묘하게 마음에 걸리네.|섣불리 덧붙이지 말고, 들은 표현 그대로 적어 두는 편이 좋겠어.",
+act4_b3_finish,service_text,,,"그 상인이 두고 간 말, 묘하게 마음에 걸리네.|짐작을 보태기보다 들은 말 그대로 적어 두는 편이 좋겠어.",
 act4_b3_intro,service_text,,,어둠 속에서도 이 불빛은 여전하군.|짐을 풀어볼 텐가? 밤길을 헤치는 데 보탬이 될 만한 걸 챙겨왔지.,
 act4_b3_purchase,service_text,,,"숲이 깊어질수록 길은 어두워지기 마련인데, 여긴 여전히 불이 밝아.|어쩌다 이런 곳에 서게 되었든, 오가는 발걸음에는 다행스러운 일이지.",
 act4_b3_secret_merchant_title,service_text,한밤의 물음,다시 찾아온 심야 상인에게 지도를 구매하고 남긴 말을 기억합니다.,,
 act4_b4_blank_of_map_title,service_text,지도의 여백,다시 유적을 탐험하고 지도에서 비어 있는 자리를 함께 살펴봅니다.,,
-act4_b4_clue,service_text,,"기록된 지도 속 빈 자리는 가게의 자리와 닿아 있으나 원인은 알 수 없다.",,
+act4_b4_clue,service_text,,기록된 지도 속 빈 자리는 가게의 자리와 닿아 있으나 원인은 알 수 없다.,,
 act4_b4_finish,service_text,,,우리가 머무는 이 터와 빈 자리가 묘하게 맞물리는구나.|하지만 지도만으로 이유를 말할 수는 없겠어.,
 act4_b4_intro,service_text,,,지금껏 모은 길목을 겹쳐 두었는데도 한구석이 비어 있어.|다음에 다녀오면 그 길도 같이 살펴보자.,
 act4_b4_return,service_text,,,"바깥을 둘러보고 와서 채워 넣으려 해도 여전히 여백이네.|애초에 비워둔 것인지, 흔적이 지워진 것인지는 알 수 없지만.",
@@ -141,36 +141,36 @@ expansion_birthday_doyun_0,service_text,코르빈의 조용한 생일,코르빈�
 expansion_birthday_doyun_1,service_text,코르빈의 조용한 생일,,이번 생일에는 서두를 일이 줄었군.|손에 공구 대신 선물이 있으니 낯설기도 하네.,코르빈의 조용한 생일
 expansion_birthday_naru_0,service_text,타블렌이 기다리는 날,타블렌에게 좋아하는 간식을 챙겨 기념일을 나눈다.,해마다 이맘때면 보따리에서 작은 간식을 꺼내 먹어.|이번에는 생일을 여기서 맞겠네.,
 expansion_birthday_naru_1,service_text,타블렌이 기다리는 날,,선물을 받으니 올해 생일의 길목도 기억나겠어.|지나가는 곳이 아니라 머무른 자리에서 먹어야지.,타블렌이 기다리는 날
-expansion_birthday_sora_0,service_text,이세르의 생일 한 줄,이세르에게 차를 전하고 올해 생일의 기록을 나눈다.,생일 기록에는 늘 머물던 곳 이름을 적었어요.|올해는 이 가게가 보이는 길목을 적겠네요.,
-expansion_birthday_sora_1,service_text,이세르의 생일 한 줄,,기억할 장소에 만난 사람까지 더해졌어요.|생일을 떠올릴 때 찻잎 향도 함께 기억하겠네요.,이세르의 생일 한 줄
+expansion_birthday_sora_0,service_text,이세르의 생일 한 줄,이세르에게 차를 전하고 올해 생일의 기록을 나눈다.,생일 기록에는 늘 머물던 곳 이름을 적었어.|올해는 이 가게가 보이는 길목을 적겠네.,
+expansion_birthday_sora_1,service_text,이세르의 생일 한 줄,,기억할 장소에 만난 사람까지 더해졌어.|생일을 떠올릴 때 찻잎 향도 함께 기억하겠네.,이세르의 생일 한 줄
 expansion_chapter_first_table_0,service_text,함께 차린 첫 식탁,서로의 일상을 챙긴 주민들이 마을의 시작을 돌아본다.,길목이라고만 부르던 곳에 얼굴이 붙었어.|이제 보따리를 풀면 찾아갈 사람부터 생각나네.,
 expansion_chapter_first_table_1,service_text,서로 챙긴 하루,,고칠 물건보다 함께 쉴 사람이 먼저 떠오를 때도 있군.|이곳에서 일을 마치는 기분이 달라졌네.,
-expansion_chapter_first_table_2,service_text,마을의 첫 문장,,처음 식탁을 차린 이야기를 맨 앞에 적었어요.|가게에 들른 사람들이 서로를 부르기 시작했네요.,마을의 첫 문장
+expansion_chapter_first_table_2,service_text,마을의 첫 문장,,처음 식탁을 차린 이야기를 맨 앞에 적었어.|가게에 들른 사람들이 서로를 부르기 시작했네.,마을의 첫 문장
 expansion_chapter_home_again_0,service_text,익숙한 가게의 새 이웃,처음 상품의 기억과 자라난 마을을 함께 돌아본다.,네가 기억하던 음식이 이곳 재료로 만들어졌네.|그걸 함께 굽던 사람도 이제 이웃이 됐어.,
 expansion_chapter_home_again_1,service_text,돌아올 가게,,다른 길에서도 돌아올 가게가 떠오르겠어.|처음 여기 왔을 때와는 다른 마음이네.,
-expansion_chapter_home_again_2,service_text,다음 장을 열어 두고,,가게가 낯선 땅에 왔다는 문장으로 시작했지요.|다음 장은 이곳에서 다시 만날 얼굴로 채워요.,다음 장을 열어 두고
+expansion_chapter_home_again_2,service_text,다음 장을 열어 두고,,가게가 낯선 땅에 왔다는 문장으로 시작했었지.|다음 장은 이곳에서 다시 만날 얼굴로 채워 보자.,다음 장을 열어 두고
 expansion_chapter_winter_lights_0,service_text,함께 지난 겨울,정착한 새 이웃들과 겨울 모임 뒤의 길목을 돌아본다.,겨울 모임이 끝나도 이웃들이 머물 곳은 그대로 있네.|등불을 살필 때마다 그날 식탁이 떠오르겠어.,
-expansion_chapter_winter_lights_1,service_text,접어 둔 잎 꾸러미,,올겨울에는 짐을 꾸려 다른 길로 떠나지 않았어요.|노점 가까이에 인사할 사람이 있었거든요.,
-expansion_chapter_winter_lights_2,service_text,불빛을 나눈 계절,,겨울 기록에 추위보다 얼굴을 더 많이 적었네요.|함께 머문 계절이 이 마을의 시간이 됐어요.,불빛을 나눈 계절
+expansion_chapter_winter_lights_1,service_text,접어 둔 잎 꾸러미,,올겨울에는 짐을 꾸려 다른 길로 떠나지 않았어.|노점 가까이에 인사할 사람이 있었거든.,
+expansion_chapter_winter_lights_2,service_text,불빛을 나눈 계절,,겨울 기록에 추위보다 얼굴을 더 많이 적었네.|함께 머문 계절이 이 마을의 시간이 됐어.,불빛을 나눈 계절
 expansion_festival_autumn_0,service_text,수확 뒤의 식탁,수프와 빵을 모아 가을의 작은 식탁을 차린다.,추수 끝에 따뜻한 음식을 나누고 싶네.|버섯을 끓인 것과 빵이면 식탁이 넉넉하겠어.,
 expansion_festival_autumn_1,service_text,함께 챙긴 음식,,음식을 챙기니 모임 준비가 실감 나는군.|식사 자리에서는 일 얘기를 조금 줄여 보겠네.,
-expansion_festival_autumn_2,service_text,수확 뒤의 식탁,,코르빈: 오늘 음식은 천천히 먹어도 되겠군.|이세르: 숟가락이 멈추면 지난 계절 이야기를 해요.|타블렌: 장사보다 먹는 얘기가 먼저 나오네.,수확 뒤의 식탁
+expansion_festival_autumn_2,service_text,수확 뒤의 식탁,,코르빈: 오늘 음식은 천천히 먹어도 되겠군.|이세르: 숟가락이 멈추면 지난 계절 이야기를 하자.|타블렌: 장사보다 먹는 얘기가 먼저 나오네.,수확 뒤의 식탁
 expansion_festival_spring_0,service_text,봄의 소풍 자리,새 계절에 먹을 것을 챙겨 이웃들과 봄 모임을 연다.,풀밭에 앉을 날이 가까워졌어.|손에 들기 편한 요깃거리를 챙겨 보자.,
 expansion_festival_spring_1,service_text,함께 챙긴 음식,,부스러기를 털어 내고 소풍 꾸러미를 닫았어.|먹거리를 골랐으니 이제 이웃들을 부르면 되겠네.,
-expansion_festival_spring_2,service_text,봄의 소풍 자리,,타블렌: 보따리를 베개 삼아 눈을 붙여도 되겠어.|코르빈: 오늘은 공구를 가져오지 않았네.|이세르: 봄의 첫 빈자리를 함께 채웠네요.,봄의 소풍 자리
-expansion_festival_summer_0,service_text,물가의 여름 인사,차와 물을 준비하고 우물 곁에서 여름 모임을 연다.,그늘진 물가에서 이야기할 자리를 찾고 있어요.|맑은 물과 향이 옅은 차를 챙기면 어울리겠어요.,
-expansion_festival_summer_1,service_text,함께 챙긴 음식,,찻잔에 담을 몫을 따로 챙겨 두었어요.|우물 그늘에 앉을 자리도 살펴볼게요.,
-expansion_festival_summer_2,service_text,물가의 여름 인사,,이세르: 물소리가 문장 사이에 끼어들어요.|타블렌: 말없이 마셔도 심심하진 않네.|코르빈: 서로 얼굴 보는 시간도 있어야지.,물가의 여름 인사
+expansion_festival_spring_2,service_text,봄의 소풍 자리,,타블렌: 보따리를 베개 삼아 눈을 붙여도 되겠어.|코르빈: 오늘은 공구를 가져오지 않았네.|이세르: 봄의 첫 빈자리를 함께 채웠네.,봄의 소풍 자리
+expansion_festival_summer_0,service_text,물가의 여름 인사,차와 물을 준비하고 우물 곁에서 여름 모임을 연다.,그늘진 물가에서 이야기할 자리를 찾고 있어.|맑은 물과 향이 옅은 차를 챙기면 어울리겠어.,
+expansion_festival_summer_1,service_text,함께 챙긴 음식,,찻잔에 담을 몫을 따로 챙겨 두었어.|우물 그늘에 앉을 자리도 살펴볼게.,
+expansion_festival_summer_2,service_text,물가의 여름 인사,,이세르: 물소리가 문장 사이에 끼어드네.|타블렌: 말없이 마셔도 심심하진 않네.|코르빈: 서로 얼굴 보는 시간도 있어야지.,물가의 여름 인사
 expansion_festival_winter_0,service_text,등불 곁 겨울 모임,밤길의 따뜻한 음료를 챙겨 겨울 저녁을 함께 보낸다.,등불 아래에 오래 서 있던 날이 생각나네.|이번 모임에서는 약초 음료로 손을 녹여야겠어.,
 expansion_festival_winter_1,service_text,함께 챙긴 음식,,음료를 챙겨 놓으니 겨울 모임이 기다려지는군.|공구함이 닫힐 무렵 서로 얼굴을 보면 좋겠어.,
-expansion_festival_winter_2,service_text,등불 곁 겨울 모임,,코르빈: 불빛 아래에서는 얼굴이 먼저 보이네.|타블렌: 길을 돌아오면 기다리는 자리가 있군.|이세르: 겨울 기록에는 이 등불 빛도 남겠네요.,등불 곁 겨울 모임
-expansion_forest_path_0,service_text,숲잎의 자리를 찾아서,숲의 채집 지점에서 약초를 직접 찾고 돌아와 이야기한다.,숲에서 약초를 골랐던 자리를 기억해 주세요.|직접 잎을 살핀 이야기를 듣고 싶어요.,
-expansion_forest_path_1,service_text,발견을 펼쳐 놓고,,찾아 온 잎을 펼치니 숲의 길목이 떠오르네요.|살펴본 자리를 천천히 이야기해 주세요.,
-expansion_forest_path_2,service_text,숲잎의 자리를 찾아서,,가게 밖에서 본 풍경을 듣는 것도 좋네요.|같은 약초라도 찾아온 길은 다르니까요.,숲잎의 자리를 찾아서
+expansion_festival_winter_2,service_text,등불 곁 겨울 모임,,코르빈: 불빛 아래에서는 얼굴이 먼저 보이네.|타블렌: 길을 돌아오면 기다리는 자리가 있군.|이세르: 겨울 기록에는 이 등불 빛도 남겠네.,등불 곁 겨울 모임
+expansion_forest_path_0,service_text,숲잎의 자리를 찾아서,숲의 채집 지점에서 약초를 직접 찾고 돌아와 이야기한다.,숲에서 약초를 골랐던 자리를 기억해 줘.|직접 잎을 살핀 이야기를 듣고 싶어.,
+expansion_forest_path_1,service_text,발견을 펼쳐 놓고,,찾아 온 잎을 펼치니 숲의 길목이 떠오르네.|살펴본 자리를 천천히 이야기해 줘.,
+expansion_forest_path_2,service_text,숲잎의 자리를 찾아서,,가게 밖에서 본 풍경을 듣는 것도 좋네.|같은 약초라도 찾아온 길은 다르니까.,숲잎의 자리를 찾아서
 expansion_mine_path_0,service_text,돌빛을 따라간 길,광산에서 구리 광석을 직접 채집하고 발견을 나눈다.,광산에서 구리빛이 비치는 자리를 살펴봐.|돌을 캐며 눈에 들어온 것도 기억해 두면 좋겠어.,
 expansion_mine_path_1,service_text,발견을 펼쳐 놓고,,가져온 광석에 구리빛이 보이는군.|네가 발견한 자리가 어디였는지 들어 보겠네.,
 expansion_mine_path_2,service_text,돌빛을 따라간 길,,돌 얘기를 듣다 보니 함께 걸은 기분이네.|캐 온 물건 말고도 남는 것이 있군.,돌빛을 따라간 길
-expansion_order_evening_0,service_text,저녁 찻잔 주문,익숙해진 이웃이 가끔 다시 부탁하는 생활 주문.,기록을 쓰고 나면 차를 곁에 두는 게 익숙해졌어요.|이번 저녁에도 찻잔을 부탁드릴게요.,
+expansion_order_evening_0,service_text,저녁 찻잔 주문,익숙해진 이웃이 가끔 다시 부탁하는 생활 주문.,기록을 쓰고 나면 차를 곁에 두는 게 익숙해졌어.|이번 저녁에도 찻잔을 부탁할게.,
 expansion_order_evening_1,service_text,저녁 찻잔 주문,,찻잔을 꺼내 두고 글을 마무리할게요.|오늘의 마지막 문장을 느긋하게 고를 것 같아요.,저녁 찻잔 주문
 expansion_order_trail_0,service_text,여행길 간식 주문,익숙해진 이웃이 가끔 다시 부탁하는 생활 주문.,길에 챙긴 간식이 줄어들면 이 가게가 떠올라.|이번에도 보따리에 넣을 몫을 부탁하고 싶어.,
 expansion_order_trail_1,service_text,여행길 간식 주문,,간식을 챙겼으니 출발 준비도 끝났어.|다녀온 길 얘기는 돌아와서 하자.,여행길 간식 주문
@@ -181,31 +181,31 @@ expansion_product_berry_bread_1,service_text,새 속을 넣은 빵,,열매가 �
 expansion_product_berry_bread_2,service_text,익숙함을 건넨 맛,,전에 먹던 간식과는 속이 다르네.|네가 가게에 늘어놓고 싶어 했던 맛이라는 건 알겠어.,익숙함을 건넨 맛
 expansion_product_packed_meal_0,service_text,다시 만든 도시락,마을의 버섯 음식과 빵을 모아 익숙한 도시락을 만든다.,따로 먹던 빵과 음식을 함께 챙긴다는 거지?|도시락 속을 담을 순서는 네 기억을 따라가 보자.,
 expansion_product_packed_meal_1,service_text,담아 낸 한 끼,,빵을 곁들여 담으니 손에 들고 나갈 식사가 됐어.|마을 재료로 네 가게의 기억을 다시 엮었네.,
-expansion_product_packed_meal_2,service_text,처음과 다른 식탁,,처음 팔던 것에 가까워져도 음식의 이야기는 달라졌네요.|이제 이 안에는 이웃들과 나눈 시간이 담겨 있어요.,처음과 다른 식탁
-expansion_reed_path_0,service_text,갈대가 있던 물가,늪의 갈대를 직접 채집하고 물가의 기억을 기록한다.,물가에서 갈대를 살피게 되면 주변도 기억해 주세요.|재료 이름 곁에 둘러본 풍경을 적고 싶어요.,
-expansion_reed_path_1,service_text,발견을 펼쳐 놓고,,길에서 고른 갈대를 펼쳐 놓아 주세요.|젖은 땅에서 무엇을 봤는지 궁금하네요.,
-expansion_reed_path_2,service_text,갈대가 있던 물가,,갈대라는 이름 아래에도 다른 풍경이 들어가네요.|들려주신 물가를 천천히 종이에 옮길게요.,갈대가 있던 물가
+expansion_product_packed_meal_2,service_text,처음과 다른 식탁,,처음 팔던 것에 가까워져도 음식의 이야기는 달라졌네.|이제 이 안에는 이웃들과 나눈 시간이 담겨 있어.,처음과 다른 식탁
+expansion_reed_path_0,service_text,갈대가 있던 물가,늪의 갈대를 직접 채집하고 물가의 기억을 기록한다.,물가에서 갈대를 살피게 되면 주변도 기억해 줘.|재료 이름 곁에 둘러본 풍경을 적고 싶어.,
+expansion_reed_path_1,service_text,발견을 펼쳐 놓고,,길에서 고른 갈대를 펼쳐 놓아 줘.|젖은 땅에서 무엇을 봤는지 궁금하네.,
+expansion_reed_path_2,service_text,갈대가 있던 물가,,갈대라는 이름 아래에도 다른 풍경이 들어가네.|들려준 물가를 천천히 종이에 옮길게.,갈대가 있던 물가
 expansion_settle_baker_0,service_text,빵 냄새가 머무를 곳,빵 굽는 길손의 정착을 도와 마을 제빵소를 연다.,여기서 약초를 산 뒤로 이 길에 익숙해졌어.|잠깐 굽고 떠나는 대신 이웃으로 머물고 싶네.,
 expansion_settle_baker_1,service_text,터를 다듬는 손,,빵을 굽기 전에 자리부터 단단해야겠지.|나무와 돌을 모아 오래 쓸 터를 손보겠어.,
 expansion_settle_baker_2,service_text,새 이웃의 첫 아침,,오늘은 돌아갈 길보다 내일 구울 빵을 생각했어.|함께 만든 자리에 약초 빵 굽는 법도 전하고 싶어.,새 이웃의 첫 아침
-expansion_settle_herbalist_0,service_text,잎을 펼칠 작은 노점,약초를 다루는 길손이 노점에 정착하도록 돕는다.,이 가게에서 열매를 골랐던 날이 생각나요.|숲에서 골라 온 잎을 펼칠 자리도 가까이 두고 싶네요.,
-expansion_settle_herbalist_1,service_text,나무 틀과 잎,,가지로 받침을 만들면 잎을 가지런히 둘 것 같아요.|여기서 자라는 약초도 함께 살펴보고 싶네요.,
-expansion_settle_herbalist_2,service_text,잎 사이의 새 자리,,낯선 길목이었는데 이제 내 노점이 있네요.|손을 비우고 이웃에게 인사할 틈도 생겼어요.,잎 사이의 새 자리
-expansion_shared_notes_0,service_text,저녁 기록의 빈칸,차를 나누며 주민들이 기억하는 장면을 모은다.,같은 길을 걸어도 기억하는 장면은 다르겠지요.|저녁 찻잔 옆에 그 차이를 모아 보고 싶어요.,
+expansion_settle_herbalist_0,service_text,잎을 펼칠 작은 노점,약초를 다루는 길손이 노점에 정착하도록 돕는다.,이 가게에서 열매를 골랐던 날이 생각나.|숲에서 골라 온 잎을 펼칠 자리도 가까이 두고 싶네.,
+expansion_settle_herbalist_1,service_text,나무 틀과 잎,,가지로 받침을 만들면 잎을 가지런히 놓기 좋겠어.|여기서 자라는 약초도 함께 살펴보고 싶네.,
+expansion_settle_herbalist_2,service_text,잎 사이의 새 자리,,낯선 길목이었는데 이제 내 노점이 있네.|손을 비우고 이웃에게 인사할 틈도 생겼어.,잎 사이의 새 자리
+expansion_shared_notes_0,service_text,저녁 기록의 빈칸,차를 나누며 주민들이 기억하는 장면을 모은다.,같은 길을 걸어도 기억하는 장면은 다르겠지.|저녁 찻잔 옆에 그 차이를 모아 보고 싶어.,
 expansion_shared_notes_1,service_text,접어 둔 옷감,,나는 노점에서 흥정이 멈춘 순간이 기억나.|옷감을 접고 차를 마시니 해가 기울어 있더라.,
 expansion_shared_notes_2,service_text,조용한 공구함,,내 기록이라면 공구함을 닫는 소리부터 넣겠어.|일이 끝났다는 걸 그 소리로 알거든.,
-expansion_shared_notes_3,service_text,빈칸을 채운 목소리,,오늘 기록은 혼자 쓴 글 같지 않네요.|종이 사이로 이웃들의 목소리가 들려요.,빈칸을 채운 목소리
+expansion_shared_notes_3,service_text,빈칸을 채운 목소리,,오늘 기록은 혼자 쓴 글 같지 않네.|종이 사이로 이웃들의 목소리가 들려.,빈칸을 채운 목소리
 expansion_shared_snack_0,service_text,보따리에서 식탁까지,간식에서 시작한 이야기를 이웃들에게 이어 전한다.,내 간식만 챙기려다 이웃 얼굴이 떠올랐어.|코르빈도 일 정리한 다음에 한입 먹으면 좋겠더라.,
 expansion_shared_snack_1,service_text,간식을 둔 자리,,끼니를 미루는 버릇은 남아 있지.|오늘은 공구 곁에 먹을 것도 놓아 두겠어.,
-expansion_shared_snack_2,service_text,먹는 동안의 이야기,,먹는 동안에는 서두르던 말도 잠깐 멈추네요.|그 틈을 오늘 기록에 넣어 둘게요.,
+expansion_shared_snack_2,service_text,먹는 동안의 이야기,,먹는 동안에는 서두르던 말도 잠깐 멈추네.|그 틈을 오늘 기록에 넣어 둘게.,
 expansion_shared_snack_3,service_text,이웃 몫의 간식,,보따리를 풀 때마다 네 가게 쪽을 보게 되네.|간식 하나가 이어 준 얼굴이 꽤 많아졌어.,이웃 몫의 간식
 expansion_shared_warmth_0,service_text,온기를 건네는 순서,작업 뒤의 휴식을 서로 챙기는 이웃 이야기.,작업이 끝나도 손에 힘이 들어가곤 하지.|오늘은 먼저 쉬는 법을 이웃에게 물어보겠어.,
 expansion_shared_warmth_1,service_text,기다리는 손,,상인이 바쁘면 쉬는 시간부터 놓치더라.|온기가 손에 닿으면 발걸음도 느려지더라.,
-expansion_shared_warmth_2,service_text,쉼의 길이,,누가 오래 일했는지는 적지 않을래요.|서로 쉬라고 말해 준 장면을 남기고 싶어요.,
+expansion_shared_warmth_2,service_text,쉼의 길이,,누가 오래 일했는지는 적지 않을래.|서로 쉬라고 말해 준 장면을 남기고 싶어.,
 expansion_shared_warmth_3,service_text,함께 내려놓기,,혼자 내려놓기 어려운 공구도 말 한마디면 놓게 되네.|하루 작업을 정리한 뒤 만날 얼굴이 생겼군.,함께 내려놓기
 expansion_shop_anniversary_0,service_text,처음 문을 열었던 날,첫 거래에서 한 해가 지난 가게를 주민들과 돌아본다.,처음 이 가게를 봤을 때는 옷감 얘기만 했지.|이제는 지나는 길에 안부부터 묻게 됐네.,
 expansion_shop_anniversary_1,service_text,일 년의 흔적,,그동안 고친 자리마다 얼굴이 떠오르네.|가게에서 만난 사람들이 길목을 바꿔 놓았군.,
-expansion_shop_anniversary_2,service_text,다시 적는 첫날,,처음 문을 연 날의 기록을 꺼내 봤어요.|빈칸이 많았는데 지금은 이웃 이름으로 채워져 있네요.,다시 적는 첫날
+expansion_shop_anniversary_2,service_text,다시 적는 첫날,,처음 문을 연 날의 기록을 꺼내 봤어.|빈칸이 많았는데 지금은 이웃 이름으로 채워져 있네.,다시 적는 첫날
 first_market_doyun,service_text,,,진열대 다리가 흔들려서 받침을 괴었어.|이제 빵을 고르다 기대도 괜찮겠지.|일하러 지나가던 길인데 앉을 자리가 됐네.,
 first_market_end,service_text,,,보따리가 가벼워졌는데 자리는 더 따뜻하네.|먹거리를 준비한 몫은 따로 챙겨 뒀어.|남겨 둔 밀도 가져가. 네 가게에서 구워 줘.,처음 모인 노점에서 먹거리와 이웃들의 시간을 나눴습니다.
 first_market_intro,service_text,작은 노점의 첫 장터,타블렌과 먹거리를 준비하고 이웃들과 첫 장터를 엽니다.,이세르가 적은 이야기를 읽으니 얼굴들이 떠올라.|이번엔 그 얼굴들이 노점에 같이 모이면 좋겠어.|빵과 열매를 놓고 작은 장터를 열어 볼까?,타블렌과 첫 장터를 준비하기로 했습니다.
@@ -225,7 +225,7 @@ landmark_settle_sora,service_text,공동 우물,,,
 lantern_wayfarer,service_text,등불 아래의 길손,등불 곁 길손에게 물이나 빵을 건네고 다음 날 다시 만납니다.,멀리서 이 불빛을 보고 길을 찾았어.|여기서 다리를 좀 쉬어도 될까? 목도 마르네.|물이나 빵이 있으면 조금 나눠 줄 수 있을까?,길손이 쉬어 갔던 불빛 아래 다시 인사를 나눴습니다.
 lantern_wayfarer_bread,service_text,빵 건네기,,길 위에서는 빵 냄새가 더 반갑더라.|오늘은 이 근처에서 쉬고 내일 다시 들를게.,
 lantern_wayfarer_return_bread,service_text,,,그때 먹은 빵이 든든해서 아침까지 잘 잤어.|가는 길에 밀을 구했어. 가게에서 써 줘.|다음에 또 이곳에 들러 인사할게.,
-lantern_wayfarer_return_water,service_text,,,지난번 나눠 준 물 기억하지? 오랜만에 푹 쉬었어.|가는 길에 밀을 구했어. 가게에서 써 줘.|이 불빛을 보면 여기서 쉬던 밤이 생각날 것 같아.,
+lantern_wayfarer_return_water,service_text,,,지난번 나눠 준 물 기억하지? 오랜만에 푹 쉬었어.|오는 길에 주운 밀이야. 가게에서 요긴하게 써 줘.|이 불빛을 보면 여기서 쉬던 밤이 떠오르겠지.,
 lantern_wayfarer_water,service_text,물 건네기,,차가운 물을 마시니 숨이 좀 돌아오네.|오늘은 이 근처에서 쉬고 내일 다시 들를게.,
 market_afterglow_doyun,service_text,,,수프가 식기 전에 도구부터 내려놨어.|혼자 빨리 먹던 저녁이 조금 길어졌네.|그날 노점에서 들었던 웃음도 같이 떠올랐어.,코르빈은 일을 멈추고 이웃의 웃음을 떠올리며 식사했습니다.
 market_afterglow_naru,service_text,,,주스를 마시며 보따리 끈을 천천히 묶었어.|급히 떠날 길보다 내일 펼칠 자리가 생각나네.|이번엔 여기서 들은 이야기도 짐에 넣고 갈래.,타블렌은 내일도 노점을 펼칠 자리를 떠올렸습니다.
@@ -433,7 +433,7 @@ winter_shared_meal_materials_intro,service_text,옆자리 몫을 생각하며,�
 winter_shared_meal_materials_wait,service_text,식사 준비의 빈자리,버섯과 밀의 창고 수량을 채워 타블렌에게 돌아가자.,끼니를 생각하며 모으는 재료도 천천히 준비해.|버섯이랑 밀이 창고에 모이면 내게 알려 줘.,
 workshop_afterglow_doyun,service_text,공구를 내려놓고,코르빈이 일을 마친 뒤의 시간을 돌아본다.,공구를 내려놓고 손난로를 양손으로 감쌌지.|늘 하던 일인데 마무리는 좀 달랐어.|손을 펴고 앉아 있을 여유가 생겼네.,코르빈이 손난로와 함께 쉬던 순간을 남겼다.
 workshop_afterglow_naru,service_text,옷감 곁의 열매,타블렌이 챙겨 간 간식 이야기를 들려준다.,옷감을 풀다가 간식 봉지를 먼저 꺼냈어.|서둘러 나선 길에서도 간식만은 안 잊었더라고.|길에서 가게 생각이 난 건 그때였지.,길에 챙긴 간식이 가게를 떠올리게 했다.
-workshop_afterglow_sora,service_text,찻잔 옆의 마지막 줄,이세르가 차와 함께 마친 기록을 이야기한다.,찻잔을 옆에 두니 종이를 넘기는 손이 느려졌어요.|빠뜨린 줄을 찾으려던 건 아니었는데요.|끝에 오늘 만난 사람 이야기를 덧붙였어요.,이세르의 저녁 기록에 만난 사람이 더해졌다.
+workshop_afterglow_sora,service_text,찻잔 옆의 마지막 줄,이세르가 차와 함께 마친 기록을 이야기한다.,찻잔을 옆에 두니 종이를 넘기는 손이 느려졌어.|빠뜨린 줄을 찾으려던 건 아니었는데.|끝에 오늘 만난 사람 이야기를 덧붙였어.,이세르의 저녁 기록에 만난 사람이 더해졌다.
 grain,trade_offer,빵을 만들 밀,,,
 iron,trade_offer,제작에 쓸 철광석,,,
 mushroom,trade_offer,요리에 쓸 버섯,,,
