@@ -11,9 +11,9 @@ const COLLISION_3D := "Collision3D"
 const COLLISION_INSET := 0.04  # 보이는 발자국보다 살짝 안쪽(칸)
 const CONTAINERS: Array = ["NearbyHouses", "VillageExtraHouses", "VillageBlacksmith", "VillageToolShop", "VillageBuildings", "VillageDecor", "VillageGathering", "DungeonRoadside", "DungeonWall"]
 const RULES_PATH: String = "res://data/shop/catalogs/village_3d.csv"
-const GROUND_TEXTURES: Dictionary = {"grass": ["grass", Color(0.62, 0.6, 0.46)], "road": ["brick", Color(0.5, 0.46, 0.46)], "paving": ["brick", Color(0.82, 0.76, 0.68)]}
+const GROUND_TEXTURES: Dictionary = {"grass": ["grass", Color(0.62, 0.6, 0.46)], "road": ["brick", Color(0.5, 0.46, 0.46)], "paving": ["brick", Color(0.82, 0.76, 0.68)], "dirt": ["dirt", Color(0.86, 0.78, 0.66)]}
 # 깔끔한 스타일(PlaceholderTextures.clean)용: 질감 자체가 이미 밝은 색이라 곱하는 색을 거의 1 로 둔다.
-const GROUND_TEXTURES_CLEAN: Dictionary = {"grass": ["grass", Color(1.0, 1.0, 1.0)], "road": ["brick", Color(0.96, 0.96, 0.98)], "paving": ["brick", Color(1.0, 0.93, 0.8)]}
+const GROUND_TEXTURES_CLEAN: Dictionary = {"grass": ["grass", Color(1.0, 1.0, 1.0)], "road": ["brick", Color(0.96, 0.96, 0.98)], "paving": ["brick", Color(1.0, 0.93, 0.8)], "dirt": ["dirt", Color(1.0, 0.95, 0.88)]}
 
 # 같은 규칙을 쓰는 집(vary=1)마다 다르게 보이게 하는 색 조합(건물 번호로 정해져서 다시 만들어도 같다).
 const ROOF_PALETTE: Array = ["b8503c", "4a8a5a", "5a80ac", "c8a450", "8068a0", "b0784e", "58908c", "a04c5c"]
@@ -139,6 +139,9 @@ static func find_rule(rule_list: Array, text: String) -> Dictionary:
 # ---------------------------------------------------------------- 바닥
 
 func _cell_kind(cell: Vector2i) -> String:
+	if exterior.is_wild():
+		return exterior.get_wild_kind(cell)  # 초반 낯선 땅: 풀밭과 흙길뿐
+
 	var painted: String = exterior.get_layout_tile(cell)
 
 	if painted == "road":
@@ -166,7 +169,7 @@ func _cell_kind(cell: Vector2i) -> String:
 func sync_ground() -> void:
 	var cells: Array[Vector2i] = exterior.get_connected_map_cells()
 	var store_rect: Rect2i = view.floor_node.get_store_rect()
-	var sig: String = "%d|%s|%d|%s|%s|%d" % [cells.size(), str(exterior.get_village_map_extent()), exterior._layout_tiles.hash(), str(store_rect), season, _footprints.hash()]
+	var sig: String = "%d|%s|%d|%s|%s|%d|%s" % [cells.size(), str(exterior.get_village_map_extent()), exterior._layout_tiles.hash(), str(store_rect), season, _footprints.hash(), str(exterior.is_wild())]
 
 	if sig == _ground_signature:
 		return
@@ -213,7 +216,7 @@ func sync_ground() -> void:
 		if kind == "grass":
 			info[0] = str(sst["grass_kind"])
 			info[1] = (info[1] as Color) * (sst["grass_tint"] as Color)
-		elif kind == "road":
+		elif kind == "road" or kind == "dirt":
 			info[1] = (info[1] as Color) * (sst["road_tint"] as Color)
 		else:
 			info[1] = (info[1] as Color) * (sst["paving_tint"] as Color)
@@ -850,10 +853,12 @@ func sync_objects(world: Node) -> void:
 	var seen: Dictionary = {}
 	var parts: PackedStringArray = PackedStringArray()
 
+	var wild: bool = exterior.is_wild()  # 초반 낯선 땅: 마을 건물·소품은 3D 로도 만들지 않는다
+
 	for container_name in CONTAINERS:
 		var container: Node = world.get_node_or_null(container_name)
 
-		if container == null:
+		if container == null or (wild and container_name != "DungeonWall"):
 			continue
 
 		for body in container.get_children():

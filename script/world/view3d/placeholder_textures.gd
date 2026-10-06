@@ -47,6 +47,10 @@ static func albedo(kind: String, size: int) -> ImageTexture:
 					else:
 						var shade: float = rng.randf_range(-0.07, 0.07)
 						c = Color(0.36 + shade, 0.6 + shade, 0.3 + shade)
+				"dirt":
+					# 다져진 흙길: 갈색 바탕에 작은 자갈·결 점(규칙 무늬라 이음매 없이 반복)
+					var dp: int = (x * 5 + y * 3) % 23
+					c = Color(0.5, 0.42, 0.32) if dp == 0 else (Color(0.72, 0.64, 0.5) if dp == 7 else Color(0.63, 0.54, 0.41))
 				"snow":
 					# 눈밭: 거의 흰색에 푸른 그늘 점과 반짝이는 점(잡음 없는 규칙 무늬)
 					var sp: int = (x * 5 + y * 11) % 37

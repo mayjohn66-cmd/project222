@@ -87,9 +87,10 @@ func _ready() -> void:
 		return
 
 	load_village_map_layout()
-
 	# 현재 확장 단계에 맞춰 외부 부지 크기를 계산한다.
 	_apply_store_size_to_exterior()
+	_wild_active = OpeningTerrain.wild()
+	_wild_layout = OpeningTerrain.layout(self) if _wild_active else {}
 	_tile_grid_overlay = TILE_GRID_OVERLAY.new()
 	_tile_grid_overlay.name = "TileGridOverlay"
 	_tile_grid_overlay.set("terrain", self)
@@ -146,6 +147,14 @@ func is_at_expedition_departure(world_position: Vector2) -> bool:
 
 func get_connected_map_cells() -> Array[Vector2i]:
 	var cells: Array[Vector2i] = []
+	_sync_wild()
+
+	if _wild_active:
+		for wild_cell in _wild_layout:
+			cells.append(wild_cell)
+
+		return cells
+
 	var center := get_village_map_center_local()
 	var center_cell := Vector2i(roundi(center.x/tile_width+center.y/tile_height),roundi(center.y/tile_height-center.x/tile_width))
 	var radius := get_village_map_radius()
@@ -336,6 +345,58 @@ func save_village_map_layout() -> String:
 		file.flush()
 		return ProjectSettings.globalize_path(path)
 	return ""
+
+# ---- 초반 낯선 땅(OpeningTerrain): 좁은 풀밭 길만 남기고 마을 소품을 숨긴다 ----
+const WILD_HIDDEN_CONTAINERS := ["NearbyHouses","VillageExtraHouses","VillageBlacksmith","VillageToolShop","VillageBuildings","VillageDecor","VillageGathering","DungeonRoadside"]
+var _wild_active: bool = false
+var _wild_layout: Dictionary = {}
+var _wild_poll: float = 0.0
+
+func is_wild() -> bool:
+	_sync_wild()
+	return _wild_active
+
+# 이야기 기록이 바뀐 직후에도 곧바로 맞는 지형이 나오도록, 쓸 때마다 단계가 바뀌었는지 가볍게 확인한다.
+func _sync_wild() -> void:
+	if Engine.is_editor_hint(): return
+	if OpeningTerrain.wild() != _wild_active: _update_wild()
+
+func get_wild_kind(cell: Vector2i) -> String:
+	return str(_wild_layout.get(cell,"grass"))
+
+func _process(delta: float) -> void:
+	if Engine.is_editor_hint(): return
+	_wild_poll -= delta
+	if _wild_poll > 0.0: return
+	_wild_poll = 0.5
+	_update_wild()
+
+func _update_wild() -> void:
+	var now := OpeningTerrain.wild()
+	var layout: Dictionary = OpeningTerrain.layout(self) if now else {}
+	# 켜지거나 꺼질 때, 또는 가게가 넓어져 부지가 바뀔 때 지형을 다시 만든다.
+	if now != _wild_active or layout.hash() != _wild_layout.hash():
+		_wild_active = now
+		_wild_layout = layout
+		refresh_map_footprint()
+	_set_village_objects_hidden(_wild_active)
+
+# 마을 건물·울타리·소품의 충돌을 끄고(3D 그림은 VillageMirror 가 이 단계에서 만들지 않는다) 단계가 끝나면 되돌린다.
+# 보이는지(visible)는 건드리지 않는다: 주민·이야기 코드가 그 값으로 "이 장소가 열렸는지"를 판단한다.
+func _set_village_objects_hidden(hidden: bool) -> void:
+	var world := get_parent()
+	if world == null: return
+	for container_name in WILD_HIDDEN_CONTAINERS:
+		var container := world.get_node_or_null(container_name)
+		if container == null: continue
+		for body in container.get_children():
+			if not body is StaticBody2D: continue
+			if hidden and not body.has_meta("wild_layer"):
+				body.set_meta("wild_layer",body.collision_layer)
+				body.collision_layer = 0
+			elif not hidden and body.has_meta("wild_layer"):
+				body.collision_layer = int(body.get_meta("wild_layer"))
+				body.remove_meta("wild_layer")
 
 func refresh_village_layout() -> void:
 	queue_redraw()
@@ -616,6 +677,8 @@ func get_exterior_rect() -> Rect2i:
 func is_exterior_cell(
 	cell: Vector2i
 ) -> bool:
+	_sync_wild()
+	if _wild_active: return _wild_layout.has(cell)
 	var key := _map_cell_key(cell)
 	if _layout_removed_cells.has(key): return false
 	return _layout_added_cells.has(key) or _is_round_map_cell(cell)
