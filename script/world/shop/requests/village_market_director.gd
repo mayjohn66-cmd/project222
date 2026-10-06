@@ -67,7 +67,7 @@ func try_interact() -> bool:
 				label_visibility[npc.title] = npc.title.visible
 				npc.title.hide()
 			lines = VillageMarketFlow.lines()
-			lines.append("장터 정산: " + VillageMarketFlow.reward_description())
+			lines.append("장터 답례: " + VillageMarketFlow.reward_description())
 		else:
 			lines = RequestTextData.lines("service_text", "first_market_intro" if stage == "intro" else "first_market_wait")
 			if stage == "wait": lines.append(VillageMarketFlow.information())

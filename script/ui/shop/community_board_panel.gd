@@ -105,7 +105,8 @@ func refresh() -> void:
 			var required: int = required_items[item]
 			if CommunityRequestFlow.done(id): text += "%s %d개 전달 완료  " % [ItemData.get_item_name(item), required]
 			else: text += "%s %d/%d  " % [ItemData.get_item_name(item), mini(GameState.get_item_count(item), required), required]
-		text += "\n보상: 평판 +%d · %d G · %s" % [entry["reputation"], entry["money"], entry["landmark_name"]]
+		if RequestPaymentText.is_gift(entry): text += "\n" + RequestPaymentText.notice(entry)
+		text += "\n%s: 평판 +%d · %d G · %s" % [RequestPaymentText.label(entry), entry["reputation"], entry["money"], entry["landmark_name"]]
 		var reason := CommunityRequestFlow.locked_reason(entry)
 		if CommunityRequestFlow.done(id):
 			card["action"].text = "함께 완료한 부탁"

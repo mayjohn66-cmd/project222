@@ -2,6 +2,7 @@
 [ext_resource type="Script" path="res://script/world/shop/requests/village_market_settings.gd" id="1"]
 [resource]
 script = ExtResource("1")
+payment_kind = "gift"
 requirements = Array[Dictionary]([{"item":"bread","amount":2},{"item":"wild_berry","amount":3}])
 gifts = Array[Dictionary]([{"item":"wheat","amount":3}])
 moments = Array[Dictionary]([

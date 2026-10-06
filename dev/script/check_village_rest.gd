@@ -118,13 +118,14 @@ func run() -> void:
 	bench = VillageRestFlow.site(world)
 	check(bench != null and bench.visible, "terrain rebuild preserves unlocked bench")
 	GameState.total_day += 1
-	check(not VillageRestFlow.active(14) and VillageRestFlow.active(15) and VillageRestFlow.active(17) and not VillageRestFlow.active(18), "afternoon opening window")
-	manager.current_hour = 15
+	check(not VillageRestFlow.active(13) and VillageRestFlow.active(14) and VillageRestFlow.active(18) and not VillageRestFlow.active(19), "expanded afternoon opening window includes 14 and 18, excludes 13 and 19")
+	check(VillageRestFlow.information().contains("14~19시"), "rest information uses expanded opening hours")
+	manager.current_hour = 14
 	manager.hour_timer.paused = false
 	player.global_position = Vector2(-3000, -3000)
 	life.refresh()
 	for id in VillageRestFlow.SETTINGS.participants:
-		check(VillageRoutine.location(VillageLifeFlow.resident(id), 15)["path"] == VillageRestFlow.SETTINGS.site_path, "new routine heads to bench " + id)
+		check(VillageRoutine.location(VillageLifeFlow.resident(id), 14)["path"] == VillageRestFlow.SETTINGS.site_path and VillageRoutine.location(VillageLifeFlow.resident(id), 18)["path"] == VillageRestFlow.SETTINGS.site_path, "routine heads to bench throughout expanded window " + id)
 		life.residents[id].set_physics_process(false)
 	for i in range(6000):
 		for id in VillageRestFlow.SETTINGS.participants: life.residents[id]._physics_process(1.0 / 60.0)

@@ -7,8 +7,8 @@ extends Resource
 @export var participants: Array[String] = ["naru", "doyun", "sora"]
 @export var days_after := 1
 @export var opening_days_after := 1
-@export var start_hour := 15
-@export var end_hour := 18
+@export var start_hour := 14
+@export var end_hour := 19
 @export var interaction_distance := 180.0
 @export var arrival_distance := 220.0
 @export var opening_reputation := 1

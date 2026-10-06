@@ -164,6 +164,7 @@ static func information(id: String) -> String:
 	var entry := event(id)
 	if entry.is_empty(): return ""
 	var text := RequestTextData.text("service_text",str(entry["title_id"]),"summary") + "\n"
+	if RequestPaymentText.is_gift(entry): text += RequestPaymentText.notice(entry) + "\n"
 	if accepted(id):
 		var current := step(id)
 		text += "진행 %d/%d · %s\n" % [int(current["index"]) + 1,entry["steps"].size(),RequestTextData.text("service_text",str(current["id"]),"title")]
@@ -179,6 +180,6 @@ static func information(id: String) -> String:
 			text += RequestTextData.text("service_text",str(entry["steps"].back()["id"]),"completion") + "\n"
 		text += locked_reason(id)
 		if not done(id) and locked_reason(id).is_empty(): text += "게시판에서 이야기를 맡은 뒤 주민에게 이어서 들으세요."
-	text += "\n마지막 대화 완독 때: %d G · 첫 완료 평판 +%d" % [entry.get("money",0),entry.get("reputation",1)]
+	text += "\n%s마지막 대화 완독 때: %d G · 첫 완료 평판 +%d" % ["답례 · " if RequestPaymentText.is_gift(entry) else "",entry.get("money",0),entry.get("reputation",1)]
 	for gift in entry.get("gifts", []): text += " · %s ×%d" % [ItemData.get_item_name(str(gift["item"])),gift["amount"]]
 	return text

@@ -3,9 +3,9 @@
 [resource]
 script = ExtResource("1")
 requests = Array[Dictionary]([
-{"id":"naru_market_juice","resident":"naru","friendship":7,"after":"naru_neighbor_basket","after_gathering":true,"after_market":true,"days_after":1,"recipe":"berry_juice","requirements":[{"item":"berry_juice","amount":2}],"reputation":1,"money":30},
-{"id":"doyun_market_soup","resident":"doyun","friendship":7,"after":"doyun_tool_care","after_gathering":true,"after_market":true,"days_after":1,"recipe":"mushroom_stew","requirements":[{"item":"mushroom_stew","amount":1}],"reputation":1,"money":30},
-{"id":"sora_market_drink","resident":"sora","friendship":7,"after":"sora_well_notes","after_gathering":true,"after_market":true,"days_after":1,"recipe":"herb_drink","requirements":[{"item":"herb_drink","amount":2}],"reputation":1,"money":30}
+{"id":"naru_market_juice","payment_kind":"gift","resident":"naru","friendship":7,"after":"naru_neighbor_basket","after_gathering":true,"after_market":true,"days_after":1,"recipe":"berry_juice","requirements":[{"item":"berry_juice","amount":2}],"reputation":1,"money":30},
+{"id":"doyun_market_soup","payment_kind":"gift","resident":"doyun","friendship":7,"after":"doyun_tool_care","after_gathering":true,"after_market":true,"days_after":1,"recipe":"mushroom_stew","requirements":[{"item":"mushroom_stew","amount":1}],"reputation":1,"money":30},
+{"id":"sora_market_drink","payment_kind":"gift","resident":"sora","friendship":7,"after":"sora_well_notes","after_gathering":true,"after_market":true,"days_after":1,"recipe":"herb_drink","requirements":[{"item":"herb_drink","amount":2}],"reputation":1,"money":30}
 ])
 moments = Array[Dictionary]([
 {"id":"market_afterglow_naru","npc":"타블렌","resident":"naru","request":"naru_market_juice","stage":"첫 장터 뒤 열매 주스 부탁 전달 완료. 기존 타블렌에게 직접 E로 안부를 나누며 주스를 마신 후일담. 끝까지 들으면 수첩에 남김. 추가 물품 소비·보상·새 고객 해금 없음"},

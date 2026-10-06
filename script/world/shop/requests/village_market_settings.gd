@@ -8,6 +8,7 @@ extends Resource
 @export var gifts: Array[Dictionary] = []
 @export var reputation := 1
 @export var money := 40
+@export var payment_kind := ""
 @export var days_after := 1
 @export var start_hour := 12
 @export var end_hour := 17

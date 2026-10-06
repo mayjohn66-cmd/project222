@@ -83,5 +83,7 @@ static func information() -> String:
 		var text := "타블렌에게 준비 물품 전달하기 [E] · 창고 기준\n"
 		var totals := required_items()
 		for id in totals: text += "%s %d/%d  " % [ItemData.get_item_name(id), mini(GameState.get_item_count(id), int(totals[id])), int(totals[id])]
+		if RequestPaymentText.is_gift({"payment_kind":SETTINGS.payment_kind}):
+			text += "\n" + RequestPaymentText.notice({"payment_kind":SETTINGS.payment_kind}) + "\n장터를 마친 답례: " + reward_description()
 		return text + "\n기한 없이 준비할 수 있습니다."
 	return "%d일차부터 매일 %02d~%02d시 · 노점에서 [E]\n이웃들이 도착하면 참여합니다. 시간을 놓쳐도 다시 열립니다.\n답례: %s" % [earliest_day(), SETTINGS.start_hour, SETTINGS.end_hour, reward_description()]

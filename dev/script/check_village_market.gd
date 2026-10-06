@@ -90,6 +90,8 @@ func run() -> void:
 	GameState.add_item("wild_berry", 2)
 	check(not VillageMarketFlow.can_prepare() and not VillageMarketFlow.prepare() and GameState.get_item_count("bread") == 2, "missing one item consumes no supplied item")
 	check(talk() and market.panel.root.visible and market.panel.cards["prepare"]["action"].disabled, "preparation E opens disabled delivery panel when short")
+	var preparation_text: String = market.panel.cards["prepare"]["info"].text
+	check(preparation_text.contains("나눔 부탁") and preparation_text.contains("물품 대금은 별도로 받지 않습니다.") and preparation_text.contains("장터를 마친 답례: " + VillageMarketFlow.reward_description()), "actual first market preparation UI distinguishes donated goods and unchanged completion gifts")
 	market.panel.close()
 	check(not VillageMarketFlow.prepared() and GameState.get_item_count("wild_berry") == 2, "closing panel consumes nothing")
 	GameState.add_item("wild_berry", 1)
