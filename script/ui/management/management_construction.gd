@@ -99,6 +99,10 @@ func select_tab(
 
 
 func refresh_view() -> void:
+	if ShopSpaceConstruction.render(self): return
+	store_button.disabled = current_tab == ConstructionTab.STORE
+	production_room_button.disabled = current_tab == ConstructionTab.PRODUCTION_ROOM
+	warehouse_button.disabled = current_tab == ConstructionTab.WAREHOUSE
 	match current_tab:
 		ConstructionTab.STORE:
 			_refresh_store_expansion()
@@ -284,6 +288,9 @@ func _refresh_store_expansion() -> void:
 
 
 func _on_expand_button_pressed() -> void:
+	if not ShopSpaceProgression.expansion_ready():
+		ShopSpaceConstruction.begin(self)
+		return
 	match current_tab:
 		ConstructionTab.STORE:
 			_request_store_expansion()
@@ -296,6 +303,7 @@ func _on_expand_button_pressed() -> void:
 
 
 func _request_store_expansion() -> void:
+	if not ShopSpaceProgression.expansion_ready(): return
 	if not _can_expand_space_now():
 		refresh_view()
 		return
@@ -442,6 +450,7 @@ func _refresh_warehouse_expansion() -> void:
 		)
 
 func _request_warehouse_expansion() -> void:
+	if not ShopSpaceProgression.expansion_ready(): return
 	if not _can_expand_space_now():
 		refresh_view()
 		return
@@ -502,6 +511,10 @@ func _request_warehouse_expansion() -> void:
 func _confirm_warehouse_expansion(
 	confirm_dialog: ConfirmationDialog
 ) -> void:
+	if not ShopSpaceProgression.expansion_ready() or not _can_expand_space_now():
+		confirm_dialog.queue_free()
+		refresh_view()
+		return
 	var succeeded: bool = (
 		GameState.upgrade_warehouse()
 	)
@@ -519,6 +532,10 @@ func _confirm_warehouse_expansion(
 func _confirm_store_expansion(
 	confirm_dialog: ConfirmationDialog
 ) -> void:
+	if not ShopSpaceProgression.expansion_ready() or not _can_expand_space_now():
+		confirm_dialog.queue_free()
+		refresh_view()
+		return
 	var succeeded: bool = (
 		GameState.upgrade_store()
 	)
@@ -534,6 +551,7 @@ func _confirm_store_expansion(
 	expansion_completed.emit()
 
 func _request_production_room_expansion() -> void:
+	if not ShopSpaceProgression.expansion_ready(): return
 	if not _can_expand_space_now():
 		refresh_view()
 		return
@@ -594,6 +612,10 @@ func _request_production_room_expansion() -> void:
 func _confirm_production_room_expansion(
 	confirm_dialog: ConfirmationDialog
 ) -> void:
+	if not ShopSpaceProgression.expansion_ready() or not _can_expand_space_now():
+		confirm_dialog.queue_free()
+		refresh_view()
+		return
 	var succeeded: bool = (
 		GameState.upgrade_production_room()
 	)

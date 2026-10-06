@@ -732,7 +732,7 @@ func _render_facility_cards() -> void:
 			_add_facility_card(cards,node.facility_id,node)
 			found[node.facility_id] = true
 	for id in ["drink_machine","magic_oven"]:
-		if not found.has(id): _add_facility_card(cards,id,null)
+		if ShopSpaceProgression.furniture_visible(id) and not found.has(id): _add_facility_card(cards,id,null)
 
 func _add_facility_card(cards: GridContainer, id: String, facility: ProductionFacility) -> void:
 	var panel := PanelContainer.new()

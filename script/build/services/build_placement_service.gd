@@ -74,6 +74,7 @@ func place_furniture(
 
 	if build_id.is_empty():
 		return null
+	if not ShopSpaceProgression.can_install(build_id, objects_parent): return null
 
 	if not GameState.has_furniture(
 		build_id,
@@ -174,6 +175,7 @@ func place_furniture(
 		placed_rotation
 	)
 
+	ShopSpaceProgression.placed(build_id, objects_parent)
 	return furniture
 
 

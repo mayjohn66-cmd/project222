@@ -163,6 +163,7 @@ static func install(menu: Control) -> void:
 	strip.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for bi in range(nav.get_child_count()):
 		var nb: Button = nav.get_child(bi)
+		if not nb.visible: continue
 		nb.mouse_entered.connect(func() -> void: strip.set_hover(bi))
 		nb.mouse_exited.connect(func() -> void: strip.set_hover(-1))
 	var note_view := BookViews.Note.new()

@@ -61,6 +61,7 @@ static func _load() -> void:
 	_rows = loaded
 
 static func locked_reason(id: String) -> String:
+	if not ShopSpaceProgression.furniture_visible(id): return "가게의 다음 공간을 마련한 뒤 만들 수 있습니다."
 	var row := get_object(id)
 	if row.is_empty(): return ""
 	var stage := str(row["requires_stage"])

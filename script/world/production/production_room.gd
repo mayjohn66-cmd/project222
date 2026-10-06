@@ -142,10 +142,12 @@ func is_cell_buildable(cell: Vector2i) -> bool:
 	return true
 
 func enter_actor(actor: Node2D) -> bool:
+	if not ShopSpaceProgression.room_ready("production"): return false
 	if not is_instance_valid(actor):
 		return false
 
 	_stop_actor_movement(actor)
+	ShopSpaceProgression.entered("production")
 
 	actor.global_position = (
 		get_entry_world_position()

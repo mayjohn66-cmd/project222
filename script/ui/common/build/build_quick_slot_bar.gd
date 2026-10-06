@@ -161,6 +161,7 @@ func refresh_furniture_inventory() -> void:
 
 	for raw_build_id in GameState.get_furniture_inventory_ids():
 		var build_id: String = str(raw_build_id)
+		if not ShopSpaceProgression.furniture_visible(build_id): continue
 
 		var count: int = GameState.get_furniture_count(
 			build_id
@@ -309,6 +310,7 @@ func refresh_slots() -> void:
 	for i in range(slot_buttons.size()):
 		var button: Button = slot_buttons[i]
 		var build_id: String = GameState.get_build_quick_slot(i)
+		button.visible = build_id.is_empty() or ShopSpaceProgression.furniture_visible(build_id)
 
 		button.text = ""
 		var icon_rect: TextureRect = button.get_node("FurnitureIcon")
@@ -423,6 +425,7 @@ func _is_valid_slot_index(
 func _is_available_furniture(
 	build_id: String
 ) -> bool:
+	if not ShopSpaceProgression.furniture_visible(build_id): return false
 	if build_id.is_empty():
 		return false
 

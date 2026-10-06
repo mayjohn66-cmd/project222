@@ -84,6 +84,7 @@ func _ready() -> void:
 
 
 func _on_category_pressed(category_id: String) -> void:
+	if not ShopSpaceProgression.category_visible(category_id): return
 	if crafting:
 		_update_category_buttons()
 		return
@@ -100,6 +101,7 @@ func _update_category_buttons() -> void:
 	for raw_id in category_buttons:
 		var category_id: String = str(raw_id)
 		var button: Button = category_buttons[category_id]
+		button.visible = ShopSpaceProgression.category_visible(category_id)
 
 		button.set_pressed_no_signal(
 			category_id == selected_category
@@ -125,6 +127,7 @@ func _get_visible_furniture_ids() -> Array[String]:
 	)
 
 	for furniture_id in ids:
+		if not ShopSpaceProgression.furniture_visible(furniture_id): continue
 		var data: Dictionary = FurnitureData.get_furniture(
 			furniture_id
 		)
@@ -146,6 +149,9 @@ func _get_visible_furniture_ids() -> Array[String]:
 func refresh_view() -> void:
 	if not is_instance_valid(furniture_list):
 		return
+	if not ShopSpaceProgression.category_visible(selected_category):
+		selected_category = "store"
+		selected_furniture_id = ""
 
 	_update_category_buttons()
 
@@ -208,6 +214,9 @@ func _clear_detail(message: String) -> void:
 
 
 func _select_furniture(furniture_id: String) -> void:
+	if not ShopSpaceProgression.furniture_visible(furniture_id):
+		_clear_detail("현재 공간에서 사용할 집기를 먼저 준비하세요.")
+		return
 	var data: Dictionary = FurnitureData.get_furniture(
 		furniture_id
 	)
@@ -234,6 +243,7 @@ func _select_furniture(furniture_id: String) -> void:
 
 	description_label.text = (
 		str(data.get("description", ""))
+		+ ShopSpaceProgression.furniture_purpose(furniture_id)
 		+ FurnitureObjectCatalog.detail(furniture_id)
 		+ _get_effect_description(furniture_id)
 	)

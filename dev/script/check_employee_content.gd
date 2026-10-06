@@ -43,6 +43,9 @@ func run() -> void:
 	add_child(world)
 	await frames()
 	OpeningJourneyFlow.initialize(world)
+	# 직원 관리는 첫 영업·원정 안내를 마친 상태에서 검사한다.
+	for step in TutorialDirector.SETTINGS.steps:
+		if not step.get("optional", false): PlayerProgress.record_story_beat("tutorial_step:" + str(step["id"]) + ":done", 1)
 	var manager = world.get_node("DayManager")
 	manager.hour_timer.stop()
 	manager.current_hour = 6

@@ -363,6 +363,7 @@ func refresh_furniture_inventory() -> void:
 	furniture_ids.sort()
 
 	for furniture_id in furniture_ids:
+		if not ShopSpaceProgression.furniture_visible(furniture_id): continue
 		if not FurnitureData.has_furniture(
 			furniture_id
 		):

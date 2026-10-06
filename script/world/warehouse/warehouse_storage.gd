@@ -413,6 +413,7 @@ func deposit_from_inventory_to_slot(
 		removed_amount
 	)
 
+	ShopSpaceProgression.deposited(self, removed_amount)
 	return removed_amount
 
 

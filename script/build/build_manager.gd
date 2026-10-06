@@ -1063,6 +1063,7 @@ func can_place(
 ) -> bool:
 	if not has_valid_build_selection():
 		return false
+	if not ShopSpaceProgression.can_install(get_selected_build_id(), objects): return false
 
 	# 생산실에서는 생산 설비만 배치할 수 있다.
 	if building_in_production:
@@ -2092,6 +2093,7 @@ func _on_build_quick_slot_pressed(
 	slot_index: int,
 	build_id: String
 ) -> void:
+	if not ShopSpaceProgression.furniture_visible(build_id): return
 	if not build_mode:
 		return
 

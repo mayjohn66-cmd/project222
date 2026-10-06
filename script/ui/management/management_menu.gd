@@ -144,12 +144,15 @@ var current_info_tab: InfoTab = InfoTab.BASIC
 
 var current_tab: MenuTab = MenuTab.INVENTORY
 var _paused_by_menu: bool = false
+var space_menu: ShopSpaceMenu
 
 
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	space_menu = ShopSpaceMenu.new()
+	add_child(space_menu)
 	inventory_button.pressed.connect(
 		select_tab.bind(
 			MenuTab.INVENTORY
@@ -279,6 +282,8 @@ func close_menu() -> void:
 func select_tab(
 	tab: MenuTab
 ) -> void:
+	if space_menu != null and not space_menu.tab_available(int(tab)):
+		tab = MenuTab.INVENTORY
 	current_tab = tab
 	PRESENTATION.apply_tab(self)
 
