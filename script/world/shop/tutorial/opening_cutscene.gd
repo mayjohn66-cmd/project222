@@ -19,6 +19,22 @@ const FLASH_UP := 0.9
 const FLASH_DOWN := 1.8
 const RETURN_SECONDS := 1.8
 
+# 독백 중간의 움직임: 장면 id → {방금 읽은 줄 번호: 걸어갈 곳}. 말만 길게 하지 않고 주인공이 가게 안을 둘러보게 한다.
+const BEATS := {
+	"prologue_last_shift": {0: "door", 1: "silence"},   # 마지막 줄 "왜 이렇게 조용하지?" 직전에 도로 소리가 뚝 끊긴다
+	"prologue_unfamiliar_window": {0: "counter", 1: "shelf"},
+	"prologue_food_dates": {0: "counter"},
+	"prologue_keep_the_light": {0: "center"},
+}
+# 가게 안 칸 좌표(문 (0,4), 계산대 (4,3), 진열대 (2,2) 옆). 소수 좌표는 칸 사이.
+const SPOTS := {
+	"door": Vector2(1.3, 4.0),
+	"counter": Vector2(4.0, 4.9),
+	"shelf": Vector2(2.0, 3.5),
+	"center": Vector2(4.5, 5.3),
+}
+const WALK_SPEED := 2.4   # 칸/초
+
 var enabled: bool = true
 var active: bool = false
 
@@ -213,6 +229,45 @@ func _push_camera() -> void:
 		var z: float = lerpf(from_zoom, PUSH_ZOOM, f)
 		camera2d.zoom = Vector2(z, z)
 		camera2d.offset = from_offset.lerp(offset_to, f))
+
+
+# 대사 한 줄을 읽은 뒤(다음 줄 전에) 정해진 곳으로 걸어간다. 걷는 동안 대사창은 숨겨져 있다.
+func beat(moment_id: String, read_index: int) -> void:
+	if not enabled:
+		return
+
+	var spot_name: String = str((BEATS.get(moment_id, {}) as Dictionary).get(read_index, ""))
+
+	if spot_name.is_empty() or not await _ensure():
+		return
+
+	if spot_name == "silence":
+		noise.silence()
+		await _wait(1.0)
+		return
+
+	await _walk_to(SPOTS[spot_name])
+
+
+func _walk_to(cell: Vector2) -> void:
+	var player: Node2D = _world.get_node_or_null("Actors/Player") if _world != null else null
+
+	if player == null or view == null:
+		return
+
+	var from: Vector2 = player.global_position
+	var to: Vector2 = view.cell_to_world(cell)
+	var seconds: float = maxf(0.3, view.world_to_cell(from).distance_to(cell) / WALK_SPEED)
+	var t: float = 0.0
+
+	while t < seconds:
+		await get_tree().process_frame
+		t += get_process_delta_time()
+		player.global_position = from.lerp(to, clampf(t / seconds, 0.0, 1.0))
+
+	player.global_position = to
+	await get_tree().process_frame
+	await get_tree().process_frame
 
 
 # 독백 2가 끝난 뒤 카메라를 제자리로. 기다리지 않는다.

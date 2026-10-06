@@ -141,6 +141,8 @@ func _begin_prologue(moment: Dictionary) -> void:
 	# 프롤로그 연출: 독백1 앞에 도시 거리, 독백2 앞에 숲으로 바뀌는 장면(자동 검사에서는 꺼져 있다)
 	if str(moment["id"]) == "prologue_last_shift": await cutscene.play_intro()
 	elif str(moment["id"]) == "prologue_unfamiliar_window": await cutscene.play_transition()
+	var moment_id := str(moment["id"])
+	dialogue.beat_handler = func(read_index: int) -> void: await cutscene.beat(moment_id, read_index)
 	dialogue.start("나",null,lines)
 
 func _begin_step(step: Dictionary) -> void:
@@ -175,6 +177,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 
 func _end_talk() -> void:
+	dialogue.beat_handler = Callable()
 	if not talking: return
 	var completed_read: bool = dialogue.line_index >= dialogue.lines.size()
 	var result := pending.duplicate(true)

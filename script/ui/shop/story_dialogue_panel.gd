@@ -18,6 +18,10 @@ var name_label: Label
 var text_label: Label
 var hint_label: Label
 var hint_tween: Tween = null
+# 대사 한 줄을 다 읽고 다음 줄로 넘어가기 직전에 부르는 동작(예: 주인공이 걸어간다). 기다릴 수 있다. 비워 두면 바로 넘어간다.
+# 인자는 방금 읽은 줄 번호(0부터).
+var beat_handler: Callable = Callable()
+var _beat_busy: bool = false
 
 const HINT_HOLDER_HEIGHT := 44.0   # 움찔거리는 범위와 테두리 사이 여유까지 포함
 const HINT_MARGIN_RIGHT := 22.0    # 오른쪽 테두리에서 띄우는 거리
@@ -160,6 +164,9 @@ func _show_hint(shown: bool) -> void:
 
 
 func _advance() -> void:
+	if _beat_busy:
+		return
+
 	# 글자가 나오는 중이면 먼저 전부 보여 준다.
 	if text_label.visible_ratio < 1.0:
 		if typing_tween != null:
@@ -169,17 +176,31 @@ func _advance() -> void:
 		_show_hint(true)
 		return
 
+	var read_index: int = line_index
 	line_index += 1
 
 	if line_index >= lines.size():
 		close()
 		return
 
+	if beat_handler.is_valid():
+		_beat_busy = true
+		_show_hint(false)
+		root.visible = false  # 걷는 동안에는 대사창을 잠깐 숨긴다
+		await beat_handler.call(read_index)
+		_beat_busy = false
+
+		if not open:
+			return
+
+		root.visible = true
+
 	_show_line()
 
 
 func close() -> void:
 	open = false
+	_beat_busy = false
 	root.visible = false
 
 	if typing_tween != null:
