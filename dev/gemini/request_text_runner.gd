@@ -162,7 +162,7 @@ func _webprompt(sources: Dictionary) -> void:
 
 				column_notes.append("- %s → 채울 열: %s (나머지 열은 비운다)" % [id, ", ".join(names)])
 
-			var text: String = "아래 [지침]을 따라 [요청]의 항목만 쓴다. 답은 **코드블록 하나** 안에 탭으로 구분한 행만 넣고, 설명·머리말은 쓰지 않는다.\n\n[지침]\n%s\n\n[요청]\n%s\n\n[채울 열 — 반드시 지킨다]\n%s\n열 순서는 id, kind, title, summary, lines, completion 이고 항상 탭 5개(6칸)다. 단서(clue)·제목 행은 NPC 대사가 아니므로 lines 에 쓰지 않는다.\n" % [system_prompt, build_prompt(kind, part, sources), "\n".join(column_notes)]
+			var text: String = "아래 [지침]을 따라 [요청]의 항목 **%d개 전부**를 한 번에 쓴다(첫 줄만 쓰고 멈추지 않는다). 답은 **코드블록 하나** 안에 탭으로 구분한 행 %d줄만 넣고, 설명·머리말은 쓰지 않는다.\n\n[지침]\n%s\n\n[요청]\n%s\n\n[채울 열 — 반드시 지킨다]\n%s\n열 순서는 id, kind, title, summary, lines, completion 이고 항상 탭 5개(6칸)다. 단서(clue)·제목 행은 NPC 대사가 아니므로 lines 에 쓰지 않는다. 마지막 줄까지 %d줄을 모두 쓴 뒤에 끝낸다.\n" % [chunk.size(), chunk.size(), system_prompt, build_prompt(kind, part, sources), "\n".join(column_notes), chunk.size()]
 			_write(path, text)
 			print("[웹 요청] %s (%s %s)" % [path, kind, ", ".join(chunk)])
 
