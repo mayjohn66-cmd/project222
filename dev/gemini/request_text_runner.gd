@@ -9,6 +9,7 @@ extends Node
 const Tools = preload("res://dev/gemini/request_text_tools.gd")
 const GeminiClient = preload("res://dev/gemini/gemini_client.gd")
 const StoryGen = preload("res://dev/gemini/story_draft_generator.gd")
+const Profiles = preload("res://dev/gemini/character_profile_context.gd")
 const FakeClient = preload("res://dev/gemini/fake_gemini_client.gd")
 
 const OUT_DIR: String = "res://docs/drafts/story"
@@ -653,6 +654,7 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 	var out: PackedStringArray = [head, ""]
 	var residents: Dictionary = (sources if not sources.is_empty() else targets).get(Tools.KIND_RESIDENT_GREETING, {})
 	var voices: Dictionary = Tools.load_voices()
+	var profiles: Dictionary = Profiles.load_profiles()
 
 	for id in targets[kind].keys():
 		var d: Dictionary = targets[kind][id]
@@ -739,6 +741,9 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 			info += " / 말하는 사람: %s / 말버릇: %s" % [voice["name"], voice["voice"]]
 
 		out.append("id=%s | %s" % [id, info])
+		var profile := Profiles.for_speaker(profiles, str(voice.get("name", d.get("npc", d.get("name", "")))), str(id))
+		if not profile.is_empty():
+			out.append(profile)
 		out.append("현재 문장(참고, 같은 칸 수와 역할로 새로 쓴다): " + "\t".join(current))
 
 		if drafts.has(id):

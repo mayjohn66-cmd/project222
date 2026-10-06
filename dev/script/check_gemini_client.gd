@@ -91,6 +91,7 @@ func _run() -> void:
 	_check("1줄 이상" in full and "자동문" in full, "NPC 반응 지침이 들어감")
 	_check(not ("상태: 🟡" in full) and not ("이 파일의 내용은" in full), "안내용 인용문은 제외")
 	_check("beat_id,npc_id" in full and "neighbor" in full, "기본 지침도 그대로 유지")
+	_check(full.contains("인물 설정 참고: 오렐") and full.contains("접은 손수건") and not full.contains("인물 설정 참고: 타블렌"), "기존 neighbor 장면은 오렐 설정만 대사 문맥에 포함")
 	_check(gen.build_system_prompt("") == gen.SYSTEM_PROMPT, "설정 문서가 없으면 기본 지침만")
 
 	# 재시도 규칙

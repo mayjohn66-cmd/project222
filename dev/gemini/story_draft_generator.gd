@@ -9,6 +9,7 @@ extends Node
 
 # class_name 등록(전역 캐시)에 기대지 않고 직접 불러온다. 새 파일은 에디터가 한 번 열기 전에는 전역 클래스로 안 잡힌다.
 const GeminiClient = preload("res://dev/gemini/gemini_client.gd")
+const Profiles = preload("res://dev/gemini/character_profile_context.gd")
 
 const OUT_DIR: String = "res://docs/drafts/story"
 const HEADER: String = "beat_id,npc_id,conditions,gifts,repeat_days,lines"
@@ -62,7 +63,11 @@ func _run() -> void:
 
 # 기본 지침 뒤에 세계관 설정 문서를 붙인다(안내용 첫 줄 인용문은 제외).
 static func build_system_prompt(setting_text: String) -> String:
-	return append_world_setting(SYSTEM_PROMPT, setting_text)
+	var prompt := append_world_setting(SYSTEM_PROMPT, setting_text)
+	if setting_text.is_empty():
+		return prompt
+	var profile := Profiles.for_speaker(Profiles.load_profiles(), "", "neighbor")
+	return prompt if profile.is_empty() else prompt + "\n\n" + profile
 
 
 # 어떤 기본 지침에도 세계관 설정을 붙일 수 있게 분리(부탁 글 초안에서도 같이 쓴다).
