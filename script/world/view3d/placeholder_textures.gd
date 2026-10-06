@@ -47,6 +47,14 @@ static func albedo(kind: String, size: int) -> ImageTexture:
 					else:
 						var shade: float = rng.randf_range(-0.07, 0.07)
 						c = Color(0.36 + shade, 0.6 + shade, 0.3 + shade)
+				"goods":
+					# 진열대 위 상품 줄: 6×9 픽셀 칸마다 다른 색(여러 상품이 늘어선 것처럼 보이는 규칙 무늬). 항목 하나로 많은 상품을 표현해 정렬 부담을 줄인다.
+					var gx: int = x / 6
+					var gy: int = y / 9
+					var palette: Array = [Color(0.95, 0.35, 0.3), Color(0.98, 0.8, 0.3), Color(0.3, 0.7, 0.95), Color(0.45, 0.85, 0.5), Color(0.95, 0.55, 0.8), Color(0.95, 0.95, 0.98), Color(0.62, 0.48, 0.92), Color(0.98, 0.6, 0.25)]
+					c = palette[(gx + gy * 3) % palette.size()]
+					if x % 6 == 0 or y % 9 == 0:
+						c = c * 0.7
 				"dirt":
 					# 다져진 흙길: 갈색 바탕에 작은 자갈·결 점(규칙 무늬라 이음매 없이 반복)
 					var dp: int = (x * 5 + y * 3) % 23

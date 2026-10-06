@@ -73,41 +73,31 @@ func _good_color(i: int) -> Color:
 	return GOODS_COLORS[i % GOODS_COLORS.size()]
 
 
-# 음료 냉장 진열장: 벽에 붙은 흰 몸통, 앞면에 층마다 알록달록한 음료, 위쪽 파란 조명
+# 상품 줄은 "goods" 질감(색 칸 무늬)을 입힌 얇은 상자 하나로 그린다. 상자를 잘게 쪼개 쌓으면 깊이 정렬이 수십 배 느려져
+# (측정: 항목 101개일 때 한 프레임 정렬 150~260ms) 장식 전체를 20개 안팎으로 둔다.
+func _goods(name: String, lo: Vector2, hi: Vector2, height: float, base: float) -> void:
+	keys.append(_put(name, lo, hi, height, Color(1, 1, 1), base, "goods"))
+
+
+# 음료 냉장 진열장: 벽에 붙은 흰 몸통, 앞면에 알록달록한 음료 줄, 위쪽 파란 조명
 func _cooler(lo: Vector2, hi: Vector2) -> void:
 	keys.append(_put("cb", lo, hi, 1.9, COOLER_BODY))
 	keys.append(_put("cl", Vector2(lo.x + 0.1, lo.y + 0.1), Vector2(hi.x - 0.1, hi.y - 0.1), 0.08, COOLER_LIGHT, 1.9))
-	var n: int = int((hi.x - lo.x) / 0.55)
-
-	for level in range(4):
-		for i in range(n):
-			var x0: float = lo.x + 0.15 + float(i) * 0.55
-			keys.append(_put("cg", Vector2(x0, hi.y), Vector2(x0 + 0.42, hi.y + 0.1), 0.26, _good_color(i * 3 + level), 0.2 + float(level) * 0.42))
+	_goods("cg", Vector2(lo.x + 0.1, hi.y), Vector2(hi.x - 0.1, hi.y + 0.1), 1.6, 0.2)
 
 
-# 곤돌라 진열대: 회색 몸통, 위·양면에 층마다 상품
-func _gondola(lo: Vector2, hi: Vector2, along_x: bool) -> void:
+# 곤돌라 진열대: 회색 몸통, 위·양면에 상품 줄
+func _gondola(lo: Vector2, hi: Vector2, _along_x: bool) -> void:
 	keys.append(_put("gb", lo, hi, 1.1, BODY))
-	var length: float = (hi.x - lo.x) if along_x else (hi.y - lo.y)
-	var n: int = int(length / 0.6)
-
-	for i in range(n):
-		var at: float = 0.12 + float(i) * 0.6
-
-		if along_x:
-			keys.append(_put("gt", Vector2(lo.x + at, lo.y + 0.08), Vector2(lo.x + at + 0.45, hi.y - 0.08), 0.3, _good_color(i + 1), 1.1))
-			keys.append(_put("gf", Vector2(lo.x + at, hi.y), Vector2(lo.x + at + 0.45, hi.y + 0.09), 0.24, _good_color(i), 0.2))
-			keys.append(_put("gf", Vector2(lo.x + at, hi.y), Vector2(lo.x + at + 0.45, hi.y + 0.09), 0.24, _good_color(i + 4), 0.62))
-			keys.append(_put("gr", Vector2(lo.x + at, lo.y - 0.09), Vector2(lo.x + at + 0.45, lo.y), 0.24, _good_color(i + 2), 0.2))
-			keys.append(_put("gr", Vector2(lo.x + at, lo.y - 0.09), Vector2(lo.x + at + 0.45, lo.y), 0.24, _good_color(i + 5), 0.62))
+	_goods("gt", Vector2(lo.x + 0.1, lo.y + 0.08), Vector2(hi.x - 0.1, hi.y - 0.08), 0.3, 1.1)
+	_goods("gf", Vector2(lo.x + 0.05, hi.y), Vector2(hi.x - 0.05, hi.y + 0.09), 0.85, 0.2)
+	_goods("gr", Vector2(lo.x + 0.05, lo.y - 0.09), Vector2(hi.x - 0.05, lo.y), 0.85, 0.2)
 
 
 # 입구 쪽 과자 선반
 func _rack(lo: Vector2, hi: Vector2) -> void:
 	keys.append(_put("rb", lo, hi, 1.2, BODY))
-
-	for i in range(3):
-		keys.append(_put("rg", Vector2(lo.x + 0.08 + float(i) * 0.2, lo.y + 0.1), Vector2(lo.x + 0.24 + float(i) * 0.2, hi.y - 0.1), 0.3, _good_color(i * 2), 1.2))
+	_goods("rg", Vector2(lo.x + 0.08, lo.y + 0.1), Vector2(hi.x - 0.08, hi.y - 0.1), 0.3, 1.2)
 
 
 # ---------------------------------------------------------------- 전이 뒤
