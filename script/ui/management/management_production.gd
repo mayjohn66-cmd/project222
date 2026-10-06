@@ -500,7 +500,7 @@ func get_facility_display_name(
 			return "음료 제조기"
 
 		"magic_oven":
-			return "마법 오븐"
+			return "화덕"
 
 		"cooking_table":
 			return "조리대"

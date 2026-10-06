@@ -10,7 +10,7 @@ production_door,생산실 문,facility,res://art/furniture/pixel_v1/production_d
 drink_machine,음료 제조기,production,res://art/furniture/pixel_v1/drink_machine.png,음료 상품을 생산하는 설비다.,production,,0,,0,
 plant_small,작은 화분,decoration,res://art/furniture/pixel_v1/plant_small.png,일반 손님의 방문 비중을 높입니다.,interior,customer_weight,0.20,plant,2,normal
 wall_poster,상품 포스터,decoration,res://art/furniture/pixel_v1/wall_poster.png,손님의 구매욕구를 높이는 포스터다.,interior,purchase_desire,0.03,poster,2,
-magic_oven,마법 오븐,production,res://art/furniture/pixel_v1/magic_oven.png,빵을 굽는 생산 설비다.,production,,0,,0,
+magic_oven,화덕,production,res://art/furniture/pixel_v1/magic_oven.png,빵을 굽는 생산 설비다.,production,,0,,0,
 night_lantern,심야의 등불,decoration,res://art/furniture/pixel_v1/night_lantern.png,매장을 은은하게 밝혀 평판이 오르고 손님이 더 자주 찾아옵니다.,interior,reputation,2.0,lantern,1,
 antique_cabinet,골동품 진열장,decoration,res://art/furniture/pixel_v1/antique_cabinet.png,수집가의 방문 비중을 높입니다.,interior,customer_weight,0.40,cabinet,1,collector
 old_world_map,낡은 세계지도,decoration,res://art/furniture/pixel_v1/old_world_map.png,여행자의 방문 비중을 높입니다.,interior,customer_weight,0.30,worldmap,1,traveler

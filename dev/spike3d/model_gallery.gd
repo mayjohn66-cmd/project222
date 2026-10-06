@@ -7,7 +7,7 @@ const PITCH_DEG: float = 30.0
 const YAW_DEG: float = 45.0
 const PAGES: Array = ["가구(계산대·선반·설비·장식·문)", "진열 상품", "마을 건물·소품", "캐릭터", "사람별 외형(손님·직원)"]
 const FURNITURE: Array = [
-	["register", "계산대", 2, 0.5], ["warehouse_rack", "창고 선반", 2, 1.0], ["magic_oven", "마법 오븐", 2, 1.0],
+	["register", "계산대", 2, 0.5], ["warehouse_rack", "창고 선반", 2, 1.0], ["magic_oven", "화덕", 2, 1.0],
 	["drink_machine", "음료 제조기", 1, 1.0], ["plant_small", "작은 화분", 1, 0.5], ["night_lantern", "심야의 등불", 1, 0.3],
 	["antique_cabinet", "골동품 진열장", 1, 1.0], ["fridge_unit", "냉장함", 1, 1.0], ["freezer_unit", "냉동함", 2, 1.0],
 ]
