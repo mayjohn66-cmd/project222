@@ -50,19 +50,19 @@ act4_a1_finish,service_text,,,표지를 보고 멈춰 선 사람이 있었어.|�
 act4_a1_intro,service_text,,,길을 헤매다가 가게 불빛을 놓치는 사람도 있더라.|길목에 가게가 있다는 걸 알려 줄 표지 하나 세워 보자.,
 act4_a1_road_sign_title,service_text,길목의 표지,길 어귀에 가게를 알릴 작은 표지를 함께 준비합니다.,,
 act4_a2_far_caravan_title,service_text,먼 곳에서 온 짐수레,쉬어 가는 상단에게 상품을 실제로 판매하고 후기를 듣습니다.,,
-act4_a2_finish,service_text,,,어제 챙긴 물건 덕에 거친 고개를 한결 편하게 걸었습니다.|이번 길을 지나고도 가끔 이곳에 들르겠습니다.,
-act4_a2_intro,service_text,,,길목의 표지를 따라오니 잠깐 머무를 곳이 있군요.|이 길을 지날 때 챙겨 갈 물건도 둘러보고 싶습니다.,
-act4_a2_sale,service_text,,,길에서 필요한 것들을 여기서 구할 수 있었네요.|동행들에게도 가게에서 들은 이야기를 전하겠습니다.,
+act4_a2_finish,service_text,,,어제 챙긴 물건 덕에 거친 고개를 한결 편하게 넘었어.|이번 길을 지나고도 가끔 이곳에 들를게.,
+act4_a2_intro,service_text,,,길목의 표지를 따라오니 잠깐 머무를 곳이 있네.|이 길을 지날 때 챙겨 갈 물건도 둘러보고 싶어.,
+act4_a2_sale,service_text,,,길에서 필요한 것들을 여기서 구할 수 있었어.|동행들에게도 가게에서 들은 이야기를 전할게.,
 act4_a3_delivery,service_text,,,짐을 놓을 집기부터 만들면 좋겠어.|쉼터 옆에 오래 쓸 자리를 마련해 두자.,
-act4_a3_finish,service_text,,,오늘은 길을 서두르지 않고 잠시 쉬어 가려 합니다.|짐을 내려놓으니 가게 불빛도 천천히 보이네요.,
-act4_a3_intro,service_text,,,짐을 잠깐 내려놓아도 될까요?|머무는 자리도 누군가의 손을 거쳐 조금씩 생기는군요.,
+act4_a3_finish,service_text,,,오늘은 길을 서두르지 않고 잠시 쉬어 가려고.|짐을 내려놓으니 가게 불빛도 천천히 보이네.,
+act4_a3_intro,service_text,,,짐을 잠깐 내려놓아도 될까?|머무는 자리도 누군가의 손을 거쳐 조금씩 생기는구나.,
 act4_a3_traveler_rest_title,service_text,길손의 잠자리,직접 만든 나무 집기와 재료를 쉼터에 보태 길손의 자리를 마련합니다.,,
 act4_a4_finish,service_text,,,"지도 위의 표시는 작지만, 여기에 사람이 머문다는 뜻이겠지.|가게로 오는 길도 조금씩 이어지고 있어.",
 act4_a4_intro,service_text,,,길을 묻는 사람들의 지도에도 이 자리가 적히기 시작했어.|먼 곳에서 맡기는 이야기도 이제 여기로 도착하겠네.,
 act4_a4_on_the_map_title,service_text,지도에 오르는 마을,먼 길의 지도에 가게가 있는 자리가 적히고 상단 주문이 이어집니다.,,
-act4_a5_delivery,service_text,,,야영지에서 나눌 꾸러미를 받아 갑니다.|이번에도 정성껏 챙겨 주셨군요.,
-act4_a5_finish,service_text,,,모두 잘 챙겨 먹었습니다. 맡긴 물건의 값도 치렀고요.|다음 여정을 나설 때 또 부탁드리겠습니다.,
-act4_a5_intro,service_text,,,다음 길에도 이곳에서 만든 먹거리를 챙겨 가고 싶습니다.|가게 사정에 맞춰 준비해 주시면 여정을 마치고 찾아뵙지요.,
+act4_a5_delivery,service_text,,,야영지에서 나눌 꾸러미를 받아 갈게.|이번에도 정성껏 챙겨 줬구나.,
+act4_a5_finish,service_text,,,모두 잘 챙겨 먹었어. 맡긴 물건의 값도 치렀고.|다음 여정을 나설 때 또 부탁할게.,
+act4_a5_intro,service_text,,,다음 길에도 이곳에서 만든 먹거리를 챙겨 가고 싶어.|가게 사정에 맞춰 준비해 주면 여정을 마치고 들를게.,
 act4_a5_regular_order_title,service_text,상단의 정기 주문,완제품을 맡기고 대금을 받으며 한 주 뒤 다시 주문을 준비합니다.,,
 act4_a6_crossroad_market_title,service_text,길이 모이는 날,계절 장터에서 실제로 판매한 뒤 이웃들의 이야기를 듣습니다.,,
 act4_a6_doyun,service_text,,,사람들이 쉬어 가니 고친 자리들이 쓰이는 게 보이네.|다음에 올 때도 편히 머물 수 있게 해 두자.,
@@ -95,7 +95,7 @@ act4_b5_doyun,service_text,,,"닮은 물건이 있다고 같은 사연이라고 
 act4_b5_finish,service_text,,,"수첩의 메모는 마침표 대신 열린 물음표로 갈무리할게.|어떤 까닭으로 닿았든, 함께 걸어온 온기는 수첩에 고스란히 남아.",
 act4_b5_naru,service_text,,,먼 길에서 온 가게 덕에 우리 길도 이어졌네.|풀리지 않은 수수께끼가 많아도 발걸음이 닿은 인연은 분명하지.,
 act4_b5_question_stays_title,service_text,물음으로 남은 자리,모아 온 단서를 차분히 되짚으며 해답 대신 이웃과의 오늘을 마음에 새깁니다.,,
-act4_rest_greeting,service_text,쉬어 가는 길손,쉼터를 마련한 뒤 저녁에 나누는 짧은 안부.,길에서 저 불빛을 보니 발걸음이 느려졌습니다.|잠시 쉬었다가 다음 길로 가려 합니다.,
+act4_rest_greeting,service_text,쉬어 가는 길손,쉼터를 마련한 뒤 저녁에 나누는 짧은 안부.,길에서 저 불빛을 보니 발걸음이 느려졌어.|잠시 쉬었다가 다음 길로 가 볼게.,
 arrival_peddler_return,service_text,다시 온 타블렌,,검과 갑옷은 손에 좀 익었어?|그 낯선 식품 생각이 나서 다시 들렀지.|오늘은 길에서 먹을 것도 부탁할까 해.,
 autumn_lamp_materials_finish,service_text,이웃의 저녁을 생각하며,코르빈에게 원재료를 건네고 마지막 문장까지 듣자.,저녁을 준비할 재료에 이웃의 손길이 보태졌네.|내가 모아 둔 석탄도 나눌게. 가게에서 쓰면 되겠지.,코르빈의 저녁 채비를 돕고 석탄을 나눠 받았다.
 autumn_lamp_materials_intro,service_text,저녁 채비에 보탤 재료,발광 해초·늪 갈대를 창고에 준비하고 코르빈에게 직접 전달하자.,이세르가 차를 곁들여 기록을 읽는다고 했지.|나도 저녁 채비에 쓸 발광 해초와 늪 갈대를 모으려고.|재료를 창고에 두고 나한테 돌아와 줘.,
@@ -284,7 +284,7 @@ sora_unwritten_day_intro,service_text,적지 않아도 남는 하루,이세르�
 sora_village_story,service_text,이세르의 마을 이야기,이웃들의 이야기를 듣고 마을에 남길 기억을 함께 고릅니다.,길손이 쉬어 간 자리에도 이야기가 남았네.|타블렌과 코르빈은 이곳을 어떻게 기억할까?|둘의 말을 듣고 와 줘. 우리 기억도 적어 보자.,이웃들의 말을 모아 마을 수첩에 기억을 남겼다.
 spring_flower_walk_finish,service_text,,,늘 지나던 곳에 새 잎이 있었지.|잠깐 몸을 낮춰야 보이는 것도 있더라.|나도 둘러보며 챙긴 약초를 나누고 싶었어.,봄 꽃자리를 살피고 코르빈과 새 잎 이야기를 나눴다.
 spring_flower_walk_intro,service_text,봄바람 따라 꽃자리로,,꽃자리 흙이 겨울 끝보다 부드러워졌어.|가까이 서면 새 잎이 보일지도 모르겠네.|꽃자리를 직접 살펴보고 나한테 들러 줘.,
-spring_flower_walk_observe,service_text,,,낮은 꽃자리 사이로 작은 잎이 올라옵니다.|바람이 지나가자 흙 냄새가 가까워집니다.|겨우내 밟던 길 옆에도 봄이 머무릅니다.,
+spring_flower_walk_observe,service_text,,,낮은 꽃자리 사이로 작은 잎이 올라온다.|바람이 지나가자 흙 냄새가 가까워진다.|겨우내 밟던 길 옆에도 봄이 머문다.,
 spring_flower_walk_wait,service_text,,,꽃자리는 서두르지 않아도 돼.|수첩에 표시한 자리에서 천천히 살펴봐.,
 spring_snack_ingredients_finish,service_text,함께 고른 봄 향,준비한 재료를 직접 건네고 끝까지 이야기를 듣자.,약초와 열매를 모으면서 어떤 향이 좋을지 생각했겠지.|내가 가진 밀도 나눌게. 다음 간식을 준비할 때 써 봐.,타블렌과 봄 간식에 보탤 재료를 나누고 밀을 받았다.
 spring_snack_ingredients_intro,service_text,봄 향을 보탤 재료,숲 약초와 야생 열매를 창고에 모아 타블렌에게 직접 전달하자.,약초 빵을 나눌 준비를 하니 재료에도 눈이 가네.|숲 약초와 야생 열매를 조금씩 모아 볼까 해.|창고에 담아 두고 나한테 다시 말 걸어 줘.,
@@ -398,7 +398,7 @@ trail_afterglow_sora,service_text,,,번진 글씨 옆에 그날 기억을 덧붙
 trail_rest_end,service_text,,,길목에 자리를 놓으니 걷는 속도가 달라지네.|이 벤치는 바쁜 날에도 여기 남아 있을 거야.|혼자 들러도 좋아. 지나가다 발을 쉬게 해.,이웃들은 길목에 잠깐 멈출 자리를 함께 마련했다.
 trail_rest_naru,service_text,,,보따리를 발치에 두니 어깨가 먼저 알아채네.|앞서 걷는 사람을 따라가지 않아도 괜찮아.|노점도 문도 잠깐 멀리서 바라보자.,
 trail_rest_open,service_text,,,가지와 돌은 잘 맞춰 뒀어. 흔들리지 않네.|일을 끝내고 그냥 지나치던 길에 놓고 싶었어.|오늘은 도구를 내려놓고 여기서 쉬자.,
-trail_rest_quiet,service_text,,,벤치에 머무르자 길가의 바람이 느껴집니다.|멀리서 보따리 끈을 매고 도구를 놓는 소리가 납니다.|가게로 돌아가기 전 잠깐 마을을 바라봅니다.,길목 벤치에서 마을 소리를 들으며 잠시 머물렀다.
+trail_rest_quiet,service_text,,,벤치에 머무르자 길가의 바람이 느껴진다.|멀리서 보따리 끈을 매고 도구를 놓는 소리가 난다.|가게로 돌아가기 전 잠깐 마을을 바라본다.,길목 벤치에서 마을 소리를 들으며 잠시 머물렀다.
 trail_rest_sora,service_text,,,펜을 쉬게 하니 마을 소리가 더 잘 들려.|누가 일을 마쳤는지 발걸음으로도 알겠어.|오늘은 적지 않고 이 자리에 있어도 좋겠네.,
 village_story_choose,service_text,,,같은 곳에 살아도 남는 장면은 다르네.|길목의 등불도 우물의 저녁도 새집의 첫날도.|너는 어느 이야기를 이 페이지에 남기고 싶어?,
 village_story_doyun,service_text,,,집에 돌아와 도구를 내려놓는 순간이 좋아.|일을 마치면 우물 쪽에서 사람 소리도 들려.|여기서는 해가 져도 혼자 남은 기분이 덜해.,
@@ -420,13 +420,13 @@ weather_summer_berries_bought,service_text,주머니에 담긴 열매,,열매는
 weather_summer_berries_finish,service_text,그늘에서 나눈 열매,열매를 산 주민이 숲 약초를 가져온다.,그날 산 열매를 그늘에 앉아 천천히 먹었어.|오늘은 내가 말려 쓰던 약초를 조금 가져왔지.|낯선 가게였는데 이제 밭일이 끝나면 여기가 떠올라.,열매를 샀던 주민이 약초를 나누러 들렀다.
 weather_summer_berries_intro,service_text,볕 아래 열매 한입,여름 볕에 지친 주민이 야생 열매를 사려 한다.,볕이 세서 밭둑을 걷다 자꾸 그늘을 찾게 돼.|숲에서 따 온 열매를 입에 넣으면 새콤해서 좋더라.|열매를 가게에 내놓으면 밭일을 마치고 사 갈게.,여름 볕 아래 먹을 열매를 내놓기로 했다.
 well_evening_doyun,service_text,,,오늘 일은 끝났어. 잠깐 앉아 있지.|이렇게 쉬는 것도 나쁘지 않군.,
-well_evening_end,service_text,,이웃들과 우물 곁에서 빵과 이야기를 나눴습니다.,잠시 일을 내려놓고 함께 쉬었습니다.,
-well_evening_intro,service_text,우물 곁 저녁 모임,,우물 곁 벤치에 이웃들이 모였습니다.,
+well_evening_end,service_text,,이웃들과 우물 곁에서 빵과 이야기를 나눴습니다.,잠시 일을 내려놓고 함께 쉬었다.,
+well_evening_intro,service_text,우물 곁 저녁 모임,,우물 곁 벤치에 이웃들이 모였다.,
 well_evening_naru,service_text,,,오늘은 보따리 대신 빵을 나눠 보자.|좋은 길 얘기는 배가 든든해야 더 잘 나오거든.,
 well_evening_sora,service_text,,,처음엔 길 끝에 불빛만 있었는데 이제 얼굴이 보여.|오늘 이야기도 이 우물 곁에 남겠네.,
 winter_lantern_round_finish,service_text,,,익숙한 길도 밤에 보면 다르게 느껴지지.|등불 곁에 발소리가 남아 있어서 좋더라.|겨울에 쓸 석탄을 조금 나눌게. 창고에 챙겨 둬.,겨울 저녁 등불을 살피고 코르빈과 돌아오는 길을 이야기했다.
 winter_lantern_round_intro,service_text,긴 밤의 등불 한 바퀴,,겨울에는 돌아오는 길이 금세 어두워져.|저녁에 길목 등불 곁에서 잠깐 멈춰 봐.|불빛을 살펴보고 와서 본 걸 들려줘.,
-winter_lantern_round_observe,service_text,,,길목 등불 아래로 익숙한 길이 드러납니다.|밝은 자리와 어두운 자리 사이에 발을 멈춥니다.|집으로 향하는 발소리가 불빛 곁을 지나갑니다.,
+winter_lantern_round_observe,service_text,,,길목 등불 아래로 익숙한 길이 드러난다.|밝은 자리와 어두운 자리 사이에서 발을 멈춘다.|집으로 향하는 발소리가 불빛 곁을 지나간다.,
 winter_lantern_round_wait,service_text,,,등불은 저녁 여섯 시부터 자정 전에 살펴봐.|길목에서 멈춘 뒤 돌아오면 이야기를 듣겠어.,
 winter_shared_meal_materials_finish,service_text,같이 준비한 식사 재료,타블렌에게 식사 재료를 전달하며 끝까지 대화하자.,혼자 챙길 때와는 다른 마음으로 재료를 모았네.|마른 가지를 나눌게. 네가 준비할 일에도 보태 봐.,타블렌의 이웃 식사 준비에 보태고 마른 가지를 받았다.
 winter_shared_meal_materials_intro,service_text,옆자리 몫을 생각하며,숲 버섯·밀을 창고에 모아 타블렌에게 직접 전달하자.,코르빈이 아침 몫을 챙기겠다던 말이 마음에 남았어.|나도 이웃의 끼니에 버섯하고 밀을 보태고 싶네.|창고에 모아 두면 내가 직접 받을게. 다시 찾아와 줘.,
