@@ -69,7 +69,7 @@ for rid, r in recs.items():
 out.append("\n## 원정 재료를 그냥 판매할 때 (재료 개당 가격 x 평균 획득량)\n")
 out.append("| 채집 노드 | 아이템 | 개당 | 평균 획득 | 노드당 가치 |\n|---|---|---|---|---|")
 for r in rd("data/expedition/expedition_loot.csv"):
-    if r["table_id"] in ("forest_gather", "mine_gather", "swamp_gather", "hidden_gather", "gather_iron", "gather_wheat", "gather_water") and r["item_id"] in price:
+    if r["table_id"] in ("forest_gather", "mine_gather", "swamp_gather", "meadow_gather", "river_gather", "ruins_gather", "gather_iron", "gather_wheat", "gather_water") and r["item_id"] in price:
         avg = (int(r["min_amount"]) + int(r["max_amount"])) / 2
         out.append(f"| {r['table_id']} | {items[r['item_id']]['name']} | {price[r['item_id']]} | {avg:.1f} | {price[r['item_id']]*avg:.0f} |")
 
