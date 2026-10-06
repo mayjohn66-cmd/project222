@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EmployeeStorySettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/employees/employee_story_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+profiles = Array[Dictionary]([
+{"employee_id":"worker_001","role":"아침을 준비하는 직원","summary":"먼저 가게 안을 둘러보고 물건 놓일 자리를 살피는 사람. 차분하게 일을 확인한다."},
+{"employee_id":"worker_002","role":"밤을 지키는 직원","summary":"조용한 시간에 일하는 것을 편하게 여기는 사람. 손님을 기다리는 가게에 관심을 보인다."},
+{"employee_id":"worker_003","role":"저녁을 함께하는 직원","summary":"바쁜 시간이 지나고 물건을 정리하는 일을 좋아하는 사람. 동료와 일을 나누려 한다."}
+])
+moments = Array[Dictionary]([
+{"id":"worker_001_intro","npc":"직원 1","employee_id":"worker_001","event":"intro","stage":"고용 전 직원의 일하는 태도를 알아본다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_001_hired","npc":"직원 1","employee_id":"worker_001","event":"hired","stage":"실제 고용이 성공한 뒤 처음 함께 일할 준비를 한다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_001_first_shift","npc":"직원 1","employee_id":"worker_001","event":"first_shift","stage":"직원이 실제 출근한 뒤 첫 근무의 소감을 듣는다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_001_trained","npc":"직원 1","employee_id":"worker_001","event":"trained","stage":"실제 유료 교육이 성공한 뒤 배운 것을 돌아본다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_001_dismissed","npc":"직원 1","employee_id":"worker_001","event":"dismissed","stage":"실제 해고가 성공한 뒤 작별한다. 급여 면제나 평판 변화는 없다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_001_rehired","npc":"직원 1","employee_id":"worker_001","event":"rehired","stage":"같은 직원을 실제로 재고용한 뒤 재회한다. 교육 기록은 유지된다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_002_intro","npc":"직원 2","employee_id":"worker_002","event":"intro","stage":"고용 전 직원의 일하는 태도를 알아본다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_002_hired","npc":"직원 2","employee_id":"worker_002","event":"hired","stage":"실제 고용이 성공한 뒤 처음 함께 일할 준비를 한다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_002_first_shift","npc":"직원 2","employee_id":"worker_002","event":"first_shift","stage":"직원이 실제 출근한 뒤 첫 근무의 소감을 듣는다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_002_trained","npc":"직원 2","employee_id":"worker_002","event":"trained","stage":"실제 유료 교육이 성공한 뒤 배운 것을 돌아본다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_002_dismissed","npc":"직원 2","employee_id":"worker_002","event":"dismissed","stage":"실제 해고가 성공한 뒤 작별한다. 급여 면제나 평판 변화는 없다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_002_rehired","npc":"직원 2","employee_id":"worker_002","event":"rehired","stage":"같은 직원을 실제로 재고용한 뒤 재회한다. 교육 기록은 유지된다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_003_intro","npc":"직원 3","employee_id":"worker_003","event":"intro","stage":"고용 전 직원의 일하는 태도를 알아본다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_003_hired","npc":"직원 3","employee_id":"worker_003","event":"hired","stage":"실제 고용이 성공한 뒤 처음 함께 일할 준비를 한다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_003_first_shift","npc":"직원 3","employee_id":"worker_003","event":"first_shift","stage":"직원이 실제 출근한 뒤 첫 근무의 소감을 듣는다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_003_trained","npc":"직원 3","employee_id":"worker_003","event":"trained","stage":"실제 유료 교육이 성공한 뒤 배운 것을 돌아본다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_003_dismissed","npc":"직원 3","employee_id":"worker_003","event":"dismissed","stage":"실제 해고가 성공한 뒤 작별한다. 급여 면제나 평판 변화는 없다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."},
+{"id":"worker_003_rehired","npc":"직원 3","employee_id":"worker_003","event":"rehired","stage":"같은 직원을 실제로 재고용한 뒤 재회한다. 교육 기록은 유지된다. 새 이름·전이 원인·직원 전용 능력·선물·급여 감면을 만들지 않는다. 수량·비용·시간은 관리 화면에서 확인한다."}
+])

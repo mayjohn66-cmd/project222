@@ -43,6 +43,7 @@ var employee_tab_buttons: Dictionary = {}
 )
 
 var pending_dismiss_worker: Node = null
+var employee_content: EmployeeContentController
 
 func _ready() -> void:
 	# 씬에 배치된 탭 버튼을 enum 값과 연결한다.
@@ -63,6 +64,8 @@ func _ready() -> void:
 
 	dismiss_dialog.confirmed.connect(_confirm_dismiss)
 	dismiss_dialog.canceled.connect(_cancel_dismiss)
+	employee_content = EmployeeContentController.new()
+	add_child(employee_content)
 
 	refresh_view()
 
@@ -96,6 +99,7 @@ func refresh_view() -> void:
 			message_label.text = (
 				"직원을 고용하거나 해고합니다."
 				+ "\n아침 6시 오픈 준비 중에 변경할 수 있습니다."
+				+ "\n이야기와 고용 조건을 살핀 뒤, 고용한 직원의 근무표를 지정하세요."
 			)
 
 		EmployeeTab.TRAINING:
@@ -220,6 +224,7 @@ func _create_employee_entry(worker: Node) -> void:
 	)
 	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	content.add_child(summary)
+	if employee_content != null and current_employee_tab in [EmployeeTab.EMPLOYMENT, EmployeeTab.INFO]: employee_content.add_card(content, worker)
 
 	match current_employee_tab:
 		EmployeeTab.SCHEDULE:
@@ -331,7 +336,6 @@ func _create_employee_info(
 
 	info_label.text = (
 		"[근무 정보]"
-		+ "\n직원 ID: " + employee_id
 		+ "\n근무표: " + schedule_text
 		+ "\n" + str(
 			worker.get_preferred_period_text()
@@ -479,6 +483,7 @@ func _hire_worker(worker: Node) -> void:
 	_refresh_money_displays()
 
 	if success:
+		employee_content.after_action(str(worker.get("employee_id")), "hired")
 		message_label.text = (
 			worker_name + "을 고용했습니다. 근무표를 지정해주세요."
 		)
@@ -500,12 +505,7 @@ func _request_dismiss(worker: Node) -> void:
 
 	pending_dismiss_worker = worker
 
-	dismiss_dialog.dialog_text = (
-		worker.get_employee_display_name()
-		+ "을 해고하시겠습니까?"
-		+ "\n근무표가 비워집니다."
-		+ "\n다시 고용할 때 고용 비용이 필요합니다."
-	)
+	dismiss_dialog.dialog_text = EmployeeStoryFlow.terms(worker, true)
 
 	dismiss_dialog.popup_centered()
 
@@ -528,6 +528,7 @@ func _confirm_dismiss() -> void:
 	refresh_view()
 
 	if success:
+		employee_content.after_action(str(worker.get("employee_id")), "dismissed")
 		message_label.text = worker_name + "을 해고했습니다."
 	else:
 		message_label.text = "현재는 해고할 수 없습니다."
@@ -622,7 +623,7 @@ func _create_training_controls(
 		]
 
 		if stat_id == "service":
-			label.text += "\n추천 행동은 구현 예정"
+			label.text += "\n응대 성공 시 손님에게 상품을 추천합니다."
 
 		if next_data.is_empty():
 			button.text = "최대 단계"
@@ -679,6 +680,7 @@ func _train_employee(
 	_refresh_money_displays()
 
 	if success:
+		employee_content.after_action(str(worker.get("employee_id")), "trained")
 		message_label.text = (
 			worker_name + "의 교육을 완료했습니다."
 		)
@@ -767,5 +769,8 @@ func _create_employment_controls(
 			or not GameState.can_afford(cost)
 		)
 		button.pressed.connect(
-			_hire_worker.bind(worker)
+			_request_hire.bind(worker)
 		)
+
+func _request_hire(worker: Node) -> void:
+	employee_content.request_hire(worker)
