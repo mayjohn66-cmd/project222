@@ -15,6 +15,7 @@ var physics_was_enabled: bool = true
 var elapsed: float = 0.0
 var pending: Dictionary = {}
 var barter_panel: ArrivalBarterPanel
+var cutscene: OpeningCutscene  # 새 게임 프롤로그 연출(새 그림 없이 카메라·빛·소리)
 
 func _ready() -> void:
 	add_child(FoodShelfLifeDirector.new())
@@ -30,6 +31,9 @@ func _ready() -> void:
 	barter_panel.closed.connect(_end_talk)
 	panel = TutorialGoalPanel.new()
 	add_child(panel)
+	cutscene = OpeningCutscene.new()
+	add_child(cutscene)
+	cutscene.setup(get_parent())
 	add_to_group("tutorial_director")
 	call_deferred("refresh")
 
@@ -134,6 +138,9 @@ func _begin_prologue(moment: Dictionary) -> void:
 	player.set_physics_process(false)
 	player.velocity = Vector2.ZERO
 	get_parent().set_meta("progressive_tutorial_dialogue",true)
+	# 프롤로그 연출: 독백1 앞에 도시 거리, 독백2 앞에 숲으로 바뀌는 장면(자동 검사에서는 꺼져 있다)
+	if str(moment["id"]) == "prologue_last_shift": await cutscene.play_intro()
+	elif str(moment["id"]) == "prologue_unfamiliar_window": await cutscene.play_transition()
 	dialogue.start("나",null,lines)
 
 func _begin_step(step: Dictionary) -> void:
@@ -174,6 +181,7 @@ func _end_talk() -> void:
 	pending.clear()
 	if result.has("prologue") and completed_read:
 		OpeningPrologueFlow.complete(str(result["prologue"]))
+		if str(result["prologue"]) == "prologue_unfamiliar_window": cutscene.play_outro()
 	elif not result.is_empty() and completed_read:
 		var step: Dictionary = result["step"]
 		if flow.current().get("id", "") == step.get("id", ""):
