@@ -84,7 +84,7 @@ func run() -> void:
 		if worker.is_hired or worker.visible or worker.on_duty: no_staff = false
 	check(no_staff, "no automatically hired staff at arrival")
 	check(director.flow.current()["id"] == "setup" and not is_instance_valid(director.npc), "arrival starts with player alone")
-	check(director.dialogue.open and director.dialogue.name_label.text == "나", "situation is player monologue")
+	check(director.dialogue.open and director.dialogue.name_label.text == PlayerProgress.display_player_name(), "situation is player monologue")
 	check(director.flow.goal_met(director.flow.current(), world), "shop's existing basic furniture is already placed")
 	check(GameState.get_furniture_count("door") == 0 and GameState.get_furniture_count("shelf_1x1") == 2, "placed furniture is consumed once from ownership")
 	var layout := GameState.get_store_layout().duplicate(true)

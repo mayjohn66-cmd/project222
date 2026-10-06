@@ -17,6 +17,12 @@ var portrait: TextureRect
 var name_label: Label
 var text_label: Label
 var hint_label: Label
+var hint_tween: Tween = null
+
+const HINT_HOLDER_HEIGHT := 30.0
+const HINT_BOB_PIXELS := 5.0      # ▼가 아래로 움찔하는 거리
+const HINT_BOB_SECONDS := 0.45
+const PLAYER_SPEAKER := "나"      # 이 이름으로 시작한 대화는 플레이어 닉네임으로 보여 준다
 
 
 func _ready() -> void:
@@ -75,12 +81,19 @@ func _ready() -> void:
 	text_label.add_theme_color_override("font_color", Color(0.96, 0.93, 0.85))
 	column.add_child(text_label)
 
+	# 컨테이너 안에서는 위치를 움직일 수 없어서, 고정 높이 칸 안에 표시를 넣고 그 칸 안에서 위아래로 움직인다.
+	var hint_holder := Control.new()
+	hint_holder.custom_minimum_size = Vector2(0, HINT_HOLDER_HEIGHT)
+	column.add_child(hint_holder)
+
 	hint_label = Label.new()
 	hint_label.text = "▼"
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	hint_label.add_theme_font_size_override("font_size", 18)
 	hint_label.add_theme_color_override("font_color", Color(0.85, 0.65, 0.3))
-	column.add_child(hint_label)
+	hint_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+	_show_hint(false)
+	hint_holder.add_child(hint_label)
 
 
 func start(
@@ -95,7 +108,7 @@ func start(
 
 	lines = new_lines
 	line_index = 0
-	name_label.text = npc_name
+	name_label.text = PlayerProgress.display_player_name() if npc_name == PLAYER_SPEAKER else npc_name
 	portrait.texture = portrait_texture
 	portrait.visible = portrait_texture != null
 	root.visible = true
@@ -106,7 +119,7 @@ func start(
 func _show_line() -> void:
 	text_label.text = lines[line_index]
 	text_label.visible_ratio = 0.0
-	hint_label.visible = false
+	_show_hint(false)
 
 	if typing_tween != null:
 		typing_tween.kill()
@@ -120,8 +133,25 @@ func _show_line() -> void:
 	)
 	typing_tween.tween_callback(
 		func() -> void:
-			hint_label.visible = true
+			_show_hint(true)
 	)
+
+
+# 대사가 다 나오면 ▼가 아래로 움찔거려 "다음으로 넘기라"고 알려 준다.
+func _show_hint(shown: bool) -> void:
+	if hint_tween != null:
+		hint_tween.kill()
+		hint_tween = null
+
+	hint_label.visible = shown
+	hint_label.position.y = 0.0
+
+	if not shown:
+		return
+
+	hint_tween = create_tween().set_loops()
+	hint_tween.tween_property(hint_label, "position:y", HINT_BOB_PIXELS, HINT_BOB_SECONDS).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	hint_tween.tween_property(hint_label, "position:y", 0.0, HINT_BOB_SECONDS).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 
 func _advance() -> void:
@@ -131,7 +161,7 @@ func _advance() -> void:
 			typing_tween.kill()
 
 		text_label.visible_ratio = 1.0
-		hint_label.visible = true
+		_show_hint(true)
 		return
 
 	line_index += 1
@@ -150,6 +180,7 @@ func close() -> void:
 	if typing_tween != null:
 		typing_tween.kill()
 
+	_show_hint(false)
 	finished.emit()
 
 
