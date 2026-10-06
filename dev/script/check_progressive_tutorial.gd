@@ -101,7 +101,7 @@ func run() -> void:
 	for i in range(OpeningCleanup.PILES.size()):
 		player.global_position = director._cell_world(OpeningCleanup.PILES[i]["stand"])
 		check(director.try_interact() and OpeningCleanup.done(i), "E cleans rubble pile %d" % i)
-	check(GameState.get_item_count("dry_branch") >= 4 and GameState.get_item_count("amber_sap") >= 1, "cleaning yields enough branches and sap for a wooden shelf")
+	check(GameState.get_item_count("dry_branch") >= 4 and GameState.get_item_count("amber_sap") >= 1, "cleaning yields enough branches and sap for a simple shelf")
 	var branches_after: int = GameState.get_item_count("dry_branch")
 	player.global_position = director._cell_world(OpeningCleanup.PILES[0]["stand"])
 	director.try_interact()
@@ -109,7 +109,7 @@ func run() -> void:
 	advance_self()
 	check(director.flow.current()["id"] == "craft_shelf" and director.flow.seen("craft_shelf"), "cleaning leads to crafting a shelf")
 	check(not director.flow.goal_met(director.flow.current(), world), "shelf is not crafted yet")
-	check(FurnitureObjectCatalog.craft("wood_shelf_1x1") and GameState.get_furniture_count("wood_shelf_1x1") == 1, "crafting uses the gathered materials")
+	check(FurnitureObjectCatalog.craft("shelf_1x1") and GameState.get_furniture_count("shelf_1x1") == 2, "crafting a simple shelf uses the gathered materials")
 	advance_self()
 	check(director.flow.current()["id"] == "setup" and director.flow.seen("setup"), "crafting leads to rebuilding the shop")
 	check(not director.flow.goal_met(director.flow.current(), world), "register and shelf are not placed yet")
@@ -118,7 +118,7 @@ func run() -> void:
 		{"build_id":"door", "anchor":Vector2i(0,4), "rotation_index":3},
 		{"build_id":"register", "anchor":Vector2i(4,3), "rotation_index":0},
 		{"build_id":"shelf_1x1", "anchor":Vector2i(2,2), "rotation_index":0},
-		{"build_id":"wood_shelf_1x1", "anchor":Vector2i(2,5), "rotation_index":0}]
+		{"build_id":"shelf_1x1", "anchor":Vector2i(2,5), "rotation_index":0}]
 	world.get_node("BuildManager")._restore_current_area_layout(rebuilt)
 	check(director.flow.goal_met(director.flow.current(), world), "placing register and shelf completes rebuilding")
 	advance_self()

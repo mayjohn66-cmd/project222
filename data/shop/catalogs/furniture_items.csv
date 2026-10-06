@@ -1,5 +1,5 @@
 id,name,category,icon_path,description,craft_category,effect_type,effect_value,effect_group,max_effective_count,effect_target
-shelf_1x1,1×1 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,작은 상품 진열대다.,store,,0,,0,
+shelf_1x1,간이 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,부서진 선반 조각을 가지와 수액으로 급히 묶어 세운 진열대다. 가게를 다시 세우는 첫 진열 자리다.,store,,0,,0,
 shelf_2x1,2×1 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,중형 상품 진열대다.,store,,0,,0,
 shelf_3x1,3×1 진열대,sales,res://art/furniture/pixel_v1/shelf_3x1.png,대형 상품 진열대다.,store,,0,,0,
 warehouse_rack,창고 선반,facility,res://art/furniture/pixel_v1/warehouse_rack.png,아이템을 보관하는 창고용 선반이다.,construction,,0,,0,
@@ -17,7 +17,7 @@ old_world_map,낡은 세계지도,decoration,res://art/furniture/pixel_v1/old_wo
 adventurer_banner,모험가 깃발,decoration,res://art/furniture/pixel_v1/adventurer_banner.png,모험가의 방문 비중을 높입니다.,interior,customer_weight,0.30,banner,1,adventurer
 wood_shelf_1x1,작은 나무 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,주운 가지를 수액으로 묶어 만든 소박한 진열대. 새 가게의 작은 수확을 올려 두기 좋다. 한 층만 사용할 수 있다.,store,,0,,0,
 wood_shelf_2x1,넓은 나무 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,가지와 나무틀을 넓게 엮은 진열대. 서로 다른 원정 재료를 나란히 놓을 수 있지만 위로 더 쌓을 수는 없다.,store,,0,,0,
-reinforced_shelf_2x1,보강 나무 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,익숙해진 나무틀에 철제 이음쇠를 더했다. 상품을 더 담고 같은 진열대를 하나 더 얹어 두 층으로 사용할 수 있다.,store,,0,,0,
+reinforced_shelf_2x1,철제 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,나무틀에 철제 이음쇠를 더해 튼튼하게 만들었다. 상품을 더 담고 같은 진열대를 하나 더 얹어 두 층으로 사용할 수 있다.,store,,0,,0,
 modern_shelf_1x1,소형 편의점 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,플레이어가 기억하는 흰 선반과 가격표 띠를 현지 재료로 재현한 철제 진열대. 좁은 자리에도 많은 상품을 진열할 수 있다.,store,,0,,0,
 modern_shelf_2x1,표준 편의점 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,흰 철판과 곧은 기둥을 가진 익숙한 편의점 진열대. 원재료에서 이웃과 만든 제품까지 네 종류를 한 층에 나누어 놓는다.,store,,0,,0,
 modern_shelf_3x1,대형 편의점 진열대,sales,res://art/furniture/pixel_v1/shelf_3x1.png,처음의 편의점을 떠올리며 길게 만든 철제 진열대. 넓은 설치 자리와 재료가 필요하지만 다양한 상품을 함께 전시할 수 있다.,store,,0,,0,

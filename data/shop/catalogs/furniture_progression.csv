@@ -2,12 +2,12 @@ id,family,stage,requires_stage,requires_story,unlock_hint,storage_capacity,stora
 wood_shelf_1x1,shelf,wood,,,,0,0,나무
 wood_shelf_2x1,shelf,wood,,,,0,0,나무
 reinforced_shelf_2x1,shelf,reinforced,wood,,나무 집기를 먼저 한 번 제작하세요.,0,0,나무와 철제 이음쇠
-modern_shelf_1x1,shelf,modern,reinforced,craft_first_shelf,보강 나무 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,0,0,철제와 현지 가공 재료
-modern_shelf_2x1,shelf,modern,reinforced,craft_first_shelf,보강 나무 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,0,0,철제와 현지 가공 재료
-modern_shelf_3x1,shelf,modern,reinforced,craft_first_shelf,보강 나무 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,0,0,철제와 현지 가공 재료
+modern_shelf_1x1,shelf,modern,reinforced,craft_first_shelf,철제 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,0,0,철제와 현지 가공 재료
+modern_shelf_2x1,shelf,modern,reinforced,craft_first_shelf,철제 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,0,0,철제와 현지 가공 재료
+modern_shelf_3x1,shelf,modern,reinforced,craft_first_shelf,철제 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,0,0,철제와 현지 가공 재료
 wood_register,register,wood,,,,0,0,나무
-modern_register,register,modern,reinforced,craft_first_shelf,보강 나무 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,0,0,철제와 현지 가공 재료
+modern_register,register,modern,reinforced,craft_first_shelf,철제 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,0,0,철제와 현지 가공 재료
 wood_warehouse_rack,warehouse_storage,wood,,,,24,6,나무
-steel_warehouse_rack,warehouse_storage,modern,reinforced,craft_first_shelf,보강 나무 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,80,16,철제와 현지 가공 재료
-fridge_unit,decoration,modern,reinforced,,보강 나무 집기를 먼저 한 번 제작하세요.,0,0,철제와 수정 냉각 장치
-freezer_unit,decoration,modern,reinforced,,보강 나무 집기를 먼저 한 번 제작하세요.,0,0,철제와 수정 냉각 장치
+steel_warehouse_rack,warehouse_storage,modern,reinforced,craft_first_shelf,철제 진열대 제작과 처음의 빵·생수 재현 이야기를 마치면 만들 수 있습니다.,80,16,철제와 현지 가공 재료
+fridge_unit,decoration,modern,reinforced,,철제 집기를 먼저 한 번 제작하세요.,0,0,철제와 수정 냉각 장치
+freezer_unit,decoration,modern,reinforced,,철제 집기를 먼저 한 번 제작하세요.,0,0,철제와 수정 냉각 장치

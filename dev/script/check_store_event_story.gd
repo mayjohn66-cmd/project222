@@ -120,13 +120,13 @@ func run() -> void:
 	notice._process(StoreEventStory.SETTINGS.remark_seconds)
 	check(not notice.card.visible, "remark expires without user input")
 	shelf.product_id = customer.wanted_item_id
-	shelf.stock = 4
+	shelf.stock = 3
 	customer.carried_item_id = customer.wanted_item_id
 	customer.carried_amount = shelf.take_items_by_id(customer.wanted_item_id, 2)
 	var money_before: int = GameState.money
 	var price: int = ItemData.get_item_price(customer.wanted_item_id)
 	customer.checkout_item()
-	check(player.successful_sales == 1 and player.daily_sold_items.get(customer.wanted_item_id, 0) == 2 and shelf.stock == 2, "real multi-unit sale consumes shelf and records sold units")
+	check(player.successful_sales == 1 and player.daily_sold_items.get(customer.wanted_item_id, 0) == 2 and shelf.stock == 1, "real multi-unit sale consumes shelf and records sold units")
 	check(GameState.money == money_before + price * 2 and notice.card.visible, "remark follows actual payment and correct money change")
 	check(not notice.caption.text.contains("{item}") and notice.caption.text.contains(ItemData.get_item_name(customer.wanted_item_id)), "purchase response names actually sold item")
 	customer.checkout_item()

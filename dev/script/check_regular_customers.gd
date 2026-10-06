@@ -109,7 +109,7 @@ func verify() -> void:
 		var key := ResidentRequestFlow.PREFIX + "visited:" + type_id
 		PlayerProgress.record_story_beat(key,1)
 		check(not RegularCustomerRecords.has(id,"first"),"historical type visit is not a purchase")
-		stock(item,4)
+		stock(item,3)
 		var aborted = buyer(type_id)
 		check(not RegularCustomerVisits.prepare(aborted,"peddler"),"resident introduction keeps spawn priority")
 		check(RegularCustomerVisits.prepare(aborted,type_id),"matching resident first introduction can also become regular")
@@ -117,7 +117,7 @@ func verify() -> void:
 		aborted.carried_item_id = aborted.choose_wanted_item()
 		aborted.carried_amount = shelf.take_items_by_id(item,1)
 		aborted.go_to_exit()
-		check(not RegularCustomerRecords.has(id,"first") and shelf.get_item_stock(item) == 4,"unpaid goods returned without story progress")
+		check(not RegularCustomerRecords.has(id,"first") and shelf.get_item_stock(item) == 3,"unpaid goods returned without story progress")
 		aborted.queue_free()
 		await frames()
 		var first = buyer(type_id)

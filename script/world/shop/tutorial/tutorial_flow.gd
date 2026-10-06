@@ -44,10 +44,8 @@ func goal_met(step: Dictionary, world: Node) -> bool:
 			return found.has("door") and found.has("register") and has_shelf
 		"cleanup": return OpeningCleanup.all_done()
 		"craft_shelf":
-			if PlayerProgress.story_beat_days.has(FurnitureObjectCatalog.PREFIX + "wood"): return true
-			for object in world.get_node("Objects").get_children():
-				if str(object.get_meta("build_id", "")).begins_with("wood_shelf") and not object.is_queued_for_deletion(): return true
-			return GameState.get_furniture_count("wood_shelf_1x1") > 0
+			# 간이 진열대(shelf_1x1)를 설계도에서 제작했는지(건진 진열대와 구별하려고 제작 기록을 본다)
+			return PlayerProgress.story_beat_days.has(FurnitureObjectCatalog.PREFIX + "shelf_1x1")
 		"stock":
 			for object in world.get_node("Objects").get_children():
 				if not object.is_in_group("shelf") or object.is_queued_for_deletion() or object.get_meta("is_build_preview", false): continue

@@ -1,7 +1,6 @@
 furniture_id,item_id,amount
-shelf_1x1,iron_ore,2
-shelf_2x1,iron_ore,3
-shelf_3x1,iron_ore,4
+shelf_1x1,dry_branch,3
+shelf_1x1,amber_sap,1
 register,iron_ore,5
 register,mine_crystal,1
 door,iron_ore,2

@@ -186,7 +186,7 @@ func run() -> void:
 	for product in overview:
 		match product["item_id"]:
 			"camp_bread":
-				check(product["stock"] == 4 and product["capacity"] == 10, "same product across shelves has one combined quantity")
+				check(product["stock"] == 4 and product["capacity"] == 8, "same product across shelves has one combined quantity")
 				check(product["days_left"] == 1 and product["discounted"] == 3 and RegisterProductOverview.price_text(product) == "70~100G", "mixed ages show true receipt price range and earliest expiry")
 			"water": check(product["stock"] == 2 and product["days_left"] == -1 and RegisterProductOverview.price_text(product) == "100G", "stable goods exclude preview and other-world shelves and keep normal price")
 			"forest_herb": check(product["stock"] == 0 and RegisterProductOverview.status_text(product).begins_with("품절"), "empty assigned slot remains visible as sold out")

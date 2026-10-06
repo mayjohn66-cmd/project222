@@ -79,6 +79,7 @@ static func craft(id: String) -> bool:
 	ActFourRecords.record_furniture(id,1)
 	var row := get_object(id)
 	if not row.is_empty(): PlayerProgress.record_story_beat(PREFIX + str(row["stage"]), GameState.total_day)
+	else: PlayerProgress.record_story_beat(PREFIX + id, GameState.total_day)  # 발전 단계에 없는 집기(간이 진열대 등)도 처음 제작을 기록한다
 	return true
 
 static func detail(id: String) -> String:
