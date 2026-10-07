@@ -215,6 +215,7 @@ func play_intro() -> void:
 	active = true
 	_skip = false
 	_phase = "intro"
+	_set_hud(false)
 	city.build()
 	dressing.build_modern()
 	_place_player(_spot("behind"))
@@ -551,6 +552,7 @@ func prepare_cleanup() -> void:
 	if not await _ensure():
 		return
 
+	_set_hud(true)  # 프롤로그가 끝나고 정리가 시작되면 시계·돈·메뉴가 나타난다
 	_set_alpha(_black, 0.0)  # 처음 만들 때는 도입을 위해 까맣게 시작하므로, 도입 없이 불러온 경우엔 걷어 낸다
 
 	if OpeningCleanup.all_done() or not dressing.debris.is_empty() or dressing.built():
@@ -571,6 +573,15 @@ func clear_pile(index: int) -> void:
 		dressing.clear_props(OpeningCleanup.piles()[index]["props"])
 
 
+# 프롤로그 동안은 시계·돈 표시(HUD)와 메뉴 단추를 숨긴다(화면에 연출만 보이게).
+func _set_hud(shown: bool) -> void:
+	for path in ["UI/HUD", "UI/GameMenu/MenuButton"]:
+		var node: CanvasItem = _world.get_node_or_null(path) if _world != null else null
+
+		if node != null:
+			node.visible = shown
+
+
 # 연출 도중 나가거나 장면이 바뀌어도 화면과 숲이 원래대로 남게 한다.
 func restore() -> void:
 	if not enabled or city == null:
@@ -579,6 +590,7 @@ func restore() -> void:
 	_skip = true
 	_free_visitor()
 	_stand_up()
+	_set_hud(true)
 
 	if city.built():
 		city.show_forest()
