@@ -1432,6 +1432,9 @@ func is_door_selected() -> bool:
 		BuildObjectData.BUILD_TYPE_DOOR
 	)
 
+const OPENING_DOOR_ROTATION: int = 3
+
+
 func can_place_wall_object(
 	cell: Vector2i
 ) -> bool:
@@ -1482,6 +1485,10 @@ func can_place_wall_object(
 	# 일반 고객용 문은 현재 부지의
 	# 도로를 바라보는 전면 벽에만 설치할 수 있다.
 	if is_door_selected():
+		# 새 게임 도입부(낯선 땅)의 문은 서쪽 벽(방향 3)에 서 있다: 그 벽에도 옮겨 놓을 수 있게 한다.
+		if rotation_index == OPENING_DOOR_ROTATION and PlayerProgress.story_beat_days.has(OpeningJourneyFlow.VERSION):
+			return true
+
 		return (
 			StoreLotData
 			.is_customer_door_rotation_allowed(
