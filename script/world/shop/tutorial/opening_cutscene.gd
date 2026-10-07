@@ -38,7 +38,7 @@ const DOZE_STEPS := [[0.55, 0.9, 0.8], [0.12, 0.5, 0.7], [0.8, 1.1, 0.5], [0.3, 
 # 대본: docs/스토리/프롤로그_시나리오_요청.md 로 받은 장면 시나리오(2026-10-07).
 const BEATS := {
 	"prologue_last_shift": {0: "seat", 1: "blink", 2: "doze"},
-	"prologue_unfamiliar_window": {0: "flinch", 1: "run_door", 2: "back_away"},
+	"prologue_unfamiliar_window": {0: "flinch", 1: "run_door", 2: "back_away", 3: "flinch"},
 	"prologue_food_dates": {0: "flinch", 1: "counter", 2: "floor_sit"},
 	"prologue_keep_the_light": {0: "stand", 1: "center", 2: "flinch"},
 }
