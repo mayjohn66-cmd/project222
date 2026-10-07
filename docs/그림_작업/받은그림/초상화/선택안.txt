@@ -1,0 +1,11 @@
+# 대화 초상화 선택안 (2026-10-07). 80x96 생성 → 160x192(2배). 형식: npc_id 파일 (이름)
+naru naru_2x.png 타블렌
+doyun doyun_2x.png 코르빈
+sora sora_2x.png 이세르
+neighbor_bread neighbor_bread_v3_2x.png 오렐
+child_berries child_berries_2x.png 피니아
+traveler_water traveler_water_2x.png 라슈
+gatherer_herbs gatherer_herbs_2x.png 엘미
+miner_ore miner_ore_2x.png 바르크
+healer_moss healer_moss_v2_2x.png 세이나
+delvin delvin_2x.png 델빈
