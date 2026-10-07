@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://dev/spike3d/world3d_art_shot.gd" id="1"]
+[node name="World3dArtShot" type="Node"]
+script = ExtResource("1")
