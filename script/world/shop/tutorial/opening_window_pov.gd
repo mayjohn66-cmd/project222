@@ -7,7 +7,7 @@ extends Node
 ##   `show_pov()` / `hide_pov()`
 ##   `set_drowsy(0~1)` 졸음: 고개가 숙여지고 시야가 흔들린다(눈꺼풀 막은 연출 쪽에서 따로 덮는다).
 
-const SHRINK := 4                    # 화면 크기를 몇 분의 1로 그려 키우나(픽셀 느낌)
+const SHRINK := 3                    # 화면 크기를 몇 분의 1로 그려 키우나(픽셀 느낌)
 const FOV := 68.0
 const EYE_HEIGHT := 1.12
 const EYE_Z := 1.0                  # 창벽에서 눈까지 거리(앉은 자리에서 창이 화면의 일부로 보이게)
@@ -238,7 +238,7 @@ func _build_street(root: Node3D) -> void:
 		_style_car(car, true, float(i))
 
 
-# 차 한 대를 새로 꾸미고 출발 위치에 둔다. first 면 화면 안에 흩어 놓는다.
+# 차 한 대를 새로 꾸미고 출발 위치에 둔다. first 면 화면 안에 흩어 놓는다. 종류: 승용차·소형차·승합차·트럭.
 func _style_car(car: Dictionary, first: bool, spread: float) -> void:
 	var node: Node3D = car["node"]
 
@@ -248,14 +248,80 @@ func _style_car(car: Dictionary, first: bool, spread: float) -> void:
 	var lane: int = int(car["lane"])
 	var dir: float = 1.0 if lane == 0 else -1.0
 	var color: Color = CAR_COLORS[_rng.randi() % CAR_COLORS.size()]
-	var length: float = _rng.randf_range(3.6, 4.6)
-	var truck: bool = _rng.randf() < 0.2
-	_box(node, Vector3(-length * 0.5, 0.25, -0.85), Vector3(length * 0.5, 0.85, 0.85), color)                                     # 차체
-	_box(node, Vector3(-length * 0.22, 0.85, -0.78), Vector3(length * (0.3 if truck else 0.18), 1.4 if not truck else 1.9, 0.78), color if truck else Color(0.7, 0.85, 0.95))
-	_box(node, Vector3(-length * 0.5, 0.0, -0.8), Vector3(-length * 0.34, 0.25, 0.8), Color(0.12, 0.12, 0.14))
-	_box(node, Vector3(length * 0.34, 0.0, -0.8), Vector3(length * 0.5, 0.25, 0.8), Color(0.12, 0.12, 0.14))
-	_box(node, Vector3(length * 0.5 * dir - 0.03, 0.45, -0.7), Vector3(length * 0.5 * dir + 0.03, 0.62, -0.45), Color(1.0, 0.95, 0.7), 1.0)   # 앞 전조등
-	_box(node, Vector3(length * 0.5 * dir - 0.03, 0.45, 0.45), Vector3(length * 0.5 * dir + 0.03, 0.62, 0.7), Color(1.0, 0.95, 0.7), 1.0)
+	var roll: float = _rng.randf()
+	var kind: String = "sedan" if roll < 0.4 else ("hatch" if roll < 0.65 else ("van" if roll < 0.85 else "truck"))
+	var length: float = {"sedan": 4.4, "hatch": 3.7, "van": 4.8, "truck": 5.6}[kind]
+	var glass := Color(0.22, 0.3, 0.4)
+	var dark := Color(0.1, 0.1, 0.12)
+	var f: float = dir  # 앞쪽(진행 방향) 부호
+
+	# x 는 앞쪽이 +인 차 기준 좌표(u)를 진행 방향 부호로 뒤집어 쓴다
+	var put := func(u0: float, u1: float, y0: float, y1: float, z0: float, z1: float, c: Color, emit: float = 0.0) -> void:
+		var xa: float = u0 * f
+		var xb: float = u1 * f
+		_box(node, Vector3(minf(xa, xb), y0, z0), Vector3(maxf(xa, xb), y1, z1), c, emit)
+
+	var h: float = length * 0.5
+	put.call(-h, h, 0.28, 0.82, -0.85, 0.85, color)                                  # 차체
+	put.call(-h, h, 0.2, 0.3, -0.8, 0.8, dark)                                       # 하부
+	put.call(h - 0.04, h + 0.06, 0.3, 0.5, -0.86, 0.86, dark)                        # 앞 범퍼
+	put.call(-h - 0.06, -h + 0.04, 0.3, 0.5, -0.86, 0.86, dark)                      # 뒷 범퍼
+	put.call(h - 0.02, h + 0.04, 0.56, 0.7, -0.75, -0.45, Color(1.0, 0.95, 0.75), 1.1)   # 전조등
+	put.call(h - 0.02, h + 0.04, 0.56, 0.7, 0.45, 0.75, Color(1.0, 0.95, 0.75), 1.1)
+	put.call(-h - 0.04, -h + 0.02, 0.56, 0.7, -0.78, -0.5, Color(0.95, 0.15, 0.12), 0.9)  # 후미등
+	put.call(-h - 0.04, -h + 0.02, 0.56, 0.7, 0.5, 0.78, Color(0.95, 0.15, 0.12), 0.9)
+
+	match kind:
+		"sedan":
+			put.call(h * 0.35, h, 0.82, 0.92, -0.82, 0.82, color)                  # 보닛
+			put.call(-h, -h * 0.55, 0.82, 0.94, -0.82, 0.82, color)                # 트렁크
+			put.call(-h * 0.5, h * 0.3, 0.82, 1.38, -0.76, 0.76, glass)            # 창(유리)
+			put.call(-h * 0.46, h * 0.26, 1.38, 1.46, -0.72, 0.72, color)          # 지붕
+			for u in [-h * 0.5, -h * 0.1, h * 0.3 - 0.06]:
+				put.call(u, u + 0.06, 0.82, 1.38, -0.78, 0.78, color)              # 기둥
+		"hatch":
+			put.call(h * 0.45, h, 0.82, 0.9, -0.82, 0.82, color)
+			put.call(-h * 0.85, h * 0.4, 0.82, 1.45, -0.76, 0.76, glass)
+			put.call(-h * 0.85, h * 0.36, 1.45, 1.53, -0.74, 0.74, color)
+			for u in [-h * 0.85, -h * 0.2, h * 0.4 - 0.06]:
+				put.call(u, u + 0.06, 0.82, 1.45, -0.78, 0.78, color)
+		"van":
+			put.call(-h, h * 0.55, 0.82, 1.75, -0.84, 0.84, color)                 # 짐칸
+			put.call(h * 0.5, h, 0.82, 1.1, -0.82, 0.82, color)                    # 앞 보닛
+			put.call(h * 0.3, h * 0.62, 1.1, 1.6, -0.78, 0.78, glass)              # 앞유리
+			put.call(-h * 0.7, h * 0.2, 1.1, 1.5, -0.855, 0.855, glass)            # 옆 창 띠
+		_:
+			put.call(-h, h * 0.25, 0.82, 2.35, -0.86, 0.86, Color(0.93, 0.93, 0.9))   # 하얀 짐칸
+			put.call(h * 0.3, h, 0.82, 1.55, -0.84, 0.84, color)                   # 운전석
+			put.call(h * 0.62, h * 0.97, 1.1, 1.5, -0.86, 0.86, glass)             # 옆 창
+			put.call(h * 0.28, h * 0.32, 0.82, 1.55, -0.85, 0.85, dark)
+
+	# 바퀴(옆에서 보이는 원통)와 휠
+	for u in [-h * 0.62, h * 0.62]:
+		for side in [-0.85, 0.85]:
+			var wheel := MeshInstance3D.new()
+			var cyl := CylinderMesh.new()
+			cyl.top_radius = 0.34
+			cyl.bottom_radius = 0.34
+			cyl.height = 0.26
+			cyl.radial_segments = 10
+			wheel.mesh = cyl
+			wheel.material_override = _mat(Color(0.08, 0.08, 0.09))
+			wheel.rotation_degrees = Vector3(90.0, 0.0, 0.0)
+			wheel.position = Vector3(u * f, 0.34, side)
+			node.add_child(wheel)
+			var hub := MeshInstance3D.new()
+			var hc := CylinderMesh.new()
+			hc.top_radius = 0.16
+			hc.bottom_radius = 0.16
+			hc.height = 0.28
+			hc.radial_segments = 8
+			hub.mesh = hc
+			hub.material_override = _mat(Color(0.7, 0.72, 0.75))
+			hub.rotation_degrees = Vector3(90.0, 0.0, 0.0)
+			hub.position = wheel.position
+			node.add_child(hub)
+
 	car["speed"] = dir * _rng.randf_range(3.2, 6.2)
 	node.position = Vector3(-dir * (WRAP_X + 3.0) + dir * (spread * 5.0 if first else 0.0), 0.0, float(LANE_Z[lane]))
 
