@@ -20,19 +20,22 @@ const SEED_VALUE := 5
 
 # 놓을 집기: model(OpeningStoreModels 종류), anchor(칸), size(칸 수), depth(두께, 칸), rot(0 이면 앞면이 +y 쪽 = 카메라 쪽)
 # 칸 좌표: 문 (0,4), 계산대 (4,3), 남은 진열대 (2,2). 매장은 (0..9, 0..7). 실제 편의점처럼 벽을 따라 유리문 음료 냉장고,
-# 가운데 줄 진열대, 한쪽 끝에 아이스크림 냉동 쇼케이스를 둔다.
+# 서쪽 벽에 벽 진열대, 가운데는 서로 나란한 두 줄 진열대, 앞쪽 오른편에 계산대, 한쪽 끝에 아이스크림 냉동 쇼케이스를 둔다.
 const PROPS := [
+	{"model": "cooler", "anchor": Vector2i(2, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
 	{"model": "cooler", "anchor": Vector2i(3, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
 	{"model": "cooler", "anchor": Vector2i(4, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
 	{"model": "cooler", "anchor": Vector2i(5, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
 	{"model": "cooler", "anchor": Vector2i(6, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
 	{"model": "cooler", "anchor": Vector2i(7, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
 	{"model": "chest", "anchor": Vector2i(8, 0), "size": Vector2i(2, 1), "depth": 0.9, "rot": 0},
-	{"model": "gondola", "anchor": Vector2i(1, 0), "size": Vector2i(2, 1), "depth": 0.5, "rot": 0},
-	{"model": "gondola", "anchor": Vector2i(7, 2), "size": Vector2i(3, 1), "depth": 0.55, "rot": 0},
-	{"model": "gondola", "anchor": Vector2i(6, 5), "size": Vector2i(3, 1), "depth": 0.55, "rot": 0},
-	{"model": "gondola", "anchor": Vector2i(3, 6), "size": Vector2i(2, 1), "depth": 0.5, "rot": 0},
-	{"model": "rack", "anchor": Vector2i(1, 6), "size": Vector2i(1, 1), "depth": 0.5, "rot": 1},
+	{"model": "gondola", "anchor": Vector2i(0, 1), "size": Vector2i(1, 2), "depth": 0.5, "rot": 1},
+	{"model": "gondola", "anchor": Vector2i(0, 6), "size": Vector2i(1, 2), "depth": 0.5, "rot": 1},
+	{"model": "gondola", "anchor": Vector2i(2, 2), "size": Vector2i(3, 1), "depth": 0.55, "rot": 0},
+	{"model": "gondola", "anchor": Vector2i(6, 2), "size": Vector2i(3, 1), "depth": 0.55, "rot": 0},
+	{"model": "gondola", "anchor": Vector2i(3, 4), "size": Vector2i(3, 1), "depth": 0.55, "rot": 0},
+	{"model": "gondola", "anchor": Vector2i(7, 4), "size": Vector2i(2, 1), "depth": 0.55, "rot": 0},
+	{"model": "counter", "anchor": Vector2i(6, 6), "size": Vector2i(3, 1), "depth": 0.8, "rot": 0},
 ]
 
 # 부서진 잔해를 놓지 않는 곳: 문 앞 통로. (칸 좌표 사각형)

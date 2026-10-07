@@ -10,12 +10,12 @@ const REACH_CELLS := 1.7           # 더미에서 이만큼(칸) 안이면 [E]�
 
 # stand: 서서 치우는 자리(칸 좌표). props: 이 더미가 치우는 연출 집기 번호(`OpeningStoreDressing.PROPS`). loot: 얻는 자재.
 const PILES := [
-	{"stand": Vector2(4.0, 1.4), "props": [0, 1, 2], "loot": {"iron_ore": 1}},
-	{"stand": Vector2(7.0, 1.4), "props": [3, 4], "loot": {"iron_ore": 1}},
-	{"stand": Vector2(8.6, 1.4), "props": [5], "loot": {"iron_ore": 1}},
-	{"stand": Vector2(1.6, 1.4), "props": [6], "loot": {}},
-	{"stand": Vector2(8.0, 3.2), "props": [7], "loot": {}},
-	{"stand": Vector2(7.5, 6.2), "props": [8, 9, 10], "loot": {"iron_ore": 1}},
+	{"stand": Vector2(4.0, 1.0), "props": [0, 1, 2], "loot": {"iron_ore": 1}},
+	{"stand": Vector2(7.0, 1.0), "props": [3, 4, 5, 6], "loot": {"iron_ore": 1}},
+	{"stand": Vector2(1.3, 1.6), "props": [7], "loot": {"iron_ore": 1}},
+	{"stand": Vector2(1.3, 6.2), "props": [8], "loot": {}},
+	{"stand": Vector2(5.0, 3.0), "props": [9, 10], "loot": {}},
+	{"stand": Vector2(6.0, 5.0), "props": [11, 12, 13], "loot": {"iron_ore": 1}},
 ]
 
 

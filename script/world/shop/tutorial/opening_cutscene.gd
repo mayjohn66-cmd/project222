@@ -35,7 +35,7 @@ const BEATS := {
 }
 # 가게 안 칸 좌표(문 (0,4), 계산대 (4,3), 남은 진열대 (2,2)). 소수 좌표는 칸 사이.
 const SPOTS := {
-	"behind": Vector2(4.6, 2.1),     # 계산대 안쪽(점원 자리)
+	"behind": Vector2(7.0, 5.2),     # 계산대 안쪽(점원 자리)
 	"door": Vector2(1.3, 4.0),
 	"counter": Vector2(4.0, 4.9),
 	"shelf": Vector2(2.0, 3.5),
@@ -43,16 +43,24 @@ const SPOTS := {
 }
 # 걸어갈 때 거치는 점(계산대 모서리를 돌아가도록). 없으면 곧장 간다.
 const ROUTES := {
-	"door": [Vector2(3.1, 2.1), Vector2(3.0, 4.0)],
+	"door": [Vector2(5.0, 5.2), Vector2(1.3, 5.0)],
 }
 # 연출용 손님: 문으로 들어와 진열대를 둘러보고 계산한 뒤 나간다. {to: 칸, wait: 멈추는 초, beep: 삑}
 const VISITOR_START := Vector2(-3.0, 5.4)
 const VISITOR_ROUTE := [
 	{"to": Vector2(-0.4, 4.0)},
-	{"to": Vector2(1.1, 4.0)},
-	{"to": Vector2(4.8, 5.4), "wait": 1.0},
-	{"to": Vector2(4.4, 4.3), "wait": 1.7, "beep": true},
-	{"to": Vector2(1.1, 4.0)},
+	{"to": Vector2(1.0, 4.0)},
+	{"to": Vector2(1.0, 3.0)},
+	{"to": Vector2(5.0, 3.0), "wait": 1.0},
+	{"to": Vector2(6.0, 3.0)},
+	{"to": Vector2(6.0, 5.0)},
+	{"to": Vector2(5.0, 5.0)},
+	{"to": Vector2(5.0, 7.0)},
+	{"to": Vector2(7.0, 7.0), "wait": 1.7, "beep": true},
+	{"to": Vector2(5.0, 7.0)},
+	{"to": Vector2(5.0, 5.0)},
+	{"to": Vector2(1.0, 5.0)},
+	{"to": Vector2(1.0, 4.0)},
 	{"to": Vector2(-0.4, 4.0)},
 	{"to": Vector2(-3.2, 2.4)},
 ]

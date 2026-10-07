@@ -6,6 +6,7 @@ extends RefCounted
 ##   gondola 중앙 진열대: 흰 몸통, 층마다 과자·상품 상자, 청록 가격표 띠, 윗간판
 ##   chest   아이스크림 냉동 쇼케이스: 낮고 긴 흰 상자, 유리 뚜껑 아래 알록달록한 상품
 ##   rack    입구 쪽 작은 상품 걸이
+##   counter 계산대: 청록 상판·흰 몸통, 단말기(POS)·영수증 프린터·바구니
 ## 길이(L)·깊이(D)는 칸 단위. 앞면(손님 쪽)은 v = D.
 
 const PALETTE := [
@@ -28,6 +29,8 @@ static func build(kind: String, lo: Vector2, hi: Vector2, rot: int, pp: Dictiona
 			return _gondola(f)
 		"chest":
 			return _chest(f)
+		"counter":
+			return _counter(f)
 		_:
 			return _rack(f)
 
@@ -143,3 +146,32 @@ static func _rack(f: FurnitureAssets.Frame) -> Dictionary:
 			f.box(_goods(f, r * 3 + j + 2), u0, u0 + (L - 0.2) / 3.0 - 0.03, 0.08, D - 0.08, y0 + 0.03, y0 + 0.3)
 
 	return f.finish(1.3)
+
+
+# 계산대: 흰 몸통에 청록 상판, 한쪽에 단말기와 영수증 프린터, 다른 쪽에 상품 바구니. 앞면(손님 쪽)이 v = D.
+static func _counter(f: FurnitureAssets.Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var body: Dictionary = f.flat(WHITE, "cn_body")
+	var teal: Dictionary = f.flat(TEAL, "cn_teal", 0.4)
+	var gray: Dictionary = f.flat(Color(0.74, 0.77, 0.82), "cn_gray")
+	var dark: Dictionary = f.flat(DARK, "cn_dark")
+	var screen: Dictionary = f.flat(Color(0.55, 0.85, 1.0), "cn_screen", 0.9)
+	var top: float = 0.92
+	f.box(dark, 0.0, L, 0.0, D, 0.0, 0.08)
+	f.box(body, 0.02, L - 0.02, 0.02, D - 0.02, 0.08, top)
+	f.box(teal, 0.0, L, 0.0, D, top, top + 0.07)              # 청록 상판
+	f.box(teal, 0.02, L - 0.02, D - 0.04, D, 0.2, 0.5)        # 앞면 청록 띠
+	# 단말기(POS): 받침 + 화면 + 영수증 프린터
+	f.box(gray, 0.25, 0.95, 0.18, 0.55, top + 0.07, top + 0.2)
+	f.box(dark, 0.4, 0.8, 0.22, 0.3, top + 0.2, top + 0.58)
+	f.box(screen, 0.43, 0.77, 0.3, 0.33, top + 0.24, top + 0.54)
+	f.box(gray, 1.05, 1.4, 0.2, 0.5, top + 0.07, top + 0.22)
+	# 상품 바구니와 담긴 상품
+	f.box(dark, 1.9, L - 0.2, 0.18, 0.62, top + 0.07, top + 0.2)
+
+	for j in range(4):
+		var u0: float = 1.95 + float(j) * 0.2
+		f.box(_goods(f, j * 3 + 1), u0, u0 + 0.16, 0.22, 0.58, top + 0.2, top + 0.34)
+
+	return f.finish(1.6)
