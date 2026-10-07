@@ -289,6 +289,9 @@ func _on_delete_save_confirmed() -> void:
 
 var nickname_dialog: ConfirmationDialog
 var nickname_edit: LineEdit
+var gender_preview: TextureRect
+var chosen_gender: String = PlayerProgress.DEFAULT_GENDER
+const GENDER_LABELS := {"male": "남성 점장", "female": "여성 점장"}
 
 
 func _build_nickname_dialog() -> void:
@@ -309,9 +312,46 @@ func _build_nickname_dialog() -> void:
 	nickname_edit.text_submitted.connect(func(_text: String) -> void:
 		if not nickname_dialog.get_ok_button().disabled: nickname_dialog.get_ok_button().pressed.emit())
 	box.add_child(nickname_edit)
+	box.add_child(_build_gender_picker())
 	nickname_dialog.add_child(box)
 	nickname_dialog.confirmed.connect(_start_new_game)
 	add_child(nickname_dialog)
+
+
+# 주인공 외형(남·여) 고르기. 고르면 아래 초상화가 바뀐다.
+func _build_gender_picker() -> Control:
+	var holder := VBoxContainer.new()
+	holder.add_theme_constant_override("separation", 6)
+	var buttons := HBoxContainer.new()
+	buttons.alignment = BoxContainer.ALIGNMENT_CENTER
+	buttons.add_theme_constant_override("separation", 8)
+	var group := ButtonGroup.new()
+
+	for gender in PlayerProgress.GENDERS:
+		var button := Button.new()
+		button.text = str(GENDER_LABELS.get(gender, gender))
+		button.toggle_mode = true
+		button.button_group = group
+		button.button_pressed = gender == chosen_gender
+		button.custom_minimum_size = Vector2(120, 0)
+		button.pressed.connect(_on_gender_chosen.bind(gender))
+		buttons.add_child(button)
+
+	holder.add_child(buttons)
+	gender_preview = TextureRect.new()
+	gender_preview.custom_minimum_size = Vector2(160, 192)
+	gender_preview.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
+	gender_preview.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+	gender_preview.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	gender_preview.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	holder.add_child(gender_preview)
+	_on_gender_chosen(chosen_gender)
+	return holder
+
+
+func _on_gender_chosen(gender: String) -> void:
+	chosen_gender = gender
+	gender_preview.texture = PlayerPortraits.find_for(gender)
 
 
 func _on_nickname_changed(_text: String) -> void:
@@ -334,6 +374,7 @@ func _start_new_game() -> void:
 
 	var chosen_name := PlayerProgress.clean_player_name(nickname_edit.text if nickname_edit != null else "")
 	GameState.initialize_new_game()
+	PlayerProgress.player_gender = chosen_gender
 	PlayerProgress.player_name = chosen_name  # 새 게임 초기화가 진행 기록을 비우므로 그 뒤에 넣는다
 
 	GameState.set_build_quick_slot(

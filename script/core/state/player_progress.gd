@@ -13,6 +13,10 @@ static var expeditions_completed: int = 0
 static var story_beat_days: Dictionary = {}
 # 새 게임을 시작하기 전에 짓는 플레이어(점장) 이름. 관리 창 표지 등에 표시한다. 비어 있으면 기본 호칭을 쓴다.
 static var player_name: String = ""
+# 주인공 외형(남녀 선택형). 초상화 선택에 쓴다.
+static var player_gender: String = DEFAULT_GENDER
+const GENDERS: Array[String] = ["male", "female"]
+const DEFAULT_GENDER := "male"
 const PLAYER_NAME_MAX := 8
 const DEFAULT_PLAYER_NAME := "점장"
 
@@ -24,6 +28,7 @@ static func reset() -> void:
 	expeditions_completed = 0
 	story_beat_days.clear()
 	player_name = ""
+	player_gender = DEFAULT_GENDER
 
 
 # =========================
@@ -158,7 +163,8 @@ static func to_save_data() -> Dictionary:
 		"starter_scroll_granted": starter_scroll_granted,
 		"expeditions_completed": expeditions_completed,
 		"story_beat_days": story_beat_days.duplicate(true),
-		"player_name": player_name
+		"player_name": player_name,
+		"player_gender": player_gender
 	}
 
 
@@ -194,6 +200,8 @@ static func load_save_data(
 	)
 
 	player_name = clean_player_name(str(data.get("player_name","")))
+	var saved_gender := str(data.get("player_gender", DEFAULT_GENDER))
+	player_gender = saved_gender if GENDERS.has(saved_gender) else DEFAULT_GENDER
 
 	var saved_beats: Variant = data.get(
 		"story_beat_days",

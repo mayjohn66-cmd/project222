@@ -1,0 +1,15 @@
+gender,expression,portrait_path
+male,neutral,res://art/portraits/player/player_male_neutral.png
+male,smile,res://art/portraits/player/player_male_smile.png
+male,flustered,res://art/portraits/player/player_male_flustered.png
+male,surprised,res://art/portraits/player/player_male_surprised.png
+male,worried,res://art/portraits/player/player_male_worried.png
+male,tired,res://art/portraits/player/player_male_tired.png
+male,determined,res://art/portraits/player/player_male_determined.png
+female,neutral,res://art/portraits/player/player_female_neutral.png
+female,smile,res://art/portraits/player/player_female_smile.png
+female,flustered,res://art/portraits/player/player_female_flustered.png
+female,surprised,res://art/portraits/player/player_female_surprised.png
+female,worried,res://art/portraits/player/player_female_worried.png
+female,tired,res://art/portraits/player/player_female_tired.png
+female,determined,res://art/portraits/player/player_female_determined.png

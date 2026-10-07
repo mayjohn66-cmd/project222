@@ -122,9 +122,10 @@ func start(
 
 	lines = new_lines
 	line_index = 0
-	_speaker = PlayerProgress.display_player_name() if npc_name == PLAYER_SPEAKER else npc_name
+	var is_player: bool = npc_name == PLAYER_SPEAKER
+	_speaker = PlayerProgress.display_player_name() if is_player else npc_name
 	name_label.text = _speaker
-	portrait_texture = NpcPortraits.resolve(_speaker, portrait_texture)
+	portrait_texture = PlayerPortraits.find() if is_player else NpcPortraits.resolve(_speaker, portrait_texture)
 	portrait.texture = portrait_texture
 	portrait.visible = portrait_texture != null
 	root.visible = true
