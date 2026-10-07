@@ -156,9 +156,20 @@ func _try_clean() -> bool:
 	if index < 0: return false
 	var loot := OpeningCleanup.clean(index)
 	cutscene.clear_pile(index)
-	_show_cleanup_note("잔해를 치웠다 · %s (%d/%d)" % [OpeningCleanup.loot_text(loot), OpeningCleanup.cleaned_count(), OpeningCleanup.piles().size()])
+	_show_cleanup_note("잔해를 치웠다 · %s (%d/%d)\n“%s”" % [OpeningCleanup.loot_text(loot), OpeningCleanup.cleaned_count(), OpeningCleanup.piles().size(), _cleanup_murmur(loot)])
 	call_deferred("refresh")
 	return true
+
+# 더미를 치울 때마다 나오는 혼잣말: 치운 차례대로(`cleanup_murmur`), 아무것도 못 건진 더미는 따로(`cleanup_murmur_empty`).
+func _cleanup_murmur(loot: Dictionary) -> String:
+	var order: int = maxi(OpeningCleanup.cleaned_count() - 1, 0)
+
+	if loot.is_empty():
+		var empty: Array[String] = RequestTextData.lines("tutorial_dialogue", "cleanup_murmur_empty")
+		return empty[order % empty.size()]
+
+	var lines: Array[String] = RequestTextData.lines("tutorial_dialogue", "cleanup_murmur")
+	return lines[mini(order, lines.size() - 1)]
 
 func _ensure_cleanup_ui() -> void:
 	if _cleanup_layer != null: return
@@ -186,7 +197,7 @@ func _show_cleanup_note(text: String) -> void:
 	_cleanup_note.text = text
 	_cleanup_note.visible = true
 	var size: Vector2 = get_viewport().get_visible_rect().size
-	_cleanup_note.size = Vector2(size.x, 30)
+	_cleanup_note.size = Vector2(size.x, 60)
 	_cleanup_note.position = Vector2(0, size.y * 0.3)
 	get_tree().create_timer(2.6).timeout.connect(func() -> void:
 		if is_instance_valid(_cleanup_note): _cleanup_note.visible = false)

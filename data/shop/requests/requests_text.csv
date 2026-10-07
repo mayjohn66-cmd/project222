@@ -437,6 +437,8 @@ workshop_afterglow_sora,service_text,찻잔 옆의 마지막 줄,이세르가 �
 grain,trade_offer,빵을 만들 밀,,,
 iron,trade_offer,제작에 쓸 철광석,,,
 mushroom,trade_offer,요리에 쓸 버섯,,,
+cleanup_murmur,tutorial_dialogue,,,뭐라도 있겠지. 하나라도 나와라.|…아직도 꿈 같네. 우선 손을 움직이자.|천천히 하자. 손끝이 아직 떨린다.|이렇게 박살 났는데 건질 게 있을까.|거의 다 치웠다. 숨이 좀 트이네.|다 치웠다. 이제 남은 걸 살펴보자.,
+cleanup_murmur_empty,tutorial_dialogue,,,여기는 아무것도 없네…|전부 부서져 버렸구나.,
 checkout_checkout,tutorial_dialogue,,,고른 건 여기 탁자에 올려 두면 될까?|여기서 기다릴게. 내 주머니의 동전으로도 살 수 있겠지?,
 checkout_finished,tutorial_dialogue,,,이 향은 처음 맡아 봐. 돌아가는 길에 먹어 봐야겠다.|동전 받아 줘. 다음에 또 들를게.,
 checkout_intro,tutorial_dialogue,,,문 너머로 먹을 것이 훤히 보이네.|나는 델빈이야. 여기 있는 걸 하나 사도 될까?,

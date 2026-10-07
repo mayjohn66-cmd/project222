@@ -151,7 +151,7 @@ static func load_sources() -> Dictionary:
 			result[kind][id] = TextData.enrich(data,kind)
 	for id in ["trade_panel", "smithy_panel", "trade_first_greeting", "arrival_peddler_return"]:
 		result[KIND_SERVICE_TEXT][id] = {"id":id}
-	for id in ["checkout_intro", "checkout_checkout", "checkout_finished", "raw_checkout_intro", "raw_checkout_checkout", "raw_checkout_finished"]:
+	for id in ["checkout_intro", "checkout_checkout", "checkout_finished", "raw_checkout_intro", "raw_checkout_checkout", "raw_checkout_finished", "cleanup_murmur", "cleanup_murmur_empty"]:
 		result[KIND_TUTORIAL_DIALOGUE][id] = {"id":id}
 
 	return result

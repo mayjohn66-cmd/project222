@@ -102,6 +102,7 @@ func run() -> void:
 	for i in range(OpeningCleanup.piles().size()):
 		player.global_position = director._cell_world(OpeningCleanup.piles()[i]["stand"])
 		check(director.try_interact() and OpeningCleanup.done(i), "E cleans rubble pile %d" % i)
+	check(not director._cleanup_murmur({}).is_empty() and not director._cleanup_murmur({"bread": 1}).is_empty() and director._cleanup_murmur({"bread": 1}) != director._cleanup_murmur({}), "each cleaned pile has a murmur line (empty piles get their own)")
 	check(GameState.get_item_count("bread") == 4 and GameState.get_item_count("water") == 8 and GameState.get_item_count("plywood") == 4 and GameState.get_item_count("iron_ore") == 0, "cleaning yields bread water and plywood only")
 	check(GameState.get_furniture_count("register") == 1 and GameState.get_furniture_count("shelf_1x1") == 2, "cleaning yields the register and two simple shelves")
 	var branches_after: int = GameState.get_item_count("plywood")
@@ -224,7 +225,7 @@ func run() -> void:
 	talk_merchant()
 	check(director.flow.current().is_empty(), "optional crafting ends on collected output")
 	var sources := Tools.load_sources()
-	check(sources[Tools.KIND_TUTORIAL_STEP].size() == 9 and sources[Tools.KIND_TUTORIAL_DIALOGUE].size() == 6, "all revised tutorial prose registered in story tool")
+	check(sources[Tools.KIND_TUTORIAL_STEP].size() == 9 and sources[Tools.KIND_TUTORIAL_DIALOGUE].size() == 8, "all revised tutorial prose registered in story tool")
 	check(sources[Tools.KIND_SERVICE_TEXT].has("arrival_peddler_return"), "merchant reunion registered for prose drafting")
 	var step_prompt := Writer.build_prompt(Tools.KIND_TUTORIAL_STEP, sources, sources)
 	check(step_prompt.contains("플레이어 독백") and step_prompt.contains("현대 기기는 플레이어만 이해"), "Gemini receives player monologue and modern-knowledge boundary")
