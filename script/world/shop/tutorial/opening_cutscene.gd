@@ -19,7 +19,8 @@ const SHAKE_SECONDS := 0.9
 const SHAKE_PIXELS := 14.0
 const NOD_PIXELS := 22.0           # 졸 때 고개가 숙여지는 만큼 카메라가 내려간다
 const BLACKOUT_HOLD := 1.2
-const WALK_SPEED := 2.4            # 주인공 걸음(칸/초)
+const WALK_SPEED := 2.4
+const RUN_SPEED := 4.6             # 놀라서 뛰는 걸음(칸/초)            # 주인공 걸음(칸/초)
 const VISITOR_SPEED := 2.8
 # 1인칭 창밖 장면(`OpeningWindowPov`): 주인공이 시식대에 앉은 뒤 눈높이 시점으로 창밖 거리를 보다가 졸아서 잠든다.
 const POV_FADE := 0.9              # 검은 화면으로 사라졌다 창밖 장면이 밝아지는 시간(초, 한 쪽)
@@ -32,7 +33,7 @@ const DOZE_STEPS := [[0.55, 0.9, 0.8], [0.12, 0.5, 0.7], [0.8, 1.1, 0.5], [0.3, 
 # 독백 중간의 움직임: 장면 id → {방금 읽은 줄 번호: 동작}. 걷는 곳 이름은 SPOTS, "doze" 는 졸기.
 const BEATS := {
 	"prologue_last_shift": {0: "seat", 1: "doze"},
-	"prologue_unfamiliar_window": {0: "shelf", 1: "counter"},
+	"prologue_unfamiliar_window": {0: "run_door", 1: "run_shelf", 2: "counter"},   # run_ 은 놀라서 뛰어가는 걸음
 	"prologue_food_dates": {0: "counter"},
 	"prologue_keep_the_light": {0: "center"},
 }
@@ -371,14 +372,20 @@ func beat(moment_id: String, read_index: int) -> void:
 	if player == null or view == null:
 		return
 
+	var speed: float = WALK_SPEED
+
+	if action.begins_with("run_"):
+		action = action.trim_prefix("run_")
+		speed = RUN_SPEED
+
 	var target: Vector2 = _spot(action)
 	var from_cell := Vector2i(roundi(view.world_to_cell(player.global_position).x), roundi(view.world_to_cell(player.global_position).y))
 
 	# 집기를 피해 길을 따라 걷고, 마지막은 정확한 자리까지
 	for point in OpeningStorePaths.route(from_cell, Vector2i(roundi(target.x), roundi(target.y)), not dressing.built()).slice(1):
-		await _move_node(player, Vector2(point), WALK_SPEED)
+		await _move_node(player, Vector2(point), speed)
 
-	await _move_node(player, target, WALK_SPEED)
+	await _move_node(player, target, speed)
 	await get_tree().process_frame
 	await get_tree().process_frame
 
