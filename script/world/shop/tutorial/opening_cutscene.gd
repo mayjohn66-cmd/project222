@@ -21,6 +21,11 @@ const NOD_PIXELS := 22.0           # 졸 때 고개가 숙여지는 만큼 카�
 const BLACKOUT_HOLD := 1.2
 const WALK_SPEED := 2.4            # 주인공 걸음(칸/초)
 const VISITOR_SPEED := 2.8
+# 도입의 시점 연출(1인칭 대신): 점원 눈높이처럼 화면을 가까이 당겨 손님을 보다가 천천히 물러난다.
+const POV_ZOOM := 1.7              # 기본 배율의 몇 배로 당겨 시작하나
+const POV_HOLD := 2.6              # 당긴 채 손님을 보는 시간(초)
+const POV_PULL := 2.4              # 물러나는 시간(초)
+const POV_VIGNETTE := 0.55         # 시작할 때 화면 가장자리가 어두운 정도(0~1)
 const LAYER := 20                  # 대사창(30) 아래: 검은 화면 위에서도 대사가 보인다
 
 # 졸음: [눈꺼풀이 닫힌 정도(0~1), 걸리는 시간(초), 도로 소리 크기(0~1)] 를 차례로. 마지막에 완전히 감긴다.
@@ -53,6 +58,7 @@ var _black: ColorRect
 var _lid_top: ColorRect
 var _lid_bottom: ColorRect
 var _flash: ColorRect
+var _vignette: TextureRect
 var _hint: Label
 var _base_zoom: float = 1.0
 var _base_offset: Vector2 = Vector2.ZERO
@@ -61,6 +67,8 @@ var _world: Node
 var _phase: String = ""
 var _visitor: Node2D
 var _shaking: bool = false
+var _pov_offset: Vector2 = Vector2.ZERO
+var _pov_done: bool = true
 
 
 func setup(world: Node) -> void:
@@ -110,6 +118,24 @@ func _ensure() -> bool:
 	_lid_bottom = _rect(Color(0, 0, 0, 1.0))
 	_set_lids(0.0)
 	_flash = _rect(Color(1.0, 0.98, 0.9, 0))
+	var gradient := Gradient.new()
+	gradient.set_color(0, Color(0, 0, 0, 0))
+	gradient.set_color(1, Color(0, 0, 0, 1))
+	gradient.set_offset(0, 0.45)
+	var texture := GradientTexture2D.new()
+	texture.gradient = gradient
+	texture.fill = GradientTexture2D.FILL_RADIAL
+	texture.fill_from = Vector2(0.5, 0.5)
+	texture.fill_to = Vector2(1.0, 0.5)
+	texture.width = 256
+	texture.height = 256
+	_vignette = TextureRect.new()
+	_vignette.texture = texture
+	_vignette.stretch_mode = TextureRect.STRETCH_SCALE
+	_vignette.set_anchors_preset(Control.PRESET_FULL_RECT)
+	_vignette.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_vignette.modulate.a = 0.0
+	_layer.add_child(_vignette)
 	_hint = Label.new()
 	_hint.text = "E · Esc  건너뛰기"
 	var label_settings := LabelSettings.new()
@@ -205,12 +231,46 @@ func play_intro() -> void:
 	_set_alpha(_black, 1.0)
 	noise.play("city")
 	await _wait(0.4)
+	_pov_start()
 	await _tween(FADE_IN, func(f: float) -> void: _set_alpha(_black, 1.0 - f))
+	_pov_pull_back()
 	await _wait(BEFORE_VISITOR)
 	await _visitor_scene()
 	await _wait(AFTER_VISITOR)
+
+	while not _pov_done:
+		await get_tree().process_frame
+
 	active = false
 	_skip = false
+
+
+# 점원 시점: 카메라를 계산대와 문 사이로 가까이 당기고 가장자리를 어둡게 한다.
+func _pov_start() -> void:
+	var player: Node2D = _world.get_node_or_null("Actors/Player") if _world != null else null
+
+	if camera2d == null or player == null or view == null:
+		return
+
+	var door := Vector2(OpeningStorePaths.DOOR_CELL)
+	var mid: Vector2 = (view.world_to_cell(player.global_position) + door) * 0.5
+	_pov_offset = view.cell_to_world(mid) - player.global_position
+	camera2d.zoom = Vector2.ONE * _base_zoom * POV_ZOOM
+	camera2d.offset = _base_offset + _pov_offset
+	_vignette.modulate.a = POV_VIGNETTE
+
+
+# 잠시 보여 준 뒤 평소 시점으로 물러난다(기다리지 않는다). 건너뛰면 곧바로 평소로.
+func _pov_pull_back() -> void:
+	_pov_done = false
+	await _wait(POV_HOLD)
+	await _tween(POV_PULL, func(f: float) -> void:
+		if camera2d == null:
+			return
+		camera2d.zoom = Vector2.ONE * lerpf(_base_zoom * POV_ZOOM, _base_zoom, f)
+		camera2d.offset = _base_offset + _pov_offset * (1.0 - f)
+		_vignette.modulate.a = POV_VIGNETTE * (1.0 - f))
+	_pov_done = true
 
 
 # 손님이 들어와 둘러보고 계산한 뒤 나간다.
@@ -502,6 +562,9 @@ func restore() -> void:
 	if camera2d != null:
 		camera2d.zoom = Vector2(_base_zoom, _base_zoom)
 		camera2d.offset = _base_offset
+
+	if _vignette != null:
+		_vignette.modulate.a = 0.0
 
 	for rect in [_black, _flash]:
 		if rect != null:
