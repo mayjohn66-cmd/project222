@@ -98,12 +98,12 @@ func run() -> void:
 	# 잔해 더미를 하나씩 [E]로 치운다: 서 있는 자리에서만, 한 번씩만 자재를 얻는다.
 	player.global_position = director._cell_world(Vector2(4.0, 7.0))
 	check(not director.try_interact() and OpeningCleanup.cleaned_count() == 0, "too far from rubble cleans nothing")
-	for i in range(OpeningCleanup.PILES.size()):
-		player.global_position = director._cell_world(OpeningCleanup.PILES[i]["stand"])
+	for i in range(OpeningCleanup.piles().size()):
+		player.global_position = director._cell_world(OpeningCleanup.piles()[i]["stand"])
 		check(director.try_interact() and OpeningCleanup.done(i), "E cleans rubble pile %d" % i)
 	check(GameState.get_item_count("iron_ore") == 4 and GameState.get_item_count("dry_branch") == 0, "cleaning yields iron ore for two simple shelves and nothing else")
 	var branches_after: int = GameState.get_item_count("iron_ore")
-	player.global_position = director._cell_world(OpeningCleanup.PILES[0]["stand"])
+	player.global_position = director._cell_world(OpeningCleanup.piles()[0]["stand"])
 	director.try_interact()
 	check(GameState.get_item_count("iron_ore") == branches_after, "a cleaned pile gives nothing again")
 	advance_self()

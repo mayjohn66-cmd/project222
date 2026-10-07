@@ -20,6 +20,7 @@ var _cleanup_layer: CanvasLayer
 var _cleanup_hint: Label       # 가장 가까운 잔해 더미 위 "[E] 잔해 치우기"
 var _cleanup_note: Label       # 치운 뒤 얻은 자재 알림
 var _cleanup_prepared: bool = false
+var layout_editor: OpeningLayoutEditor
 
 func _ready() -> void:
 	add_child(FoodShelfLifeDirector.new())
@@ -38,6 +39,12 @@ func _ready() -> void:
 	cutscene = OpeningCutscene.new()
 	add_child(cutscene)
 	cutscene.setup(get_parent())
+	if _is_primary():
+		# 개발자 모드(F10): 프롤로그 가게 안 집기 배치 편집기
+		layout_editor = OpeningLayoutEditor.new()
+		add_child(layout_editor)
+		layout_editor.setup(get_parent(), cutscene)
+		layout_editor.closed.connect(func() -> void: _cleanup_prepared = false)
 	add_to_group("tutorial_director")
 	call_deferred("refresh")
 
@@ -149,7 +156,7 @@ func _try_clean() -> bool:
 	if index < 0: return false
 	var loot := OpeningCleanup.clean(index)
 	cutscene.clear_pile(index)
-	_show_cleanup_note("잔해를 치웠다 · %s (%d/%d)" % [OpeningCleanup.loot_text(loot), OpeningCleanup.cleaned_count(), OpeningCleanup.PILES.size()])
+	_show_cleanup_note("잔해를 치웠다 · %s (%d/%d)" % [OpeningCleanup.loot_text(loot), OpeningCleanup.cleaned_count(), OpeningCleanup.piles().size()])
 	call_deferred("refresh")
 	return true
 
@@ -196,7 +203,7 @@ func _update_cleanup_hint() -> void:
 	if index < 0 or get_tree().paused:
 		_cleanup_hint.visible = false
 		return
-	var world_pos: Vector2 = _cell_world(OpeningCleanup.PILES[index]["stand"])
+	var world_pos: Vector2 = _cell_world(OpeningCleanup.piles()[index]["stand"])
 	var screen: Vector2 = get_viewport().get_canvas_transform() * world_pos
 	_cleanup_hint.visible = true
 	_cleanup_hint.position = screen + Vector2(-60, -70 + sin(Time.get_ticks_msec() / 220.0) * 5.0)

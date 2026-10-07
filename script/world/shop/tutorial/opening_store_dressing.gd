@@ -18,25 +18,7 @@ const GOODS_COLORS := [
 const DEBRIS_PER_SPOT := 9
 const SEED_VALUE := 5
 
-# 놓을 집기: model(OpeningStoreModels 종류), anchor(칸), size(칸 수), depth(두께, 칸), rot(0 이면 앞면이 +y 쪽 = 카메라 쪽)
-# 칸 좌표: 문 (0,4), 계산대 (4,3), 남은 진열대 (2,2). 매장은 (0..9, 0..7). 실제 편의점처럼 벽을 따라 유리문 음료 냉장고,
-# 서쪽 벽에 벽 진열대, 가운데는 서로 나란한 두 줄 진열대, 앞쪽 오른편에 계산대, 한쪽 끝에 아이스크림 냉동 쇼케이스를 둔다.
-const PROPS := [
-	{"model": "cooler", "anchor": Vector2i(2, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
-	{"model": "cooler", "anchor": Vector2i(3, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
-	{"model": "cooler", "anchor": Vector2i(4, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
-	{"model": "cooler", "anchor": Vector2i(5, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
-	{"model": "cooler", "anchor": Vector2i(6, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
-	{"model": "cooler", "anchor": Vector2i(7, 0), "size": Vector2i(1, 1), "depth": 0.85, "rot": 0},
-	{"model": "chest", "anchor": Vector2i(8, 0), "size": Vector2i(2, 1), "depth": 0.9, "rot": 0},
-	{"model": "gondola", "anchor": Vector2i(0, 1), "size": Vector2i(1, 2), "depth": 0.5, "rot": 1},
-	{"model": "gondola", "anchor": Vector2i(0, 6), "size": Vector2i(1, 2), "depth": 0.5, "rot": 1},
-	{"model": "gondola", "anchor": Vector2i(2, 2), "size": Vector2i(3, 1), "depth": 0.55, "rot": 0},
-	{"model": "gondola", "anchor": Vector2i(6, 2), "size": Vector2i(3, 1), "depth": 0.55, "rot": 0},
-	{"model": "gondola", "anchor": Vector2i(3, 4), "size": Vector2i(3, 1), "depth": 0.55, "rot": 0},
-	{"model": "gondola", "anchor": Vector2i(7, 4), "size": Vector2i(2, 1), "depth": 0.55, "rot": 0},
-	{"model": "counter", "anchor": Vector2i(6, 6), "size": Vector2i(3, 1), "depth": 0.8, "rot": 0},
-]
+# 놓을 집기는 `OpeningStoreLayout.props()`(칸 좌표·종류·회전). 개발자 모드(F10)에서 배치해 저장한다.
 
 # 부서진 잔해를 놓지 않는 곳: 문 앞 통로. (칸 좌표 사각형)
 const KEEP_CLEAR := [Rect2(-0.5, 3.3, 2.6, 1.5)]
@@ -44,7 +26,7 @@ const KEEP_CLEAR := [Rect2(-0.5, 3.3, 2.6, 1.5)]
 var view: Node                      # StoreView3D
 var keys: Array[String] = []
 var debris: Array[String] = []
-var debris_by_prop: Dictionary = {}    # 집기 번호(PROPS) → 그 자리 잔해 항목 이름 목록
+var debris_by_prop: Dictionary = {}    # 집기 번호(배치 목록 순서) → 그 자리 잔해 항목 이름 목록
 var _current_prop: int = -1
 var _count: int = 0
 
@@ -63,33 +45,12 @@ func build_modern() -> void:
 	if built() or view == null:
 		return
 
-	for prop in PROPS:
+	for prop in OpeningStoreLayout.props():
 		_place(prop)
 
 
-# 집기가 차지하는 칸 사각형(가구 3D 와 같은 규칙: 칸 중심이 정수, 두께(depth)는 회전에 따라 한쪽 변에 붙는다).
-func _rect_of(prop: Dictionary) -> Rect2:
-	var anchor: Vector2i = prop["anchor"]
-	var size: Vector2i = prop["size"]
-	var lo := Vector2(float(anchor.x) - 0.5, float(anchor.y) - 0.5)
-	var hi := Vector2(float(anchor.x + size.x) - 0.5, float(anchor.y + size.y) - 0.5)
-	var depth: float = float(prop["depth"])
-
-	match posmod(int(prop["rot"]), 4):
-		0:
-			hi.y = lo.y + depth
-		1:
-			hi.x = lo.x + depth
-		2:
-			lo.y = hi.y - depth
-		3:
-			lo.x = hi.x - depth
-
-	return Rect2(lo, hi - lo)
-
-
 func _place(prop: Dictionary) -> void:
-	var rect: Rect2 = _rect_of(prop)
+	var rect: Rect2 = OpeningStoreLayout.rect_of(prop)
 	var pp: Dictionary = {"ts": view.texture_size, "block_px": view.block_px, "unit_px_z": (view.tile_low / sqrt(2.0)) * cos(deg_to_rad(view.PITCH_DEG))}
 	var built_model: Dictionary = OpeningStoreModels.build(str(prop["model"]), rect.position, rect.end, int(prop["rot"]), pp)
 	_count += 1
@@ -116,11 +77,13 @@ func smash(skip_props: Array = []) -> void:
 	var rng := RandomNumberGenerator.new()
 	rng.seed = SEED_VALUE
 
-	for prop_index in range(PROPS.size()):
-		var prop: Dictionary = PROPS[prop_index]
+	var layout: Array = OpeningStoreLayout.props()
+
+	for prop_index in range(layout.size()):
+		var prop: Dictionary = layout[prop_index]
 		_current_prop = prop_index
 
-		var rect: Rect2 = _rect_of(prop)
+		var rect: Rect2 = OpeningStoreLayout.rect_of(prop)
 		var lo: Vector2 = rect.position - Vector2(0.35, 0.35)
 		var hi: Vector2 = rect.end + Vector2(0.35, 0.35)
 		var long_side: float = maxf(rect.size.x, rect.size.y)
@@ -185,6 +148,12 @@ func clear_debris_step(count: int) -> int:
 		view._remove_item(debris.pop_back())
 
 	return debris.size()
+
+
+# 배치가 바뀌었을 때(개발자 모드) 현대 집기를 처음부터 다시 그린다.
+func rebuild() -> void:
+	clear_all()
+	build_modern()
 
 
 func clear_all() -> void:

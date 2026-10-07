@@ -33,37 +33,11 @@ const BEATS := {
 	"prologue_food_dates": {0: "counter"},
 	"prologue_keep_the_light": {0: "center"},
 }
-# 가게 안 칸 좌표(문 (0,4), 계산대 (4,3), 남은 진열대 (2,2)). 소수 좌표는 칸 사이.
-const SPOTS := {
-	"behind": Vector2(7.0, 5.2),     # 계산대 안쪽(점원 자리)
-	"door": Vector2(1.3, 4.0),
-	"counter": Vector2(4.0, 4.9),
-	"shelf": Vector2(2.0, 3.5),
-	"center": Vector2(4.5, 5.3),
-}
-# 걸어갈 때 거치는 점(계산대 모서리를 돌아가도록). 없으면 곧장 간다.
-const ROUTES := {
-	"door": [Vector2(5.0, 5.2), Vector2(1.3, 5.0)],
-}
-# 연출용 손님: 문으로 들어와 진열대를 둘러보고 계산한 뒤 나간다. {to: 칸, wait: 멈추는 초, beep: 삑}
-const VISITOR_START := Vector2(-3.0, 5.4)
-const VISITOR_ROUTE := [
-	{"to": Vector2(-0.4, 4.0)},
-	{"to": Vector2(1.0, 4.0)},
-	{"to": Vector2(1.0, 3.0)},
-	{"to": Vector2(5.0, 3.0), "wait": 1.0},
-	{"to": Vector2(6.0, 3.0)},
-	{"to": Vector2(6.0, 5.0)},
-	{"to": Vector2(5.0, 5.0)},
-	{"to": Vector2(5.0, 7.0)},
-	{"to": Vector2(7.0, 7.0), "wait": 1.7, "beep": true},
-	{"to": Vector2(5.0, 7.0)},
-	{"to": Vector2(5.0, 5.0)},
-	{"to": Vector2(1.0, 5.0)},
-	{"to": Vector2(1.0, 4.0)},
-	{"to": Vector2(-0.4, 4.0)},
-	{"to": Vector2(-3.2, 2.4)},
-]
+# 걸을 곳 이름 → 칸 좌표는 집기 배치에서 자동으로 구한다(`_spot`, `OpeningStorePaths`). 길도 집기를 피해 자동으로 찾는다.
+const DOOR_SPOT := Vector2(1.3, 4.0)       # 문 안쪽에서 바깥을 보는 자리
+const VISITOR_EXIT := Vector2(-3.2, 2.4)   # 손님이 나가서 사라지는 곳(문 밖 거리)
+const VISITOR_BROWSE_WAIT := 1.0
+const VISITOR_PAY_WAIT := 1.7
 
 var enabled: bool = true
 var active: bool = false
@@ -227,7 +201,7 @@ func play_intro() -> void:
 	_phase = "intro"
 	city.build()
 	dressing.build_modern()
-	_place_player(SPOTS["behind"])
+	_place_player(_spot("behind"))
 	_set_alpha(_black, 1.0)
 	noise.play("city")
 	await _wait(0.4)
@@ -251,18 +225,38 @@ func _visitor_scene() -> void:
 	_visitor.add_to_group("cutscene_actor")
 	_visitor.set_meta("look_key", "backpacker")
 	actors.add_child(_visitor)
-	_visitor.global_position = view.cell_to_world(VISITOR_START)
+	var start: Vector2i = OpeningStorePaths.OUTSIDE_START
+	_visitor.global_position = view.cell_to_world(Vector2(start))
+	var counter: Dictionary = OpeningStorePaths.counter_cells()
+	var browse: Vector2i = OpeningStorePaths.browse_cell()
 
-	for step in VISITOR_ROUTE:
+	# 문으로 들어와 → 진열대를 둘러보고 → 계산대 앞에서 계산(삑) → 같은 길로 나간다
+	var stops: Array = [
+		{"to": browse, "wait": VISITOR_BROWSE_WAIT, "beep": false},
+		{"to": counter["customer"], "wait": VISITOR_PAY_WAIT, "beep": true},
+		{"to": start, "wait": 0.0, "beep": false},
+	]
+	var at: Vector2i = start
+
+	for stop in stops:
+		for point in OpeningStorePaths.route(at, stop["to"]).slice(1):
+			if _skip:
+				break
+
+			await _move_node(_visitor, Vector2(point), VISITOR_SPEED)
+
+		at = stop["to"]
+
 		if _skip:
 			break
 
-		await _move_node(_visitor, step["to"], VISITOR_SPEED)
-
-		if step.get("beep", false):
+		if stop["beep"]:
 			noise.beep()
 
-		await _wait(float(step.get("wait", 0.0)))
+		await _wait(float(stop["wait"]))
+
+	if not _skip:
+		await _move_node(_visitor, VISITOR_EXIT, VISITOR_SPEED)
 
 	_free_visitor()
 
@@ -354,16 +348,19 @@ func beat(moment_id: String, read_index: int) -> void:
 		await _doze()
 		return
 
-	var route: Array = (ROUTES.get(action, []) as Array).duplicate()
-	route.append(SPOTS[action])
 	var player: Node2D = _world.get_node_or_null("Actors/Player") if _world != null else null
 
 	if player == null or view == null:
 		return
 
-	for point in route:
-		await _move_node(player, point, WALK_SPEED)
+	var target: Vector2 = _spot(action)
+	var from_cell := Vector2i(roundi(view.world_to_cell(player.global_position).x), roundi(view.world_to_cell(player.global_position).y))
 
+	# 집기를 피해 길을 따라 걷고, 마지막은 정확한 자리까지
+	for point in OpeningStorePaths.route(from_cell, Vector2i(roundi(target.x), roundi(target.y)), not dressing.built()).slice(1):
+		await _move_node(player, Vector2(point), WALK_SPEED)
+
+	await _move_node(player, target, WALK_SPEED)
 	await get_tree().process_frame
 	await get_tree().process_frame
 
@@ -389,6 +386,21 @@ func _move_node(node: Node2D, cell: Vector2, speed: float) -> void:
 
 	if is_instance_valid(node):
 		node.global_position = to
+
+
+# 걸을 곳 이름 → 칸 좌표(집기 배치에서 자동). behind 점원 자리 / door 문 안쪽 / counter 계산 자리 / shelf 둘러볼 자리 / center 가운데.
+func _spot(name: String) -> Vector2:
+	match name:
+		"behind":
+			return Vector2(OpeningStorePaths.counter_cells()["cashier"])
+		"door":
+			return DOOR_SPOT
+		"counter":
+			return Vector2(OpeningStorePaths.counter_cells()["customer"])
+		"shelf":
+			return Vector2(OpeningStorePaths.browse_cell())
+		_:
+			return Vector2(OpeningStorePaths.center_cell())
 
 
 func _place_player(cell: Vector2) -> void:
@@ -421,9 +433,9 @@ func prepare_cleanup() -> void:
 
 	var skip: Array = []
 
-	for i in range(OpeningCleanup.PILES.size()):
+	for i in range(OpeningCleanup.piles().size()):
 		if OpeningCleanup.done(i):
-			skip.append_array(OpeningCleanup.PILES[i]["props"])
+			skip.append_array(OpeningCleanup.piles()[i]["props"])
 
 	dressing.smash(skip)
 
@@ -431,7 +443,7 @@ func prepare_cleanup() -> void:
 # 더미 하나를 치운다(화면에서 잔해가 사라진다).
 func clear_pile(index: int) -> void:
 	if enabled and dressing != null:
-		dressing.clear_props(OpeningCleanup.PILES[index]["props"])
+		dressing.clear_props(OpeningCleanup.piles()[index]["props"])
 
 
 # 연출 도중 나가거나 장면이 바뀌어도 화면과 숲이 원래대로 남게 한다.

@@ -6,6 +6,8 @@ extends RefCounted
 ##   gondola 중앙 진열대: 흰 몸통, 층마다 과자·상품 상자, 청록 가격표 띠, 윗간판
 ##   chest   아이스크림 냉동 쇼케이스: 낮고 긴 흰 상자, 유리 뚜껑 아래 알록달록한 상품
 ##   rack    입구 쪽 작은 상품 걸이
+##   table   취식 탁자와 초록 의자 두 개
+##   cabinet 커피 기계가 올라간 흰 장
 ##   counter 계산대: 청록 상판·흰 몸통, 단말기(POS)·영수증 프린터·바구니
 ## 길이(L)·깊이(D)는 칸 단위. 앞면(손님 쪽)은 v = D.
 
@@ -31,6 +33,10 @@ static func build(kind: String, lo: Vector2, hi: Vector2, rot: int, pp: Dictiona
 			return _chest(f)
 		"counter":
 			return _counter(f)
+		"table":
+			return _table(f)
+		"cabinet":
+			return _cabinet(f)
 		_:
 			return _rack(f)
 
@@ -175,3 +181,42 @@ static func _counter(f: FurnitureAssets.Frame) -> Dictionary:
 		f.box(_goods(f, j * 3 + 1), u0, u0 + 0.16, 0.22, 0.58, top + 0.2, top + 0.34)
 
 	return f.finish(1.6)
+
+
+# 취식 탁자: 작은 탁자 하나와 초록 의자 두 개(탁자 양옆). L·D 안에 맞춘다.
+static func _table(f: FurnitureAssets.Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var wood: Dictionary = f.flat(Color(0.86, 0.72, 0.52), "tb_wood")
+	var green: Dictionary = f.flat(Color(0.2, 0.62, 0.38), "tb_green")
+	var dark: Dictionary = f.flat(DARK, "tb_dark")
+	var cx: float = L * 0.5
+	var cz: float = D * 0.5
+	f.box(dark, cx - 0.04, cx + 0.04, cz - 0.04, cz + 0.04, 0.0, 0.5)
+	f.box(wood, cx - 0.3, cx + 0.3, cz - 0.3, cz + 0.3, 0.5, 0.56)
+
+	for side in [-1.0, 1.0]:
+		var u0: float = cx + side * 0.4 - 0.1
+		f.box(dark, u0 + 0.07, u0 + 0.13, cz - 0.04, cz + 0.04, 0.0, 0.28)
+		f.box(green, u0, u0 + 0.2, cz - 0.12, cz + 0.12, 0.28, 0.34)
+		f.box(green, u0 + (0.16 if side < 0.0 else 0.0), u0 + (0.2 if side < 0.0 else 0.04), cz - 0.12, cz + 0.12, 0.34, 0.62)
+
+	return f.finish(0.65)
+
+
+# 커피 기계 장: 흰 장 위에 커피 기계와 컵 더미
+static func _cabinet(f: FurnitureAssets.Frame) -> Dictionary:
+	var L: float = f.length
+	var D: float = f.depth
+	var body: Dictionary = f.flat(WHITE, "cb_body")
+	var teal: Dictionary = f.flat(TEAL, "cb_teal", 0.4)
+	var dark: Dictionary = f.flat(DARK, "cb_dark")
+	var gray: Dictionary = f.flat(Color(0.78, 0.8, 0.84), "cb_gray")
+	f.box(dark, 0.0, L, 0.0, D, 0.0, 0.08)
+	f.box(body, 0.02, L - 0.02, 0.02, D - 0.02, 0.08, 0.9)
+	f.box(teal, 0.0, L, 0.0, D, 0.9, 0.95)
+	f.box(gray, 0.2, 0.7, 0.15, D - 0.15, 0.95, 1.45)          # 커피 기계 몸통
+	f.box(dark, 0.28, 0.62, D - 0.18, D - 0.12, 1.05, 1.35)    # 기계 앞 패널
+	f.box(_goods(f, 1), L - 0.5, L - 0.34, 0.2, 0.36, 0.95, 1.1)  # 컵 더미
+	f.box(_goods(f, 5), L - 0.5, L - 0.34, 0.4, 0.56, 0.95, 1.1)
+	return f.finish(1.5)
