@@ -59,6 +59,7 @@ func run() -> void:
 	PlayerProgress.record_story_beat(CheckoutTutorial.BEAT_ID, 1)
 	# A genuine sale remains available while the power story is incomplete.
 	var shelf = get_tree().get_nodes_in_group("shelf")[0]
+	GameState.add_item("water", 1)  # 식품은 청소로 건져야 생기므로 시험에서 따로 준비한다
 	shelf.slots[0]["item_id"] = "water"
 	FoodShelfLife.restock_slot(shelf, 0, 1)
 	var buyer = load("res://scenes/shop/actors/customer.tscn").instantiate()

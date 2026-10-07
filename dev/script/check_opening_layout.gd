@@ -41,12 +41,19 @@ func run() -> void:
 	OpeningCleanup.reset()
 	var piles := OpeningCleanup.piles()
 	var seen: Dictionary = {}
-	var ore := 0
+	var totals: Dictionary = {}
 	for pile in piles:
 		for index in pile["props"]: seen[index] = seen.get(index, 0) + 1
-		ore += int((pile["loot"] as Dictionary).get("iron_ore", 0))
+		for key in (pile["loot"] as Dictionary): totals[key] = int(totals.get(key, 0)) + int((pile["loot"] as Dictionary)[key])
 	check(piles.size() == 6 and seen.size() == defaults.size() and not seen.values().has(2), "청소 더미 6곳이 집기를 한 번씩 맡는다")
-	check(ore == OpeningCleanup.ORE_TOTAL, "철광석 합계가 정해진 개수")
+	check(totals == OpeningCleanup.LOOT_TOTAL, "건지는 것의 합계가 정해진 양")
+	var home_ok := true
+	for pile in piles:
+		if (pile["loot"] as Dictionary).has("furniture:register"):
+			var has_counter := false
+			for index in pile["props"]: has_counter = has_counter or str(OpeningStoreLayout.props()[index]["model"]) == "counter"
+			home_ok = home_ok and has_counter
+	check(home_ok, "계산대는 계산대 자리의 잔해에서 나온다")
 	# 길과 자리
 	var counter := OpeningStorePaths.counter_cells()
 	check(counter["cashier"] == Vector2i(6, 5) and counter["customer"] == Vector2i(6, 7), "계산대 뒤·앞 칸이 단말기(POS) 앞뒤의 점원·손님 자리")
@@ -86,9 +93,10 @@ func run() -> void:
 	# 집기가 아주 적을 때도 철광석이 모자라지 않는다
 	OpeningStoreLayout.set_props([OpeningStoreLayout.make("counter", Vector2i(5, 5), 0), OpeningStoreLayout.make("gondola", Vector2i(2, 2), 0)])
 	OpeningCleanup.reset()
-	var few_ore := 0
-	for pile in OpeningCleanup.piles(): few_ore += int((pile["loot"] as Dictionary).get("iron_ore", 0))
-	check(OpeningCleanup.piles().size() == 2 and few_ore == OpeningCleanup.ORE_TOTAL, "집기가 둘뿐이어도 철광석 합계 유지")
+	var few: Dictionary = {}
+	for pile in OpeningCleanup.piles():
+		for key in (pile["loot"] as Dictionary): few[key] = int(few.get(key, 0)) + int((pile["loot"] as Dictionary)[key])
+	check(OpeningCleanup.piles().size() == 2 and few == OpeningCleanup.LOOT_TOTAL, "집기가 둘뿐이어도 건지는 합계 유지")
 	OpeningStoreLayout.set_props([])
 	OpeningStoreLayout.reload()
 	OpeningCleanup.reset()

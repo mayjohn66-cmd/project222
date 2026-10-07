@@ -44,6 +44,7 @@ func run() -> void:
 	check(not is_instance_valid(checkout.guide), "no practice before preparation steps")
 	# First buyer takes actual shelf stock, including when resuming an already-open shop.
 	var shelf = get_tree().get_nodes_in_group("shelf")[0]
+	GameState.add_item("bread", 3)  # 식품은 청소로 건져야 생기므로 시험에서 따로 준비한다
 	check(GameState.remove_item("bread", 3) == 3, "fixture stocks owned goods for real purchases")
 	shelf.slots[0]["item_id"] = "bread"
 	shelf.slots[0]["stock"] = 3

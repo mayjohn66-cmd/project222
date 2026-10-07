@@ -1,15 +1,19 @@
 class_name OpeningCleanup
 extends RefCounted
-## 새 게임 초반의 "부서진 가게 정리": 바닥의 잔해 더미(6곳)를 [E]로 치우면 쓸 만한 철광석을 얻는다(모두 4개: 간이 진열대 제작에 2개씩이라 두 개를 만들 수 있다). 쓸 만한 게 없는 더미도 있다.
-## 이 자재로 나무 진열대를 제작하고(설계도), 건진 계산대·진열대와 함께 건축 모드로 설치하는 것이 이어지는 튜토리얼이다.
+## 새 게임 초반의 "부서진 가게 정리": 바닥의 잔해 더미(6곳)를 [E]로 치우면 쓸 만한 것이 나온다(`LOOT_TOTAL`: 빵·물·합판·계산대·간이 진열대). 아무것도 없는 더미도 있다.
+## 제작은 아직 모른다(나중에 기술자를 만나 배운다). 건진 계산대·진열대를 건축 모드로 설치하는 것이 이어지는 튜토리얼이다.
 ## 더미 위치·얻는 자재는 집기 배치(`OpeningStoreLayout`)에서 자동으로 정해진다(`_build`). 잔해 그림은 `OpeningStoreDressing`(3D 연출)이 그리고, 치운 더미는 그림에서도 사라진다.
 ## 진행은 이야기 기록(`tutorial_event:cleanup:<번호>`)에 남아 저장·불러오기 뒤에도 이어진다.
 
 const BEAT := "tutorial_event:cleanup:"
+const FURNITURE_PREFIX := "furniture:"
 const REACH_CELLS := 1.7           # 더미에서 이만큼(칸) 안이면 [E]로 치울 수 있다
 
 const GROUPS := 6                   # 잔해 더미 수(집기가 6개 미만이면 그 수만큼)
-const ORE_TOTAL := 4                # 모두 치우면 얻는 철광석(간이 진열대 두 개분)
+# 모두 치우면 얻는 것. 키가 `furniture:` 로 시작하면 가구(보관함에 들어간다), 아니면 아이템. 합계는 더미들에 나뉜다.
+const LOOT_TOTAL := {"bread": 4, "water": 8, "plywood": 4, "furniture:register": 1, "furniture:shelf_1x1": 2}
+# 어울리는 더미(그 더미가 치우는 집기 종류)에 먼저 놓는다. 없으면 아무 더미나.
+const LOOT_HOME := {"bread": ["cooler", "chest"], "water": ["cooler", "chest"], "plywood": ["gondola", "rack", "cabinet", "table"], "furniture:register": ["counter"], "furniture:shelf_1x1": ["gondola", "rack"]}
 
 # 더미 목록: {stand: 서서 치우는 자리(칸 좌표), props: 이 더미가 치우는 집기 번호(`OpeningStoreLayout.props()` 순서), loot: 얻는 자재}.
 # 집기 배치에서 자동으로 만든다: 집기를 위치(x, y) 순으로 6묶음으로 나누고, 묶음의 앞쪽(+y)에 서서 치운다.
@@ -61,16 +65,37 @@ static func _build() -> Array:
 		var stand := Vector2(clampf(bounds.get_center().x, 0.5, 8.5), clampf(bounds.end.y + 0.8, 0.8, 7.0))
 		result.append({"stand": stand, "props": members, "loot": {}})
 
-	# 철광석 ORE_TOTAL 개를 묶음에 고르게
-	if groups >= ORE_TOTAL:
-		for i in range(ORE_TOTAL):
-			result[roundi(float(i) * float(groups - 1) / float(ORE_TOTAL - 1))]["loot"] = {"iron_ore": 1}
-	else:
-		for i in range(ORE_TOTAL):
-			var target: Dictionary = result[i % groups]["loot"]
-			target["iron_ore"] = int(target.get("iron_ore", 0)) + 1
-
+	_spread_loot(result, props)
 	return result
+
+
+# LOOT_TOTAL 을 더미들에 나눠 담는다(어울리는 더미에 돌아가며 한 개씩).
+static func _spread_loot(result: Array, props: Array) -> void:
+	var models: Array = []
+
+	for pile in result:
+		var set: Dictionary = {}
+
+		for index in pile["props"]:
+			set[str(props[index]["model"])] = true
+
+		models.append(set)
+
+	for key in LOOT_TOTAL:
+		var eligible: Array = []
+
+		for i in range(result.size()):
+			for model in LOOT_HOME.get(key, []):
+				if (models[i] as Dictionary).has(model):
+					eligible.append(i)
+					break
+
+		if eligible.is_empty():
+			eligible = range(result.size())
+
+		for n in range(int(LOOT_TOTAL[key])):
+			var loot: Dictionary = result[eligible[n % eligible.size()]]["loot"]
+			loot[key] = int(loot.get(key, 0)) + 1
 
 
 static func done(index: int) -> bool:
@@ -99,7 +124,10 @@ static func clean(index: int) -> Dictionary:
 	var loot: Dictionary = (piles()[index]["loot"] as Dictionary).duplicate()
 
 	for id in loot:
-		GameState.add_item(str(id), int(loot[id]))
+		if str(id).begins_with(FURNITURE_PREFIX):
+			GameState.add_furniture(str(id).trim_prefix(FURNITURE_PREFIX), int(loot[id]))
+		else:
+			GameState.add_item(str(id), int(loot[id]))
 
 	PlayerProgress.record_story_beat(BEAT + str(index), GameState.total_day)
 	return loot
@@ -127,6 +155,7 @@ static func loot_text(loot: Dictionary) -> String:
 	var parts: Array[String] = []
 
 	for id in loot:
-		parts.append("%s ×%d" % [ItemData.get_item_name(str(id)), int(loot[id])])
+		var name: String = FurnitureData.get_furniture_name(str(id).trim_prefix(FURNITURE_PREFIX)) if str(id).begins_with(FURNITURE_PREFIX) else ItemData.get_item_name(str(id))
+		parts.append("%s ×%d" % [name, int(loot[id])])
 
 	return ", ".join(parts) if not parts.is_empty() else "쓸 만한 건 없었다"

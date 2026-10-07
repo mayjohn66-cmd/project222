@@ -45,6 +45,10 @@ static func initialize(world: Node) -> void:
 		var want: int = int(SETTINGS.salvaged_furniture[id])
 		if have > want: GameState.remove_furniture(str(id), have - want)
 		elif have < want: GameState.add_furniture(str(id), want - have)
+	# 함께 온 식품도 부서진 가게 안에 흩어져 있다: 청소하며 건져야 손에 들어온다(`OpeningCleanup.LOOT_TOTAL`).
+	for id in OpeningCleanup.LOOT_TOTAL:
+		if not str(id).begins_with(OpeningCleanup.FURNITURE_PREFIX): GameState.remove_item(str(id), GameState.get_item_count(str(id)))
+	FoodShelfLife.state()["markdown"] = false  # 처음엔 남은 기한 표시와 만료 분리만. 마감 할인은 상인을 만나 조언을 들은 뒤 켜진다
 	GameState.save_store_layout(SETTINGS.opening_layout.duplicate(true))
 	PlayerProgress.record_story_beat(VERSION, GameState.total_day)
 	PlayerProgress.record_story_beat("shop_space:v1", GameState.total_day)
@@ -79,6 +83,7 @@ static func trade() -> bool:
 		if bool(gift.get("missing_only", false)): amount = maxi(0, amount - GameState.get_item_count(id))
 		if amount > 0: GameState.add_item(id, amount)
 	PlayerProgress.record_story_beat(TRADE, GameState.total_day)
+	FoodShelfLife.state()["markdown"] = true  # 타블렌의 조언: 날짜가 가까운 식품은 싸게 내놓는다(마감 할인 켬)
 	return true
 
 static func is_raw_material(id: String) -> bool:

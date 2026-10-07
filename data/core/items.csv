@@ -17,6 +17,7 @@ sickle,낫,equipment,tool,0,1,2,false,false,res://art/items/pixel_v1/sickle.png,
 gathering_bottle,채집용 물병,equipment,tool,0,1,1,false,false,res://art/items/pixel_v1/gathering_bottle.png,호수의 물을 담아 운반할 수 있는 원정용 물병이다.,0,0,bag,expedition,0
 treasure_map,보물 지도,special,etc,0,1,1,false,false,res://art/items/pixel_v1/treasure_map.png,숨겨진 원정지를 가리키는 오래된 지도다.,0,0,inventory,expedition,0
 wild_berry,야생 열매,material,material,20,1,1,true,true,res://art/items/pixel_v1/wild_berry.png,새들이 즐겨 먹는 붉은 열매다.,0,0,inventory,shelf,1
+plywood,합판,material,material,30,1,1,true,true,res://art/items/pixel_v1/plywood.png,집기를 고치거나 새로 세울 때 쓰는 얇은 나무판이다.,0,0,inventory,shelf,0
 dry_branch,마른 가지,material,material,20,1,1,true,true,res://art/items/pixel_v1/dry_branch.png,불쏘시개로 쓰기 좋은 나뭇가지다.,0,0,inventory,shelf,1
 forest_mushroom,숲 버섯,material,material,40,1,1,true,true,res://art/items/pixel_v1/forest_mushroom.png,습한 나무 그늘에서 자란 버섯이다.,0,0,inventory,shelf,2
 amber_sap,호박 수액,material,material,40,1,1,true,true,res://art/items/pixel_v1/amber_sap.png,오래된 나무에서 굳은 투명한 수액이다.,0,0,inventory,shelf,2
