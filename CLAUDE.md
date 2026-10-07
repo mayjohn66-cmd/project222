@@ -14,7 +14,8 @@
 사용자 + AI 2개(Claude, ChatGPT)가 같은 저장소를 쓴다. 규칙은 `AI_협업_규칙.md`에 있으니 **작업 전에 반드시 읽는다.**
 
 - **내 담당: 코드 정리와 밸런스** (`data/`, `docs/`, `tools/`, 기존 코드 정리).
-- ChatGPT 담당: 이미지 제작(`art/`), 새 기능 코드 생성.
+- **이미지 생성도 내 담당**(2026-10-07): Claude Code 의 Pixel Lab MCP 또는 `tools/pixellab_batch.py` 로만 만든다. 결과는 `docs/그림_작업/받은그림/`에 모아 사용자에게 보여 주고, 고른 것만 `art/`에 넣는다. 기존 그림은 덮어쓰지 않는다.
+- ChatGPT 담당: 새 기능 코드 생성(이미지는 만들지 않음).
 - 새 기능은 기존 큰 파일에 덧붙이지 않는다(`expedition.gd`, `game_state.gd`, `build_manager.gd`, `worker.gd`, `day_manager.gd`).
 - 작업은 **`main`에서 직접** 한다(2026-10-05 사용자 지침, `docs/AI_협업_규칙.md` 2장). 작게 커밋하고, 푸시 전 `git pull --rebase origin main`, 강제 푸시 금지. 커밋 메시지는 `[data]`, `[code]`, `[art]`, `[docs]`, `[tools]` 접두사.
 - **파일 삭제·대규모 이동·이름 변경은 먼저 계획을 보여 주고 사용자 승인을 받는다.**
@@ -48,7 +49,7 @@
 ## 6. 알려진 문제 (2026-10-06 확인 기준)
 
 - **해결·확인됨:** 누락 이미지로 인한 `preload()` 실패는 코드 검색으로 찾지 못했다. 루트의 `_codex_restore_asset_check.gd`와 `shader/` 폴더는 이미 없다. 개발용 파일은 `dev/`로 옮겨졌다. 빈 폴더는 `scenes/core`만 남아 있고 파일이 1개 있다.
-- **아이콘 파일 없음 86개:** `python tools/validate_assets.py .` 결과. `art/items/pixel_v1/`에 36장뿐이다(석탄·구리 광석·말린 열매 등). 이미지 담당(ChatGPT) 몫이며, 그 2D 그림들이 3D 전환 뒤에도 실제로 쓰이는지 먼저 확인한다.
+- **아이콘 파일 없음 86개:** `python tools/validate_assets.py .` 결과. `art/items/pixel_v1/`에 36장뿐이다(석탄·구리 광석·말린 열매 등). 이미지 담당(Claude, Pixel Lab) 몫이며, 그 2D 그림들이 3D 전환 뒤에도 실제로 쓰이는지 먼저 확인한다.
 - **이미지 규격 FAIL 14개:** 가구 12개와 `treasure_map.png`, `wild_berry.png`가 색 상한(32/48색)을 넘거나 반투명 픽셀이 있다. 버전 폴더 7개도 정리 후보다.
 - `data/` 안에 Godot가 CSV를 번역 파일로 착각해 만든 `.translation` 파일이 저장소에 227개 올라가 있다. 커밋 전에는 `git ls-files -m | grep "\.translation$" | xargs -r git checkout --`로 되돌린다. CSV 가져오기 설정을 바꿔 정리할 후보(변경 전 내보내기 영향 확인).
 - 가방 셀(46px)·인벤토리 셀(52px)에 64px 아이콘을 넣어 픽셀 배율이 정수가 아니다.

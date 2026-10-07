@@ -12,10 +12,10 @@
 | `tools/` (검증·계산 스크립트) | Claude | `validate_assets.py`, `balance_baseline.py` |
 | 기존 코드 정리·리팩터링 | Claude | 큰 파일 분리는 기능 작업이 안정된 뒤에 |
 | 스토리 스크립트(대사·장면 초안) | 제미나이 | **`docs/drafts/story/`에 초안만 쓴다.** 형식은 `docs/스토리/작성_가이드.md`, 게임 데이터(`data/story/`)에 넣는 것은 검사(`tools/validate_story.py`)와 사용자 승인 뒤. 코드·수치·이미지는 건드리지 않음 |
-| `art/` (이미지) | 사용자 + Claude(Pixel Lab 자동 생성, 2026-10-07 변경) | **Claude는 `tools/pixellab_batch.py` 로 Pixel Lab 에 요청해 `docs/그림_작업/받은그림/` 에 모으고, 사용자가 고른 것만 `art/` 에 넣는다.** 이미 있는 그림은 덮어쓰지 않는다. ChatGPT는 이미지를 생성하거나 덮어쓰지 않음. 규격은 `docs/그림_3D/에셋_규격서.md` |
+| `art/` (이미지) | 사용자 + Claude(Pixel Lab, 2026-10-07 변경: 이미지 생성은 Claude Code 에서만) | **Claude는 Claude Code 의 Pixel Lab MCP 도구나 `tools/pixellab_batch.py` 로 Pixel Lab 에 요청해 `docs/그림_작업/받은그림/` 에 모으고, 사용자가 고른 것만 `art/` 에 넣는다.** 이미 있는 그림은 덮어쓰지 않는다. ChatGPT는 이미지를 생성하거나 덮어쓰지 않음. 규격은 `docs/그림_3D/에셋_규격서.md` |
 | 새 기능 코드 (`script/`, `scenes/`) | ChatGPT | **새 파일로 추가**, 기존 큰 파일에 덧붙이지 않기 |
 
-ChatGPT는 이미지 파일을 만들지 않습니다. Claude가 이미지를 만드는 것은 사용자가 승인한 Pixel Lab 자동 생성(`tools/pixellab_batch.py`)뿐이며, 한 번에 만드는 개수(`--limit`)와 예산(`--budget-usd`)을 지키고 결과 시트를 사용자에게 보여 준 뒤 고른 것만 반영합니다. 이미지가 없을 때는 임시 이미지(`ArtLoader`)로 게임이 죽지 않게만 합니다.
+이미지 생성은 **Claude Code(Pixel Lab MCP 또는 `tools/pixellab_batch.py`)에서만** 합니다(2026-10-07 사용자 지침). ChatGPT·제미나이는 이미지 파일을 만들거나 덮어쓰지 않습니다. Claude는 사용자가 요청한 범위만 만들고, 한 번에 만드는 개수와 예산(스크립트는 `--limit`, `--budget-usd`)을 지키고 결과 시트를 사용자에게 보여 준 뒤 고른 것만 반영합니다. 이미지가 없을 때는 임시 이미지(`ArtLoader`)로 게임이 죽지 않게만 합니다.
 
 담당이 아닌 구역을 고쳐야 하면 먼저 사용자에게 알리고 허락을 받습니다.
 
