@@ -96,7 +96,7 @@ func run() -> void:
 	advance_self()
 	check(director.flow.current()["id"] == "cleanup" and director.flow.seen("cleanup"), "monologue then asks to clean the rubble")
 	# 잔해 더미를 하나씩 [E]로 치운다: 서 있는 자리에서만, 한 번씩만 자재를 얻는다.
-	player.global_position = director._cell_world(Vector2(0.5, 7.0))
+	player.global_position = director._cell_world(Vector2(4.0, 7.0))
 	check(not director.try_interact() and OpeningCleanup.cleaned_count() == 0, "too far from rubble cleans nothing")
 	for i in range(OpeningCleanup.PILES.size()):
 		player.global_position = director._cell_world(OpeningCleanup.PILES[i]["stand"])
