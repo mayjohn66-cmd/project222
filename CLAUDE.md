@@ -53,6 +53,7 @@
 - 버전 폴더 7개(`pixel_v1` 등)는 정리 후보다.
 - `data/` 안에 Godot가 CSV를 번역 파일로 착각해 만든 `.translation` 파일이 저장소에 227개 올라가 있다. 커밋 전에는 `git ls-files -m | grep "\.translation$" | xargs -r git checkout --`로 되돌린다. CSV 가져오기 설정을 바꿔 정리할 후보(변경 전 내보내기 영향 확인).
 - 가방 셀(46px)·인벤토리 셀(52px)에 64px 아이콘을 넣어 픽셀 배율이 정수가 아니다.
+- 사용자 PC의 Godot: `C:/Users/john9/Downloads/Godot_v4.7.1-stable_win64.exe/Godot_v4.7.1-stable_win64_console.exe` (`GODOT_EXE`로 넘겨 `dev/run_all_checks.sh` 실행 가능). 2026-10-07 이 PC에서 대화·주민 관련 검사 8개 통과(전체 62개는 아직 안 돌림). `--import` 때 `dev/spike3d/model_gallery.gd` 파싱 오류가 원래부터 난다.
 - **검사 56개는 이 클라우드 환경에서 모두 통과**한다(`dev/run_all_checks.sh`). 사용자 PC에서 같은지는 아직 확인하지 않았다. 화면을 직접 띄워 보는 확인(대화창 줄바꿈, 책 UI)도 사용자 몫이다.
 
 ## 7. 유용한 명령
