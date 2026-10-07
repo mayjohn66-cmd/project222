@@ -85,7 +85,7 @@ func run() -> void:
 		if worker.is_hired or worker.visible or worker.on_duty: no_staff = false
 	check(no_staff, "no automatically hired staff at arrival")
 	check(director.flow.current()["id"] == "cleanup" and not is_instance_valid(director.npc), "arrival starts with player alone")
-	check(director.dialogue.open and director.dialogue.name_label.text == PlayerProgress.display_player_name(), "situation is player monologue")
+	check(director.dialogue.open and director.dialogue._speaker == PlayerProgress.display_player_name(), "situation is player monologue")
 	check(not director.flow.goal_met(director.flow.current(), world) and OpeningCleanup.cleaned_count() == 0, "shop starts smashed: nothing cleaned yet")
 	check(GameState.get_furniture_count("door") == 0 and GameState.get_furniture_count("register") == 0 and GameState.get_furniture_count("shelf_1x1") == 0 and GameState.get_furniture_count("shelf_2x1") == 0 and GameState.get_furniture_count("shelf_3x1") == 0, "nothing waits in storage before cleaning")
 	check(get_tree().get_nodes_in_group("shelf").is_empty(), "no shelf stands in the smashed shop")

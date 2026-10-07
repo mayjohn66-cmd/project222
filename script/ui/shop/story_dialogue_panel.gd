@@ -14,6 +14,11 @@ var typing_tween: Tween = null
 
 var root: Control
 var portrait: TextureRect
+# 줄 맨 앞에 "*" 가 붙으면 말이 아니라 서술(독백·행동 묘사)이다: 화자 이름 없이 흐린 글씨로 나온다. 붙지 않은 줄은 화자가 소리 내어 하는 말이다.
+const NARRATION_MARK := "*"
+const SPEECH_COLOR := Color(0.96, 0.93, 0.85)
+const NARRATION_COLOR := Color(0.72, 0.78, 0.86)
+var _speaker: String = ""
 var name_label: Label
 var text_label: Label
 var hint_label: Label
@@ -117,7 +122,8 @@ func start(
 
 	lines = new_lines
 	line_index = 0
-	name_label.text = PlayerProgress.display_player_name() if npc_name == PLAYER_SPEAKER else npc_name
+	_speaker = PlayerProgress.display_player_name() if npc_name == PLAYER_SPEAKER else npc_name
+	name_label.text = _speaker
 	portrait.texture = portrait_texture
 	portrait.visible = portrait_texture != null
 	root.visible = true
@@ -126,7 +132,11 @@ func start(
 
 
 func _show_line() -> void:
-	text_label.text = lines[line_index]
+	var line: String = lines[line_index]
+	var narration: bool = line.begins_with(NARRATION_MARK)
+	text_label.text = line.trim_prefix(NARRATION_MARK) if narration else line
+	name_label.text = " " if narration else _speaker
+	text_label.add_theme_color_override("font_color", NARRATION_COLOR if narration else SPEECH_COLOR)
 	text_label.visible_ratio = 0.0
 	_show_hint(false)
 

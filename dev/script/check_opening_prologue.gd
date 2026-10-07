@@ -34,7 +34,7 @@ func verify() -> void:
 	check(PlayerProgress.story_beat_days.has(OpeningJourneyFlow.PROLOGUE),"genuine new bootstrap opts into prologue")
 	check(director.dialogue.open and director.pending.get("prologue","") == "prologue_last_shift","first story appears before setup intro")
 	check(not director.flow.seen("setup") and not director.flow.done("setup"),"prologue does not advance tutorial goals")
-	check(director.dialogue.name_label.text == PlayerProgress.display_player_name() and not director.dialogue.portrait.visible and not is_instance_valid(director.npc),"player alone with no local instructor")
+	check(director.dialogue._speaker == PlayerProgress.display_player_name() and not director.dialogue.portrait.visible and not is_instance_valid(director.npc),"player alone with no local instructor")
 	check(manager.hour_timer.paused and not player.is_physics_processing() and world.get_node("WorldInteractions").blocked(),"dialogue pauses clock movement and normal interaction")
 	check(not director.panel.root.visible and not director.permits_first_checkout(),"goal instructions and first shopper wait for prologue")
 	world.get_node("CheckoutTutorial").try_start()
