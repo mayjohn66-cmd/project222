@@ -201,19 +201,19 @@ static func _counter(f: FurnitureAssets.Frame) -> Dictionary:
 static func _table(f: FurnitureAssets.Frame) -> Dictionary:
 	var L: float = f.length
 	var D: float = f.depth
-	var wood: Dictionary = f.flat(Color(0.86, 0.72, 0.52), "tb_wood")
+	var wood: Dictionary = f.flat(Color(0.58, 0.4, 0.26), "tb_wood")
 	var green: Dictionary = f.flat(Color(0.2, 0.62, 0.38), "tb_green")
 	var dark: Dictionary = f.flat(DARK, "tb_dark")
 	var cx: float = L * 0.5
 	var cz: float = D * 0.5
 	f.box(dark, cx - 0.04, cx + 0.04, cz - 0.04, cz + 0.04, 0.0, 0.5)
-	f.box(wood, cx - 0.3, cx + 0.3, cz - 0.3, cz + 0.3, 0.5, 0.56)
+	f.box(wood, cx - 0.34, cx + 0.34, cz - 0.34, cz + 0.34, 0.5, 0.58)
 
 	for side in [-1.0, 1.0]:
 		var u0: float = cx + side * 0.4 - 0.1
 		f.box(dark, u0 + 0.07, u0 + 0.13, cz - 0.04, cz + 0.04, 0.0, 0.28)
 		f.box(green, u0, u0 + 0.2, cz - 0.12, cz + 0.12, 0.28, 0.34)
-		f.box(green, u0 + (0.16 if side < 0.0 else 0.0), u0 + (0.2 if side < 0.0 else 0.04), cz - 0.12, cz + 0.12, 0.34, 0.62)
+		f.box(green, u0 + (0.0 if side < 0.0 else 0.16), u0 + (0.04 if side < 0.0 else 0.2), cz - 0.12, cz + 0.12, 0.34, 0.62)  # 등받이는 탁자 반대쪽
 
 	return f.finish(0.65)
 

@@ -20,6 +20,8 @@ var parts: Array = []  # {inst, material, id_inst, id_material}
 var head_ratio_value: float = 3.0
 var walk_time: float = 0.0
 var walking: bool = false
+var sitting: bool = false  # true 면 앉는 자세(허벅지를 앞으로, 정강이를 아래로, 골반을 낮춤). 연출용
+var sit_blend: float = 0.0
 var facing_yaw_deg: float = 90.0  # 목표 방향. 3/4 모습: 화면 오른쪽 아래를 본다(정면은 45, 화면 아래)
 var move_speed: float = 1.5  # 칸/초. 걸음 속도(발 구르는 빠르기)를 정한다
 var smooth: bool = true
@@ -446,6 +448,7 @@ func animate(delta: float) -> void:
 	# 걷는 자세 비중: 걷기 시작하면 빠르게 1로, 멈추면 조금 천천히 0으로
 	var target: float = 1.0 if walking else 0.0
 	walk_blend = move_toward(walk_blend, target, delta * (7.0 if walking else 5.0))
+	sit_blend = move_toward(sit_blend, 1.0 if sitting else 0.0, delta * 4.0)
 
 	if walk_blend > 0.01:
 		# 한 주기(두 걸음) 동안 가는 거리 = 걸음 길이 × 2. 속도가 빠를수록 위상이 빨리 간다.
@@ -494,8 +497,26 @@ func _apply_pose() -> void:
 		sh.rotation = Vector3(arm_x * d2r, 0.0, sg * (idle * 1.5 + w * 2.0) * d2r)
 		el.rotation = Vector3(-(w * (12.0 + 22.0 * forward) + idle * 7.0) * d2r, 0.0, 0.0)
 
+	if sit_blend > 0.001:
+		_apply_sit_pose(d2r)
+
 	_apply_attack_pose(d2r)
 	_apply_hurt_pose(d2r)
+
+
+# 앉기: 골반을 낮추고 다리를 앞으로 접는다(걷기 자세 위에 덮는다). 팔은 무릎 위에 놓는다.
+func _apply_sit_pose(d2r: float) -> void:
+	var b: float = sit_blend
+	var hips: Node3D = _j["hips"]
+	hips.position.y = lerpf(hips.position.y, _leg_h * 0.58, b)
+	hips.rotation = hips.rotation.lerp(Vector3.ZERO, b)
+
+	for k in ["l", "r"]:
+		(_j["hip_" + k] as Node3D).rotation = Vector3(lerpf((_j["hip_" + k] as Node3D).rotation.x, -88.0 * d2r, b), 0.0, 0.0)
+		(_j["kn_" + k] as Node3D).rotation = Vector3(lerpf((_j["kn_" + k] as Node3D).rotation.x, 88.0 * d2r, b), 0.0, 0.0)
+		(_j["an_" + k] as Node3D).rotation = Vector3.ZERO
+		(_j["sh_" + k] as Node3D).rotation = Vector3(lerpf((_j["sh_" + k] as Node3D).rotation.x, -25.0 * d2r, b), 0.0, 0.0)
+		(_j["el_" + k] as Node3D).rotation = Vector3(lerpf((_j["el_" + k] as Node3D).rotation.x, -45.0 * d2r, b), 0.0, 0.0)
 
 
 # ---------------------------------------------------------------- 피격

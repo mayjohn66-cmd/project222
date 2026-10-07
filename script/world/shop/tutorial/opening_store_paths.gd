@@ -42,12 +42,48 @@ static func counter_cells() -> Dictionary:
 		var center := Vector2i(rect.position.x + rect.size.x / 2, rect.position.y + rect.size.y / 2)
 		var front := _front_dir(int(prop["rot"]))
 		var blocked: Dictionary = blocked_cells()
-		var behind: Vector2i = _nearest_free(center - front, blocked)
-		var customer: Vector2i = _nearest_free(center + front, blocked)
+		# 단말기(POS)는 계산대 길이 방향 0.6 지점(모델 `_counter`): 점원·손님은 그 앞뒤에 선다
+		var along_x: bool = posmod(int(prop["rot"]), 2) == 0
+		var pos_u: float = 0.6
+		var anchor: Vector2i = prop["anchor"]
+		var rot: int = posmod(int(prop["rot"]), 4)
+		var pos_cell: Vector2i = center
+
+		if along_x:
+			var x: float = (float(anchor.x) - 0.5 + pos_u) if rot == 0 else (float(anchor.x + rect.size.x) - 0.5 - pos_u)
+			pos_cell = Vector2i(roundi(x), center.y)
+		else:
+			var y: float = (float(anchor.y) - 0.5 + pos_u) if rot == 1 else (float(anchor.y + rect.size.y) - 0.5 - pos_u)
+			pos_cell = Vector2i(center.x, roundi(y))
+
+		var behind: Vector2i = _nearest_free(pos_cell - front, blocked)
+		var customer: Vector2i = _nearest_free(pos_cell + front, blocked)
 		return {"cashier": behind, "customer": customer}
 
 	var middle := _nearest_free(Vector2i(5, 4), blocked_cells())
 	return {"cashier": middle, "customer": middle}
+
+
+# 앉을 자리(첫 취식 탁자의 의자): {seat: 의자 위치(칸 좌표 실수), approach: 의자 쪽으로 들어서는 칸, face: 바라보는 쪽 칸 방향}.
+# 의자는 탁자 길이 방향 양끝(모델 `_table`)에 있고, 탁자 뒤(창 쪽)를 보고 앉는 의자를 고른다. 탁자가 없으면 빈 딕셔너리.
+static func seat_cells() -> Dictionary:
+	for prop in OpeningStoreLayout.props():
+		if str(prop["model"]) != "table":
+			continue
+
+		var rect: Rect2 = OpeningStoreLayout.rect_of(prop)
+		var center: Vector2 = rect.get_center()
+		var along_x: bool = posmod(int(prop["rot"]), 2) == 0
+		var axis: Vector2 = Vector2(1.0, 0.0) if along_x else Vector2(0.0, 1.0)
+		var seat_a: Vector2 = center - axis * 0.4
+		var seat_b: Vector2 = center + axis * 0.4
+		# 창이 있는 가까운 벽(서쪽 x=-0.5 / 남쪽 y=7.5)을 바라보는 쪽 의자에 앉는다. 벽과 나란한 축이면 서쪽·남쪽을 더 보는 쪽
+		var wall_dir: Vector2 = Vector2(-1.0, 0.0) if center.x + 0.5 <= 7.5 - center.y else Vector2(0.0, 1.0)
+		var seat: Vector2 = seat_a if (seat_b - seat_a).normalized().dot(wall_dir) > 0.0 else seat_b
+		var face: Vector2 = (center - seat).normalized()  # 의자에서 탁자 쪽(= 벽 쪽)을 본다
+		return {"seat": seat, "approach": Vector2i((seat - face * 0.9).round()), "face": face}
+
+	return {}
 
 
 static func browse_cell() -> Vector2i:

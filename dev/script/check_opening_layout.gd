@@ -49,7 +49,15 @@ func run() -> void:
 	check(ore == OpeningCleanup.ORE_TOTAL, "철광석 합계가 정해진 개수")
 	# 길과 자리
 	var counter := OpeningStorePaths.counter_cells()
-	check(counter["cashier"] == Vector2i(7, 5) and counter["customer"] == Vector2i(7, 7), "계산대 뒤·앞 칸이 점원·손님 자리")
+	check(counter["cashier"] == Vector2i(6, 5) and counter["customer"] == Vector2i(6, 7), "계산대 뒤·앞 칸이 단말기(POS) 앞뒤의 점원·손님 자리")
+	# 앉을 자리: 기본 배치엔 탁자가 없고, 탁자(남쪽 창 앞, 길이 방향이 남북)를 놓으면 북쪽 의자에 남쪽을 보고 앉는다
+	check(OpeningStorePaths.seat_cells().is_empty(), "탁자가 없으면 앉을 자리도 없다")
+	var with_table: Array = defaults.duplicate(true)
+	with_table.append(OpeningStoreLayout.make("table", Vector2i(1, 7), 1))
+	OpeningStoreLayout.set_props(with_table)
+	var seat := OpeningStorePaths.seat_cells()
+	check(not seat.is_empty() and seat["face"] == Vector2(0.0, 1.0) and Vector2(seat["seat"]).y < 7.0 and seat["approach"] == Vector2i(1, 6), "탁자 북쪽 의자에 창(남쪽)을 보고 앉고 그 앞 칸에서 들어선다")
+	OpeningStoreLayout.set_props(defaults)
 	var route := OpeningStorePaths.route(OpeningStorePaths.OUTSIDE_START, counter["customer"])
 	check(route.size() >= 2 and route[0] == OpeningStorePaths.OUTSIDE_START and route[-1] == counter["customer"], "문 밖에서 계산 자리까지 길이 있다")
 	var full: Array = OpeningStorePaths.route(OpeningStorePaths.OUTSIDE_START, counter["customer"])

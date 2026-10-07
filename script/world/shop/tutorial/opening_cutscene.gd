@@ -28,7 +28,7 @@ const DOZE_STEPS := [[0.55, 0.9, 0.8], [0.12, 0.5, 0.7], [0.8, 1.1, 0.5], [0.3, 
 
 # 독백 중간의 움직임: 장면 id → {방금 읽은 줄 번호: 동작}. 걷는 곳 이름은 SPOTS, "doze" 는 졸기.
 const BEATS := {
-	"prologue_last_shift": {0: "door", 1: "doze"},
+	"prologue_last_shift": {0: "seat", 1: "doze"},
 	"prologue_unfamiliar_window": {0: "shelf", 1: "counter"},
 	"prologue_food_dates": {0: "counter"},
 	"prologue_keep_the_light": {0: "center"},
@@ -306,6 +306,7 @@ func play_transition() -> void:
 	_set_alpha(_black, 0.0)
 	city.show_forest()
 	dressing.smash()
+	_stand_up()
 	noise.play("wind")
 	_shake()
 	await _wait(0.2)
@@ -348,6 +349,10 @@ func beat(moment_id: String, read_index: int) -> void:
 		await _doze()
 		return
 
+	if action == "seat":
+		await _sit_down()
+		return
+
 	var player: Node2D = _world.get_node_or_null("Actors/Player") if _world != null else null
 
 	if player == null or view == null:
@@ -363,6 +368,39 @@ func beat(moment_id: String, read_index: int) -> void:
 	await _move_node(player, target, WALK_SPEED)
 	await get_tree().process_frame
 	await get_tree().process_frame
+
+
+# 시식대(취식 탁자)의 의자까지 걸어가 앉는다. 탁자가 없으면 문 안쪽에 서서 바깥을 본다.
+func _sit_down() -> void:
+	var player: Node2D = _world.get_node_or_null("Actors/Player") if _world != null else null
+
+	if player == null or view == null:
+		return
+
+	var seat: Dictionary = OpeningStorePaths.seat_cells()
+	var target: Vector2 = DOOR_SPOT if seat.is_empty() else Vector2(seat["approach"])
+	var from_cell := Vector2i(roundi(view.world_to_cell(player.global_position).x), roundi(view.world_to_cell(player.global_position).y))
+
+	for point in OpeningStorePaths.route(from_cell, Vector2i(roundi(target.x), roundi(target.y)), not dressing.built()).slice(1):
+		await _move_node(player, Vector2(point), WALK_SPEED)
+
+	await _move_node(player, target, WALK_SPEED)
+
+	if seat.is_empty():
+		return
+
+	# 의자 쪽으로 한 걸음 들어서며(그쪽을 보게 된다) 앉는다
+	await _move_node(player, seat["seat"], WALK_SPEED * 0.6)
+	player.set_meta("sitting", true)
+	await _wait(0.7)
+
+
+# 앉아 있던 주인공이 일어서게 한다(깨어난 뒤).
+func _stand_up() -> void:
+	var player: Node2D = _world.get_node_or_null("Actors/Player") if _world != null else null
+
+	if player != null and player.has_meta("sitting"):
+		player.remove_meta("sitting")
 
 
 # 노드를 칸 좌표 cell 까지 일정한 속도로 옮긴다. 3D 인물은 2D 위치가 바뀌면 걷는 동작과 방향을 스스로 만든다.
@@ -453,6 +491,7 @@ func restore() -> void:
 
 	_skip = true
 	_free_visitor()
+	_stand_up()
 
 	if city.built():
 		city.show_forest()

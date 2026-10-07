@@ -63,6 +63,7 @@ func pay_visit() -> void:
 
 func _ready() -> void: call_deferred("run")
 func run() -> void:
+	OpeningStoreLayout.set_props(OpeningStoreLayout.default_props())  # 사용자가 저장한 배치와 무관하게 기본 배치로 검사(위치 숫자가 기본 배치 기준)
 	GameState.initialize_new_game()
 	world = load("res://scenes/shop/main.tscn").instantiate()
 	add_child(world)

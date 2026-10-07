@@ -1182,6 +1182,7 @@ func _sync_actors(delta: float) -> void:
 		entry["cell"] = cell
 		figure.set_shown((n as Node2D).is_visible_in_tree())
 		figure.walking = move.length() > 0.0005 and delta > 0.0
+		figure.sitting = bool(n.get_meta("sitting", false))  # 프롤로그 연출: 의자에 앉기
 
 		if decals != null and village != null and (n as Node2D).is_visible_in_tree():
 			decals.walk(id, cell, move, village.is_snow_ground(cell))
