@@ -12,10 +12,10 @@
 | `tools/` (검증·계산 스크립트) | Claude | `validate_assets.py`, `balance_baseline.py` |
 | 기존 코드 정리·리팩터링 | Claude | 큰 파일 분리는 기능 작업이 안정된 뒤에 |
 | 스토리 스크립트(대사·장면 초안) | 제미나이 | **`docs/drafts/story/`에 초안만 쓴다.** 형식은 `docs/스토리/작성_가이드.md`, 게임 데이터(`data/story/`)에 넣는 것은 검사(`tools/validate_story.py`)와 사용자 승인 뒤. 코드·수치·이미지는 건드리지 않음 |
-| `art/` (이미지) | 사용자(이미지 전용 AI로 제작) | **Claude와 ChatGPT는 이미지를 생성하거나 덮어쓰지 않음.** 규격은 `docs/그림_3D/에셋_규격서.md` |
+| `art/` (이미지) | 사용자 + Claude(Pixel Lab 자동 생성, 2026-10-07 변경) | **Claude는 `tools/pixellab_batch.py` 로 Pixel Lab 에 요청해 `docs/그림_작업/받은그림/` 에 모으고, 사용자가 고른 것만 `art/` 에 넣는다.** 이미 있는 그림은 덮어쓰지 않는다. ChatGPT는 이미지를 생성하거나 덮어쓰지 않음. 규격은 `docs/그림_3D/에셋_규격서.md` |
 | 새 기능 코드 (`script/`, `scenes/`) | ChatGPT | **새 파일로 추가**, 기존 큰 파일에 덧붙이지 않기 |
 
-두 AI는 이미지 파일을 만들지 않습니다. 이미지가 없을 때는 임시 이미지(`ArtLoader`)로 게임이 죽지 않게만 하고, 필요한 이미지 목록은 사용자에게 전달합니다.
+ChatGPT는 이미지 파일을 만들지 않습니다. Claude가 이미지를 만드는 것은 사용자가 승인한 Pixel Lab 자동 생성(`tools/pixellab_batch.py`)뿐이며, 한 번에 만드는 개수(`--limit`)와 예산(`--budget-usd`)을 지키고 결과 시트를 사용자에게 보여 준 뒤 고른 것만 반영합니다. 이미지가 없을 때는 임시 이미지(`ArtLoader`)로 게임이 죽지 않게만 합니다.
 
 담당이 아닌 구역을 고쳐야 하면 먼저 사용자에게 알리고 허락을 받습니다.
 
@@ -57,7 +57,7 @@
   - 원정 흐름을 바꿨다면 `godot --headless --path . res://tools/check_expedition_run.tscn`으로 원정 한 판을 끝까지 자동 진행(로드 검사로는 안 잡히는 실행 중 타입 오류용). 종료 코드가 0이고 로그에 `SCRIPT ERROR`가 없어야 함
   - 실행하면 `.translation`(CSV 번역 부산물)이 바뀌므로 커밋하지 않고 `git checkout`으로 되돌림
 - 이미지를 추가하면 `tools/validate_assets.py`를 돌려 **FAIL이 없는지** 확인하고 결과를 커밋 설명에 붙입니다. 검증 실패 목록은 Claude가 사용자에게 넘깁니다.
-- 이미지 도구(API 키, 크레딧)의 키는 저장소에 넣지 않고 사용자 환경 설정으로만 관리합니다.
+- 이미지 도구(API 키, 크레딧)의 키는 저장소에 넣지 않고 사용자 환경 설정으로만 관리합니다. Pixel Lab 토큰은 환경 변수 `PIXELLAB_TOKEN` 으로만 읽고, 채팅·파일·로그에 출력하지 않습니다.
 
 ## 6. 하지 않는 것
 
