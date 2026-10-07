@@ -1,0 +1,17 @@
+# 가구 아이콘 선택안 (2026-10-07, Claude 추천, 32x32 격자 → 64x64). 형식: id 파일
+door door_v2_64.png
+drink_machine drink_machine_v2_64.png
+magic_oven magic_oven_64.png
+plant_small plant_small_64.png
+production_door production_door_64.png
+register register_64.png
+shelf_1x1 shelf_1x1_64.png
+shelf_2x1 shelf_2x1_v2_64.png
+shelf_3x1 shelf_3x1_v3_64.png
+wall_poster wall_poster_64.png
+warehouse_door warehouse_door_64.png
+warehouse_rack warehouse_rack_64.png
+night_lantern night_lantern_64.png
+antique_cabinet antique_cabinet_64.png
+old_world_map old_world_map_64.png
+adventurer_banner adventurer_banner_64.png

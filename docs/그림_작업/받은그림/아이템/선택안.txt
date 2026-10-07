@@ -1,7 +1,7 @@
 # 아이템 아이콘 1차 선택안 (2026-10-07, Claude 추천). 형식: id 파일
 coal coal_v3_64.png
 deep_gem deep_gem_v2_64.png
-worn_coin worn_coin_v2_64.png
+worn_coin worn_coin_v3_64.png
 rune_dust rune_dust_v2_64.png
 forest_mushroom forest_mushroom_64.png
 dry_branch dry_branch_64.png
@@ -20,8 +20,8 @@ sealed_scroll sealed_scroll_64.png
 berry_juice berry_juice_64.png
 mushroom_stew mushroom_stew_64.png
 elder_tonic elder_tonic_64.png
-mineral_water mineral_water_64.png
-hand_warmer hand_warmer_64.png
+mineral_water mineral_water_v2_64.png
+hand_warmer hand_warmer_v2_64.png
 gem_lantern gem_lantern_64.png
 reed_tea reed_tea_64.png
 mud_pack mud_pack_v2_64.png
@@ -37,7 +37,7 @@ explorer_kit explorer_kit_64.png
 rainbow_tonic rainbow_tonic_64.png
 herb_dagger herb_dagger_64.png
 hunting_bow hunting_bow_64.png
-hand_axe hand_axe_v2_64.png
+hand_axe hand_axe_v4_64.png
 iron_spear iron_spear_64.png
 crystal_staff crystal_staff_64.png
 rune_blade rune_blade_64.png
@@ -52,3 +52,5 @@ starlight_boots starlight_boots_64.png
 plywood plywood_64.png
 scroll_rarity_2 scroll_rarity_2_64.png
 scroll_rarity_3 scroll_rarity_3_64.png
+wild_berry wild_berry_v2_64.png
+treasure_map treasure_map_v5_64.png
