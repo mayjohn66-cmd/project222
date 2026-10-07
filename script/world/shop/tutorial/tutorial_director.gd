@@ -240,11 +240,34 @@ func _begin_prologue(moment: Dictionary) -> void:
 	player.velocity = Vector2.ZERO
 	get_parent().set_meta("progressive_tutorial_dialogue",true)
 	# 프롤로그 연출: 독백1 앞에 현대 편의점과 손님·도시 거리, 독백2 앞에 깨어나 숲과 부서진 가게가 보이는 장면(자동 검사에서는 꺼져 있다)
-	if str(moment["id"]) == "prologue_last_shift": await cutscene.play_intro()
+	cutscene.skippable = str(moment["id"]) == "prologue_last_shift"
+	if str(moment["id"]) == "prologue_last_shift":
+		await cutscene.play_intro()
+		if _first_scene_skipped:  # 도입 도중 Esc 로 건너뛰었다: 이미 다음 장면으로 넘어갔다
+			_first_scene_skipped = false
+			return
 	elif str(moment["id"]) == "prologue_unfamiliar_window": await cutscene.play_transition()
 	var moment_id := str(moment["id"])
 	dialogue.beat_handler = func(read_index: int) -> void: await cutscene.beat(moment_id, read_index)
 	dialogue.start("나",null,lines)
+
+# Esc: 첫 장면(손님 → 졸기)을 통째로 건너뛰고 곧바로 이세계에 떨어진 장면(깨어남)으로 간다.
+var _first_scene_skipped: bool = false
+
+func _skip_first_scene() -> void:
+	_first_scene_skipped = true
+	cutscene.abort()
+	# 아직 돌고 있는 연출(걷기·페이드)이 끝나도록 몇 프레임 기다린 뒤 장면을 끝낸 것으로 처리한다
+	for i in range(3): await get_tree().process_frame
+	if not talking: return
+	if dialogue.open:
+		dialogue.line_index = dialogue.lines.size()
+		dialogue.close()  # finished → _end_talk 가 장면 완료를 기록하고 다음 장면(깨어남)을 연다
+	else:
+		# 대화가 시작되기 전(도입 연출 중)이면 완독한 것으로 기록하고 곧바로 끝낸다
+		OpeningPrologueFlow.complete(str(pending.get("prologue", "")))
+		pending.clear()
+		_end_talk()
 
 func _begin_step(step: Dictionary) -> void:
 	var id := str(step["id"])
@@ -274,11 +297,16 @@ func _on_trade(_id: String) -> void:
 	_begin_step(flow.current())
 
 func _unhandled_input(event: InputEvent) -> void:
+	if _is_primary() and cutscene != null and cutscene.enabled and cutscene.skippable and event.is_action_pressed("ui_cancel") and not event.is_echo() and str(pending.get("prologue", "")) == "prologue_last_shift":
+		get_viewport().set_input_as_handled()
+		_skip_first_scene()
+		return
 	if event.is_action_pressed("interact") and not event.is_echo() and try_interact():
 		get_viewport().set_input_as_handled()
 
 func _end_talk() -> void:
 	dialogue.beat_handler = Callable()
+	if cutscene != null: cutscene.skippable = false
 	if not talking: return
 	var completed_read: bool = dialogue.line_index >= dialogue.lines.size()
 	var result := pending.duplicate(true)

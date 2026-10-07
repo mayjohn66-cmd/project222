@@ -71,6 +71,8 @@ var _world: Node
 var _phase: String = ""
 var _visitor: Node2D
 var _shaking: bool = false
+var skippable: bool = false   # 첫 장면(손님 → 졸기) 동안 Esc 로 건너뛸 수 있음을 알린다(건너뛰기 처리는 `TutorialDirector`)
+var aborted: bool = false     # 첫 장면을 건너뛴 직후: 아직 돌고 있는 연출 코루틴이 화면을 다시 건드리지 않게 한다
 
 
 func setup(world: Node) -> void:
@@ -124,7 +126,7 @@ func _ensure() -> bool:
 	_set_lids(0.0)
 	_flash = _rect(Color(1.0, 0.98, 0.9, 0))
 	_hint = Label.new()
-	_hint.text = "E · Esc  건너뛰기"
+	_hint.text = "Esc  건너뛰기"
 	var label_settings := LabelSettings.new()
 	label_settings.font_size = 18
 	label_settings.font_color = Color(1, 1, 1, 0.9)
@@ -150,16 +152,19 @@ func _process(delta: float) -> void:
 		city.tick(delta)
 
 	if _hint != null:
-		_hint.visible = active
+		_hint.visible = active or skippable
 		# 오른쪽 아래(메뉴 단추와 겹치지 않게 위쪽으로 조금)
 		var size: Vector2 = get_viewport().get_visible_rect().size
 		_hint.position = Vector2(size.x - _hint.size.x - 28.0, size.y - _hint.size.y - 150.0)
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	if active and (event.is_action_pressed("ui_cancel") or event.is_action_pressed("interact")) and not event.is_echo():
+	if active and event.is_action_pressed("ui_cancel") and not event.is_echo():
 		_skip = true
-		get_viewport().set_input_as_handled()
+
+		# 첫 장면(skippable)은 `TutorialDirector` 가 같은 Esc 로 장면 전체를 건너뛴다(여기서 입력을 가로채지 않는다)
+		if not skippable:
+			get_viewport().set_input_as_handled()
 
 
 # 매 프레임 `step(0~1)`을 불러 부드럽게 바꾼다. 건너뛰면 곧바로 1로 끝낸다.
@@ -288,6 +293,9 @@ func _free_visitor() -> void:
 
 # 졸음 → 소리가 멀어지다 뚝 끊기고 화면이 까매진다(독백 1 의 마지막 줄은 이 검은 화면 위에서 나온다).
 func _doze() -> void:
+	if aborted:
+		return
+
 	var closure: float = 0.0
 
 	for step in DOZE_STEPS:
@@ -311,6 +319,7 @@ func play_transition() -> void:
 
 	active = true
 	_skip = false
+	aborted = false
 	_phase = "wake"
 
 	if not city.built():
@@ -357,7 +366,7 @@ func _shake() -> void:
 
 # 대사 한 줄을 읽은 뒤(다음 줄 전에) 정해진 동작을 한다. 걷는 동안 대사창은 숨겨져 있다.
 func beat(moment_id: String, read_index: int) -> void:
-	if not enabled:
+	if not enabled or aborted:
 		return
 
 	var action: String = str((BEATS.get(moment_id, {}) as Dictionary).get(read_index, ""))
@@ -464,6 +473,10 @@ func _sit_down() -> void:
 
 	# 의자 쪽으로 한 걸음 들어서며(그쪽을 보게 된다) 앉는다
 	await _move_node(player, seat["seat"], WALK_SPEED * 0.6)
+
+	if aborted:
+		return
+
 	player.set_meta("face_dir", Vector2(seat["face"]))   # 탁자(창) 쪽을 보고 앉는다
 	player.set_meta("sitting", true)
 	await _wait(0.7)
@@ -473,6 +486,10 @@ func _sit_down() -> void:
 # 앉은 채 창밖을 본다: 화면이 검게 사라졌다 1인칭 창밖 장면(차가 지나가는 거리)이 밝아지고 잠시 머문다.
 func _look_out_window() -> void:
 	await _tween(POV_FADE, func(f: float) -> void: _set_alpha(_black, f))
+
+	if aborted:
+		return
+
 	pov.show_pov()
 	await _tween(POV_FADE, func(f: float) -> void: _set_alpha(_black, 1.0 - f))
 	await _wait(POV_WATCH)
@@ -580,6 +597,29 @@ func _set_hud(shown: bool) -> void:
 
 		if node != null:
 			node.visible = shown
+
+
+# 첫 장면(손님 → 졸기)을 건너뛴다: 돌고 있는 연출을 모두 끝내고 화면을 평소로 돌려놓는다. 이어서 곧바로 깨어남(이세계)이 나온다.
+func abort() -> void:
+	if not enabled or city == null:
+		return
+
+	aborted = true
+	_skip = true
+	skippable = false
+	active = false
+	_free_visitor()
+	_stand_up()
+	pov.hide_pov()
+	_set_lids(0.0)
+	_set_alpha(_black, 0.0)
+
+	if noise != null:
+		noise.silence()
+
+	if camera2d != null:
+		camera2d.zoom = Vector2.ONE * _base_zoom
+		camera2d.offset = _base_offset
 
 
 # 연출 도중 나가거나 장면이 바뀌어도 화면과 숲이 원래대로 남게 한다.
