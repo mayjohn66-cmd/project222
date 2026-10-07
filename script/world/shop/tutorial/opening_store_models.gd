@@ -62,7 +62,8 @@ static func _cooler(f: FurnitureAssets.Frame) -> Dictionary:
 	f.box(dark, 0.0, L, 0.0, D, 0.0, 0.14)                    # 받침
 	f.box(body, 0.0, 0.06, 0.0, D, 0.14, top)                 # 왼쪽 옆판
 	f.box(body, L - 0.06, L, 0.0, D, 0.14, top)               # 오른쪽 옆판
-	f.box(back, 0.06, L - 0.06, 0.0, 0.08, 0.14, top - 0.12)  # 안쪽 뒷판(밝게)
+	f.box(back, 0.06, L - 0.06, 0.1, 0.14, 0.14, top - 0.12)  # 안쪽 뒷판(밝게)
+	_back_plate(f, 0.0, L, top)                                # 바깥 등판(회색 판 + 환기 홈): 뒷면 표시
 	f.box(body, 0.0, L, 0.0, D, top - 0.12, top)              # 윗부분
 	f.box(teal, 0.0, L, D - 0.05, D, top - 0.12, top - 0.02)  # 앞 청록 띠
 
@@ -83,6 +84,17 @@ static func _cooler(f: FurnitureAssets.Frame) -> Dictionary:
 	return f.finish(1.8)
 
 
+# 뒷면 표시: 몸통보다 어두운 회색 판 두 겹(홈 줄무늬). v=0 쪽 면이 바깥(등)이다. 등끼리 맞대면 딱 붙은 것처럼 보인다.
+static func _back_plate(f: FurnitureAssets.Frame, u0: float, u1: float, top: float) -> void:
+	var plate: Dictionary = f.flat(Color(0.5, 0.54, 0.6), "bk_plate")
+	var groove: Dictionary = f.flat(Color(0.3, 0.33, 0.38), "bk_groove")
+	f.box(plate, u0, u1, 0.02, 0.1, 0.0, top)
+
+	for r in range(6):
+		var y: float = 0.15 + float(r) * (top - 0.3) / 6.0
+		f.box(groove, u0 + 0.05, u1 - 0.05, 0.0, 0.1, y, y + 0.035)
+
+
 static func _gondola(f: FurnitureAssets.Frame) -> Dictionary:
 	var L: float = f.length
 	var D: float = f.depth
@@ -95,8 +107,9 @@ static func _gondola(f: FurnitureAssets.Frame) -> Dictionary:
 	f.box(dark, 0.0, L, 0.0, D, 0.0, 0.1)
 	f.box(body, 0.0, 0.07, 0.0, D, 0.1, top)
 	f.box(body, L - 0.07, L, 0.0, D, 0.1, top)
-	f.box(body, 0.07, L - 0.07, 0.0, 0.05, 0.1, top)          # 뒷판
-	f.box(teal, 0.0, L, 0.0, D, top, top + 0.16)              # 윗간판
+	_back_plate(f, 0.0, L, top)                                # 등판: 두껍고 어두운 회색 판 + 환기 홈 → 뒷면이 한눈에 구분됨
+	f.box(body, 0.0, L, 0.0, D - 0.12, top, top + 0.06)       # 윗덮개(뒤쪽은 흰색)
+	f.box(teal, 0.0, L, D - 0.12, D, top, top + 0.22)         # 앞 간판(청록)만 높게 → 앞면이 한눈에 구분됨
 	var cols: int = maxi(3, int((L - 0.2) / 0.17))
 	var cw: float = (L - 0.2) / float(cols)
 
