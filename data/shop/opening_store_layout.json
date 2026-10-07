@@ -1,0 +1,161 @@
+{
+	"props": [
+		{
+			"anchor": [
+				5,
+				0
+			],
+			"depth": 0.85,
+			"model": "cooler",
+			"rot": 0,
+			"size": [
+				1,
+				1
+			]
+		},
+		{
+			"anchor": [
+				6,
+				0
+			],
+			"depth": 0.85,
+			"model": "cooler",
+			"rot": 0,
+			"size": [
+				1,
+				1
+			]
+		},
+		{
+			"anchor": [
+				7,
+				0
+			],
+			"depth": 0.85,
+			"model": "cooler",
+			"rot": 0,
+			"size": [
+				1,
+				1
+			]
+		},
+		{
+			"anchor": [
+				8,
+				0
+			],
+			"depth": 0.9,
+			"model": "chest",
+			"rot": 0,
+			"size": [
+				2,
+				1
+			]
+		},
+		{
+			"anchor": [
+				0,
+				0
+			],
+			"depth": 0.55,
+			"model": "gondola",
+			"rot": 0,
+			"size": [
+				2,
+				1
+			]
+		},
+		{
+			"anchor": [
+				2,
+				0
+			],
+			"depth": 0.55,
+			"model": "gondola",
+			"rot": 0,
+			"size": [
+				3,
+				1
+			]
+		},
+		{
+			"anchor": [
+				7,
+				4
+			],
+			"depth": 0.55,
+			"model": "gondola",
+			"rot": 2,
+			"size": [
+				3,
+				1
+			]
+		},
+		{
+			"anchor": [
+				0,
+				2
+			],
+			"depth": 0.8,
+			"model": "counter",
+			"rot": 2,
+			"size": [
+				3,
+				1
+			]
+		},
+		{
+			"anchor": [
+				4,
+				4
+			],
+			"depth": 0.55,
+			"model": "gondola",
+			"rot": 2,
+			"size": [
+				3,
+				1
+			]
+		},
+		{
+			"anchor": [
+				4,
+				5
+			],
+			"depth": 0.55,
+			"model": "gondola",
+			"rot": 0,
+			"size": [
+				3,
+				1
+			]
+		},
+		{
+			"anchor": [
+				7,
+				5
+			],
+			"depth": 0.55,
+			"model": "gondola",
+			"rot": 0,
+			"size": [
+				3,
+				1
+			]
+		},
+		{
+			"anchor": [
+				3,
+				5
+			],
+			"depth": 0.85,
+			"model": "cooler",
+			"rot": 3,
+			"size": [
+				1,
+				1
+			]
+		}
+	],
+	"version": 1
+}
