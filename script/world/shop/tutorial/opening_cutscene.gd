@@ -20,6 +20,8 @@ const SHAKE_PIXELS := 14.0
 const NOD_PIXELS := 22.0           # 졸 때 고개가 숙여지는 만큼 카메라가 내려간다
 const BLACKOUT_HOLD := 1.2
 const WALK_SPEED := 2.4
+const FLINCH_SECONDS := 0.9        # 놀라 멈칫하는 시간
+const BACK_STEP := 1.2             # 뒷걸음질 거리(칸)
 const RUN_SPEED := 4.6             # 놀라서 뛰는 걸음(칸/초)            # 주인공 걸음(칸/초)
 const VISITOR_SPEED := 2.8
 # 1인칭 창밖 장면(`OpeningWindowPov`): 주인공이 시식대에 앉은 뒤 눈높이 시점으로 창밖 거리를 보다가 졸아서 잠든다.
@@ -30,12 +32,15 @@ const LAYER := 20                  # 대사창(30) 아래: 검은 화면 위에�
 # 졸음: [눈꺼풀이 닫힌 정도(0~1), 걸리는 시간(초), 도로 소리 크기(0~1)] 를 차례로. 마지막에 완전히 감긴다.
 const DOZE_STEPS := [[0.55, 0.9, 0.8], [0.12, 0.5, 0.7], [0.8, 1.1, 0.5], [0.3, 0.45, 0.45], [1.0, 1.5, 0.15]]
 
-# 독백 중간의 움직임: 장면 id → {방금 읽은 줄 번호: 동작}. 걷는 곳 이름은 SPOTS, "doze" 는 졸기.
+# 독백 중간의 움직임: 장면 id → {방금 읽은 줄 번호: 동작}. 동작 이름은 `beat` 에서 푼다.
+#   seat 시식대에 앉아 창밖(1인칭) / blink 눈 깜빡임 / doze 졸아서 잠듦 / flinch 놀라 멈칫 / back_away 뒷걸음질 + 화면 흔들림
+#   floor_sit 그 자리에 주저앉기 / stand 일어서기 / run_X 놀라서 X 로 뛰기 / 그 밖(door·shelf·counter·center)은 그곳으로 걷기
+# 대본: docs/스토리/프롤로그_시나리오_요청.md 로 받은 장면 시나리오(2026-10-07).
 const BEATS := {
-	"prologue_last_shift": {0: "seat", 1: "doze"},
-	"prologue_unfamiliar_window": {0: "run_door", 1: "run_shelf", 2: "counter"},   # run_ 은 놀라서 뛰어가는 걸음
-	"prologue_food_dates": {0: "counter"},
-	"prologue_keep_the_light": {0: "center"},
+	"prologue_last_shift": {0: "seat", 1: "blink", 2: "doze"},
+	"prologue_unfamiliar_window": {0: "flinch", 1: "run_door", 2: "back_away"},
+	"prologue_food_dates": {0: "flinch", 1: "counter", 2: "floor_sit"},
+	"prologue_keep_the_light": {0: "stand", 1: "center", 2: "flinch"},
 }
 # 걸을 곳 이름 → 칸 좌표는 집기 배치에서 자동으로 구한다(`_spot`, `OpeningStorePaths`). 길도 집기를 피해 자동으로 찾는다.
 const DOOR_SPOT := Vector2(1.3, 4.0)       # 문 안쪽에서 바깥을 보는 자리
@@ -367,6 +372,18 @@ func beat(moment_id: String, read_index: int) -> void:
 		await _sit_down()
 		return
 
+	if action == "blink":
+		await _blink(2)
+		return
+
+	if action == "flinch":
+		await _wait(FLINCH_SECONDS)
+		return
+
+	if action == "floor_sit" or action == "stand" or action == "back_away":
+		await _body_action(action)
+		return
+
 	var player: Node2D = _world.get_node_or_null("Actors/Player") if _world != null else null
 
 	if player == null or view == null:
@@ -388,6 +405,41 @@ func beat(moment_id: String, read_index: int) -> void:
 	await _move_node(player, target, speed)
 	await get_tree().process_frame
 	await get_tree().process_frame
+
+
+# 눈을 몇 번 깜빡인다(졸림). 시야는 그대로 두고 눈꺼풀만 오르내린다.
+func _blink(times: int) -> void:
+	for i in range(times):
+		await _tween(0.22, func(f: float) -> void: _set_lids(0.7 * f))
+		await _tween(0.3, func(f: float) -> void: _set_lids(0.7 * (1.0 - f)))
+		await _wait(0.12)
+
+	_set_lids(0.0)
+
+
+# 주저앉기 / 일어서기 / 뒷걸음질(보던 쪽을 보며 물러나고 화면이 흔들린다)
+func _body_action(action: String) -> void:
+	var player: Node2D = _world.get_node_or_null("Actors/Player") if _world != null else null
+
+	if player == null or view == null:
+		return
+
+	match action:
+		"floor_sit":
+			player.set_meta("sitting", true)
+			await _wait(0.7)
+		"stand":
+			player.remove_meta("sitting")
+			await _wait(0.6)
+		"back_away":
+			var cell: Vector2 = view.world_to_cell(player.global_position)
+			var away: Vector2 = cell - Vector2(OpeningStorePaths.DOOR_CELL)
+			away = away.normalized() if away.length() > 0.01 else Vector2(1.0, 0.0)
+			player.set_meta("face_lock", -away)
+			_shake()
+			await _move_node(player, cell + away * BACK_STEP, WALK_SPEED * 0.7)
+			await _wait(0.3)
+			player.remove_meta("face_lock")
 
 
 # 시식대(취식 탁자)의 의자까지 걸어가 앉는다. 탁자가 없으면 문 안쪽에 서서 바깥을 본다.
@@ -431,7 +483,11 @@ func _stand_up() -> void:
 
 	if player != null and player.has_meta("sitting"):
 		player.remove_meta("sitting")
-		player.remove_meta("face_dir")
+
+	if player != null:
+		for key in ["face_dir", "face_lock"]:
+			if player.has_meta(key):
+				player.remove_meta(key)
 
 
 # 노드를 칸 좌표 cell 까지 일정한 속도로 옮긴다. 3D 인물은 2D 위치가 바뀌면 걷는 동작과 방향을 스스로 만든다.

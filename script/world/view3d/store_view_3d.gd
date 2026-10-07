@@ -1189,7 +1189,10 @@ func _sync_actors(delta: float) -> void:
 		if figure.walking:
 			figure.move_speed = lerpf(figure.move_speed, clampf(move.length() / delta, 0.4, 4.0), 0.25)
 
-		if move.length() > 0.0005:
+		if n.has_meta("face_lock"):
+			var lock: Vector2 = n.get_meta("face_lock")  # 연출: 움직이는 중에도 이쪽을 본다(뒷걸음질)
+			figure.facing_yaw_deg = rad_to_deg(atan2(lock.x, lock.y))
+		elif move.length() > 0.0005:
 			figure.facing_yaw_deg = rad_to_deg(atan2(move.x, move.y))
 		elif n.has_meta("face_dir"):
 			var face: Vector2 = n.get_meta("face_dir")  # 연출: 멈춰 있을 때 바라볼 칸 방향
