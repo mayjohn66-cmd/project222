@@ -411,6 +411,7 @@ func _sit_down() -> void:
 
 	# 의자 쪽으로 한 걸음 들어서며(그쪽을 보게 된다) 앉는다
 	await _move_node(player, seat["seat"], WALK_SPEED * 0.6)
+	player.set_meta("face_dir", Vector2(seat["face"]))   # 탁자(창) 쪽을 보고 앉는다
 	player.set_meta("sitting", true)
 	await _wait(0.7)
 	await _look_out_window()
@@ -430,6 +431,7 @@ func _stand_up() -> void:
 
 	if player != null and player.has_meta("sitting"):
 		player.remove_meta("sitting")
+		player.remove_meta("face_dir")
 
 
 # 노드를 칸 좌표 cell 까지 일정한 속도로 옮긴다. 3D 인물은 2D 위치가 바뀌면 걷는 동작과 방향을 스스로 만든다.

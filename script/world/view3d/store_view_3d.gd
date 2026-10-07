@@ -1191,6 +1191,9 @@ func _sync_actors(delta: float) -> void:
 
 		if move.length() > 0.0005:
 			figure.facing_yaw_deg = rad_to_deg(atan2(move.x, move.y))
+		elif n.has_meta("face_dir"):
+			var face: Vector2 = n.get_meta("face_dir")  # 연출: 멈춰 있을 때 바라볼 칸 방향
+			figure.facing_yaw_deg = rad_to_deg(atan2(face.x, face.y))
 
 		figure.animate(delta)
 

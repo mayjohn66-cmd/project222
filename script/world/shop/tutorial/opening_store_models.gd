@@ -210,10 +210,11 @@ static func _table(f: FurnitureAssets.Frame) -> Dictionary:
 	f.box(wood, cx - 0.34, cx + 0.34, cz - 0.34, cz + 0.34, 0.5, 0.58)
 
 	for side in [-1.0, 1.0]:
-		var u0: float = cx + side * 0.4 - 0.1
-		f.box(dark, u0 + 0.07, u0 + 0.13, cz - 0.04, cz + 0.04, 0.0, 0.28)
-		f.box(green, u0, u0 + 0.2, cz - 0.12, cz + 0.12, 0.28, 0.34)
-		f.box(green, u0 + (0.0 if side < 0.0 else 0.16), u0 + (0.04 if side < 0.0 else 0.2), cz - 0.12, cz + 0.12, 0.34, 0.62)  # 등받이는 탁자 반대쪽
+		# 의자: 앉는 판 0.3 x 0.3, 등받이는 탁자 반대쪽 가장자리에 높게(앉은 사람이 등을 기댄다)
+		var u0: float = cx + side * 0.4 - 0.15
+		f.box(dark, u0 + 0.12, u0 + 0.18, cz - 0.04, cz + 0.04, 0.0, 0.28)
+		f.box(green, u0, u0 + 0.3, cz - 0.15, cz + 0.15, 0.28, 0.34)
+		f.box(green, u0 + (0.0 if side < 0.0 else 0.26), u0 + (0.04 if side < 0.0 else 0.3), cz - 0.15, cz + 0.15, 0.34, 0.72)  # 등받이는 탁자 반대쪽
 
 	return f.finish(0.65)
 
