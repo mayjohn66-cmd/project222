@@ -1,0 +1,22 @@
+id,group,name_ko,priority,directions,animations,description_en,notes
+player,main,점장(주인공),1,4,"breathing-idle;walk;picking-up;crouching;getting-up;surprise;sit",young adult convenience store clerk with short dark hair in a dark green uniform vest over a white shirt and black trousers and black shoes,플레이어 닉네임 변경 가능. 프롤로그에서 앉기·놀람 필요
+worker,main,직원,1,4,"breathing-idle;walk;picking-up",convenience store employee in a dark green cap and dark green uniform apron over a white shirt,직원 3명(worker_001~003)은 모자·머리색만 다르게
+naru,named,타블렌,1,4,"breathing-idle;walk;picking-up",middle-aged male peddler with curly dark brown hair and a short beard and a wide-brim hat and a tan coat and a dark brown vest and worn leather boots and a huge patched cloth bundle on his back,행상인. 보따리와 모자로 구분
+delvin,named,델빈,1,4,"breathing-idle;walk;picking-up",young man with messy light brown hair and round curious eyes in a cream shirt and a short blue jacket and brown trousers and plain shoes and a small cloth coin pouch,첫 현지 손님
+doyun,named,코르빈,2,4,"breathing-idle;walk;picking-up",adult male miner with short black hair and thick eyebrows in a blue work shirt and a navy apron and reinforced work trousers and gloves and a small hammer and a stone pouch,채굴꾼
+sora,named,이세르,2,4,"breathing-idle;walk;picking-up",adult woman traveler with dark chestnut hair tied low in a long sand-colored travel coat over an olive undershirt and brown shoes and a flat satchel and a small notebook,유적 여행자
+neighbor_bread,named,오렐,2,4,"breathing-idle;walk;picking-up",middle-aged woman with silver-streaked brown hair in a loose bun in a brick-red top and a cream apron and a long brown skirt and a small cloth basket,이웃
+child_berries,named,피니아,2,4,"breathing-idle;walk;picking-up",small energetic adult woman with a high ponytail of reddish brown hair in a mustard yellow top and a teal short jacket and practical trousers and a multi-pocket cloth bag,이웃
+traveler_water,named,라슈,3,4,"breathing-idle;walk;picking-up",lean young man with short windblown dark brown hair and tanned skin in a gray-blue cloak and green-brown trousers and sturdy boots and a tied water flask and a cloth map pouch,여행자
+gatherer_herbs,named,엘미,3,4,"breathing-idle;walk;picking-up",light-built young woman with a low dark brown braid in a moss green jacket and a light green undershirt and earth-colored trousers and soft gloves and a small leafy basket,채집가
+miner_ore,named,바르크,3,4,"breathing-idle;walk;picking-up",stocky middle-aged male miner with short gray-brown hair and beard in a gray-brown work outfit and a dark leather apron and a brass miner cap and thick boots and an old pickaxe,광부
+healer_moss,named,세이나,3,4,"breathing-idle;walk;picking-up",middle-aged woman healer with shoulder-length dark hair tied at the nape in a deep teal coat over a gray-white undershirt and a light brown bag and shoes and a small herb pouch and a corked bottle,치료사(존댓말)
+customer_normal,customer,일반 손님,2,4,"breathing-idle;walk",ordinary townsperson in simple clothes,손님 소분류별 외형은 data/shop/catalogs/actor_looks_3d.csv 의 색·모자·등짐 값을 따른다
+customer_traveler,customer,여행자 손님,3,4,"breathing-idle;walk",traveler with a small backpack and a hat,
+customer_adventurer,customer,모험가 손님,3,4,"breathing-idle;walk",adventurer with light leather armor,
+customer_miner,customer,광부 손님,3,4,"breathing-idle;walk",miner with a helmet and a pickaxe,
+customer_herbalist,customer,약초꾼 손님,3,4,"breathing-idle;walk",herbalist with a herb basket,
+customer_child,customer,아이 손님,3,4,"breathing-idle;walk",small child in simple clothes,키가 작다(look 의 total)
+field_slime,enemy,슬라임,1,4,"breathing-idle;walk;taking-punch;falling-back-death",cute green slime blob with simple eyes,원정 적. 사족/무정형 템플릿이 없어 custom 애니메이션 필요
+mine_bat,enemy,광산 박쥐,2,4,"breathing-idle;walk;taking-punch;falling-back-death",small grey cave bat with spread wings,
+mine_golem,enemy,광산 골렘,3,4,"breathing-idle;walk;taking-punch;falling-back-death",stone golem made of grey rocks with glowing blue crystal core,보스급: 큰 캔버스 필요(비용 큼)
