@@ -11,10 +11,12 @@ extends RefCounted
 ##   counter 계산대: 청록 상판·흰 몸통, 단말기(POS)·영수증 프린터·바구니
 ## 길이(L)·깊이(D)는 칸 단위. 앞면(손님 쪽)은 v = D.
 
+# 차분한 상품 색. 진열대는 한 줄에 같은 색 상품을 묶음으로, 냉장고는 같은 색을 세로 한 줄로 놓아 정돈돼 보이게 한다.
 const PALETTE := [
-	Color(0.92, 0.28, 0.25), Color(0.98, 0.78, 0.22), Color(0.28, 0.62, 0.92), Color(0.4, 0.78, 0.4),
-	Color(0.95, 0.5, 0.75), Color(0.96, 0.96, 0.98), Color(0.58, 0.42, 0.88), Color(0.98, 0.58, 0.2),
+	Color(0.97, 0.72, 0.62), Color(0.99, 0.93, 0.7), Color(0.72, 0.85, 1.0), Color(0.78, 0.94, 0.8),
+	Color(0.98, 0.98, 1.0), Color(0.98, 0.98, 1.0), Color(0.72, 0.85, 1.0), Color(0.99, 0.93, 0.7),
 ]
+const RUN := 3          # 진열대 한 줄에서 같은 상품이 이어지는 칸 수
 const TEAL := Color(0.1, 0.72, 0.72)
 const WHITE := Color(0.93, 0.95, 0.97)
 const GRAY := Color(0.7, 0.74, 0.8)
@@ -70,7 +72,7 @@ static func _cooler(f: FurnitureAssets.Frame) -> Dictionary:
 
 		for j in range(6):
 			var u0: float = 0.1 + float(j) * ((L - 0.2) / 6.0)
-			f.box(_goods(f, r * 3 + j * 2), u0, u0 + (L - 0.2) / 6.0 - 0.025, D * 0.32, D - 0.1, y0 + 0.03, y0 + 0.26)
+			f.box(_goods(f, 2 + j % 2), u0, u0 + (L - 0.2) / 6.0 - 0.025, D * 0.32, D - 0.1, y0 + 0.03, y0 + 0.26)
 
 	# 앞 유리문 틀(가운데 세로 손잡이)과 반사
 	f.box(dark, 0.06, L - 0.06, D - 0.03, D, 0.14, 0.2)
@@ -105,8 +107,7 @@ static func _gondola(f: FurnitureAssets.Frame) -> Dictionary:
 
 		for j in range(cols):
 			var u0: float = 0.1 + float(j) * cw
-			var h: float = 0.17 + 0.07 * float((j * 5 + r * 3) % 3)
-			f.box(_goods(f, r * 2 + j * 3 + 1), u0, u0 + cw - 0.02, 0.1, D - 0.06, y0 + 0.03, y0 + 0.03 + h)
+			f.box(_goods(f, (r % 2) * 2 + (j / RUN) % 2), u0, u0 + cw - 0.02, 0.1, D - 0.06, y0 + 0.03, y0 + 0.03 + 0.22)
 
 	return f.finish(1.66)
 
@@ -127,7 +128,7 @@ static func _chest(f: FurnitureAssets.Frame) -> Dictionary:
 	for j in range(cols):
 		for k in range(3):
 			var v0: float = 0.1 + float(k) * ((D - 0.2) / 3.0)
-			f.box(_goods(f, j * 3 + k * 2), 0.08 + float(j) * cw, 0.08 + float(j) * cw + cw - 0.03, v0, v0 + (D - 0.2) / 3.0 - 0.03, 0.7, 0.8)
+			f.box(_goods(f, 4 + (j / 2) % 2), 0.08 + float(j) * cw, 0.08 + float(j) * cw + cw - 0.03, v0, v0 + (D - 0.2) / 3.0 - 0.03, 0.7, 0.8)
 
 	f.box(lid, 0.04, L - 0.04, 0.04, D - 0.04, 0.82, 0.86)
 	return f.finish(0.9)
@@ -149,7 +150,7 @@ static func _rack(f: FurnitureAssets.Frame) -> Dictionary:
 
 		for j in range(3):
 			var u0: float = 0.1 + float(j) * ((L - 0.2) / 3.0)
-			f.box(_goods(f, r * 3 + j + 2), u0, u0 + (L - 0.2) / 3.0 - 0.03, 0.08, D - 0.08, y0 + 0.03, y0 + 0.3)
+			f.box(_goods(f, r + 2), u0, u0 + (L - 0.2) / 3.0 - 0.03, 0.08, D - 0.08, y0 + 0.03, y0 + 0.3)
 
 	return f.finish(1.3)
 

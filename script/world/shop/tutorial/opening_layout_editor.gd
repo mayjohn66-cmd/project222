@@ -9,6 +9,8 @@ extends Node
 
 signal closed
 
+# 바닥 바로 위·모든 집기 뒤에 고정해 깊이 정렬에 끼지 않는다(집기 순서를 흐트러뜨리지 않음)
+const SLAB_RANK := -0.5
 const KEY_CURSOR := "cut_sedit_cur"
 const KEY_SELECT := "cut_sedit_sel"
 const HISTORY_LIMIT := 40
@@ -343,6 +345,7 @@ func _refresh_marks() -> void:
 	# 마우스 칸 표시와 고른 집기 바닥 표시(얇은 판 하나씩)
 	if _hover.x > -50:
 		view._set_item(KEY_CURSOR, Vector2(_hover) - Vector2(0.5, 0.5), Vector2(_hover) + Vector2(0.5, 0.5), 0.03, "tile", CURSOR_TINT, "")
+		view._items[KEY_CURSOR]["fixed_rank"] = SLAB_RANK
 	else:
 		view._remove_item(KEY_CURSOR)
 
@@ -350,6 +353,7 @@ func _refresh_marks() -> void:
 		var rect: Rect2 = OpeningStoreLayout.rect_of(props[selected])
 		var cells: Rect2i = OpeningStoreLayout.cells_of(props[selected])
 		view._set_item(KEY_SELECT, Vector2(cells.position) - Vector2(0.5, 0.5), Vector2(cells.end) - Vector2(0.5, 0.5), 0.02, "tile", SELECT_TINT, "")
+		view._items[KEY_SELECT]["fixed_rank"] = SLAB_RANK
 		rect = rect
 	else:
 		view._remove_item(KEY_SELECT)
