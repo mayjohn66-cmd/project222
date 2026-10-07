@@ -1,11 +1,11 @@
 class_name OpeningTerrain
 extends RefCounted
-## 새 게임 초반(첫 원정을 마치기 전)의 "낯선 땅".
+## 새 게임 초반(첫 원정을 다녀와 가져온 재료를 첫 판매할 때까지)의 "낯선 땅".
 ## 가게가 갑자기 놓인 곳이라 포장도로·울타리·마을 소품이 없고, 가게 부지와 원정 출발지까지 이어지는 좁은 풀밭 길만 있다.
 ## 길은 가게 문 앞에서 시작해 흙길이 점점 흐려지며 원정 출발지로 어렴풋이 이어진다.
-## 첫 원정을 마치면 `wild()`가 false가 되어 평소 마을 지형으로 돌아간다.
+## 원정 직후 곧바로 마을 지형으로 바뀌면 튜토리얼 도중에 풍경이 달라져 어색하므로, 원정 뒤 재료 판매 단계(`OpeningJourneyFlow.RAW_SALE`)까지 마친 다음에야 `wild()`가 false가 되어 평소 마을 지형으로 돌아간다.
 
-const EXPEDITION_DONE := "tutorial_step:expedition:done"
+const END_BEAT := OpeningJourneyFlow.RAW_SALE   # 이 기록이 생기면 낯선 땅이 끝난다(핵심 튜토리얼의 마지막 판매)
 const GRASS_MARGIN := 3          # 길 양옆으로 남기는 풀밭 폭(칸)
 const DEPARTURE_MARGIN := 3      # 원정 출발지(5×5) 둘레 여유(칸)
 const SOLID_TRAIL_CELLS := 4     # 문 앞에서 흙이 끊기지 않는 칸 수
@@ -15,10 +15,10 @@ const TRAIL_MIN_CHANCE := 30
 const TRAIL_RUN := 3             # 흙이 끊기는 단위(칸)
 
 
-# 지금이 낯선 땅 단계인지. 기존 저장·첫 원정을 마친 게임은 항상 false.
+# 지금이 낯선 땅 단계인지. 기존 저장·첫 재료 판매를 마친 게임은 항상 false.
 static func wild() -> bool:
 	if PlayerProgress.story_beat_days.has(OpeningJourneyFlow.VERSION):
-		return not PlayerProgress.story_beat_days.has(EXPEDITION_DONE)
+		return not PlayerProgress.story_beat_days.has(END_BEAT)
 
 	# 도입부가 기록되기 직전의 새 게임(OpeningJourneyFlow.initialize 와 같은 조건)
 	if GameState.total_day != 1 or GameState.has_store_layout() or GameState.has_player_state():
