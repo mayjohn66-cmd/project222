@@ -20,7 +20,9 @@ static func sold(item: String, amount: int) -> void:
 		var store = load("res://script/data/shop/events/store_event_data.gd")
 		if e["products"].has(item) and store.is_event_active(id, GameState.total_day) \
 			and store.is_discovered_for_occurrence(id, GameState.total_day):
-			mark("receipt:" + id + ":" + str(CalendarData.get_year(GameState.total_day)))
+			var suffix := id + ":" + str(CalendarData.get_year(GameState.total_day))
+			mark("receipt:" + suffix)
+			mark("receipt_item:" + suffix + ":" + item)
 static func stored(item: String, amount: int) -> void:
 	if amount > 0 and FishingData.fish(item) and accepted("fishing_keep"):
 		mark("kept")

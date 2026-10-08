@@ -4,313 +4,365 @@
       "id": "fishing_intro_intro",
       "owner_id": "fishing_intro",
       "phase": "intro",
-      "npc": "엘미"
+      "npc": "엘미",
+      "context": "소개는 행동을 자동 완료하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fishing_intro_finish",
       "owner_id": "fishing_intro",
       "phase": "finish",
-      "npc": "엘미"
+      "npc": "엘미",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fishing_rod_intro",
       "owner_id": "fishing_rod",
       "phase": "intro",
-      "npc": "타블렌"
+      "npc": "타블렌",
+      "context": "소개는 행동을 자동 완료하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fishing_rod_finish",
       "owner_id": "fishing_rod",
       "phase": "finish",
-      "npc": "타블렌"
+      "npc": "타블렌",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fishing_first_catch_intro",
       "owner_id": "fishing_first_catch",
       "phase": "intro",
-      "npc": "엘미"
+      "npc": "엘미",
+      "context": "소개는 행동을 자동 완료하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fishing_first_catch_finish",
       "owner_id": "fishing_first_catch",
       "phase": "finish",
-      "npc": "엘미"
+      "npc": "엘미",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fishing_first_sale_intro",
       "owner_id": "fishing_first_sale",
       "phase": "intro",
-      "npc": "나"
+      "npc": "나",
+      "context": "소개는 행동을 자동 완료하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fishing_first_sale_finish",
       "owner_id": "fishing_first_sale",
       "phase": "finish",
-      "npc": "나"
+      "npc": "나",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fishing_keep_intro",
       "owner_id": "fishing_keep",
       "phase": "intro",
-      "npc": "타블렌"
+      "npc": "타블렌",
+      "context": "소개는 행동을 자동 완료하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 안내 뒤 실제 냉장/냉동 입고 또는 생산실에서 건조 완성품 수령. 보존 설비를 무료로 지급하지 않는다."
     },
     {
       "id": "fishing_keep_finish",
       "owner_id": "fishing_keep",
       "phase": "finish",
-      "npc": "타블렌"
+      "npc": "타블렌",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다. 안내 뒤 실제 냉장/냉동 입고 또는 생산실에서 건조 완성품 수령. 보존 설비를 무료로 지급하지 않는다."
     },
     {
       "id": "fish_request_neighbor_intro",
       "owner_id": "fish_request_neighbor",
       "phase": "intro",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_neighbor_finish",
       "owner_id": "fish_request_neighbor",
       "phase": "finish",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_request_worker_intro",
       "owner_id": "fish_request_worker",
       "phase": "intro",
-      "npc": "코르빈"
+      "npc": "코르빈",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_worker_finish",
       "owner_id": "fish_request_worker",
       "phase": "finish",
-      "npc": "코르빈"
+      "npc": "코르빈",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_request_road_intro",
       "owner_id": "fish_request_road",
       "phase": "intro",
-      "npc": "타블렌"
+      "npc": "타블렌",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_road_finish",
       "owner_id": "fish_request_road",
       "phase": "finish",
-      "npc": "타블렌"
+      "npc": "타블렌",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_request_children_intro",
       "owner_id": "fish_request_children",
       "phase": "intro",
-      "npc": "피니아"
+      "npc": "피니아",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_children_finish",
       "owner_id": "fish_request_children",
       "phase": "finish",
-      "npc": "피니아"
+      "npc": "피니아",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_request_rain_intro",
       "owner_id": "fish_request_rain",
       "phase": "intro",
-      "npc": "세이나"
+      "npc": "세이나",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_rain_finish",
       "owner_id": "fish_request_rain",
       "phase": "finish",
-      "npc": "세이나"
+      "npc": "세이나",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_request_spring_intro",
       "owner_id": "fish_request_spring",
       "phase": "intro",
-      "npc": "엘미"
+      "npc": "엘미",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_spring_finish",
       "owner_id": "fish_request_spring",
       "phase": "finish",
-      "npc": "엘미"
+      "npc": "엘미",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_request_summer_kept_intro",
       "owner_id": "fish_request_summer_kept",
       "phase": "intro",
-      "npc": "코르빈"
+      "npc": "코르빈",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_summer_kept_finish",
       "owner_id": "fish_request_summer_kept",
       "phase": "finish",
-      "npc": "코르빈"
+      "npc": "코르빈",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_request_autumn_intro",
       "owner_id": "fish_request_autumn",
       "phase": "intro",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_autumn_finish",
       "owner_id": "fish_request_autumn",
       "phase": "finish",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_request_winter_intro",
       "owner_id": "fish_request_winter",
       "phase": "intro",
-      "npc": "바르크"
+      "npc": "바르크",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_winter_finish",
       "owner_id": "fish_request_winter",
       "phase": "finish",
-      "npc": "바르크"
+      "npc": "바르크",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_request_evening_intro",
       "owner_id": "fish_request_evening",
       "phase": "intro",
-      "npc": "이세르"
+      "npc": "이세르",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_request_evening_finish",
       "owner_id": "fish_request_evening",
       "phase": "finish",
-      "npc": "이세르"
+      "npc": "이세르",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_event_spring_intro",
       "owner_id": "fish_event_spring",
       "phase": "intro",
-      "npc": "엘미"
+      "npc": "엘미",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_event_spring_finish",
       "owner_id": "fish_event_spring",
       "phase": "finish",
-      "npc": "엘미"
+      "npc": "엘미",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_event_summer_intro",
       "owner_id": "fish_event_summer",
       "phase": "intro",
-      "npc": "이세르"
+      "npc": "이세르",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_event_summer_finish",
       "owner_id": "fish_event_summer",
       "phase": "finish",
-      "npc": "이세르"
+      "npc": "이세르",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_event_autumn_intro",
       "owner_id": "fish_event_autumn",
       "phase": "intro",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_event_autumn_finish",
       "owner_id": "fish_event_autumn",
       "phase": "finish",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_event_winter_intro",
       "owner_id": "fish_event_winter",
       "phase": "intro",
-      "npc": "코르빈"
+      "npc": "코르빈",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_event_winter_finish",
       "owner_id": "fish_event_winter",
       "phase": "finish",
-      "npc": "코르빈"
+      "npc": "코르빈",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_event_rain_intro",
       "owner_id": "fish_event_rain",
       "phase": "intro",
-      "npc": "타블렌"
+      "npc": "타블렌",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_event_rain_finish",
       "owner_id": "fish_event_rain",
       "phase": "finish",
-      "npc": "타블렌"
+      "npc": "타블렌",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_event_moon_intro",
       "owner_id": "fish_event_moon",
       "phase": "intro",
-      "npc": "이세르"
+      "npc": "이세르",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 플레이어의 챙기기/놓아주기 선택 공통 마무리. 놓아주기만 생선1마리 소비하며 어느 답을 골랐다고 단정하지 않는다."
     },
     {
       "id": "fish_event_moon_finish",
       "owner_id": "fish_event_moon",
       "phase": "finish",
-      "npc": "이세르"
+      "npc": "이세르",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 플레이어의 챙기기/놓아주기 선택 공통 마무리. 놓아주기만 생선1마리 소비하며 어느 답을 골랐다고 단정하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_event_table_intro",
       "owner_id": "fish_event_table",
       "phase": "intro",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 오렐·코르빈·피니아의 실제 물가 모임 뒤 생선구이2개 나눔. 현금·평판·추가 답례 없음."
     },
     {
       "id": "fish_event_table_finish",
       "owner_id": "fish_event_table",
       "phase": "finish",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 오렐·코르빈·피니아의 실제 물가 모임 뒤 생선구이2개 나눔. 현금·평판·추가 답례 없음. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "fish_event_memory_intro",
       "owner_id": "fish_event_memory",
       "phase": "intro",
-      "npc": "나"
+      "npc": "나",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다."
     },
     {
       "id": "fish_event_memory_finish",
       "owner_id": "fish_event_memory",
       "phase": "finish",
-      "npc": "나"
+      "npc": "나",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 이 대화의 완독 직후 실제 행동·재고를 재확인하고 한 번만 완료한다. 소개와 마무리 사이에 추가 선물을 만들지 않는다."
     },
     {
       "id": "recipe_fish_grilled_learn",
       "owner_id": "recipe_fish_grilled",
       "phase": "learn",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 완독 후 제조법만 배운다. 완성품 무료 지급·원격 제작·원격 수령 없음."
     },
     {
       "id": "recipe_fish_dried_learn",
       "owner_id": "recipe_fish_dried",
       "phase": "learn",
-      "npc": "타블렌"
+      "npc": "타블렌",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 완독 후 제조법만 배운다. 완성품 무료 지급·원격 제작·원격 수령 없음."
     },
     {
       "id": "recipe_fish_soup_learn",
       "owner_id": "recipe_fish_soup",
       "phase": "learn",
-      "npc": "세이나"
+      "npc": "세이나",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 완독 후 제조법만 배운다. 완성품 무료 지급·원격 제작·원격 수령 없음."
     },
     {
       "id": "recipe_fish_bread_learn",
       "owner_id": "recipe_fish_bread",
       "phase": "learn",
-      "npc": "오렐"
+      "npc": "오렐",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 완독 후 제조법만 배운다. 완성품 무료 지급·원격 제작·원격 수령 없음."
     },
     {
       "id": "recipe_fish_lunch_learn",
       "owner_id": "recipe_fish_lunch",
       "phase": "learn",
-      "npc": "피니아"
+      "npc": "피니아",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 완독 후 제조법만 배운다. 완성품 무료 지급·원격 제작·원격 수령 없음."
     },
     {
       "id": "recipe_fish_winter_stew_learn",
       "owner_id": "recipe_fish_winter_stew",
       "phase": "learn",
-      "npc": "바르크"
+      "npc": "바르크",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음 실제 실행 조건은 content를 따른다. 소개로 재료·돈을 지급하거나 건물·고객·회복을 약속하지 않는다. 완독 후 제조법만 배운다. 완성품 무료 지급·원격 제작·원격 수령 없음."
     }
   ]
 }

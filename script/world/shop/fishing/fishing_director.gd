@@ -258,7 +258,16 @@ func _start_dialogue(scene: String) -> void:
 	if mode == "menu": panel.root.hide()
 	else: _lock(true)
 	mode = "dialogue"
-	dialogue.start(_speaker(pending_entry), null, RequestTextData.lines("service_text", scene))
+	var lines := RequestTextData.lines("service_text", scene)
+	if pending_entry.get("kind", "") == "store_events" and pending_phase == "response":
+		var item_name := "가게 음식"
+		var suffix := str(pending_entry["id"]) + ":" + str(CalendarData.get_year(GameState.total_day))
+		for item in pending_entry["products"]:
+			if FishingRecords.has("receipt_item:" + suffix + ":" + str(item)):
+				item_name = ItemData.get_item_name(str(item))
+				break
+		for i in range(lines.size()): lines[i] = lines[i].replace("{item}", item_name)
+	dialogue.start(_speaker(pending_entry), null, lines)
 func _dialogue_finished() -> void:
 	var full := dialogue.line_index >= dialogue.lines.size()
 	var id := str(pending_entry.get("id", ""))

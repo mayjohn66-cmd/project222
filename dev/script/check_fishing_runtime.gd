@@ -128,7 +128,7 @@ func run() -> void:
 	FishingRecords.sold("bread",1)
 	check(not FishingRecords.has("receipt:fish_store_spring:1"), "unrelated sale no event response")
 	FishingRecords.sold("fish_grilled",1)
-	check(FishingRecords.has("receipt:fish_store_spring:1"), "actual relevant receipt unlocks response")
+	check(FishingRecords.has("receipt:fish_store_spring:1") and FishingRecords.has("receipt_item:fish_store_spring:1:fish_grilled"), "actual relevant receipt unlocks response with sold product")
 	check(StoreEventDemandData.get_active_demand_entries("normal",21).any(func(e):return e["target_id"]=="fish_grilled"), "fish event feeds actual customer demand picker")
 	check(StoreEventData.can_share_event("fish_store_spring",133), "next year rumor independent")
 	# Serialized file uses an explicit test filename; the user's save slots are untouched.
@@ -300,6 +300,15 @@ func run() -> void:
 		var old: Vector2 = npc.global_position
 		for i in range(30): npc._physics_process(0.1)
 		check(npc.global_position.distance_to(old) > 5, "visitor actually walks rather than teleporting conversation")
+	GameState.total_day = 21
+	StoreEventData.discover_event("fish_store_spring",21)
+	FishingRecords.sold("fish_grilled",1)
+	director.pending_entry = FishingData.entry("fish_store_spring").duplicate(true)
+	director.pending_entry["kind"] = "store_events"
+	director.pending_phase = "response"
+	director._start_dialogue("fish_store_spring_response")
+	check(not "|".join(director.dialogue.lines).contains("{item}") and "|".join(director.dialogue.lines).contains(ItemData.get_item_name("fish_grilled")),"waterfront response names actual sold product without raw token")
+	director.dialogue.close()
 	# Optional visual evidence in rendered runs.
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--snap="):
