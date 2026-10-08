@@ -9,9 +9,10 @@ extends Node
 
 
 const GAME_TILE: Vector2 = Vector2(96.0, 48.0)  # 2D 게임의 칸 크기
-# 확대 배율(shrink)에 따라 정해지는 값. 기본 3배: 낮은 해상도 칸 36×18, 블록 22px, 질감 18, 2D 줌 1.125.
-# configure_scale(n) 으로 1·2·3배를 고를 수 있다(시험·비교용, 노드를 장면에 넣기 전에 호출).
-var shrink: int = 3  # 낮은 해상도 → 화면 확대 배율
+# 확대 배율(shrink)에 따라 정해지는 값. 3배: 낮은 해상도 칸 36×18, 블록 22px, 질감 18, 2D 줌 1.125 / 1배: 칸 96×48, 블록 60px, 질감 48, 2D 줌 1.0.
+# 기본은 DEFAULT_SHRINK(2026-10-08 사용자 결정: 3배는 도트가 너무 뭉개져 1배로 되돌림). configure_scale(n) 으로 1·2·3배를 고를 수 있다(노드를 장면에 넣기 전에 호출).
+const DEFAULT_SHRINK: int = 1
+var shrink: int = DEFAULT_SHRINK  # 낮은 해상도 → 화면 확대 배율
 var tile_low: float = 36.0  # 낮은 해상도에서 한 칸 마름모 폭
 var block_px: float = 22.0  # 1블록 = 낮은 해상도 세로 px
 var match_zoom: float = 1.125  # 2D 카메라가 이 줌일 때 3D 와 2D 칸 크기가 같다
@@ -113,6 +114,7 @@ func configure_scale(n: int) -> void:
 
 
 func _ready() -> void:
+	configure_scale(shrink)  # 배율에 딸린 값(칸 크기·블록·질감)을 한 곳에서 맞춘다
 	process_priority = 200  # 2D 노드들이 움직인 다음에 읽는다
 	process_mode = Node.PROCESS_MODE_ALWAYS  # 건축 모드가 게임을 멈춰도(get_tree().paused) 3D 는 미리보기·가구를 계속 갱신한다
 	world = get_parent() as Node2D
