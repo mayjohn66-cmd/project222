@@ -16,6 +16,7 @@ var _icon: TextureRect
 var _preview: FurniturePreview  # 가구는 그림 대신 실제 배치에 쓰는 3D 모델을 보여 준다
 var _price: Label
 var _acquire: Label
+var _use: Label
 var _desc: Label
 var _hint: Label
 var _selected_card: Control = null
@@ -88,6 +89,9 @@ func _build() -> void:
 	content.add_child(_price)
 	_acquire = _label(18)
 	content.add_child(_acquire)
+	_use = _label(17,INK_DIM)
+	_use.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	content.add_child(_use)
 	var line := HSeparator.new()
 	line.modulate = PAPER_LINE
 	content.add_child(line)
@@ -105,7 +109,7 @@ func _build() -> void:
 
 
 func _show_empty() -> void:
-	for n in [_name,_frame,_price,_acquire,_desc]:
+	for n in [_name,_frame,_price,_acquire,_use,_desc]:
 		n.visible = false
 	_hint.visible = true
 
@@ -140,9 +144,12 @@ func _on_entry(entry_type: String,entry_id: Variant,card: ItemCard) -> void:
 			icon = ItemData.get_item_icon(item_id)
 			var price := ItemData.get_item_price(item_id)
 			if price > 0: price_text = "가격 : %d G" % price
-			acquire = "획득 방법 : %s" % ACQUIRE_TEXT.get(str(ItemData.get_item_type(item_id)),"알 수 없음")
+			var item_acquire := InventoryItemGuide.acquire(item_id)
+			acquire = item_acquire if not item_acquire.is_empty() else "획득 방법 : %s" % ACQUIRE_TEXT.get(str(ItemData.get_item_type(item_id)),"알 수 없음")
 			desc = str(data.get("description",""))
 	if entry_type != ItemCard.ENTRY_TYPE_FURNITURE: _preview.visible = false
+	_use.text = InventoryItemGuide.note(self,item_id) if entry_type != ItemCard.ENTRY_TYPE_FURNITURE else ""
+	_use.visible = not _use.text.is_empty()
 	_scroll.scroll_vertical = 0
 	_name.text = title
 	_icon.texture = icon
