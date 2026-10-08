@@ -41,6 +41,7 @@ static func deposit(id: String, item: String, amount: int = 1) -> int:
 		FoodShelfLife.zone_batches(id, item, int(contents.get(item, 0))).append_array(batches)
 	contents[item] = int(contents.get(item, 0)) + removed
 	PreservationLessonRecords.record_deposit(id, item, removed)
+	FishingRecords.stored(item, removed)
 	return removed
 
 static func withdraw(id: String, item: String, amount: int = 1) -> int:

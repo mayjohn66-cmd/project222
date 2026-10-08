@@ -56,3 +56,15 @@ village_festival_winter,normal,item,herb_drink,45,1,2
 village_festival_winter,normal,item,hand_warmer,45,1,2
 village_festival_winter,traveler,item,herb_drink,30,1,2
 village_festival_winter,traveler,item,hand_warmer,30,1,2
+fish_store_spring,normal,item,fish_grilled,60,1,2
+fish_store_spring,traveler,item,fish_grilled,30,1,2
+fish_store_summer,normal,item,fish_bread,60,1,2
+fish_store_summer,traveler,item,fish_bread,30,1,2
+fish_store_summer,normal,item,fish_lunch,60,1,2
+fish_store_summer,traveler,item,fish_lunch,30,1,2
+fish_store_autumn,normal,item,fish_dried,60,1,2
+fish_store_autumn,traveler,item,fish_dried,30,1,2
+fish_store_winter,normal,item,fish_soup,60,1,2
+fish_store_winter,traveler,item,fish_soup,30,1,2
+fish_store_winter,normal,item,fish_winter_stew,60,1,2
+fish_store_winter,traveler,item,fish_winter_stew,30,1,2

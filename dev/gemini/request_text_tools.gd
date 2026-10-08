@@ -149,6 +149,20 @@ static func load_sources() -> Dictionary:
 			if kind == KIND_SERVICE_TEXT and not data.has("id"): id = "landmark_" + id
 			data["id"] = id
 			result[kind][id] = TextData.enrich(data,kind)
+	var fishing: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/fishing/fishing_scenes.json"))
+	var fishing_rules: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/fishing/fishing_content.json"))
+	if fishing is Dictionary:
+		for scene in fishing.get("scenes", []):
+			var source: Dictionary = scene.duplicate(true)
+			# Read live mechanics instead of copying prices/requirements into the scene registry.
+			if fishing_rules is Dictionary:
+				for section in ["progression", "recipes", "requests", "events"]:
+					for content in fishing_rules.get(section, []):
+						if str(content["id"]) == str(scene.get("owner_id", "")):
+							source["content"] = {"kind": section}
+							for field in ["id", "title", "requires", "items", "result_item_id", "reward"]:
+								if content.has(field): source["content"][field] = content[field]
+			result[KIND_SERVICE_TEXT][str(scene["id"])] = source
 	for id in ["trade_panel", "smithy_panel", "trade_first_greeting", "arrival_peddler_return"]:
 		result[KIND_SERVICE_TEXT][id] = {"id":id}
 	for id in ["checkout_intro", "checkout_checkout", "checkout_finished", "raw_checkout_intro", "raw_checkout_checkout", "raw_checkout_finished", "cleanup_murmur", "cleanup_murmur_empty"]:

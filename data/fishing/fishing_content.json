@@ -1,0 +1,2118 @@
+{
+  "schema": "fishing_content_runtime",
+  "schema_version": 1,
+  "date": "2026-10-08",
+  "status": "runtime_initial_values",
+  "confirmed": [
+    "낚시는 원정과 분리된 생활 채집",
+    "원정 입장 없이 물고기를 얻는 방식"
+  ],
+  "references": {
+    "decision": "docs/콘텐츠/시스템/원정과_분리된_낚시.md",
+    "scenes": "data/fishing/fishing_scenes.json"
+  },
+  "parser_notice": "requires는 FishingContent.conditions에서 평가한다. 기존 story_conditions 문자열 파서에 넘기지 않는다.",
+  "economy_notice": "초기 플레이 값. Claude 경제 검토 대기. 데이터 파일을 변경하면 적용된다.",
+  "mechanics": {
+    "cast_requires": "실제 낚싯대 보유와 사용 가능한 물가",
+    "interaction": "드리우기 → 입질 대기 → E로 건지기. 연타·게이지 없음.",
+    "bait": "없음",
+    "durability": "없음",
+    "skill_level": "없음",
+    "size_quality": "개별 길이·등급 없음",
+    "first_success": "실제 첫 성공은 기본 3어종 중 하나. 실패 횟수·추가 보정 없음.",
+    "cancel": "확정 전 취소에는 지급 없음. 완료 지급은 한 번만 기록.",
+    "inventory_full": "버리는 것을 강제하지 않고 물가로 놓아주기 또는 먼저 공간 정리. 지급 실패는 발견 완료로 기록하지 않음.",
+    "time": "낚는 동안 세계 시간 진행. 06시 정비·정산·메뉴·다른 대화의 정지가 발생하면 낚시 취소·지급 없음. 문 닫기는 현재 세계 시간 정책을 따른다.",
+    "store": "기존 직원 근무 여부대로 영업. 낚시가 손님을 대신 계산하지 않는다."
+  },
+  "locations": [
+    {
+      "id": "fish_bank",
+      "name": "가게 옆 개울",
+      "requires": {
+        "all": [
+          {
+            "kind": "core_tutorial_complete"
+          },
+          {
+            "kind": "raw_material_sale_recorded"
+          },
+          {
+            "kind": "known_npc",
+            "id": "gatherer_herbs"
+          }
+        ]
+      },
+      "description": "가게 밖 도보 생활 공간. 낮은 물가·발 디딜 돌·얕은 흐름. 원정 던전이 아니다.",
+      "access": "처음 소개 때 관찰 가능, 낚싯대 확보 후 실제 낚시",
+      "seasons": [
+        "spring",
+        "summer",
+        "autumn",
+        "winter"
+      ],
+      "status": "runtime"
+    },
+    {
+      "id": "fish_reeds",
+      "name": "갈대가 둘러싼 못",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_neighbor"
+          },
+          {
+            "kind": "distinct_fish_caught",
+            "amount": 2
+          }
+        ]
+      },
+      "description": "개울과 연결된 주변 생활 공간. 주민이 길을 알려 준 뒤 걸어갈 수 있다.",
+      "access": "시설 건설·희귀 어종·특정 계절을 요구하지 않는다",
+      "seasons": [
+        "spring",
+        "summer",
+        "autumn",
+        "winter"
+      ],
+      "status": "runtime"
+    },
+    {
+      "id": "fish_pond",
+      "name": "숲가의 작은 연못",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "distinct_fish_caught",
+            "amount": 3
+          }
+        ]
+      },
+      "description": "마을 외곽 도보 공간. 숲 원정 지도·보스·던전 층수와 연결하지 않는다.",
+      "access": "서로 다른 기본 어종을 만나고 길을 관찰하면 발견",
+      "seasons": [
+        "spring",
+        "summer",
+        "autumn",
+        "winter"
+      ],
+      "status": "runtime"
+    }
+  ],
+  "tools": [
+    {
+      "id": "fishing_rod_wood",
+      "name": "소박한 낚싯대",
+      "materials": [
+        {
+          "item_id": "dry_branch",
+          "amount": 2
+        },
+        {
+          "item_id": "amber_sap",
+          "amount": 1
+        }
+      ],
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_intro"
+          },
+          {
+            "kind": "known_npc",
+            "id": "naru"
+          }
+        ]
+      },
+      "acquisition": "타블렌과 재료를 준비해 현지에서 줄과 바늘을 엮어 실제 제작·수령. 시작 무료 지급 없음.",
+      "bonus": "없음",
+      "fee": 0,
+      "status": "runtime"
+    },
+    {
+      "id": "fishing_rod_reinforced",
+      "name": "손잡이를 보강한 낚싯대",
+      "materials": [
+        {
+          "item_id": "fishing_rod_wood",
+          "amount": 1
+        },
+        {
+          "item_id": "dry_branch",
+          "amount": 1
+        },
+        {
+          "item_id": "iron_ore",
+          "amount": 1
+        }
+      ],
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "known_npc",
+            "id": "naru"
+          }
+        ]
+      },
+      "acquisition": "보유 낚싯대를 소비해 보강. 기존 낚시 기록과 연결.",
+      "bonus": "외형·생활 이야기만. 새 어종 해금·성공률·수익 보너스 없음.",
+      "fee": 0,
+      "status": "runtime"
+    }
+  ],
+  "fish": [
+    {
+      "id": "fish_stream_minnow",
+      "name": "개울 송사리",
+      "locations": [
+        "fish_bank"
+      ],
+      "seasons": [
+        "spring",
+        "summer",
+        "autumn",
+        "winter"
+      ],
+      "rarity": "common",
+      "time": "all",
+      "weather": "all",
+      "description": "밝은 은색 몸과 작은 검은 점. 처음 찌를 보는 연습에 어울린다.",
+      "catch_amount": 1,
+      "catch_weight": 32,
+      "sale_price": 40,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_stone_crucian",
+      "name": "돌빛 붕어",
+      "locations": [
+        "fish_bank",
+        "fish_pond"
+      ],
+      "seasons": [
+        "spring",
+        "summer",
+        "autumn",
+        "winter"
+      ],
+      "rarity": "common",
+      "time": "all",
+      "weather": "all",
+      "description": "둥근 회갈색 몸. 돌 그늘 부근에서 만나는 일상적인 식재료.",
+      "catch_amount": 1,
+      "catch_weight": 32,
+      "sale_price": 50,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_reed_loach",
+      "name": "갈대 미꾸라지",
+      "locations": [
+        "fish_bank",
+        "fish_reeds"
+      ],
+      "seasons": [
+        "spring",
+        "summer",
+        "autumn",
+        "winter"
+      ],
+      "rarity": "common",
+      "time": "all",
+      "weather": "all",
+      "description": "가늘고 갈색인 몸과 짧은 수염. 기본 개울에서도 잡혀 길 해금이 막히지 않는다.",
+      "catch_amount": 1,
+      "catch_weight": 32,
+      "sale_price": 45,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_blossom_minnow",
+      "name": "꽃비 피라미",
+      "locations": [
+        "fish_bank"
+      ],
+      "seasons": [
+        "spring"
+      ],
+      "rarity": "seasonal",
+      "time": "all",
+      "weather": "all",
+      "description": "봄의 물빛처럼 등 옆에 옅은 분홍빛이 돈다.",
+      "catch_amount": 1,
+      "catch_weight": 12,
+      "sale_price": 55,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_bud_crucian",
+      "name": "새순 붕어",
+      "locations": [
+        "fish_reeds"
+      ],
+      "seasons": [
+        "spring"
+      ],
+      "rarity": "seasonal",
+      "time": "all",
+      "weather": "all",
+      "description": "올리브빛 등과 밝은 배. 갈대 사이의 봄 식탁 재료.",
+      "catch_amount": 1,
+      "catch_weight": 12,
+      "sale_price": 60,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_ripple_carp",
+      "name": "물결 잉어",
+      "locations": [
+        "fish_pond"
+      ],
+      "seasons": [
+        "summer"
+      ],
+      "rarity": "seasonal",
+      "time": "all",
+      "weather": "all",
+      "description": "넓은 황금빛 비늘. 잔물결과 어울리는 여름 어종.",
+      "catch_amount": 1,
+      "catch_weight": 12,
+      "sale_price": 65,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_rain_catfish",
+      "name": "비늘빛 메기",
+      "locations": [
+        "fish_reeds"
+      ],
+      "seasons": [
+        "summer"
+      ],
+      "rarity": "seasonal",
+      "time": "all",
+      "weather": "rain",
+      "description": "짙은 청회색 몸과 긴 수염. 비 오는 여름에만 만나는 선택 어종.",
+      "catch_amount": 1,
+      "catch_weight": 12,
+      "sale_price": 70,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_leaf_dace",
+      "name": "단풍 피라미",
+      "locations": [
+        "fish_bank"
+      ],
+      "seasons": [
+        "autumn"
+      ],
+      "rarity": "seasonal",
+      "time": "all",
+      "weather": "all",
+      "description": "구릿빛 옆선. 떨어지는 잎을 따라 가을 이야기가 열린다.",
+      "catch_amount": 1,
+      "catch_weight": 12,
+      "sale_price": 55,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_dusk_crucian",
+      "name": "저녁빛 붕어",
+      "locations": [
+        "fish_pond"
+      ],
+      "seasons": [
+        "autumn"
+      ],
+      "rarity": "seasonal",
+      "time": "evening",
+      "weather": "all",
+      "description": "보랏빛 회색 등. 가을 저녁에 만나는 선택 어종.",
+      "catch_amount": 1,
+      "catch_weight": 12,
+      "sale_price": 65,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_frost_smelt",
+      "name": "서리 빙어",
+      "locations": [
+        "fish_bank"
+      ],
+      "seasons": [
+        "winter"
+      ],
+      "rarity": "seasonal",
+      "time": "all",
+      "weather": "all",
+      "description": "작고 반투명한 은빛 몸. 얼지 않은 물가에서 잡으며 얼음 깨기 조작은 없다.",
+      "catch_amount": 1,
+      "catch_weight": 12,
+      "sale_price": 60,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_snow_trout",
+      "name": "눈등 송어",
+      "locations": [
+        "fish_pond"
+      ],
+      "seasons": [
+        "winter"
+      ],
+      "rarity": "seasonal",
+      "time": "all",
+      "weather": "all",
+      "description": "흰 점이 있는 푸른 등. 겨울의 묵직한 식재료.",
+      "catch_amount": 1,
+      "catch_weight": 12,
+      "sale_price": 70,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_moon_carp",
+      "name": "달무늬 잉어",
+      "locations": [
+        "fish_pond"
+      ],
+      "seasons": [
+        "spring",
+        "summer",
+        "autumn",
+        "winter"
+      ],
+      "rarity": "rare",
+      "time": "night",
+      "weather": "clear",
+      "description": "등 옆의 밝은 점무늬. 마법 효과·전이 원인·전설의 정체는 설정하지 않는다.",
+      "catch_amount": 1,
+      "catch_weight": 2,
+      "sale_price": 85,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    }
+  ],
+  "goods": [
+    {
+      "id": "fish_grilled",
+      "name": "약초 생선구이",
+      "description": "기본 생선의 첫 요리. 의료·전투 회복 효과 없음.",
+      "sale_price": 90,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_dried",
+      "name": "말린 생선",
+      "description": "원정 재료의 영구 보존 가공품과 구분. 일반 식품 기한을 가진 길 음식.",
+      "sale_price": 65,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 14
+    },
+    {
+      "id": "fish_soup",
+      "name": "물가의 맑은 수프",
+      "description": "물을 현장 설비에서 가열해 만든 상품. 채집한 물을 바로 마시는 장면 없음.",
+      "sale_price": 125,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_bread",
+      "name": "생선 속을 넣은 빵",
+      "description": "현지식 빵을 배운 뒤 확장하는 상품. 초기 현대 빵 재현 조건을 우회하지 않음.",
+      "sale_price": 150,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 3
+    },
+    {
+      "id": "fish_lunch",
+      "name": "물가의 작은 도시락",
+      "description": "갈대는 포장 재료이며 먹는 재료로 설명하지 않음. 실제 세 재료 소비.",
+      "sale_price": 195,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "fish_winter_stew",
+      "name": "겨울 생선 스튜",
+      "description": "겨울 생선을 남겨 다른 계절에도 만들 수 있음. 최초 소개 조건만 겨울.",
+      "sale_price": 170,
+      "shelf_allowed": true,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "normal_shelf_life_days": 2
+    }
+  ],
+  "ingredient_groups": {
+    "fish_any_fresh": [
+      "fish_stream_minnow",
+      "fish_stone_crucian",
+      "fish_reed_loach",
+      "fish_blossom_minnow",
+      "fish_bud_crucian",
+      "fish_ripple_carp",
+      "fish_rain_catfish",
+      "fish_leaf_dace",
+      "fish_dusk_crucian",
+      "fish_frost_smelt",
+      "fish_snow_trout",
+      "fish_moon_carp"
+    ],
+    "fish_spring_exclusive": [
+      "fish_blossom_minnow",
+      "fish_bud_crucian"
+    ],
+    "fish_summer_exclusive": [
+      "fish_ripple_carp",
+      "fish_rain_catfish"
+    ],
+    "fish_autumn_exclusive": [
+      "fish_leaf_dace",
+      "fish_dusk_crucian"
+    ],
+    "fish_winter_exclusive": [
+      "fish_frost_smelt",
+      "fish_snow_trout"
+    ],
+    "fish_winter_kept": [
+      "fish_frost_smelt",
+      "fish_snow_trout"
+    ]
+  },
+  "progression": [
+    {
+      "id": "fishing_intro",
+      "title": "가게 너머의 물소리",
+      "npc_id": "gatherer_herbs",
+      "requires": {
+        "all": [
+          {
+            "kind": "core_tutorial_complete"
+          },
+          {
+            "kind": "raw_material_sale_recorded"
+          },
+          {
+            "kind": "known_npc",
+            "id": "gatherer_herbs"
+          }
+        ]
+      },
+      "action": "엘미에게 물가 이야기를 끝까지 듣고 개울을 실제 관찰",
+      "outcome": "개울 접근 안내",
+      "repeat": "once",
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "extra_items": []
+      },
+      "intro_scene": "fishing_intro_intro",
+      "finish_scene": "fishing_intro_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fishing_rod",
+      "title": "가지로 잇는 낚싯대",
+      "npc_id": "naru",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_intro"
+          },
+          {
+            "kind": "known_npc",
+            "id": "naru"
+          }
+        ]
+      },
+      "action": "실제 재료 소비와 소박한 낚싯대 수령",
+      "outcome": "소박한 낚싯대 제작 경로",
+      "repeat": "once",
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "extra_items": []
+      },
+      "intro_scene": "fishing_rod_intro",
+      "finish_scene": "fishing_rod_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fishing_first_catch",
+      "title": "처음 움직인 찌",
+      "npc_id": "gatherer_herbs",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_rod"
+          }
+        ]
+      },
+      "action": "본인 조작으로 기본 어종을 실제 획득; 소지나 소개만으로 완료하지 않음",
+      "outcome": "기본 어종 발견 기록",
+      "repeat": "once",
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "extra_items": []
+      },
+      "intro_scene": "fishing_first_catch_intro",
+      "finish_scene": "fishing_first_catch_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fishing_first_sale",
+      "title": "새로 놓인 식탁 재료",
+      "npc_id": "player",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_catch"
+          }
+        ]
+      },
+      "action": "잡은 생선을 실제 진열하고 손님의 정상 결제가 완료됨",
+      "outcome": "생선 판매 기록; 구매자를 특정 NPC로 꾸미지 않음",
+      "repeat": "once",
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "extra_items": []
+      },
+      "intro_scene": "fishing_first_sale_intro",
+      "finish_scene": "fishing_first_sale_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fishing_keep",
+      "title": "내일의 식탁을 남기다",
+      "npc_id": "naru",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "known_npc",
+            "id": "naru"
+          }
+        ]
+      },
+      "action": "소개 후 생선을 실제 냉장/냉동 보관하거나 말린 생선을 제작해 수령",
+      "outcome": "기존 보존 안내·말린 생선 제조법 후보",
+      "repeat": "once",
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "extra_items": []
+      },
+      "intro_scene": "fishing_keep_intro",
+      "finish_scene": "fishing_keep_finish",
+      "status": "runtime"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "recipe_fish_grilled",
+      "name": "약초 생선구이",
+      "result_item_id": "fish_grilled",
+      "ingredients": [
+        {
+          "group_id": "fish_any_fresh",
+          "amount": 1,
+          "selection": "플레이어가 선택; 유효한 입고 묶음만 소비"
+        },
+        {
+          "item_id": "forest_herb",
+          "amount": 1
+        }
+      ],
+      "teacher": "neighbor_bread",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_neighbor"
+          }
+        ]
+      },
+      "facility_id": "magic_oven",
+      "shelf_days": 2,
+      "description": "기본 생선의 첫 요리. 의료·전투 회복 효과 없음.",
+      "result_amount": 1,
+      "craft_time": 45,
+      "sale_price": null,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "learning_scene": "recipe_fish_grilled_learn",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "recipe_fish_dried",
+      "name": "말린 생선",
+      "result_item_id": "fish_dried",
+      "ingredients": [
+        {
+          "group_id": "fish_any_fresh",
+          "amount": 1,
+          "selection": "플레이어가 선택; 유효한 입고 묶음만 소비"
+        }
+      ],
+      "teacher": "naru",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "production_room_ready"
+          }
+        ]
+      },
+      "facility_id": "magic_oven",
+      "shelf_days": 14,
+      "description": "원정 재료의 영구 보존 가공품과 구분. 일반 식품 기한을 가진 길 음식.",
+      "result_amount": 1,
+      "craft_time": 30,
+      "sale_price": null,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "learning_scene": "recipe_fish_dried_learn",
+      "normal_shelf_life_days": 14
+    },
+    {
+      "id": "recipe_fish_soup",
+      "name": "물가의 맑은 수프",
+      "result_item_id": "fish_soup",
+      "ingredients": [
+        {
+          "group_id": "fish_any_fresh",
+          "amount": 1,
+          "selection": "플레이어가 선택; 유효한 입고 묶음만 소비"
+        },
+        {
+          "item_id": "raw_water",
+          "amount": 1
+        },
+        {
+          "item_id": "forest_herb",
+          "amount": 1
+        }
+      ],
+      "teacher": "healer_moss",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_worker"
+          },
+          {
+            "kind": "known_npc",
+            "id": "healer_moss"
+          }
+        ]
+      },
+      "facility_id": "magic_oven",
+      "shelf_days": 2,
+      "description": "물을 현장 설비에서 가열해 만든 상품. 채집한 물을 바로 마시는 장면 없음.",
+      "result_amount": 1,
+      "craft_time": 45,
+      "sale_price": null,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "learning_scene": "recipe_fish_soup_learn",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "recipe_fish_bread",
+      "name": "생선 속을 넣은 빵",
+      "result_item_id": "fish_bread",
+      "ingredients": [
+        {
+          "group_id": "fish_any_fresh",
+          "amount": 1,
+          "selection": "플레이어가 선택; 유효한 입고 묶음만 소비"
+        },
+        {
+          "item_id": "wheat",
+          "amount": 2
+        }
+      ],
+      "teacher": "neighbor_bread",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_road"
+          },
+          {
+            "kind": "known_recipe",
+            "id": "camp_bread"
+          }
+        ]
+      },
+      "facility_id": "magic_oven",
+      "shelf_days": 3,
+      "description": "현지식 빵을 배운 뒤 확장하는 상품. 초기 현대 빵 재현 조건을 우회하지 않음.",
+      "result_amount": 1,
+      "craft_time": 45,
+      "sale_price": null,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "learning_scene": "recipe_fish_bread_learn",
+      "normal_shelf_life_days": 3
+    },
+    {
+      "id": "recipe_fish_lunch",
+      "name": "물가의 작은 도시락",
+      "result_item_id": "fish_lunch",
+      "ingredients": [
+        {
+          "item_id": "fish_grilled",
+          "amount": 1
+        },
+        {
+          "item_id": "camp_bread",
+          "amount": 1
+        },
+        {
+          "item_id": "marsh_reed",
+          "amount": 1
+        }
+      ],
+      "teacher": "child_berries",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_children"
+          }
+        ]
+      },
+      "facility_id": "magic_oven",
+      "shelf_days": 2,
+      "description": "갈대는 포장 재료이며 먹는 재료로 설명하지 않음. 실제 세 재료 소비.",
+      "result_amount": 1,
+      "craft_time": 45,
+      "sale_price": null,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "learning_scene": "recipe_fish_lunch_learn",
+      "normal_shelf_life_days": 2
+    },
+    {
+      "id": "recipe_fish_winter_stew",
+      "name": "겨울 생선 스튜",
+      "result_item_id": "fish_winter_stew",
+      "ingredients": [
+        {
+          "group_id": "fish_winter_exclusive",
+          "amount": 1,
+          "selection": "플레이어가 선택; 유효한 입고 묶음만 소비"
+        },
+        {
+          "item_id": "forest_mushroom",
+          "amount": 1
+        },
+        {
+          "item_id": "raw_water",
+          "amount": 1
+        }
+      ],
+      "teacher": "miner_ore",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "season",
+            "value": "winter"
+          },
+          {
+            "kind": "known_npc",
+            "id": "miner_ore"
+          }
+        ]
+      },
+      "facility_id": "magic_oven",
+      "shelf_days": 2,
+      "description": "겨울 생선을 남겨 다른 계절에도 만들 수 있음. 최초 소개 조건만 겨울.",
+      "result_amount": 1,
+      "craft_time": 45,
+      "sale_price": null,
+      "freeze_allowed": true,
+      "status": "runtime",
+      "learning_scene": "recipe_fish_winter_stew_learn",
+      "normal_shelf_life_days": 2
+    }
+  ],
+  "requests": [
+    {
+      "id": "fish_request_neighbor",
+      "title": "오늘 저녁의 작은 생선",
+      "npc_id": "neighbor_bread",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_catch"
+          },
+          {
+            "kind": "known_npc",
+            "id": "neighbor_bread"
+          }
+        ]
+      },
+      "items": [
+        {
+          "group_id": "fish_any_fresh",
+          "amount": 2,
+          "selection": "플레이어가 선택; 유효한 입고 묶음만 소비"
+        }
+      ],
+      "unlock_recipe_id": "recipe_fish_grilled",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 195,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_neighbor_intro",
+      "completion_scene": "fish_request_neighbor_finish",
+      "status": "runtime",
+      "reward_policy": "유상 부탁의 대금과 최초 평판은 별도 검토. 재읽기/미완료 지급 없음"
+    },
+    {
+      "id": "fish_request_worker",
+      "title": "작업 뒤의 따뜻한 한 접시",
+      "npc_id": "doyun",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_neighbor"
+          },
+          {
+            "kind": "product_collected",
+            "id": "fish_grilled"
+          },
+          {
+            "kind": "known_npc",
+            "id": "doyun"
+          }
+        ]
+      },
+      "items": [
+        {
+          "item_id": "fish_grilled",
+          "amount": 1
+        }
+      ],
+      "unlock_recipe_id": null,
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 103,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_worker_intro",
+      "completion_scene": "fish_request_worker_finish",
+      "status": "runtime",
+      "reward_policy": "유상 부탁의 대금과 최초 평판은 별도 검토. 재읽기/미완료 지급 없음"
+    },
+    {
+      "id": "fish_request_road",
+      "title": "길 위에서 먹는 생선",
+      "npc_id": "naru",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_keep"
+          },
+          {
+            "kind": "product_collected",
+            "id": "fish_dried"
+          },
+          {
+            "kind": "known_npc",
+            "id": "naru"
+          }
+        ]
+      },
+      "items": [
+        {
+          "item_id": "fish_dried",
+          "amount": 2
+        }
+      ],
+      "unlock_recipe_id": "recipe_fish_bread",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 150,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_road_intro",
+      "completion_scene": "fish_request_road_finish",
+      "status": "runtime",
+      "reward_policy": "유상 부탁의 대금과 최초 평판은 별도 검토. 재읽기/미완료 지급 없음"
+    },
+    {
+      "id": "fish_request_children",
+      "title": "함께 나눌 저녁",
+      "npc_id": "child_berries",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_neighbor"
+          },
+          {
+            "kind": "known_npc",
+            "id": "child_berries"
+          }
+        ]
+      },
+      "items": [
+        {
+          "item_id": "fish_grilled",
+          "amount": 2
+        }
+      ],
+      "unlock_recipe_id": "recipe_fish_lunch",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 207,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_children_intro",
+      "completion_scene": "fish_request_children_finish",
+      "status": "runtime",
+      "reward_policy": "유상 부탁의 대금과 최초 평판은 별도 검토. 재읽기/미완료 지급 없음"
+    },
+    {
+      "id": "fish_request_rain",
+      "title": "비 오는 날의 수프",
+      "npc_id": "healer_moss",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_worker"
+          },
+          {
+            "kind": "known_recipe",
+            "id": "recipe_fish_soup"
+          },
+          {
+            "kind": "known_npc",
+            "id": "healer_moss"
+          },
+          {
+            "kind": "weather",
+            "value": "rain"
+          }
+        ]
+      },
+      "items": [
+        {
+          "item_id": "fish_soup",
+          "amount": 1
+        }
+      ],
+      "unlock_recipe_id": null,
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 144,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_rain_intro",
+      "completion_scene": "fish_request_rain_finish",
+      "status": "runtime",
+      "reward_policy": "유상 부탁의 대금과 최초 평판은 별도 검토. 재읽기/미완료 지급 없음"
+    },
+    {
+      "id": "fish_request_spring",
+      "title": "풀 향을 곁들일 봄 식탁",
+      "npc_id": "gatherer_herbs",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "season",
+            "value": "spring"
+          },
+          {
+            "kind": "known_npc",
+            "id": "gatherer_herbs"
+          }
+        ]
+      },
+      "items": [
+        {
+          "group_id": "fish_spring_exclusive",
+          "amount": 1,
+          "selection": "플레이어가 선택; 유효한 입고 묶음만 소비"
+        },
+        {
+          "item_id": "forest_herb",
+          "amount": 1
+        }
+      ],
+      "unlock_recipe_id": null,
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 92,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_spring_intro",
+      "completion_scene": "fish_request_spring_finish",
+      "status": "runtime",
+      "reward_policy": "유상 부탁의 대금과 최초 평판은 별도 검토. 재읽기/미완료 지급 없음"
+    },
+    {
+      "id": "fish_request_summer_kept",
+      "title": "겨울을 남겨 둔 여름 식탁",
+      "npc_id": "doyun",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_keep"
+          },
+          {
+            "kind": "season",
+            "value": "summer"
+          },
+          {
+            "kind": "known_npc",
+            "id": "doyun"
+          },
+          {
+            "kind": "winter_fish_caught_before"
+          }
+        ]
+      },
+      "items": [
+        {
+          "group_id": "fish_winter_kept",
+          "amount": 1,
+          "selection": "플레이어가 선택; 유효한 입고 묶음만 소비"
+        }
+      ],
+      "unlock_recipe_id": null,
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 126,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_summer_kept_intro",
+      "completion_scene": "fish_request_summer_kept_finish",
+      "status": "runtime",
+      "reward_policy": "겨울 보관의 기회비용을 고려해 일반 납품보다 좋은 대금 제안; 금액은 Claude 검토"
+    },
+    {
+      "id": "fish_request_autumn",
+      "title": "나들이를 위한 도시락",
+      "npc_id": "neighbor_bread",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_children"
+          },
+          {
+            "kind": "season",
+            "value": "autumn"
+          },
+          {
+            "kind": "known_recipe",
+            "id": "recipe_fish_lunch"
+          },
+          {
+            "kind": "known_npc",
+            "id": "neighbor_bread"
+          }
+        ]
+      },
+      "items": [
+        {
+          "item_id": "fish_lunch",
+          "amount": 1
+        }
+      ],
+      "unlock_recipe_id": null,
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 224,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_autumn_intro",
+      "completion_scene": "fish_request_autumn_finish",
+      "status": "runtime",
+      "reward_policy": "유상 부탁의 대금과 최초 평판은 별도 검토. 재읽기/미완료 지급 없음"
+    },
+    {
+      "id": "fish_request_winter",
+      "title": "손을 녹이며 먹는 스튜",
+      "npc_id": "miner_ore",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "season",
+            "value": "winter"
+          },
+          {
+            "kind": "known_recipe",
+            "id": "recipe_fish_winter_stew"
+          },
+          {
+            "kind": "known_npc",
+            "id": "miner_ore"
+          }
+        ]
+      },
+      "items": [
+        {
+          "item_id": "fish_winter_stew",
+          "amount": 1
+        }
+      ],
+      "unlock_recipe_id": null,
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 195,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_winter_intro",
+      "completion_scene": "fish_request_winter_finish",
+      "status": "runtime",
+      "reward_policy": "유상 부탁의 대금과 최초 평판은 별도 검토. 재읽기/미완료 지급 없음"
+    },
+    {
+      "id": "fish_request_evening",
+      "title": "차 곁에 놓는 작은 접시",
+      "npc_id": "sora",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_road"
+          },
+          {
+            "kind": "known_npc",
+            "id": "sora"
+          },
+          {
+            "kind": "known_recipe",
+            "id": "reed_tea"
+          }
+        ]
+      },
+      "items": [
+        {
+          "item_id": "fish_dried",
+          "amount": 1
+        },
+        {
+          "item_id": "reed_tea",
+          "amount": 1
+        }
+      ],
+      "unlock_recipe_id": null,
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "paid_request",
+      "reward": {
+        "money": 362,
+        "reputation": 1,
+        "items": []
+      },
+      "introduction_scene": "fish_request_evening_intro",
+      "completion_scene": "fish_request_evening_finish",
+      "status": "runtime",
+      "reward_policy": "유상 부탁의 대금과 최초 평판은 별도 검토. 재읽기/미완료 지급 없음"
+    }
+  ],
+  "events": [
+    {
+      "id": "fish_event_spring",
+      "title": "갈대 사이의 첫 봄빛",
+      "npc_id": "gatherer_herbs",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_catch"
+          },
+          {
+            "kind": "season",
+            "value": "spring"
+          }
+        ]
+      },
+      "action": "봄 물가 관찰과 엘미 대화 완독",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "none",
+      "items": [],
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "items": []
+      },
+      "intro_scene": "fish_event_spring_intro",
+      "finish_scene": "fish_event_spring_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fish_event_summer",
+      "title": "늦게 돌아오는 여름 저녁",
+      "npc_id": "sora",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "season",
+            "value": "summer"
+          },
+          {
+            "kind": "time",
+            "value": "evening"
+          },
+          {
+            "kind": "known_npc",
+            "id": "sora"
+          }
+        ]
+      },
+      "action": "물가에서 이세르와 저녁 대화",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "none",
+      "items": [],
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "items": []
+      },
+      "intro_scene": "fish_event_summer_intro",
+      "finish_scene": "fish_event_summer_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fish_event_autumn",
+      "title": "찌 곁에 내려앉은 잎",
+      "npc_id": "neighbor_bread",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "season",
+            "value": "autumn"
+          },
+          {
+            "kind": "known_npc",
+            "id": "neighbor_bread"
+          }
+        ]
+      },
+      "action": "낙엽 관찰과 오렐 대화",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "none",
+      "items": [],
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "items": []
+      },
+      "intro_scene": "fish_event_autumn_intro",
+      "finish_scene": "fish_event_autumn_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fish_event_winter",
+      "title": "얼지 않은 물소리",
+      "npc_id": "doyun",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "season",
+            "value": "winter"
+          },
+          {
+            "kind": "known_npc",
+            "id": "doyun"
+          }
+        ]
+      },
+      "action": "열린 물가 관찰; 얼음 깨기나 추위 능력 요구 없음",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "none",
+      "items": [],
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "items": []
+      },
+      "intro_scene": "fish_event_winter_intro",
+      "finish_scene": "fish_event_winter_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fish_event_rain",
+      "title": "비가 그린 작은 동그라미",
+      "npc_id": "naru",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_catch"
+          },
+          {
+            "kind": "weather",
+            "value": "rain"
+          },
+          {
+            "kind": "known_npc",
+            "id": "naru"
+          }
+        ]
+      },
+      "action": "비 오는 물가 대화; 메기 포획을 필수로 요구하지 않음",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "none",
+      "items": [],
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "items": []
+      },
+      "intro_scene": "fish_event_rain_intro",
+      "finish_scene": "fish_event_rain_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fish_event_moon",
+      "title": "달무늬를 보여 주는 밤",
+      "npc_id": "sora",
+      "requires": {
+        "all": [
+          {
+            "kind": "fish_discovered",
+            "id": "fish_moon_carp"
+          },
+          {
+            "kind": "known_npc",
+            "id": "sora"
+          }
+        ]
+      },
+      "action": "유효한 달무늬 잉어를 보여 준 뒤 보관/놓아주기 선택",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "none",
+      "items": [],
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "items": []
+      },
+      "intro_scene": "fish_event_moon_intro",
+      "finish_scene": "fish_event_moon_finish",
+      "status": "runtime",
+      "choices": [
+        {
+          "id": "keep",
+          "label": "챙겨 두기",
+          "consume": [],
+          "reward": [],
+          "memory": "달무늬 잉어를 보여 준 뒤 그대로 챙겨 두었다."
+        },
+        {
+          "id": "release",
+          "label": "물가로 돌려보내기",
+          "consume": [
+            {
+              "item_id": "fish_moon_carp",
+              "amount": 1
+            }
+          ],
+          "reward": [],
+          "memory": "달무늬 잉어를 실제로 물가에 돌려보냈다."
+        }
+      ]
+    },
+    {
+      "id": "fish_event_table",
+      "title": "물가에서 이어진 작은 식탁",
+      "npc_id": "neighbor_bread",
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fish_request_children"
+          },
+          {
+            "kind": "content_completed",
+            "id": "fish_request_worker"
+          },
+          {
+            "kind": "known_npc",
+            "id": "neighbor_bread"
+          }
+        ]
+      },
+      "action": "선택 나눔으로 생선구이 전달 후 실제 참여 주민과 모임",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "gift",
+      "items": [
+        {
+          "item_id": "fish_grilled",
+          "amount": 2
+        }
+      ],
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "items": []
+      },
+      "intro_scene": "fish_event_table_intro",
+      "finish_scene": "fish_event_table_finish",
+      "status": "runtime"
+    },
+    {
+      "id": "fish_event_memory",
+      "title": "손에 남은 기다림",
+      "npc_id": "player",
+      "requires": {
+        "all": [
+          {
+            "kind": "distinct_fish_caught",
+            "amount": 3
+          },
+          {
+            "kind": "seasonal_fish_discovered",
+            "amount": 2
+          },
+          {
+            "kind": "content_completed",
+            "id": "fish_event_table"
+          }
+        ]
+      },
+      "action": "물가 관찰 후 수첩 기억 완독. 전 어종·사계절 완료 요구 없음",
+      "repeat": "once",
+      "deadline": null,
+      "payment_kind": "none",
+      "items": [],
+      "reward": {
+        "money": 0,
+        "reputation": 0,
+        "items": []
+      },
+      "intro_scene": "fish_event_memory_intro",
+      "finish_scene": "fish_event_memory_finish",
+      "status": "runtime"
+    }
+  ],
+  "store_events": [
+    {
+      "id": "fish_store_spring",
+      "title": "봄 식탁의 풀 향",
+      "category": "seasonal",
+      "season": "spring",
+      "start_day": 21,
+      "end_day": 25,
+      "rumor_lead_days": 4,
+      "demand_weights": {
+        "normal": 60,
+        "traveler": 30
+      },
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "known_npc",
+            "id": "neighbor_bread"
+          }
+        ]
+      },
+      "products": [
+        "fish_grilled"
+      ],
+      "known_recipe_gate": [
+        "recipe_fish_grilled"
+      ],
+      "preparation_hint": "봄 어종·약초가 준비 단서. 기본 생선으로도 요리를 만들어 참여 가능.",
+      "repeat": "yearly",
+      "purchase_rule": "실제 배운 상품이 진열되어 있어야 기존 정상 구매와 결제가 일어난다. 자동 매출·특정 방문 보장 없음.",
+      "rumor_scene": "fish_store_spring_rumor",
+      "response_scene": "fish_store_spring_response",
+      "status": "runtime"
+    },
+    {
+      "id": "fish_store_summer",
+      "title": "물가로 챙겨 가는 음식",
+      "category": "seasonal",
+      "season": "summer",
+      "start_day": 21,
+      "end_day": 25,
+      "rumor_lead_days": 4,
+      "demand_weights": {
+        "normal": 60,
+        "traveler": 30
+      },
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "known_npc",
+            "id": "child_berries"
+          }
+        ]
+      },
+      "products": [
+        "fish_bread",
+        "fish_lunch"
+      ],
+      "known_recipe_gate": [
+        "recipe_fish_bread",
+        "recipe_fish_lunch"
+      ],
+      "preparation_hint": "둘 중 배운 상품만 준비 힌트에 표시.",
+      "repeat": "yearly",
+      "purchase_rule": "실제 배운 상품이 진열되어 있어야 기존 정상 구매와 결제가 일어난다. 자동 매출·특정 방문 보장 없음.",
+      "rumor_scene": "fish_store_summer_rumor",
+      "response_scene": "fish_store_summer_response",
+      "status": "runtime"
+    },
+    {
+      "id": "fish_store_autumn",
+      "title": "돌아오는 길의 한 끼",
+      "category": "seasonal",
+      "season": "autumn",
+      "start_day": 21,
+      "end_day": 25,
+      "rumor_lead_days": 4,
+      "demand_weights": {
+        "normal": 60,
+        "traveler": 30
+      },
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "known_npc",
+            "id": "naru"
+          }
+        ]
+      },
+      "products": [
+        "fish_dried"
+      ],
+      "known_recipe_gate": [
+        "recipe_fish_dried"
+      ],
+      "preparation_hint": "가을 길손의 보관 가능한 식사 수요.",
+      "repeat": "yearly",
+      "purchase_rule": "실제 배운 상품이 진열되어 있어야 기존 정상 구매와 결제가 일어난다. 자동 매출·특정 방문 보장 없음.",
+      "rumor_scene": "fish_store_autumn_rumor",
+      "response_scene": "fish_store_autumn_response",
+      "status": "runtime"
+    },
+    {
+      "id": "fish_store_winter",
+      "title": "따뜻한 그릇을 찾는 저녁",
+      "category": "seasonal",
+      "season": "winter",
+      "start_day": 21,
+      "end_day": 25,
+      "rumor_lead_days": 4,
+      "demand_weights": {
+        "normal": 60,
+        "traveler": 30
+      },
+      "requires": {
+        "all": [
+          {
+            "kind": "content_completed",
+            "id": "fishing_first_sale"
+          },
+          {
+            "kind": "known_npc",
+            "id": "miner_ore"
+          }
+        ]
+      },
+      "products": [
+        "fish_soup",
+        "fish_winter_stew"
+      ],
+      "known_recipe_gate": [
+        "recipe_fish_soup",
+        "recipe_fish_winter_stew"
+      ],
+      "preparation_hint": "기본 생선 수프도 행사에 참여 가능. 겨울 어종 필수화 금지.",
+      "repeat": "yearly",
+      "purchase_rule": "실제 배운 상품이 진열되어 있어야 기존 정상 구매와 결제가 일어난다. 자동 매출·특정 방문 보장 없음.",
+      "rumor_scene": "fish_store_winter_rumor",
+      "response_scene": "fish_store_winter_response",
+      "status": "runtime"
+    }
+  ],
+  "learning": [
+    {
+      "recipe_id": "recipe_fish_soup",
+      "trigger": "fish_request_worker 완료 후 세이나와 제조법 소개 완독"
+    },
+    {
+      "recipe_id": "recipe_fish_lunch",
+      "trigger": "fish_request_children 전달 후 피니아와 제조법 소개 완독"
+    },
+    {
+      "recipe_id": "recipe_fish_bread",
+      "trigger": "fish_request_road 완료 후 기존 현지식 빵 제조법을 아는 상태에서 오렐에게 배우기"
+    },
+    {
+      "recipe_id": "recipe_fish_winter_stew",
+      "trigger": "겨울·첫생선판매·바르크 만남 이후 소개 완독. 스튜 납품이 해금 선행이 아님"
+    }
+  ],
+  "preservation": {
+    "engine": "기존 FoodShelfLife/food_batches/PreservationService 확장 제안",
+    "room": "기존 날짜별 입고 묶음 기한 사용",
+    "chilled": "기존 2배 느린 기한 소모",
+    "frozen": "기존 남은 기한 정지; 출고 시 남은 나이부터 재개",
+    "expired": "기존 만료품 분리; 판매/제작/부탁 소비 거부, 기존 폐기/food_compost 처리만 사용",
+    "dried": "말린 생선은 일반 식품 기한14일 제안. 말린 계절 잎의 영구 보존과 다름",
+    "identity": "겨울 보관 부탁은 원래 겨울 어종 ID를 요구. 공통 말린 생선으로 대체하지 않음",
+    "capacity": "기존 식품·계절 재료와 공유하는 용량12. 새 낚시 전용 보관함·무료 냉동고 없음"
+  },
+  "journal": {
+    "entries": [
+      "본인이 실제 획득한 어종과 계절/날씨 기억",
+      "실제로 들은 물가·상품 준비 이야기",
+      "실제 부탁·행사 기록",
+      "놓아주기/보관 선택별 기억"
+    ],
+    "unknown": "미발견 어종 이름·정확한 확률·미래 판매량은 공개하지 않음",
+    "collection_reward": "전 어종 수집 보상 없음 제안; 희귀 어종을 주요 흐름의 필수 조건으로 만들지 않음"
+  },
+  "repetition": {
+    "requests": "초기10건은 각 최초1회; 반복 주문은 추가 제안으로 분리",
+    "events": "초기8건 최초1회 기억; 재방문은 재읽기이며 추가 답례 없음",
+    "store_events": "4개 매년 회차별 반복; 기존 행사15개에 이미 포함됐다고 집계하지 않음",
+    "season": "소개 기회를 놓치면 다음 해당 계절. 맡은 부탁은 계절 뒤에도 유지; 재료 기한은 계속 적용",
+    "weather": "비가 필요한 조건은 제안 소개 때만. 맡은 뒤 날씨가 바뀌어도 납품 가능"
+  },
+  "assets": {
+    "new_images": false,
+    "needed": [
+      "물가3종 배치",
+      "낚싯대2종",
+      "찌와 입질 표시",
+      "생선12종 아이콘",
+      "상품6종 아이콘",
+      "캐스팅/건지기 플레이어 동작"
+    ],
+    "style": "현재 등각·고채도 서브컬처 도트 규격 유지. 사용자 이미지 제작."
+  },
+  "implementation_order": [
+    {
+      "phase": 1,
+      "title": "별도 낚시와 첫 판매",
+      "include": [
+        "fish_bank",
+        "기본3어종",
+        "fishing_intro",
+        "fishing_rod",
+        "fishing_first_catch",
+        "fishing_first_sale",
+        "fish_request_neighbor",
+        "recipe_fish_grilled"
+      ]
+    },
+    {
+      "phase": 2,
+      "title": "보관과 주민 식탁",
+      "include": [
+        "나머지2낚시터",
+        "fishing_keep",
+        "나머지5가공법",
+        "주민부탁10건",
+        "fish_event_table"
+      ]
+    },
+    {
+      "phase": 3,
+      "title": "계절과 물가의 기억",
+      "include": [
+        "계절8어종",
+        "희귀1어종",
+        "생활사건8건",
+        "계절매장행사4건",
+        "수첩 기억"
+      ]
+    }
+  ],
+  "validation_targets": [
+    "낚시가 원정 입장을 호출하지 않음",
+    "닫힌 문/정비 시간 무한 무료 획득 방지",
+    "취소/지급 실패/중단 저장 중복 지급 없음",
+    "공간 부족 시 강제 소실 없음",
+    "기본3어종만으로 물가 해금 가능",
+    "계절/날씨 조건 밖 기본 풀 유지",
+    "실제 식품 나이·냉장/냉동 왕복 보존",
+    "만료품 납품/가공/판매 차단",
+    "서로 다른 어종 선택 소비가 정확함",
+    "희귀 놓아주기 실제1개 소비/보관 미소비",
+    "행사 알려지지 않은 제조법/상품 힌트 숨김",
+    "겨울→여름 보관 부탁의 도달 가능성",
+    "옛 저장 소급 과금/강제 장비 지급 없음"
+  ],
+  "settings": {
+    "bite_min_seconds": 20,
+    "bite_max_seconds": 28,
+    "interaction_distance": 70,
+    "request_reputation": 1,
+    "enabled": true
+  },
+  "npc_types": {
+    "naru": "peddler",
+    "doyun": "gem_hunter",
+    "sora": "relic_hunter",
+    "neighbor_bread": "villager",
+    "gatherer_herbs": "gatherer",
+    "child_berries": "village_kid",
+    "healer_moss": "alchemist",
+    "miner_ore": "digger"
+  },
+  "recipe_variants": {
+    "recipe_fish_grilled__fish_stream_minnow": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_stream_minnow"
+    },
+    "recipe_fish_grilled__fish_stone_crucian": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_stone_crucian"
+    },
+    "recipe_fish_grilled__fish_reed_loach": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_reed_loach"
+    },
+    "recipe_fish_grilled__fish_blossom_minnow": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_blossom_minnow"
+    },
+    "recipe_fish_grilled__fish_bud_crucian": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_bud_crucian"
+    },
+    "recipe_fish_grilled__fish_ripple_carp": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_ripple_carp"
+    },
+    "recipe_fish_grilled__fish_rain_catfish": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_rain_catfish"
+    },
+    "recipe_fish_grilled__fish_leaf_dace": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_leaf_dace"
+    },
+    "recipe_fish_grilled__fish_dusk_crucian": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_dusk_crucian"
+    },
+    "recipe_fish_grilled__fish_frost_smelt": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_frost_smelt"
+    },
+    "recipe_fish_grilled__fish_snow_trout": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_snow_trout"
+    },
+    "recipe_fish_grilled__fish_moon_carp": {
+      "base": "recipe_fish_grilled",
+      "fish": "fish_moon_carp"
+    },
+    "recipe_fish_dried__fish_stream_minnow": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_stream_minnow"
+    },
+    "recipe_fish_dried__fish_stone_crucian": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_stone_crucian"
+    },
+    "recipe_fish_dried__fish_reed_loach": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_reed_loach"
+    },
+    "recipe_fish_dried__fish_blossom_minnow": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_blossom_minnow"
+    },
+    "recipe_fish_dried__fish_bud_crucian": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_bud_crucian"
+    },
+    "recipe_fish_dried__fish_ripple_carp": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_ripple_carp"
+    },
+    "recipe_fish_dried__fish_rain_catfish": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_rain_catfish"
+    },
+    "recipe_fish_dried__fish_leaf_dace": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_leaf_dace"
+    },
+    "recipe_fish_dried__fish_dusk_crucian": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_dusk_crucian"
+    },
+    "recipe_fish_dried__fish_frost_smelt": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_frost_smelt"
+    },
+    "recipe_fish_dried__fish_snow_trout": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_snow_trout"
+    },
+    "recipe_fish_dried__fish_moon_carp": {
+      "base": "recipe_fish_dried",
+      "fish": "fish_moon_carp"
+    },
+    "recipe_fish_soup__fish_stream_minnow": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_stream_minnow"
+    },
+    "recipe_fish_soup__fish_stone_crucian": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_stone_crucian"
+    },
+    "recipe_fish_soup__fish_reed_loach": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_reed_loach"
+    },
+    "recipe_fish_soup__fish_blossom_minnow": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_blossom_minnow"
+    },
+    "recipe_fish_soup__fish_bud_crucian": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_bud_crucian"
+    },
+    "recipe_fish_soup__fish_ripple_carp": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_ripple_carp"
+    },
+    "recipe_fish_soup__fish_rain_catfish": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_rain_catfish"
+    },
+    "recipe_fish_soup__fish_leaf_dace": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_leaf_dace"
+    },
+    "recipe_fish_soup__fish_dusk_crucian": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_dusk_crucian"
+    },
+    "recipe_fish_soup__fish_frost_smelt": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_frost_smelt"
+    },
+    "recipe_fish_soup__fish_snow_trout": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_snow_trout"
+    },
+    "recipe_fish_soup__fish_moon_carp": {
+      "base": "recipe_fish_soup",
+      "fish": "fish_moon_carp"
+    },
+    "recipe_fish_bread__fish_stream_minnow": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_stream_minnow"
+    },
+    "recipe_fish_bread__fish_stone_crucian": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_stone_crucian"
+    },
+    "recipe_fish_bread__fish_reed_loach": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_reed_loach"
+    },
+    "recipe_fish_bread__fish_blossom_minnow": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_blossom_minnow"
+    },
+    "recipe_fish_bread__fish_bud_crucian": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_bud_crucian"
+    },
+    "recipe_fish_bread__fish_ripple_carp": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_ripple_carp"
+    },
+    "recipe_fish_bread__fish_rain_catfish": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_rain_catfish"
+    },
+    "recipe_fish_bread__fish_leaf_dace": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_leaf_dace"
+    },
+    "recipe_fish_bread__fish_dusk_crucian": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_dusk_crucian"
+    },
+    "recipe_fish_bread__fish_frost_smelt": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_frost_smelt"
+    },
+    "recipe_fish_bread__fish_snow_trout": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_snow_trout"
+    },
+    "recipe_fish_bread__fish_moon_carp": {
+      "base": "recipe_fish_bread",
+      "fish": "fish_moon_carp"
+    },
+    "recipe_fish_lunch": {
+      "base": "recipe_fish_lunch",
+      "fish": ""
+    },
+    "recipe_fish_winter_stew__fish_frost_smelt": {
+      "base": "recipe_fish_winter_stew",
+      "fish": "fish_frost_smelt"
+    },
+    "recipe_fish_winter_stew__fish_snow_trout": {
+      "base": "recipe_fish_winter_stew",
+      "fish": "fish_snow_trout"
+    }
+  },
+  "runtime_scene_count": 76
+}

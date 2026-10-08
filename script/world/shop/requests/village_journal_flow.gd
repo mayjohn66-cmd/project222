@@ -43,9 +43,16 @@ static func entries() -> Array[Dictionary]:
 	if ActFourFlow.started():
 		for event in ActFourFlow.SETTINGS.events:
 			result.append({"id":ActFourFlow.JOURNAL_PREFIX + str(event["id"]),"title":ActFourFlow.title(str(event["id"]))})
+	if FishingRecords.accepted("fishing_intro"):
+		result.append({"id":"fishing:journal", "title":"가게 너머의 물가"})
 	return result
 
 static func information(id: String) -> String:
+	if id == "fishing:journal":
+		var text := "만난 물고기 %d종 · 계절 물고기 %d종\n물가에서 [E]로 기록과 부탁을 확인하세요." % [FishingRecords.discovered(), FishingRecords.discovered(true)]
+		for entry in FishingData.entries("progression"):
+			if FishingRecords.accepted(str(entry["id"])) and not FishingRecords.done(str(entry["id"])): text += "\n" + FishingContent.instructions(str(entry["id"]))
+		return text
 	if id.begins_with(ActFourFlow.JOURNAL_PREFIX): return ActFourFlow.information(id.trim_prefix(ActFourFlow.JOURNAL_PREFIX))
 	if id == PowerRepairFlow.JOURNAL_ID: return PowerRepairFlow.information()
 	if id.begins_with(VillageExpansionFlow.JOURNAL_PREFIX): return VillageExpansionFlow.information(id.trim_prefix(VillageExpansionFlow.JOURNAL_PREFIX))
@@ -95,6 +102,9 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id == "fishing:journal":
+		var spots = world.get_node_or_null("FishingSpots")
+		return spots.get_node_or_null("fish_bank") if spots != null else null
 	if id.begins_with(ActFourFlow.JOURNAL_PREFIX):
 		var event_id := id.trim_prefix(ActFourFlow.JOURNAL_PREFIX)
 		var current := ActFourFlow.step(event_id)

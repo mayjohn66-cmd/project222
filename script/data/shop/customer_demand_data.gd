@@ -357,6 +357,7 @@ static func _get_candidate_items(
 		if (
 			ItemData.has_item(target_id)
 			and ItemData.is_sellable(target_id)
+			and FishingRecords.market_item_available(target_id)
 		):
 			result.append(target_id)
 
@@ -370,7 +371,7 @@ static func _get_candidate_items(
 		)
 
 		for item_id in category_items:
-			if ItemData.is_sellable(item_id):
+			if ItemData.is_sellable(item_id) and FishingRecords.market_item_available(item_id):
 				result.append(item_id)
 
 	return result

@@ -1258,6 +1258,9 @@ func _install_world_interactions() -> void:
 	var interaction = preload("res://script/world/shop/world_interactions.gd").new()
 	interaction.name = "WorldInteractions"
 	get_parent().add_child(interaction)
+	var fishing = preload("res://script/world/shop/fishing/fishing_director.gd").new()
+	fishing.name = "FishingDirector"
+	get_parent().add_child(fishing)
 	var context: Dictionary = GameState.get_meta("shop_return_context",{})
 	var return_position: Array = context.get("position",[])
 	if return_position.size() == 2:
