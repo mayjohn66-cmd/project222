@@ -62,6 +62,7 @@ func run() -> void:
 	var worker = workers[2]
 	var id: String = worker.employee_id
 	for candidate in workers:
+		EmployeeRecruitmentFlow.meet(str(candidate.employee_id))
 		candidate.set_physics_process(false)
 		check(not candidate.is_hired and not EmployeeStoryFlow.profile(candidate.employee_id).is_empty(), "new game keeps existing candidate un-hired with content")
 	GameState.money = 400
@@ -108,6 +109,26 @@ func run() -> void:
 	GameState.accrue_employee_salary_for_current_day()
 	GameState.accrue_employee_salary_for_current_day()
 	check(GameState.get_employee_accrued_salary(id) == 50, "existing wage accrues once even with empty schedule")
+	check(not worker.train_stat("checkout"), "education waits for actual first attendance")
+	var first_period: Array[String] = ["morning"]
+	check(worker.set_work_periods(first_period), "first schedule explicitly assigned")
+	await close_book(menu)
+	manager.shop_open = true
+	worker._on_shop_opened()
+	for i in range(1800):
+		await get_tree().physics_frame
+		if worker.on_duty and worker.visible: break
+	controller.elapsed = 1.0
+	controller._process(0.01)
+	check(worker.on_duty and worker.visible and EmployeeRecruitmentFlow.training_available(id), "actual first attendance enables education")
+	manager.shop_open = false
+	worker.on_duty = false
+	worker.moving = false
+	worker.shift_ending = false
+	worker.state = worker.WorkerState.OFF_DUTY
+	worker.visible = false
+	menu.open_menu(ManagementMenu.MenuTab.EMPLOYEE)
+	host._select_employee_tab(host.EmployeeTab.EMPLOYMENT)
 	host._train_employee(worker, "checkout")
 	check(worker.get_training_level("checkout") == 1 and GameState.money == 200 and EmployeeStoryFlow.available(id, "trained"), "successful real education unlocks story at existing cost")
 	GameState.money = 0

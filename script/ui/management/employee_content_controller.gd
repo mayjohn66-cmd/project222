@@ -58,10 +58,8 @@ func add_card(parent: VBoxContainer, worker: Node) -> void:
 	if entry.is_empty(): return
 	var label := Label.new()
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.text = str(entry["role"]) + "\n" + str(entry["summary"])
+	label.text = str(entry["role"])
 	label.text += "\n고용 비용 %d G · %d일 기준 급여 %d G" % [worker.get_hire_cost(), CalendarData.DAYS_PER_SEASON, EmployeeData.get_monthly_salary(id)]
-	if bool(worker.get("is_hired")) and worker.get_work_periods().is_empty(): label.text += "\n근무표 미설정 · 급여는 누적됩니다. 근무표 탭에서 시간을 정하세요."
-	label.text += "\n" + EmployeeStoryFlow.memory(id)
 	parent.add_child(label)
 	var button := Button.new()
 	button.custom_minimum_size.y = 42
@@ -71,6 +69,7 @@ func add_card(parent: VBoxContainer, worker: Node) -> void:
 	# 새 행동이 발생하면 카드의 버튼 문구를 다음 갱신에서 바꾼다.
 
 func open_story(id: String) -> void:
+	if not EmployeeRecruitmentFlow.met(id): return
 	if dialogue.open or hire_dialog.visible: return
 	var entry := EmployeeStoryFlow.unread(id)
 	pending_story = str(entry.get("id", ""))
@@ -100,6 +99,8 @@ func _process(delta: float) -> void:
 			EmployeeStoryFlow.observe_existing(id)
 			if bool(worker.get("on_duty")) and worker.visible and not EmployeeStoryFlow.available(id, "first_shift"):
 				EmployeeStoryFlow.record(id, "first_shift")
+				host.refresh_view()
+				if host.is_visible_in_tree(): host.message_label.text = "첫 근무를 시작했습니다. 다음 아침 오픈 준비 중에 교육 탭을 살펴보세요."
 
 func _host_visibility_changed() -> void:
 	if host.is_visible_in_tree(): return

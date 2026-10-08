@@ -1982,6 +1982,7 @@ func get_hire_cost() -> int:
 
 
 func hire_employee() -> bool:
+	if not EmployeeRecruitmentFlow.met(employee_id): return false
 	if is_hired or not can_change_employment():
 		return false
 
@@ -2139,6 +2140,7 @@ func get_customer_service_chance() -> float:
 
 
 func train_stat(stat_id: String) -> bool:
+	if not EmployeeRecruitmentFlow.training_available(employee_id): return false
 	# 고용된 비근무 직원, 아침 6시 오픈 준비 중에만 교육
 	if not can_edit_work_schedule():
 		return false

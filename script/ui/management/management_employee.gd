@@ -74,6 +74,7 @@ func refresh_view() -> void:
 	if not is_instance_valid(employee_list):
 		return
 
+	EmployeeProgressUI.refresh(self)
 	employee_list.columns = 2
 	# 기존 직원 카드 제거
 	for child in employee_list.get_children():
@@ -115,6 +116,11 @@ func refresh_view() -> void:
 				% GameState.get_unpaid_employee_salary()
 			)
 
+	if current_employee_tab == EmployeeTab.EMPLOYMENT:
+		message_label.text = EmployeeRecruitmentFlow.guide(get_tree().get_nodes_in_group("worker"))
+		if EmployeeRecruitmentFlow.has_hired(get_tree().get_nodes_in_group("worker")):
+			message_label.text += "\n고용·해고는 아침 6시 오픈 준비 중에 변경합니다."
+
 	# worker 그룹에서 직원 노드 조회
 	var workers: Array[Node] = (
 		get_tree().get_nodes_in_group("worker")
@@ -148,6 +154,7 @@ func refresh_view() -> void:
 			if not hired:
 				continue
 
+		if not EmployeeProgressUI.show_worker(self, worker): continue
 		_create_employee_entry(worker)
 		visible_employee_count += 1
 
@@ -161,7 +168,7 @@ func refresh_view() -> void:
 
 			EmployeeTab.EMPLOYMENT:
 				message_label.text += (
-					"\n\n등록된 직원 데이터가 없습니다."
+					"\n\n아직 소개를 들은 지원자가 없습니다. 가게 앞에서 인사를 나눠 보세요."
 				)
 
 			EmployeeTab.TRAINING:
@@ -211,7 +218,7 @@ func _create_employee_entry(worker: Node) -> void:
 	var status: String = "비근무"
 
 	if not hired:
-		status = "미고용"
+		status = "재고용 후보" if PlayerProgress.story_beat_days.has(EmployeeStoryFlow.PREFIX + str(worker.get("employee_id")) + ":hire_count") else "지원자"
 	elif bool(worker.get("shift_ending")):
 		status = "퇴근 처리 중"
 	elif bool(worker.get("on_duty")):
@@ -224,7 +231,7 @@ func _create_employee_entry(worker: Node) -> void:
 	)
 	summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	content.add_child(summary)
-	if employee_content != null and current_employee_tab in [EmployeeTab.EMPLOYMENT, EmployeeTab.INFO]: employee_content.add_card(content, worker)
+	if employee_content != null and current_employee_tab == EmployeeTab.EMPLOYMENT: employee_content.add_card(content, worker)
 
 	match current_employee_tab:
 		EmployeeTab.SCHEDULE:
@@ -265,8 +272,6 @@ func _create_employee_entry(worker: Node) -> void:
 				content,
 				worker
 			)
-
-			_create_training_controls(content, worker)
 
 
 func _create_employee_info(
@@ -565,6 +570,7 @@ func _create_training_controls(
 	parent: VBoxContainer,
 	worker: Node
 ) -> void:
+	if not EmployeeRecruitmentFlow.training_available(str(worker.get("employee_id"))): return
 	var title := Label.new()
 	title.text = "직원 교육"
 	title.add_theme_font_size_override("font_size", 20)

@@ -59,6 +59,7 @@ static func terms(worker: Node, dismiss: bool = false) -> String:
 static func hire_reason(worker: Node) -> String:
 	if not is_instance_valid(worker) or worker.is_queued_for_deletion(): return "직원을 찾을 수 없습니다."
 	if bool(worker.get("is_hired")): return "이미 고용된 직원입니다."
+	if not EmployeeRecruitmentFlow.met(str(worker.get("employee_id"))): return "가게 앞의 지원자와 먼저 인사를 나눠 주세요."
 	if not worker.can_change_employment(): return "오전 6시 오픈 준비 중에 고용할 수 있습니다."
 	if not GameState.can_afford(int(worker.get_hire_cost())): return "고용 비용이 부족합니다."
 	return ""

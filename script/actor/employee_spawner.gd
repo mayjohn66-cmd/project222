@@ -75,6 +75,12 @@ func _spawn_missing_employees() -> void:
 		existing_ids[employee_id] = true
 		created_count += 1
 
+	EmployeeRecruitmentFlow.initialize(get_tree().get_nodes_in_group("worker"))
+	if EmployeeRecruitmentFlow.enabled() and not get_parent().has_node("EmployeeRecruitmentDirector"):
+		var recruitment := EmployeeRecruitmentDirector.new()
+		recruitment.name = "EmployeeRecruitmentDirector"
+		get_parent().add_child(recruitment)
+
 	DebugLog.write(
 		"[직원 생성] 자동 생성 완료 / 추가: ",
 		created_count

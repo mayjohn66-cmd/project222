@@ -24,6 +24,7 @@ func _ready() -> void:
 
 func blocked() -> bool:
  var world = get_parent()
+ if bool(world.get_meta("employee_recruitment_open",false)): return true
  if bool(world.get_meta("fishing_open",false)): return true
  if bool(world.get_meta("act_four_open",false)): return true
  if bool(world.get_meta("checkout_tutorial_dialogue",false)): return true
@@ -67,6 +68,10 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var recruitment = get_parent().get_node_or_null("EmployeeRecruitmentDirector")
+ if recruitment != null and not recruitment.interaction_hint().is_empty():
+  prompt.text = recruitment.interaction_hint()
+  return
  var fishing = get_parent().get_node_or_null("FishingDirector")
  if fishing != null and not fishing.interaction_hint().is_empty():
   prompt.text = fishing.interaction_hint()
@@ -138,6 +143,8 @@ func _process(_delta: float) -> void:
  else: prompt.text = ""
 
 func try_interact() -> bool:
+ var recruitment = get_parent().get_node_or_null("EmployeeRecruitmentDirector")
+ if recruitment != null and recruitment.try_interact(): return true
  var fishing = get_parent().get_node_or_null("FishingDirector")
  if fishing != null and fishing.try_interact(): return true
  var act_four = get_parent().get_node_or_null("VillageLifeDirector/ActFourDirector")
