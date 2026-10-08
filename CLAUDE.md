@@ -83,3 +83,11 @@ python tools/balance_baseline.py .
 - 데이터를 바꾸면 `tools/balance_baseline.py`, 이미지를 추가하면 `tools/validate_assets.py`를 돌려 결과를 커밋 설명에 붙인다.
 - 실행해 보지 않은 코드를 "동작한다"고 말하지 않는다. 확인하지 못한 것은 확인하지 못했다고 쓴다.
 - 미정 항목(❓)은 임의로 정하지 말고 사용자에게 묻는다.
+
+<!-- revvy:shared-memory:start -->
+The file imported below is shared memory for ALL agents (Claude/Codex/Kimi)
+working in this project. Append a dated one-line entry there whenever you make
+a durable decision, adopt a convention, or leave work half-done.
+
+@.revvy/shared-memory.md
+<!-- revvy:shared-memory:end -->

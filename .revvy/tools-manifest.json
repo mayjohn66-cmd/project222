@@ -1,0 +1,551 @@
+[
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false
+    },
+    "description": "Evaluate one Godot Expression on the editor main thread. This is a constrained, const-call-only expression subset, not arbitrary or multiline GDScript.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "code": {
+          "description": "One Expression-compatible expression.",
+          "maxLength": 65536,
+          "minLength": 1,
+          "type": "string"
+        },
+        "inputs": {
+          "additionalProperties": true,
+          "description": "Optional JSON values bound as named expression inputs.",
+          "type": "object"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "type": "object"
+    },
+    "name": "execute_script"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyActions": [
+        "list",
+        "search"
+      ],
+      "readOnlyHint": false
+    },
+    "description": "List/search, import, refresh, move, or permanently delete Godot project assets.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "list",
+            "search",
+            "import",
+            "refresh",
+            "move",
+            "delete"
+          ],
+          "type": "string"
+        },
+        "destination": {
+          "description": "Destination res:// path for move; it must not already exist.",
+          "type": "string"
+        },
+        "limit": {
+          "default": 200,
+          "maximum": 5000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "path": {
+          "description": "Source file/directory under res:// (defaults to res:// for reads).",
+          "type": "string"
+        },
+        "query": {
+          "description": "Case-insensitive path filter for search.",
+          "type": "string"
+        },
+        "recursive": {
+          "default": false,
+          "description": "Recurse while listing, or permit recursive directory deletion.",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "name": "manage_asset"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": true
+    },
+    "description": "Read the Revvy ring buffer of Godot editor-process messages and errors.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "enum": [
+            "tail",
+            "search",
+            "errors"
+          ],
+          "type": "string"
+        },
+        "limit": {
+          "default": 100,
+          "maximum": 1000,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "query": {
+          "description": "Case-insensitive text filter for search.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "name": "read_logs"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true
+    },
+    "description": "Report Godot version, project identity, editor play state, scenes, and filesystem scan state.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {},
+      "type": "object"
+    },
+    "name": "editor_status"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": true,
+      "readOnlyActions": [
+        "status"
+      ],
+      "readOnlyHint": false
+    },
+    "description": "Inspect, start, stop, pause, resume, or single-frame step play mode for the currently edited scene.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Operation to perform.",
+          "enum": [
+            "status",
+            "start",
+            "stop",
+            "pause",
+            "resume",
+            "step"
+          ],
+          "type": "string"
+        },
+        "frames": {
+          "default": 1,
+          "description": "For step: how many frames to advance. Each frame is advanced individually and the game stays paused afterwards.",
+          "maximum": 60,
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "name": "manage_play_mode"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": "Inspect scene"
+    },
+    "description": "Inspect a bounded portion of the currently edited scene hierarchy without modifying editor state.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "limit": {
+          "default": 200,
+          "description": "Maximum hierarchy entries to return.",
+          "maximum": 500,
+          "minimum": 1,
+          "type": "integer"
+        },
+        "max_depth": {
+          "default": 3,
+          "description": "Maximum descendant depth relative to each traversal root. Depth zero returns only the root objects.",
+          "maximum": 16,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "description": "Number of entries to skip in deterministic depth-first pre-order.",
+          "maximum": 10000,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "root_id": {
+          "default": "",
+          "description": "Opaque node ID returned by an earlier inspect_scene call. Empty starts at all scene roots.",
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "name": "inspect_scene"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyHint": false,
+      "title": "Mutate scene"
+    },
+    "description": "Create, instantiate a prefab, rename, reparent, or delete a single object in the currently edited scene.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Structural edit to perform.",
+          "enum": [
+            "create",
+            "rename",
+            "reparent",
+            "delete",
+            "instantiate"
+          ],
+          "type": "string"
+        },
+        "asset_path": {
+          "default": "",
+          "description": "For instantiate: project-relative path of the asset to instantiate. Unity accepts Assets/....prefab; Godot accepts res://....tscn or res://....scn.",
+          "type": "string"
+        },
+        "name": {
+          "default": "",
+          "description": "For create and rename: the object name. For instantiate: optional override of the instance root name. 1 to 128 characters, not whitespace-only, no control characters.",
+          "type": "string"
+        },
+        "new_parent_id": {
+          "default": "",
+          "description": "For reparent: opaque ID of the new parent. Empty moves the object to the scene root.",
+          "type": "string"
+        },
+        "node_type": {
+          "default": "object",
+          "description": "For create: the kind of object to create. Engine-neutral names only; use execute_script for arbitrary engine classes.",
+          "enum": [
+            "object",
+            "camera",
+            "light_point",
+            "light_directional"
+          ],
+          "type": "string"
+        },
+        "parent_id": {
+          "default": "",
+          "description": "For create and instantiate: opaque ID of the parent object. Empty places the object at the scene root.",
+          "type": "string"
+        },
+        "target_id": {
+          "default": "",
+          "description": "For rename, reparent, and delete: opaque ID of the object to modify.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "name": "mutate_scene"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": true,
+      "openWorldHint": false,
+      "readOnlyHint": true,
+      "title": "Capture viewport"
+    },
+    "description": "Capture the editor viewport of the currently edited scene to a PNG file inside the project and return its path.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "inline": {
+          "default": false,
+          "description": "Also return the PNG as a base64 image content block so the caller can see it without reading the file. Subject to a smaller size limit than the file.",
+          "type": "boolean"
+        },
+        "max_dimension": {
+          "default": 1024,
+          "description": "Maximum length of the longer image edge in pixels. The capture is downscaled to fit, preserving aspect ratio; it is never upscaled.",
+          "maximum": 4096,
+          "minimum": 64,
+          "type": "integer"
+        }
+      },
+      "type": "object"
+    },
+    "name": "capture_viewport"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyActions": [
+        "status"
+      ],
+      "readOnlyHint": false,
+      "title": "Simulate input"
+    },
+    "description": "Send simulated keyboard and mouse input to the running game during play mode.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Input event to deliver, or status to report backend availability without sending anything.",
+          "enum": [
+            "status",
+            "key_down",
+            "key_up",
+            "mouse_move",
+            "mouse_button_down",
+            "mouse_button_up"
+          ],
+          "type": "string"
+        },
+        "button": {
+          "default": "",
+          "description": "For mouse_button_down and mouse_button_up: which mouse button.",
+          "enum": [
+            "left",
+            "right",
+            "middle"
+          ],
+          "type": "string"
+        },
+        "key": {
+          "default": "",
+          "description": "For key_down and key_up: engine-neutral key name from the curated vocabulary.",
+          "enum": [
+            "a",
+            "b",
+            "c",
+            "d",
+            "e",
+            "f",
+            "g",
+            "h",
+            "i",
+            "j",
+            "k",
+            "l",
+            "m",
+            "n",
+            "o",
+            "p",
+            "q",
+            "r",
+            "s",
+            "t",
+            "u",
+            "v",
+            "w",
+            "x",
+            "y",
+            "z",
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "space",
+            "enter",
+            "escape",
+            "tab",
+            "backspace",
+            "delete",
+            "up",
+            "down",
+            "left",
+            "right",
+            "shift",
+            "ctrl",
+            "alt"
+          ],
+          "type": "string"
+        },
+        "x": {
+          "default": 0,
+          "description": "For mouse_move: pointer X in game-view pixels, origin top-left.",
+          "maximum": 16384,
+          "minimum": 0,
+          "type": "integer"
+        },
+        "y": {
+          "default": 0,
+          "description": "For mouse_move: pointer Y in game-view pixels, origin top-left, increasing downward.",
+          "maximum": 16384,
+          "minimum": 0,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "name": "simulate_input"
+  },
+  {
+    "annotations": {
+      "destructiveHint": false,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyActions": [
+        "list",
+        "get"
+      ],
+      "readOnlyHint": false,
+      "title": "Manage properties"
+    },
+    "description": "Read and write curated properties of an object in the currently edited scene.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Operation to perform.",
+          "enum": [
+            "list",
+            "get",
+            "set"
+          ],
+          "type": "string"
+        },
+        "property": {
+          "default": "",
+          "description": "For get and set: engine-neutral property name from the curated vocabulary.",
+          "enum": [
+            "transform.position",
+            "transform.rotation",
+            "transform.scale",
+            "light.color",
+            "light.intensity",
+            "light.range",
+            "light.shadows_enabled",
+            "camera.field_of_view",
+            "camera.near_clip",
+            "camera.far_clip",
+            "camera.orthographic"
+          ],
+          "type": "string"
+        },
+        "target_id": {
+          "default": "",
+          "description": "Opaque ID of the object, as returned by inspect_scene or mutate_scene.",
+          "type": "string"
+        },
+        "value": {
+          "default": null,
+          "description": "For set: the new value, encoded per the property's type (contract section 10)."
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "name": "manage_properties"
+  },
+  {
+    "annotations": {
+      "destructiveHint": true,
+      "idempotentHint": false,
+      "openWorldHint": false,
+      "readOnlyActions": [
+        "list_overrides"
+      ],
+      "readOnlyHint": false,
+      "title": "Manage prefab overrides"
+    },
+    "description": "List, revert, or apply the overrides a prefab instance carries relative to its source asset.",
+    "inputSchema": {
+      "additionalProperties": false,
+      "properties": {
+        "action": {
+          "description": "Operation to perform.",
+          "enum": [
+            "list_overrides",
+            "revert",
+            "apply"
+          ],
+          "type": "string"
+        },
+        "property": {
+          "default": "",
+          "description": "For revert: engine-neutral property name from the curated vocabulary. Omit to revert every override on the instance.",
+          "enum": [
+            "transform.position",
+            "transform.rotation",
+            "transform.scale",
+            "light.color",
+            "light.intensity",
+            "light.range",
+            "light.shadows_enabled",
+            "camera.field_of_view",
+            "camera.near_clip",
+            "camera.far_clip",
+            "camera.orthographic"
+          ],
+          "type": "string"
+        },
+        "target_id": {
+          "default": "",
+          "description": "Opaque ID of the prefab instance root, or of a node inside it, as returned by inspect_scene or mutate_scene.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "action"
+      ],
+      "type": "object"
+    },
+    "name": "manage_prefab"
+  }
+]

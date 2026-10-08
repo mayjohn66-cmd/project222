@@ -1,0 +1,18 @@
+{
+  "version": "0.2.0",
+  "digest": "ff37d40f6760412c3d407f4a468d5d48277daed1d96bcdddece85a106df7b566",
+  "entries": [
+    "icon.svg",
+    "icon.svg.import",
+    "log_capture.gd",
+    "log_capture.gd.uid",
+    "plugin.cfg",
+    "plugin.gd",
+    "plugin.gd.uid",
+    "revvy_config.gd",
+    "revvy_config.gd.uid",
+    "revvy_server.gd",
+    "revvy_server.gd.uid",
+    "tools"
+  ]
+}
