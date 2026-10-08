@@ -68,6 +68,7 @@ func _ready() -> void:
 	back_to_map_button.pressed.connect(select_tab.bind(PrepTab.MAP))
 	_build_difficulty_selector()
 	ExpeditionEnvironmentCard.install(self)
+	ExpeditionSupplyAccess.install(self)
 
 	select_tab(PrepTab.MAP)
 

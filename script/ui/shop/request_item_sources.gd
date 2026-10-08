@@ -37,6 +37,7 @@ static func expedition(item: String, environment: Dictionary) -> Array[String]:
 	ExpeditionEventData.ensure_loaded()
 	var current: Array[String] = []
 	var later: Array[String] = []
+	var tool_notes: Array[String] = []
 	for event in ExpeditionEventData.events:
 		if event.get("result_type","") not in ["loot","battle"] or int(event.get("weight",0)) <= 0: continue
 		var region := str(event["region_id"])
@@ -47,6 +48,8 @@ static func expedition(item: String, environment: Dictionary) -> Array[String]:
 			table = EnemyData.get_loot_table(table)
 		for loot in ExpeditionEventData.get_loot_entries(table):
 			if str(loot["item_id"]) != item or int(loot.get("weight",0)) <= 0 or int(loot.get("max_amount",0)) <= 0: continue
+			var tool_note := ExpeditionGatheringToolGuide.required_tool(table)
+			if not tool_note.is_empty() and tool_note not in tool_notes: tool_notes.append(tool_note)
 			var labels := condition_labels(event)
 			for label in condition_labels(loot):
 				if label not in labels: labels.append(label)
@@ -71,6 +74,7 @@ static func expedition(item: String, environment: Dictionary) -> Array[String]:
 	for route in current + later:
 		lines.append(route)
 		if lines.size() >= MAX_ROUTES: break
+	lines.append_array(tool_notes)
 	if not lines.is_empty(): lines.append("탐험 중 만나는 채집물과 보물은 달라질 수 있습니다.")
 	return lines
 

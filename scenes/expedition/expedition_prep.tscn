@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://b21oveokrf4c"]
 
 [ext_resource type="Script" uid="uid://bcl67a4kob1jx" path="res://script/ui/expedition/expedition_prep.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://scenes/expedition/prep/prep_shop.tscn" id="10_supply"]
 [ext_resource type="PackedScene" uid="uid://dkpmxf76nbk5n" path="res://scenes/expedition/prep/prep_bag.tscn" id="2_bag"]
 [ext_resource type="PackedScene" uid="uid://dm2esspgxul17" path="res://scenes/expedition/prep/prep_map.tscn" id="3_map"]
 [ext_resource type="Texture2D" path="res://art/ui/pixel_theme/panel_inset.png" id="4_panel"]
@@ -257,3 +258,6 @@ theme_override_styles/normal = SubResource("StartStyle")
 theme_override_styles/hover = SubResource("StartHover")
 theme_override_styles/pressed = SubResource("StartPressed")
 theme_override_styles/disabled = SubResource("StartDisabled")
+
+[node name="ShopContent" parent="." instance=ExtResource("10_supply")]
+visible = false
