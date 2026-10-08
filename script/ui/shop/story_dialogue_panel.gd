@@ -20,6 +20,7 @@ const SPEECH_COLOR := Color(0.96, 0.93, 0.85)
 const NARRATION_COLOR := Color(0.72, 0.78, 0.86)
 var _speaker: String = ""
 var _speaker_is_player: bool = false
+var _base_portrait: Texture2D
 var name_label: Label
 var text_label: Label
 var hint_label: Label
@@ -128,6 +129,7 @@ func start(
 	_speaker = PlayerProgress.display_player_name() if is_player else npc_name
 	name_label.text = _speaker
 	portrait_texture = PlayerPortraits.find() if is_player else NpcPortraits.resolve(_speaker, portrait_texture)
+	_base_portrait = portrait_texture
 	portrait.texture = portrait_texture
 	portrait.visible = portrait_texture != null
 	root.visible = true
@@ -145,6 +147,10 @@ func _show_line() -> void:
 		# 표정 표시가 없는 줄은 기본 표정으로 돌아간다(앞 줄 표정이 남지 않게).
 		var expression: String = marks["expression"] if not str(marks["expression"]).is_empty() else PlayerPortraits.DEFAULT_EXPRESSION
 		portrait.texture = PlayerPortraits.find(expression)
+	else:
+		# NPC: 표정 그림이 있으면 쓰고, 없거나 표시가 없으면 기본 초상화.
+		var npc_face: Texture2D = NpcPortraits.find_expression(_speaker, marks["expression"])
+		portrait.texture = npc_face if npc_face != null else _base_portrait
 	name_label.visible = not narration
 	name_label.text = _speaker
 	text_label.add_theme_color_override("font_color", NARRATION_COLOR if narration else SPEECH_COLOR)

@@ -69,6 +69,14 @@ func run() -> void:
 		check(dlg.portrait.texture == PlayerPortraits.find_for("male", "tired") and dlg.text_label.text == "(한숨.)", "서술 줄도 표정이 붙는다")
 		dlg.start("타블렌", null, tagged)
 		check(dlg.portrait.texture != PlayerPortraits.find_for("male", "surprised"), "NPC 줄은 주인공 표정을 쓰지 않는다")
+		# NPC 표정: 그림 파일이 없으면 기본 초상화를 쓴다(그림이 오면 art/npc/expr/<npc_id>_<표정>.png)
+		check(NpcPortraits.npc_id_of("행상인 타블렌") == "naru" and NpcPortraits.npc_id_of("낯선 사람") == "", "화자 이름 → npc_id")
+		var base_naru: Texture2D = NpcPortraits.find("타블렌")
+		var expr_lines: Array[String] = ["{놀람}앗!", "그냥 말"]
+		dlg.start("타블렌", null, expr_lines)
+		var has_file: bool = NpcPortraits.find_expression("타블렌", "surprised") != null
+		check(dlg.portrait.texture == (NpcPortraits.find_expression("타블렌", "surprised") if has_file else base_naru), "NPC 표정 파일이 없으면 기본 초상화")
+		check(NpcPortraits.find_expression("타블렌", "neutral") == null and NpcPortraits.find_expression("타블렌", "") == null, "기본 표정은 별도 파일을 찾지 않는다")
 		dlg.close()
 	# 데이터에 쓴 모든 표시는 유효한 표정이어야 한다
 	var csv := FileAccess.open("res://data/shop/requests/requests_text.csv", FileAccess.READ)
