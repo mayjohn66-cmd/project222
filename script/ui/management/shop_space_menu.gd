@@ -17,9 +17,9 @@ func refresh() -> void:
 	ShopSpaceProgression.adopt_tutorial_save(world)
 	for room in ["production", "warehouse"]:
 		world.get_node("ProductionRoom" if room == "production" else "WarehouseRoom").visible = ShopSpaceProgression.room_ready(room)
-	host.production_button.visible = ShopSpaceProgression.production_introduced()
-	host.construction_button.visible = ShopSpaceProgression.production_offered()
-	host.employee_button.visible = not ShopSpaceProgression.active() or OpeningJourneyFlow.core_finished()
+	host.production_button.visible = tab_available(host.MenuTab.PRODUCTION)
+	host.construction_button.visible = tab_available(host.MenuTab.CONSTRUCTION)
+	host.employee_button.visible = tab_available(host.MenuTab.EMPLOYEE)
 	if not tab_available(int(host.current_tab)):
 		host.select_tab(host.MenuTab.INVENTORY)
 	host.construction_content.refresh_view()
@@ -32,6 +32,7 @@ func refresh() -> void:
 		bar.build_quick_slot_bar.refresh_furniture_inventory()
 
 func tab_available(tab: int) -> bool:
+	if ShopSpaceProgression.UNLOCK_ALL_TABS: return true
 	match tab:
 		host.MenuTab.PRODUCTION: return ShopSpaceProgression.production_introduced()
 		host.MenuTab.CONSTRUCTION: return ShopSpaceProgression.production_offered()

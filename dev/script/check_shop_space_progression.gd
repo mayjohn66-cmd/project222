@@ -57,8 +57,8 @@ func run() -> void:
 	var construction = menu.construction_content
 	var blueprint = menu.blueprint_content
 	check(ShopSpaceProgression.active() and ShopSpaceProgression.phase() == "store", "fresh game starts in store only")
-	check(not menu.production_button.visible and not menu.construction_button.visible and not menu.employee_button.visible, "advanced navigation hidden during core tutorial")
-	check(not blueprint.production_button.visible and not blueprint.interior_button.visible and not blueprint.construction_button.visible, "future blueprint categories hidden")
+	check(menu.production_button.visible and menu.construction_button.visible and menu.employee_button.visible, "all book tabs open from the start (UNLOCK_ALL_TABS)")
+	check(blueprint.production_button.visible and blueprint.interior_button.visible and blueprint.construction_button.visible, "all blueprint categories open from the start")
 	check(not world.get_node("ProductionRoom").visible and not world.get_node("WarehouseRoom").visible, "unbuilt rooms hidden")
 	check(not world.get_node("ProductionRoom").enter_actor(player) and not world.get_node("WarehouseRoom").enter_actor(player), "unbuilt room entry rejected")
 	check(not ShopSpaceProgression.furniture_visible("production_door") and not ShopSpaceProgression.furniture_visible("warehouse_rack"), "starting stock does not unlock future rooms")
@@ -67,14 +67,14 @@ func run() -> void:
 	var cash := GameState.money
 	check(not FurnitureObjectCatalog.craft("warehouse_door") and GameState.money == cash, "early crafting cannot bypass progression")
 	menu.open_menu(ManagementMenu.MenuTab.CONSTRUCTION)
-	check(menu.current_tab == ManagementMenu.MenuTab.INVENTORY, "direct early menu request cannot bypass navigation")
+	check(menu.current_tab == ManagementMenu.MenuTab.CONSTRUCTION, "early menu request opens the requested tab")
 	await snap("store")
 	for step in TutorialDirector.SETTINGS.steps:
 		if not step.get("optional", false): PlayerProgress.record_story_beat("tutorial_step:" + str(step["id"]) + ":done", 1)
 	check(not ShopSpaceProgression.production_offered(), "core completion alone waits for resident settlement")
 	PlayerProgress.record_story_beat(ResidentRequestFlow.PREFIX + "settle_naru:done", 1)
 	menu.space_menu.refresh()
-	check(menu.construction_button.visible and not menu.production_button.visible, "first settlement offers preparation without premature production")
+	check(menu.construction_button.visible and menu.production_button.visible, "tabs stay open after first settlement")
 	menu.select_tab(ManagementMenu.MenuTab.CONSTRUCTION)
 	check(not construction.expand_button.visible and not construction.next_info_label.text.contains("5000"), "before explanation only next preparation is shown")
 	var tutorial = world.get_node("TutorialDirector")
@@ -84,7 +84,7 @@ func run() -> void:
 	construction.refresh_view()
 	check(construction.expand_button.text == "생산실 문 배치" and not construction.expand_button.disabled, "first construction action places owned door")
 	check(builder.build_placement_service.place_furniture("magic_oven", Vector2i(1, 1)) == null, "first oven cannot bypass production room by placement in store")
-	check(blueprint.production_button.visible and not blueprint.interior_button.visible and not blueprint._get_visible_furniture_ids().has("warehouse_door"), "only first facilities available")
+	check(blueprint.production_button.visible and not blueprint._get_visible_furniture_ids().has("warehouse_door"), "tabs open but future items still hidden")
 	await snap("production-plan")
 	construction._on_expand_button_pressed()
 	for i in range(180):

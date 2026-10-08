@@ -4,6 +4,9 @@ extends RefCounted
 # 공간은 기존 씬을 사용하며, 새 게임에서 실제 문을 설치해야 사용할 수 있다.
 const PREFIX := "shop_space:"
 const VERSION := PREFIX + "v1"
+# 관리 책의 탭(생산·건설·직원)과 설계도 분류 탭을 초반부터 모두 연다(2026-10-08 결정).
+# 되돌리려면 false. 가구 하나하나의 공개(furniture_visible)와 공간 단계(생산실·창고 마련)는 이 값과 상관없이 그대로다.
+const UNLOCK_ALL_TABS := true
 
 static func active() -> bool:
 	return PlayerProgress.story_beat_days.has(VERSION)
@@ -44,7 +47,7 @@ static func expansion_ready() -> bool:
 	return not active() or (room_ready("warehouse") and marked("stored"))
 
 static func category_visible(category: String) -> bool:
-	if not active(): return true
+	if not active() or UNLOCK_ALL_TABS: return true
 	match category:
 		"production": return production_introduced()
 		"interior": return first_product()
