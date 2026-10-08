@@ -1,8 +1,8 @@
 npc_id,name,expression_id,planned_file,batch,asset_status
-naru,타블렌,smile,art/npc/expr/naru_smile.png,1,미제작
-naru,타블렌,surprised,art/npc/expr/naru_surprised.png,1,미제작
-naru,타블렌,worried,art/npc/expr/naru_worried.png,1,미제작
-naru,타블렌,flustered,art/npc/expr/naru_flustered.png,1,미제작
+naru,타블렌,smile,art/npc/expr/naru_smile.png,1,제작 완료
+naru,타블렌,surprised,art/npc/expr/naru_surprised.png,1,제작 완료
+naru,타블렌,worried,art/npc/expr/naru_worried.png,1,제작 완료
+naru,타블렌,flustered,art/npc/expr/naru_flustered.png,1,제작 완료
 naru,타블렌,tired,art/npc/expr/naru_tired.png,2,미제작
 naru,타블렌,determined,art/npc/expr/naru_determined.png,2,미제작
 doyun,코르빈,smile,art/npc/expr/doyun_smile.png,1,미제작
