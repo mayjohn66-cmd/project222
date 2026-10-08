@@ -1,0 +1,7 @@
+# 바닥 질감 후보 (64x64, 2x2칸, 이음새 없음). Claude 추천안 — 사용자 확정 전.
+wood    wood_b     (a는 벽돌처럼 보임)
+tile    tile_b     (체크 대비가 더 분명)
+road    road_b     (a는 같은 흠집이 반복돼 보임)
+paving  paving_b   (a는 분홍 얼룩 반복)
+dirt    dirt_a     (b는 반복 경계에 대각선 띠가 끊겨 보임)
+grass   grass_a2   (grass_a에서 반복되는 보라 꽃 점을 직접 지움, 생성 0회. grass_b는 채도가 너무 높고 평평함)
