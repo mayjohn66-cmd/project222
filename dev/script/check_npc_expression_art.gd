@@ -21,10 +21,14 @@ func run() -> void:
 			break
 	check(dlg != null, "대화창을 찾았다")
 	var base: Texture2D = NpcPortraits.find("타블렌")
-	for e in ["smile", "surprised", "worried", "flustered"]:
-		var tex: Texture2D = NpcPortraits.find_expression("타블렌", e)
-		check(tex != null and tex.get_size() == Vector2(160, 192), "타블렌 %s 160x192" % e)
-		check(tex != base, "타블렌 %s 는 기본 초상화와 다른 그림" % e)
+	var roster := {"타블렌": "naru", "코르빈": "doyun", "이세르": "sora", "오렐": "neighbor_bread", "피니아": "child_berries", "라슈": "traveler_water", "엘미": "gatherer_herbs", "바르크": "miner_ore", "세이나": "healer_moss", "델빈": "delvin"}
+	for who in roster:
+		check(NpcPortraits.npc_id_of(who) == roster[who], "%s → %s" % [who, roster[who]])
+		var base_who: Texture2D = NpcPortraits.find(who)
+		for e in ["smile", "surprised", "worried", "flustered"]:
+			var tex: Texture2D = NpcPortraits.find_expression(who, e)
+			check(tex != null and tex.get_size() == Vector2(160, 192), "%s %s 160x192" % [who, e])
+			check(tex != base_who, "%s %s 는 기본 초상화와 다른 그림" % [who, e])
 	check(NpcPortraits.find_expression("타블렌", "tired") == null, "그림이 없는 표정(tired)은 null → 기본 초상화")
 	if dlg != null:
 		var lines: Array[String] = ["{놀람}앗!", "그냥 말", "{피곤}휴우."]
