@@ -1,0 +1,13 @@
+# Pixel Lab 캐릭터 ID (v3, 64px, low top-down, 8방향 정지). 걷기 애니메이션을 붙일 때 이 ID를 쓴다.
+# 외형 근거: 직원 = 초록 모자 #235740 + 남색 조끼, 손님 = data/shop/catalogs/actor_looks_3d.csv
+worker_001  64a09847-d8c8-4fca-be30-dd8695e99826
+worker_002  86aeafa6-6dd0-4343-9526-f40fe5779bf7
+worker_003  10231124-0f81-434a-bac2-1497b0998b30
+normal      a81f7218-ed37-4a6a-b56d-3483c85cb46b
+traveler    e7d2c140-463e-4f67-8b60-45a9f51c8cfe
+adventurer  6c2c9e3d-40f7-45f4-8ec4-3fcfa28b667c
+miner       1b50b4e2-1084-4a3f-9e08-3687bae22250
+herbalist   05cc5444-d387-4064-83a4-db9bc0952733
+child       20b713aa-b710-4dd3-acd4-07bbcb57e235
+collector   b65eab56-1b61-413d-a0a7-940c4e27b0cf
+marsh_local 3f232720-06b6-4798-a793-c99ecf656a5c
