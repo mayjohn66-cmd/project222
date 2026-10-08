@@ -577,6 +577,7 @@ func _create_schedule_entry(
 	schedule_list.add_child(
 		event_panel
 	)
+	StoreEventPreparationView.attach(self, event_data)
 
 
 func _get_schedule_status_text(
