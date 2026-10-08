@@ -479,8 +479,8 @@ static func _need_lines(errors: Array[String], warns: Array[String], tag: String
 	for x in lines:
 		if x.strip_edges().is_empty():
 			errors.append("%s lines에 빈 칸이 있음" % tag)
-		elif x.length() > MAX_LINE:
-			errors.append("%s lines 한 칸이 %d자(최대 %d)" % [tag, x.length(), MAX_LINE])
+		elif DialogueMarks.plain_text(x).length() > MAX_LINE:
+			errors.append("%s lines 한 칸이 %d자(최대 %d)" % [tag, DialogueMarks.plain_text(x).length(), MAX_LINE])
 
 
 static func validate_file(path: String, known: Dictionary) -> Dictionary:
