@@ -440,9 +440,13 @@ static func _flip_tabs(menu: Control,stage: BookStage3D,old_tab: int) -> void:
 	menu.set_meta("book_moving",moving)
 	_sync_note.call_deferred(menu)
 	var arts := _flag_arts(menu,order)  # 두 프레임을 기다리는 동안 포스트잇 질감도 그려 둔다
+	var art_owner: Node = menu.get_meta("book_flag_art")
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	if not is_instance_valid(menu) or not is_instance_valid(stage) or not stage.is_inside_tree(): return
+	# A newer tab/close can replace and free this capture during the two-frame wait.
+	if not is_instance_valid(art_owner) or art_owner.is_queued_for_deletion() or menu.get_meta("book_flag_art",null) != art_owner: return
+	if not menu.visible or bool(menu.get_meta("book_closing",false)): return
 	var fresh: Array = stage.capture_halves()
 	if fresh.is_empty():
 		_kill_anim(menu)
@@ -494,9 +498,11 @@ static func _drag_begin(menu: Control,stage: BookStage3D,dir: int) -> void:
 	menu.set_meta("book_moving",order)
 	menu.select_tab(new_tab)
 	var arts := _flag_arts(menu,order)
+	var art_owner: Node = menu.get_meta("book_flag_art")
 	await RenderingServer.frame_post_draw
 	await RenderingServer.frame_post_draw
 	if not is_instance_valid(menu) or not is_instance_valid(stage) or menu.get_meta("book_drag") != st: return
+	if not is_instance_valid(art_owner) or art_owner.is_queued_for_deletion() or menu.get_meta("book_flag_art",null) != art_owner: return
 	var fresh: Array = stage.capture_halves()
 	if fresh.is_empty():
 		_kill_anim(menu)
