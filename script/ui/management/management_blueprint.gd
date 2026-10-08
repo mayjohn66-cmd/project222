@@ -51,6 +51,7 @@ var furniture_buttons: Dictionary = {}
 var selected_category: String = "store"
 var selected_furniture_id: String = ""
 var crafting: bool = false
+var guide_summary: Label
 var furniture_preview: FurniturePreview
 
 
@@ -59,6 +60,12 @@ func _ready() -> void:
 	name_label.get_parent().add_child(furniture_preview)
 	name_label.get_parent().move_child(furniture_preview, name_label.get_index() + 1)
 	furniture_preview.visible = false
+	if FurnitureGuide.ENABLED:
+		guide_summary = Label.new()
+		guide_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		guide_summary.add_theme_font_size_override("font_size",18)
+		name_label.get_parent().add_child(guide_summary)
+		name_label.get_parent().move_child(guide_summary,name_label.get_index()+1)
 	# 고정 레이아웃은 management_blueprint.tscn에서 관리한다.
 	category_buttons = {
 		"store": store_button,
@@ -200,6 +207,7 @@ func refresh_view() -> void:
 
 
 func _clear_detail(message: String) -> void:
+	if is_instance_valid(guide_summary): guide_summary.hide()
 	furniture_preview.visible = false
 	selected_furniture_id = ""
 
@@ -232,6 +240,8 @@ func _select_furniture(furniture_id: String) -> void:
 		_clear_detail("현재 분류에 해당하는 가구를 선택하세요.")
 		return
 
+	if selected_furniture_id != furniture_id:
+		$MainVBox/Body/DetailPanel/DetailScroll.scroll_vertical = 0
 	selected_furniture_id = furniture_id
 	furniture_preview.show_furniture(furniture_id)
 	_update_furniture_buttons()
@@ -247,6 +257,11 @@ func _select_furniture(furniture_id: String) -> void:
 		+ FurnitureObjectCatalog.detail(furniture_id)
 		+ _get_effect_description(furniture_id)
 	)
+
+	if FurnitureGuide.ENABLED:
+		description_label.text = FurnitureGuide.description(furniture_id,true)
+		guide_summary.text = FurnitureGuide.overview(furniture_id)
+		guide_summary.visible = not guide_summary.text.is_empty()
 
 	owned_label.text = (
 		"미설치 보유 수량: %d개"

@@ -9,6 +9,7 @@ const PAPER_LINE := Color("b9a582")
 # 아이템 종류(item_type) → 얻는 방법 문구. 문구는 임시이며 바꾸려면 여기만 고친다.
 const ACQUIRE_TEXT := {"material": "채집·원정", "store_product": "제작", "equipment": "원정 장비", "special": "특별한 곳에서"}
 
+var _scroll: ScrollContainer
 var _name: Label
 var _frame: PanelContainer
 var _icon: TextureRect
@@ -52,9 +53,17 @@ func _label(size_px: int,color: Color = INK) -> Label:
 
 
 func _build() -> void:
+	_scroll = ScrollContainer.new()
+	_scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	add_child(_scroll)
+	var content := VBoxContainer.new()
+	content.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	content.add_theme_constant_override("separation",12)
+	_scroll.add_child(content)
 	add_theme_constant_override("separation",12)
 	_name = _label(28)
-	add_child(_name)
+	content.add_child(_name)
 	_frame = PanelContainer.new()
 	_frame.custom_minimum_size = Vector2(0,190)
 	_frame.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
@@ -65,7 +74,7 @@ func _build() -> void:
 	frame_style.set_content_margin_all(10)
 	_frame.add_theme_stylebox_override("panel",frame_style)
 	_frame.custom_minimum_size = Vector2(240,190)
-	add_child(_frame)
+	content.add_child(_frame)
 	_icon = TextureRect.new()
 	_icon.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 	_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
@@ -76,21 +85,22 @@ func _build() -> void:
 	_preview.visible = false
 	_frame.add_child(_preview)
 	_price = _label(20)
-	add_child(_price)
+	content.add_child(_price)
 	_acquire = _label(18)
-	add_child(_acquire)
+	content.add_child(_acquire)
 	var line := HSeparator.new()
 	line.modulate = PAPER_LINE
-	add_child(line)
+	content.add_child(line)
 	_desc = _label(17,INK_DIM)
+	_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_desc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_desc.vertical_alignment = VERTICAL_ALIGNMENT_TOP
-	add_child(_desc)
+	content.add_child(_desc)
 	_hint = _label(18,INK_DIM)
 	_hint.text = "왼쪽에서 물건을 고르면\n여기에 자세한 설명이 적힙니다."
 	_hint.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	add_child(_hint)
+	content.add_child(_hint)
 	_show_empty()
 
 
@@ -120,8 +130,9 @@ func _on_entry(entry_type: String,entry_id: Variant,card: ItemCard) -> void:
 			var data := FurnitureData.get_furniture(str(entry_id))
 			title = FurnitureData.get_furniture_name(str(entry_id))
 			icon = FurnitureData.get_furniture_icon(str(entry_id))
-			acquire = "획득 방법 : 설계도에서 제작"
-			desc = str(data.get("description",""))
+			acquire = "획득 방법 : 설계도에서 제작" if not FurnitureRecipeData.get_recipe(str(entry_id)).is_empty() else "보유한 집기 · 아래에서 사용법을 확인하세요."
+			desc = FurnitureGuide.description(str(entry_id)) if FurnitureGuide.ENABLED else str(data.get("description",""))
+			if FurnitureGuide.ENABLED: price_text = FurnitureGuide.overview(str(entry_id))
 			_preview.show_furniture(str(entry_id))
 		_:
 			var data := ItemData.get_item(item_id)
@@ -132,6 +143,7 @@ func _on_entry(entry_type: String,entry_id: Variant,card: ItemCard) -> void:
 			acquire = "획득 방법 : %s" % ACQUIRE_TEXT.get(str(ItemData.get_item_type(item_id)),"알 수 없음")
 			desc = str(data.get("description",""))
 	if entry_type != ItemCard.ENTRY_TYPE_FURNITURE: _preview.visible = false
+	_scroll.scroll_vertical = 0
 	_name.text = title
 	_icon.texture = icon
 	_icon.visible = not _preview.visible
