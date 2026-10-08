@@ -3,6 +3,13 @@ extends CommunityBoardPanel
 
 var world: Node
 var tracked_id := ""
+var preparation_view: RequestPreparationView
+
+func _ready() -> void:
+	super._ready()
+	preparation_view = RequestPreparationView.new()
+	preparation_view.host = self
+	add_child(preparation_view)
 
 func entries() -> Array[Dictionary]: return VillageJournalFlow.entries()
 func panel_title() -> String: return "마을 수첩"
@@ -20,3 +27,5 @@ func refresh() -> void:
 		var target := VillageJournalFlow.destination(world,id)
 		card["action"].text = "목적지 표시 해제" if tracked_id == id else "목적지 표시"
 		card["action"].disabled = target == null and tracked_id != id
+
+	if preparation_view != null: preparation_view.refresh()

@@ -48,9 +48,9 @@ func run() -> void:
 	var host = menu.management_production
 	book = host.preparation_book
 	check(is_instance_valid(book) and book.world == world,"book resolves its own real main world during startup")
-	check(not menu.production_button.visible,"fresh tutorial still hides production navigation")
+	check(menu.production_button.visible == ShopSpaceProgression.UNLOCK_ALL_TABS,"production navigation follows shared tab disclosure setting")
 	menu.open_menu(ManagementMenu.MenuTab.PRODUCTION)
-	check(menu.current_tab == ManagementMenu.MenuTab.INVENTORY,"direct early production menu cannot bypass tutorial")
+	check(menu.current_tab == (ManagementMenu.MenuTab.PRODUCTION if ShopSpaceProgression.UNLOCK_ALL_TABS else ManagementMenu.MenuTab.INVENTORY),"direct production selection follows shared tab disclosure setting")
 	for step in TutorialDirector.SETTINGS.steps:
 		if not step.get("optional",false): PlayerProgress.record_story_beat("tutorial_step:" + str(step["id"]) + ":done",GameState.total_day)
 	PlayerProgress.record_story_beat("tutorial_step:production:intro",GameState.total_day)
@@ -59,7 +59,7 @@ func run() -> void:
 	menu.select_tab(ManagementMenu.MenuTab.PRODUCTION)
 	host.refresh_view()
 	check(menu.current_tab == ManagementMenu.MenuTab.PRODUCTION and book.mode == "today","first unlocked production opens today's preparation")
-	check(book.selected == "camp_bread" and book.entries[0]["id"] == "camp_bread","first visit prioritizes actual current tutorial product")
+	check(book.entries[0]["id"] == "camp_bread" and (ShopSpaceProgression.UNLOCK_ALL_TABS or book.selected == "camp_bread"),"current tutorial product leads list; earlier visits retain selection")
 	check(not host.get_node("MainHBox").visible and not host.get_node("FacilityStatusScroll").visible,"old duplicate production panels hidden")
 	check(not has_recipe("bake_bread") and not has_recipe("bottled_water") and not has_recipe("herb_drink"),"unlearned and early modern products hidden")
 	host.select_recipe("herb_drink")
