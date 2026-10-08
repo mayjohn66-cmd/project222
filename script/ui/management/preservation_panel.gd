@@ -6,6 +6,8 @@ var rows: VBoxContainer
 var message: Label
 var contents_scroll: ScrollContainer
 var host: Node  # 월드 모드(가구에서 열 때)의 기준 노드. 크기 계산에 쓴다
+var intro: Label
+var guide_view: PreservationGuideView
 var unit_filter: String = ""  # 비어 있지 않으면 이 설비 하나만 보여 준다(월드 모드)
 
 static func install(view: Control) -> void:
@@ -64,7 +66,7 @@ func _ready() -> void:
 	body.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	body.add_theme_constant_override("separation", 10)
 	contents_scroll.add_child(body)
-	var intro := _label()
+	intro = _label()
 	intro.text = "겨울을 여름까지 남겨 두려면\n서리 얼음은 다음 아침에 물이 됩니다. 새순·물박하는 계절이 지나면 시들어요.\n보관 설비에 넣거나 베이킹 작업대에서 말려 두세요."
 	intro.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	body.add_child(intro)
@@ -78,6 +80,8 @@ func _ready() -> void:
 	about_to_popup.connect(_fit)
 	confirmed.connect(_refresh_inventory)
 	close_requested.connect(_refresh_inventory)
+	guide_view = PreservationGuideView.new()
+	add_child(guide_view)
 
 func _process(_delta: float) -> void:
 	if visible and inventory_view != null and not inventory_view.is_visible_in_tree(): hide()
@@ -94,11 +98,13 @@ func _fit() -> void:
 
 func open() -> void:
 	PreservationService.settle()
-	message.text = "설비는 가게에 고정 설치됩니다. 계절 재료는 보존되고 식품은 냉장 시 천천히 변하며 냉동 시 멈춥니다.\n부탁을 전달하려면 필요한 만큼 꺼내 게시판에 가져가세요."
+	message.text = "설비는 가게에 고정 설치됩니다. 계절 재료는 보존되고 식품은 냉장 시 천천히 변하며 냉동 시 멈춥니다.\n부탁에 쓸 물품은 필요한 만큼 꺼내세요. 맡은 부탁의 안내에 따라 이웃이나 게시판에 전달합니다."
 	refresh()
 	popup_centered(Vector2i(minf(650, _bounds().x - 32), minf(470, _bounds().y - 40)))
 
 func refresh() -> void:
+	var scroll := contents_scroll.scroll_vertical
+	if PreservationGuide.ENABLED: intro.text = PreservationGuide.intro(unit_filter)
 	for child in rows.get_children():
 		rows.remove_child(child)
 		child.queue_free()
@@ -109,7 +115,7 @@ func refresh() -> void:
 		header.text = "%s · %d/%d개 · 소지금 %d G" % [unit["name"], PreservationService.count(id), unit["capacity"], GameState.money]
 		rows.add_child(header)
 		var description := _label()
-		description.text = str(unit["description"])
+		description.text = PreservationGuide.unit_description(unit) if PreservationGuide.ENABLED else str(unit["description"])
 		description.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		rows.add_child(description)
 		if not PreservationService.installed(id):
@@ -117,13 +123,16 @@ func refresh() -> void:
 			install_button.disabled = not GameState.can_afford(int(unit["cost"]))
 			rows.add_child(install_button)
 			continue
+		var shown := 0
 		for item in unit["accepts"]:
+			if not PreservationGuide.visible_item(str(item)): continue
+			shown += 1
 			var row := HBoxContainer.new()
 			var caption := _label()
 			caption.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-			caption.text = "%s · 창고 %d / 보관 %d" % [ItemData.get_item_name(item), GameState.get_item_count(item), int(GameState.preservation_state[id].get(item, 0))]
+			caption.text = "%s · 소지 %d / 보관 %d" % [ItemData.get_item_name(item), GameState.get_item_count(item), int(GameState.preservation_state[id].get(item, 0))]
 			if FoodShelfLife.tracked(item):
-				caption.tooltip_text = FoodShelfLife.describe(item, FoodShelfLife.state()[id].get(item, []))
+				caption.tooltip_text = PreservationGuide.item_note(id,item) if PreservationGuide.ENABLED else FoodShelfLife.describe(item, FoodShelfLife.state()[id].get(item, []))
 			row.add_child(caption)
 			var put := _button("넣기", _move.bind(id, item, true))
 			put.disabled = GameState.get_item_count(item) <= 0 or PreservationService.count(id) >= int(unit["capacity"])
@@ -131,13 +140,24 @@ func refresh() -> void:
 			var take := _button("꺼내기", _move.bind(id, item, false))
 			take.disabled = int(GameState.preservation_state[id].get(item, 0)) <= 0
 			row.add_child(take)
+			row.set_meta("preservation_item",item)
+			row.set_meta("preservation_unit",id)
 			rows.add_child(row)
+			PreservationGuide.add_note(self,id,str(item))
+		if shown == 0:
+			var empty := _label()
+			empty.text = "지금 이 설비에 넣을 물품은 없어요. 재료를 구하거나 상품을 배우면 목록에 나타납니다."
+			empty.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			rows.add_child(empty)
 	var notices: Array = GameState.preservation_state.get("notices", [])
 	if not notices.is_empty():
 		var record := _label()
 		record.text = "최근 변형\n" + "\n".join(notices.slice(maxi(0, notices.size() - 3)))
 		record.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		rows.add_child(record)
+
+	if guide_view != null: guide_view.remember_state()
+	contents_scroll.set_deferred("scroll_vertical",scroll)
 
 func _button(text_value: String, action: Callable) -> Button:
 	var button := Button.new()
@@ -163,7 +183,7 @@ func _move(id: String, item: String, putting: bool) -> void:
 	var moved := PreservationService.deposit(id, item) if putting else PreservationService.withdraw(id, item)
 	if moved > 0:
 		message.text = "%s 1개를 %s." % [ItemData.get_item_name(item), "넣었습니다" if putting else "꺼냈습니다"]
-		message.text += " 남은 유통기한은 그대로 이어집니다." if FoodShelfLife.tracked(item) else " 꺼낸 얼음은 다음 아침 전에 사용하거나 다시 보관하세요."
+		message.text += " " + PreservationGuide.move_note(id,item,putting) if PreservationGuide.ENABLED else (" 남은 유통기한은 그대로 이어집니다." if FoodShelfLife.tracked(item) else " 꺼낸 얼음은 다음 아침 전에 사용하거나 다시 보관하세요.")
 	else: message.text = "재고와 보관함의 빈자리를 확인해 주세요."
 	refresh()
 	_refresh_inventory()
