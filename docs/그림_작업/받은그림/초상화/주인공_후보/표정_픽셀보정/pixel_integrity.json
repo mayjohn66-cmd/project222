@@ -1,0 +1,619 @@
+{
+  "spec": {
+    "male": {
+      "base": "male_B_1x.png",
+      "eyes": [
+        [
+          30,
+          30,
+          39,
+          37
+        ],
+        [
+          44,
+          30,
+          53,
+          37
+        ]
+      ],
+      "nose": [
+        37,
+        36,
+        42,
+        40
+      ],
+      "brows": [
+        [
+          31,
+          27,
+          36,
+          30
+        ],
+        [
+          45,
+          27,
+          51,
+          30
+        ]
+      ],
+      "mouth_clear": [
+        34,
+        40,
+        47,
+        46
+      ],
+      "mouth_center": [
+        40,
+        43
+      ],
+      "donor_eyes": {
+        "smile": [
+          [
+            27,
+            28,
+            36,
+            35
+          ],
+          [
+            44,
+            28,
+            53,
+            35
+          ]
+        ],
+        "flustered": [
+          [
+            28,
+            29,
+            37,
+            36
+          ],
+          [
+            44,
+            29,
+            53,
+            36
+          ]
+        ],
+        "surprised": [
+          [
+            27,
+            28,
+            36,
+            36
+          ],
+          [
+            43,
+            28,
+            52,
+            36
+          ]
+        ],
+        "worried": [
+          [
+            29,
+            30,
+            38,
+            37
+          ],
+          [
+            44,
+            30,
+            53,
+            37
+          ]
+        ],
+        "tired": [
+          [
+            28,
+            30,
+            37,
+            37
+          ],
+          [
+            44,
+            30,
+            53,
+            37
+          ]
+        ],
+        "determined": [
+          [
+            29,
+            29,
+            38,
+            36
+          ],
+          [
+            45,
+            29,
+            54,
+            36
+          ]
+        ]
+      },
+      "donor_mouth": {
+        "smile": [
+          [
+            35,
+            40,
+            45,
+            46
+          ],
+          [
+            9,
+            5
+          ]
+        ],
+        "flustered": [
+          [
+            35,
+            40,
+            47,
+            46
+          ],
+          [
+            9,
+            4
+          ]
+        ],
+        "surprised": [
+          [
+            34,
+            39,
+            45,
+            48
+          ],
+          [
+            7,
+            6
+          ]
+        ],
+        "worried": [
+          [
+            35,
+            40,
+            45,
+            44
+          ],
+          [
+            9,
+            3
+          ]
+        ],
+        "tired": [
+          [
+            37,
+            40,
+            44,
+            44
+          ],
+          [
+            7,
+            3
+          ]
+        ],
+        "determined": [
+          [
+            36,
+            40,
+            47,
+            44
+          ],
+          [
+            9,
+            3
+          ]
+        ]
+      },
+      "cheeks": [
+        [
+          29,
+          36,
+          35,
+          39
+        ],
+        [
+          45,
+          36,
+          50,
+          39
+        ]
+      ]
+    },
+    "female": {
+      "base": "female_C_1x.png",
+      "eyes": [
+        [
+          25,
+          29,
+          33,
+          36
+        ],
+        [
+          41,
+          29,
+          50,
+          36
+        ]
+      ],
+      "nose": [
+        32,
+        35,
+        37,
+        40
+      ],
+      "brows": [
+        [
+          27,
+          26,
+          33,
+          29
+        ],
+        [
+          42,
+          26,
+          49,
+          29
+        ]
+      ],
+      "mouth_clear": [
+        30,
+        40,
+        44,
+        46
+      ],
+      "mouth_center": [
+        36,
+        43
+      ],
+      "donor_eyes": {
+        "smile": [
+          [
+            26,
+            29,
+            34,
+            36
+          ],
+          [
+            42,
+            29,
+            51,
+            36
+          ]
+        ],
+        "flustered": [
+          [
+            26,
+            29,
+            34,
+            36
+          ],
+          [
+            42,
+            29,
+            51,
+            36
+          ]
+        ],
+        "surprised": [
+          [
+            25,
+            29,
+            33,
+            37
+          ],
+          [
+            42,
+            29,
+            50,
+            37
+          ]
+        ],
+        "worried": [
+          [
+            27,
+            30,
+            35,
+            37
+          ],
+          [
+            43,
+            30,
+            51,
+            37
+          ]
+        ],
+        "tired": [
+          [
+            27,
+            29,
+            35,
+            36
+          ],
+          [
+            43,
+            29,
+            52,
+            36
+          ]
+        ],
+        "determined": [
+          [
+            26,
+            29,
+            34,
+            36
+          ],
+          [
+            42,
+            29,
+            51,
+            36
+          ]
+        ]
+      },
+      "donor_mouth": {
+        "smile": [
+          [
+            32,
+            40,
+            44,
+            47
+          ],
+          [
+            9,
+            5
+          ]
+        ],
+        "flustered": [
+          [
+            32,
+            42,
+            45,
+            46
+          ],
+          [
+            10,
+            3
+          ]
+        ],
+        "surprised": [
+          [
+            33,
+            42,
+            42,
+            47
+          ],
+          [
+            7,
+            5
+          ]
+        ],
+        "worried": [
+          [
+            32,
+            42,
+            44,
+            46
+          ],
+          [
+            10,
+            3
+          ]
+        ],
+        "tired": [
+          [
+            32,
+            42,
+            43,
+            47
+          ],
+          [
+            9,
+            4
+          ]
+        ],
+        "determined": [
+          [
+            33,
+            43,
+            44,
+            46
+          ],
+          [
+            9,
+            3
+          ]
+        ]
+      },
+      "cheeks": [
+        [
+          27,
+          36,
+          31,
+          40
+        ],
+        [
+          43,
+          36,
+          47,
+          40
+        ]
+      ]
+    }
+  },
+  "source_sha256": {
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\male_B_1x.png": "2065e0bac59f202588ea0222bce54d578d01142e67285865cd91cf59f7855de9",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\female_C_1x.png": "c2efd58cd35217ea5182fd4ccf22d426cc053654b090e1a8be2f9b47f1951c36",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\male_smile_1x.png": "bf640c1a0a556a2deb52b83d18cdb8487f8bfe891b42cb11f258e657982a5d7d",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\male_flustered_1x.png": "c26545a7b15d32e456face4057ffad0a1afc9e592811f55419744266ef392107",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\male_surprised_1x.png": "98f982f53acb2bbf97d55542209f128e058556342d8782a525160ea14ae55e11",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\male_worried_1x.png": "c2e7c6cf7043f4916da7dd861672bf8a3669e61fb6a373a7c6de4464b8368fff",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\male_tired_1x.png": "c4b2f834bddb0413d2f5a42a286b7921fdbc3b1ccb656cb320ab8961a0b30347",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\male_determined_1x.png": "2488001e9329647e9cf80b9bb8c58c7ca73e4cd0369486b47508aae49dabb4b6",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\female_smile_1x.png": "d6be69419443daffc58e9f0c2514e4cd980cff8c0b2e8ed7cb1d99c996466e7e",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\female_flustered_1x.png": "b6cdb4787fc25412481aee3e8f17ef166c5d9c5675a47e59b419a5173e3e0b20",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\female_surprised_1x.png": "cbba8896c71c0cdab6571c2fe39f346f018a45cecc27eebed3c905674254a957",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\female_worried_1x.png": "77cfbaae10c85733c020c1755269e22db0f8074e289cba36f8c630bbc3576433",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\female_tired_1x.png": "2c7ccb73ef37937ea2c0a2c192943960c95fc8971cdaccb9f1a5f00a7df36d23",
+    "docs\\그림_작업\\받은그림\\초상화\\주인공_후보\\표정_inpaint\\female_determined_1x.png": "2338cb91079b002ed27a2e7acc2cfa76246a8b851f2cb0ee2dbf7cffe9835760"
+  },
+  "source_files_changed": 0,
+  "checks": [
+    {
+      "gender": "male",
+      "expression": "neutral",
+      "changed_pixels": 0,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "male",
+      "expression": "smile",
+      "changed_pixels": 150,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "male",
+      "expression": "flustered",
+      "changed_pixels": 142,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "male",
+      "expression": "surprised",
+      "changed_pixels": 135,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "male",
+      "expression": "worried",
+      "changed_pixels": 95,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "male",
+      "expression": "tired",
+      "changed_pixels": 118,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "male",
+      "expression": "determined",
+      "changed_pixels": 124,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "female",
+      "expression": "neutral",
+      "changed_pixels": 0,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "female",
+      "expression": "smile",
+      "changed_pixels": 140,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "female",
+      "expression": "flustered",
+      "changed_pixels": 166,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "female",
+      "expression": "surprised",
+      "changed_pixels": 140,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "female",
+      "expression": "worried",
+      "changed_pixels": 119,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "female",
+      "expression": "tired",
+      "changed_pixels": 138,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    },
+    {
+      "gender": "female",
+      "expression": "determined",
+      "changed_pixels": 122,
+      "outside_mask_changes": 0,
+      "outside_feature_regions_changes": 0,
+      "nose_changes": 0,
+      "alpha_changes": 0,
+      "palette_expansion": 0,
+      "nearest_2x": true
+    }
+  ]
+}
