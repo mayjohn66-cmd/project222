@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://dev/script/check_product_preparation.gd" id="1"]
+[node name="CheckProductPreparation" type="Node"]
+script = ExtResource("1")

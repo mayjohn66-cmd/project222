@@ -1,8 +1,8 @@
 extends Control
 
-# 생산 레시피와 현재 배치된 생산 설비 상태를 표시한다.
-# 탭과 고정 레이아웃은 씬에서 관리하고, 레시피 버튼과 설비 상태 문구만
-# 데이터에 맞춰 동적으로 갱신한다.
+# 배운 상품·현재 재료·실제 설비를 상품 준비 책에 연결한다.
+# 기존 고정 노드와 API는 책 배치·호환 호출을 위해 유지한다.
+# 실제 제작 시작과 수령은 현장 생산 설비에서 진행한다.
 
 
 @onready var facility_status_button: Button = (
@@ -59,6 +59,7 @@ extends Control
 )
 
 
+var preparation_book: ProductPreparationBook
 var selected_recipe_id: String = ""
 var production_processing: bool = false
 
@@ -107,6 +108,11 @@ func _ready() -> void:
 
 	_setup_facility_status_view()
 	refresh_facility_status()
+	if ProductPreparationData.ENABLED:
+		preparation_book = ProductPreparationBook.new()
+		preparation_book.name = "ProductPreparationBook"
+		add_child(preparation_book)
+		for path in ["ProductionTabBar","FacilityStatusScroll","MainHBox"]: get_node(path).hide()
 
 
 func refresh_recipe_list() -> void:
@@ -174,6 +180,11 @@ func create_recipe_button(
 func select_recipe(
 	recipe_id: String
 ) -> void:
+	if not RecipeUnlockData.is_recipe_available(recipe_id): return
+	if is_instance_valid(preparation_book):
+		if preparation_book.mode == "facilities": preparation_book.select_tab("learned")
+		preparation_book.select_entry(recipe_id)
+		return
 	var recipe: Dictionary = (
 		ProductRecipeData.get_recipe(
 			recipe_id
@@ -510,6 +521,9 @@ func get_facility_display_name(
 
 
 func refresh_view() -> void:
+	if is_instance_valid(preparation_book):
+		preparation_book.refresh()
+		return
 	if not is_instance_valid(facility_status_scroll):
 		return
 
@@ -700,6 +714,9 @@ func refresh_facility_status() -> void:
 func _select_production_tab(
 	show_status: bool
 ) -> void:
+	if is_instance_valid(preparation_book):
+		preparation_book.select_tab("facilities" if show_status else "learned")
+		return
 	showing_facility_status = show_status
 
 	facility_status_scroll.visible = show_status
@@ -773,7 +790,8 @@ func _add_facility_card(cards: GridContainer, id: String, facility: ProductionFa
 			ProductionFacility.ProductionState.READY: status.text = "완성 · 회수할 수 있습니다."
 	content.add_child(status)
 	var note := Label.new()
-	note.text = "반죽 → 굽기 → 완성" if id=="magic_oven" else "재료 → 혼합 → 병에 담기"
+	note.text = "현장에서 [E]로 배운 제조법을 선택하고 완성품을 수령합니다."
+	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.add_theme_font_size_override("font_size",15)
 	note.add_theme_color_override("font_color",Color("90694b"))
 	content.add_child(note)
