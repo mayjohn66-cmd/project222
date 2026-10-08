@@ -266,6 +266,7 @@ func record_successful_sale(
 	quantity: int = 1
 ) -> void:
 
+	FishingRecords.sold(item_id, quantity)
 	successful_sales += 1
 	daily_revenue += maxi(
 		revenue_amount,
@@ -647,7 +648,7 @@ func _fill_facility_recipes(
 
 		facility_recipe_picker.add_item(
 			"%s ×%d" % [
-				ItemData.get_item_name(result_item_id),
+				FishingData.recipe_name(recipe),
 				result_amount
 			]
 		)

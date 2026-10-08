@@ -114,6 +114,7 @@ static func get_active_demand_entries(
 		)
 
 		for entry in event_entries:
+			if event_id.begins_with("fish_store_") and not FishingContent.product_known(str(entry.get("target_id", ""))): continue
 			result.append(
 				entry.duplicate(true)
 			)

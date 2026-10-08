@@ -6,7 +6,10 @@ const SETTINGS = preload("res://scenes/shop/events/default_store_event_story.tre
 static func moment(event_id: String, stage: String) -> Dictionary:
 	for entry in SETTINGS.moments:
 		if str(entry.get("event_id", "")) == event_id and str(entry.get("stage", "")) == stage:
-			return entry
+			var result: Dictionary = entry.duplicate(true)
+			if event_id.begins_with("fish_store_") and result.has("cue_items"):
+				result["cue_items"] = result["cue_items"].filter(func(item):return FishingRecords.market_item_available(str(item)))
+			return result
 	return {}
 
 static func phase(event: Dictionary, day: int) -> String:

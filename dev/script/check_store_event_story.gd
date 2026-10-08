@@ -42,7 +42,7 @@ func run() -> void:
 	var menu = world.get_node("UI/ManagementMenu")
 	var sources := Tools.load_sources()
 	var prose := RequestTextData.read_file(RequestTextData.CSV_PATH)
-	check(StoreEventStory.SETTINGS.moments.size() == 90, "fifteen common/seasonal events have six narrative stages each")
+	check(StoreEventStory.SETTINGS.moments.size() == 114, "nineteen common/seasonal events have six narrative stages each")
 	var token_id := "store_trail_bought"
 	var bad_token := PackedStringArray([token_id, "service_text", "길손의 말", "", "준비를 다 했어.", ""])
 	check(not Tools.validate_rows(Tools.COLUMNS, [bad_token], sources)["errors"].is_empty(), "Gemini cannot remove actual purchased item token")
@@ -51,6 +51,10 @@ func run() -> void:
 		check(sources["service_text"].has(id) and prose.has("service_text:" + id), "game and Gemini share scene: " + id)
 		var prompt := Runner.build_prompt("service_text", {"service_text": {id:sources["service_text"][id]}})
 		check(prompt.contains(str(entry["context"])), "Gemini preserves actual demand context: " + id)
+	FishingRecords.mark("fishing_first_sale:done")
+	for id in ["neighbor_bread","child_berries","miner_ore"]: PlayerProgress.record_story_beat("resident_request:"+id+":accepted",GameState.total_day)
+	PlayerProgress.record_story_beat(OpeningJourneyFlow.TRADE,GameState.total_day)
+	for recipe in FishingData.entries("recipes"): PlayerProgress.learn_recipe(str(recipe["id"]))
 	for event in StoreEventData.get_all_events():
 		var id := str(event["event_id"])
 		var start := int(event["start_day"])
@@ -77,11 +81,16 @@ func run() -> void:
 		check(StoreEventStory.reaction(id, type_id, item_id, "bought", end + 1).is_empty(), "expired demand gets no event praise: " + id)
 		var normal := sample(type_id, start - 1, id)
 		var active := sample(type_id, start, id)
+		# Compare the same day with only this event removed: adjacent events may end between dates.
+		var held: Dictionary = StoreEventData.events[id]
+		StoreEventData.events.erase(id)
+		var control := sample(type_id,start,id)
+		StoreEventData.events[id] = held
 		var ended := sample(type_id, end + 1, id)
 		check(normal["event_units"] == 0 and ended["event_units"] == 0, "event demand absent outside dates: " + id)
-		check(active["event_units"] > 0 and active["units"] > normal["units"], "actual request generator increases purchased units: " + id)
+		check(active["event_units"] > 0 and active["units"] > control["units"], "actual request generator increases purchased units: " + id)
 		for cue in rumor["cue_items"]:
-			check(int(active["item_units"].get(cue, 0)) > int(normal["item_units"].get(cue, 0)), "each advertised item gets more requested units: " + id + ":" + str(cue))
+			check(int(active["item_units"].get(cue, 0)) > int(control["item_units"].get(cue, 0)), "each advertised item gets more requested units: " + id + ":" + str(cue))
 		print("DEMAND_SAMPLE ", id, " before=", normal["units"], " active=", active["units"], " after=", ended["units"])
 
 	# 실제 손님 쇼핑의 품절 경로와 진열대 -> 결제 -> 기록 경로를 확인한다.

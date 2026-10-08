@@ -14,3 +14,7 @@ village_festival_spring,봄의 소풍 자리,3,7,8,20,any,store_fest_spring_rumo
 village_festival_summer,물가의 여름 인사,3,7,8,20,any,store_fest_summer_rumor,차와 물을 준비하고 우물 곁에서 여름 모임을 연다.,seasonal,summer,0
 village_festival_autumn,수확 뒤의 식탁,3,7,8,20,any,store_fest_autumn_rumor,수프와 빵을 모아 가을의 작은 식탁을 차린다.,seasonal,autumn,0
 village_festival_winter,등불 곁 겨울 모임,3,7,8,20,any,store_fest_winter_rumor,밤길의 따뜻한 음료를 챙겨 겨울 저녁을 함께 보낸다.,seasonal,winter,0
+fish_store_spring,봄 식탁의 풀 향,17,20,21,25,any,fish_store_spring_rumor,봄 어종·약초가 준비 단서. 기본 생선으로도 요리를 만들어 참여 가능.,seasonal,spring,0
+fish_store_summer,물가로 챙겨 가는 음식,17,20,21,25,any,fish_store_summer_rumor,둘 중 배운 상품만 준비 힌트에 표시.,seasonal,summer,0
+fish_store_autumn,돌아오는 길의 한 끼,17,20,21,25,any,fish_store_autumn_rumor,가을 길손의 보관 가능한 식사 수요.,seasonal,autumn,0
+fish_store_winter,따뜻한 그릇을 찾는 저녁,17,20,21,25,any,fish_store_winter_rumor,기본 생선 수프도 행사에 참여 가능. 겨울 어종 필수화 금지.,seasonal,winter,0

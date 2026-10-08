@@ -44,6 +44,7 @@ static func is_recipe_available(
 	ensure_loaded()
 
 	if not CraftingPathFlow.recipe_ready(recipe_id) or not VillageExpansionFlow.recipe_ready(recipe_id): return false
+	if not FishingRecords.recipe_available(recipe_id): return false
 	if not by_recipe.has(recipe_id):
 		return true
 

@@ -88,7 +88,7 @@ static func is_discovered_for_occurrence(event_id: String, total_day: int) -> bo
 
 static func can_share_event(event_id: String, total_day: int) -> bool:
 	var event := get_event_occurrence(event_id, total_day)
-	return not event.is_empty() and total_day >= int(event["discovery_start_day"]) and total_day <= int(event["end_day"]) and not is_discovered_for_occurrence(event_id, total_day)
+	return _fishing_available(event_id) and not event.is_empty() and total_day >= int(event["discovery_start_day"]) and total_day <= int(event["end_day"]) and not is_discovered_for_occurrence(event_id, total_day)
 
 static func discover_event(event_id: String, total_day: int) -> bool:
 	if total_day != GameState.total_day or not can_share_event(event_id, total_day): return false
@@ -102,6 +102,7 @@ static func get_discoverable_events(total_day: int, customer_type_id: String) ->
 	ensure_loaded()
 	var result: Array[Dictionary] = []
 	for raw_event in events.values():
+		if not _fishing_available(str(raw_event["event_id"])): continue
 		var event := StoreEventSchedule.occurrence(raw_event, total_day)
 		if is_discovered_for_occurrence(str(event["event_id"]), total_day): continue
 		if total_day < int(event["discovery_start_day"]) or total_day > int(event["discovery_end_day"]): continue
@@ -114,12 +115,12 @@ static func get_active_events(total_day: int) -> Array[Dictionary]:
 	ensure_loaded()
 	var result: Array[Dictionary] = []
 	for event in events.values():
-		if StoreEventSchedule.active(event, total_day): result.append(StoreEventSchedule.occurrence(event, total_day))
+		if _fishing_available(str(event["event_id"])) and StoreEventSchedule.active(event, total_day): result.append(StoreEventSchedule.occurrence(event, total_day))
 	return result
 
 static func is_event_active(event_id: String, total_day: int) -> bool:
 	var event := get_event(event_id)
-	return not event.is_empty() and StoreEventSchedule.active(event, total_day)
+	return _fishing_available(event_id) and not event.is_empty() and StoreEventSchedule.active(event, total_day)
 
 
 # =========================================================
@@ -304,3 +305,9 @@ static func _load_csv() -> void:
 # CSV 셀 읽기
 # =========================================================
 
+
+# Delay the optional content dependency until runtime, avoiding catalog/state cycles.
+static func _fishing_available(id: String) -> bool:
+	if not id.begins_with("fish_store_"): return true
+	var flow = load("res://script/world/shop/fishing/fishing_content.gd")
+	return flow != null and flow.store_available(id)

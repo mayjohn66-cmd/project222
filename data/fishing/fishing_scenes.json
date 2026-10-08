@@ -1,0 +1,316 @@
+{
+  "scenes": [
+    {
+      "id": "fishing_intro_intro",
+      "owner_id": "fishing_intro",
+      "phase": "intro",
+      "npc": "엘미"
+    },
+    {
+      "id": "fishing_intro_finish",
+      "owner_id": "fishing_intro",
+      "phase": "finish",
+      "npc": "엘미"
+    },
+    {
+      "id": "fishing_rod_intro",
+      "owner_id": "fishing_rod",
+      "phase": "intro",
+      "npc": "타블렌"
+    },
+    {
+      "id": "fishing_rod_finish",
+      "owner_id": "fishing_rod",
+      "phase": "finish",
+      "npc": "타블렌"
+    },
+    {
+      "id": "fishing_first_catch_intro",
+      "owner_id": "fishing_first_catch",
+      "phase": "intro",
+      "npc": "엘미"
+    },
+    {
+      "id": "fishing_first_catch_finish",
+      "owner_id": "fishing_first_catch",
+      "phase": "finish",
+      "npc": "엘미"
+    },
+    {
+      "id": "fishing_first_sale_intro",
+      "owner_id": "fishing_first_sale",
+      "phase": "intro",
+      "npc": "나"
+    },
+    {
+      "id": "fishing_first_sale_finish",
+      "owner_id": "fishing_first_sale",
+      "phase": "finish",
+      "npc": "나"
+    },
+    {
+      "id": "fishing_keep_intro",
+      "owner_id": "fishing_keep",
+      "phase": "intro",
+      "npc": "타블렌"
+    },
+    {
+      "id": "fishing_keep_finish",
+      "owner_id": "fishing_keep",
+      "phase": "finish",
+      "npc": "타블렌"
+    },
+    {
+      "id": "fish_request_neighbor_intro",
+      "owner_id": "fish_request_neighbor",
+      "phase": "intro",
+      "npc": "오렐"
+    },
+    {
+      "id": "fish_request_neighbor_finish",
+      "owner_id": "fish_request_neighbor",
+      "phase": "finish",
+      "npc": "오렐"
+    },
+    {
+      "id": "fish_request_worker_intro",
+      "owner_id": "fish_request_worker",
+      "phase": "intro",
+      "npc": "코르빈"
+    },
+    {
+      "id": "fish_request_worker_finish",
+      "owner_id": "fish_request_worker",
+      "phase": "finish",
+      "npc": "코르빈"
+    },
+    {
+      "id": "fish_request_road_intro",
+      "owner_id": "fish_request_road",
+      "phase": "intro",
+      "npc": "타블렌"
+    },
+    {
+      "id": "fish_request_road_finish",
+      "owner_id": "fish_request_road",
+      "phase": "finish",
+      "npc": "타블렌"
+    },
+    {
+      "id": "fish_request_children_intro",
+      "owner_id": "fish_request_children",
+      "phase": "intro",
+      "npc": "피니아"
+    },
+    {
+      "id": "fish_request_children_finish",
+      "owner_id": "fish_request_children",
+      "phase": "finish",
+      "npc": "피니아"
+    },
+    {
+      "id": "fish_request_rain_intro",
+      "owner_id": "fish_request_rain",
+      "phase": "intro",
+      "npc": "세이나"
+    },
+    {
+      "id": "fish_request_rain_finish",
+      "owner_id": "fish_request_rain",
+      "phase": "finish",
+      "npc": "세이나"
+    },
+    {
+      "id": "fish_request_spring_intro",
+      "owner_id": "fish_request_spring",
+      "phase": "intro",
+      "npc": "엘미"
+    },
+    {
+      "id": "fish_request_spring_finish",
+      "owner_id": "fish_request_spring",
+      "phase": "finish",
+      "npc": "엘미"
+    },
+    {
+      "id": "fish_request_summer_kept_intro",
+      "owner_id": "fish_request_summer_kept",
+      "phase": "intro",
+      "npc": "코르빈"
+    },
+    {
+      "id": "fish_request_summer_kept_finish",
+      "owner_id": "fish_request_summer_kept",
+      "phase": "finish",
+      "npc": "코르빈"
+    },
+    {
+      "id": "fish_request_autumn_intro",
+      "owner_id": "fish_request_autumn",
+      "phase": "intro",
+      "npc": "오렐"
+    },
+    {
+      "id": "fish_request_autumn_finish",
+      "owner_id": "fish_request_autumn",
+      "phase": "finish",
+      "npc": "오렐"
+    },
+    {
+      "id": "fish_request_winter_intro",
+      "owner_id": "fish_request_winter",
+      "phase": "intro",
+      "npc": "바르크"
+    },
+    {
+      "id": "fish_request_winter_finish",
+      "owner_id": "fish_request_winter",
+      "phase": "finish",
+      "npc": "바르크"
+    },
+    {
+      "id": "fish_request_evening_intro",
+      "owner_id": "fish_request_evening",
+      "phase": "intro",
+      "npc": "이세르"
+    },
+    {
+      "id": "fish_request_evening_finish",
+      "owner_id": "fish_request_evening",
+      "phase": "finish",
+      "npc": "이세르"
+    },
+    {
+      "id": "fish_event_spring_intro",
+      "owner_id": "fish_event_spring",
+      "phase": "intro",
+      "npc": "엘미"
+    },
+    {
+      "id": "fish_event_spring_finish",
+      "owner_id": "fish_event_spring",
+      "phase": "finish",
+      "npc": "엘미"
+    },
+    {
+      "id": "fish_event_summer_intro",
+      "owner_id": "fish_event_summer",
+      "phase": "intro",
+      "npc": "이세르"
+    },
+    {
+      "id": "fish_event_summer_finish",
+      "owner_id": "fish_event_summer",
+      "phase": "finish",
+      "npc": "이세르"
+    },
+    {
+      "id": "fish_event_autumn_intro",
+      "owner_id": "fish_event_autumn",
+      "phase": "intro",
+      "npc": "오렐"
+    },
+    {
+      "id": "fish_event_autumn_finish",
+      "owner_id": "fish_event_autumn",
+      "phase": "finish",
+      "npc": "오렐"
+    },
+    {
+      "id": "fish_event_winter_intro",
+      "owner_id": "fish_event_winter",
+      "phase": "intro",
+      "npc": "코르빈"
+    },
+    {
+      "id": "fish_event_winter_finish",
+      "owner_id": "fish_event_winter",
+      "phase": "finish",
+      "npc": "코르빈"
+    },
+    {
+      "id": "fish_event_rain_intro",
+      "owner_id": "fish_event_rain",
+      "phase": "intro",
+      "npc": "타블렌"
+    },
+    {
+      "id": "fish_event_rain_finish",
+      "owner_id": "fish_event_rain",
+      "phase": "finish",
+      "npc": "타블렌"
+    },
+    {
+      "id": "fish_event_moon_intro",
+      "owner_id": "fish_event_moon",
+      "phase": "intro",
+      "npc": "이세르"
+    },
+    {
+      "id": "fish_event_moon_finish",
+      "owner_id": "fish_event_moon",
+      "phase": "finish",
+      "npc": "이세르"
+    },
+    {
+      "id": "fish_event_table_intro",
+      "owner_id": "fish_event_table",
+      "phase": "intro",
+      "npc": "오렐"
+    },
+    {
+      "id": "fish_event_table_finish",
+      "owner_id": "fish_event_table",
+      "phase": "finish",
+      "npc": "오렐"
+    },
+    {
+      "id": "fish_event_memory_intro",
+      "owner_id": "fish_event_memory",
+      "phase": "intro",
+      "npc": "나"
+    },
+    {
+      "id": "fish_event_memory_finish",
+      "owner_id": "fish_event_memory",
+      "phase": "finish",
+      "npc": "나"
+    },
+    {
+      "id": "recipe_fish_grilled_learn",
+      "owner_id": "recipe_fish_grilled",
+      "phase": "learn",
+      "npc": "오렐"
+    },
+    {
+      "id": "recipe_fish_dried_learn",
+      "owner_id": "recipe_fish_dried",
+      "phase": "learn",
+      "npc": "타블렌"
+    },
+    {
+      "id": "recipe_fish_soup_learn",
+      "owner_id": "recipe_fish_soup",
+      "phase": "learn",
+      "npc": "세이나"
+    },
+    {
+      "id": "recipe_fish_bread_learn",
+      "owner_id": "recipe_fish_bread",
+      "phase": "learn",
+      "npc": "오렐"
+    },
+    {
+      "id": "recipe_fish_lunch_learn",
+      "owner_id": "recipe_fish_lunch",
+      "phase": "learn",
+      "npc": "피니아"
+    },
+    {
+      "id": "recipe_fish_winter_stew_learn",
+      "owner_id": "recipe_fish_winter_stew",
+      "phase": "learn",
+      "npc": "바르크"
+    }
+  ]
+}

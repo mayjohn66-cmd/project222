@@ -68,6 +68,10 @@ func setup(
 	count_label.text = (
 		str(total_count)
 	)
+	text = ItemData.get_item_name(item_id) if icon_rect.texture == null else ""
+	clip_text = icon_rect.texture == null
+	if icon_rect.texture == null: add_theme_font_size_override("font_size",12)
+	else: remove_theme_font_size_override("font_size")
 
 	var item_data: Dictionary = (
 		ItemData.get_item(

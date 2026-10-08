@@ -31,7 +31,7 @@ func step_day(days: int) -> void:
 
 func run() -> void:
 	reset()
-	check(FoodShelfLife.rules().size() == 10, "ten selected foods; stable water/materials stay unchanged")
+	check(FoodShelfLife.rules().size() == 28, "original ten foods plus eighteen fish foods; stable water/materials stay unchanged")
 	for item in FoodShelfLife.rules():
 		check(ItemData.has_item(item) and ItemData.is_shelf_allowed(item), "all food rules use existing sellable products " + item)
 		check(int(FoodShelfLife.rules()[item]["days"]) > 0, "positive daily duration " + item)

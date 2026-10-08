@@ -24,6 +24,7 @@ func _ready() -> void:
 
 func blocked() -> bool:
  var world = get_parent()
+ if bool(world.get_meta("fishing_open",false)): return true
  if bool(world.get_meta("act_four_open",false)): return true
  if bool(world.get_meta("checkout_tutorial_dialogue",false)): return true
  if bool(world.get_meta("progressive_tutorial_dialogue",false)): return true
@@ -66,6 +67,10 @@ func _process(_delta: float) -> void:
  prompt.visible = not blocked()
  if not prompt.visible: return
  if Time.get_ticks_msec() < message_until and player.global_position.distance_to(message_origin) < 96: return
+ var fishing = get_parent().get_node_or_null("FishingDirector")
+ if fishing != null and not fishing.interaction_hint().is_empty():
+  prompt.text = fishing.interaction_hint()
+  return
  var act_four = get_parent().get_node_or_null("VillageLifeDirector/ActFourDirector")
  if act_four != null and not act_four.interaction_hint().is_empty():
   prompt.text = act_four.interaction_hint()
@@ -133,6 +138,8 @@ func _process(_delta: float) -> void:
  else: prompt.text = ""
 
 func try_interact() -> bool:
+ var fishing = get_parent().get_node_or_null("FishingDirector")
+ if fishing != null and fishing.try_interact(): return true
  var act_four = get_parent().get_node_or_null("VillageLifeDirector/ActFourDirector")
  if act_four != null and act_four.try_interact(): return true
  var power = get_parent().get_node_or_null("ManualCheckoutController/PowerRepairDirector")

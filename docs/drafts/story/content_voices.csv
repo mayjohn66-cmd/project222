@@ -439,3 +439,79 @@ worker_003_first_shift,직원 3,기존 직원 역할명. 친근한 반말. 바�
 worker_003_trained,직원 3,기존 직원 역할명. 친근한 반말. 바쁜 시간이 지나고 물건을 정리하는 일을 좋아하는 사람. 동료와 일을 나누려 한다. 실제 이벤트가 먼저 발생해야 이야기를 연다. 돈·물품·평판 답례 없음.
 worker_003_dismissed,직원 3,기존 직원 역할명. 친근한 반말. 바쁜 시간이 지나고 물건을 정리하는 일을 좋아하는 사람. 동료와 일을 나누려 한다. 실제 이벤트가 먼저 발생해야 이야기를 연다. 돈·물품·평판 답례 없음.
 worker_003_rehired,직원 3,기존 직원 역할명. 친근한 반말. 바쁜 시간이 지나고 물건을 정리하는 일을 좋아하는 사람. 동료와 일을 나누려 한다. 실제 이벤트가 먼저 발생해야 이야기를 연다. 돈·물품·평판 답례 없음.
+fishing_intro_intro,엘미,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fishing_intro_finish,엘미,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fishing_rod_intro,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fishing_rod_finish,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fishing_first_catch_intro,엘미,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fishing_first_catch_finish,엘미,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fishing_first_sale_intro,나,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fishing_first_sale_finish,나,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fishing_keep_intro,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fishing_keep_finish,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_neighbor_intro,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_neighbor_finish,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_worker_intro,코르빈,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_worker_finish,코르빈,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_road_intro,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_road_finish,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_children_intro,피니아,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_children_finish,피니아,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_rain_intro,세이나,차분한 존댓말. 식탁과 안부를 이야기하고 의료 효과를 약속하지 않음.
+fish_request_rain_finish,세이나,차분한 존댓말. 식탁과 안부를 이야기하고 의료 효과를 약속하지 않음.
+fish_request_spring_intro,엘미,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_spring_finish,엘미,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_summer_kept_intro,코르빈,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_summer_kept_finish,코르빈,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_autumn_intro,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_autumn_finish,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_winter_intro,바르크,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_winter_finish,바르크,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_evening_intro,이세르,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_request_evening_finish,이세르,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_spring_intro,엘미,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_spring_finish,엘미,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_summer_intro,이세르,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_summer_finish,이세르,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_autumn_intro,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_autumn_finish,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_winter_intro,코르빈,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_winter_finish,코르빈,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_rain_intro,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_rain_finish,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_moon_intro,이세르,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_moon_finish,이세르,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_table_intro,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_table_finish,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_memory_intro,나,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_event_memory_finish,나,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_store_spring_rumor,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_store_spring_response,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_store_summer_rumor,피니아,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_store_summer_response,피니아,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_store_autumn_rumor,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_store_autumn_response,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_store_winter_rumor,바르크,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_store_winter_response,바르크,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+recipe_fish_grilled_learn,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+recipe_fish_dried_learn,타블렌,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+recipe_fish_soup_learn,세이나,차분한 존댓말. 식탁과 안부를 이야기하고 의료 효과를 약속하지 않음.
+recipe_fish_bread_learn,오렐,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+recipe_fish_lunch_learn,피니아,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+recipe_fish_winter_stew_learn,바르크,물가에서 느긋하게 이야기하는 친근한 반말. 추가 지급·전투 효과 약속 없음.
+fish_store_spring_ongoing,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_spring_closing,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_spring_finished,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_spring_missing,손님,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_summer_ongoing,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_summer_closing,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_summer_finished,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_summer_missing,손님,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_autumn_ongoing,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_autumn_closing,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_autumn_finished,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_autumn_missing,손님,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_winter_ongoing,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_winter_closing,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_winter_finished,서술,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.
+fish_store_winter_missing,손님,짧고 자연스러운 반말. 인물 구매를 추정하지 않는 매장 풍경.

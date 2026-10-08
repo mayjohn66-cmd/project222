@@ -168,7 +168,7 @@ func can_start_production(
 	recipe_id: String,
 	production_count: int = 1
 ) -> bool:
-	if not CraftingPathFlow.recipe_ready(recipe_id): return false
+	if not CraftingPathFlow.recipe_ready(recipe_id) or not FishingRecords.recipe_available(recipe_id): return false
 	if production_state != ProductionState.IDLE:
 		return false
 
@@ -391,10 +391,14 @@ func collect_production() -> bool:
 		push_warning("[가공기] 완성품 정보를 확인할 수 없습니다.")
 		return false
 
+	if pending_item_id.begins_with("fish_"):
+		var fishing = load("res://script/world/shop/fishing/fishing_service.gd")
+		if not fishing.capacity(pending_item_id, pending_amount): return false
 	GameState.add_item(
 		pending_item_id,
 		pending_amount
 	)
+	FishingRecords.collected(pending_item_id, pending_amount)
 	output_collected.emit(pending_item_id, pending_amount)
 
 
