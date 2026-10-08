@@ -5,7 +5,7 @@
   },
   "bearer_scope": "read_only",
   "bearer_token": "b00b64547469e63c57a954ed8dc9f71286d2aa0fd3da49443d01a72e5c73e54b",
-  "bridge_instance_id": "65b6dda018a0ccc2da0330a0df72052e",
+  "bridge_instance_id": "e0a41573f20bf9b180079f03d8bb99c0",
   "config_version": 3,
   "engine": "godot",
   "engine_version": "4.7.1-stable (official)",
@@ -13,5 +13,5 @@
   "project_path": "C:/Users/john9/OneDrive/Documents/project222",
   "proxy_port": 8089,
   "ue_port": 8088,
-  "updated_at": "2026-10-08T12:13:50Z"
+  "updated_at": "2026-10-08T14:05:40Z"
 }
