@@ -85,6 +85,7 @@ var _leaf_overlay: LeafOverlay
 var decals: GroundDecals  # 물웅덩이·눈 발자국
 var wetness: float = 0.0  # 젖은 정도 0~1(비가 오면 빨리 오르고, 그친 뒤 천천히 마른다)
 var season_override: String = ""  # 개발용: 비우면 달력(GameState.total_day)을 따른다
+var use_pixel_actors: bool = true # 제공 직원/손님 그림, 전용 그림 없는 인물은 기존 모델
 var sync_collision: bool = true  # 3D 로 보이는 건물·소품의 발자국을 실제 충돌 모양으로 쓴다
 ## 색 단계 수(채널당). 256 = 제한 없음, 낮출수록 색이 뭉쳐서 도트 그림 같은 느낌(예: 12). 시험용 값.
 # 빛 세기 배율(낮 해·환경광). 참조 화면보다 밝게 날아갈 때 낮춘다. 후처리의 knee(하이라이트 눌림)와 같이 쓴다.
@@ -1164,16 +1165,17 @@ func _sync_actors(delta: float) -> void:
 		seen[id] = true
 
 		var look_key: String = _actor_look_key(n)
+		var sprite_key := StoreActorVisuals.sprite_key(n, look_key) if use_pixel_actors else ""
 
 		# 손님 종류는 만든 뒤에 정해지기도 하니, 외형 키가 바뀌면 새로 만든다.
-		if _actors.has(id) and _actors[id].get("look_key", "") != look_key:
+		if _actors.has(id) and (_actors[id].get("look_key", "") != look_key or _actors[id].get("sprite_key", "") != sprite_key):
 			(_actors[id]["figure"] as BlockyFigure).destroy()
 			_actors.erase(id)
 
 		if not _actors.has(id):
-			var figure := BlockyFigure.new()
+			var figure := StoreActorVisuals.create(sprite_key)
 			figure.build(_viewport, _viewport, ACTOR_HEAD_RATIO, ACTOR_TOTAL, ACTOR_TORSO, ActorLooks.get_look(look_key))
-			_actors[id] = {"node": n, "figure": figure, "cell": world_to_cell((n as Node2D).global_position), "look_key": look_key}
+			_actors[id] = {"node": n, "figure": figure, "cell": world_to_cell((n as Node2D).global_position), "look_key": look_key, "sprite_key": sprite_key}
 
 		var entry: Dictionary = _actors[id]
 		var figure: BlockyFigure = entry["figure"]
@@ -1181,6 +1183,7 @@ func _sync_actors(delta: float) -> void:
 		var move: Vector2 = cell - (entry["cell"] as Vector2)
 		entry["cell"] = cell
 		figure.set_shown((n as Node2D).is_visible_in_tree())
+		StoreActorVisuals.apply_lighting(figure, _env, _lamps, Vector3(cell.x, 0.0, cell.y))
 		figure.walking = move.length() > 0.0005 and delta > 0.0
 		figure.sitting = bool(n.get_meta("sitting", false))  # 프롤로그 연출: 의자에 앉기
 
