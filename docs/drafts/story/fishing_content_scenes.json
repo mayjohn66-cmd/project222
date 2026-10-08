@@ -1,0 +1,909 @@
+{
+  "schema": "fishing_scene_drafts",
+  "date": "2026-10-08",
+  "status": "rough_draft_not_runtime",
+  "content_file": "docs/drafts/fishing/fishing_content.json",
+  "notice": "Gemini가 다듬을 수 있는 러프 장면60개. 기존 kind를 미리 추가하거나 draft --ids로 호출하지 않는다. 실제 기계 조건·ID 등록 후 글 카탈로그로 옮겨 검수한다.",
+  "scenes": [
+    {
+      "id": "fishing_intro_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_intro",
+      "phase": "intro",
+      "npc_id": "gatherer_herbs",
+      "speaker": "엘미",
+      "context": "소개는 행동을 자동 완료하지 않는다",
+      "lines": [
+        "가게 뒤쪽에서 물소리 들리지?",
+        "풀을 찾다가 잠깐 앉아 쉬기 좋은 곳이야."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fishing_intro_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_intro",
+      "phase": "finish",
+      "npc_id": "gatherer_herbs",
+      "speaker": "엘미",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음",
+      "lines": [
+        "여기가 그 개울이야. 발 디딜 곳부터 봐.",
+        "처음에는 가까운 물살을 보는 걸로 충분해."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fishing_rod_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_rod",
+      "phase": "intro",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "소개는 행동을 자동 완료하지 않는다",
+      "lines": [
+        "물가에 갈 생각이면 이 가지가 쓸 만하겠네.",
+        "줄과 바늘은 내가 엮는 방법을 알려 줄게."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fishing_rod_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_rod",
+      "phase": "finish",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음",
+      "lines": [
+        "손에 맞는지 한번 들어 봐.",
+        "급하게 당기지 말고 물살을 기다려 봐."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fishing_first_catch_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_first_catch",
+      "phase": "intro",
+      "npc_id": "gatherer_herbs",
+      "speaker": "엘미",
+      "context": "소개는 행동을 자동 완료하지 않는다",
+      "lines": [
+        "찌가 조용하다고 아무것도 없는 건 아니야.",
+        "물살과 다른 움직임이 보이면 살짝 당겨 봐."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fishing_first_catch_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_first_catch",
+      "phase": "finish",
+      "npc_id": "gatherer_herbs",
+      "speaker": "엘미",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음",
+      "lines": [
+        "방금은 네가 물가의 움직임을 알아본 거야.",
+        "서두르지 않아도 건질 수 있지?"
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fishing_first_sale_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_first_sale",
+      "phase": "intro",
+      "npc_id": "player",
+      "speaker": "나",
+      "context": "소개는 행동을 자동 완료하지 않는다",
+      "lines": [
+        "오늘 잡은 것도 가게에 내놓을 수 있겠지.",
+        "배운 음식이 없어도 재료부터 팔아 보자."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fishing_first_sale_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_first_sale",
+      "phase": "finish",
+      "npc_id": "player",
+      "speaker": "나",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음",
+      "lines": [
+        "물가에서 가져온 게 누군가의 식탁으로 갔다.",
+        "내가 준비할 수 있는 물건이 하나 더 늘었다."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fishing_keep_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_keep",
+      "phase": "intro",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "소개는 행동을 자동 완료하지 않는다",
+      "lines": [
+        "오늘 다 팔리지 않으면 말려 두는 것도 좋아.",
+        "길에서는 오래 챙길 수 있는 음식이 반갑거든."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fishing_keep_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fishing_keep",
+      "phase": "finish",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "실제 목표 행동 이후 완독. 추가 답례 없음",
+      "lines": [
+        "남은 걸 버티게 하는 방법도 장사의 일부겠네.",
+        "다음 길을 준비할 때도 가게에 들를게."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_neighbor_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_neighbor",
+      "phase": "intro",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "물가에서 생선을 잡았다며?",
+        "오늘 저녁에 구워 볼까 해. 조금 나눠 줄래?"
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_neighbor_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_neighbor",
+      "phase": "finish",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "고마워. 향을 더해 굽는 방법도 알려 줄게.",
+        "가게에서도 이런 음식을 준비할 수 있겠지."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_worker_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_worker",
+      "phase": "intro",
+      "npc_id": "doyun",
+      "speaker": "코르빈",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "돌을 옮기고 나니 따뜻한 음식이 생각나.",
+        "가게에서 구운 생선이 있으면 챙겨 줘."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_worker_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_worker",
+      "phase": "finish",
+      "npc_id": "doyun",
+      "speaker": "코르빈",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "향이 괜찮네. 일하던 생각이 조금 가라앉아.",
+        "다음에도 작업 끝나고 들를게."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_road_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_road",
+      "phase": "intro",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "다음 길에는 말린 생선을 챙겨 가려 해.",
+        "짐에 넣기 좋게 준비해 줄 수 있겠어?"
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_road_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_road",
+      "phase": "finish",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "이 정도면 길에서 식탁을 찾느라 서두르지 않겠네.",
+        "돌아오면 가게 음식 이야기도 전해 줄게."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_children_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_children",
+      "phase": "intro",
+      "npc_id": "child_berries",
+      "speaker": "피니아",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "함께 저녁을 먹기로 했어.",
+        "따뜻하게 구운 생선도 식탁에 놓고 싶어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_children_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_children",
+      "phase": "finish",
+      "npc_id": "child_berries",
+      "speaker": "피니아",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "가게 덕분에 준비가 한결 편해졌어.",
+        "다음엔 들고 나가기 좋은 음식도 만들어 보자."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_rain_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_rain",
+      "phase": "intro",
+      "npc_id": "healer_moss",
+      "speaker": "세이나",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "비를 맞고 돌아오는 이웃이 많네요.",
+        "따뜻한 수프를 준비해 주실 수 있을까요?"
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_rain_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_rain",
+      "phase": "finish",
+      "npc_id": "healer_moss",
+      "speaker": "세이나",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "식탁 곁에서 잠깐 쉬어 갈 수 있겠어요.",
+        "준비해 주셔서 고마워요."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_spring_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_spring",
+      "phase": "intro",
+      "npc_id": "gatherer_herbs",
+      "speaker": "엘미",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "물가에도 봄빛이 올라왔더라.",
+        "봄에 만나는 생선에 풀 향을 곁들이고 싶어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_spring_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_spring",
+      "phase": "finish",
+      "npc_id": "gatherer_herbs",
+      "speaker": "엘미",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "물가에서 가져온 것과 숲에서 가져온 게 만났네.",
+        "이 계절의 식탁으로 기억해 둘게."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_summer_kept_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_summer_kept",
+      "phase": "intro",
+      "npc_id": "doyun",
+      "speaker": "코르빈",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "겨울에 잡았던 생선을 아직 챙겨 두었어?",
+        "더운 날에 그때의 맛이 문득 생각났어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_summer_kept_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_summer_kept",
+      "phase": "finish",
+      "npc_id": "doyun",
+      "speaker": "코르빈",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "그 계절을 이렇게 다시 만나네.",
+        "차갑게 챙겨 둔 시간이 쓸모가 있었어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_autumn_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_autumn",
+      "phase": "intro",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "잎이 물들어서 가까운 길을 걸으려 해.",
+        "가게에서 만든 도시락을 들고 가고 싶어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_autumn_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_autumn",
+      "phase": "finish",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "오늘은 걸음을 조금 느리게 해도 되겠어.",
+        "돌아오면 길에서 본 것도 이야기해 줄게."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_winter_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_winter",
+      "phase": "intro",
+      "npc_id": "miner_ore",
+      "speaker": "바르크",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "작업하고 돌아오니 손끝이 뻣뻣하네.",
+        "생선 넣은 따뜻한 스튜를 부탁할게."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_winter_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_winter",
+      "phase": "finish",
+      "npc_id": "miner_ore",
+      "speaker": "바르크",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "일하던 이야기는 잠깐 내려놔도 되겠네.",
+        "잘 먹었어. 그릇도 정리해 둘게."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_evening_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_evening",
+      "phase": "intro",
+      "npc_id": "sora",
+      "speaker": "이세르",
+      "context": "실제 인물의 부탁. 대사에 수량·대금·평판 숫자를 넣지 않는다",
+      "lines": [
+        "오늘은 물가에서 본 풍경을 적고 싶어.",
+        "차와 함께 먹을 작은 접시도 준비해 줄래?"
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_request_evening_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_request_evening",
+      "phase": "finish",
+      "npc_id": "sora",
+      "speaker": "이세르",
+      "context": "재고 재확인·정확한 소비·완독 뒤 최초 완료. 배달과 재읽기는 별도",
+      "lines": [
+        "평범한 풍경도 곁에 놓인 음식으로 남는구나.",
+        "가게에서 챙긴 저녁으로 적어 둘게."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_spring_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_spring",
+      "phase": "intro",
+      "npc_id": "gatherer_herbs",
+      "speaker": "엘미",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다",
+      "lines": [
+        "갈대 사이가 밝아졌지?",
+        "계절이 바뀌면 물가에서 만나는 것도 달라져."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_spring_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_spring",
+      "phase": "finish",
+      "npc_id": "gatherer_herbs",
+      "speaker": "엘미",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음",
+      "lines": [
+        "오늘의 물빛을 기억해 두면 다음 봄에도 알아보겠네.",
+        "서두르지 말고 한번 둘러봐."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_summer_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_summer",
+      "phase": "intro",
+      "npc_id": "sora",
+      "speaker": "이세르",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다",
+      "lines": [
+        "해가 길게 남아 있으니 물결도 천천히 보이는구나.",
+        "오늘은 놓친 것보다 기다린 시간이 생각나."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_summer_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_summer",
+      "phase": "finish",
+      "npc_id": "sora",
+      "speaker": "이세르",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음",
+      "lines": [
+        "아무것도 건지지 못한 날도 적어 둘 만하겠어.",
+        "여기 앉아 있었던 저녁으로."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_autumn_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_autumn",
+      "phase": "intro",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다",
+      "lines": [
+        "찌 옆으로 잎이 흘러가네.",
+        "잠깐은 생선보다 잎을 더 보게 된다니까."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_autumn_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_autumn",
+      "phase": "finish",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음",
+      "lines": [
+        "오늘도 물가를 다녀왔구나.",
+        "가게로 돌아갈 때 그 풍경도 같이 가져가."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_winter_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_winter",
+      "phase": "intro",
+      "npc_id": "doyun",
+      "speaker": "코르빈",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다",
+      "lines": [
+        "겨울에도 물이 흐르는 자리가 있네.",
+        "발밑은 살피고, 닿는 곳에서만 기다려 봐."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_winter_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_winter",
+      "phase": "finish",
+      "npc_id": "doyun",
+      "speaker": "코르빈",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음",
+      "lines": [
+        "물소리가 남아 있으니 조용한 것도 다르네.",
+        "오늘은 이 자리로 기억하겠어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_rain_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_rain",
+      "phase": "intro",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다",
+      "lines": [
+        "물 위에 작은 동그라미가 자꾸 생기네.",
+        "이런 날 만나는 생선도 있을까?"
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_rain_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_rain",
+      "phase": "finish",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음",
+      "lines": [
+        "다 잡으려고 할 필요는 없지.",
+        "오늘 물가가 어땠는지만 들어도 재미있어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_moon_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_moon",
+      "phase": "intro",
+      "npc_id": "sora",
+      "speaker": "이세르",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다",
+      "lines": [
+        "등 옆의 점이 밤빛을 닮았네.",
+        "오늘 이 모습을 본 것만으로도 기억이 되겠다."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_moon_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_moon",
+      "phase": "finish",
+      "npc_id": "sora",
+      "speaker": "이세르",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음",
+      "lines": [
+        "물가에서 네가 고른 순간을 적어 둘게.",
+        "그 뒤에 어디로 갔는지도 함께."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_table_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_table",
+      "phase": "intro",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다",
+      "lines": [
+        "각자 먹던 걸 오늘은 같이 놓아 볼까?",
+        "가게에서 준비한 생선도 식탁에 어울리겠어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_table_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_table",
+      "phase": "finish",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음",
+      "lines": [
+        "가게에 들르는 이유가 또 하나 생겼네.",
+        "다음에는 오늘 이야기를 꺼내도 좋겠다."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_memory_intro",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_memory",
+      "phase": "intro",
+      "npc_id": "player",
+      "speaker": "나",
+      "context": "관찰·만남 소개. 새 주민 정착이나 관계를 확정하지 않는다",
+      "lines": [
+        "처음에는 찌가 왜 움직이는지도 몰랐는데.",
+        "이제는 물가에서 기다리는 시간이 익숙하다."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_event_memory_finish",
+      "planned_kind": "service_text",
+      "owner_id": "fish_event_memory",
+      "phase": "finish",
+      "npc_id": "player",
+      "speaker": "나",
+      "context": "실제 관찰/모임/선택 이후의 기억. 재읽기 답례 없음",
+      "lines": [
+        "이곳에서 얻은 건 식재료만은 아니었다.",
+        "가게로 돌아갈 때 떠올릴 사람이 늘었다."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_store_spring_rumor",
+      "planned_kind": "service_text",
+      "owner_id": "fish_store_spring",
+      "phase": "rumor",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "소문을 실제로 들은 뒤 준비 힌트를 표시. 날짜 범위·배율은 대사에 없음",
+      "lines": [
+        "저녁에 풀 향 나는 생선을 구워 먹자는 얘기가 있어.",
+        "가게에서도 준비하면 들르는 사람이 있겠네."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_store_spring_response",
+      "planned_kind": "service_text",
+      "owner_id": "fish_store_spring",
+      "phase": "response",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "행사 관련 상품의 실제 판매 기록이 있는 경우만 사용. 특정 주민이 샀다고 단정하지 않음",
+      "lines": [
+        "가게에서 구운 걸 집에서도 이야기하더라.",
+        "다음 식탁도 여기서 챙기고 싶대."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_store_summer_rumor",
+      "planned_kind": "service_text",
+      "owner_id": "fish_store_summer",
+      "phase": "rumor",
+      "npc_id": "child_berries",
+      "speaker": "피니아",
+      "context": "소문을 실제로 들은 뒤 준비 힌트를 표시. 날짜 범위·배율은 대사에 없음",
+      "lines": [
+        "물가에 다녀올 때 들고 먹을 음식이 있으면 좋겠어.",
+        "흐르지 않고 챙기기 편한 걸 찾는 사람이 있더라."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_store_summer_response",
+      "planned_kind": "service_text",
+      "owner_id": "fish_store_summer",
+      "phase": "response",
+      "npc_id": "child_berries",
+      "speaker": "피니아",
+      "context": "행사 관련 상품의 실제 판매 기록이 있는 경우만 사용. 특정 주민이 샀다고 단정하지 않음",
+      "lines": [
+        "가게에서 챙겨 간 음식 얘기를 많이 하네.",
+        "돌아오는 길에도 들르겠다는 사람도 있어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_store_autumn_rumor",
+      "planned_kind": "service_text",
+      "owner_id": "fish_store_autumn",
+      "phase": "rumor",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "소문을 실제로 들은 뒤 준비 힌트를 표시. 날짜 범위·배율은 대사에 없음",
+      "lines": [
+        "길을 오가는 사람이 마른 음식을 찾더라.",
+        "짐에 넣기 좋은 걸 준비해 두면 어떨까?"
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_store_autumn_response",
+      "planned_kind": "service_text",
+      "owner_id": "fish_store_autumn",
+      "phase": "response",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "행사 관련 상품의 실제 판매 기록이 있는 경우만 사용. 특정 주민이 샀다고 단정하지 않음",
+      "lines": [
+        "길에서 가게 이야기를 들었다는 사람이 있네.",
+        "챙겨 간 음식이 기억에 남았나 봐."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_store_winter_rumor",
+      "planned_kind": "service_text",
+      "owner_id": "fish_store_winter",
+      "phase": "rumor",
+      "npc_id": "miner_ore",
+      "speaker": "바르크",
+      "context": "소문을 실제로 들은 뒤 준비 힌트를 표시. 날짜 범위·배율은 대사에 없음",
+      "lines": [
+        "돌아오는 길에는 따뜻한 그릇이 생각나.",
+        "가게에 그런 음식이 있으면 좋겠다는 얘기야."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "fish_store_winter_response",
+      "planned_kind": "service_text",
+      "owner_id": "fish_store_winter",
+      "phase": "response",
+      "npc_id": "miner_ore",
+      "speaker": "바르크",
+      "context": "행사 관련 상품의 실제 판매 기록이 있는 경우만 사용. 특정 주민이 샀다고 단정하지 않음",
+      "lines": [
+        "따뜻한 음식을 챙겨 가는 사람이 늘었네.",
+        "작업 뒤에 들르는 길로 기억하겠어."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "recipe_fish_grilled_learn",
+      "planned_kind": "service_text",
+      "owner_id": "recipe_fish_grilled",
+      "phase": "learn",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음",
+      "lines": [
+        "손질한 생선에 약초 향을 조금 더해 봐.",
+        "불을 살피며 구우면 가게의 첫 접시가 되겠지."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "recipe_fish_dried_learn",
+      "planned_kind": "service_text",
+      "owner_id": "recipe_fish_dried",
+      "phase": "learn",
+      "npc_id": "naru",
+      "speaker": "타블렌",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음",
+      "lines": [
+        "물기를 천천히 말려서 챙겨 두는 방법이야.",
+        "길에 가져갈 음식도 가게에서 준비할 수 있겠네."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "recipe_fish_soup_learn",
+      "planned_kind": "service_text",
+      "owner_id": "recipe_fish_soup",
+      "phase": "learn",
+      "npc_id": "healer_moss",
+      "speaker": "세이나",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음",
+      "lines": [
+        "생선과 약초를 물에 넣고 끓이는 음식이에요.",
+        "따뜻한 그릇을 준비하고 싶을 때 써 보세요."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "recipe_fish_bread_learn",
+      "planned_kind": "service_text",
+      "owner_id": "recipe_fish_bread",
+      "phase": "learn",
+      "npc_id": "neighbor_bread",
+      "speaker": "오렐",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음",
+      "lines": [
+        "전에 배운 빵에 생선 속을 넣어 보자.",
+        "들고 먹을 수 있는 식사가 되겠네."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "recipe_fish_lunch_learn",
+      "planned_kind": "service_text",
+      "owner_id": "recipe_fish_lunch",
+      "phase": "learn",
+      "npc_id": "child_berries",
+      "speaker": "피니아",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음",
+      "lines": [
+        "구운 생선과 빵을 함께 담아 보자.",
+        "갈대는 먹는 게 아니라 포장을 묶는 데 써."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    },
+    {
+      "id": "recipe_fish_winter_stew_learn",
+      "planned_kind": "service_text",
+      "owner_id": "recipe_fish_winter_stew",
+      "phase": "learn",
+      "npc_id": "miner_ore",
+      "speaker": "바르크",
+      "context": "선행 부탁/소개 조건 이후 제조법을 배우는 장면. 무료 완제품을 주거나 실제 제작을 완료하지 않음",
+      "lines": [
+        "겨울 생선에 버섯을 더해 끓이는 거야.",
+        "일을 마치고 따뜻한 그릇을 찾을 때 좋겠네."
+      ],
+      "status": "rough_draft",
+      "runtime_registered": false
+    }
+  ]
+}
