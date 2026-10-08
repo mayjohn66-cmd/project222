@@ -20,13 +20,6 @@ static func install(view: Control) -> void:
 	var panel := PreservationPanel.new()
 	panel.inventory_view = view
 	view.add_child(panel)
-	var button := Button.new()
-	button.name = "PreservationButton"
-	button.text = "냉장·냉동 보관"
-	button.add_theme_font_size_override("font_size", 16)
-	button.tooltip_text = "계절 재료의 상온 변형 규칙과 보관 설비를 확인합니다."
-	view.get_node("MainVBox/CategoryTabs").add_child(button)
-	button.pressed.connect(panel.open)
 
 # 가게에 놓인 냉장함·냉동함에서 바로 연다. 가구를 만들어 놓은 것이 설치이므로 아직 설치 전이면 대금 없이 설치한다.
 static func open_for_unit(from: Node, id: String) -> void:

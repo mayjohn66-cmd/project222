@@ -87,7 +87,7 @@ func _build() -> void:
 	_desc.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	add_child(_desc)
 	_hint = _label(18,INK_DIM)
-	_hint.text = "왼쪽 쪽에서 물건을 고르면\n여기에 자세한 설명이 적힙니다."
+	_hint.text = "왼쪽에서 물건을 고르면\n여기에 자세한 설명이 적힙니다."
 	_hint.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(_hint)

@@ -59,6 +59,12 @@ var slot_buttons: Array[Button] = []
 var selected_slot_index: int = -1
 
 var inventory_open: bool = false
+
+# 이번에 새로 열려 아직 가방을 열어 보지 않은 가구
+var _new_ids: Array[String] = []
+var _notice_panel: PanelContainer
+var _notice_label: Label
+var _notice_tween: Tween
 var inventory_tween: Tween
 
 # 0 = 닫힘, 1 = 완전히 열림
@@ -197,6 +203,7 @@ func refresh_furniture_inventory() -> void:
 
 		inventory_grid.add_child(card)
 		card.setup_furniture(build_id,count)
+		_refresh_new_mark(card, _new_ids.has(build_id))
 		displayed_count += 1
 
 	empty_label.text = "인벤토리에 남은 가구가 없습니다."
@@ -227,7 +234,10 @@ func set_inventory_open(open: bool) -> void:
 		inventory_tween.kill()
 
 	if open:
+		# 가방을 열어 보면 새로 열린 가구 표시(NEW)는 사라진다. 이번 열림에서는 아직 보이게 한 채 그린다.
 		refresh_furniture_inventory()
+		_new_ids.clear()
+		refresh_slots()
 		inventory_clip.show()
 		bag_button.text = "가방 닫기"
 	else:
@@ -276,8 +286,18 @@ func set_build_mode_active(active: bool) -> void:
 	visible = active
 
 	if active:
+		FurnitureUnlockNotice.observe()
+		var opened: Array[String] = FurnitureUnlockNotice.collect_new()
+
+		for id in opened:
+			if not _new_ids.has(id):
+				_new_ids.append(id)
+
 		refresh_slots()
 		refresh_furniture_inventory()
+
+		if not opened.is_empty():
+			_show_unlock_notice(opened)
 	else:
 		close_inventory_immediately()
 		clear_selected_slot()
@@ -310,8 +330,13 @@ func refresh_slots() -> void:
 	for i in range(slot_buttons.size()):
 		var button: Button = slot_buttons[i]
 		var build_id: String = GameState.get_build_quick_slot(i)
-		button.visible = build_id.is_empty() or ShopSpaceProgression.furniture_visible(build_id)
+		# 아직 열리지 않은 가구가 든 슬롯은 숨기지 않고 빈 칸처럼 보여 번호와 자리를 지킨다(열리면 그 자리에 나타난다).
+		var locked: bool = not build_id.is_empty() and not ShopSpaceProgression.furniture_visible(build_id)
 
+		if locked:
+			build_id = ""
+
+		button.visible = true
 		button.text = ""
 		var icon_rect: TextureRect = button.get_node("FurnitureIcon")
 		var title: Label = button.get_node("FurnitureTitle")
@@ -321,6 +346,7 @@ func refresh_slots() -> void:
 		amount.text = str(GameState.get_furniture_count(build_id)) if not build_id.is_empty() else ""
 		button.tooltip_text = title.text
 		title.hide()
+		_refresh_new_mark(button, not build_id.is_empty() and _new_ids.has(build_id))
 
 	refresh_slot_highlight()
 
@@ -886,3 +912,64 @@ func _setup_build_presentation() -> void:
 	guide.position = Vector2(24,30)
 	guide.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(guide)
+
+
+# =========================
+# 새로 열린 가구 알림
+# =========================
+
+const NEW_MARK_NAME := "NewMark"
+
+
+func _refresh_new_mark(holder: Control, shown: bool) -> void:
+	var mark: Label = holder.get_node_or_null(NEW_MARK_NAME) as Label
+
+	if not shown:
+		if mark != null:
+			mark.queue_free()
+		return
+
+	if mark != null:
+		return
+
+	mark = Label.new()
+	mark.name = NEW_MARK_NAME
+	mark.text = "NEW"
+	mark.add_theme_font_size_override("font_size", 12)
+	mark.add_theme_color_override("font_color", Color("fff4d6"))
+	mark.add_theme_color_override("font_outline_color", Color("b3412f"))
+	mark.add_theme_constant_override("outline_size", 5)
+	mark.position = Vector2(5, 4)
+	mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	holder.add_child(mark)
+
+
+func _show_unlock_notice(ids: Array[String]) -> void:
+	if _notice_panel == null:
+		_notice_panel = PanelContainer.new()
+		_notice_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		_notice_panel.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP, Control.PRESET_MODE_MINSIZE)
+		_notice_panel.offset_top = 64.0
+		_notice_panel.add_theme_stylebox_override("panel", preload("res://script/ui/common/build/build_ui_style.gd").paper())
+		_notice_label = Label.new()
+		_notice_label.add_theme_font_size_override("font_size", 17)
+		_notice_label.add_theme_color_override("font_color", Color("51382d"))
+		_notice_panel.add_child(_notice_label)
+		add_child(_notice_panel)
+
+	var names: PackedStringArray = []
+
+	for id in ids:
+		names.append(FurnitureData.get_furniture_name(id))
+
+	_notice_label.text = "새로 열린 가구: %s\n가방에서 확인하세요." % ", ".join(names)
+	_notice_panel.show()
+	_notice_panel.modulate.a = 1.0
+
+	if _notice_tween != null and _notice_tween.is_valid():
+		_notice_tween.kill()
+
+	_notice_tween = create_tween()
+	_notice_tween.tween_interval(4.0)
+	_notice_tween.tween_property(_notice_panel, "modulate:a", 0.0, 0.6)
+	_notice_tween.tween_callback(_notice_panel.hide)

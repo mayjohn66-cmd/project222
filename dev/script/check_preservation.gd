@@ -145,13 +145,14 @@ func verify_ui() -> void:
 	await frames()
 	menu.open_menu()
 	var view = menu.management_inventory
-	var button: Button = view.get_node("MainVBox/CategoryTabs/PreservationButton")
-	button.pressed.emit()
-	await frames()
+	check(not view.has_node("MainVBox/CategoryTabs/PreservationButton"), "inventory tabs no longer carry a cold-storage button")
 	var panel: PreservationPanel
 	for child in view.get_children():
 		if child is PreservationPanel: panel = child
-	check(panel != null and panel.visible, "real inventory button opens cold-storage panel while menu paused")
+	check(panel != null, "inventory still hosts the cold-storage panel")
+	panel.open()
+	await frames()
+	check(panel.visible, "cold-storage panel opens while menu paused")
 	var install_button: Button = panel.rows.get_child(2)
 	install_button.pressed.emit()
 	check(PreservationService.installed("fridge"), "real installation button")
@@ -180,6 +181,9 @@ func verify_ui() -> void:
 	var expedition = load("res://scenes/expedition/expedition.tscn").instantiate()
 	add_child(expedition)
 	await frames()
-	check(not expedition.get_node("UI/ManagementMenu").management_inventory.has_node("MainVBox/CategoryTabs/PreservationButton"), "fixed store storage cannot be used remotely during expedition")
+	var remote_panel := false
+	for child in expedition.get_node("UI/ManagementMenu").management_inventory.get_children():
+		if child is PreservationPanel: remote_panel = true
+	check(not remote_panel, "fixed store storage cannot be used remotely during expedition")
 	expedition.queue_free()
 	await frames()
