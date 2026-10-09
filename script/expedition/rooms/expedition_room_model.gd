@@ -12,6 +12,7 @@ var selected_loot_table := ""
 var selected_site_index := 0
 var extra_interaction_label: Callable
 var extra_interact: Callable
+var interaction_guard: Callable
 
 var settings: ExpeditionRoomSettings
 var attack_profile: ExpeditionAttackProfile
@@ -380,5 +381,6 @@ func interact() -> void:
 		finished = true
 		exited.emit()
 	elif not interacting:
+		if interaction_guard.is_valid() and not interaction_guard.call(): return
 		interacting = true
 		interaction_progress = 0.0

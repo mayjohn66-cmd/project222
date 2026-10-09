@@ -41,8 +41,10 @@ static func play(controller: ExpeditionRoomController) -> bool:
 				else:
 					attacking = true
 		elif not room.object_kind.is_empty() and not room.object_consumed:
-			if room.player_position.distance_to(room.object_position) > room.settings.interaction_reach * 0.75:
-				movement = _walk_direction(room, room.object_position, grid)
+			var target := _available_object(controller)
+			if target == Vector2.INF: target = room.exit_position
+			if room.player_position.distance_to(target) > room.settings.interaction_reach * 0.75:
+				movement = _walk_direction(room, target, grid)
 			else:
 				room.interact()
 		else:
@@ -104,3 +106,16 @@ static func _walk_direction(room: ExpeditionRoomModel, target: Vector2, grid: AS
 	var path := grid.get_point_path(_free_cell(origin,grid),_free_cell(target,grid))
 	if path.size() < 2: return (target-origin).normalized()
 	return (path[1]-origin).normalized()
+
+# Missing required tools are not an attempted roll. Walk to another site or skip,
+# using the same actual bag/rules; never remove walls, move the actor or grant tools.
+static func _available_object(controller: ExpeditionRoomController) -> Vector2:
+	var room := controller.model
+	if room.object_kind != "gather" or not room.interaction_guard.is_valid(): return room.object_position
+	var sites := room.gathering_sites
+	if sites.is_empty(): sites = [{"table":str(controller.event.get("target_id","")),"x":room.object_position.x,"y":room.object_position.y}]
+	for site in sites:
+		var rule := ExpeditionGatheringData.get_rule(str(site["table"]))
+		if bool(rule.get("tool_required",false)) and controller.host.expedition_gathering_service._find_tool_placement(controller.host.expedition_bag,str(rule.get("tool_effect_id",""))).is_empty(): continue
+		return Vector2(float(site["x"]),float(site["y"]))
+	return Vector2.INF

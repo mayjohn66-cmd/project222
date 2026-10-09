@@ -23,6 +23,9 @@ func setup(new_host) -> void:
 	view.add_child(contact)
 	view.z_index = 10
 	view.hide()
+	view.progress_guide = ExpeditionRoomProgressGuide.new()
+	view.progress_guide.controller = self
+	view.add_child(view.progress_guide)
 	view.blocked = Callable(self, "_menu_open")
 	view.retreat_requested.connect(_retreat)
 	map_retreat_button = Button.new()
@@ -92,6 +95,7 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	host.battle_active = true # 방 진행 중에는 체크포인트 저장/지도 선택을 막는다.
 	view.show()
 	contact.enter()
+	view.progress_guide.bind_model()
 
 func _enemies_cleared() -> void:
 	# 방 전체 보상은 한 번만 굴린다. 몬스터 수가 드롭량을 늘리지 않는다.
@@ -129,6 +133,7 @@ func _object_used() -> void:
 
 func _close() -> void:
 	contact.clear()
+	view.progress_guide.clear_model()
 	host.combat_player_hp = model.player_hp
 	host.battle_active = false
 	view.hide()

@@ -22,6 +22,7 @@ var region_id: String = "forest"  # 3D 무대의 지역별 꾸밈(초원·계곡
 var use_3d: bool = true  # 던전 방을 3D 로 그린다(항상 3D)
 var stage: ExpeditionStage3D
 var weather_overlay: ExpeditionWeatherOverlay
+var progress_guide: ExpeditionRoomProgressGuide
 var ground_overlay := Color.TRANSPARENT
 
 func _ready() -> void:
@@ -138,6 +139,8 @@ func _physics_process(delta: float) -> void:
 		hint_label.text = notice
 	else:
 		hint_label.text = "출구가 열렸습니다" if model.exit_open else "몬스터를 처치하면 출구가 열립니다"
+	if progress_guide != null:
+		hint_label.text = progress_guide.hint(hint_label.text)
 	queue_redraw()
 
 func _stage_on() -> bool:

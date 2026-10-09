@@ -16,6 +16,8 @@ var host
 
 func setup(new_host) -> void:
 	host = new_host
+	if not host.discard_loot_dialog.confirmed.is_connected(finish_loot_organization):
+		host.discard_loot_dialog.confirmed.connect(finish_loot_organization)
 
 
 # 관리 인벤토리 등 외부 UI에서 현재 원정 가방을
