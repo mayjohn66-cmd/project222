@@ -75,6 +75,8 @@ docs/
 
 ## 성능
 
+[코드 정리 후보](코드_정리_후보.md) — 안 쓰는 스크립트·씬·함수 후보(`tools/unused_scan.py`). 삭제 전 승인 필요.
+
 [성능 측정과 최적화 기록](성능_측정.md) — 측정 도구(`dev/spike3d/frame_profile`·`load_profile`), 결과, 다음 후보.
 
 ## 문서 점검
