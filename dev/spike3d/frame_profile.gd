@@ -64,6 +64,9 @@ func run() -> void:
 	var view: StoreView3D = world.get_node("StoreView3D")
 	# 부하 상황: 인자 두 번째가 load 이면 가게를 열고 손님을 한꺼번에 들여보낸다
 	if args.size() > 1 and args[1] == "load":
+		var layout: Array[Dictionary] = [{"build_id":"door","anchor":Vector2i(0,4),"rotation_index":3},{"build_id":"register","anchor":Vector2i(4,3),"rotation_index":0},{"build_id":"shelf_1x1","anchor":Vector2i(2,2),"rotation_index":0}]
+		world.get_node("BuildManager")._restore_current_area_layout(layout)
+		for i in range(10): await get_tree().process_frame
 		var spawner = world.get_node("CustomerSpawner")
 		spawner.set_shop_open(true)
 		for i in range(14):
