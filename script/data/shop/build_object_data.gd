@@ -84,7 +84,8 @@ static func load_data() -> void:
 	while not file.eof_reached():
 		var row := file.get_csv_line()
 
-		if row.is_empty():
+		# 파일 끝의 빈 줄은 [""] 한 칸짜리로 읽힌다.
+		if row.is_empty() or (row.size() == 1 and row[0].is_empty()):
 			continue
 
 		if row.size() < 8:
