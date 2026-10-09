@@ -51,16 +51,28 @@ static func _frame(path: String) -> Dictionary:
 	return {"texture": texture, "bounds": bounds, "path": path}
 
 
+## 땅에 닿는 기준점. 세로는 발 맨 아래, 가로는 **몸의 가운데 축**(머리 구간과 몸통 구간 불투명 픽셀 평균의 중간)이다.
+## 예전에는 가로도 맨 아래 세 줄(발)의 가운데였는데, 비스듬한 방향에서는 몸이 발 중심에서 최대 7픽셀씩 어긋나
+## 8방향을 돌려 볼 때 캐릭터 축이 좌우로 흔들려 보였다(2026-10-09). 모자·가방처럼 머리가 몸통에서 기운 그림도 한쪽으로 쏠리지 않게
+## 머리와 몸통의 가운데를 쓴다.
 static func _feet(image: Image, bounds: Rect2i) -> Vector2:
-	var left := image.get_width()
-	var right := -1
-	for y in range(maxi(bounds.position.y, bounds.end.y - 3), bounds.end.y):
+	var h := bounds.size.y
+	var head_axis := _axis_x(image, bounds, bounds.position.y, bounds.position.y + int(float(h) * 0.30))
+	var torso_axis := _axis_x(image, bounds, bounds.position.y + int(float(h) * 0.30), bounds.position.y + int(float(h) * 0.65))
+	var axis: float = (head_axis + torso_axis) * 0.5 if head_axis >= 0.0 and torso_axis >= 0.0 else float(bounds.get_center().x)
+	return Vector2(axis, bounds.end.y)
+
+
+# 세로 구간 [top, bottom) 의 불투명 픽셀 가로 평균. 없으면 -1.
+static func _axis_x(image: Image, bounds: Rect2i, top: int, bottom: int) -> float:
+	var sum := 0.0
+	var count := 0
+	for y in range(top, bottom):
 		for x in range(bounds.position.x, bounds.end.x):
 			if image.get_pixel(x, y).a >= 0.5:
-				left = mini(left, x)
-				right = maxi(right, x)
-	var center := (float(left + right) + 1.0) * 0.5 if right >= left else float(bounds.get_center().x)
-	return Vector2(center, bounds.end.y)
+				sum += float(x) + 0.5
+				count += 1
+	return sum / float(count) if count > 0 else -1.0
 
 
 static func _missing(key: String) -> Dictionary:

@@ -43,6 +43,27 @@ func run() -> void:
 				var texture: Texture2D = f.texture
 				var top: float = float(f.bounds.position.y) - texture.get_height() * 0.5
 				check(float(set_data.reference_height) >= pose.anchor.y - top, "constant scale contains entire silhouette")
+	# 8방향을 돌려도 캐릭터 몸의 축(머리 가운데)이 기준점 위에 있어야 한다: 발 중심에 맞추면 방향별로 최대 6픽셀 어긋났다
+	for key in ActorSpriteFrames.KEYS:
+		var axis_set := ActorSpriteFrames.load_set(key)
+		if axis_set.is_empty():
+			continue
+		var worst := 0.0
+		for d in ActorSpriteFrames.DIRECTIONS:
+			var pose: Dictionary = axis_set.directions[d]
+			var img: Image = pose.idle.texture.get_image()
+			var b: Rect2i = pose.idle.bounds
+			var head_sum := 0.0
+			var head_count := 0
+			for y in range(b.position.y, b.position.y + int(float(b.size.y) * 0.30)):
+				for x in range(b.position.x, b.end.x):
+					if img.get_pixel(x, y).a >= 0.5:
+						head_sum += float(x) + 0.5
+						head_count += 1
+			var head_axis := head_sum / float(maxi(head_count, 1))
+			var anchor_x: float = pose.anchor.x + img.get_width() * 0.5
+			worst = maxf(worst, absf(head_axis - anchor_x))
+		check(worst <= 2.6, "%s: head axis stays over the ground point in all 8 directions (worst %.1fpx; before the fix up to 7px)" % [key, worst])
 	check(ActorSpriteFrames.load_set("no_art").is_empty(), "unknown art falls back without loading")
 	check(ActorSpriteFrames.direction_for(45.0,45.0) == "south", "towards camera is south")
 	check(ActorSpriteFrames.direction_for(90.0,45.0) == "south-east", "+X projects right/down")
