@@ -613,9 +613,7 @@ func _get_schedule_status_text(
 	return "종료"
 
 func _refresh_daily_history_list() -> void:
-	for child in history_list.get_children():
-		history_list.remove_child(child)
-		child.queue_free()
+	_reset_info_labels()
 
 	history_title_label.text = (
 		"편의점 정보 · 영업 기록"
@@ -1239,10 +1237,8 @@ func refresh_shop_history() -> void:
 		current_info_tab == InfoTab.RECORD
 	)
 
-	for child in history_list.get_children():
-		history_list.remove_child(child)
-		child.queue_free()
-
+	# 이정표 탭은 자식이 쪽(page) 둘뿐이어야 하므로 보관한 글 칸을 비운다. 나머지 탭은 글 칸을 다시 쓴다.
+	_reset_info_labels(current_info_tab != InfoTab.MILESTONES)
 	refresh_common_info()
 
 	match current_info_tab:
@@ -1266,22 +1262,57 @@ func refresh_shop_history() -> void:
 			history_title_label.text = "추가 기록 · 날짜별 영업"
 
 
+# 정보 탭의 글 칸(Label)은 트리에 둔 채 다시 쓴다. 한글 글을 새로 만들거나 트리에서 뺐다 넣으면 글자 배치(shaping)를 처음부터 다시 해
+# 열 때마다 수십 ms가 들어 책이 끊겼다. 같은 글이면 text 대입은 아무 일도 하지 않는다(2026-10-09).
+const INFO_TEXT_META := "info_text"
+var _info_labels: Array[Label] = []
+var _info_next: int = 0
+
+
+# 기록 목록을 새로 채우기 전에 호출한다: keep 이면 글 칸은 숨기기만 하고 나머지(표·행)는 지운다. keep 이 아니면 글 칸도 지운다.
+func _reset_info_labels(keep: bool = true) -> void:
+	for child in history_list.get_children():
+		if keep and child is Label and child.has_meta(INFO_TEXT_META):
+			child.visible = false
+		else:
+			history_list.remove_child(child)
+			child.queue_free()
+
+	if not keep:
+		_info_labels.clear()
+
+	_info_next = 0
+
+
 func _add_store_info_text(text: String) -> void:
-	var label := Label.new()
+	var label: Label
 
-	label.text = text
-	label.autowrap_mode = (
-		TextServer.AUTOWRAP_WORD_SMART
-	)
-	label.size_flags_horizontal = (
-		Control.SIZE_EXPAND_FILL
-	)
-	label.add_theme_font_size_override(
-		"font_size",
-		20
-	)
+	if _info_next < _info_labels.size() and is_instance_valid(_info_labels[_info_next]):
+		label = _info_labels[_info_next]
+	else:
+		label = Label.new()
+		label.set_meta(INFO_TEXT_META, true)
+		label.autowrap_mode = (
+			TextServer.AUTOWRAP_WORD_SMART
+		)
+		label.size_flags_horizontal = (
+			Control.SIZE_EXPAND_FILL
+		)
+		label.add_theme_font_size_override(
+			"font_size",
+			20
+		)
+		history_list.add_child(label)
 
-	history_list.add_child(label)
+		if _info_next < _info_labels.size():
+			_info_labels[_info_next] = label
+		else:
+			_info_labels.append(label)
+
+	_info_next += 1
+	label.text = text  # 같은 글이면 아무 일도 하지 않는다
+	label.visible = true
+	history_list.move_child(label, -1)  # 이번 목록의 끝으로(다른 칸 순서를 지킨다)
 
 func _show_basic_store_info() -> void:
 	_show_store_decoration_info()
