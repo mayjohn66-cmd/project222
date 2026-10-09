@@ -44,7 +44,11 @@ static func summary(world: Node, event: Dictionary) -> String:
 		if not cold.is_empty(): lines.append(cold)
 		if on_shelf > 0: lines.append("진열 중 · 판매 뒤에는 재고를 보충해 주세요.")
 		elif stock > 0: lines.append("소지 상품을 진열대에 보충해 주세요.")
-		else: lines.append("보관 중인 상품은 꺼낸 뒤 진열해 주세요." if stored > 0 or not cold.is_empty() else "상품을 마련한 뒤 진열해 주세요.")
+		else:
+			lines.append("보관 중인 상품은 꺼낸 뒤 진열해 주세요." if stored > 0 or not cold.is_empty() else "상품을 마련한 뒤 진열해 주세요.")
+			if stored == 0 and cold.is_empty():
+				var next := StoreEventNextStepGuide.missing(item)
+				if not next.is_empty(): lines.append(next)
 		food = food or FoodShelfLife.tracked(item)
 	if lines.is_empty(): return ""
 	if food: lines.append("식품은 기한을 살피며 조금씩 보충해 주세요.")

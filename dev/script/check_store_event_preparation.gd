@@ -32,10 +32,22 @@ func snap(label: String) -> void:
 	var args := OS.get_cmdline_user_args()
 	if args.is_empty() or DisplayServer.get_name() == "headless": return
 	await get_tree().create_timer(2.0,true,false,true).timeout
+	if label in ["scroll","rumor","stock"]:
+		var shown := views(menu.schedule_list)
+		if not shown.is_empty():
+			var target: Control = shown[0].label
+			var parent: Node = target.get_parent()
+			while parent != null and not parent is ScrollContainer: parent = parent.get_parent()
+			if parent is ScrollContainer: parent.ensure_control_visible(target)
+			await frames()
 	await RenderingServer.frame_post_draw
 	get_viewport().get_texture().get_image().save_png(args[0] + "-" + label + ".png")
 func _ready() -> void: call_deferred("run")
 func run() -> void:
+	if not OS.get_user_data_dir().contains("foodbag_checks"):
+		push_error("Run this check in the isolated foodbag_checks project.")
+		get_tree().quit(1)
+		return
 	GameState.initialize_new_game()
 	PlayerProgress.reset()
 	world = load("res://scenes/shop/main.tscn").instantiate()
@@ -56,8 +68,28 @@ func run() -> void:
 	var event := StoreEventData.get_event_occurrence("spring_market",GameState.total_day)
 	check(StoreEventPreparation.items(event) == ["bread","berry_juice"],"only rumor cue products included")
 	check(StoreEventPreparation.recipes("berry_juice").is_empty(),"unlearned recipe remains hidden")
-	PlayerProgress.learn_recipe("berry_juice")
+	check(StoreEventNextStepGuide.missing("iron_ore").is_empty(),"raw material is not sent to an invented manufacturing recipe")
+	var missing := StoreEventPreparation.summary(world,event)
+	check(missing.contains(UiText.t("store.preparation.unavailable")),"empty unknown product offers a reachable learning path without rushing this event")
+	var scroll := str(RecipeUnlockData.by_recipe["berry_juice"]["scroll_item_id"])
+	GameState.add_item(scroll,1) # Owned scroll fixture; actual learning UI is tested by check_room_preparation.
+	var untouched := GameState.create_save_data().duplicate(true)
+	missing = StoreEventPreparation.summary(world,event)
+	check(missing.contains(ItemData.get_item_name(scroll)) and missing.contains("‘배우기’"),"owned unlearned scroll gets concrete inventory action")
+	check(StoreEventPreparation.recipes("berry_juice").is_empty() and GameState.create_save_data() == untouched,"clue lookup cannot learn consume scroll or reward")
+	menu.refresh_schedule()
+	await frames()
+	await snap("scroll")
+	PlayerProgress.learn_recipe("berry_juice") # Learned-history fixture; guidance performs no learning.
+	check(StoreEventPreparation.summary(world,event).contains(UiText.t("store.preparation.learned")),"known empty product points to existing recipe and real facility work")
+	GameState.remove_item(scroll,1)
 	check(not StoreEventPreparation.recipes("berry_juice").is_empty(),"learned actual output recipe included")
+	var earlier := PlayerProgress.to_save_data().duplicate(true)
+	PlayerProgress.record_story_beat(ShopSpaceProgression.VERSION,1)
+	PlayerProgress.record_story_beat("tutorial_step:production:intro",1)
+	check(StoreEventNextStepGuide.missing("berry_juice") == UiText.t("store.preparation.production_room"),"learned event product cannot skip unopened production room")
+	PlayerProgress.reset()
+	PlayerProgress.load_save_data(earlier)
 	# Existing full book can keep a ready-only filter from an earlier visit.
 	var book: ProductPreparationBook = menu.management_production.preparation_book
 	book.only_ready.set_pressed_no_signal(true)
