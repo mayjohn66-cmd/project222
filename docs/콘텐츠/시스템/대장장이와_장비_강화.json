@@ -2,9 +2,9 @@
   "design_id": "blacksmith_equipment_progression",
   "date": "2026-10-09",
   "baseline_commit": "dd93be0",
-  "status": "사용자 승인 방향의 구체 설계",
-  "runtime_implemented": false,
-  "condition_language": "설계용 조건. 이 JSON을 읽는 런타임 파서는 아직 없다. StoryConditions 문자열로 복사하지 않는다.",
+  "status": "사용자 승인 방향 게임 연결 완료",
+  "runtime_implemented": true,
+  "condition_language": "참조 설계 데이터. 게임은 BlacksmithProgressionFlow와 Resource 설정을 읽으며 이 JSON을 파싱하지 않는다.",
   "source_files": [
     "scenes/shop/requests/default_community_requests.tres",
     "scenes/shop/requests/default_village_life.tres",
@@ -19,7 +19,14 @@
     "data/expedition/equipment_enhancement_costs.csv",
     "data/expedition/expedition_equipment.csv",
     "docs/drafts/story/character_names.md",
-    "docs/drafts/story/character_profiles.md"
+    "docs/drafts/story/character_profiles.md",
+    "script/world/shop/blacksmith/blacksmith_progression_flow.gd",
+    "script/world/shop/blacksmith/blacksmith_progression_records.gd",
+    "script/world/shop/blacksmith/blacksmith_progression_settings.gd",
+    "script/world/shop/blacksmith/blacksmith_director.gd",
+    "script/world/shop/blacksmith/blacksmith_equipment_adapter.gd",
+    "script/ui/shop/blacksmith_service_panel.gd",
+    "scenes/shop/blacksmith/default_blacksmith_progression.tres"
   ],
   "roles": [
     {
@@ -34,7 +41,7 @@
     },
     {
       "id": "village_blacksmith",
-      "id_status": "신규 설계 ID, 미등록",
+      "id_status": "게임 NPC ID 연결, 정식 이름·전용 그림 미정",
       "display_role": "대장장이",
       "proper_name": null,
       "duty": "장비 제작·강화 서비스의 담당 NPC"
@@ -225,9 +232,9 @@
     "modal": "현재 게임과 동일하게 대화/서비스 동안 시간·플레이어 이동 잠금, 닫기·Esc·장면 이탈에서 기존 상태 복원. 서비스를 이용할 때마다 안부 장면을 강제하지 않는다."
   },
   "migration": {
-    "keys_storage": "기존 PlayerProgress.story_beat_days 안의 선택형 blacksmith_progress: 접두 키를 계획. SAVE_VERSION과 별도 강제 필드는 변경하지 않는다.",
+    "keys_storage": "기존 PlayerProgress.story_beat_days의 선택형 blacksmith_progress: 키와 새 게임 version 기록. SAVE_VERSION 변경 없음.",
     "ore_record": "새 플레이는 정상 복귀 정산에서 실제 신규 iron_ore가 반입된 경우 기록. 출발 전 적재물·선물·보유 수량을 새 원정 채집이라고 기록하지 않는다.",
-    "record_hook_proposal": "획득 이벤트와 실제 반입 정산에 최소 연결을 두고 신규 채집 증거를 보존한다. 정산 목록 전체를 신규 채집으로 보지 않는다. 실제 지급 성공분만 기록한다.",
+    "record_hook_proposal": "실제 적/이벤트 획득의 blacksmith_ore_origin을 전리품·가방 이동·체크포인트에 보존하고 성공 반입 뒤 기록. 탐험 복귀는 정상 정산 후 기록.",
     "old_open_smithy": "open_smithy 완료 저장은 시설과 서비스 권한 유지, 재료 재지급/재차감/반복 건축 없음. NPC 안부 도입은 이후 선택형으로 제공.",
     "old_enhanced": "이미 강화한 개별 장비가 있으면 강화 권한 유지, 새 재료 소모 시범 강제 없음. 작업장이 없던 저장은 임시 작업 NPC가 기존 강화 창으로 받는 호환 경로를 제공하고 영구 대장간은 기존 부탁으로 마련.",
     "legacy_source_missing": "과거 채집 출처를 추측해서 기록하지 않는다. 기존 강화/시설 권한이 없는 저장은 현재 철광석을 NPC에게 보여 주는 비소비 호환 행동으로 광석 경험을 인정해 소개를 재개.",
@@ -269,12 +276,32 @@
     "기존 주민/대장간/튜토리얼/main 검사, import 2회·전체 로드·원정 완주와 실제 화면 확인을 수행한다."
   ],
   "story_delivery": {
-    "status": "새 설계 ID 미등록. 현 Gemini export/webprompt가 아직 이 ID들을 알지 못한다.",
-    "handoff": "Gemini에는 이 JSON의 stage.story_brief와 NPC 참고를 설계 자료로 전달. 구현 때 service_text 컨텍스트 등록 후 기존 글 도구로 작성한다.",
+    "status": "service_text 7개 ID를 글 CSV와 Gemini SOURCE_FILES/장면 프롬프트에 등록. 임시 문구 교정 가능.",
+    "handoff": "stage.story_brief와 실행 Resource stage를 함께 검토하고 기존 글 도구에서 같은 ID만 교정.",
     "existing_text_ids_to_review": [
       "open_smithy",
       "smithy_panel"
     ],
     "content_rules": "재료 수량·강화 숫자·골드·확률은 대사에 쓰지 않는다. 기술자의 계산대 지식·전이 원인·새 고유 지명을 대장장이에게 붙이지 않는다."
+  },
+  "implementation_commit": "e32cf1f",
+  "implementation": {
+    "feature_flag": "BlacksmithProgressionFlow.ENABLED",
+    "settings": "scenes/shop/blacksmith/default_blacksmith_progression.tres",
+    "equipment": "script/world/shop/blacksmith/blacksmith_equipment_adapter.gd",
+    "npc": "script/world/shop/blacksmith/blacksmith_director.gd",
+    "panel": "script/ui/shop/blacksmith_service_panel.gd",
+    "check": "dev/scenes/check_blacksmith_progression.tscn",
+    "checks": 68,
+    "headless_failures": 0,
+    "gpu_failures": 0,
+    "all_load_count": 792,
+    "all_load_failures": 0,
+    "expedition_clears": 16,
+    "expedition_runs": 16,
+    "expedition_stuck": 0,
+    "art_status": "기존 story_npc 임시 모델. 전용 그림·이름 후속",
+    "economic_data_changed": false,
+    "provisional_prose_rows_added": 7
   }
 }
