@@ -111,7 +111,7 @@ func refresh_view() -> void:
 
 		EmployeeTab.INFO:
 			message_label.text = (
-				"직원별 능력치와 이번 달 급여를 확인합니다."
+				"직원별 능력치와 이번 급여 기간을 확인합니다."
 				+ "\n전체 미지급 급여: %dG"
 				% GameState.get_unpaid_employee_salary()
 			)
@@ -125,6 +125,9 @@ func refresh_view() -> void:
 	var workers: Array[Node] = (
 		get_tree().get_nodes_in_group("worker")
 	)
+
+	if EmployeeNextStepGuide.ENABLED:
+		message_label.text = EmployeeNextStepGuide.tab_message(self,workers)
 
 	var visible_employee_count: int = 0
 
@@ -167,9 +170,8 @@ func refresh_view() -> void:
 				)
 
 			EmployeeTab.EMPLOYMENT:
-				message_label.text += (
-					"\n\n아직 소개를 들은 지원자가 없습니다. 가게 앞에서 인사를 나눠 보세요."
-				)
+				if not EmployeeNextStepGuide.ENABLED:
+					message_label.text += "\n\n아직 소개를 들은 지원자가 없습니다. 가게 앞에서 인사를 나눠 보세요."
 
 			EmployeeTab.TRAINING:
 				message_label.text += (
@@ -324,9 +326,7 @@ func _create_employee_info(
 
 	for period in worker.get_work_periods():
 		schedule_names.append(
-			EmployeeData.get_period_name(
-				str(period)
-			)
+			EmployeeNextStepGuide.period_text(str(period)) if EmployeeNextStepGuide.ENABLED else EmployeeData.get_period_name(str(period))
 		)
 
 	var schedule_text: String = "휴무"
@@ -385,8 +385,8 @@ func _create_employee_info(
 		]
 
 		+ "\n\n[급여]"
-		+ "\n월급: %dG" % monthly_salary
-		+ "\n이번 달 고용 기간: %d일" % accrued_days
+		+ "\n%d일 기준 급여: %dG" % [CalendarData.DAYS_PER_SEASON,monthly_salary]
+		+ "\n이번 기간 고용한 날: %d일" % accrued_days
 		+ "\n현재 누적 급여: %dG" % accrued_salary
 	)
 
@@ -465,7 +465,7 @@ func _apply_period_schedule(
 
 	if success:
 		message_label.text = (
-			employee_name + "의 근무표를 적용했습니다."
+			employee_name + "의 근무표를 적용했습니다." + ("\n" + EmployeeNextStepGuide.first_shift(worker,EmployeeNextStepGuide.manager_for(self)) if EmployeeNextStepGuide.ENABLED else "")
 		)
 	else:
 		message_label.text = (
@@ -724,7 +724,7 @@ func _create_schedule_controls(
 
 	for period in period_ids:
 		var check := CheckBox.new()
-		check.text = EmployeeData.get_period_name(period)
+		check.text = EmployeeNextStepGuide.period_text(period) if EmployeeNextStepGuide.ENABLED else EmployeeData.get_period_name(period)
 		check.button_pressed = current_periods.has(period)
 		row.add_child(check)
 		checks[period] = check
