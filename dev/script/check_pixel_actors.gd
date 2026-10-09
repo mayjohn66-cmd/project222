@@ -64,6 +64,8 @@ func run() -> void:
 	var actors: Array[TestActor] = []
 	for i in ActorSpriteFrames.KEYS.size():
 		var key: String = ActorSpriteFrames.KEYS[i]
+		if key.begins_with("player_"):
+			continue  # 주인공 그림은 아래에서 따로 확인한다(직원·손님 역할이 아니다)
 		var actor := TestActor.new()
 		world.get_node("Actors").add_child(actor)
 		if key.begins_with("worker_"):
@@ -80,7 +82,8 @@ func run() -> void:
 	for actor in actors:
 		var entry: Dictionary = view._actors[actor.get_instance_id()]
 		check(entry.figure is PixelActorFigure, "actual store actor uses sprite")
-	check(view._actors[view.player.get_instance_id()].figure is BlockyFigure and not view._actors[view.player.get_instance_id()].figure is PixelActorFigure, "player keeps original appearance")
+	var player_figure = view._actors[view.player.get_instance_id()].figure
+	check(player_figure is PixelActorFigure and player_figure.sprite_key == "player_" + PlayerProgress.player_gender, "player uses the sprite of the chosen gender")
 	var subtype_actor: TestActor = actors[3]
 	subtype_actor.customer_type_id = "warrior"
 	check(StoreActorVisuals.sprite_key(subtype_actor,"warrior") == "adventurer", "customer subtype maps to supplied group art")

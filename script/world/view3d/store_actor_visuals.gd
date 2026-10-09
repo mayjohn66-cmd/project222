@@ -17,6 +17,10 @@ static func sprite_key(actor: Node, look_key: String) -> String:
 			type_id = str(ActFourCustomers.TYPES[type_id]["source"])
 		var group := CustomerTypeData.get_group_id(type_id)
 		return group if group in ActorSpriteFrames.KEYS else ""
+	# 주인공은 새 게임에서 고른 성별의 그림을 쓴다(art/actors/player_male·player_female).
+	if look_key == "player":
+		var player_key := "player_" + PlayerProgress.player_gender
+		return player_key if player_key in ActorSpriteFrames.KEYS else ""
 	# 연출의 현대 직장인 등은 판타지 손님으로 바꾸지 않는다.
 	return look_key if look_key in ActorSpriteFrames.KEYS else ""
 

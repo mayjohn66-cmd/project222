@@ -4,7 +4,7 @@ extends RefCounted
 
 const ROOT := "res://art/actors/"
 const DIRECTIONS := ["south", "south-east", "east", "north-east", "north", "north-west", "west", "south-west"]
-const KEYS := ["worker_001", "worker_002", "worker_003", "normal", "traveler", "adventurer", "miner", "herbalist", "child", "collector", "marsh_local"]
+const KEYS := ["worker_001", "worker_002", "worker_003", "normal", "traveler", "adventurer", "miner", "herbalist", "child", "collector", "marsh_local", "player_male", "player_female"]
 const FRAME_COUNT := 8
 static var _cache: Dictionary = {}
 

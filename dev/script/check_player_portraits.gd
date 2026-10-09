@@ -46,6 +46,17 @@ func run() -> void:
 		check(dlg.portrait.visible and dlg.portrait.texture == PlayerPortraits.find_for("female"), "플레이어 대사는 여성 초상화")
 		dlg.start("타블렌", null, lines)
 		check(dlg.portrait.texture != PlayerPortraits.find_for("female"), "NPC 대사는 NPC 초상화")
+	# 주인공 걷기 그림: 고른 성별의 스프라이트를 쓰고, 앉는 연출 중에는 기존 모델로 돌아간다
+	var player_node: Node = panel.get_node_or_null("Actors/Player")
+	check(player_node != null, "주인공 노드를 찾았다")
+	if player_node != null:
+		for g in PlayerProgress.GENDERS:
+			PlayerProgress.player_gender = g
+			check(StoreActorVisuals.sprite_key(player_node, "player") == "player_" + g, "주인공 그림 키 player_" + g)
+			check(not ActorSpriteFrames.load_set("player_" + g).is_empty(), "주인공 그림 세트 읽힘 player_" + g)
+		player_node.set_meta("sitting", true)
+		check(StoreActorVisuals.sprite_key(player_node, "player") == "", "앉는 연출 중에는 그림 대신 기존 모델")
+		player_node.remove_meta("sitting")
 	# 대사 표시(서술 *, 표정 {이름})
 	var m: Dictionary = DialogueMarks.parse("*{피곤}눈꺼풀이 무겁다.")
 	check(m["narration"] and m["expression"] == "tired" and m["text"] == "눈꺼풀이 무겁다.", "서술+표정 표시를 함께 읽는다")
