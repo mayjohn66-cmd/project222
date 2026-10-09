@@ -443,28 +443,11 @@ func _update_load_slot_button(
 
 		return
 
-	var saved_day: int = int(
-		data.get("current_day", 1)
-	)
-
-	var saved_money: int = int(
-		data.get("money", 0)
-	)
-
-	var modified_time: int = (
-		FileAccess.get_modified_time(path)
-	)
-
-	button.text = (
-		slot_name
-		+ "\n"
-		+ _get_saved_day_name(saved_day)
-		+ " | 보유금 "
-		+ str(saved_money)
-		+ "G"
-		+ "\n저장 일시: "
-		+ _format_save_datetime(modified_time)
-	)
+	var modified_time := FileAccess.get_modified_time(path)
+	if SaveSlotSummary.ENABLED:
+		button.text = slot_name + "\n" + SaveSlotSummary.describe(data, modified_time)
+	else:
+		button.text = slot_name + "\n" + _get_saved_day_name(int(data.get("current_day", 1))) + " | 보유금 " + str(data.get("money", 0)) + "G\n저장 일시: " + _format_save_datetime(modified_time)
 
 	button.disabled = false
 

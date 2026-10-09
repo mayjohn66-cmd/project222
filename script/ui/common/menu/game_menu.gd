@@ -388,6 +388,13 @@ func _update_save_slot_button(
 		]
 	)
 
+	if SaveSlotSummary.ENABLED and FileAccess.file_exists(path):
+		var data := GameState.read_save_file(path)
+		if not data.is_empty() and GameState.is_save_data_valid(data):
+			button.text = "세이브 슬롯 " + str(slot_index + 1) + "\n" + SaveSlotSummary.describe(data, FileAccess.get_modified_time(path))
+			return
+		button.text = "세이브 슬롯 " + str(slot_index + 1) + "\n" + UiText.t("save.slot.invalid")
+		return
 	if FileAccess.file_exists(path):
 		button.text = (
 			"세이브 슬롯 "

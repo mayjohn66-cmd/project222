@@ -903,6 +903,7 @@ func read_save_file(
 
 
 func is_save_data_valid(data: Dictionary) -> bool:
+	if not SaveProgressGuard.valid(data): return false
 	if not FoodShelfLife.valid_save(data): return false
 	if data.has("preservation") and not PreservationService.valid_state(data["preservation"], int(data.get("total_day", data.get("current_day", 1)))):
 		return false

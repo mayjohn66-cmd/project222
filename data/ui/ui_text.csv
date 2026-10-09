@@ -47,3 +47,8 @@ day.preparation.salary_debt,현재 미지급 급여 %d G · 정산 확인 시 �
 day.preparation.open,정비를 마치면 출입문에서 [E]로 영업을 시작하세요.
 day.preparation.furniture,영업을 시작하려면 실제 출입문과 계산대가 필요해요. 건설로 설치한 뒤 출입문에서 [E]를 누르세요.
 day.preparation.save_time,%s 영업 전 정비 중에 저장할 수 있습니다.
+save.slot.summary,%s · %s\n%s · 보유금 %d G\n저장 일시: %s
+save.slot.store,가게 %s 정비
+save.slot.expedition,원정 체크포인트
+save.slot.unknown_time,알 수 없음
+save.slot.invalid,사용할 수 없는 저장 데이터 · 덮어쓰기 가능
