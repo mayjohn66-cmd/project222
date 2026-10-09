@@ -27,6 +27,15 @@ func key(code: Key) -> void:
 	get_viewport().push_input(event,true)
 	await settle()
 
+# 책의 일정 탭 "마을 수첩"에서 제목이 title 인 칸의 목적지 단추
+func book_button(menu, title: String) -> Button:
+	for card in menu.schedule_list.get_children():
+		var labels: Array = card.find_children("*", "Label", true, false)
+		if not labels.is_empty() and (labels[0] as Label).text == title:
+			for child in card.get_children():
+				if child is Button: return child
+	return null
+
 func _ready() -> void: call_deferred("run")
 
 func run() -> void:
@@ -38,14 +47,16 @@ func run() -> void:
 	var journal: VillageJournalDirector = world.get_node("VillageJournalDirector")
 	var player = world.get_node("Actors/Player")
 	var manager = world.get_node("DayManager")
-	check(not journal.button.visible and not journal.try_interact(), "journal waits for tutorial completion")
+	var menu: ManagementMenu = world.get_node("UI/ManagementMenu")
+	await key(KEY_N)
+	check(not VillageJournalFlow.available() and not journal.try_interact() and not menu.visible, "journal waits for tutorial completion (N opens nothing)")
 	for step in TutorialDirector.SETTINGS.steps:
 		PlayerProgress.record_story_beat("tutorial_step:" + str(step["id"]) + ":done",GameState.total_day)
 	PlayerProgress.record_story_beat(CheckoutTutorial.BEAT_ID,GameState.total_day)
 	world.get_node("TutorialDirector").refresh()
 	world.get_node("ResidentRequestDirector").refresh()
 	await settle()
-	check(journal.button.visible, "journal becomes available without settlement")
+	check(VillageJournalFlow.available() and world.get_node_or_null("UI/VillageJournalButton") == null, "journal becomes available without settlement and has no floating button")
 	check(VillageJournalFlow.destination(world,"resident:naru") == null and VillageJournalFlow.destination(world,"place:settle_naru") == null, "hidden residents and places cannot be tracked")
 	check(not VillageJournalFlow.information("next_request").is_empty(), "next request gives current action and warehouse counts")
 	player.set_physics_process(false)
@@ -53,20 +64,23 @@ func run() -> void:
 	var progress_before := PlayerProgress.to_save_data().duplicate(true)
 	var money_before: int = GameState.get_money()
 	var inventory_before: Dictionary = GameState.inventory.duplicate(true)
-	await click(journal.button)
-	check(journal.open and manager.hour_timer.paused and world.get_node("WorldInteractions").blocked(), "actual HUD button opens journal and blocks conflicting actions")
-	check(not journal.panel.cards["next_request"]["action"].disabled, "current request NPC can be marked")
-	await click(journal.panel.cards["next_request"]["action"])
+	await key(KEY_N)
+	check(menu.visible and menu.current_tab == ManagementMenu.MenuTab.SCHEDULE, "N opens the management book on the schedule tab")
+	var next_button := book_button(menu, "다음 주민 부탁")
+	check(next_button != null and not next_button.disabled, "book lists the village journal and the current request NPC can be marked")
+	await click(next_button)
 	check(journal.tracked_id == "next_request", "actual action selects destination")
+	check(book_button(menu, "다음 주민 부탁").text == "목적지 표시 해제", "book button flips to clear after marking")
 	await key(KEY_ESCAPE)
-	check(not journal.open and not manager.hour_timer.paused and not player.is_physics_processing(), "Escape restores clock and exact movement state")
+	check(not menu.visible and not manager.hour_timer.paused and not player.is_physics_processing(), "Escape closes the book and restores clock and exact movement state")
 	check(journal.marker.is_inside_tree() and journal.marker.visible and journal.guidance.visible, "marker and directional hint appear after closing")
 	check(PlayerProgress.to_save_data() == progress_before and GameState.get_money() == money_before and GameState.inventory == inventory_before, "viewing and tracking award nothing and preserve saved progress")
 	await key(KEY_N)
-	check(journal.open and not journal.marker.visible, "N opens journal and hides world marker")
-	await click(journal.panel.cards["next_request"]["action"])
-	await key(KEY_N)
-	check(not journal.open and journal.tracked_id.is_empty() and not journal.marker.visible, "same card clears marker and N closes")
+	check(menu.visible and menu.current_tab == ManagementMenu.MenuTab.SCHEDULE, "N opens the book again")
+	await click(book_button(menu, "다음 주민 부탁"))
+	check(journal.tracked_id.is_empty(), "same card clears the marked destination")
+	await key(KEY_ESCAPE)
+	check(not menu.visible and not journal.marker.visible, "Escape closes the book and no marker remains")
 	PlayerProgress.record_story_beat(ResidentRequestFlow.PREFIX + "settle_naru:done",GameState.total_day)
 	VillageSettlement.apply_world(world)
 	world.get_node("VillageLifeDirector").refresh()
@@ -85,11 +99,7 @@ func run() -> void:
 	VillageSettlement.apply_world(world)
 	check(VillageJournalFlow.destination(world,"community:path_light") == VillageSettlement.find_site(world,"VillageGathering/MarketLantern"), "completed community request points at actual landmark")
 	await key(KEY_N)
-	for dimensions in [Vector2i(1152,648),Vector2i(593,523),Vector2i(800,450)]:
-		get_window().size = dimensions
-		await settle()
-		check(get_viewport().get_visible_rect().encloses(journal.panel.root.get_global_rect()) and journal.panel.root.get_global_rect().encloses(journal.panel.close_button.get_global_rect()), "journal scroll keeps footer inside screen")
-	get_window().size = Vector2i(1152,648)
+	check(menu.visible and book_button(menu, "행상인 타블렌") != null, "settled neighbors appear in the book journal")
 	await settle()
 	var args := OS.get_cmdline_user_args()
 	if not args.is_empty():
@@ -108,6 +118,6 @@ func run() -> void:
 	VillageSettlement.apply_world(world)
 	world.get_node("VillageLifeDirector").refresh()
 	await settle()
-	check(not journal.button.visible and not journal.marker.visible and journal.tracked_id.is_empty() and not VillageJournalFlow.available(), "new game hides journal and clears marker")
+	check(not journal.marker.visible and journal.tracked_id.is_empty() and not VillageJournalFlow.available(), "new game hides journal and clears marker")
 	print("CHECK_VILLAGE_JOURNAL failures=",failures)
 	get_tree().quit(0 if failures == 0 else 1)

@@ -5,12 +5,16 @@ extends TutorialDirector
 func is_guiding() -> bool:
 	return enabled and (not ResidentRequestFlow.current().is_empty() or not ResidentStoryFlow.pending_introduction().is_empty())
 
+# 튜토리얼이 끝난 뒤의 주민 부탁·인연 안내는 화면 왼쪽에 띄우지 않는다(2026-10-08 결정).
+# 같은 내용은 관리 책의 일정 탭 "마을 수첩"에서 본다. 문구는 그대로 만들어 두고 보이게만 하지 않는다.
+const SHOW_LEFT_PANEL := false
+
 func refresh() -> void:
 	if not is_instance_valid(panel): return
 	var introduction := ResidentStoryFlow.pending_introduction() if enabled else {}
 	if not introduction.is_empty():
 		panel.display("새로운 인연 · " + str(introduction["npc"]), "가게를 찾은 손님과 인사하세요. [E]\n" + ResidentStoryFlow.place_name())
-		panel.root.visible = not talking and not _blocked()
+		panel.root.visible = SHOW_LEFT_PANEL and not talking and not _blocked()
 		if not talking and not _blocked(): _prepare_npc("meet:" + str(introduction["type"]), str(introduction["npc"]), introduction["lines"])
 		return
 	var request := ResidentRequestFlow.current() if enabled else {}
@@ -18,7 +22,7 @@ func refresh() -> void:
 		panel.display(ResidentStoryFlow.place_name() + "\n마을 평판 · %d" % ResidentRequestFlow.reputation(), "주민 부탁 %d/%d 완료" % [ResidentRequestFlow.total_completed_count(), ResidentRequestFlow.total_request_count()] if ResidentRequestFlow.tutorial_finished() and enabled else "")
 		var next_step := ResidentMerchantSupply.next_step()
 		if not next_step.is_empty(): panel.display("채집 도구를 구하는 길", next_step)
-		panel.root.visible = enabled and ResidentRequestFlow.tutorial_finished() and not _blocked()
+		panel.root.visible = SHOW_LEFT_PANEL and enabled and ResidentRequestFlow.tutorial_finished() and not _blocked()
 		if is_instance_valid(npc): npc.leave()
 		npc = null
 		return
@@ -35,7 +39,7 @@ func refresh() -> void:
 	var landmark := ResidentStoryFlow.landmark_for_request(str(request["id"]))
 	if not landmark.is_empty(): objective += "\n함께 만들 곳: " + landmark
 	panel.display("주민 부탁 · " + str(request["title"]) + "\n마을 평판 %d" % ResidentRequestFlow.reputation(), objective)
-	panel.root.visible = not talking and not _blocked()
+	panel.root.visible = SHOW_LEFT_PANEL and not talking and not _blocked()
 	if talking or _blocked(): return
 	_prepare_npc(str(request["id"]), str(request["npc"]), request["lines"])
 

@@ -1,7 +1,6 @@
 class_name VillageJournalDirector
 extends CommunityBoardDirector
 
-var button: Button
 var guidance: Label
 var marker: Label
 var tracked_id := ""
@@ -15,13 +14,6 @@ func modal_key() -> String: return "village_journal_open"
 
 func _ready() -> void:
 	super._ready()
-	button = Button.new()
-	button.name = "VillageJournalButton"
-	button.text = "마을 수첩 [N]"
-	button.size = Vector2(180,48)
-	panel._style_button(button)
-	button.pressed.connect(try_interact)
-	get_parent().get_node("UI").add_child(button)
 	guidance = Label.new()
 	guidance.name = "VillageJournalGuidance"
 	guidance.size = Vector2(600,32)
@@ -48,20 +40,31 @@ func _style_label(label: Label) -> void:
 func near_board() -> bool:
 	return VillageJournalFlow.available() and not get_parent().get_node("VillageLifeDirector")._blocked()
 
+# N: 마을 수첩은 관리 책의 일정 탭에 있다(VillageJournalBookView). 책이 열려 있는 동안은 게임이 멈춰 이 노드가 입력을 못 받으므로
+# 닫기는 다른 탭과 같이 Esc 로 한다(아래 menu.visible 갈래는 책이 열린 채 멈추지 않는 경우를 위한 것).
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_N:
-		if open:
-			panel.close()
+		var menu := get_parent().get_node_or_null("UI/ManagementMenu") as ManagementMenu
+		if menu == null: return
+		if menu.visible:
+			if menu.current_tab == ManagementMenu.MenuTab.SCHEDULE: menu.close_menu()
+			else: menu.select_tab(ManagementMenu.MenuTab.SCHEDULE)
 			get_viewport().set_input_as_handled()
-		elif try_interact(): get_viewport().set_input_as_handled()
+		elif near_board():
+			menu.open_menu(ManagementMenu.MenuTab.SCHEDULE)
+			get_viewport().set_input_as_handled()
+
+# 책의 일정 탭에서 "목적지 표시"를 눌렀을 때. 같은 곳을 다시 누르면 해제한다. 표시했으면 true.
+func set_tracked(id: String) -> bool:
+	if tracked_id == id: tracked_id = ""
+	elif VillageJournalFlow.destination(get_parent(),id) != null: tracked_id = id
+	return tracked_id == id
 
 func _process(_delta: float) -> void:
-	if button == null: return
+	if guidance == null: return
 	if not VillageJournalFlow.available(): tracked_id = ""
 	var screen := get_viewport().get_visible_rect().size
 	guidance.size.x = minf(600,screen.x - 48)
-	button.position = Vector2(screen.x - button.size.x - 24,screen.y - button.size.y - 24)
-	button.visible = near_board() and not open
 	guidance.position = Vector2((screen.x - guidance.size.x) * 0.5,screen.y - 122)
 	marker.hide()
 	guidance.hide()

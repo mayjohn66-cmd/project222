@@ -420,6 +420,7 @@ func refresh_schedule() -> void:
 	for child in schedule_list.get_children():
 		schedule_list.remove_child(child)
 		child.queue_free()
+	VillageJournalBookView.add_schedule(self)
 	ActFourBookView.add_schedule(self)
 
 	schedule_current_date_label.text = (
