@@ -70,6 +70,7 @@ func _ready() -> void:
 	ExpeditionEnvironmentCard.install(self)
 	ExpeditionSupplyAccess.install(self)
 	ExpeditionLoadoutGuide.install(self)
+	ExpeditionShopReadinessGuide.attach(self)
 
 	select_tab(PrepTab.MAP)
 
