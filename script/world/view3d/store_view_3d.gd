@@ -19,6 +19,7 @@ var match_zoom: float = 1.125  # 2D 카메라가 이 줌일 때 3D 와 2D 칸 �
 var texture_size: int = 18  # 질감 한 변 = 칸 폭의 절반
 var actor_height_px: float = 25.0  # 캐릭터 정렬 상자 높이(블록 px 단위)
 const PITCH_DEG: float = 30.0
+const WALK_GRACE_SECONDS: float = 0.12  # 마지막으로 움직인 뒤 이 시간까지는 걷는 중으로 본다(물리 갱신 사이 빈 프레임 흡수)
 const YAW_DEG: float = 45.0
 
 const WALL_THICKNESS: float = 0.3
@@ -1186,13 +1187,20 @@ func _sync_actors(delta: float) -> void:
 		entry["cell"] = cell
 		figure.set_shown((n as Node2D).is_visible_in_tree())
 		StoreActorVisuals.apply_lighting(figure, _env, _lamps, Vector3(cell.x, 0.0, cell.y))
-		figure.walking = move.length() > 0.0005 and delta > 0.0
+		# 화면 갱신이 물리 갱신(초당 60)보다 잦은 모니터(고주사율)에서는 위치가 안 바뀐 프레임이 사이사이 끼어, 걷기↔정지가 매 프레임
+		# 바뀌며 걷기 그림이 정지 그림과 깜빡였다(2026-10-09, 144fps 에서 초당 105회 전환). 마지막으로 움직인 뒤 잠깐은 계속 걷는 것으로 본다.
+		var moved: bool = move.length() > 0.0005 and delta > 0.0
+		var since_move: float = float(entry.get("since_move", 99.0)) + delta
+		var step_time: float = since_move if since_move <= WALK_GRACE_SECONDS else delta  # 움직임이 이어지면 그동안의 시간, 멈췄다 다시 움직이면 이번 프레임만
+		figure.walking = moved or since_move <= WALK_GRACE_SECONDS
+		entry["since_move"] = 0.0 if moved else since_move
 		figure.sitting = bool(n.get_meta("sitting", false))  # 프롤로그 연출: 의자에 앉기
 
 		if decals != null and village != null and (n as Node2D).is_visible_in_tree():
 			decals.walk(id, cell, move, village.is_snow_ground(cell))
-		if figure.walking:
-			figure.move_speed = lerpf(figure.move_speed, clampf(move.length() / delta, 0.4, 4.0), 0.25)
+		if moved:
+			# 속도는 움직인 거리 ÷ 그동안 지난 시간(프레임 하나가 아니라)으로 재야 화면 갱신 속도와 상관없이 같다
+			figure.move_speed = lerpf(figure.move_speed, clampf(move.length() / maxf(step_time, 0.0001), 0.4, 4.0), 0.25)
 
 		if n.has_meta("face_lock"):
 			var lock: Vector2 = n.get_meta("face_lock")  # 연출: 움직이는 중에도 이쪽을 본다(뒷걸음질)
