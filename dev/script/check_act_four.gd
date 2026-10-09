@@ -298,7 +298,11 @@ func run() -> void:
 	check(left.position.x < right.position.x and right.position.x >= left.size.x + BookLayout.GUTTER - 1,"pages respect real book viewport and gutter")
 	check(left.size.x <= (book.history_list.size.x - BookLayout.GUTTER) * 0.5 + 1 and right.position.x + right.size.x <= book.history_list.size.x + 1,"text stays in both page widths")
 	book.refresh_schedule()
-	check(book.schedule_list.get_child(0).get_child(0).text.contains("길이 모이는 날"),"calendar records future seasonal markets")
+	var market_found := false
+	for section in book.schedule_list.get_children():
+		for part in section.get_children():
+			if part is Label and part.text.contains("길이 모이는 날"): market_found = true
+	check(market_found,"calendar records future seasonal markets (village journal section comes first)")
 	var view = world.get_node("StoreView3D")
 	ActFourDecor3D.sync(view)
 	check(view._items.has("act4_sign_face") and view._items.has("act4_rest_rack"),"actual 3D progress sign and delivered rack visible")

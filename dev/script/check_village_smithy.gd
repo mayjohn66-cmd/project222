@@ -64,6 +64,7 @@ func run() -> void:
 	BlacksmithProgressionRecords.mark("heard")
 	BlacksmithProgressionRecords.mark("met")
 	director.refresh()
+	await settle() # 낯선 땅 단계가 끝난 뒤 충돌은 다음 0.5초 확인 때 돌아온다
 	check(VillageSmithyFlow.available() and smithy.visible and smithy.collision_layer > 0, "user-placed smithy opens with collision")
 	check(str(smithy.get_meta("settlement_source", "")) == VillageSmithyFlow.SITE, "removed original uses user-placed copy")
 	var saved := PlayerProgress.to_save_data()

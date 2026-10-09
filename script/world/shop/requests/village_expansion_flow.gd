@@ -176,7 +176,7 @@ static func information(id: String) -> String:
 		text += step_reason(id)
 	else:
 		if done(id):
-			text += "함께 마친 날: %d일차 · %d회\n" % [PlayerProgress.story_beat_days[key(id,"last_done")],PlayerProgress.story_beat_days[key(id,"count")]]
+			text += "함께 마친 날: %d일차 · %d회\n" % [PlayerProgress.story_beat_days[key(id,"last_done")],PlayerProgress.story_beat_days.get(key(id,"count"),1)]
 			text += RequestTextData.text("service_text",str(entry["steps"].back()["id"]),"completion") + "\n"
 		text += locked_reason(id)
 		if not done(id) and locked_reason(id).is_empty(): text += "게시판에서 이야기를 맡은 뒤 주민에게 이어서 들으세요."
