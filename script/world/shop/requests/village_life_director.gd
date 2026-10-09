@@ -226,11 +226,8 @@ func try_interact() -> bool:
 		elif not result["first"]: lines.append("오늘은 이미 안부를 나눴어요. 내일 또 만나요.")
 		if target["id"] == "naru" and result["first"] and VillageLifeFlow.friendship("naru") == 1:
 			lines.append_array(RequestTextData.lines("service_text", "trade_first_greeting"))
-		for request in PersonalRequestFlow.entries():
-			if request["resident"] != target["id"] or PersonalRequestFlow.done(str(request["id"])) or not PersonalRequestFlow.locked_reason(request).is_empty(): continue
-			lines.append_array(RequestTextData.lines("personal_request",str(request["id"])))
-			lines.append("마을 게시판에서 개인 부탁을 맡거나 준비한 물품을 전달할 수 있어요.")
 		afterglow_action = MarketAfterglowFlow.pending(str(target["id"]))
+		lines.append_array(ResidentFollowthroughGuide.personal_lines(str(target["id"]),afterglow_action))
 		if not afterglow_action.is_empty(): lines.append_array(MarketAfterglowFlow.lines(afterglow_action))
 		story_action = _next_story_action(str(target["id"])) if afterglow_action.is_empty() else {}
 		if not story_action.is_empty():

@@ -91,13 +91,13 @@ static func step_reason(id: String) -> String:
 	if GameState.total_day < previous + int(current.get("wait_days",0)): return "다음 날 이어지는 이야기를 들어 주세요."
 	if current.get("market",false) and not market_window(): return "장터 준비는 남아 있습니다. 다음 장터 철에 이어갈 수 있어요."
 	for requirement in current.get("requirements",[]):
-		if GameState.get_item_count(str(requirement["item"])) < int(requirement["amount"]): return "보통 창고에 전달할 물품을 준비해 주세요."
+		if GameState.get_item_count(str(requirement["item"])) < int(requirement["amount"]): return UiText.t("request.followthrough.missing_stock")
 	for requirement in current.get("furniture",[]):
 		var item := str(requirement["item"])
-		if GameState.get_furniture_count(item) < int(requirement["amount"]): return "가구 창고에 전달할 집기를 준비해 주세요."
+		if GameState.get_furniture_count(item) < int(requirement["amount"]): return UiText.t("request.followthrough.missing_furniture")
 		if int(PlayerProgress.story_beat_days.get(key(id,"made:" + item,cycle(id)),0)) < int(requirement["amount"]): return "소개를 들은 뒤 집기를 직접 제작해 주세요."
 	for item in current.get("show",[]):
-		if GameState.get_item_count(str(item)) <= 0: return "살펴볼 물건을 보통 창고에 가져와 주세요. 물건은 소비하지 않습니다."
+		if GameState.get_item_count(str(item)) <= 0: return UiText.t("request.followthrough.inspect")
 	for requirement in current.get("sales",[]):
 		if int(PlayerProgress.story_beat_days.get(key(id,"sold:" + str(requirement["item"]),cycle(id)),0)) < int(requirement["amount"]): return "안내 뒤 해당 물품을 진열하고 손님의 실제 결제를 받아 주세요."
 	if current.get("map_purchase",false) and not PlayerProgress.story_beat_days.has(key(id,"bought_map",cycle(id))): return "안내 뒤 심야 상인이 두 번째 이상 찾아온 밤에 보물 지도를 직접 구매해 주세요."
@@ -160,7 +160,7 @@ static func information(id: String) -> String:
 			var item := str(requirement["item"])
 			var count := GameState.get_furniture_count(item) if field == "furniture" else GameState.get_item_count(item)
 			if field == "sales": count = int(PlayerProgress.story_beat_days.get(key(id,"sold:" + item,cycle(id)),0))
-			text += "\n%s %d/%d (%s)" % [FurnitureData.get_furniture_name(item) if field == "furniture" else ItemData.get_item_name(item),count,requirement["amount"],"실제 결제" if field == "sales" else "창고 전달"]
+			text += "\n%s %d/%d (%s)" % [FurnitureData.get_furniture_name(item) if field == "furniture" else ItemData.get_item_name(item),count,requirement["amount"],"실제 결제" if field == "sales" else (UiText.t("request.followthrough.furniture_delivery") if field == "furniture" else UiText.t("request.followthrough.inventory_delivery"))]
 	if not current.get("show",[]).is_empty(): text += "\n물건 확인만 합니다. 소비하지 않습니다."
 	text += "\n" + ("완독하면 다음 단계로 이어집니다. [E]" if step_reason(id).is_empty() else step_reason(id))
 	if int(entry.get("money",0)) > 0: text += "\n최종 대화 완독 후 대금: %d G" % entry["money"]

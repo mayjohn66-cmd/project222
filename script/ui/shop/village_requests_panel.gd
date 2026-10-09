@@ -22,7 +22,7 @@ func refresh() -> void:
 		card["info"].text = ActFourFlow.information(id) if ActFourFlow.started() else ""
 		var reason := ActFourFlow.locked_reason(id)
 		card["action"].disabled = ActFourFlow.accepted(id) or not reason.is_empty()
-		card["action"].text = "이야기 이어 듣기 [E]" if ActFourFlow.accepted(id) else ("이야기 맡기" if reason.is_empty() else "다음 소식을 기다리는 중")
+		card["action"].text = ResidentFollowthroughGuide.story_button(ActFourFlow.accepted(id),ActFourFlow.done(id),not str(entry.get("repeat","")).is_empty(),reason,"이야기 이어 듣기 [E]")
 	# The base panel handles the existing community cards only.
 	for entry in PersonalRequestFlow.entries():
 		var id := str(entry["id"])
@@ -40,4 +40,4 @@ func refresh() -> void:
 		var card: Dictionary = cards[VillageExpansionFlow.JOURNAL_PREFIX + id]
 		card["info"].text = VillageExpansionFlow.information(id)
 		card["action"].disabled = VillageExpansionFlow.accepted(id) or not VillageExpansionFlow.locked_reason(id).is_empty()
-		card["action"].text = "주민에게 이어서 듣기 [E]" if VillageExpansionFlow.accepted(id) else ("이야기 맡기" if VillageExpansionFlow.locked_reason(id).is_empty() else "다음 소식을 기다리는 중")
+		card["action"].text = ResidentFollowthroughGuide.story_button(VillageExpansionFlow.accepted(id),VillageExpansionFlow.done(id),not str(entry.get("repeat","")).is_empty(),VillageExpansionFlow.locked_reason(id),"주민에게 이어서 듣기 [E]")

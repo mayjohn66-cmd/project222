@@ -15,3 +15,13 @@ expedition.room.contact,가까이 있는 사람과 [E]로 이야기할 수 있�
 expedition.room.interact,%s [E]
 expedition.room.cancel_gather,이동하거나 공격하면 채집을 중단합니다.
 expedition.room.progress,%s 중 %d%%
+request.followthrough.personal_hint,마을 게시판에서 개인 부탁을 맡거나 준비한 물품을 전달할 수 있어요.
+request.followthrough.finished,함께 마친 이야기
+request.followthrough.repeat_wait,다음 회차를 기다리는 중
+request.followthrough.stock,%s %d/%d · 소지품
+request.followthrough.missing_stock,소지품에 완제품이나 재료를 준비해 주세요.
+request.followthrough.board_intro,물품은 소지품에서 전달합니다. 창고 선반이나 냉장·냉동함에 보관했다면 현장에서 꺼낸 뒤 전달하세요. 천천히 준비하세요.
+request.followthrough.missing_furniture,가구 보관함에 전달할 집기를 준비해 주세요.
+request.followthrough.inspect,살펴볼 물건을 소지품에 가져와 주세요. 물건은 소비하지 않습니다.
+request.followthrough.furniture_delivery,가구 보관함에서 전달
+request.followthrough.inventory_delivery,소지품에서 전달

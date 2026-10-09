@@ -98,7 +98,7 @@ static func step_reason(id: String, hour: int = -1) -> String:
 		if hour >= 0 and (hour < int(current["start_hour"]) or hour >= int(current["end_hour"])): return "모임은 %d~%d시에 열립니다." % [current["start_hour"],current["end_hour"]]
 	if current.has("region") and not PlayerProgress.story_beat_days.has(key(id,"discovered",cycle(id))): return "%s 원정에서 %s을 직접 채집한 뒤 돌아와 주세요." % [ExpeditionMapData.get_region_data(str(current["region"])).get("name",current["region"]),ItemData.get_item_name(str(current["discover_item"]))]
 	for item in CommunityRequestFlow.required_items(current):
-		if not ItemData.has_item(item) or GameState.get_item_count(item) < int(CommunityRequestFlow.required_items(current)[item]): return "보통 창고에 완제품이나 재료를 준비해 주세요."
+		if not ItemData.has_item(item) or GameState.get_item_count(item) < int(CommunityRequestFlow.required_items(current)[item]): return UiText.t("request.followthrough.missing_stock")
 	if current.get("mode", "") == "produce":
 		for item in CommunityRequestFlow.required_items(current):
 			if int(PlayerProgress.story_beat_days.get(key(id,"made:" + item,cycle(id)),0)) < int(CommunityRequestFlow.required_items(current)[item]): return "소개 뒤 실제로 제작하고 수령한 상품이 필요합니다."
@@ -168,7 +168,7 @@ static func information(id: String) -> String:
 	if accepted(id):
 		var current := step(id)
 		text += "진행 %d/%d · %s\n" % [int(current["index"]) + 1,entry["steps"].size(),RequestTextData.text("service_text",str(current["id"]),"title")]
-		for item in CommunityRequestFlow.required_items(current): text += "%s %d/%d · 창고\n" % [ItemData.get_item_name(item),GameState.get_item_count(item),CommunityRequestFlow.required_items(current)[item]]
+		for item in CommunityRequestFlow.required_items(current): text += UiText.f("request.followthrough.stock",[ItemData.get_item_name(item),GameState.get_item_count(item),CommunityRequestFlow.required_items(current)[item]]) + "\n"
 		if current.has("site"):
 			text += "계절 %d~%d일 · %d~%d시\n" % [SETTINGS.festival_start_day,SETTINGS.festival_end_day,current["start_hour"],current["end_hour"]]
 			text += "모임 장소에서 이웃들이 도착하면 대화 [E]\n"

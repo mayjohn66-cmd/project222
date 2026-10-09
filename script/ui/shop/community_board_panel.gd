@@ -12,7 +12,7 @@ var backdrop: ColorRect
 
 func entries() -> Array[Dictionary]: return RequestTextData.enrich_all(CommunityRequestFlow.SETTINGS.requests, "community_request")
 func panel_title() -> String: return "마을 부탁 게시판"
-func introduction() -> String: return "물품은 창고에서 전달합니다. 기한 없이 천천히 준비하세요."
+func introduction() -> String: return UiText.t("request.followthrough.board_intro")
 
 func _ready() -> void:
 	layer = 25
