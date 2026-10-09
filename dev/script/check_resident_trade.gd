@@ -12,6 +12,11 @@ func settle() -> void:
 	for i in range(6): await get_tree().process_frame
 
 func click(button: Button) -> void:
+	# Offers share a scrolling list with merchant tools; bring the real control into view.
+	var parent := button.get_parent()
+	while parent != null and not parent is ScrollContainer: parent = parent.get_parent()
+	if parent is ScrollContainer: parent.ensure_control_visible(button)
+	await settle()
 	for pressed in [true, false]:
 		var event := InputEventMouseButton.new()
 		event.position = button.get_global_rect().get_center()

@@ -68,6 +68,9 @@ func run() -> void:
 	check(spawner.spawn_timer.wait_time < spawner.base_spawn_interval, "NPC delivery immediately refreshes visit frequency")
 	drain(director.dialogue)
 	check(ResidentRequestFlow.deliver(request).is_empty(), "completed request cannot pay twice")
+	# Water prerequisites have their own merchant progression integration check.
+	PlayerProgress.record_story_beat(ResidentRequestFlow.PREFIX + "settle_naru:done", GameState.total_day)
+	GameState.create_owned_equipment_instance("gathering_bottle", 0)
 	for index in range(1,6):
 		request = ResidentRequestFlow.current()
 		ResidentRequestFlow.accept(request)

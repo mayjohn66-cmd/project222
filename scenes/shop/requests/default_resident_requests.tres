@@ -6,8 +6,8 @@
 script = ExtResource("1")
 requests = Array[Dictionary]([
 {"id":"neighbor_bread","npc":"이웃 오렐","item":"wild_berry","amount":2,"reputation":1,"money":30,"payment_kind":"gift"},
-{"id":"traveler_water","npc":"여행자 라슈","item":"raw_water","amount":2,"reputation":1,"money":30,"payment_kind":"gift"},
 {"id":"gatherer_herbs","npc":"채집가 엘미","item":"forest_herb","amount":3,"reputation":1,"money":40},
+{"id":"traveler_water","npc":"여행자 라슈","item":"raw_water","amount":2,"reputation":1,"money":30,"payment_kind":"gift"},
 {"id":"miner_ore","npc":"광부 바르크","item":"iron_ore","amount":3,"reputation":1,"money":40},
 {"id":"child_berries","npc":"이웃 피니아","item":"wild_berry","amount":3,"reputation":1,"money":50},
 {"id":"healer_moss","npc":"치료사 세이나","item":"swamp_moss","amount":3,"reputation":1,"money":60}

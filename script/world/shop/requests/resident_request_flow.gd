@@ -9,9 +9,15 @@ static func tutorial_finished() -> bool:
 
 static func current() -> Dictionary:
 	if not tutorial_finished(): return {}
+	# 순서 변경 전 수락한 부탁은 준비된 경우 우선 유지한다. 물 도구가 없으면 엘미/타블렌을 먼저 만난다.
+	for request in SETTINGS.requests:
+		if accepted(str(request["id"])) and not done(str(request["id"])):
+			if str(request["id"]) != "traveler_water" or ResidentMerchantSupply.water_ready(request):
+				return RequestTextData.enrich(request, "resident_request")
 	var base_request: Dictionary = {}
 	for request in SETTINGS.requests:
 		if not done(str(request["id"])):
+			if str(request["id"]) == "traveler_water" and not ResidentMerchantSupply.water_ready(request): break
 			base_request = RequestTextData.enrich(request, "resident_request")
 			break
 	# 이미 받은 부탁은 새 손님 등장 때문에 숨기지 않는다.

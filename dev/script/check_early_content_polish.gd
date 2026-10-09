@@ -36,7 +36,7 @@ func run() -> void:
 	check(not RecipeUnlockData.is_recipe_available("bake_bread") and not RecipeUnlockData.is_recipe_available("bottled_water"), "modern recipes still locked")
 	var resident = world.get_node("ResidentRequestDirector")
 	var player = world.get_node("Actors/Player")
-	for expected in ["wild_berry", "raw_water"]:
+	for expected in ["wild_berry", "forest_herb"]:
 		var request := ResidentRequestFlow.current()
 		check(str(request["item"]) == expected, "first requests use expedition materials")
 		resident.refresh()
@@ -47,7 +47,7 @@ func run() -> void:
 		PlayerProgress.reset()
 		PlayerProgress.load_save_data(accepted_save)
 		check(ResidentRequestFlow.current()["id"] == request["id"] and ResidentRequestFlow.accepted(str(request["id"])), "existing resident acceptance survives reload")
-		check(resident.panel.goal.text.contains("답례"), "resident UI identifies small thanks")
+		check(resident.panel.goal.text.contains("답례" if request.get("payment_kind", "") == "gift" else "보상"), "resident UI identifies reward kind")
 		var money := GameState.money
 		check(ResidentRequestFlow.deliver(request).is_empty() and GameState.money == money, "missing materials never pay")
 		GameState.add_item(expected, int(request["amount"]))

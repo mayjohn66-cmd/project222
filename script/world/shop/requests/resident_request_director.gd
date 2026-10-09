@@ -16,6 +16,8 @@ func refresh() -> void:
 	var request := ResidentRequestFlow.current() if enabled else {}
 	if request.is_empty():
 		panel.display(ResidentStoryFlow.place_name() + "\n마을 평판 · %d" % ResidentRequestFlow.reputation(), "주민 부탁 %d/%d 완료" % [ResidentRequestFlow.total_completed_count(), ResidentRequestFlow.total_request_count()] if ResidentRequestFlow.tutorial_finished() and enabled else "")
+		var next_step := ResidentMerchantSupply.next_step()
+		if not next_step.is_empty(): panel.display("채집 도구를 구하는 길", next_step)
 		panel.root.visible = enabled and ResidentRequestFlow.tutorial_finished() and not _blocked()
 		if is_instance_valid(npc): npc.leave()
 		npc = null

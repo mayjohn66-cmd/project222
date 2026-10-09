@@ -1,7 +1,7 @@
 class_name ExpeditionSupplyAccess
 extends Node
 ## 기존 원정 상점을 준비 화면에 연결한다. 구매/가격/개별 장비 생성은 PrepShop이 담당한다.
-const ENABLED := true
+const ENABLED := false # 도구는 타블렌의 노점에서 구매한다. 익명 원정 상점은 비활성화.
 var prep: Control
 var shop: Control
 var entry: Button
