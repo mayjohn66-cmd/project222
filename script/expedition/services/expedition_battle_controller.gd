@@ -302,6 +302,7 @@ func generate_loot(
 	host.temporary_loot.append(
 		{
 			"item_id": item_id,
+			"blacksmith_ore_origin": item_id == "iron_ore",
 			"amount": amount
 		}
 	)

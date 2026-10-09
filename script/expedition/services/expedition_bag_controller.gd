@@ -319,7 +319,8 @@ func drop_grid_data(
 				item_id,
 				target_cell,
 				amount,
-				false
+				false,
+				{"blacksmith_ore_origin": bool(loot.get("blacksmith_ore_origin", false))}
 			)
 		)
 
@@ -432,6 +433,7 @@ func return_bag_item_to_loot(
 	host.temporary_loot.append(
 		{
 			"item_id": item_id,
+			"blacksmith_ore_origin": bool(placement.get("blacksmith_ore_origin", false)),
 			"amount": amount
 		}
 	)

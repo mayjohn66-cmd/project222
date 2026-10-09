@@ -183,6 +183,7 @@ func initialize_new_game():
 	preservation_state = PreservationService.initial_state(total_day)
 
 	PlayerProgress.reset()
+	BlacksmithProgressionRecords.new_game()
 
 	store_expansion_level = (
 		StoreExpansionData.MIN_LEVEL

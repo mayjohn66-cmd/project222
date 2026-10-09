@@ -156,6 +156,7 @@ func deposit_items(
 			amount
 		)
 
+		BlacksmithProgressionRecords.deposited(context, removed)
 		deposited_amount += amount
 
 		DebugLog.write(
@@ -166,6 +167,7 @@ func deposit_items(
 		)
 
 	ActFourRecords.record_settlement(context,targets)
+	BlacksmithProgressionRecords.returned(context)
 	return {
 		"success": true,
 		"message": "",

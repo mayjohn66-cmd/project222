@@ -1,10 +1,18 @@
 class_name VillageSmithyDirector
 extends CommunityBoardDirector
 
+func _ready() -> void:
+	super._ready()
+	if BlacksmithProgressionFlow.ENABLED:
+		var director := BlacksmithDirector.new()
+		director.name = "BlacksmithDirector"
+		get_parent().add_child.call_deferred(director)
+
 func create_panel() -> CommunityBoardPanel: return VillageSmithyPanel.new()
 func modal_key() -> String: return "village_smithy_open"
 
 func _process(delta: float) -> void:
+	if BlacksmithProgressionFlow.ENABLED: return
 	elapsed += delta
 	if elapsed < 0.5: return
 	elapsed = 0.0
@@ -26,7 +34,7 @@ func _process(delta: float) -> void:
 	smithy.add_child(hint)
 
 func near_board() -> bool:
-	return VillageSmithyFlow.available() and can_open_at(VillageSmithyFlow.SITE, VillageSmithyFlow.INTERACTION_DISTANCE)
+	return not BlacksmithProgressionFlow.ENABLED and VillageSmithyFlow.available() and can_open_at(VillageSmithyFlow.SITE, VillageSmithyFlow.INTERACTION_DISTANCE)
 
 func interaction_hint() -> String:
 	return "[E] %s의 대장간에서 장비 제작" % VillageLifeFlow.resident("doyun")["name"] if near_board() else ""

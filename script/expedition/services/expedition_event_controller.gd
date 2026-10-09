@@ -255,6 +255,7 @@ func resolve_loot_event(
 		host.temporary_loot.append(
 			{
 				"item_id": gathered_item_id,
+				"blacksmith_ore_origin": gathered_item_id == "iron_ore",
 				"amount": gathered_amount
 			}
 		)
@@ -338,6 +339,7 @@ func resolve_loot_event(
 	host.temporary_loot.append(
 		{
 			"item_id": item_id,
+			"blacksmith_ore_origin": item_id == "iron_ore",
 			"amount": amount
 		}
 	)

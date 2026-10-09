@@ -132,6 +132,7 @@ func refresh_all() -> void:
 func _set_mode(
 	new_mode: MaintenanceMode
 ) -> void:
+	if BlacksmithProgressionFlow.ENABLED and new_mode == MaintenanceMode.ENHANCEMENT and not BlacksmithProgressionFlow.service_available(): return
 	current_mode = new_mode
 
 	selected_recipe_id = ""
@@ -143,6 +144,8 @@ func _set_mode(
 
 
 func _refresh_mode_display() -> void:
+	if BlacksmithProgressionFlow.ENABLED: enhancement_mode_button.text = "장비 조회"
+	enhancement_mode_button.visible = not BlacksmithProgressionFlow.ENABLED or BlacksmithProgressionFlow.service_available()
 	craft_mode_button.disabled = (
 		current_mode == MaintenanceMode.CRAFT
 	)
@@ -172,11 +175,13 @@ func _refresh_mode_display() -> void:
 			)
 
 		MaintenanceMode.ENHANCEMENT:
-			title_label.text = "장비 강화"
+			title_label.text = "장비 조회" if BlacksmithProgressionFlow.ENABLED else "장비 강화"
 			action_button.text = "강화"
-			hint_label.text = (
-				"보관함 또는 원정 가방의 장비를 강화합니다."
-			)
+			hint_label.text = "장비 손질은 마을의 대장장이에게 [E]로 부탁하세요." if BlacksmithProgressionFlow.ENABLED else "보관함 또는 원정 가방의 장비를 강화합니다."
+			if BlacksmithProgressionFlow.ENABLED:
+				enhancement_mode_button.text = "장비 조회"
+				action_button.text = "대장장이에게 방문"
+				action_button.disabled = true
 
 		MaintenanceMode.DISMANTLE:
 			title_label.text = "장비 분해"
@@ -594,6 +599,12 @@ func _refresh_equipment_detail() -> void:
 		]
 	)
 
+	if BlacksmithProgressionFlow.ENABLED:
+		materials_label.text = ""
+		status_label.text = "마을 수첩에서 대장장이의 목적지를 표시할 수 있습니다."
+		action_button.disabled = true
+		return
+
 	if current_level >= max_level:
 		materials_label.text = ""
 		status_label.text = (
@@ -685,6 +696,9 @@ func _build_enhancement_cost_text(
 
 
 func _enhance_selected_equipment() -> void:
+	if BlacksmithProgressionFlow.ENABLED:
+		status_label.text = "장비 손질은 대장장이에게 방문하세요."
+		return
 	var placement: Dictionary = (
 		_get_selected_equipment_placement()
 	)

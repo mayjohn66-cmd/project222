@@ -33,6 +33,7 @@ func blocked() -> bool:
  if bool(world.get_meta("community_board_open",false)): return true
  if bool(world.get_meta("resident_trade_open",false)): return true
  if bool(world.get_meta("village_smithy_open",false)): return true
+ if bool(world.get_meta("blacksmith_open",false)): return true
  if bool(world.get_meta("village_journal_open",false)): return true
  if bool(world.get_meta("village_gathering_open",false)): return true
  if bool(world.get_meta("village_market_open",false)): return true
@@ -124,6 +125,10 @@ func _process(_delta: float) -> void:
  if board != null and not board.interaction_hint().is_empty():
   prompt.text = board.interaction_hint()
   return
+ var blacksmith = get_parent().get_node_or_null("BlacksmithDirector")
+ if blacksmith != null and not blacksmith.interaction_hint().is_empty():
+  prompt.text = blacksmith.interaction_hint()
+  return
  var life = get_parent().get_node_or_null("VillageLifeDirector")
  if life != null and not life.interaction_hint().is_empty():
   prompt.text = life.interaction_hint()
@@ -177,6 +182,8 @@ func try_interact() -> bool:
  if requests != null and requests.try_interact(): return true
  var board = get_parent().get_node_or_null("CommunityBoardDirector")
  if board != null and board.try_interact(): return true
+ var blacksmith = get_parent().get_node_or_null("BlacksmithDirector")
+ if blacksmith != null and blacksmith.try_interact(): return true
  var life = get_parent().get_node_or_null("VillageLifeDirector")
  if life != null and life.try_interact(): return true
  var trade = get_parent().get_node_or_null("ResidentTradeDirector")

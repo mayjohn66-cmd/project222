@@ -18,6 +18,7 @@ static func recipes() -> Array[Dictionary]:
 	return result
 
 static func blocked_reason(id: String) -> String:
+	if BlacksmithProgressionFlow.ENABLED and not BlacksmithProgressionFlow.service_available(): return "대장장이에게 작업장 이야기를 먼저 들어 보세요."
 	if not available(): return "대장간을 여는 공동 부탁을 먼저 완료하세요."
 	if not RecipeData.has_recipe(id): return "제작법을 확인할 수 없습니다."
 	if not RecipeUnlockData.is_recipe_available(id): return "원정에서 제작 두루마리를 얻어 먼저 배우세요."

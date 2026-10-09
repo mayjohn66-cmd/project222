@@ -6,6 +6,7 @@ static func available() -> bool:
 
 static func entries() -> Array[Dictionary]:
 	var result: Array[Dictionary] = [{"id":"next_request", "title":"다음 주민 부탁"}]
+	if not BlacksmithProgressionFlow.next_step().is_empty(): result.append({"id":BlacksmithProgressionFlow.JOURNAL_ID,"title":"장비를 다듬는 이웃"})
 	if PowerRepairFlow.opted_in(): result.append({"id":PowerRepairFlow.JOURNAL_ID, "title":PowerRepairFlow.title()})
 	for resident in VillageLifeFlow.entries():
 		result.append({"id":"resident:" + str(resident["id"]), "title":str(resident["name"])})
@@ -48,6 +49,7 @@ static func entries() -> Array[Dictionary]:
 	return result
 
 static func information(id: String) -> String:
+	if id == BlacksmithProgressionFlow.JOURNAL_ID: return BlacksmithProgressionFlow.next_step()
 	if id == "fishing:journal":
 		var text := "만난 물고기 %d종 · 계절 물고기 %d종\n물가에서 [E]로 기록과 부탁을 확인하세요." % [FishingRecords.discovered(), FishingRecords.discovered(true)]
 		for entry in FishingData.entries("progression"):
@@ -102,6 +104,7 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id == BlacksmithProgressionFlow.JOURNAL_ID: return BlacksmithProgressionFlow.destination(world)
 	if id == "fishing:journal":
 		var spots = world.get_node_or_null("FishingSpots")
 		return spots.get_node_or_null("fish_bank") if spots != null else null

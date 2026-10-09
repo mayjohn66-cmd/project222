@@ -27,7 +27,7 @@ func run() -> void:
 	world.get_node("TutorialDirector").enabled = false # Post-tutorial fixture; opening is tested separately.
 	add_child(world)
 	await settle()
-	var director: VillageSmithyDirector = world.get_node("VillageSmithyDirector")
+	var director: BlacksmithDirector = world.get_node("BlacksmithDirector")
 	var player = world.get_node("Actors/Player")
 	var manager = world.get_node("DayManager")
 	var smithy := VillageSettlement.find_site(world, VillageSmithyFlow.SITE)
@@ -61,6 +61,9 @@ func run() -> void:
 	check(CommunityRequestFlow.deliver("open_smithy").is_empty(), "completion cannot award twice")
 	VillageSettlement.apply_world(world)
 	await settle()
+	BlacksmithProgressionRecords.mark("heard")
+	BlacksmithProgressionRecords.mark("met")
+	director.refresh()
 	check(VillageSmithyFlow.available() and smithy.visible and smithy.collision_layer > 0, "user-placed smithy opens with collision")
 	check(str(smithy.get_meta("settlement_source", "")) == VillageSmithyFlow.SITE, "removed original uses user-placed copy")
 	var saved := PlayerProgress.to_save_data()
@@ -79,6 +82,9 @@ func run() -> void:
 	manager.hour_timer.paused = false
 	check(not director.interaction_hint().is_empty() and world.get_node("WorldInteractions").try_interact() and director.open, "E opens smithy from accessible apron")
 	check(manager.hour_timer.paused and world.get_node("WorldInteractions").blocked(), "smithy pauses clock and blocks other interaction")
+	while director.dialogue.open: director.dialogue._advance()
+	check(BlacksmithProgressionFlow.service_available(), "completed NPC introduction unlocks existing workshop service")
+	director.panel.select_mode("craft")
 	await settle()
 	GameState.add_item("iron_ore",3)
 	GameState.add_item("mine_crystal",1)
@@ -106,7 +112,7 @@ func run() -> void:
 	escape.pressed = true
 	get_viewport().push_input(escape, true)
 	await settle()
-	check(not director.open and not manager.hour_timer.paused and not player.is_physics_processing() and not world.has_meta("village_smithy_open"), "Escape restores exact previous state")
+	check(not director.open and not manager.hour_timer.paused and not player.is_physics_processing() and not world.has_meta("blacksmith_open"), "Escape restores exact previous state")
 	world.get_node("BuildManager").build_mode = true
 	check(not director.try_interact(), "building blocks smithy interaction")
 	world.get_node("BuildManager").build_mode = false

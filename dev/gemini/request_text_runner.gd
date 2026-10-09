@@ -838,6 +838,8 @@ static func build_prompt(kind: String, targets: Dictionary, sources: Dictionary 
 				info = "기존 기능 안내를 유지하는 문장: " + id
 				if d.has("stage"):
 					info = "마을 이야기·이벤트 / 말하는 사람: %s / 장면: %s / 새 정착·구매·해금을 약속하지 않음" % [d.get("npc", ""), d["stage"]]
+				if id.begins_with("smith_"):
+					info = "별도 대장장이 이야기 / 화자: %s / 실제 조건: %s / 타블렌 소개·코르빈 작업장 부탁·기술자 계산대 수리는 별도. 새 고유 이름/무료 장비/추가 답례/무작위 강화 실패 없음. 수량·단계·조작은 UI. 첫 강화 선택형, 사용 여부 단정 없음" % [d.get("npc",""),d.get("stage","")]
 				if id.begins_with("craft_"):
 					info = "교류로 제품 발전 / 화자: %s / 장면: %s / 소개 완독 시 실제 제조법 학습, 소개 후 제작 수령과 창고 시제품이 필요, 최종 완독 때 시제품 소비·평판 최초 1회 / 현지인은 현지 재료·음식을 설명, 처음 편의점 빵·생수의 재현 지식은 플레이어 / 조작·수량은 UI, 새 시설·돈·무료 완제품 약속 없음" % [d.get("npc", ""),d.get("stage", "")]
 				if id.begins_with("regular_"):

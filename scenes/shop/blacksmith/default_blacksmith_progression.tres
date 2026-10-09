@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="BlacksmithProgressionSettings" load_steps=2 format=3]
+[ext_resource type="Script" path="res://script/world/shop/blacksmith/blacksmith_progression_settings.gd" id="1"]
+[resource]
+script = ExtResource("1")
+moments = Array[Dictionary]([
+{"id":"smith_heard_naru","npc":"타블렌","stage":"튜토리얼·정착·물 부탁 뒤 실제 원정 철광석 반입. 구저장은 광석을 보여주는 비소비 호환. 끝까지 읽을 때 heard."},
+{"id":"smith_first_meeting","npc":"대장장이","stage":"작업장 바깥 첫 만남. 장비 관찰, 소비/강화/지급 없음. 끝까지 읽을 때 met."},
+{"id":"smith_workshop_wait","npc":"대장장이","stage":"기존 코르빈 open_smithy 작업장 준비. 안부7일·꽃자리·기존 비용 유지."},
+{"id":"smith_workshop_ready","npc":"대장장이","stage":"기존 open_smithy 완료. 완독 후 서비스, 첫 강화는 선택. 새 무료지급 없음."},
+{"id":"smith_first_enhancement","npc":"대장장이","stage":"실제 재료 소비와 개별 ID 강화 성공 후 선택형 반응. 무료시범/추가지급 없음."},
+{"id":"smith_after_first_return","npc":"대장장이","stage":"첫 강화 이후 실제 탐험 복귀. 강화장비 사용 여부 단정 금지. 완독 afterglow, 추가답례 없음."},
+{"id":"smith_return_greeting","npc":"대장장이","stage":"반복 안부, 제작/강화는 별도 선택. 추가 선물·평판·할인 없음."}
+])
