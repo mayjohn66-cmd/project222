@@ -292,7 +292,7 @@ func select_tab(
 			inventory_button.button_pressed = true
 
 			info_label.text = (
-				"현재 보유 중인 물품을 확인합니다."
+				UiText.t("management.tab.inventory.desc")
 			)
 
 			management_inventory.refresh_inventory_if_changed()
@@ -300,7 +300,7 @@ func select_tab(
 		MenuTab.PRODUCTION:
 			production_content.visible = true
 			production_button.button_pressed = true
-			info_label.text = "판매 상품의 생산과 가공을 관리합니다."
+			info_label.text = UiText.t("management.tab.production.desc")
 			if management_production.has_method(
 				"refresh_view"
 			):
@@ -312,7 +312,7 @@ func select_tab(
 			employee_button.button_pressed = true
 
 			info_label.text = (
-				"직원의 근무시간과 담당 업무를 확인합니다."
+				UiText.t("management.tab.employee.desc")
 			)
 
 			if employee_content.has_method("refresh_view"):
@@ -324,7 +324,7 @@ func select_tab(
 			blueprint_button.button_pressed = true
 
 			info_label.text = (
-				"재료로 가구와 생산 설비를 제작합니다."
+				UiText.t("management.tab.blueprint.desc")
 			)
 
 			if blueprint_content.has_method("refresh_view"):
@@ -335,7 +335,7 @@ func select_tab(
 			construction_button.button_pressed = true
 
 			info_label.text = (
-				"편의점과 부속 공간의 크기를 확장합니다."
+				UiText.t("management.tab.construction.desc")
 			)
 
 			if construction_content.has_method(
@@ -352,7 +352,7 @@ func select_tab(
 
 
 			info_label.text = (
-				"손님에게서 얻은 예정 정보를 확인합니다."
+				UiText.t("management.tab.schedule.desc")
 			)
 
 
@@ -363,7 +363,7 @@ func select_tab(
 			refresh_shop_history()
 
 			info_label.text = (
-				"편의점 현황과 지난 영업 결과를 확인합니다."
+				UiText.t("management.tab.history.desc")
 			)
 
 

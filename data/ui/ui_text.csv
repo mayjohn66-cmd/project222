@@ -1,0 +1,8 @@
+key,text
+management.tab.inventory.desc,현재 보유 중인 물품을 확인합니다.
+management.tab.production.desc,판매 상품의 생산과 가공을 관리합니다.
+management.tab.employee.desc,직원의 근무시간과 담당 업무를 확인합니다.
+management.tab.blueprint.desc,재료로 가구와 생산 설비를 제작합니다.
+management.tab.construction.desc,편의점과 부속 공간의 크기를 확장합니다.
+management.tab.schedule.desc,손님에게서 얻은 예정 정보를 확인합니다.
+management.tab.history.desc,편의점 현황과 지난 영업 결과를 확인합니다.
