@@ -49,6 +49,23 @@ func run() -> void:
 	check(ActorSpriteFrames.direction_for(0.0,45.0) == "south-west", "+Z projects left/down")
 	check(ActorSpriteFrames.direction_for(-135.0,45.0) == "north", "away from camera is north")
 	check(ActorSpriteFrames.direction_for(405.0,45.0) == "south", "angle wrapping")
+	# 화면에서 보이는 이동 각도를 360도로 돌려 보면, 8방위 그림이 각자 45도 구간을 차지해야 한다(월드 각도로 나누면 80도/23도로 쏠린다)
+	var compass := ["south", "south-east", "east", "north-east", "north", "north-west", "west", "south-west"]
+	var span := {}
+	for t in range(0, 360, 1):
+		var sx := cos(deg_to_rad(float(t)))
+		var sy := sin(deg_to_rad(float(t)))
+		# 화면 방향 (sx, sy)를 가진 월드 방향: 땅 방향은 sin(30도)=0.5 만큼 눌려 보이므로 되돌린다
+		var toward := Vector2(sin(deg_to_rad(45.0)), cos(deg_to_rad(45.0)))
+		var right := Vector2(toward.y, -toward.x)
+		var heading: Vector2 = right * sx + toward * (sy / 0.5)
+		var yaw := rad_to_deg(atan2(heading.x, heading.y))
+		var expected: String = compass[posmod(int(floor((90.0 - float(t) + 22.5) / 45.0)), 8)]
+		var got := ActorSpriteFrames.direction_for(yaw, 45.0)
+		span[got] = int(span.get(got, 0)) + 1
+		check(got == expected, "screen angle %d° shows the %s art" % [t, expected])
+	for name in compass:
+		check(int(span.get(name, 0)) == 45, "%s art covers a 45° screen sector (got %d)" % [name, int(span.get(name, 0))])
 	GameState.initialize_new_game()
 	PlayerProgress.reset()
 	world = load("res://scenes/shop/main.tscn").instantiate()

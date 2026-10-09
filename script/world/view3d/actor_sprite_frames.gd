@@ -69,7 +69,19 @@ static func _missing(key: String) -> Dictionary:
 	return {}
 
 
-## Facing yaw is world X/Z; artwork directions are screen compass directions.
+const CAMERA_PITCH_DEG := 30.0 # 매장 카메라가 내려다보는 각도(StoreView3D.PITCH_DEG 와 같다)
+
+
+## 그림 방향은 화면의 8방위(남=아래, 동=오른쪽 …)다. 월드 방향각을 그대로 45도씩 나누면 등각 시점에서
+## 화면에 보이는 각도와 어긋나(남·북 그림이 약 80도, 동·서 그림이 약 23도를 차지) 360도로 돌릴 때 그림이 엇나간다(2026-10-09).
+## 그래서 걷는 방향을 화면에 투영한 각도(땅 방향은 sin(피치)만큼 눌린다)로 고른다.
+## facing_yaw: 월드 X/Z 평면의 방향각(atan2(x, z)), camera_yaw: 카메라가 바라보는 쪽 각도(도).
 static func direction_for(facing_yaw: float, camera_yaw: float) -> String:
-	var index := posmod(int(floor((facing_yaw - camera_yaw + 22.5) / 45.0)), DIRECTIONS.size())
+	var heading := Vector2(sin(deg_to_rad(facing_yaw)), cos(deg_to_rad(facing_yaw)))
+	var toward_camera := Vector2(sin(deg_to_rad(camera_yaw)), cos(deg_to_rad(camera_yaw)))
+	var screen_right := Vector2(toward_camera.y, -toward_camera.x)
+	var screen_x := heading.dot(screen_right)
+	var screen_y := heading.dot(toward_camera) * sin(deg_to_rad(CAMERA_PITCH_DEG))
+	var screen_angle := rad_to_deg(atan2(screen_y, screen_x)) # 0=오른쪽, 90=아래(카메라 쪽)
+	var index := posmod(int(floor((90.0 - screen_angle + 22.5) / 45.0)), DIRECTIONS.size())
 	return DIRECTIONS[index]
