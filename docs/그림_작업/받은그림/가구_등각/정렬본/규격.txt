@@ -13,3 +13,6 @@
 
 - wood_register 는 크기가 기존 계산대보다 커서(폭 99px) 소형판(wood_register_소형, 기존 계산대를 스타일 참조로 다시 생성)으로 대신한다. 회전_대응.csv 는 소형판을 가리킨다. 큰 판은 비교용으로 남김.
 - 알려진 문제: 폭 96px 를 넘는 2x1 후보(wood_register 큰 판, shelf_2x1 rot1·rot2, magic_oven_ref)는 128x128 캔버스 아래쪽이 1~4px 잘렸을 수 있다. dough_table(폭 71px)은 64px 캔버스에 잘려 있으므로 합성에는 후보8방향 원본을 쓴다.
+
+- 창고 선반은 게임이 저장 물품(층마다 최대 6개, 최대 3종)을 모델 위에 따로 올려 놓으므로(furniture_assets.gd _rack) 그림은 빈 틀을 쓴다. 회전_대응.csv 의 warehouse_rack, steel_warehouse_rack 은 *_empty 를 가리킨다. 물품이 그려진 기존 그림과 wood_warehouse_rack(물품 조금 있음)은 비교용으로 남김.
+- 빈 틀 그림은 선반 판이 2단(맨 위 판 + 아래 판 1장)이다. 코드의 모델은 판 3장 + 맨 위 판이다.

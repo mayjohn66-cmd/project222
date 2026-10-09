@@ -19,10 +19,10 @@ plant_small,floor,0,SW,정렬본/plant_small/rot0.png
 plant_small,floor,1,SE,정렬본/plant_small/rot3.png
 plant_small,floor,2,NE,정렬본/plant_small/rot2.png
 plant_small,floor,3,NW,정렬본/plant_small/rot1.png
-warehouse_rack,floor,0,SW,정렬본/warehouse_rack/rot0.png
-warehouse_rack,floor,1,SE,정렬본/warehouse_rack/rot3.png
-warehouse_rack,floor,2,NE,정렬본/warehouse_rack/rot2.png
-warehouse_rack,floor,3,NW,정렬본/warehouse_rack/rot1.png
+warehouse_rack,floor,0,SW,정렬본/warehouse_rack_empty/rot0.png
+warehouse_rack,floor,1,SE,정렬본/warehouse_rack_empty/rot3.png
+warehouse_rack,floor,2,NE,정렬본/warehouse_rack_empty/rot2.png
+warehouse_rack,floor,3,NW,정렬본/warehouse_rack_empty/rot1.png
 magic_oven,floor,0,SW,정렬본/magic_oven_합성/rot0.png
 magic_oven,floor,1,SE,정렬본/magic_oven_합성/rot3.png
 magic_oven,floor,2,NE,정렬본/magic_oven_합성/rot2.png
@@ -79,7 +79,7 @@ wood_warehouse_rack,floor,0,SW,정렬본/wood_warehouse_rack/rot0.png
 wood_warehouse_rack,floor,1,SE,정렬본/wood_warehouse_rack/rot3.png
 wood_warehouse_rack,floor,2,NE,정렬본/wood_warehouse_rack/rot2.png
 wood_warehouse_rack,floor,3,NW,정렬본/wood_warehouse_rack/rot1.png
-steel_warehouse_rack,floor,0,SW,정렬본/steel_warehouse_rack/rot0.png
-steel_warehouse_rack,floor,1,SE,정렬본/steel_warehouse_rack/rot3.png
-steel_warehouse_rack,floor,2,NE,정렬본/steel_warehouse_rack/rot2.png
-steel_warehouse_rack,floor,3,NW,정렬본/steel_warehouse_rack/rot1.png
+steel_warehouse_rack,floor,0,SW,정렬본/steel_warehouse_rack_empty/rot0.png
+steel_warehouse_rack,floor,1,SE,정렬본/steel_warehouse_rack_empty/rot3.png
+steel_warehouse_rack,floor,2,NE,정렬본/steel_warehouse_rack_empty/rot2.png
+steel_warehouse_rack,floor,3,NW,정렬본/steel_warehouse_rack_empty/rot1.png
