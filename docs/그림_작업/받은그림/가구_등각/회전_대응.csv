@@ -67,10 +67,10 @@ adventurer_banner,wall,0,SW,정렬본/adventurer_banner/rot0.png
 adventurer_banner,wall,1,NW,정렬본/adventurer_banner/rot1.png
 adventurer_banner,wall,2,NE,정렬본/adventurer_banner/rot2.png
 adventurer_banner,wall,3,SE,정렬본/adventurer_banner/rot3.png
-wood_register,floor,0,SW,정렬본/wood_register/rot0.png
-wood_register,floor,1,SE,정렬본/wood_register/rot3.png
-wood_register,floor,2,NE,정렬본/wood_register/rot2.png
-wood_register,floor,3,NW,정렬본/wood_register/rot1.png
+wood_register,floor,0,SW,정렬본/wood_register_소형/rot0.png
+wood_register,floor,1,SE,정렬본/wood_register_소형/rot3.png
+wood_register,floor,2,NE,정렬본/wood_register_소형/rot2.png
+wood_register,floor,3,NW,정렬본/wood_register_소형/rot1.png
 modern_register,floor,0,SW,정렬본/modern_register/rot0.png
 modern_register,floor,1,SE,정렬본/modern_register/rot3.png
 modern_register,floor,2,NE,정렬본/modern_register/rot2.png

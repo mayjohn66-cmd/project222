@@ -10,3 +10,6 @@
   · 바닥 가구(furniture_footprint.gd, furniture_assets.gd 의 앞 방향 0=+z,1=+x,2=-z,3=-x): 게임 회전 0,1,2,3 -> SW, SE, NE, NW  (파일 rot0, rot3, rot2, rot1)
   · 벽 부착물(문 3종, 포스터·지도·깃발; store_view_3d.gd 의 wall_front_rot [0,3,2,1]): 게임 회전 0,1,2,3 -> SW, NW, NE, SE  (파일 rot0, rot1, rot2, rot3)
   · 2x1 가구는 게임 회전 1, 3 에서 1x2 로 바뀐다. SE/NW 그림은 긴 변이 "/" 방향이라 맞는다.
+
+- wood_register 는 크기가 기존 계산대보다 커서(폭 99px) 소형판(wood_register_소형, 기존 계산대를 스타일 참조로 다시 생성)으로 대신한다. 회전_대응.csv 는 소형판을 가리킨다. 큰 판은 비교용으로 남김.
+- 알려진 문제: 폭 96px 를 넘는 2x1 후보(wood_register 큰 판, shelf_2x1 rot1·rot2, magic_oven_ref)는 128x128 캔버스 아래쪽이 1~4px 잘렸을 수 있다. dough_table(폭 71px)은 64px 캔버스에 잘려 있으므로 합성에는 후보8방향 원본을 쓴다.
