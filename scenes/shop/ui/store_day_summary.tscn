@@ -1,4 +1,6 @@
-[gd_scene format=3 uid="uid://dxpg68bbh3ivk"]
+[gd_scene load_steps=2 format=3 uid="uid://dxpg68bbh3ivk"]
+
+[ext_resource type="Script" path="res://script/ui/shop/day_summary_preparation.gd" id="1"]
 
 [node name="DaySummaryCenter" type="CenterContainer" unique_id=1990696905]
 anchors_preset = 15
@@ -6,6 +8,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+script = ExtResource("1")
 
 [node name="DaySummaryPanel" type="PanelContainer" parent="." unique_id=594396325]
 custom_minimum_size = Vector2(360, 250)

@@ -857,7 +857,7 @@ func save_preparation_checkpoint(
 		or summary_open
 		or closing_shop
 	):
-		save_failure_reason = "오전 9시 오픈 준비 중에 저장할 수 있습니다."
+		save_failure_reason = UiText.f("day.preparation.save_time", ["%02d:00" % GameConfig.DAY_START_HOUR])
 		return false
 
 	if not is_instance_valid(build_manager):
