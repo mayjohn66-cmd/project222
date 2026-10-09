@@ -6,21 +6,21 @@ static func install(menu: Control) -> void:
 	button.name = "MilestonesButton"
 	button.text = "이정표"
 	button.visible = ActFourFlow.started()
-	button.pressed.connect(menu.select_info_tab.bind(ManagementMenu.InfoTab.MILESTONES))
+	button.pressed.connect(menu.select_info_tab.bind(ManagementTabs.InfoTab.MILESTONES))
 	menu.info_tab_bar.add_child(button)
 	menu.set_meta("act4_button",button)
 static func refresh_button(menu: Control) -> void:
 	var button: Button = menu.get_meta("act4_button",null)
 	if button == null: return
 	button.visible = ActFourFlow.started()
-	button.disabled = menu.current_info_tab == ManagementMenu.InfoTab.MILESTONES
+	button.disabled = menu.current_info_tab == ManagementTabs.InfoTab.MILESTONES
 	# 소탭 다섯 개가 왼쪽 쪽에 모두 읽히도록 완전한 짧은 이름을 쓴다.
 	menu.basic_info_button.text = "기본" if button.visible else "기본 정보"
 	menu.detail_info_button.text = "상세" if button.visible else "상세 정보"
 	menu.sales_trend_button.text = "매출" if button.visible else "매출 추이"
 	menu.extra_record_button.text = "기록" if button.visible else "추가 기록"
-	if not button.visible and menu.current_info_tab == ManagementMenu.InfoTab.MILESTONES:
-		menu.current_info_tab = ManagementMenu.InfoTab.BASIC
+	if not button.visible and menu.current_info_tab == ManagementTabs.InfoTab.MILESTONES:
+		menu.current_info_tab = ManagementTabs.InfoTab.BASIC
 static func render(menu: Control) -> void:
 	# 두 자식은 BookFlowVBox가 각각 왼쪽·오른쪽 쪽에 배치한다.
 	var left := _page(menu.history_list,"MilestonePage")

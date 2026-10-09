@@ -13,7 +13,7 @@ var unit_filter: String = ""  # 비어 있지 않으면 이 설비 하나만 보
 static func install(view: Control) -> void:
 	# The compact shelf/warehouse transfer view keeps its existing controls.
 	var ancestor: Node = view.get_parent()
-	while ancestor != null and not ancestor is ManagementMenu: ancestor = ancestor.get_parent()
+	while ancestor != null and not ancestor.has_method("refresh_common_info"): ancestor = ancestor.get_parent()
 	if ancestor == null: return
 	var world: Node = ancestor.get_parent()
 	while world != null:
@@ -192,5 +192,5 @@ func _refresh_inventory() -> void:
 	if inventory_view == null or not is_instance_valid(inventory_view): return
 	inventory_view.refresh_inventory()
 	var ancestor: Node = inventory_view.get_parent()
-	while ancestor != null and not ancestor is ManagementMenu: ancestor = ancestor.get_parent()
-	if ancestor is ManagementMenu: ancestor.refresh_common_info()
+	while ancestor != null and not ancestor.has_method("refresh_common_info"): ancestor = ancestor.get_parent()
+	if ancestor != null: ancestor.refresh_common_info()

@@ -7,7 +7,7 @@ extends RefCounted
 const INTRO := "이웃과 함께한 날을 확인하세요. 목적지를 표시한 뒤 책을 닫고 직접 걸어가세요."
 
 
-static func add_schedule(menu: ManagementMenu) -> void:
+static func add_schedule(menu: Control) -> void:
 	if not VillageJournalFlow.available():
 		return
 

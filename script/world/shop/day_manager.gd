@@ -996,7 +996,7 @@ func _on_info_button_pressed() -> void:
 
 	management_menu.call(
 		"open_menu",
-		ManagementMenu.MenuTab.HISTORY
+		ManagementTabs.MenuTab.HISTORY
 	)
 
 # =========================

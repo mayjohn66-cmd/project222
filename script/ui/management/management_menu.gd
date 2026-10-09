@@ -6,25 +6,10 @@ const PRESENTATION = preload("res://script/ui/management/management_presentation
 # 인벤토리·생산·직원·설계도 화면의 세부 동작은 각 하위 씬에 위임한다.
 
 
-enum MenuTab {
-	INVENTORY,
-	PRODUCTION,
-	EMPLOYEE,
-	BLUEPRINT,
-	CONSTRUCTION,
-	SCHEDULE,
-	HISTORY
-}
+const MenuTab = ManagementTabs.MenuTab
+const InfoTab = ManagementTabs.InfoTab
 
-enum InfoTab {
-	BASIC,
-	DETAIL,
-	TREND,
-	RECORD,
-	MILESTONES
-}
-
-var current_info_tab: InfoTab = InfoTab.BASIC
+var current_info_tab: ManagementTabs.InfoTab = ManagementTabs.InfoTab.BASIC
 
 @onready var info_tab_bar: HBoxContainer = (
 	$DimBackground/CenterContainer/MainPanel/MainVBox/Body/ContentArea/HistoryContent/MarginContainer/HistoryVBox/InfoTabBar

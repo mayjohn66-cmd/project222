@@ -47,11 +47,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
 		var menu := get_parent().get_node_or_null("UI/ManagementMenu") as ManagementMenu
 		if menu == null: return
 		if menu.visible:
-			if menu.current_tab == ManagementMenu.MenuTab.SCHEDULE: menu.close_menu()
-			else: menu.select_tab(ManagementMenu.MenuTab.SCHEDULE)
+			if menu.current_tab == ManagementTabs.MenuTab.SCHEDULE: menu.close_menu()
+			else: menu.select_tab(ManagementTabs.MenuTab.SCHEDULE)
 			get_viewport().set_input_as_handled()
 		elif near_board():
-			menu.open_menu(ManagementMenu.MenuTab.SCHEDULE)
+			menu.open_menu(ManagementTabs.MenuTab.SCHEDULE)
 			get_viewport().set_input_as_handled()
 
 # 책의 일정 탭에서 "목적지 표시"를 눌렀을 때. 같은 곳을 다시 누르면 해제한다. 표시했으면 true.

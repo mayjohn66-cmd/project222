@@ -105,13 +105,13 @@ static func open_action(host: Node) -> bool:
 	match action:
 		"blueprint":
 			var id := str(data["id"])
-			menu.select_tab(ManagementMenu.MenuTab.BLUEPRINT)
+			menu.select_tab(ManagementTabs.MenuTab.BLUEPRINT)
 			menu.blueprint_content._on_category_pressed(str(FurnitureData.get_furniture(id)["craft_category"]))
 			menu.blueprint_content._select_furniture(id)
 		"inventory":
-			menu.select_tab(ManagementMenu.MenuTab.INVENTORY)
+			menu.select_tab(ManagementTabs.MenuTab.INVENTORY)
 			menu.management_inventory.select_inventory_group(ItemData.INVENTORY_GROUP_FURNITURE)
 		"today","learned","facilities":
-			menu.select_tab(ManagementMenu.MenuTab.PRODUCTION)
+			menu.select_tab(ManagementTabs.MenuTab.PRODUCTION)
 			if is_instance_valid(menu.management_production.preparation_book): menu.management_production.preparation_book.select_tab(action)
 	return true

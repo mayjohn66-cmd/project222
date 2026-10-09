@@ -1,6 +1,6 @@
 class_name StoreEventPreparationView
 extends Node
-var host: ManagementMenu
+var host: Control
 var world: Node
 var event: Dictionary
 var card: PanelContainer
@@ -10,7 +10,7 @@ var actions: VBoxContainer
 var signature := ""
 var elapsed := 0.0
 
-static func attach(menu: ManagementMenu, data: Dictionary) -> void:
+static func attach(menu: Control, data: Dictionary) -> void:
 	if not StoreEventPreparation.ENABLED or StoreEventPreparation.items(data).is_empty(): return
 	var view := StoreEventPreparationView.new()
 	view.host = menu
@@ -51,7 +51,7 @@ func refresh() -> void:
 	var text := StoreEventPreparation.summary(world,event)
 	card.visible = not text.is_empty()
 	var available := []
-	if host.space_menu.tab_available(ManagementMenu.MenuTab.PRODUCTION) and is_instance_valid(host.management_production.preparation_book):
+	if host.space_menu.tab_available(ManagementTabs.MenuTab.PRODUCTION) and is_instance_valid(host.management_production.preparation_book):
 		for item in StoreEventPreparation.items(event):
 			for recipe in StoreEventPreparation.recipes(item):
 				available.append({"item":item,"recipe":str(recipe["recipe_id"])})
@@ -73,10 +73,10 @@ func refresh() -> void:
 
 func open_recipe(item: String, id: String) -> void:
 	if item not in StoreEventPreparation.items(event) or not StoreEventPreparation.recipes(item).any(func(recipe): return recipe["recipe_id"] == id): return
-	if not host.space_menu.tab_available(ManagementMenu.MenuTab.PRODUCTION): return
+	if not host.space_menu.tab_available(ManagementTabs.MenuTab.PRODUCTION): return
 	var book: ProductPreparationBook = host.management_production.preparation_book
 	if not is_instance_valid(book): return
-	host.select_tab(ManagementMenu.MenuTab.PRODUCTION)
+	host.select_tab(ManagementTabs.MenuTab.PRODUCTION)
 	book.only_ready.set_pressed_no_signal(false)
 	book.refresh()
 	book.select_tab("learned")

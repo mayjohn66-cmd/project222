@@ -598,7 +598,7 @@ func _on_info_requested() -> void:
 
 	management_menu.call(
 		"open_menu",
-		ManagementMenu.MenuTab.HISTORY
+		ManagementTabs.MenuTab.HISTORY
 	)
 
 
