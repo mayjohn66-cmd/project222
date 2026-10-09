@@ -1,0 +1,280 @@
+{
+  "design_id": "blacksmith_equipment_progression",
+  "date": "2026-10-09",
+  "baseline_commit": "dd93be0",
+  "status": "사용자 승인 방향의 구체 설계",
+  "runtime_implemented": false,
+  "condition_language": "설계용 조건. 이 JSON을 읽는 런타임 파서는 아직 없다. StoryConditions 문자열로 복사하지 않는다.",
+  "source_files": [
+    "scenes/shop/requests/default_community_requests.tres",
+    "scenes/shop/requests/default_village_life.tres",
+    "script/world/shop/requests/community_request_flow.gd",
+    "script/world/shop/requests/village_smithy_flow.gd",
+    "script/world/shop/requests/village_smithy_director.gd",
+    "script/ui/shop/village_smithy_panel.gd",
+    "script/expedition/services/equipment_enhancement_service.gd",
+    "script/expedition/services/expedition_result_service.gd",
+    "script/ui/expedition/prep/prep_maintenance.gd",
+    "script/ui/management/village_journal_book_view.gd",
+    "data/expedition/equipment_enhancement_costs.csv",
+    "data/expedition/expedition_equipment.csv",
+    "docs/drafts/story/character_names.md",
+    "docs/drafts/story/character_profiles.md"
+  ],
+  "roles": [
+    {
+      "id": "naru",
+      "name": "타블렌",
+      "duty": "기존 도구 판매와 대장장이 소개"
+    },
+    {
+      "id": "doyun",
+      "name": "코르빈",
+      "duty": "광석 교류와 기존 open_smithy 부탁의 제안자"
+    },
+    {
+      "id": "village_blacksmith",
+      "id_status": "신규 설계 ID, 미등록",
+      "display_role": "대장장이",
+      "proper_name": null,
+      "duty": "장비 제작·강화 서비스의 담당 NPC"
+    },
+    {
+      "id": null,
+      "display_role": "순회 기술자",
+      "duty": "기존 마석 발전기·계산대 개조와 룬석 이야기"
+    }
+  ],
+  "npc_profile_proposal": {
+    "appearance": "성인 장인의 단단한 체형, 걷어 올린 소매, 갈색 가죽 앞치마, 벽돌색 두건, 손때 묻은 망치",
+    "personality": "작은 수선을 소중히 여기고 먼저 쓸 수 있는 부분을 살피는 차분한 이웃",
+    "speech": "친근하고 짧은 반말 제안. 기존 이름 있는 인물 말투 규칙에 맞춰 Gemini 검토",
+    "relationship": "타블렌은 거래를 통해 알던 사이, 코르빈과는 광석·작업장을 함께 준비하는 관계 제안",
+    "character_details_status": "외형·관계·말투는 제작 참고 제안. 고유 이름과 정식 그림은 후속 확정"
+  },
+  "existing_workshop": {
+    "source": "scenes/shop/requests/default_community_requests.tres",
+    "snapshot": {
+      "id": "open_smithy",
+      "resident": "doyun",
+      "friendship": 7,
+      "after": "flower_corner",
+      "requirements": [
+        {
+          "item": "iron_ore",
+          "amount": 5
+        },
+        {
+          "item": "stone_shard",
+          "amount": 4
+        }
+      ],
+      "reputation": 1,
+      "money": 60,
+      "landmark": "VillageBlacksmith/Smithy",
+      "landmark_name": "대장간 장비 제작"
+    },
+    "reuse_policy": "open_smithy를 작업장 마련 부탁으로 재사용. 제안자는 doyun 유지, 새 대장장이가 실제 서비스 담당. 새 건물·건축 부탁·이중 재료 차감 없음."
+  },
+  "existing_enhancement": {
+    "service": "EquipmentEnhancementService",
+    "valid_result": "조건 충족 시 확정 성공",
+    "gold_fee": 0,
+    "material_costs_source": "data/expedition/equipment_enhancement_costs.csv",
+    "first_level_snapshot": {
+      "basic_weapon": {
+        "iron_ore": 2
+      },
+      "basic_armor": {
+        "forest_herb": 2
+      },
+      "basic_gathering_tool": {
+        "iron_ore": 2
+      },
+      "rune_weapon": {
+        "ancient_fragment": 3
+      },
+      "rune_armor": {
+        "ancient_fragment": 3
+      },
+      "night_weapon": {
+        "mine_crystal": 3,
+        "silver_ore": 2
+      },
+      "night_armor": {
+        "mine_crystal": 3,
+        "silver_ore": 2
+      }
+    },
+    "caps_source": "data/expedition/expedition_equipment.csv",
+    "preserve": "재료·강화 상한·실제 효과·무작위 실패 없음·개별 instance_id를 유지한다.",
+    "ui_policy": "강화 단계와 다음 단계, 필요한 재료/보유량, 기존 공격 방식·도구 용도를 표시. 공격력·방어력 절대 수치는 표시하지 않는다."
+  },
+  "stages": [
+    {
+      "id": "smith_heard_naru",
+      "actor": "naru",
+      "title": "광석을 다루는 사람의 소식",
+      "entry_all": [
+        "핵심 튜토리얼 완료",
+        "settle_naru 완료",
+        "traveler_water 완료",
+        "실제 원정 정산에서 iron_ore 확보 기록"
+      ],
+      "action": "타블렌에게 대장장이의 소식을 듣고 장면을 완독",
+      "commit": "blacksmith_progress:heard",
+      "next": "smith_first_meeting",
+      "consume_items": false,
+      "economic_reward": false,
+      "story_brief": "원정에서 돌아온 플레이어의 도구를 보고 아직 다듬어 쓸 수 있다고 알려 준다. 시스템 날짜·가격·단계 설명은 UI에 맡긴다."
+    },
+    {
+      "id": "smith_first_meeting",
+      "actor": "village_blacksmith",
+      "title": "오래 쓸 도구를 살피는 손",
+      "entry_all": [
+        "blacksmith_progress:heard 기록"
+      ],
+      "action": "외부의 접근 가능한 자리에서 NPC와 인사하고 장비를 보여준다",
+      "commit": "blacksmith_progress:met",
+      "next": "smith_workshop_wait",
+      "consume_items": false,
+      "economic_reward": false,
+      "story_brief": "현지 장인이 장비를 살펴보는 첫 만남. 장비를 가져가거나 강화하지 않는다. 작업할 자리가 필요하다는 뜻을 전달한다."
+    },
+    {
+      "id": "smith_workshop_wait",
+      "actor": "doyun",
+      "title": "이웃의 작업장 준비",
+      "entry_all": [
+        "blacksmith_progress:met 기록"
+      ],
+      "action": "기존 open_smithy가 열리면 맡고 지정 재료를 전달한다",
+      "completion_reference": "CommunityRequestFlow.done(open_smithy)",
+      "next": "smith_workshop_ready",
+      "requirements_source": "existing_workshop.snapshot",
+      "consume_items": "기존 전달 처리만 차감",
+      "economic_reward": "기존 답례만 지급",
+      "story_brief": "코르빈은 광석과 자리를 준비하고 대장장이는 실제 작업을 맡는다. 기존 path_light→flower_corner→open_smithy 진행을 유지하며 기다리는 동안 다른 생활 콘텐츠를 계속할 수 있다."
+    },
+    {
+      "id": "smith_workshop_ready",
+      "actor": "village_blacksmith",
+      "title": "가게 곁에 생긴 대장간",
+      "entry_all": [
+        "open_smithy 완료"
+      ],
+      "action": "기존 VillageBlacksmith/Smithy에 담당 NPC 배치, 첫 서비스 설명 완독",
+      "commit": "blacksmith_progress:service_intro",
+      "next": "smith_first_enhancement",
+      "consume_items": false,
+      "economic_reward": false,
+      "story_brief": "이웃이 모은 작업장이 마련되었다. 제작은 배운 제조법, 강화는 지금 소지한 장비를 다듬는 일로 소개한다."
+    },
+    {
+      "id": "smith_first_enhancement",
+      "actor": "village_blacksmith",
+      "title": "첫 장비 손질",
+      "entry_all": [
+        "대장간 서비스 이용 가능"
+      ],
+      "action": "실제 소유 장비 하나 선택→재료 확인→확정→기존 강화 서비스 성공",
+      "commit": "blacksmith_progress:first_enhanced",
+      "next": "smith_after_first_return",
+      "optional": true,
+      "required_for_other_content": false,
+      "consume_items": "선택 장비의 다음 단계 기존 비용만",
+      "economic_reward": false,
+      "story_brief": "손에 익은 장비를 더 오래 쓰게 다듬는다. 부족한 재료를 자동 지급하거나 무료 강화로 장면을 끝내지 않는다. 창만 닫으면 미완료로 남는다."
+    },
+    {
+      "id": "smith_after_first_return",
+      "actor": "village_blacksmith",
+      "title": "함께 손질한 장비의 이야기",
+      "entry_all": [
+        "실제 첫 강화 성공 또는 기존 강화 저장 호환",
+        "그 이후 실제 원정 복귀 기록"
+      ],
+      "action": "NPC에게 원정 이후의 짧은 안부를 듣고 완독",
+      "commit": "blacksmith_progress:afterglow",
+      "next": "smith_return_greeting",
+      "consume_items": false,
+      "economic_reward": false,
+      "story_brief": "어떤 장비를 썼는지 확인된 경우에만 그 장비를 언급한다. 사용 증거가 없으면 강화 장비로 전투했다고 단정하지 않고 돌아온 사람의 안부를 묻는다."
+    },
+    {
+      "id": "smith_return_greeting",
+      "actor": "village_blacksmith",
+      "title": "머무는 장인",
+      "entry_all": [
+        "NPC와 작업장 도입 완료"
+      ],
+      "action": "안부·장비 제작·강화를 선택해서 이용",
+      "repeatable": true,
+      "economic_reward": false,
+      "story_brief": "서비스와 안부를 함께 제공하되 반복 인사만으로 추가 물품·평판·할인을 주지 않는다."
+    }
+  ],
+  "service_access": {
+    "new_game": "작업장 마련과 NPC 첫 서비스 설명 뒤 대장간에서 E로 이용. 첫 강화 체험 완료는 이용 선행 조건이 아니다.",
+    "pre_intro": "원정 준비 강화 탭과 실행 동작 모두 잠근다. 강화 경로를 모를 때 미래 가격·설명을 나열하지 않는다.",
+    "after_intro": "원정 준비에서는 장비 정리·현재 강화 단계 조회와 마을 대장간 위치 안내. 강화 실행은 NPC 서비스 창에서 한다.",
+    "dialogue_priority": "기존 주민 부탁·정착·계산대 수리 대화를 덮어쓰지 않는다. NPC 상호작용은 안부/제작/강화의 명시적 선택을 제공한다.",
+    "guidance": "관리 책 일정 탭의 마을 수첩·물품 준비·목적지 표시. 폐기된 왼쪽 상시 안내 패널을 다시 켜지 않는다.",
+    "transaction": "재료와 개별 장비를 확정 직전 재검사. 보유 장비/저장 가방 원본에 같은 instance_id 강화 단계를 저장. 가방 배치/연결 장비 참조는 유지. 실패 시 재료·단계 모두 복구.",
+    "modal": "현재 게임과 동일하게 대화/서비스 동안 시간·플레이어 이동 잠금, 닫기·Esc·장면 이탈에서 기존 상태 복원. 서비스를 이용할 때마다 안부 장면을 강제하지 않는다."
+  },
+  "migration": {
+    "keys_storage": "기존 PlayerProgress.story_beat_days 안의 선택형 blacksmith_progress: 접두 키를 계획. SAVE_VERSION과 별도 강제 필드는 변경하지 않는다.",
+    "ore_record": "새 플레이는 정상 복귀 정산에서 실제 신규 iron_ore가 반입된 경우 기록. 출발 전 적재물·선물·보유 수량을 새 원정 채집이라고 기록하지 않는다.",
+    "record_hook_proposal": "획득 이벤트와 실제 반입 정산에 최소 연결을 두고 신규 채집 증거를 보존한다. 정산 목록 전체를 신규 채집으로 보지 않는다. 실제 지급 성공분만 기록한다.",
+    "old_open_smithy": "open_smithy 완료 저장은 시설과 서비스 권한 유지, 재료 재지급/재차감/반복 건축 없음. NPC 안부 도입은 이후 선택형으로 제공.",
+    "old_enhanced": "이미 강화한 개별 장비가 있으면 강화 권한 유지, 새 재료 소모 시범 강제 없음. 작업장이 없던 저장은 임시 작업 NPC가 기존 강화 창으로 받는 호환 경로를 제공하고 영구 대장간은 기존 부탁으로 마련.",
+    "legacy_source_missing": "과거 채집 출처를 추측해서 기록하지 않는다. 기존 강화/시설 권한이 없는 저장은 현재 철광석을 NPC에게 보여 주는 비소비 호환 행동으로 광석 경험을 인정해 소개를 재개.",
+    "stale_selection": "이미 다른 방식으로 강화/이동한 장비 또는 중복 버튼은 확정 직전 거부·다시 선택. 같은 단계 비용의 중복 소비 없음"
+  },
+  "planned_modules": [
+    "BlacksmithProgressionSettings",
+    "BlacksmithProgressionFlow",
+    "BlacksmithProgressionRecords",
+    "BlacksmithDirector",
+    "BlacksmithServicePanel",
+    "BlacksmithEquipmentAdapter"
+  ],
+  "implementation_order": [
+    "진행 조건·기존 기록 호환",
+    "NPC 실제 등장·소개·기존 작업장 연계",
+    "개별 장비 어댑터와 기존 강화 호출",
+    "NPC 서비스 UI·원정 화면 공개 조건",
+    "관리 책 일정·부탁 준비 안내",
+    "첫 강화 뒤 선택형 안부",
+    "검증·글 등록·제공 그림 연결"
+  ],
+  "acceptance_checks": [
+    "튜토리얼에서 NPC·강화 UI와 강화 실행 모두 열리지 않는다.",
+    "엘미→타블렌 판매→라슈 물 부탁을 선행하고 소개가 기존 부탁을 숨기지 않는다.",
+    "출발 전 담은 광석/선물은 새 원정 획득으로 기록되지 않고 실제 반입 정산은 기록된다.",
+    "광석을 먼저 얻었거나 모두 판매한 뒤에도 획득 기록으로 소개를 받을 수 있다.",
+    "철광석만 들고 왔다고 기존 open_smithy의 안부7일/꽃자리 선행 조건을 건너뛰지 않는다.",
+    "open_smithy 재료·평판·돈을 기존 경로로 정확히 한 번만 처리한다.",
+    "장비 보여주기/안부/창 열기/취소는 재료 차감·강화·보상을 발생시키지 않는다.",
+    "보유 장비/저장 가방의 같은 종류 여러 장비 중 선택 instance_id만 +1 된다.",
+    "강화 재료 부족/최대 단계/없는 장비/빠른 중복 클릭을 처리하고 재료·강화 단계가 보존된다.",
+    "기존 골드 비용 없음·확정 성공·단계별 재료·강화 상한·공격 방식이 유지된다.",
+    "첫 강화 체험을 미뤄도 원정·판매·NPC 서비스·다른 부탁을 진행할 수 있다.",
+    "같은 단계 중간 저장/복원과 이미 열린 대장간·이미 강화한 장비의 이전 저장을 유지한다.",
+    "소개 뒤 재접속·부탁 완료 뒤 재접속·강화 확정 뒤 재접속에서 대화/비용을 반복하지 않는다.",
+    "NPC 거래/부탁/계산대/관리 책/건설 등 중첩을 막고 Esc와 장면 이탈에서 시간·이동을 복원한다.",
+    "강화 창에는 실제 보유·배운 제조법만 표시하고 작은 화면에서 확인·닫기를 누를 수 있다.",
+    "기존 주민/대장간/튜토리얼/main 검사, import 2회·전체 로드·원정 완주와 실제 화면 확인을 수행한다."
+  ],
+  "story_delivery": {
+    "status": "새 설계 ID 미등록. 현 Gemini export/webprompt가 아직 이 ID들을 알지 못한다.",
+    "handoff": "Gemini에는 이 JSON의 stage.story_brief와 NPC 참고를 설계 자료로 전달. 구현 때 service_text 컨텍스트 등록 후 기존 글 도구로 작성한다.",
+    "existing_text_ids_to_review": [
+      "open_smithy",
+      "smithy_panel"
+    ],
+    "content_rules": "재료 수량·강화 숫자·골드·확률은 대사에 쓰지 않는다. 기술자의 계산대 지식·전이 원인·새 고유 지명을 대장장이에게 붙이지 않는다."
+  }
+}
