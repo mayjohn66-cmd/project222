@@ -4,7 +4,11 @@ extends BlockyFigure
 
 const SPRITE_SHADER := preload("res://script/world/view3d/shader/actor_sprite.gdshader")
 const SPRITE_ID_SHADER := preload("res://script/world/view3d/shader/actor_sprite_id.gdshader")
-const STEP_LENGTH := 0.8 # 8프레임 한 주기의 이동 거리(칸)
+# 걷기 그림 8프레임이 바뀌는 속도. 이동 속도에 비례하되 눈에 읽히는 범위(초당 MIN~MAX 프레임)로 묶는다.
+# 예전에는 한 주기 0.8칸이라 주인공(초당 약 4칸)이 초당 40프레임으로 걸어 발이 안 보이고 떨려 보였다(2026-10-09 확인).
+const STEP_LENGTH := 2.4 # 8프레임 한 주기의 이동 거리(칸). 느리게 걸을 때 발이 땅과 어긋나 보이지 않게 맞춘 값
+const MIN_FPS := 6.0 # 아무리 느려도 이보다 느리게 바뀌지 않는다
+const MAX_FPS := 12.0 # 아무리 빨라도 이보다 빠르게 바뀌지 않는다(발이 보이는 한계)
 const PROJECTION_HEIGHT := 0.8660254 # 기존 30도 카메라의 인물 높이와 맞춤
 var sprite_key := ""
 var frame_set: Dictionary = {}
@@ -46,7 +50,8 @@ func _make_mesh(shader: Shader, layer: int) -> MeshInstance3D:
 
 func animate(delta: float) -> void:
 	if walking and delta > 0.0:
-		phase = fposmod(phase + maxf(move_speed, 0.0) * delta / STEP_LENGTH, 1.0)
+		var frames_per_second := clampf(maxf(move_speed, 0.0) / STEP_LENGTH * float(ActorSpriteFrames.FRAME_COUNT), MIN_FPS, MAX_FPS)
+		phase = fposmod(phase + frames_per_second / float(ActorSpriteFrames.FRAME_COUNT) * delta, 1.0)
 		frame_index = int(floor(phase * ActorSpriteFrames.FRAME_COUNT))
 	else:
 		phase = 0.0

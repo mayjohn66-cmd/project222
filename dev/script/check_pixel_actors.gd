@@ -115,6 +115,23 @@ func run() -> void:
 			check(figure._material.get_shader_parameter("frame_offset") == figure._id_material.get_shader_parameter("frame_offset"), "color/mask anchor agree")
 			check(is_equal_approx(figure.display_height, original_height), "no direction/frame resize")
 	check(seen.size() == 8, "all directions seen in real store")
+	# 걷기 그림이 바뀌는 속도: 빨리 걸어도 초당 MAX_FPS 를 넘지 않고, 느려도 MIN_FPS 아래로 내려가지 않는다
+	for speed in [0.4, 1.0, 2.0, 4.0]:
+		figure.walking = true
+		figure.move_speed = speed
+		figure.phase = 0.0
+		figure.frame_index = -1
+		var changes := 0
+		var last := -2
+		for i in range(60):
+			figure.animate(1.0 / 60.0)
+			if figure.frame_index != last:
+				changes += 1
+				last = figure.frame_index
+		check(changes <= int(PixelActorFigure.MAX_FPS) + 2, "walk frame rate capped at speed %.1f (changes/s=%d)" % [speed, changes])
+		check(changes >= int(PixelActorFigure.MIN_FPS) - 1, "walk frame rate not frozen at speed %.1f (changes/s=%d)" % [speed, changes])
+	figure.walking = false
+	figure.animate(0.016)
 	actor.visible = false
 	view._sync_actors(0.016)
 	check(not figure.visible and not figure._id_root.visible, "hidden actor also hides mask")
