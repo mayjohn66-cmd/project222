@@ -98,6 +98,8 @@ func open_menu() -> void:
 	_lock(true)
 	panel.clear(str(FishingData.entry(location)["name"]))
 	panel.text("물가에 잠깐 앉아 볼까요? 낚는 동안에도 가게의 시간과 직원의 근무는 이어집니다.")
+	var guide := FishingPreparationGuide.next_step(world, _environment())
+	if not guide.is_empty(): panel.text(guide)
 	panel.button("물가 살펴보기", observe)
 	panel.button("낚싯대 드리우기 [E로 건지기]", cast, not FishingService.has_rod() or not FishingRecords.done("fishing_rod"))
 	if FishingRecords.accepted("fishing_rod") and not FishingRecords.has("tool:fishing_rod_wood"):
@@ -181,6 +183,7 @@ func _open_entry() -> void:
 		_lock(true)
 		panel.clear("타블렌과 낚싯대 엮기")
 		panel.text("나뭇가지를 손질하고 줄을 엮습니다. 준비한 재료만 사용합니다.")
+		if FishingPreparationGuide.ENABLED: panel.text(FishingPreparationGuide.materials(world, id, _environment()))
 		panel.button("준비한 재료로 엮기", func():
 			if FishingService.make_rod(id, hour(), weather()):
 				panel.text(ItemData.get_item_name(id) + "를 받았습니다.")
@@ -211,12 +214,21 @@ func _delivery_panel() -> void:
 		if ingredient.has("group_id"):
 			var group := str(ingredient["group_id"])
 			panel.text("전달할 생선 선택 · %d개 (날짜가 오래된 묶음부터)" % int(ingredient["amount"]))
+			choices.erase(group)
+			var ids := FishingPreparationGuide.candidates(group)
+			if ids.is_empty():
+				panel.text(UiText.t("fishing.preparation.no_candidates"))
+				continue
 			var picker := OptionButton.new()
-			var ids: Array = FishingData.group(group)
+			picker.clip_text = true
+			picker.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 			for fish in ids: picker.add_item("%s · 보유 %d" % [ItemData.get_item_name(str(fish)),GameState.get_item_count(str(fish))])
-			choices[group] = str(ids[0])
+			var selected := FishingPreparationGuide.preferred(ids, int(ingredient["amount"])) if FishingPreparationGuide.ENABLED else 0
+			picker.select(selected)
+			choices[group] = ids[selected]
 			picker.item_selected.connect(func(index: int): choices[group] = str(ids[index]))
 			panel.body.add_child(picker)
+			if FishingPreparationGuide.ENABLED: panel.text(UiText.t("fishing.preparation.one_kind"))
 		else: panel.text("%s ×%d · 보유 %d" % [ItemData.get_item_name(str(ingredient["item_id"])),ingredient["amount"],GameState.get_item_count(str(ingredient["item_id"]))])
 	if pending_entry["kind"] == "requests":
 		panel.text("답례 %d G · 평판 %d · 처음 한 번" % [pending_entry["reward"]["money"],pending_entry["reward"]["reputation"]])
@@ -228,6 +240,8 @@ func _delivery_panel() -> void:
 		panel.button("함께할 이웃 부르기", _gather)
 		panel.button("모인 이웃과 이야기하기", func(): _finish(), not _meeting_ready())
 	else: panel.button("준비한 물품 전달 / 이야기 마치기", func(): _finish())
+func _environment() -> Dictionary:
+	return {"hour":hour(), "weather":weather(), "season":CalendarData.get_season_id(GameState.total_day)}
 func _gather() -> void:
 	close()
 	meeting.clear()
