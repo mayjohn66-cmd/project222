@@ -7,6 +7,7 @@ heading so the next agent (possibly a different model) picks up where you left
 off.
 
 ## Decisions
+- 2026-10-09 사용자: 등각 그림 기준 칸은 처음 정한 64x32 로 계속 간다(코드의 tile_width 96 은 맞추는 쪽). Claude 가 docs/AI_인수인계.md 45번으로 ChatGPT 에 넘김.
 
 ## Conventions
 - 2026-10-09 Claude: 등각 가구 그림 규칙 — 원본 픽셀 유지(리사이즈 금지), 투명 여백만 추가. 1x1=64x128, 2x1=128x128, 작은 장식=64x64. 기준점(칸 윗면 마름모 중심)=(가로 중앙, 아래에서 24px). 예외: magic_oven_합성은 128x192/(64,152). 규격은 docs/그림_작업/받은그림/가구_등각/정렬본/규격.txt.
