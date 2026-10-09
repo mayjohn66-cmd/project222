@@ -85,7 +85,7 @@ static func information(id: String) -> String:
 			var waiting := EarlyProgressionGuide.waiting_text()
 			return waiting if not waiting.is_empty() else "지금까지의 주민 부탁을 마쳤습니다. 이웃과 안부를 나누고 마을 게시판을 살펴보세요."
 		var status := "물품 전달 가능" if ResidentRequestFlow.can_deliver(request) else ("물품 준비 중" if ResidentRequestFlow.accepted(str(request["id"])) else "주민에게 부탁 듣기")
-		return "%s · %s\n%s %d/%d · 창고 기준" % [request["title"],status,ItemData.get_item_name(str(request["item"])),GameState.get_item_count(str(request["item"])),request["amount"]]
+		return "%s · %s\n%s %d/%d · 소지품 기준" % [request["title"],status,ItemData.get_item_name(str(request["item"])),GameState.get_item_count(str(request["item"])),request["amount"]]
 	if id.begins_with("resident:"):
 		var resident_id := id.trim_prefix("resident:")
 		var resident := VillageLifeFlow.resident(resident_id)

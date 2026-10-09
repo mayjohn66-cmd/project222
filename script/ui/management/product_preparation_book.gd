@@ -105,6 +105,11 @@ func refresh(force := true) -> void:
 	notes = ProductPreparationContext.notes()
 	var recipes := ProductPreparationData.entries(world,notes)
 	var machines := ProductPreparationData.facility_entries(world)
+	# Default drying recipes are usable later, but do not lead the first store lesson.
+	var first_steps := ProductNextStepGuidance.ENABLED and ProductNextStepGuidance.first_steps()
+	if first_steps:
+		recipes = []
+		machines = []
 	var state := str([GameState.inventory, GameState.preservation_state, PlayerProgress.learned_recipe_ids, PlayerProgress.story_beat_days, recipes, _machine_state(machines), ProductPreparationData.storage_state(world), mode, only_ready.button_pressed])
 	if not force and state == signature: return
 	signature = state
@@ -113,11 +118,12 @@ func refresh(force := true) -> void:
 	revision += 1
 	clear(list)
 	for key in tabs: tabs[key].disabled = key == mode
-	only_ready.visible = mode == "today"
+	only_ready.visible = mode == "today" and not first_steps
 	entries = machines if mode == "facilities" else recipes
 	if mode == "learned": entries.sort_custom(func(a,b): return a["title"] < b["title"])
 	if mode == "today" and only_ready.button_pressed: entries = entries.filter(func(entry): return entry["status"] == "지금 만들 수 있음")
 	summary.text = "설치한 설비와 배운 상품에 필요한 설비를 살펴봅니다." if mode == "facilities" else ("들은 소문과 맡은 부탁을 먼저 살펴봅니다." if mode == "today" else "배운 제조법의 재료와 출처를 확인합니다.")
+	if first_steps: summary.text = "첫 제작을 위한 준비"
 	if not entries.any(func(entry): return str(entry["id"]) == selected): selected = "" if entries.is_empty() else str(entries[0]["id"])
 	for entry in entries:
 		var button := Button.new()
@@ -131,7 +137,8 @@ func refresh(force := true) -> void:
 		button.pressed.connect(select_entry.bind(str(entry["id"])))
 		list.add_child(button)
 		if entry["id"] == selected: button.disabled = true
-	if entries.is_empty(): text(list,"조건에 맞는 상품이 없습니다. 필터를 바꾸거나 이웃과 제조법을 배워 보세요." if mode != "facilities" else "아직 필요한 설비가 없습니다. 먼저 배운 상품을 살펴보세요.")
+	if entries.is_empty():
+		text(list,("오른쪽에서 지금 할 일을 확인하세요." if first_steps else ProductNextStepGuidance.empty_message(mode,only_ready.button_pressed)) if ProductNextStepGuidance.ENABLED else ("조건에 맞는 상품이 없습니다. 필터를 바꾸거나 이웃과 제조법을 배워 보세요." if mode != "facilities" else "아직 필요한 설비가 없습니다. 먼저 배운 상품을 살펴보세요."))
 	_render_detail()
 	_restore_scroll.call_deferred(scroll,detail_position,revision)
 func _restore_scroll(left: int, right: int, version: int) -> void:
@@ -157,8 +164,8 @@ func _render_detail() -> void:
 		if mode == "facilities": _facility_detail(entry)
 		else: _recipe_detail(entry)
 		return
-	text(detail,"오늘 필요한 것을 천천히 준비해 보세요.",22)
-	text(detail,"제작과 완성품 수령은 현장 설비에서 진행합니다. 원정 재료를 그대로 진열해도 됩니다.")
+	text(detail,ProductNextStepGuidance.empty_title() if ProductNextStepGuidance.ENABLED else "오늘 필요한 것을 천천히 준비해 보세요.",22)
+	text(detail,ProductNextStepGuidance.empty_message(mode,only_ready.button_pressed) if ProductNextStepGuidance.ENABLED else "제작과 완성품 수령은 현장 설비에서 진행합니다. 원정 재료를 그대로 진열해도 됩니다.")
 func _recipe_detail(entry: Dictionary) -> void:
 	var recipe: Dictionary = entry["recipe"]
 	var item := str(recipe["result_item_id"])
@@ -188,7 +195,8 @@ func _recipe_detail(entry: Dictionary) -> void:
 		"첫 상품 수령 먼저": action = "먼저 화덕에서 현지식 빵을 만들고 수령하세요."
 		"설비 설치": action = "필요 설비를 현장에 설치하세요."
 		"완성품 수령 먼저": action = "설비에서 [E]로 완성품을 수령하세요."
-		"설비 사용 중": action = "설비의 가공이 끝나면 [E]로 완성품을 수령하세요."
+		"설비 사용 중": action = "가공이 끝나길 기다린 뒤 설비에서 [E]로 완성품을 수령하세요. 책을 열어 둔 동안 가공도 멈춥니다."
+		"재료 준비": action = "부족한 재료를 소지품에 챙긴 뒤 설비에서 [E]로 제조법을 선택하세요."
 	text(detail,"책을 닫고 " + action,17)
 func _facility_detail(entry: Dictionary) -> void:
 	var id := str(entry["facility_id"])
@@ -207,4 +215,4 @@ func _facility_detail(entry: Dictionary) -> void:
 		if recipe["facility_id"] == id and name not in products: products.append(name)
 	text(detail,"배운 상품에 사용하는 설비",20)
 	text(detail," · ".join(products.slice(0,ProductPreparationData.MAX_EXAMPLES)) if not products.is_empty() else "이 설비에서 사용할 배운 제조법이 아직 없습니다.")
-	text(detail,"책을 닫고 현장에서 [E]로 재료를 가공하거나 완성품을 수령하세요.")
+	text(detail,ProductNextStepGuidance.facility_action(world,entry) if ProductNextStepGuidance.ENABLED else "책을 닫고 현장에서 [E]로 재료를 가공하거나 완성품을 수령하세요.")

@@ -23,6 +23,18 @@ func snap(name: String) -> void:
 		check(label.is_visible_in_tree(),"captured guide label is visible: " + label.name)
 		check(label.get_global_rect().end.y <= construction.get_global_rect().end.y + 1,"actual guide label remains inside book: " + label.name)
 	if construction.expand_button.visible: check(construction.expand_button.get_global_rect().end.y <= construction.get_global_rect().end.y + 1,"navigation button remains readable inside book")
+func click(button: Button) -> void:
+	await get_tree().create_timer(1.7,true,false,true).timeout
+	var position := button.get_global_rect().get_center()
+	if menu.has_meta("book_stage") and is_instance_valid(menu.get_meta("book_stage")):
+		position += menu.get_meta("book_stage")._offset
+	for pressed in [true,false]:
+		var event := InputEventMouseButton.new()
+		event.position = position
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.pressed = pressed
+		get_viewport().push_input(event,true)
+	await frames()
 func place(id: String) -> Node2D:
 	if not builder.build_mode: builder.start_build_mode()
 	builder.build_selection_state.restore_selection(builder.get_catalog_index_from_build_id(id),0)
@@ -110,7 +122,27 @@ func run() -> void:
 	var learned := PlayerProgress.learned_recipe_ids.duplicate()
 	PlayerProgress.learned_recipe_ids.erase("camp_bread")
 	data = view()
-	check(data["action"] == "learned" and not data["next"].contains("버섯"),"missing first recipe exposes no unrelated future products")
+	check(data["action"] == "scroll" and data["next"].contains("배우기"),"received first scroll leads to learning it instead of asking the NPC again")
+	var scroll_id := str(data["id"])
+	var scroll_count := GameState.get_item_count(scroll_id)
+	var learning_money := GameState.money
+	await snap("learn-scroll")
+	await click(construction.expand_button)
+	check(menu.current_tab == ManagementMenu.MenuTab.INVENTORY and menu.management_inventory.selected_inventory_group == ItemData.get_inventory_group(scroll_id),"real construction link opens scroll's actual inventory category")
+	var learning_inventory = menu.management_inventory
+	learning_inventory._on_recipe_scroll_selected(scroll_id)
+	check(not PlayerProgress.is_recipe_learned("camp_bread") and GameState.get_item_count(scroll_id) == scroll_count,"opening learning confirmation does not consume or teach")
+	learning_inventory.recipe_scroll_dialog.confirmed.emit()
+	learning_inventory.recipe_scroll_dialog.hide()
+	check(PlayerProgress.is_recipe_learned("camp_bread") and GameState.get_item_count(scroll_id) == scroll_count - 1 and GameState.money == learning_money,"actual learning confirmation consumes exactly one granted scroll without extra cost")
+	learning_inventory.recipe_scroll_dialog.confirmed.emit()
+	check(GameState.get_item_count(scroll_id) == scroll_count - 1,"repeated confirmation cannot consume another scroll")
+	PlayerProgress.learned_recipe_ids.erase("camp_bread")
+	var remaining_scrolls := GameState.get_item_count(scroll_id)
+	GameState.remove_item(scroll_id,remaining_scrolls)
+	data = view()
+	check(data["action"] == "learned" and not data["next"].contains("버섯"),"missing first recipe without owned scroll retains original source fallback")
+	GameState.add_item(scroll_id,remaining_scrolls)
 	PlayerProgress.learned_recipe_ids.assign(learned)
 	PlayerProgress.learn_recipe("camp_bread")
 	var ingredients := ProductionRecipeService.collect_required_ingredients(ProductRecipeData.get_recipe("camp_bread"),1)

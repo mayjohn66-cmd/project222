@@ -30,7 +30,7 @@ func refresh() -> void:
 	var ready := ResidentRequestFlow.can_deliver(request)
 	var objective := "주민에게 말을 걸어 부탁을 받으세요. [E]"
 	if accepted:
-		objective = "%s %d/%d · 창고 물품 전달 [E]" % [ItemData.get_item_name(str(request["item"])), mini(GameState.get_item_count(str(request["item"])), int(request["amount"])), int(request["amount"])]
+		objective = "%s %d/%d · 소지 물품 전달 [E]" % [ItemData.get_item_name(str(request["item"])), mini(GameState.get_item_count(str(request["item"])), int(request["amount"])), int(request["amount"])]
 		if ready: objective = "준비 완료! 주민에게 전달 [E]"
 	if str(request.get("payment_kind", "")) == "gift":
 		objective += "\n나눔 부탁 · 물품 대금은 별도로 받지 않습니다.\n답례: 평판 +%d · %d G" % [int(request["reputation"]), int(request["money"])]
@@ -86,7 +86,7 @@ func try_interact() -> bool:
 			lines.append("새 손님 소식: %s! 가게를 열면 소개받은 손님이 방문해요." % CustomerTypeData.get_display_name(type_id))
 	else:
 		lines.assign(request["lines"])
-		lines.append("필요한 물건은 %s %d개야. 진열대나 원정 가방에 있다면 창고로 옮겨 준비해 줘." % [ItemData.get_item_name(str(request["item"])), int(request["amount"])])
+		lines.append("필요한 물건은 %s %d개야. 소지품에 챙겨 줘. 진열대나 보관 선반에 있다면 먼저 꺼내 줘." % [ItemData.get_item_name(str(request["item"])), int(request["amount"])])
 	_start_resident_dialogue(str(request["npc"]), lines)
 	return true
 

@@ -41,6 +41,8 @@ static func production(world: Node) -> Dictionary:
 	for recipe in ProductRecipeData.get_learned_recipes():
 		if str(recipe["recipe_id"]) == FIRST_RECIPE: available = recipe; break
 	if available.is_empty():
+		if ProductNextStepGuidance.ENABLED and ProductNextStepGuidance.owned_first_scroll():
+			return info(current,"지금 할 일 · 받은 제조법 배우기\n인벤토리에서 현지식 빵 제조법 두루마리를 선택하고 ‘배우기’를 누르세요.","안내를 다시 받거나 두루마리를 새로 구할 필요가 없습니다. 배운 뒤 화덕에서 만듭니다.","scroll",ProductNextStepGuidance.first_scroll())
 		return info(current,"지금 할 일 · 첫 제조법 확인\n타블렌의 제작 안내와 배운 상품을 확인하세요.","제조법을 배운 뒤 실제 설비에서 만들 수 있습니다.","learned")
 	var required := ProductionRecipeService.collect_required_ingredients(available,1)
 	var missing: Array[String] = []
@@ -90,6 +92,7 @@ static func button_text(data: Dictionary) -> String:
 	match str(data.get("action","")):
 		"blueprint": return "집기 제작 정보 보기"
 		"inventory": return "가구 보관함 보기"
+		"scroll": return "제조법 두루마리 보기"
 		"today": return "상품 준비 보기"
 		"learned": return "배운 상품 보기"
 		"facilities": return "설비 현황 보기"
@@ -111,6 +114,9 @@ static func open_action(host: Node) -> bool:
 		"inventory":
 			menu.select_tab(ManagementTabs.MenuTab.INVENTORY)
 			menu.management_inventory.select_inventory_group(ItemData.INVENTORY_GROUP_FURNITURE)
+		"scroll":
+			menu.select_tab(ManagementTabs.MenuTab.INVENTORY)
+			menu.management_inventory.select_inventory_group(ItemData.get_inventory_group(str(data["id"])))
 		"today","learned","facilities":
 			menu.select_tab(ManagementTabs.MenuTab.PRODUCTION)
 			if is_instance_valid(menu.management_production.preparation_book): menu.management_production.preparation_book.select_tab(action)
