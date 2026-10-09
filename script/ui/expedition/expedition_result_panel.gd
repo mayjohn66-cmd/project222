@@ -10,6 +10,7 @@ func _ready() -> void:
 	get_viewport().size_changed.connect(_fit_screen)
 	visibility_changed.connect(_on_visibility_changed)
 	_fit_screen()
+	ExpeditionReturnGuide.attach(self)
 
 func _fit_screen() -> void:
 	var screen := get_viewport_rect().size

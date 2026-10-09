@@ -23,7 +23,12 @@ layout_mode = 2
 size_flags_vertical = 3
 horizontal_scroll_mode = 0
 
-[node name="ResultInfoLabel" type="Label" parent="VBoxContainer/ResultScroll" unique_id=765125406]
+[node name="ResultBody" type="VBoxContainer" parent="VBoxContainer/ResultScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 20
+
+[node name="ResultInfoLabel" type="Label" parent="VBoxContainer/ResultScroll/ResultBody" unique_id=765125406]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 18
