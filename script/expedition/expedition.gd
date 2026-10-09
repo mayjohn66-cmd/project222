@@ -278,6 +278,7 @@ var preparation_return_pending: bool = false
 
 
 func _ready() -> void:
+	add_to_group(ExpeditionFoodBatches.LIVE_GROUP)
 	expedition_room_controller.setup(self)
 	expedition_checkpoint_controller.setup(self)
 	expedition_battle_controller.setup(self)

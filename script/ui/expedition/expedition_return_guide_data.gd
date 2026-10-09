@@ -6,6 +6,7 @@ const ENABLED := true
 static func snapshot(bag: ExpeditionBag) -> Dictionary:
 	var result := {"valid":false,"rows":[],"text":"가방 정보를 확인할 수 없습니다. 원정 결과의 안내를 확인하세요."}
 	if bag == null: return result
+	if not ExpeditionFoodBatches.valid_entries(bag.placements,GameState.total_day): return result
 	var totals := {}
 	var seen := {}
 	for placement in bag.placements:
@@ -44,6 +45,8 @@ static func snapshot(bag: ExpeditionBag) -> Dictionary:
 			lines.append("상온 변형을 피하려면 이 재료에 맞는 보존 설비에 직접 넣어야 합니다.")
 		if FoodShelfLife.tracked(item):
 			lines.append("기한이 있는 식품 · 복귀 후 소지품 상세와 보존 설비에서 상태를 살피고, 필요한 만큼 진열하세요.")
+		if FoodShelfLife.tracked(item) and ExpeditionFoodBatches.ENABLED:
+			lines.append("가방으로 옮기거나 복귀해도 이전 식품 기한이 이어집니다. 가방은 상온 보관입니다.")
 		if RecipeUnlockData.is_scroll(item):
 			lines.append("이미 배운 제조법의 두루마리입니다." if PlayerProgress.is_recipe_learned(RecipeUnlockData.get_recipe_id_for_scroll(item)) else "제조법은 아직 배우지 않았습니다. 실제 두루마리 사용과 제작 조건을 확인하세요.")
 		result["rows"].append({"item":item,"amount":int(totals[item]),"deposited":deposited,"text":"\n".join(lines)})

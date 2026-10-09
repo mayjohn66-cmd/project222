@@ -320,7 +320,7 @@ func drop_grid_data(
 				target_cell,
 				amount,
 				false,
-				{"blacksmith_ore_origin": bool(loot.get("blacksmith_ore_origin", false))}
+				loot.duplicate(true)
 			)
 		)
 
@@ -353,6 +353,8 @@ func rotate_selected_bag_item() -> void:
 
 
 func refresh_loot_ui():
+	for entry in host.temporary_loot:
+		if ExpeditionFoodBatches.valid_entry(entry,GameState.total_day): ExpeditionFoodBatches.adopt(entry)
 	for child in host.loot_grid.get_children():
 		child.queue_free()
 
@@ -431,11 +433,7 @@ func return_bag_item_to_loot(
 	)
 
 	host.temporary_loot.append(
-		{
-			"item_id": item_id,
-			"blacksmith_ore_origin": bool(placement.get("blacksmith_ore_origin", false)),
-			"amount": amount
-		}
+		ExpeditionFoodBatches.loot(placement)
 	)
 
 	host.selected_bag_uid = -1

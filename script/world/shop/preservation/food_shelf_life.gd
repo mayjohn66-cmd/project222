@@ -144,6 +144,7 @@ static func settle() -> void:
 	if bool(food.get("grace_active", false)) and not protected:
 		food["grace_ended_day"] = GameState.total_day
 	food["grace_active"] = protected
+	ExpeditionFoodBatches.settle_owned_stock()
 	var inventory_changed := false
 	for zone in ["inventory", "fridge", "freezer"]:
 		var counts: Dictionary = GameState.inventory if zone == "inventory" else GameState.preservation_state[zone]
@@ -388,6 +389,7 @@ static func valid_batches(value: Variant, count: int, day: int) -> bool:
 	return total == count
 
 static func valid_save(data: Dictionary) -> bool:
+	if not ExpeditionFoodBatches.valid_save(data): return false
 	if not data.get("store_layout", []) is Array: return false
 	var preservation: Variant = data.get("preservation", {})
 	if not preservation is Dictionary: return false

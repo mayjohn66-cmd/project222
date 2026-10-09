@@ -74,6 +74,8 @@ func deposit_items(
 			"원정 가방을 찾지 못했습니다."
 		)
 
+	if not ExpeditionFoodBatches.valid_entries(expedition_bag.placements,GameState.total_day):
+		return _failure("가방의 식품 기한 기록을 확인할 수 없습니다.")
 	var targets: Array[Dictionary] = []
 	var checked_uids: Array[int] = []
 
@@ -125,6 +127,14 @@ func deposit_items(
 			}
 		)
 
+	FoodShelfLife.settle()
+	ExpeditionFoodBatches.settle_bag(expedition_bag)
+	# Expired lots are no longer deposit targets; use the remaining actual counts.
+	targets.clear()
+	for placement in expedition_bag.placements:
+		if ItemData.should_deposit_after_expedition(str(placement["item_id"])):
+			targets.append({"uid":int(placement["uid"]),"item_id":str(placement["item_id"]),"amount":int(placement["amount"])})
+
 	var deposited_amount: int = 0
 
 	# 검사가 끝난 아이템만 실제로 이동한다.
@@ -153,7 +163,8 @@ func deposit_items(
 
 		GameState.add_item(
 			item_id,
-			amount
+			amount,
+			ExpeditionFoodBatches.batches(removed)
 		)
 
 		BlacksmithProgressionRecords.deposited(context, removed)
