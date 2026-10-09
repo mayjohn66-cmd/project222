@@ -69,6 +69,7 @@ func _ready() -> void:
 	_build_difficulty_selector()
 	ExpeditionEnvironmentCard.install(self)
 	ExpeditionSupplyAccess.install(self)
+	ExpeditionLoadoutGuide.install(self)
 
 	select_tab(PrepTab.MAP)
 
