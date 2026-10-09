@@ -19,11 +19,4 @@ const GRID_SIZE: int = 8
 @export var default_attack: ExpeditionAttackProfile
 @export var equipment_attacks: Array[ExpeditionAttackProfile] = []
 
-func attack_for(bag) -> ExpeditionAttackProfile:
-	if bag != null:
-		for placement in bag.placements:
-			for profile in equipment_attacks:
-				if str(placement.get("item_id", "")) == profile.equipment_id:
-					return profile
-	return default_attack
 

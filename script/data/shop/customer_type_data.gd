@@ -307,18 +307,6 @@ static func get_customer_group(
 	return customer_groups[group_id].duplicate(true)
 
 
-static func get_all_customer_types() -> Array[Dictionary]:
-	ensure_loaded()
-
-	var result: Array[Dictionary] = []
-
-	for data in customer_types.values():
-		result.append(
-			data.duplicate(true)
-		)
-
-	return result
-
 static func get_customer_type(
 	customer_type_id: String
 ) -> Dictionary:

@@ -42,15 +42,6 @@ func _ready() -> void:
 	refresh_view()
 
 
-func bind_storage(
-	target_storage: Node
-) -> void:
-	storage = target_storage
-
-	if is_node_ready():
-		refresh_view()
-
-
 func refresh_view() -> void:
 	clear_item_grid()
 

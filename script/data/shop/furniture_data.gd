@@ -542,72 +542,10 @@ static func get_all_furniture() -> Array[Dictionary]:
 # 분류 조회
 # =========================
 
-static func get_by_category(
-	category: String
-) -> Array[Dictionary]:
-	ensure_loaded()
-
-	var result: Array[Dictionary] = []
-
-	for data in furniture.values():
-		if str(
-			data.get(
-				"category",
-				""
-			)
-		) != category:
-			continue
-
-		result.append(
-			data.duplicate(true)
-		)
-
-	return result
-
-
-static func get_by_craft_category(
-	craft_category: String
-) -> Array[Dictionary]:
-	ensure_loaded()
-
-	var result: Array[Dictionary] = []
-
-	for data in furniture.values():
-		if str(
-			data.get(
-				"craft_category",
-				""
-			)
-		) != craft_category:
-			continue
-
-		result.append(
-			data.duplicate(true)
-		)
-
-	return result
-
 
 # =========================
 # 효과 조회
 # =========================
-
-static func has_effect(
-	furniture_id: String
-) -> bool:
-	var data: Dictionary = get_furniture(
-		furniture_id
-	)
-
-	if data.is_empty():
-		return false
-
-	return not str(
-		data.get(
-			"effect_type",
-			""
-		)
-	).is_empty()
 
 
 static func get_effect_data(

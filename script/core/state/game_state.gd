@@ -101,7 +101,6 @@ var employee_salary_records: Dictionary = {}
 var unpaid_employee_salary: int = 0
 
 
-
 # 현재 본점 내부의 확장 단계
 var store_expansion_level: int = 1
 
@@ -117,8 +116,6 @@ var store_lot_type: String = (
 var warehouse_expansion_level: int = 1
 
 # ================================================================= #
-
-
 
 
 # =========================
@@ -168,7 +165,6 @@ func _ready() -> void:
 	DebugLog.write(
 		"[GameState] 초기 상태 준비 완료"
 	)
-
 
 
 # =========================
@@ -386,15 +382,6 @@ func rebuild_inventory_slots_from_counts() -> bool:
 
 	return true
 
-func get_inventory_slots() -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
-
-	for slot in inventory_slots:
-		result.append(
-			slot.duplicate(true)
-		)
-
-	return result
 
 # =========================
 # 일반 아이템 인벤토리
@@ -710,10 +697,6 @@ func is_valid_build_quick_slot_index(
 	)
 
 
-func get_build_quick_slot_count() -> int:
-	return BUILD_QUICK_SLOT_COUNT
-
-
 func set_build_quick_slot(
 	slot_index: int,
 	build_id: String
@@ -918,41 +901,6 @@ func read_save_file(
 
 	return data
 
-func test_save_file_round_trip() -> void:
-	var original: Dictionary = create_save_data()
-
-	# 실제 배치가 없어도 좌표 타입 보존 검사
-	original["_test_anchor"] = Vector2i(3, 4)
-
-	if not write_save_file(
-		original,
-		SAVE_TEST_PATH
-	):
-		return
-
-	var restored: Dictionary = read_save_file(
-		SAVE_TEST_PATH
-	)
-
-	if restored.is_empty():
-		push_error("[저장 테스트] 읽기 실패")
-		return
-
-	if restored != original:
-		push_error("[저장 테스트] 저장 전후 데이터 불일치")
-		return
-
-	if not restored.get("_test_anchor") is Vector2i:
-		push_error("[저장 테스트] 좌표 타입 불일치")
-		return
-
-	DebugLog.write(
-		"[저장 테스트] 성공 / 소지금: ",
-		restored["money"],
-		" / 퀵슬롯: ",
-		restored["build_quick_slots"],
-		" / 좌표 타입 유지"
-	)
 
 func is_save_data_valid(data: Dictionary) -> bool:
 	if not FoodShelfLife.valid_save(data): return false
@@ -1504,7 +1452,6 @@ func apply_save_data(data: Dictionary) -> bool:
 	current_day = int(data["current_day"])
 
 
-
 	var restored_shop_history: Array[Dictionary] = []
 
 	if data.has(
@@ -1695,49 +1642,6 @@ func apply_save_data(data: Dictionary) -> bool:
 
 	return true
 
-func test_save_data_application() -> void:
-	var original: Dictionary = create_save_data()
-
-	if not write_save_file(original, SAVE_TEST_PATH):
-		return
-
-	var restored: Dictionary = read_save_file(SAVE_TEST_PATH)
-
-	if not is_save_data_valid(restored):
-		push_error("[저장 테스트] 데이터 검사 실패")
-		return
-
-	var original_money: int = money
-	money = original_money + 123
-
-	if not apply_save_data(restored):
-		money = original_money
-		return
-
-	if create_save_data() != original:
-		push_error("[저장 테스트] 복원 전후 상태 불일치")
-		return
-
-	DebugLog.write("[저장 테스트] 상태 복원 성공")
-
-func delete_save_file() -> bool:
-	if not FileAccess.file_exists(SAVE_PATH):
-		DebugLog.write("[저장 삭제] 저장 파일이 없습니다.")
-		return true
-
-	var result: Error = DirAccess.remove_absolute(
-		ProjectSettings.globalize_path(SAVE_PATH)
-	)
-
-	if result != OK:
-		push_error(
-			"[저장 삭제] 실패 / 오류: "
-			+ str(result)
-		)
-		return false
-
-	DebugLog.write("[저장 삭제] 완료")
-	return true
 
 # =========================
 # 달력 진행
@@ -1802,15 +1706,6 @@ func advance_calendar_day() -> int:
 
 	return current_day
 
-
-func get_current_week() -> int:
-	return (
-		floori(
-			float(total_day - 1)
-			/ 7.0
-		)
-		+ 1
-	)
 
 # =========================
 # 매장 이벤트와 영업 기록
@@ -2013,20 +1908,6 @@ func get_daily_shop_history() -> Array[Dictionary]:
 
 	return result
 
-
-func get_daily_shop_result(
-	result_day: int
-) -> Dictionary:
-	for record in daily_shop_history:
-		if int(
-			record.get(
-				"total_day",
-				-1
-			)
-		) == result_day:
-			return record.duplicate(true)
-
-	return {}
 
 # =========================
 # 직원 상태와 급여
@@ -2511,21 +2392,6 @@ func has_owned_equipment_instance(
 	).is_empty()
 
 
-func has_owned_equipment(
-	item_id: String
-) -> bool:
-	for instance_data in owned_equipment_instances:
-		if str(
-			instance_data.get(
-				"item_id",
-				""
-			)
-		) == item_id:
-			return true
-
-	return false
-
-
 func get_owned_equipment_count(
 	item_id: String
 ) -> int:
@@ -2809,7 +2675,6 @@ func has_expedition_checkpoint() -> bool:
 	)
 
 
-
 #===============================
 # 편의점 확장 단계
 #===============================
@@ -2929,11 +2794,6 @@ func get_store_lot_type() -> String:
 		store_lot_type
 	)
 
-
-func get_store_lot_name() -> String:
-	return StoreLotData.get_lot_name(
-		get_store_lot_type()
-	)
 
 func get_production_room_expansion_level() -> int:
 	return clampi(

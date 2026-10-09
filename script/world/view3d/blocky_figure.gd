@@ -554,7 +554,6 @@ func _apply_hurt_pose(d2r: float) -> void:
 		(_j["hip_" + k2] as Node3D).rotation.x = -12.0 * d2r * k
 
 
-
 # ---------------------------------------------------------------- 공격
 
 # 무기를 오른손에 쥐게 한다(kind: "sword" 칼 / "staff" 지팡이). 공격 중과 직후에만 보인다.
@@ -596,10 +595,6 @@ func play_attack(duration: float, ranged: bool = false, arc_degrees: float = 80.
 	_atk_arc = arc_degrees
 	_atk_dur = maxf(0.15, duration)
 	_atk_ranged = ranged
-
-
-func is_attacking() -> bool:
-	return _atk_t >= 0.0
 
 
 func _apply_attack_pose(d2r: float) -> void:

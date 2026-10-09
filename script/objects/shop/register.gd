@@ -179,24 +179,6 @@ func finish_checkout():
 	waiting_customer = null
 
 
-
-func debug_service_cells():
-	DebugLog.write(
-		"계산대 본체: ",
-		get_body_cells()
-	)
-
-	DebugLog.write(
-		"직원 위치: ",
-		get_worker_cells()
-	)
-
-	DebugLog.write(
-		"손님 위치: ",
-		get_checkout_cells()
-	)
-
-
 func try_reserve_worker(worker_node) -> bool:
 	# 첫 손님 튜토리얼은 플레이어의 결제를 기다린다.
 	var customer = get_waiting_customer()

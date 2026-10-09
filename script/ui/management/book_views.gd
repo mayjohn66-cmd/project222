@@ -127,7 +127,6 @@ class CoverFace extends Control:
 		BookViews.paint_cover(self,get_theme_default_font(),0.0,size.x,0.0,size.y,1.0,0.0,Color.WHITE,title_text,owner_text)
 
 
-
 # ---------------------------------------------------------------- 펼친 두 쪽
 class Paper extends Control:
 	var mode: int = 0  # 현재 탭: 종이 색과 바탕무늬(설계도 모눈, 건설 모눈, 일정 왼쪽 띠)를 정한다

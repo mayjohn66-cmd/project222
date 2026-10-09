@@ -272,21 +272,6 @@ static func get_build_scene(
 	) as PackedScene
 
 
-static func get_all_build_objects() -> Array[Dictionary]:
-	ensure_loaded()
-
-	var result: Array[Dictionary] = []
-
-	for build_id in object_ids:
-		if not objects.has(build_id):
-			continue
-
-		result.append(
-			objects[build_id].duplicate(true)
-		)
-
-	return result
-
 static func get_build_type(
 	build_id: String
 ) -> String:

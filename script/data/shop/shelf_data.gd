@@ -152,21 +152,6 @@ static func get_slots_per_level(
 	)
 
 
-static func get_slot_capacity(
-	shelf_id: String
-) -> int:
-	var data := get_shelf_data(
-		shelf_id
-	)
-
-	return int(
-		data.get(
-			"slot_capacity",
-			0
-		)
-	)
-
-
 static func get_max_stack_level(
 	shelf_id: String
 ) -> int:

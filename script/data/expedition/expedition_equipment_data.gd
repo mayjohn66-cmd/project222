@@ -717,19 +717,6 @@ func get_equipment_data(
 	return equipment[item_id].duplicate(true)
 
 
-func get_all_equipment() -> Array[Dictionary]:
-	ensure_loaded()
-
-	var result: Array[Dictionary] = []
-
-	for data in equipment.values():
-		result.append(
-			data.duplicate(true)
-		)
-
-	return result
-
-
 func get_equipment_type(
 	item_id: String
 ) -> String:
@@ -887,23 +874,6 @@ func is_enhanceable(
 # =========================
 # 기타 아이템 조회
 # =========================
-
-func has_misc_item(
-	item_id: String
-) -> bool:
-	ensure_loaded()
-	return misc_items.has(item_id)
-
-
-func get_misc_item_data(
-	item_id: String
-) -> Dictionary:
-	ensure_loaded()
-
-	if not misc_items.has(item_id):
-		return {}
-
-	return misc_items[item_id].duplicate(true)
 
 
 # =========================

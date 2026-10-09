@@ -375,35 +375,6 @@ static func can_craft(recipe_id: String) -> bool:
 	return true
 
 
-static func get_missing_materials(
-	recipe_id: String
-) -> Array[Dictionary]:
-	var result: Array[Dictionary] = []
-	var recipe: Dictionary = get_recipe(recipe_id)
-
-	if recipe.is_empty():
-		return result
-
-	var materials: Array = recipe.get("materials", [])
-
-	for material in materials:
-		var item_id: String = str(material["item_id"])
-		var required_amount: int = int(material["amount"])
-		var owned_amount: int = GameState.get_item_count(item_id)
-
-		if owned_amount >= required_amount:
-			continue
-
-		result.append({
-			"item_id": item_id,
-			"required": required_amount,
-			"owned": owned_amount,
-			"missing": required_amount - owned_amount
-		})
-
-	return result
-
-
 # =========================
 # 실제 제작
 # =========================

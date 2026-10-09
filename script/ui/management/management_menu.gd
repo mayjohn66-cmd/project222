@@ -47,7 +47,6 @@ var current_info_tab: InfoTab = InfoTab.BASIC
 )
 
 
-
 @onready var inventory_button: Button = (
 	$DimBackground/CenterContainer/MainPanel/MainVBox/Body/Navigation/InventoryButton
 )
@@ -141,12 +140,9 @@ var current_info_tab: InfoTab = InfoTab.BASIC
 )
 
 
-
 var current_tab: MenuTab = MenuTab.INVENTORY
 var _paused_by_menu: bool = false
 var space_menu: ShopSpaceMenu
-
-
 
 
 func _ready() -> void:
@@ -909,134 +905,6 @@ func _get_history_weekday_name(
 			return "일요일"
 
 	return "알 수 없는 요일"
-
-func get_schedule_effect_text(
-	event_id: String
-) -> String:
-	var effect_lines: Array[String] = []
-
-	# 이벤트 효과는 대분류 기준으로 정해진다.
-	for customer_data in (
-		CustomerTypeData.get_all_customer_groups()
-	):
-		var customer_type_id: String = str(
-			customer_data.get(
-				"group_id",
-				""
-			)
-		)
-
-		if customer_type_id.is_empty():
-			continue
-
-		var customer_name: String = str(
-			customer_data.get(
-				"display_name",
-				customer_type_id
-			)
-		)
-
-		var multiplier: float = (
-			StoreEventCustomerModifierData
-			.get_event_weight_multiplier(
-				event_id,
-				customer_type_id
-			)
-		)
-
-		if not is_equal_approx(
-			multiplier,
-			1.0
-		):
-			effect_lines.append(
-				"%s 등장 빈도 ×%.1f"
-				% [
-					customer_name,
-					multiplier
-				]
-			)
-
-		var demand_entries: Array[Dictionary] = (
-			StoreEventDemandData
-			.get_event_demand_entries(
-				event_id,
-				customer_type_id
-			)
-		)
-
-		for demand in demand_entries:
-			var target_type: String = str(
-				demand.get(
-					"target_type",
-					""
-				)
-			)
-
-			var target_id: String = str(
-				demand.get(
-					"target_id",
-					""
-				)
-			)
-
-			var target_name: String = target_id
-
-			if target_type == "item":
-				target_name = (
-					ItemData.get_item_name(
-						target_id
-					)
-				)
-
-			elif target_type == "category":
-				target_name = (
-					get_category_display_name(
-						target_id
-					)
-				)
-
-			var min_amount: int = int(
-				demand.get(
-					"min_amount",
-					1
-				)
-			)
-
-			var max_amount: int = int(
-				demand.get(
-					"max_amount",
-					min_amount
-				)
-			)
-
-			var amount_text: String
-
-			if min_amount == max_amount:
-				amount_text = (
-					str(min_amount) + "개"
-				)
-			else:
-				amount_text = (
-					"%d~%d개"
-					% [
-						min_amount,
-						max_amount
-					]
-				)
-
-			effect_lines.append(
-				"%s: %s %s 요구"
-				% [
-					customer_name,
-					target_name,
-					amount_text
-				]
-			)
-
-	if effect_lines.is_empty():
-		return "확인된 영향이 없습니다."
-
-	return "\n".join(effect_lines)
 
 
 func get_category_display_name(

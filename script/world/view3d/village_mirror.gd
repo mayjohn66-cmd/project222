@@ -259,19 +259,6 @@ func is_snow_ground(cell: Vector2) -> bool:
 	return _cell_kind(Vector2i(roundi(cell.x), roundi(cell.y))) == "grass"
 
 
-func clear_ground() -> void:
-	_clear_tufts()
-	_clear_snowmen()
-	_clear_bushes()
-	_clear_trees()
-
-	for kind in _ground.keys():
-		(_ground[kind]["mesh"] as Node).queue_free()
-		(_ground[kind]["id_mesh"] as Node).queue_free()
-
-	_ground.clear()
-
-
 # 돌아가는 부품(풍차 날개 등)을 돌린다. 날개는 건물 앞면(+z)과 같은 평면이므로 그 평면의 수직 축(+z)으로 돌린다. 부품마다 axis 로 바꿀 수 있다.
 func tick(delta: float) -> void:
 	_time += delta
@@ -318,7 +305,6 @@ func update_ground_params(count: float) -> void:
 		(g["id_material"] as ShaderMaterial).set_shader_parameter("rank", -1.0)
 		(g["id_material"] as ShaderMaterial).set_shader_parameter("rank_count", count)
 		(g["id_material"] as ShaderMaterial).set_shader_parameter("id", 0.0)
-
 
 
 # ---------------------------------------------------------------- 풀 다발(십자 컷아웃)

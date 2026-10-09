@@ -22,7 +22,6 @@ var _village_map_extent := Vector2i(30,30)
 var _tile_grid_overlay: Node2D
 
 
-
 # 매장 외부 부지의 시작 좌표
 # 내부 매장의 (0, 0)을 기준으로 바깥쪽 여유 공간을 만든다.
 @export var exterior_origin: Vector2i = Vector2i(-4, -4):
@@ -230,10 +229,6 @@ func _is_round_map_cell(cell: Vector2i, radius: float = -1.0) -> bool:
 func get_village_map_extent() -> Vector2i:
 	return _village_map_extent
 
-func set_village_map_extent(extent: Vector2i) -> void:
-	var size := clampi(maxi(extent.x,extent.y),30,60)
-	_village_map_extent = Vector2i(size,size)
-	refresh_village_layout()
 
 func get_village_square_cell() -> Vector2i:
 	var lot := get_exterior_rect()

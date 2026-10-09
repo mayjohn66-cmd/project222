@@ -36,14 +36,6 @@ func _process(delta: float) -> void:
 	mark.position.y = -100 + sin(bob_time * 4.0) * 4.0
 
 
-func has_offers() -> bool:
-	for offer in offers:
-		if int(offer.get("stock", 0)) > 0:
-			return true
-
-	return false
-
-
 func leave() -> void:
 	remove_from_group("merchant_npc")
 

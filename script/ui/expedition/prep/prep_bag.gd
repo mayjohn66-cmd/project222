@@ -334,7 +334,6 @@ func _transfer_bag_to_owned(
 	return true
 
 
-
 # =========================
 # 실제 가방 배치
 # =========================
@@ -486,71 +485,6 @@ func get_prepared_bag_model():
 func refresh_all() -> void:
 	refresh_owned_items()
 	_refresh_bag_visual()
-
-func restore_returned_item_placement(
-	placement: Dictionary
-) -> bool:
-	var item_id: String = str(
-		placement.get(
-			"item_id",
-			""
-		)
-	)
-
-	if item_id.is_empty():
-		return false
-
-	var origin_cell: Vector2i = (
-		placement.get(
-			"owned_origin_cell",
-			Vector2i(-1, -1)
-		)
-	)
-
-	# 원래 위치가 없음 = 원정 중 새로 획득한 전리품
-	if (
-		origin_cell.x < 0
-		or origin_cell.y < 0
-	):
-		return false
-
-	var origin_rotated: bool = bool(
-		placement.get(
-			"owned_origin_rotated",
-			false
-		)
-	)
-
-	if not owned_grid_area.has_method(
-		"add_placement"
-	):
-		return false
-
-	var new_uid: int = int(
-		owned_grid_area.call(
-			"add_placement",
-			item_id,
-			origin_cell,
-			origin_rotated
-		)
-	)
-
-	if new_uid == -1:
-		push_warning(
-			"[원정 준비 가방] 원래 위치 복원 실패: "
-			+ item_id
-		)
-
-		return false
-
-	DebugLog.write(
-		"[원정 준비 가방] 원래 위치 복원 / ",
-		item_id,
-		" / 위치: ",
-		origin_cell
-	)
-
-	return true
 
 
 func toggle_grid_item(

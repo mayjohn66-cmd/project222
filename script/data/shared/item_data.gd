@@ -189,7 +189,6 @@ func get_item_icon(
 	)
 
 
-
 # =========================================================
 # 카테고리
 # =========================================================
@@ -530,14 +529,6 @@ func get_item_type(
 		)
 	)
 
-
-func is_store_product(
-	item_id: String
-) -> bool:
-	return (
-		get_item_type(item_id)
-		== ITEM_TYPE_STORE_PRODUCT
-	)
 
 func is_expedition_item(
 	item_id: String

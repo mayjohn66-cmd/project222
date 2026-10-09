@@ -37,25 +37,6 @@ static func count_of(tokens: PackedStringArray, name: String, default_count: int
 	return 0
 
 
-# 창이 있는 작은 벽 질감(지붕창·돌출 창 앞면용)
-static func window_tex(w_px: int, h_px: int, plaster: Color, timber: Color) -> ImageTexture:
-	var w: int = maxi(w_px, 6)
-	var h: int = maxi(h_px, 6)
-	var img := Image.create(w, h, false, Image.FORMAT_RGBA8)
-	img.fill(plaster)
-	img.fill_rect(Rect2i(0, 0, w, 1), timber)
-	img.fill_rect(Rect2i(0, 0, 1, h), timber)
-	img.fill_rect(Rect2i(w - 1, 0, 1, h), timber)
-	var ww: int = maxi(int(float(w) * 0.5), 3)
-	var wh: int = maxi(int(float(h) * 0.55), 3)
-	var wx: int = (w - ww) / 2
-	var wy: int = maxi(int(float(h) * 0.2), 1)
-	img.fill_rect(Rect2i(wx - 1, wy - 1, ww + 2, wh + 2), Color(0.92, 0.88, 0.8))
-	img.fill_rect(Rect2i(wx, wy, ww, wh), Color(0.5, 0.74, 0.92))
-	img.fill_rect(Rect2i(wx + ww / 2, wy, 1, wh), Color(0.92, 0.88, 0.8))
-	return ImageTexture.create_from_image(img)
-
-
 # ctx: b(PartBuilder), p, lo, hi, wall_h(1층 벽 높이), wall_h_total, roof_h, ridge_x, hs, vc, levels, plaster, timber, roof_tint,
 #      roof_spec, wall_spec, door_cx, door_w, cells, door_cell
 static func apply(tokens: PackedStringArray, ctx: Dictionary) -> void:

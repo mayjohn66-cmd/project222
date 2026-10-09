@@ -129,22 +129,6 @@ static func get_day_of_season(
 	)
 
 
-static func get_week_of_season(
-	total_day: int
-) -> int:
-	var day_of_season: int = (
-		get_day_of_season(total_day)
-	)
-
-	return (
-		floori(
-			float(day_of_season - 1)
-			/ float(DAYS_PER_WEEK)
-		)
-		+ 1
-	)
-
-
 static func get_weekday(
 	total_day: int
 ) -> int:
@@ -172,63 +156,4 @@ static func get_display_date(
 		]
 	)
 
-static func is_salary_payment_day(
-	total_day: int
-) -> bool:
-	return (
-		get_day_of_season(total_day)
-		== DAYS_PER_SEASON
-	)
 
-
-static func get_salary_period_index(
-	total_day: int
-) -> int:
-	var safe_day: int = maxi(
-		total_day,
-		1
-	)
-
-	# 게임 시작부터 몇 번째 급여 월인지 반환
-	return (
-		floori(
-			float(safe_day - 1)
-			/ float(DAYS_PER_SEASON)
-		)
-		+ 1
-	)
-
-
-static func get_salary_period_name(
-	total_day: int
-) -> String:
-	return (
-		"%d년차 %s"
-		% [
-			get_year(total_day),
-			get_season_name(total_day)
-		]
-	)
-
-
-static func calculate_prorated_salary(
-	monthly_salary: int,
-	employed_days: int
-) -> int:
-	if monthly_salary <= 0:
-		return 0
-
-	var safe_employed_days: int = clampi(
-		employed_days,
-		0,
-		DAYS_PER_SEASON
-	)
-
-	if safe_employed_days <= 0:
-		return 0
-
-	return ceili(
-		float(monthly_salary)
-		* float(safe_employed_days)
-		/ float(DAYS_PER_SEASON)
-	)

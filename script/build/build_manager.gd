@@ -69,8 +69,6 @@ const WAREHOUSE_LAYOUT_PERSISTENCE_SCRIPT = preload(
 )
 
 
-
-
 # 실행할 때 build_objects.csv에서 생성
 var furniture_catalog: Array[String] = []
 
@@ -100,7 +98,6 @@ var build_move_service = (
 var build_area_rules = (
 	BUILD_AREA_RULES_SCRIPT.new()
 )
-
 
 
 var build_mode: bool = false
@@ -892,28 +889,6 @@ func get_catalog_index_from_build_id(
 		build_id
 	)
 
-func get_catalog_furniture_name(
-	catalog_index: int
-) -> String:
-	var build_id: String = (
-		get_build_id_from_catalog_index(
-			catalog_index
-		)
-	)
-
-	if build_id.is_empty():
-		return "알 수 없는 가구"
-
-	if not FurnitureData.has_furniture(
-		build_id
-	):
-		return build_id
-
-	return FurnitureData.get_furniture_name(
-		build_id
-	)
-
-
 
 func get_build_id_for_furniture(
 	furniture: Node
@@ -1182,8 +1157,6 @@ func request_build_mode_exit():
 
 	build_confirm_center.visible = true
 	build_confirm_center.z_index = 200
-
-
 
 
 func confirm_build_changes() -> void:
@@ -1669,48 +1642,6 @@ func is_cell_blocked_for_customer(
 	return get_blocks_movement_for_furniture(furniture)
 
 
-func get_adjacent_walkable_cells(
-	furniture
-) -> Array[Vector2i]:
-	var result: Array[Vector2i] = []
-
-	if not is_instance_valid(furniture):
-		return result
-
-	var checked: Dictionary = {}
-
-	var directions: Array[Vector2i] = [
-		Vector2i(1, 0),
-		Vector2i(-1, 0),
-		Vector2i(0, 1),
-		Vector2i(0, -1)
-	]
-
-	var furniture_cells: Array[Vector2i] = (
-		store_occupancy_state.find_occupied_cells_for(
-			furniture
-		)
-	)
-
-	for occupied_cell in furniture_cells:
-		for direction in directions:
-			var candidate: Vector2i = (
-				occupied_cell + direction
-			)
-
-			if checked.has(candidate):
-				continue
-
-			checked[candidate] = true
-
-			# 바닥 바깥인지와 가구에 막혔는지를 함께 검사
-			if is_cell_blocked_for_customer(candidate):
-				continue
-
-			result.append(candidate)
-
-	return result
-
 func is_register_selected() -> bool:
 	return is_selected_furniture_type(
 		BuildObjectData.BUILD_TYPE_REGISTER
@@ -2051,7 +1982,6 @@ func has_valid_build_selection() -> bool:
 	)
 
 
-
 func get_selected_furniture_type() -> String:
 	var build_id: String = (
 		get_selected_build_id()
@@ -2264,7 +2194,6 @@ func _on_build_quick_slot_changed(
 var build_selection_state = (
 	BUILD_SELECTION_STATE_SCRIPT.new()
 )
-
 
 
 func get_selected_placement_rule() -> String:

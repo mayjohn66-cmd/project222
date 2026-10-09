@@ -36,10 +36,6 @@ func _process(delta: float) -> void:
 	mark.position.y = -92 + sin(bob_time * 4.0) * 4.0
 
 
-func can_talk() -> bool:
-	return not beat.is_empty()
-
-
 func leave() -> void:
 	remove_from_group("story_npc")
 

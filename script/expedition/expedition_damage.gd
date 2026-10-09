@@ -25,15 +25,3 @@ static func calculate(
 	return maxi(1, roundi(atk * atk / (atk + def)))
 
 
-# 방어로 줄어드는 피해의 비율(0.0~1.0). 표시용이 아니라 밸런스 점검용이다.
-static func reduction_ratio(
-	attack: float,
-	defense: float
-) -> float:
-	var atk: float = maxf(attack, 0.0)
-	var def: float = maxf(defense, 0.0)
-
-	if atk + def <= 0.0:
-		return 0.0
-
-	return def / (atk + def)

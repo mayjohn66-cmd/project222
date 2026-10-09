@@ -284,19 +284,6 @@ static func get_rule(
 	].duplicate(true)
 
 
-static func get_all_rules() -> Array[Dictionary]:
-	ensure_loaded()
-
-	var result: Array[Dictionary] = []
-
-	for rule in rules.values():
-		result.append(
-			rule.duplicate(true)
-		)
-
-	return result
-
-
 static func _is_empty_row(
 	row: PackedStringArray
 ) -> bool:

@@ -28,24 +28,6 @@ static func reload() -> void:
 	ensure_loaded()
 
 
-static func get_random_wanted_item(
-	customer_type_id: String
-) -> String:
-	var request: Dictionary = (
-		get_random_wanted_request(
-			customer_type_id,
-			GameState.total_day
-		)
-	)
-
-	return str(
-		request.get(
-			"item_id",
-			""
-		)
-	)
-
-
 # 소분류의 기본 수요 = 대분류 수요 + 소분류 수정(같은 target은 덮어쓰기).
 # customer_type_id가 대분류 ID이면 대분류 수요만 돌려준다.
 static func get_merged_base_entries(
