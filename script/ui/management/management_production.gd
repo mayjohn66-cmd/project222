@@ -522,7 +522,8 @@ func get_facility_display_name(
 
 func refresh_view() -> void:
 	if is_instance_valid(preparation_book):
-		preparation_book.refresh()
+		# 내용이 그대로면 책 내부 서명 비교로 다시 그리지 않는다.
+		preparation_book.refresh(false)
 		return
 	if not is_instance_valid(facility_status_scroll):
 		return

@@ -153,6 +153,9 @@ func _get_visible_furniture_ids() -> Array[String]:
 	return result
 
 
+var _list_signature: String = ""
+
+
 func refresh_view() -> void:
 	if not is_instance_valid(furniture_list):
 		return
@@ -162,39 +165,38 @@ func refresh_view() -> void:
 
 	_update_category_buttons()
 
-	furniture_buttons.clear()
-
-	for child in furniture_list.get_children():
-		furniture_list.remove_child(child)
-		child.queue_free()
-
 	var ids: Array[String] = _get_visible_furniture_ids()
-
+	var names: PackedStringArray = PackedStringArray()
 	for furniture_id in ids:
-		var button := Button.new()
-
-		button.text = FurnitureData.get_furniture_name(
-			furniture_id
-		)
+		var button_text: String = FurnitureData.get_furniture_name(furniture_id)
 		if not FurnitureObjectCatalog.locked_reason(furniture_id).is_empty():
-			button.text += " · 미해금"
-		button.toggle_mode = true
-		button.custom_minimum_size.y = 42
-
-		button.pressed.connect(
-			_select_furniture.bind(furniture_id)
-		)
-
-		furniture_list.add_child(button)
-		furniture_buttons[furniture_id] = button
+			button_text += " · 미해금"
+		names.append(button_text)
+	# 목록이 지난번과 같으면 버튼을 다시 만들지 않는다(탭 전환마다 수십 ms).
+	var signature: String = selected_category + "|" + "|".join(names)
+	if signature != _list_signature or furniture_buttons.size() != ids.size():
+		_list_signature = signature
+		furniture_buttons.clear()
+		for child in furniture_list.get_children():
+			furniture_list.remove_child(child)
+			child.queue_free()
+		for i in ids.size():
+			var button := Button.new()
+			button.text = names[i]
+			button.toggle_mode = true
+			button.custom_minimum_size.y = 42
+			button.pressed.connect(_select_furniture.bind(ids[i]))
+			furniture_list.add_child(button)
+			furniture_buttons[ids[i]] = button
 
 	if not ids.has(selected_furniture_id):
 		selected_furniture_id = ""
 
 	if ids.is_empty():
-		var empty_label := Label.new()
-		empty_label.text = "등록된 제작품이 없습니다."
-		furniture_list.add_child(empty_label)
+		if furniture_list.get_child_count() == 0:
+			var empty_label := Label.new()
+			empty_label.text = "등록된 제작품이 없습니다."
+			furniture_list.add_child(empty_label)
 
 		_clear_detail("이 분류에는 등록된 제작 레시피가 없습니다.")
 		return

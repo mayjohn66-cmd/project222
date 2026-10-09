@@ -314,14 +314,7 @@ func select_tab(
 				"현재 보유 중인 물품을 확인합니다."
 			)
 
-			management_inventory.refresh_inventory()
-
-			if management_inventory.has_method(
-				"refresh_inventory"
-			):
-				management_inventory.call(
-					"refresh_inventory"
-				)
+			management_inventory.refresh_inventory_if_changed()
 
 		MenuTab.PRODUCTION:
 			production_content.visible = true

@@ -135,7 +135,37 @@ func select_inventory_group(
 	)
 
 
+# 탭을 다시 열 때 쓴다. 표시 내용에 영향을 주는 값이 그대로면 카드를 다시 만들지 않는다.
+func refresh_inventory_if_changed() -> void:
+	var state: String = str([
+		selected_inventory_group,
+		item_transfer_mode,
+		GameState.inventory,
+		GameState.furniture_inventory,
+		get_placed_furniture_counts(),
+		get_shelf_stock_counts(),
+		PlayerProgress.learned_recipe_ids,
+		item_grid.get_child_count() > 0,
+	])
+	if state == _view_state:
+		return
+	refresh_inventory()
+
+
+var _view_state: String = ""
+
+
 func refresh_inventory() -> void:
+	_view_state = str([
+		selected_inventory_group,
+		item_transfer_mode,
+		GameState.inventory,
+		GameState.furniture_inventory,
+		get_placed_furniture_counts(),
+		get_shelf_stock_counts(),
+		PlayerProgress.learned_recipe_ids,
+		true,
+	])
 	clear_item_grid()
 
 	match selected_inventory_group:
