@@ -24,7 +24,8 @@ static func add_schedule(menu: ManagementMenu) -> void:
 		_label(INTRO, 16),
 	])
 	# 왼쪽에 띄우던 "채집 도구를 구하는 길" 안내도 이제 수첩에서 본다.
-	var supply_step := ResidentMerchantSupply.next_step()
+	var supply_step := EarlyProgressionGuide.waiting_text()
+	if supply_step.is_empty(): supply_step = ResidentMerchantSupply.next_step()
 
 	if not supply_step.is_empty():
 		_card(list, [_label("채집 도구를 구하는 길", 20), _label(supply_step, 17)])

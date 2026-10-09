@@ -81,7 +81,9 @@ static func information(id: String) -> String:
 		var introduction := ResidentStoryFlow.pending_introduction()
 		if not introduction.is_empty(): return "가게를 방문한 %s와 먼저 인사하세요." % introduction["npc"]
 		var request := ResidentRequestFlow.current()
-		if request.is_empty(): return "지금까지의 주민 부탁을 마쳤습니다. 이웃과 안부를 나누고 마을 게시판을 살펴보세요."
+		if request.is_empty():
+			var waiting := EarlyProgressionGuide.waiting_text()
+			return waiting if not waiting.is_empty() else "지금까지의 주민 부탁을 마쳤습니다. 이웃과 안부를 나누고 마을 게시판을 살펴보세요."
 		var status := "물품 전달 가능" if ResidentRequestFlow.can_deliver(request) else ("물품 준비 중" if ResidentRequestFlow.accepted(str(request["id"])) else "주민에게 부탁 듣기")
 		return "%s · %s\n%s %d/%d · 창고 기준" % [request["title"],status,ItemData.get_item_name(str(request["item"])),GameState.get_item_count(str(request["item"])),request["amount"]]
 	if id.begins_with("resident:"):
@@ -184,7 +186,8 @@ static func destination(world: Node, id: String) -> Node2D:
 		return board if board != null and board.visible else null
 	if id == "next_request":
 		var director = world.get_node_or_null("ResidentRequestDirector")
-		return director.npc if director != null and is_instance_valid(director.npc) and director.npc.visible else null
+		if (not ResidentRequestFlow.current().is_empty() or not ResidentStoryFlow.pending_introduction().is_empty()) and director != null and is_instance_valid(director.npc) and director.npc.visible and not director.npc.is_queued_for_deletion(): return director.npc
+		return EarlyProgressionGuide.destination(world)
 	if id.begins_with("resident:"):
 		var life = world.get_node_or_null("VillageLifeDirector")
 		var npc = life.residents.get(id.trim_prefix("resident:")) if life != null else null

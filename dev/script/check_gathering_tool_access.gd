@@ -158,7 +158,7 @@ func run() -> void:
 	var saved := GameState.create_save_data()
 	check(GameState.apply_save_data(saved) and ResidentRequestFlow.done("traveler_water") and ResidentMerchantSupply.owns_effect("collect_water"), "save reload preserves quest and packed merchant tool")
 	var hint := "\n".join(RequestItemSources.expedition("raw_water", ExpeditionEnvironment.capture()))
-	check(hint.contains("타블렌") and hint.contains("가방") and not hint.contains("원정 상점"), "preparation points to NPC purchase and packing")
+	check(hint.contains("준비되어") and hint.contains("가방") and not hint.contains("구매하고"), "preparation recognizes packed tool without duplicate purchase")
 	expedition.queue_free()
 	await frames()
 	print("CHECK_GATHERING_TOOL_ACCESS checks=",checks," failures=",failures)
