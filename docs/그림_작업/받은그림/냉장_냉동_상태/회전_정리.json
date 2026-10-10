@@ -1,0 +1,53 @@
+{
+  "fridge_2": {
+    "crop": [
+      153,
+      801,
+      735,
+      1622
+    ],
+    "uniform_fit": [
+      45,
+      63
+    ],
+    "position": [
+      9,
+      53
+    ],
+    "contents_visible": false
+  },
+  "fridge_3": {
+    "crop": [
+      186,
+      884,
+      732,
+      1693
+    ],
+    "uniform_fit": [
+      43,
+      63
+    ],
+    "position": [
+      10,
+      53
+    ],
+    "contents_visible": false
+  },
+  "freezer_2": {
+    "crop": [
+      269,
+      577,
+      980,
+      1192
+    ],
+    "uniform_fit": [
+      74,
+      64
+    ],
+    "position": [
+      26,
+      59
+    ],
+    "contents_visible": true
+  }
+}

@@ -1,7 +1,7 @@
 {
   "date": "2026-10-11",
-  "selection_status": "candidate_not_selected",
-  "runtime_applied": false,
+  "selection_status": "user_authorized_all_rotations_and_runtime_install",
+  "runtime_applied": true,
   "rotation": 0,
   "tool": "built-in image_gen.imagegen",
   "pixel_edit_permission": "기존 사용자 허용: 파이썬으로 게임용 픽셀 보정",
@@ -23,6 +23,14 @@
       "sha256": "d0cb350b2a5e8770764bebe7ba069a9176cb52a558cc34acd1a6fa9069e23cb7"
     },
     {
+      "path": "생성_원본/freezer_empty_rotation_2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "sha256": "72f55a76872dfea957b5508cb6ffe81e25257ea7f9dfc4c73fa1f67cfd1491df"
+    },
+    {
       "path": "생성_원본/freezer_filled_rotation_0.png",
       "size": [
         1254,
@@ -31,12 +39,36 @@
       "sha256": "d374ab03d12dcda6f98c4e84b7a11480f63858ed88d045b969b269a6602fb259"
     },
     {
+      "path": "생성_원본/freezer_filled_rotation_2.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "sha256": "61e01b20e04908152378171da7b633a15f3a8d9b065018b44800e6447b123c21"
+    },
+    {
       "path": "생성_원본/fridge_empty_rotation_0.png",
       "size": [
         887,
         1774
       ],
       "sha256": "460b64ceae6bb061270fc07bdd4ecc31c7daafffcc94bc7384376c19013d0180"
+    },
+    {
+      "path": "생성_원본/fridge_empty_rotation_2.png",
+      "size": [
+        887,
+        1774
+      ],
+      "sha256": "7418b6c172cec5842d42741298dfb9386864b9a71e4e81a069d13a35ef9cc74e"
+    },
+    {
+      "path": "생성_원본/fridge_empty_rotation_3.png",
+      "size": [
+        887,
+        1774
+      ],
+      "sha256": "aa7064fb925ff3eb5670afecf44680301b972410fb7787ef216cf8d8c0c4dff6"
     },
     {
       "path": "생성_원본/fridge_filled_rotation_0.png",
@@ -55,12 +87,60 @@
       "sha256": "8e2ee679523b4174ddee578d5ad1160a34583e7b503b428a30a284acd06e75d2"
     },
     {
+      "path": "픽셀_정리/freezer_empty_rotation_1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "78a8810ec81eee4391a40e951e59ad0ebbcbb131af7b7b8217bff25e2bfd91ad"
+    },
+    {
+      "path": "픽셀_정리/freezer_empty_rotation_2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "5b4e9049f385dcef6cfaab2458641ccb00831d0155efbb28c1047e82d7f45ca2"
+    },
+    {
+      "path": "픽셀_정리/freezer_empty_rotation_3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7a2d84033324f573448816350bde7ecd45ac92dcb736905ead989505911104f9"
+    },
+    {
       "path": "픽셀_정리/freezer_filled_rotation_0.png",
       "size": [
         128,
         128
       ],
       "sha256": "0b0c8d2182878f7def35de225d9a9938ed402319ad9aa56f85fcddedabda2ffc"
+    },
+    {
+      "path": "픽셀_정리/freezer_filled_rotation_1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "1584facde627b3ba60522eb919d42e6c55df1a0ccc9da1f5eaafa5786a0c6a05"
+    },
+    {
+      "path": "픽셀_정리/freezer_filled_rotation_2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "d6deae9202edd839f52695ad3a738a504068218c10659783b3090a1f43994766"
+    },
+    {
+      "path": "픽셀_정리/freezer_filled_rotation_3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "91928e694e22f2ad4c0041d616f73a09af4eb0889505fdf52ab57f2e328b2684"
     },
     {
       "path": "픽셀_정리/fridge_empty_rotation_0.png",
@@ -71,12 +151,68 @@
       "sha256": "0e8547b7aeeed47ce782cef31f274e349a965830289e221a2a7516f7e65d23d0"
     },
     {
+      "path": "픽셀_정리/fridge_empty_rotation_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "08919042a023a6ef5081d46529e5b2834ea8be2dfec43e5fdcdb823be93d6e07"
+    },
+    {
+      "path": "픽셀_정리/fridge_empty_rotation_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "99ead30a5a4ac9b978284c98e845a965f68e7544f740749b0a9bba4c35b4ff90"
+    },
+    {
+      "path": "픽셀_정리/fridge_empty_rotation_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "7d0de6b1c4ee5840200c64ec7ab69cb16b650e3ed55c25362433dc39809369ac"
+    },
+    {
       "path": "픽셀_정리/fridge_filled_rotation_0.png",
       "size": [
         64,
         128
       ],
       "sha256": "04a0fcdb7eab2bac0091857bd424ceca5986fbbae0366baae78543a4f3e8ef34"
+    },
+    {
+      "path": "픽셀_정리/fridge_filled_rotation_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "d05b0b2b3b2b6d8f7cff2fe14ffb36576bb99d1f3175c0c2399cde1015e68df1"
+    },
+    {
+      "path": "픽셀_정리/fridge_filled_rotation_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "99ead30a5a4ac9b978284c98e845a965f68e7544f740749b0a9bba4c35b4ff90"
+    },
+    {
+      "path": "픽셀_정리/fridge_filled_rotation_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "7d0de6b1c4ee5840200c64ec7ab69cb16b650e3ed55c25362433dc39809369ac"
+    },
+    {
+      "path": "회전_상태_비교.png",
+      "size": [
+        960,
+        1280
+      ],
+      "sha256": "b53d098518d6e0078ac09eda9bf3c1ad0421b6467ecacdb2efcd9b20b836781b"
     }
   ],
   "runtime_originals": [
@@ -111,6 +247,158 @@
     {
       "path": "art/received/furniture/fridge_unit/rotation_3.png",
       "sha256": "0594d7148ee42b21c5b3a2dc8d0a55642e4fd66110b26fe19aafc39cf583dfcb"
+    }
+  ],
+  "rotations": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "runtime_assets": [
+    {
+      "path": "res://art/received/furniture/fridge_unit/empty_rotation_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "0e8547b7aeeed47ce782cef31f274e349a965830289e221a2a7516f7e65d23d0",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/fridge_empty_rotation_0.png"
+    },
+    {
+      "path": "res://art/received/furniture/fridge_unit/filled_rotation_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "04a0fcdb7eab2bac0091857bd424ceca5986fbbae0366baae78543a4f3e8ef34",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/fridge_filled_rotation_0.png"
+    },
+    {
+      "path": "res://art/received/furniture/fridge_unit/empty_rotation_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "08919042a023a6ef5081d46529e5b2834ea8be2dfec43e5fdcdb823be93d6e07",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/fridge_empty_rotation_1.png"
+    },
+    {
+      "path": "res://art/received/furniture/fridge_unit/filled_rotation_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "d05b0b2b3b2b6d8f7cff2fe14ffb36576bb99d1f3175c0c2399cde1015e68df1",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/fridge_filled_rotation_1.png"
+    },
+    {
+      "path": "res://art/received/furniture/fridge_unit/empty_rotation_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "99ead30a5a4ac9b978284c98e845a965f68e7544f740749b0a9bba4c35b4ff90",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/fridge_empty_rotation_2.png"
+    },
+    {
+      "path": "res://art/received/furniture/fridge_unit/filled_rotation_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "99ead30a5a4ac9b978284c98e845a965f68e7544f740749b0a9bba4c35b4ff90",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/fridge_filled_rotation_2.png"
+    },
+    {
+      "path": "res://art/received/furniture/fridge_unit/empty_rotation_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "7d0de6b1c4ee5840200c64ec7ab69cb16b650e3ed55c25362433dc39809369ac",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/fridge_empty_rotation_3.png"
+    },
+    {
+      "path": "res://art/received/furniture/fridge_unit/filled_rotation_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "7d0de6b1c4ee5840200c64ec7ab69cb16b650e3ed55c25362433dc39809369ac",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/fridge_filled_rotation_3.png"
+    },
+    {
+      "path": "res://art/received/furniture/freezer_unit/empty_rotation_0.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "8e2ee679523b4174ddee578d5ad1160a34583e7b503b428a30a284acd06e75d2",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/freezer_empty_rotation_0.png"
+    },
+    {
+      "path": "res://art/received/furniture/freezer_unit/filled_rotation_0.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "0b0c8d2182878f7def35de225d9a9938ed402319ad9aa56f85fcddedabda2ffc",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/freezer_filled_rotation_0.png"
+    },
+    {
+      "path": "res://art/received/furniture/freezer_unit/empty_rotation_1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "78a8810ec81eee4391a40e951e59ad0ebbcbb131af7b7b8217bff25e2bfd91ad",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/freezer_empty_rotation_1.png"
+    },
+    {
+      "path": "res://art/received/furniture/freezer_unit/filled_rotation_1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "1584facde627b3ba60522eb919d42e6c55df1a0ccc9da1f5eaafa5786a0c6a05",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/freezer_filled_rotation_1.png"
+    },
+    {
+      "path": "res://art/received/furniture/freezer_unit/empty_rotation_2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "5b4e9049f385dcef6cfaab2458641ccb00831d0155efbb28c1047e82d7f45ca2",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/freezer_empty_rotation_2.png"
+    },
+    {
+      "path": "res://art/received/furniture/freezer_unit/filled_rotation_2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "d6deae9202edd839f52695ad3a738a504068218c10659783b3090a1f43994766",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/freezer_filled_rotation_2.png"
+    },
+    {
+      "path": "res://art/received/furniture/freezer_unit/empty_rotation_3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7a2d84033324f573448816350bde7ecd45ac92dcb736905ead989505911104f9",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/freezer_empty_rotation_3.png"
+    },
+    {
+      "path": "res://art/received/furniture/freezer_unit/filled_rotation_3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "91928e694e22f2ad4c0041d616f73a09af4eb0889505fdf52ab57f2e328b2684",
+      "source": "docs/그림_작업/받은그림/냉장_냉동_상태/픽셀_정리/freezer_filled_rotation_3.png"
     }
   ]
 }

@@ -1,0 +1,130 @@
+[
+  {
+    "kind": "fridge",
+    "rotation": 0,
+    "canvas": [
+      64,
+      128
+    ],
+    "anchor": [
+      32,
+      104
+    ],
+    "changed_pixels": 470,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0,
+    "contents_visible": true
+  },
+  {
+    "kind": "fridge",
+    "rotation": 1,
+    "canvas": [
+      64,
+      128
+    ],
+    "anchor": [
+      32,
+      104
+    ],
+    "changed_pixels": 470,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0,
+    "contents_visible": true
+  },
+  {
+    "kind": "fridge",
+    "rotation": 2,
+    "canvas": [
+      64,
+      128
+    ],
+    "anchor": [
+      32,
+      104
+    ],
+    "changed_pixels": 0,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0,
+    "contents_visible": false
+  },
+  {
+    "kind": "fridge",
+    "rotation": 3,
+    "canvas": [
+      64,
+      128
+    ],
+    "anchor": [
+      32,
+      104
+    ],
+    "changed_pixels": 0,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0,
+    "contents_visible": false
+  },
+  {
+    "kind": "freezer",
+    "rotation": 0,
+    "canvas": [
+      128,
+      128
+    ],
+    "anchor": [
+      64,
+      104
+    ],
+    "changed_pixels": 529,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0,
+    "contents_visible": true
+  },
+  {
+    "kind": "freezer",
+    "rotation": 1,
+    "canvas": [
+      128,
+      128
+    ],
+    "anchor": [
+      64,
+      104
+    ],
+    "changed_pixels": 529,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0,
+    "contents_visible": true
+  },
+  {
+    "kind": "freezer",
+    "rotation": 2,
+    "canvas": [
+      128,
+      128
+    ],
+    "anchor": [
+      64,
+      104
+    ],
+    "changed_pixels": 512,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0,
+    "contents_visible": true
+  },
+  {
+    "kind": "freezer",
+    "rotation": 3,
+    "canvas": [
+      128,
+      128
+    ],
+    "anchor": [
+      64,
+      104
+    ],
+    "changed_pixels": 512,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0,
+    "contents_visible": true
+  }
+]
