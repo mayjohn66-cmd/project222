@@ -1,0 +1,157 @@
+{
+  "method": "uniform_nearest_24_base_8_accent",
+  "checks": [
+    {
+      "id": "swamp_moss",
+      "crop": [
+        274,
+        287,
+        1413,
+        798
+      ],
+      "source_size": [
+        1672,
+        941
+      ],
+      "scaled_size": [
+        50,
+        22
+      ],
+      "position": [
+        7,
+        34
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 31,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "moss",
+      "accent_pixels": 442,
+      "source_sha256": "a35170d3a92a4b58d8028476fc88b892f63ed927255192d850702667a3bb3d3c",
+      "sha256": "0e2593ef0733743ecb70df835110e72cd0d240d1b306a6539a3e317be1461a4f"
+    },
+    {
+      "id": "ancient_fragment",
+      "crop": [
+        202,
+        164,
+        1241,
+        940
+      ],
+      "source_size": [
+        1439,
+        1093
+      ],
+      "scaled_size": [
+        50,
+        37
+      ],
+      "position": [
+        7,
+        19
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 30,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "turquoise",
+      "accent_pixels": 6,
+      "source_sha256": "b60418a2c07544d9490ede3b04a9ceafbfc7fdd4520f8268dff2876dca36592a",
+      "sha256": "f82b7ec7e11a5d9f06c64c6c4501db203c83939e5716eef462aeb3226e372f63"
+    },
+    {
+      "id": "rune_dust",
+      "crop": [
+        239,
+        206,
+        1098,
+        1028
+      ],
+      "source_size": [
+        1312,
+        1199
+      ],
+      "scaled_size": [
+        44,
+        42
+      ],
+      "position": [
+        10,
+        14
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "purple",
+      "accent_pixels": 639,
+      "source_sha256": "352fc538a3f30d02093b84bf49847394a5a76c66bc6595ceaa810b4bcdb98a2e",
+      "sha256": "e170dc54b1394d2e8f8bf437de96bf20960a1e6749ce454900a8170710b3d607"
+    },
+    {
+      "id": "treasure_chest",
+      "crop": [
+        373,
+        272,
+        1098,
+        973
+      ],
+      "source_size": [
+        1448,
+        1086
+      ],
+      "scaled_size": [
+        39,
+        38
+      ],
+      "position": [
+        12,
+        18
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "brass",
+      "accent_pixels": 419,
+      "source_sha256": "21b5181311126c6f77d86373c47720ad732360d38e20e601105ff0312759941b",
+      "sha256": "402f778fc1b3a1758935cf4fd23ae2998b6433daa494e9bbbcb0a8875211ae97"
+    }
+  ]
+}

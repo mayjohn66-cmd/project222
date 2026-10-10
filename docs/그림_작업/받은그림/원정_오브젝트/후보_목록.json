@@ -1,0 +1,56 @@
+{
+  "status": "candidate_not_installed",
+  "tool": "built-in image_gen",
+  "runtime_applied": false,
+  "canvas": [
+    64,
+    64
+  ],
+  "anchor": [
+    32,
+    56
+  ],
+  "view": "south-west",
+  "assets": [
+    {
+      "id": "swamp_moss",
+      "item": "swamp_moss",
+      "kind": "gather_site",
+      "gather_table": "choice_swamp_moss",
+      "sprite": "픽셀_정리/swamp_moss.png",
+      "source": "생성_원본/swamp_moss.png",
+      "sha256": "0e2593ef0733743ecb70df835110e72cd0d240d1b306a6539a3e317be1461a4f",
+      "state": "harvestable"
+    },
+    {
+      "id": "ancient_fragment",
+      "item": "ancient_fragment",
+      "kind": "gather_site",
+      "gather_table": "choice_ancient_fragment",
+      "sprite": "픽셀_정리/ancient_fragment.png",
+      "source": "생성_원본/ancient_fragment.png",
+      "sha256": "f82b7ec7e11a5d9f06c64c6c4501db203c83939e5716eef462aeb3226e372f63",
+      "state": "harvestable"
+    },
+    {
+      "id": "rune_dust",
+      "item": "rune_dust",
+      "kind": "gather_site",
+      "gather_table": "choice_rune_dust",
+      "sprite": "픽셀_정리/rune_dust.png",
+      "source": "생성_원본/rune_dust.png",
+      "sha256": "e170dc54b1394d2e8f8bf437de96bf20960a1e6749ce454900a8170710b3d607",
+      "state": "harvestable"
+    },
+    {
+      "id": "treasure_chest",
+      "item": null,
+      "kind": "chest",
+      "gather_table": null,
+      "sprite": "픽셀_정리/treasure_chest.png",
+      "source": "생성_원본/treasure_chest.png",
+      "sha256": "402f778fc1b3a1758935cf4fd23ae2998b6433daa494e9bbbcb0a8875211ae97",
+      "state": "closed"
+    }
+  ]
+}

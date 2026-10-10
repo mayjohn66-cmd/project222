@@ -1,0 +1,72 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-11",
+  "status": "candidate_not_installed",
+  "assets": [
+    {
+      "id": "swamp_moss",
+      "name": "늪 이끼",
+      "table": "choice_swamp_moss",
+      "kind": "gather_site",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD interaction object for a cozy isometric fantasy convenience-store game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clean outlines, readable bright midtones, compact footprint, neutral daylight and 2:1 isometric ground perspective viewed from south-west. One complete object centered on genuine transparent background. Designed to survive nearest-neighbor reduction into a64x64 logical game sprite, limited restrained palette, no smoothing or painterly textures. No labels, text, UI frame, sprite sheet, separate panels, characters, outside cast shadow, sparkles or full environment. Primary request: A low WIDE patch of ordinary SWAMP MOSS for gathering. Three irregular cushion-shaped masses of olive-to-emerald moss carpet growing over two small partly buried grey pebbles. Moss occupies most of the visible top surface. A few larger visible yellow-green tuft clusters, compact damp brown earth base. Distinguish from herbs: no upright leaves, stems, flowers, mushrooms, reeds, white snow or ice. Low mound not a leafy bush, fits roughly50x28logical pixels. Image1 rocks and Image2 bush are outline, palette and perspective style references, do not copy their tall silhouette.",
+      "generated": "exec-63da8dae-af3d-4119-92c7-5f0a77e1f52c.png",
+      "references": [
+        "art/received/nature/rocks.png",
+        "art/received/nature/bush.png"
+      ],
+      "max_size": [
+        50,
+        28
+      ],
+      "accent": "moss"
+    },
+    {
+      "id": "ancient_fragment",
+      "name": "유적 파편",
+      "table": "choice_ancient_fragment",
+      "kind": "gather_site",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD interaction object for a cozy isometric fantasy convenience-store game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clean outlines, readable bright midtones, compact footprint, neutral daylight and 2:1 isometric ground perspective viewed from south-west. One complete object centered on genuine transparent background. Designed to survive nearest-neighbor reduction into a64x64 logical game sprite, limited restrained palette, no smoothing or painterly textures. No labels, text, UI frame, sprite sheet, separate panels, characters, outside cast shadow, sparkles or full environment. Primary request: A compact cluster of ANCIENT RUIN FRAGMENTS for gathering. One broken low sandstone tablet tilted slightly upright, two chipped carved stone slabs lying around its base. Warm beige-grey stone, simple stepped engraving and one small muted turquoise inlaid geometric marking. Broken straight edges and a carved border clearly distinguish manufactured ruins from natural grey rocks. Low silhouette, not a tall monument or whole building. Brown earth and few tiny pebbles at base. Marking readable as a few pixels, no text or alphabet, magical glow, vines, treasure or crystals. Fits50x38logical pixels. Image1 rocks is art style reference only.",
+      "generated": "exec-fa5ac31f-e3bf-4025-93d7-56ad58b9a6e7.png",
+      "references": [
+        "art/received/nature/rocks.png"
+      ],
+      "max_size": [
+        50,
+        38
+      ],
+      "accent": "turquoise"
+    },
+    {
+      "id": "rune_dust",
+      "name": "룬 채집물",
+      "table": "choice_rune_dust",
+      "kind": "gather_site",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD interaction object for a cozy isometric fantasy convenience-store game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clean outlines, readable bright midtones, compact footprint, neutral daylight and 2:1 isometric ground perspective viewed from south-west. One complete object centered on genuine transparent background. Designed to survive nearest-neighbor reduction into a64x64 logical game sprite, limited restrained palette, no smoothing or painterly textures. No labels, text, UI frame, sprite sheet, separate panels, characters, outside cast shadow, sparkles or full environment. Primary request: A compact RUNE CRYSTAL OUTCROP gathering site that yields rune dust. Three chunky amethyst-purple crystals with angular facets of differing modest heights growing from one small dark grey stone base, plus a few violet mineral chips. Purple midtones and lavender top faces, deep purple shaded sides, sturdy solid shapes rather than many thin needles. One restrained pale lavender geometric notch on front crystal. No floating particles, external glow, luminous circle, aura, UI rune symbol, pouch or pile of powder. Clearly different from slate iron ore and beige ruins. Fits46x42logical pixels. Image1 rocks is outline, footprint and perspective style reference.",
+      "generated": "exec-32d6f6e0-852b-4976-a6cb-f0c0a59ecad0.png",
+      "references": [
+        "art/received/nature/rocks.png"
+      ],
+      "max_size": [
+        46,
+        42
+      ],
+      "accent": "purple"
+    },
+    {
+      "id": "treasure_chest",
+      "name": "보물상자",
+      "table": null,
+      "kind": "chest",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD interaction object for a cozy isometric fantasy convenience-store game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clean outlines, readable bright midtones, compact footprint, neutral daylight and 2:1 isometric ground perspective viewed from south-west. One complete object centered on genuine transparent background. Designed to survive nearest-neighbor reduction into a64x64 logical game sprite, limited restrained palette, no smoothing or painterly textures. No labels, text, UI frame, sprite sheet, separate panels, characters, outside cast shadow, sparkles or full environment. Primary request: ONE CLOSED wooden exploration TREASURE CHEST. Small sturdy rectangular brown wood box with slightly curved closed lid, two plain aged brass straps running front to back over lid and down front, one clearly visible brass front latch. Warm medium honey brown planks and dark brown border, subtle wood grain, brass muted ochre rather than brilliant gold. Southwest isometric view, top and two sides visible, ground edges2:1 slopes. Fits50x38logical pixels. No floor tile, soil island, feet, pedestals, ornate jewelry, red velvet, loot, coins, open lid, magical effects or surrounding objects. Image1 wooden register is WOOD COLOR, pixel style and perspective reference only; replace entire subject with one simple chest. No cash-register machine.",
+      "generated": "exec-4d6e1f4a-f99e-4ab0-bcac-3aa7f62a67d0.png",
+      "references": [
+        "art/received/furniture/wood_register/rotation_0.png"
+      ],
+      "max_size": [
+        50,
+        38
+      ],
+      "accent": "brass"
+    }
+  ]
+}
