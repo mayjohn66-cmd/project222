@@ -14,6 +14,8 @@ func show_shape(build_id: String) -> bool:
 	if ReceivedWorldArt.ENABLED:
 		var frame := PixelShopArt.frame(build_id, 0)
 		if not frame.is_empty(): path = PixelShopArt.storage_path(frame,0,false)
+		if ContainerStockArt.COLD_UNITS.has(build_id):
+			path = ContainerStockArt.cold_pair(build_id,0).empty
 		if build_id in ["door", "production_door", "warehouse_door"]:
 			path = PixelShopArt.door_path(build_id, 0, false)
 	var source := ReceivedWorldArt.texture(path) if not path.is_empty() else null

@@ -109,6 +109,7 @@ func run() -> void:
 			var expected := ReceivedWorldArt.furniture_path(id,rotation)
 			var pixel_frame := PixelShopArt.frame(id, rotation)
 			if not pixel_frame.is_empty(): expected = PixelShopArt.storage_path(pixel_frame,rotation,false)
+			if id in ["fridge_unit","freezer_unit"]: expected = "res://art/received/furniture/%s/empty_rotation_%d.png" % [id,rotation]
 			if id in ["door","production_door","warehouse_door"]: expected = PixelShopArt.door_path(id,rotation,false)
 			check(item.get("received_art", "") == expected, "selected rotation " + id + str(rotation))
 			check(item["id_material"].shader == PixelActorFigure.SPRITE_ID_SHADER, "alpha silhouette mask " + id)

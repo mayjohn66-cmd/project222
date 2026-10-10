@@ -33,7 +33,7 @@ func run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--snap="): capture_prefix = arg.trim_prefix("--snap=")
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art/pixel_shop_assets.json"))
-	check(manifest.assets.size() == 316, "220 originals plus 96 copied stock presets")
+	check(manifest.assets.size() == 332, "316 existing images plus 16 cold state images")
 	for asset in manifest.assets:
 		check(FileAccess.get_sha256(asset.path) == asset.sha256, "pixels unchanged " + asset.path)
 		check(ReceivedWorldArt.texture(asset.path) != null, "imported " + asset.path)
@@ -142,12 +142,19 @@ func run() -> void:
 	for build_id in ["fridge_unit","freezer_unit"]:
 		var unit: String = ContainerStockArt.COLD_UNITS[build_id]
 		PreservationService.install(unit,true)
+		var preview := ReceivedFurniturePreview.new()
+		check(preview.show_shape(build_id),"cold blueprint has empty state picture "+build_id)
+		check((preview.texture as AtlasTexture).atlas == ReceivedWorldArt.texture(ContainerStockArt.cold_pair(build_id,0).empty),"blueprint uses same empty artwork as placement "+build_id)
+		preview.free()
 		for rotation in 4:
 			var cold := make(build_id,rotation)
 			sync()
 			check(not item_for(cold).stocked,"empty cold unit state "+build_id+str(rotation))
 			var original_state := GameState.preservation_state.duplicate(true)
 			var pair := ContainerStockArt.cold_pair(build_id,rotation)
+			check(pair.ready and item_for(cold).stock_art_ready,"both cold state images imported "+build_id+str(rotation))
+			check(image_for(cold).get_size() == ReceivedWorldArt.texture(ReceivedWorldArt.furniture_path(build_id,rotation)).get_image().get_size(),"cold state keeps original canvas "+build_id+str(rotation))
+			check(item_for(cold).material.get_shader_parameter("normal_texture").get_size() == Vector2(image_for(cold).get_size()),"empty cold normal texture bound "+build_id+str(rotation))
 			check(item_for(cold).received_art == pair.empty,"cold empty uses selected empty artwork "+build_id+str(rotation))
 			var empty := image_for(cold).get_data()
 			check(GameState.preservation_state == original_state,"rendering cannot settle or mutate cold contents")
@@ -155,6 +162,8 @@ func run() -> void:
 			check(PreservationService.deposit(unit,"bread",1) == 1,"real cold deposit "+unit)
 			sync()
 			check(item_for(cold).stocked and item_for(cold).received_art == pair.filled,"real deposit selects common filled artwork "+build_id+str(rotation))
+			check((image_for(cold).get_data() == empty) == (build_id == "fridge_unit" and rotation in [2,3]),"cold visible contents change only through glass "+build_id+str(rotation))
+			check(item_for(cold).material.get_shader_parameter("normal_texture").get_size() == Vector2(image_for(cold).get_size()),"filled cold normal texture bound "+build_id+str(rotation))
 			var mesh_id: int = item_for(cold).mesh.get_instance_id()
 			PreservationService.deposit(unit,"bread",1)
 			sync()
@@ -175,6 +184,23 @@ func run() -> void:
 			PreservationService.withdraw(unit,"bread",1)
 			cold.free()
 			sync()
+	# 실제 카메라·조명에서 네 방향을 나란히 확인. 입출고는 공통 보관 서비스를 쓴다.
+	var cold_nodes: Array[Node2D] = []
+	for rotation in 4:
+		cold_nodes.append(make("fridge_unit",rotation,Vector2i(2+rotation*2,2)))
+		cold_nodes.append(make("freezer_unit",rotation,Vector2i(1+rotation*2,5)))
+	sync()
+	await shot("cold-empty")
+	GameState.add_item("bread",2)
+	PreservationService.deposit("fridge","bread",1)
+	PreservationService.deposit("freezer","bread",1)
+	sync()
+	for cold in cold_nodes: check(item_for(cold).stocked,"all placed units reflect shared cold bank "+str(cold.get_meta("build_id")))
+	await shot("cold-filled")
+	PreservationService.withdraw("fridge","bread",1)
+	PreservationService.withdraw("freezer","bread",1)
+	for cold in cold_nodes: cold.free()
+	sync()
 	for id in ["door", "production_door", "warehouse_door"]:
 		for rot in range(4):
 			var node := make(id,rot,Vector2i(4,7))
