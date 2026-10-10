@@ -1,0 +1,110 @@
+{
+  "status": "candidate_not_installed",
+  "tool": "built-in image_gen",
+  "runtime_applied": false,
+  "canvas": [
+    64,
+    64
+  ],
+  "anchor": [
+    32,
+    56
+  ],
+  "view": "south-west",
+  "anchors_provisional": true,
+  "animation": false,
+  "subjects": 4,
+  "frames": 4,
+  "coverage": {
+    "enemy_ids": 24,
+    "generated_ids": 4,
+    "remaining_ids": 20,
+    "ordinary_remaining": 14,
+    "boss_remaining": 6
+  },
+  "assets": [
+    {
+      "id": "field_slime",
+      "enemy_id": "field_slime",
+      "name": "숲 슬라임",
+      "data_name": "슬라임",
+      "loot_table": "forest_enemy",
+      "events": [
+        "unknown_slime_forest",
+        "battle_slime_forest"
+      ],
+      "source_sha256": "a15cf9a57652575b0a1adbfd4db12e4087980bcf10e435e1e3f36c729a965fce",
+      "sprite": "픽셀_정리/field_slime.png",
+      "source": "생성_원본/field_slime.png",
+      "sha256": "394ffe69c456ce8bb4e07e976d03916a99519f91de2af88a4fa6125df8a758ca",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "mine_bat",
+      "enemy_id": "mine_bat",
+      "name": "광산 박쥐",
+      "data_name": "광산 박쥐",
+      "loot_table": "mine_enemy",
+      "events": [
+        "unknown_slime_mine",
+        "battle_bat_mine"
+      ],
+      "source_sha256": "c42635bd3e488f3f13e2b980210504d5a59dc5ad4f149cdbc0317e5a89161dca",
+      "sprite": "픽셀_정리/mine_bat.png",
+      "source": "생성_원본/mine_bat.png",
+      "sha256": "abc440f46e39c2504f4a8af3e72beb1e231bd1210392500aab4b9478f7f82916",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "swamp_slime",
+      "enemy_id": "swamp_slime",
+      "name": "늪 슬라임",
+      "data_name": "늪 슬라임",
+      "loot_table": "swamp_enemy",
+      "events": [
+        "unknown_slime_swamp",
+        "battle_slime_swamp"
+      ],
+      "source_sha256": "584f6c4bb242be7d7bab933fa08d652cb6240f56b13ac859f6281461e3ad578e",
+      "sprite": "픽셀_정리/swamp_slime.png",
+      "source": "생성_원본/swamp_slime.png",
+      "sha256": "880210983ae23990b77d115e8111d7e9e2aee2fa858ec23bf630c4a3d20f05b4",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "ruins_sentinel",
+      "enemy_id": "ruins_sentinel",
+      "name": "유적 수호병",
+      "data_name": "유적 수호병",
+      "loot_table": "ruins_enemy",
+      "events": [
+        "hidden_battle"
+      ],
+      "source_sha256": "34aa58af7c92ead2b6f0841b32c7b50d9b5d43e363f14c886d7aae1835c9b570",
+      "sprite": "픽셀_정리/ruins_sentinel.png",
+      "source": "생성_원본/ruins_sentinel.png",
+      "sha256": "06e481020b306bf48de611e6a9b8bfd7c6ce105da991dd0ca1d64465f592b448",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    }
+  ]
+}

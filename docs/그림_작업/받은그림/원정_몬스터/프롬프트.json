@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-11",
+  "tool": "built-in image_gen",
+  "transparent_background": true,
+  "status": "candidate_not_installed",
+  "references": [
+    "art/received/nature/bush.png",
+    "art/received/nature/rocks.png",
+    "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/ancient_fragment.png"
+  ],
+  "assets": [
+    {
+      "id": "field_slime",
+      "name": "숲 슬라임",
+      "generated": "exec-4006502b-fadd-40ea-8add-057d20fed49c.png",
+      "max_size": [
+        34,
+        24
+      ],
+      "accent": "cyan",
+      "min_accent": 10,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art ENEMY CHARACTER idle pose for a cozy isometric fantasy exploration game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clear outlines, bright readable midtones, limited palette, neutral daylight, orthographic isometric2:1view from south-west. One complete centered creature on genuine transparent background, intended nearest-neighbor reduction into64x64logical game sprite. Cute but readable hostile game creature, simple silhouette and very few details. No UI, text, health bars, inventory frame, panels, sprite sheet, scenery, soil island, separate shadows, halo, sparkles, smooth painting, photography, characters other than the one enemy. Primary request: ONE ordinary FIELD SLIME, pale-to-mid turquoise blue squishy rounded low blob, broad base, two small dark eyes and tiny simple neutral mouth. Small pale aqua highlight on upper left, opaque pixel body with clearly defined silhouette, no see-through checkerboard. Asymmetric raised small ripple on top and gentle side lobes, no arms, limbs, horn, crown, leaves, metal or loot. Southwest facing, looking toward camera/front-left. Fits34x24logical pixels, simple compact sprite. Image1 rocks is game's pixel density, outline and isometric perspective reference only; do not add rocks.",
+      "preserve_small_features": false
+    },
+    {
+      "id": "mine_bat",
+      "name": "광산 박쥐",
+      "generated": "exec-63006780-b8a4-4c22-a338-cba16bad0690.png",
+      "max_size": [
+        44,
+        32
+      ],
+      "accent": "yellow",
+      "min_accent": 1,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art ENEMY CHARACTER idle pose for a cozy isometric fantasy exploration game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clear outlines, bright readable midtones, limited palette, neutral daylight, orthographic isometric2:1view from south-west. One complete centered creature on genuine transparent background, intended nearest-neighbor reduction into64x64logical game sprite. Cute but readable hostile game creature, simple silhouette and very few details. No UI, text, health bars, inventory frame, panels, sprite sheet, scenery, soil island, separate shadows, halo, sparkles, smooth painting, photography, characters other than the one enemy. Primary request: ONE small MINE BAT in a single hovering idle pose. Dark slate-purple fuzzy round body, two large triangular ears with muted mauve inner patches, small dark eyes with pale yellow iris points. Two spread raised wings with chunky dark purple membranes and clear thicker brown-purple finger ribs. Front-left southwest facing, wings fully visible, compact width rather than huge span, no motion blur. Two tiny tucked feet. No vampire costume, fangs dripping blood, magic or scenery. Wings make this distinct from a slime, fit44x32logical pixels, all membranes solid opaque, transparency only outside sprite. Image1 rocks is pixel density/outline/palette reference only.",
+      "preserve_small_features": true
+    },
+    {
+      "id": "swamp_slime",
+      "name": "늪 슬라임",
+      "generated": "exec-5c691eed-41fd-4ec9-b752-d9f120bca8ad.png",
+      "max_size": [
+        36,
+        28
+      ],
+      "accent": "moss",
+      "min_accent": 10,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art ENEMY CHARACTER idle pose for a cozy isometric fantasy exploration game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clear outlines, bright readable midtones, limited palette, neutral daylight, orthographic isometric2:1view from south-west. One complete centered creature on genuine transparent background, intended nearest-neighbor reduction into64x64logical game sprite. Cute but readable hostile game creature, simple silhouette and very few details. No UI, text, health bars, inventory frame, panels, sprite sheet, scenery, soil island, separate shadows, halo, sparkles, smooth painting, photography, characters other than the one enemy. Primary request: ONE ordinary SWAMP SLIME, low wide squishy olive-to-moss GREEN blob. Dark olive shaded lower edge, readable yellow-green midtones, two small dark eyes and a tiny displeased mouth. Two tiny moss tuft clusters and one short reed leaf attached on top, kept sparse so body stays visible. Lopsided side lobes and thick broad bottom, fully opaque pixel body. Distinguish from smooth blue field slime, and from a standing plant monster. No flowers, fungi, horns, crown, tentacles, water pool, floating particles or poisonous aura. Southwest facing, fit36x28logical pixels. Image1 bush is green tones and pixel outline reference; creature must not look like a leafy bush.",
+      "preserve_small_features": false
+    },
+    {
+      "id": "ruins_sentinel",
+      "name": "유적 수호병",
+      "generated": "exec-ba3606c8-ec46-4f50-93e1-eefdff11610a.png",
+      "max_size": [
+        32,
+        46
+      ],
+      "accent": "turquoise",
+      "min_accent": 2,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art ENEMY CHARACTER idle pose for a cozy isometric fantasy exploration game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clear outlines, bright readable midtones, limited palette, neutral daylight, orthographic isometric2:1view from south-west. One complete centered creature on genuine transparent background, intended nearest-neighbor reduction into64x64logical game sprite. Cute but readable hostile game creature, simple silhouette and very few details. No UI, text, health bars, inventory frame, panels, sprite sheet, scenery, soil island, separate shadows, halo, sparkles, smooth painting, photography, characters other than the one enemy. Primary request: ONE small ANCIENT RUIN SENTINEL idle guard, a stocky humanoid stone construct made of a simple rectangular stone torso, broad block shoulders, short chunky segmented arms and legs, and a small angular stone helmet-like head. Worn beige-grey sandstone with cool grey shaded face, just two small MUTED TEAL eye slits; one simple carved line across chest. Hands empty, both feet visible, slightly bent elbows, calm guarded stance. Southwest facing, torso front and right thickness visible. Not a boss: no large weapon, shield, horn, crown, robe, aura, detailed armor or giant ruin structure. Clear biped silhouette, low detail, fits32x46logical pixels in64x64. Image1 rock and Image2 ruin fragment are pixel/stone/perspective references only.",
+      "preserve_small_features": true
+    }
+  ]
+}

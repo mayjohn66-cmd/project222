@@ -1,0 +1,15 @@
+{
+  "new_sprites": 4,
+  "enemy_ids_exist": true,
+  "battle_events_exist": true,
+  "transparent_rgb_zero": true,
+  "binary_alpha": true,
+  "previous_candidate_hashes_preserved": 21,
+  "runtime_hashes_preserved": {
+    "data/art/received_assets.json": 147,
+    "data/art/pixel_shop_assets.json": 332
+  },
+  "runtime_manifest_unchanged": true,
+  "runtime_applied": false,
+  "godot_run": false
+}

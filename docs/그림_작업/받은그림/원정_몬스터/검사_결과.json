@@ -1,0 +1,211 @@
+{
+  "method": "uniform_nearest_24_base_8_accent_with_eye_centroid_samples",
+  "checks": [
+    {
+      "id": "field_slime",
+      "crop": [
+        410,
+        337,
+        1111,
+        867
+      ],
+      "source_size": [
+        1493,
+        1053
+      ],
+      "scaled_size": [
+        32,
+        24
+      ],
+      "position": [
+        16,
+        32
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 31,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "cyan",
+      "accent_pixels": 406,
+      "feature_samples": [],
+      "source_sha256": "a15cf9a57652575b0a1adbfd4db12e4087980bcf10e435e1e3f36c729a965fce",
+      "sha256": "394ffe69c456ce8bb4e07e976d03916a99519f91de2af88a4fa6125df8a758ca"
+    },
+    {
+      "id": "mine_bat",
+      "crop": [
+        196,
+        206,
+        1333,
+        849
+      ],
+      "source_size": [
+        1470,
+        1070
+      ],
+      "scaled_size": [
+        44,
+        25
+      ],
+      "position": [
+        10,
+        31
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 26,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "yellow",
+      "accent_pixels": 2,
+      "feature_samples": [
+        {
+          "pixel": [
+            23,
+            18
+          ],
+          "source_area": 627,
+          "rgb": [
+            249,
+            218,
+            117
+          ]
+        },
+        {
+          "pixel": [
+            28,
+            17
+          ],
+          "source_area": 297,
+          "rgb": [
+            237,
+            197,
+            108
+          ]
+        }
+      ],
+      "source_sha256": "c42635bd3e488f3f13e2b980210504d5a59dc5ad4f149cdbc0317e5a89161dca",
+      "sha256": "abc440f46e39c2504f4a8af3e72beb1e231bd1210392500aab4b9478f7f82916"
+    },
+    {
+      "id": "swamp_slime",
+      "crop": [
+        138,
+        233,
+        1283,
+        921
+      ],
+      "source_size": [
+        1424,
+        1105
+      ],
+      "scaled_size": [
+        36,
+        22
+      ],
+      "position": [
+        14,
+        34
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "moss",
+      "accent_pixels": 111,
+      "feature_samples": [],
+      "source_sha256": "584f6c4bb242be7d7bab933fa08d652cb6240f56b13ac859f6281461e3ad578e",
+      "sha256": "880210983ae23990b77d115e8111d7e9e2aee2fa858ec23bf630c4a3d20f05b4"
+    },
+    {
+      "id": "ruins_sentinel",
+      "crop": [
+        251,
+        259,
+        950,
+        1173
+      ],
+      "source_size": [
+        1182,
+        1330
+      ],
+      "scaled_size": [
+        32,
+        42
+      ],
+      "position": [
+        16,
+        14
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 27,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "turquoise",
+      "accent_pixels": 3,
+      "feature_samples": [
+        {
+          "pixel": [
+            14,
+            9
+          ],
+          "source_area": 759,
+          "rgb": [
+            100,
+            171,
+            144
+          ]
+        },
+        {
+          "pixel": [
+            11,
+            9
+          ],
+          "source_area": 281,
+          "rgb": [
+            100,
+            171,
+            141
+          ]
+        }
+      ],
+      "source_sha256": "34aa58af7c92ead2b6f0841b32c7b50d9b5d43e363f14c886d7aae1835c9b570",
+      "sha256": "06e481020b306bf48de611e6a9b8bfd7c6ce105da991dd0ca1d64465f592b448"
+    }
+  ]
+}

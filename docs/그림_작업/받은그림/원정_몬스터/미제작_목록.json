@@ -1,0 +1,125 @@
+{
+  "source": "data/expedition/enemies.csv",
+  "remaining": [
+    {
+      "id": "forest_alpha_slime",
+      "name": "거대 슬라임",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "mine_golem",
+      "name": "광산 골렘",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "swamp_queen_slime",
+      "name": "늪의 여왕 슬라임",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "ancient_guardian",
+      "name": "고대 수호자",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "forest_thornling",
+      "name": "숲 가시덩굴",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "mine_shardling",
+      "name": "돌조각 정령",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "swamp_reedling",
+      "name": "늪 갈대괴물",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "ruins_wisp",
+      "name": "유적 잔불",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "meadow_fluffling",
+      "name": "초원 솜털짐승",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "meadow_seedling",
+      "name": "밀이삭 정령",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "meadow_guardian",
+      "name": "바람갈기 수호수",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "river_crab",
+      "name": "물가 돌게",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "river_pebbling",
+      "name": "물돌 정령",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "river_guardian",
+      "name": "갈대뿌리 수호자",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "budling",
+      "name": "새순 정령",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "mintling",
+      "name": "물박하 정령",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "nutling",
+      "name": "들밤 껍질짐승",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "frostling",
+      "name": "서리 결정짐승",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "rainling",
+      "name": "빗방울 정령",
+      "boss": false,
+      "status": "not_generated"
+    },
+    {
+      "id": "snowling",
+      "name": "눈꽃 솜털짐승",
+      "boss": false,
+      "status": "not_generated"
+    }
+  ]
+}
