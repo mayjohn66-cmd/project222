@@ -1,0 +1,47 @@
+{
+  "status": "candidate_not_installed",
+  "tool": "built-in image_gen",
+  "runtime_applied": false,
+  "canvas": [
+    64,
+    64
+  ],
+  "anchor": [
+    32,
+    56
+  ],
+  "view": "south-west",
+  "states": [
+    "harvestable"
+  ],
+  "assets": [
+    {
+      "item": "raw_water",
+      "gather_table": "gather_water",
+      "sprite": "픽셀_정리/raw_water.png",
+      "source": "생성_원본/raw_water.png",
+      "sha256": "b34173d32e81853febb6bd4809312dbb745923f5b095ec7f4e9c0729abdf9bc7"
+    },
+    {
+      "item": "forest_herb",
+      "gather_table": "choice_forest_herb",
+      "sprite": "픽셀_정리/forest_herb.png",
+      "source": "생성_원본/forest_herb.png",
+      "sha256": "0da9c4f70c045c5283882d0036bf80413d9837c3e9ab450853c421705c5396da"
+    },
+    {
+      "item": "iron_ore",
+      "gather_table": "choice_iron_ore",
+      "sprite": "픽셀_정리/iron_ore.png",
+      "source": "생성_원본/iron_ore.png",
+      "sha256": "489e336992e7dbc24f8d4fad05e322bab26adae39109b71de76b3b0f02a9c6b2"
+    },
+    {
+      "item": "marsh_reed",
+      "gather_table": "choice_marsh_reed",
+      "sprite": "픽셀_정리/marsh_reed.png",
+      "source": "생성_원본/marsh_reed.png",
+      "sha256": "24657457e9bbd7b401639252693e77b2d48987337686157dd353db17ea209c2f"
+    }
+  ]
+}

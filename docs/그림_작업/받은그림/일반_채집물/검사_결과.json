@@ -1,0 +1,130 @@
+[
+  {
+    "item": "raw_water",
+    "name": "채집용 물가",
+    "table": "gather_water",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      164,
+      190,
+      1494,
+      837
+    ],
+    "scaled": [
+      50,
+      24
+    ],
+    "position": [
+      7,
+      32
+    ],
+    "colors": 31,
+    "accent": "water",
+    "accent_pixels": 247,
+    "sha256": "b34173d32e81853febb6bd4809312dbb745923f5b095ec7f4e9c0729abdf9bc7",
+    "source_sha256": "6a60c3f3c4cc14ab2d927708d336fa237abf75fa8ef438bfcd2815e3efd49729"
+  },
+  {
+    "item": "forest_herb",
+    "name": "숲 약초",
+    "table": "choice_forest_herb",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      271,
+      184,
+      1122,
+      966
+    ],
+    "scaled": [
+      46,
+      42
+    ],
+    "position": [
+      9,
+      14
+    ],
+    "colors": 32,
+    "accent": "flower",
+    "accent_pixels": 49,
+    "sha256": "0da9c4f70c045c5283882d0036bf80413d9837c3e9ab450853c421705c5396da",
+    "source_sha256": "d042490970f48270efcda09e1cfd14432886a0b3b87f99e01b8fb3835c2324eb"
+  },
+  {
+    "item": "iron_ore",
+    "name": "철 광맥",
+    "table": "choice_iron_ore",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      284,
+      265,
+      1145,
+      949
+    ],
+    "scaled": [
+      50,
+      40
+    ],
+    "position": [
+      7,
+      16
+    ],
+    "colors": 31,
+    "accent": "rust",
+    "accent_pixels": 100,
+    "sha256": "489e336992e7dbc24f8d4fad05e322bab26adae39109b71de76b3b0f02a9c6b2",
+    "source_sha256": "fe45e476931dd05e5bed3b8446f1a5ae8b339b700ab1e88f93e1336c39bff747"
+  },
+  {
+    "item": "marsh_reed",
+    "name": "늪 갈대",
+    "table": "choice_marsh_reed",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      199,
+      101,
+      1052,
+      1215
+    ],
+    "scaled": [
+      37,
+      48
+    ],
+    "position": [
+      13,
+      8
+    ],
+    "colors": 32,
+    "accent": "seed_head",
+    "accent_pixels": 94,
+    "sha256": "24657457e9bbd7b401639252693e77b2d48987337686157dd353db17ea209c2f",
+    "source_sha256": "ce29deae8756aaaa814e2678efb7e4252bba3df1937f371b7eaf2ec4c52c7ef6"
+  }
+]

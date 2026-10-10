@@ -1,0 +1,59 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-11",
+  "status": "candidate_not_installed",
+  "assets": [
+    {
+      "item": "raw_water",
+      "name": "채집용 물가",
+      "table": "gather_water",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD gathering site for a cozy isometric fantasy convenience-store game. Input images are art-style references only, match their crisp chunky 64x64 logical pixel clusters, dark brown outlines, bright readable middletones, compact soil footprint, neutral daylight and 2:1 isometric ground perspective viewed from south-west. Single complete object centered on genuine transparent background, intended for nearest-neighbor downscale to fit within a64x64sprite. Restrained limited palette, no smooth painting, no photographic textures. No UI, labels, inventory frame, text, glow, sparkles, full environment, sprite sheet, multiple objects as separate panels, or outside cast shadow. Primary request: A small natural spring used to gather fresh water. LOW and WIDE irregular oval shallow clear turquoise-blue water basin, rimmed by six modest squat ordinary grey stones and compact brown earth. Some soft green moss and only two tiny grass tufts between stones. Blue water surface is clearly visible, with two small pale reflections, naturally recessed below the stones. No bucket, tap, well, building, fountain, healing symbol, gemstones, ice, giant boulders or magical effect. The water basin must occupy most of the central area and be readable at game size. Fits about50x30logical pixels, entire compact footprint. Image1 rocks is the art style and perspective reference.",
+      "generated": "exec-0e44e3cc-86d2-4210-b73c-ce45f10a40ff.png",
+      "max_size": [
+        50,
+        30
+      ],
+      "reference": "art/received/nature/rocks.png",
+      "accent": "water"
+    },
+    {
+      "item": "forest_herb",
+      "name": "숲 약초",
+      "table": "choice_forest_herb",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD gathering site for a cozy isometric fantasy convenience-store game. Input images are art-style references only, match their crisp chunky 64x64 logical pixel clusters, dark brown outlines, bright readable middletones, compact soil footprint, neutral daylight and 2:1 isometric ground perspective viewed from south-west. Single complete object centered on genuine transparent background, intended for nearest-neighbor downscale to fit within a64x64sprite. Restrained limited palette, no smooth painting, no photographic textures. No UI, labels, inventory frame, text, glow, sparkles, full environment, sprite sheet, multiple objects as separate panels, or outside cast shadow. Primary request: An ordinary forest medicinal HERB gathering patch. A compact low mound of small dark-to-mid emerald-green rosette leaves with three slender short stems holding tiny off-white five-petal flowers with soft yellow centers. Keep the leaves SMALL and numerous, oval pointed and slightly serrated, three short stems different heights. Mature common herbs, distinguish from pale tall spring sprouts or purple flowering broad-leaf mint. Small brown soil base with one pebble. White flowers should still be visible as tiny cream clusters after nearest downscale. No purple blossoms, rain drops, roots bundle, pots or cut plants. Fits50x42logical pixels. Image1 bush is artstyle, footprint, pixelcluster reference.",
+      "generated": "exec-e99580af-b190-4de3-9d92-cdf69a1108c1.png",
+      "max_size": [
+        50,
+        42
+      ],
+      "reference": "art/received/nature/bush.png",
+      "accent": "flower"
+    },
+    {
+      "item": "iron_ore",
+      "name": "철 광맥",
+      "table": "choice_iron_ore",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD gathering site for a cozy isometric fantasy convenience-store game. Input images are art-style references only, match their crisp chunky 64x64 logical pixel clusters, dark brown outlines, bright readable middletones, compact soil footprint, neutral daylight and 2:1 isometric ground perspective viewed from south-west. Single complete object centered on genuine transparent background, intended for nearest-neighbor downscale to fit within a64x64sprite. Restrained limited palette, no smooth painting, no photographic textures. No UI, labels, inventory frame, text, glow, sparkles, full environment, sprite sheet, multiple objects as separate panels, or outside cast shadow. Primary request: A compact ordinary IRON-ORE OUTCROP gathering site. Three low irregular angular slate-grey rocks, largest at rear center, two smaller in front. Exposed dull steel-grey metallic vein bands and several rusty warm orange-brown iron flecks embedded in the rock surfaces, sufficiently broad to remain readable as a few logical pixels after downscale. No giant boulder, tall spiky gemstones, blue crystals, magical glow, gold nuggets or copper ingots. Subtle metallic highlights only, no excessive shine. Compact dark brown soil and gravel base with only one tiny green tuft. Similar silhouette size to the provided Image1 rocks, fits50x40logical pixels in a64x64sprite. Input1 is artstyle, outline and perspective reference; create a new iron-bearing rock cluster.",
+      "generated": "exec-d5245569-1314-4ec1-86e8-0ca26f243827.png",
+      "max_size": [
+        50,
+        40
+      ],
+      "reference": "art/received/nature/rocks.png",
+      "accent": "rust"
+    },
+    {
+      "item": "marsh_reed",
+      "name": "늪 갈대",
+      "table": "choice_marsh_reed",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD gathering site for a cozy isometric fantasy convenience-store game. Input images are art-style references only, match their crisp chunky 64x64 logical pixel clusters, dark brown outlines, bright readable middletones, compact soil footprint, neutral daylight and 2:1 isometric ground perspective viewed from south-west. Single complete object centered on genuine transparent background, intended for nearest-neighbor downscale to fit within a64x64sprite. Restrained limited palette, no smooth painting, no photographic textures. No UI, labels, inventory frame, text, glow, sparkles, full environment, sprite sheet, multiple objects as separate panels, or outside cast shadow. Primary request: A marsh REED gathering clump. Five slender vertical green reed stems of varying heights, with LONG narrow arching green blade leaves and three recognizable brown cylindrical cattail seed heads, rounded blunt ends. Distinguish clearly from wheat: no golden wheat ears, no grain kernels, no flowers. Compact damp brown soil oval with a little moss and two tiny grey pebbles. Tall narrow silhouette, fits44x48logical pixels in64x64 with the soil base at the bottom. The stalks must not be hair-thin, use sturdy one or two logical-pixel stems so they survive nearest downscale. Brown seed heads must read as solid three or four-pixel clusters. Neutral daylight, mid-green leaves and warm medium-brown heads, dark brown crisp outline, compact low-detail foliage. Image1 bush is the game's pixelcluster, soil color and outline reference. No water pond, cut-reed bundle, basket, props or large surrounding scene.",
+      "generated": "exec-5109d239-df4e-4f4e-b33a-c6692645cd7f.png",
+      "max_size": [
+        44,
+        48
+      ],
+      "reference": "art/received/nature/bush.png",
+      "accent": "seed_head"
+    }
+  ]
+}
