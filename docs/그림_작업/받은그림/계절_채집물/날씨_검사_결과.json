@@ -1,0 +1,77 @@
+[
+  {
+    "item": "rain_pearl",
+    "table": "climate_rain_pearl",
+    "season": "",
+    "weather": "rain",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      232,
+      357,
+      1051,
+      986
+    ],
+    "scaled": [
+      50,
+      38
+    ],
+    "position": [
+      7,
+      18
+    ],
+    "colors": 31,
+    "sha256": "5884546e8aa5cad5f94e1fb2308178c4d965ac3f21cabf3886ec1a75cd97a0b9",
+    "source_sha256": "d4a263d7c5ee7ee2ab5059ff6637770cceb9ceeb36151dc488176bb7073b468d",
+    "palette_method": "24 base colors + 8 reserved water-bead colors",
+    "water_bead_pixels": 38,
+    "water_bead_clusters": [
+      4,
+      9,
+      7,
+      1,
+      1,
+      1,
+      8,
+      7
+    ],
+    "cyan_water_bead_pixels": 29
+  },
+  {
+    "item": "snow_bloom",
+    "table": "climate_snow_bloom",
+    "season": "winter",
+    "weather": "snow",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      289,
+      188,
+      1362,
+      833
+    ],
+    "scaled": [
+      50,
+      30
+    ],
+    "position": [
+      7,
+      26
+    ],
+    "colors": 32,
+    "sha256": "f2f925f1b38a4016674796903069d96c8609687bea361b473c7ed2d1d194ef5e",
+    "source_sha256": "1a767578a31e79d5b4b187c8885e183d2edccfc7f24b629ff7ebd9745fe3c4bb"
+  }
+]

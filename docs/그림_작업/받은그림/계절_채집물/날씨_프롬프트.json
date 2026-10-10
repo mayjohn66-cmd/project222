@@ -1,0 +1,38 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-11",
+  "assets": [
+    {
+      "item": "rain_pearl",
+      "table": "climate_rain_pearl",
+      "season": "",
+      "weather": "rain",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent isometric 64x64 logical pixel-art world gathering object for a cozy fantasy convenience-store game. Primary request: Rain-pearl gathering plant, rain water beads naturally clinging to broad leaves. Image1 is ONLY a pixel-cluster and outline style reference; Image2 summer_mint is ONLY the matching art style, perspective and footprint reference. Create a small low bush of five broad slightly cupped emerald leaves, leaves leaning outward at different heights on a compact oval damp brown soil mound. Three or four distinct tiny pale cyan round water beads cling to leaf tips, each round bead a few logical pixels, readable highlights. The rounded beads are harvestable fantasy rain pearls, grounded in wet foliage, no mystical glow. No flowers. Neutral daylight, readable green middletones, sparse highlights, dark brown pixel outlines. Authentic coarse crisp pixel clusters, no smooth surfaces, no painterly shading. Single object centered on genuinely transparent background, full silhouette visible. 2:1 isometric ground perspective viewed from south-west, fits about 50x40 logical pixels inside a 64x64 sprite. Small footprint matching other gathering patches. No falling-rain scene, no water pool, no ice, no gemstones, no UI, no labels, no icons, no sparkles, no cast shadow outside the soil footprint, no multiple views or sprite sheet.",
+      "generated": "exec-09f1ea1f-1e97-4729-bf59-d8dfca8b5fe6.png",
+      "max_size": [
+        50,
+        40
+      ],
+      "references": [
+        "art/received/nature/bush.png",
+        "docs/그림_작업/받은그림/계절_채집물/생성_원본/summer_mint.png"
+      ]
+    },
+    {
+      "item": "snow_bloom",
+      "table": "climate_snow_bloom",
+      "season": "winter",
+      "weather": "snow",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent isometric 64x64 logical pixel-art gathering object for a cozy fantasy game. Primary request: Snow-bloom MOSS gathering site found only during snowy winter. Image1 bush is ONLY a chunky pixel art style reference, Image2 winter_frost is ONLY a reference for the same game perspective, dark brown outlines, neutral snowy palette and small world footprint. A very LOW ground-hugging moss cushion, three softly rounded dark teal-green moss pads, growing a few tiny icy-blue fernlike fronds with branching snowflake-like BLUE LEAVES. Thin patches of white snow rest between moss pads and on the edges of a small oval dark soil footprint. Two tiny grey pebbles partly covered in snow. Must read as LIVING MOSS, no tall flowering plant, no purple flowers, no blue crystals, no tall rock pile, no icicles, no magic glow. Coarse crisp pixel clusters, few carefully placed light cyan tips, cool muted teal shadows, readable colors; match the provided pixel-art examples. The silhouette is low and wide, target50x30 logical pixels within64x64. Entire single object centered, seen from south-west with2:1 isometric ground angle, genuine transparent background. No text, labels, UI, inventory frame, falling snow, background scene, external cast shadow, sparkles, multiple views or sprite sheet. Keep white snow restrained so the teal moss and blue leaves remain the subject.",
+      "generated": "exec-e8781b12-2fb7-4300-bce8-22f25c496ff4.png",
+      "max_size": [
+        50,
+        30
+      ],
+      "references": [
+        "art/received/nature/bush.png",
+        "docs/그림_작업/받은그림/계절_채집물/생성_원본/winter_frost.png"
+      ]
+    }
+  ]
+}

@@ -42,6 +42,24 @@
       "sprite": "픽셀_정리/winter_frost.png",
       "source": "생성_원본/winter_frost.png",
       "sha256": "f4d2fbb8216651c2fab38629b3fc300fce5ee038e4619419607c48c586527129"
+    },
+    {
+      "item": "rain_pearl",
+      "gather_table": "climate_rain_pearl",
+      "season": "",
+      "weather": "rain",
+      "sprite": "픽셀_정리/rain_pearl.png",
+      "source": "생성_원본/rain_pearl.png",
+      "sha256": "5884546e8aa5cad5f94e1fb2308178c4d965ac3f21cabf3886ec1a75cd97a0b9"
+    },
+    {
+      "item": "snow_bloom",
+      "gather_table": "climate_snow_bloom",
+      "season": "winter",
+      "weather": "snow",
+      "sprite": "픽셀_정리/snow_bloom.png",
+      "source": "생성_원본/snow_bloom.png",
+      "sha256": "f2f925f1b38a4016674796903069d96c8609687bea361b473c7ed2d1d194ef5e"
     }
   ]
 }
