@@ -6,6 +6,7 @@ var world: Node2D
 var view: StoreView3D
 var manager: Node
 var capture_prefix := ""
+var floor_preview := false
 
 func check(ok: bool, label: String) -> void:
 	checks += 1
@@ -52,6 +53,35 @@ func shot(name: String) -> void:
 	await RenderingServer.frame_post_draw
 	check(get_viewport().get_texture().get_image().save_png(capture_prefix + "-" + name + ".png") == OK, "capture " + name)
 
+func check_floor_variants(kind: String) -> void:
+	var base := ReceivedWorldArt.texture("res://art/received/floors/%s_1.png" % kind).get_image()
+	if base.is_compressed(): base.decompress()
+	var material := ReceivedWorldArt.floor_material(kind)
+	for variant in range(1,4):
+		var image := ReceivedWorldArt.texture("res://art/received/floors/%s_%d.png" % [kind,variant]).get_image()
+		if image.is_compressed(): image.decompress()
+		check(image.get_size() == Vector2i(64,32),"floor canvas " + kind + str(variant))
+		var alpha_ok := true
+		var edge_ok := true
+		var delta_ok := true
+		var changed := 0
+		for y in 32:
+			for x in 64:
+				var p := image.get_pixel(x,y)
+				var q := base.get_pixel(x,y)
+				if p.a != q.a: alpha_ok = false
+				var u := (x+0.5)/64.0+(y+0.5)/32.0-0.5
+				var v := (y+0.5)/32.0-(x+0.5)/64.0+0.5
+				if not (u>0.12 and u<0.88 and v>0.12 and v<0.88) and p != q: edge_ok = false
+				if maxf(absf(p.r-q.r),maxf(absf(p.g-q.g),absf(p.b-q.b))) > 3.1/255.0: delta_ok = false
+				if p != q: changed += 1
+		check(alpha_ok,"same floor silhouette " + kind + str(variant))
+		check(edge_ok,"same boundary pixels " + kind + str(variant))
+		check(delta_ok,"subtle floor color differences " + kind + str(variant))
+		check(changed <= 184 and (variant==1 or changed>0),"common pattern retained " + kind + str(variant))
+		var normal := material.get_shader_parameter("normal_%d" % variant) as Texture2D
+		check(normal != null and normal.get_size() == Vector2(image.get_size()),"floor normals retained " + kind + str(variant))
+
 func run() -> void:
 	if not OS.get_user_data_dir().contains("foodbag_checks"):
 		push_error("Use isolated foodbag_checks project")
@@ -59,10 +89,11 @@ func run() -> void:
 		return
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--snap="): capture_prefix = arg.trim_prefix("--snap=")
+		if arg == "--floor-preview": floor_preview = true
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art/received_assets.json"))
-	check(manifest.assets.size() == 147, "147 selected unchanged originals")
+	check(manifest.assets.size() == 147, "147 registered textures including corrected floor variants")
 	for asset in manifest.assets:
-		check(FileAccess.get_sha256(asset.path) == asset.sha256, "exact source pixels: " + asset.path)
+		check(FileAccess.get_sha256(asset.path) == asset.sha256, "registered pixel hash: " + asset.path)
 		check(ReceivedWorldArt.texture(asset.path) != null, "imported texture: " + asset.path)
 	for gender in ["male", "female"]:
 		for expression in ["neutral", "smile", "flustered", "surprised", "worried", "tired", "determined"]:
@@ -86,6 +117,7 @@ func run() -> void:
 	check(absf(px - 64.0) < 0.05, "one diamond is exactly 64 display pixels")
 	for kind in ["tile","wood","grass","dirt","road","paving"]:
 		check(ReceivedWorldArt.floor_material(kind) != null, "three floor variants " + kind)
+		check_floor_variants(kind)
 	check(ReceivedWorldArt.floor_material("snow") == null, "winter snow retains existing material")
 	view.forced_hour = 12.0
 	view.apply_hour(12.0)
@@ -239,6 +271,15 @@ func run() -> void:
 	check(day_lights != night_lights,"scene lights respond to day/night")
 	await shot("night")
 	view.apply_hour(12.0)
+	if floor_preview:
+		var saved_material := view._ground_material
+		for kind in ["tile","wood","paving","road","dirt","grass"]:
+			view._ground_material = ReceivedWorldArt.floor_material(kind)
+			view._ground_mesh.material_override = view._ground_material
+			view._sort_and_update()
+			await shot("floor-" + kind)
+		view._ground_material = saved_material
+		view._ground_mesh.material_override = saved_material
 	# Real camera motion and deterministic artist-independent floor mapping.
 	view.player.global_position += Vector2(48,24)
 	view.camera2d.reset_smoothing()

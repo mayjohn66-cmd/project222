@@ -421,94 +421,94 @@
       "sha256": "8f755b6e79fe7b1f826992a60acb6bb4dcde7741373d58056426e2938609ec8a"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/dirt_1.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/dirt_1.png",
       "path": "res://art/received/floors/dirt_1.png",
       "sha256": "6b40d349df6f09d1e213565b80f91c3fb5334bae4ca4cab068fce7bcdaa24607"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/dirt_2.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/dirt_2.png",
       "path": "res://art/received/floors/dirt_2.png",
-      "sha256": "7439171cf3b68782f15d533a329211130c608cd3a8ee2a28ffd476ea77ce5095"
+      "sha256": "2e91a323d6c8f128d1e9d37774c3d979ca0752fbfbdf1f818ec31d61ee6eba95"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/dirt_3.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/dirt_3.png",
       "path": "res://art/received/floors/dirt_3.png",
-      "sha256": "4ff7d7dd5bda29ab35177d950b09c0eedd5d7cde05b97a0b80388874108558af"
+      "sha256": "d186ca1c0c4456cb28c14f43a9928b061d507f17c501ec109601ae58c0d9a328"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/grass_1.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/grass_1.png",
       "path": "res://art/received/floors/grass_1.png",
-      "sha256": "f476fd32ca5b4d9bcd71f3f2881672e5f169f7eb085d4dd6e9fc83dbfa607975"
-    },
-    {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/grass_2.png",
-      "path": "res://art/received/floors/grass_2.png",
       "sha256": "049fa44850b3f66861434844e28d8de6e47e13d05076fa27fc8242df385b5dff"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/grass_3.png",
-      "path": "res://art/received/floors/grass_3.png",
-      "sha256": "50f4fdf6f10f8e14c39e0d0a12f180faacedfc11c0cdffb5efbd689f77908fa5"
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/grass_2.png",
+      "path": "res://art/received/floors/grass_2.png",
+      "sha256": "fa3aef703cc8af4baae8d18649c6cf65e98a30e704cf0fd68e66785addf76a71"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/paving_1.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/grass_3.png",
+      "path": "res://art/received/floors/grass_3.png",
+      "sha256": "3b35b7dd7726526eae3524664cf0418ce581075292da1812208911f663b27fbc"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/paving_1.png",
       "path": "res://art/received/floors/paving_1.png",
       "sha256": "20aad07f4c722233dbfcb257c3c8aed5aed826f8bf2d9109ed9b37a7a70bc180"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/paving_2.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/paving_2.png",
       "path": "res://art/received/floors/paving_2.png",
-      "sha256": "5651860ee380620a21fbdf26a1492a5e533257c21f121747c1bb33081aa20a87"
+      "sha256": "9d7d24e7b356cdd798da0210d25e988abdd46d44f06cf1ff1cb24f3658e625c4"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/paving_3.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/paving_3.png",
       "path": "res://art/received/floors/paving_3.png",
-      "sha256": "6a257e96e139c97767d71c433c22f2216b5e39a5160b6015dcfb803abf31467e"
+      "sha256": "c073c80af0e3e38a98da553296d7f9a1374d049253b7bad24d303296be5204ce"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/road_1.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/road_1.png",
       "path": "res://art/received/floors/road_1.png",
       "sha256": "9c9655c9dfe4927d0d4eb8f69c0a63632d98fdfe988c6db49015b9be0626516f"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/road_2.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/road_2.png",
       "path": "res://art/received/floors/road_2.png",
-      "sha256": "033a9efd24f3a1c8d7570879289100c613a565078d46c76d742fd98afc3c8eb2"
+      "sha256": "77deda5c4d50e9de45aa736a8873ddeda9643877bf0293f764f6d3580ac89213"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/road_3.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/road_3.png",
       "path": "res://art/received/floors/road_3.png",
-      "sha256": "2185f12f121cdb5a368092585fba901d428b008394036885462d124e48e96651"
+      "sha256": "c9c7b3e78c539148bc20eadf5265d1f5900c380b2331314e761d6b06eef4474a"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/tile_1.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/tile_1.png",
       "path": "res://art/received/floors/tile_1.png",
       "sha256": "e8ab532857edfe9c29af8849d246279faf796165a80f9e3be36d8066307c20a0"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/tile_2.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/tile_2.png",
       "path": "res://art/received/floors/tile_2.png",
-      "sha256": "ee71471bd8d30401169403e2352042d77b64e4f9d4545f7edb18e06250c2f959"
+      "sha256": "bdac3a40c2dfc791dfef6cdbe70db64254684174055d7f6f79a83aec7f377639"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/tile_3.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/tile_3.png",
       "path": "res://art/received/floors/tile_3.png",
-      "sha256": "aca5df75a8733b9d29fe378ef770d089c3ca600ff01cf80158a8c1df49e20403"
+      "sha256": "1f32307a76d78fb904380236ae52359dde95a9e118b7cff9b20df27cde612651"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/wood_1.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/wood_1.png",
       "path": "res://art/received/floors/wood_1.png",
       "sha256": "e0f3dfc3da4696e500d19609b9c201ce1d326da0229d51072eb52a36c04c1951"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/wood_2.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/wood_2.png",
       "path": "res://art/received/floors/wood_2.png",
-      "sha256": "fc86bb8aaa4aef05e590fabc450a277ac6ad52dca4e7e2b644f977e40f9f2163"
+      "sha256": "4b556b0683bd1d5d63b2f9c48f66c7e3232c0480e128722435be73ddefeb252c"
     },
     {
-      "source": "docs/그림_작업/받은그림/바닥_등각/정리/wood_3.png",
+      "source": "docs/그림_작업/받은그림/바닥_연결_보정/픽셀_정리/wood_3.png",
       "path": "res://art/received/floors/wood_3.png",
-      "sha256": "5f76356db0082a89d9c3c6e1c8f31bea034025f60dd67ce7d2dbd058e0f91c04"
+      "sha256": "1c34289910a9fc08317d9426adce4473a226649ee9b40d5ceeff53b546ff1a33"
     },
     {
       "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_female_determined.png",
