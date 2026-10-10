@@ -1,0 +1,155 @@
+{
+  "method": "uniform_nearest_binary_alpha128_shared_gate_frame",
+  "checks": [
+    {
+      "id": "broken_column",
+      "source_size": [
+        1024,
+        1536
+      ],
+      "crop": [
+        115,
+        269,
+        930,
+        1350
+      ],
+      "scaled_size": [
+        44,
+        58
+      ],
+      "position": [
+        10,
+        58
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "colors": 32,
+      "source_sha256": "9999d92b0def973d3e3e38ed6f3b9e6c3d6a665f0bb3d135b6dc9c48c2d70c04",
+      "sha256": "99f604983d1ba7e3b579b2d727fda309f001a896d01653845c88920e2b5f9bbe"
+    },
+    {
+      "id": "wall_torch",
+      "source_size": [
+        1182,
+        1330
+      ],
+      "crop": [
+        459,
+        119,
+        765,
+        1072
+      ],
+      "scaled_size": [
+        12,
+        38
+      ],
+      "position": [
+        26,
+        18
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        45
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "colors": 30,
+      "source_sha256": "093659123a567fac61da518e1c0285bdb9b47376d697c2884f31627ad9728e0a",
+      "sha256": "f1522fb5eb0f35ab234fbbbf81d3b1353f7dc0d8131eceab5048cb401b3216c3"
+    },
+    {
+      "id": "exit_open",
+      "source_size": [
+        1060,
+        1484
+      ],
+      "crop": [
+        219,
+        227,
+        868,
+        1301
+      ],
+      "scaled_size": [
+        47,
+        78
+      ],
+      "position": [
+        8,
+        38
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "colors": 24,
+      "source_sha256": "8517f17daaa17bc93665ab6982a86fec333a2607cee259620d7f20ed84834445",
+      "sha256": "50f1d7197bed5d7c7b7dccd41a1afabefdef5d6e617b28948af627cfd4487748"
+    },
+    {
+      "id": "exit_closed",
+      "source_size": [
+        1060,
+        1484
+      ],
+      "crop": [
+        219,
+        227,
+        868,
+        1301
+      ],
+      "scaled_size": [
+        47,
+        78
+      ],
+      "position": [
+        8,
+        38
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "colors": 32,
+      "source_sha256": "d58fc3adcc51a820432766aa13ccfa112f01b8ed07f03075951fc94ab6783089",
+      "sha256": "2baa76725acc1083208f1b95a9ee8357e4132f49b39613b85511a47937ea640d"
+    }
+  ],
+  "gate": {
+    "opening_pixels": 665,
+    "changed_pixels": 361,
+    "frame_pixels_identical": true,
+    "change_mask": "출구_변경_마스크.png"
+  }
+}

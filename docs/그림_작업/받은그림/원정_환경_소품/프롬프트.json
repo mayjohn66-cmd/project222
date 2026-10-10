@@ -1,0 +1,117 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-11",
+  "status": "candidate_not_installed",
+  "assets": [
+    {
+      "id": "broken_column",
+      "name": "깨진 유적 기둥",
+      "selector": {
+        "region": "hidden_ruins",
+        "obstacle": "column"
+      },
+      "state": "static",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "bottom": 116,
+      "max_size": [
+        44,
+        66
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art scenery object for a cozy isometric fantasy convenience-store exploration game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown clean outlines, bright readable midtones, restrained palette and neutral daylight, 2:1isometric ground perspective viewed from south-west. One complete centered object on genuine transparent background, designed for nearest-neighbor logical pixel reduction. No UI, labels, text, watermarks, inventory frame, characters, sprite sheet, full scene, external shadow, smoothing, photoreal textures or glow halo. Primary request: A BROKEN ANCIENT STONE COLUMN used as an impassable ruin obstacle. One stout octagonal sandstone-grey column shaft with an irregular chipped broken top, simple vertical fluting and two small cracks, on one squat square stepped plinth. A few chips rest ON the plinth, not scattered around. No complete classical capital, intact tall tower, arch, rune inscription, magic, vegetation or loot. Weathered beige-grey midtones with subtle lavender-grey shaded face, clearly different from a small gatherable stone tablet. Fits about44x66logical pixels on a64x128canvas. Ground edges exact2:1 slopes, vertical sides upright. Image1 rock and Image2 carved ruin fragment are game's pixel/stone palette references only.",
+      "generated": "exec-8b767235-4a7b-4184-9a78-f5e25d9ac2e7.png",
+      "references": [
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/ancient_fragment.png"
+      ]
+    },
+    {
+      "id": "wall_torch",
+      "name": "벽걸이 횃불",
+      "selector": {
+        "builder": "_add_torch",
+        "frame": "static",
+        "light_not_baked": true
+      },
+      "state": "lit_static",
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        45
+      ],
+      "bottom": 56,
+      "max_size": [
+        20,
+        38
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art scenery object for a cozy isometric fantasy convenience-store exploration game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown clean outlines, bright readable midtones, restrained palette and neutral daylight, 2:1isometric ground perspective viewed from south-west. One complete centered object on genuine transparent background, designed for nearest-neighbor logical pixel reduction. No UI, labels, text, watermarks, inventory frame, characters, sprite sheet, full scene, external shadow, smoothing, photoreal textures or glow halo. Primary request: ONE small WALL-MOUNTED TORCH, wooden straight stout handle attached to a small dark iron bracket, wrapped head with a compact yellow-orange flame. Fixed single frame flame, no smoke, drifting sparks, illumination halo or cast shadow. Bottom half is wooden grip, iron mount small and visible behind middle of grip; no wall slab, stand, basket, ground, brazier or lamp. Flame has warm orange outer pixel clusters and small pale yellow core, simple three-tongue silhouette. Southwest isometric view, vertical sturdy handle, subtle side thickness, fits20x38logical pixels in64x64sprite. Image1 rocks is outline and pixel density reference only; do not add stones to torch.",
+      "generated": "exec-10163a3b-0223-4855-bf97-4c4418c659c8.png",
+      "references": [
+        "art/received/nature/rocks.png"
+      ]
+    },
+    {
+      "id": "exit_open",
+      "name": "열린 출구",
+      "selector": {
+        "exit_open": true
+      },
+      "state": "open",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "bottom": 116,
+      "max_size": [
+        56,
+        78
+      ],
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art scenery object for a cozy isometric fantasy convenience-store exploration game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown clean outlines, bright readable midtones, restrained palette and neutral daylight, 2:1isometric ground perspective viewed from south-west. One complete centered object on genuine transparent background, designed for nearest-neighbor logical pixel reduction. No UI, labels, text, watermarks, inventory frame, characters, sprite sheet, full scene, external shadow, smoothing, photoreal textures or glow halo. Primary request: ONE OPEN STONE EXIT DOORFRAME for an exploration room. A SIMPLE RECTANGULAR doorway with two stout grey stone jambs, one flat continuous horizontal stone lintel, and a low stone threshold joining both jambs at bottom. NO arched top. Slightly weathered warm grey stone blocks, two small cracks only. The stone frame is a thick three-dimensional upright rectangle at2:1isometric southwest angle, showing doorway front and modest right-hand depth. Entire central doorway opening must be FULLY TRANSPARENT, including the space below lintel and above continuous threshold, no dark backing, glow, scenery, portal effect, door, bars, stairs, ornament, ivy or attached torches. Threshold closes the transparent hole completely so stone encloses opening on all four sides. Ground footprint compact, widthabout56logical pixels and heightabout78pixels on64x128canvas; upright sides vertical, lintel edges follow2:1isometric perspective. Image1 rock and Image2 ruin fragment are STYLE only. This open frame will be the exact fixed body for a later closed iron-bar state, so keep doorway clean and geometry simple.",
+      "generated": "exec-f3c94270-9ede-4b38-a37d-10bdbb5b1746.png",
+      "references": [
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/ancient_fragment.png"
+      ]
+    },
+    {
+      "id": "exit_closed",
+      "name": "닫힌 출구",
+      "selector": {
+        "exit_open": false
+      },
+      "state": "closed",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "bottom": 116,
+      "max_size": [
+        56,
+        78
+      ],
+      "prompt": "Use case: precise-object-edit. Edit target: the provided open stone exit doorframe sprite. Create its CLOSED state by adding only five sturdy dark iron vertical bars and two thin horizontal iron crossbars INSIDE the existing transparent opening. Bar plane follows the doorway2:1isometric perspective, upright vertical bars, muted dark steel-grey midtones and tiny grey highlights; no solid door panel, padlock or decoration. Preserve EXACT stone jambs, lintel, threshold, weathering, palette, outline, pixel scale, perspective, framing and original canvas; move or redraw NO part of the stone body. Leave space BETWEEN iron bars genuinely transparent, same transparent background outside. Do not fill opening with black backing or scenery. No glow, lighting change, shadow, text, halo or additional props. This is an alternate single-frame state of the EXACT SAME doorframe.",
+      "generated": "exec-3ae51d98-3c50-4cfa-9077-cd79c36c61d5.png",
+      "edit_target": "생성_원본/exit_open.png",
+      "references": [],
+      "common_body": "exit_open",
+      "change_region": "transparent_enclosed_opening_only"
+    }
+  ]
+}

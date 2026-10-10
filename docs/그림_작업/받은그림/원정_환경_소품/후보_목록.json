@@ -1,0 +1,86 @@
+{
+  "status": "candidate_not_installed",
+  "tool": "built-in image_gen",
+  "runtime_applied": false,
+  "view": "south-west",
+  "subjects": 3,
+  "frames": 4,
+  "anchors_provisional": true,
+  "assets": [
+    {
+      "id": "broken_column",
+      "state": "static",
+      "selector": {
+        "region": "hidden_ruins",
+        "obstacle": "column"
+      },
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "sprite": "픽셀_정리/broken_column.png",
+      "source": "생성_원본/broken_column.png",
+      "sha256": "99f604983d1ba7e3b579b2d727fda309f001a896d01653845c88920e2b5f9bbe"
+    },
+    {
+      "id": "wall_torch",
+      "state": "lit_static",
+      "selector": {
+        "builder": "_add_torch",
+        "frame": "static",
+        "light_not_baked": true
+      },
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        45
+      ],
+      "sprite": "픽셀_정리/wall_torch.png",
+      "source": "생성_원본/wall_torch.png",
+      "sha256": "f1522fb5eb0f35ab234fbbbf81d3b1353f7dc0d8131eceab5048cb401b3216c3"
+    },
+    {
+      "id": "exit_open",
+      "state": "open",
+      "selector": {
+        "exit_open": true
+      },
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "sprite": "픽셀_정리/exit_open.png",
+      "source": "생성_원본/exit_open.png",
+      "sha256": "50f1d7197bed5d7c7b7dccd41a1afabefdef5d6e617b28948af627cfd4487748"
+    },
+    {
+      "id": "exit_closed",
+      "state": "closed",
+      "selector": {
+        "exit_open": false
+      },
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "sprite": "픽셀_정리/exit_closed.png",
+      "source": "생성_원본/exit_closed.png",
+      "sha256": "2baa76725acc1083208f1b95a9ee8357e4132f49b39613b85511a47937ea640d"
+    }
+  ]
+}
