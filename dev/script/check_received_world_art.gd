@@ -106,7 +106,11 @@ func run() -> void:
 			node.set_meta("preview_valid",true)
 			sync()
 			var item := item_for(node)
-			check(item.get("received_art", "") == ReceivedWorldArt.furniture_path(id,rotation), "selected rotation " + id + str(rotation))
+			var expected := ReceivedWorldArt.furniture_path(id,rotation)
+			var pixel_frame := PixelShopArt.frame(id, rotation)
+			if not pixel_frame.is_empty(): expected = PixelShopArt.STORAGE + str(pixel_frame.body)
+			if id in ["door","production_door","warehouse_door"]: expected = PixelShopArt.door_path(id,rotation,false)
+			check(item.get("received_art", "") == expected, "selected rotation " + id + str(rotation))
 			check(item["id_material"].shader == PixelActorFigure.SPRITE_ID_SHADER, "alpha silhouette mask " + id)
 			check(item["mesh"].position == item["id_mesh"].position, "matching color/mask origin " + id)
 			node.set_meta("preview_valid",false)
@@ -117,7 +121,7 @@ func run() -> void:
 		check(ReceivedWorldArt.furniture_path(id,4) == ReceivedWorldArt.furniture_path(id,0),"rotation wraps " + id)
 	var shelf := make("shelf_2x1", 0)
 	sync()
-	check(not item_for(shelf).has("received_art"),"empty shelf shows no painted goods")
+	check(item_for(shelf).has("received_art"),"empty shelf shows no painted goods")
 	for i in shelf.slots.size():
 		var slot: Dictionary = shelf.slots[i]
 		slot["item_id"] = "water"
@@ -127,11 +131,11 @@ func run() -> void:
 	check(item_for(shelf).has("received_art"),"fully stocked single shelf uses art")
 	shelf.slots[0]["stock"] = 0
 	sync()
-	check(not item_for(shelf).has("received_art"),"partial stock retains dynamic display")
+	check(item_for(shelf).has("received_art"),"partial stock retains dynamic display")
 	shelf.slots[0]["stock"] = 4
 	shelf.stack_level = 2
 	sync()
-	check(not item_for(shelf).has("received_art"),"stacked shelf retains actual layer count")
+	check(item_for(shelf).has("received_art"),"stacked shelf retains actual layer count")
 	shelf.free()
 	var rack := make("warehouse_rack",0)
 	sync()
@@ -139,14 +143,14 @@ func run() -> void:
 	rack.storage_slots[0]["item_id"] = "dry_branch"
 	rack.storage_slots[0]["amount"] = 12
 	sync()
-	check(not item_for(rack).has("received_art"),"loaded warehouse displays real stored goods")
+	check(item_for(rack).has("received_art"),"loaded warehouse displays real stored goods")
 	rack.storage_slots[0]["amount"] = 0
 	sync()
 	check(item_for(rack).has("received_art"),"warehouse becomes empty again")
 	rack.free()
 	var fallback := make("modern_shelf_2x1",0)
 	sync()
-	check(not item_for(fallback).has("received_art"),"unprovided tier retains its own model")
+	check(item_for(fallback).has("received_art"),"modern tier uses dedicated empty pixel body")
 	fallback.free()
 	check(ReceivedWorldArt.texture("res://art/received/no_such.png") == null,"missing texture safely falls back")
 	for variant in ["round","pine","dead","birch","big_oak","cherry","poplar","willow","apple"]:
@@ -215,7 +219,7 @@ func run() -> void:
 	shape_preview.show_furniture("register")
 	check(shape_preview.received_preview.visible and not shape_preview.display.visible, "blueprint shows supplied shape")
 	shape_preview.show_furniture("modern_shelf_2x1")
-	check(not shape_preview.received_preview.visible and shape_preview.display.visible, "blueprint retains unprovided tier model")
+	check(shape_preview.received_preview.visible and not shape_preview.display.visible, "blueprint uses modern empty body")
 	shape_preview.free()
 	var sample := ["register","shelf_2x1","drink_machine","plant_small","magic_oven","fridge_unit","freezer_unit","night_lantern"]
 	for i in sample.size():

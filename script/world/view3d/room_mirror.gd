@@ -55,7 +55,7 @@ func sync() -> void:
 		var cols: int = int(room.get("columns"))
 		var rows: int = int(room.get("rows"))
 		var origin: Vector2 = origin_of(room)
-		var sig: String = "%d|%d|%s" % [cols, rows, str(origin)]
+		var sig: String = "%d|%d|%s|%s" % [cols, rows, str(origin), PixelShopArt.door_open(view, str(info["door"]))]
 		var name: String = str(info["node"])
 
 		if _signatures.get(name, "") == sig:
@@ -120,11 +120,16 @@ func _build_walls(name: String, info: Dictionary, origin: Vector2, cols: int, ro
 		var key: String = "rwall_%s_%s" % [name, w[0]]
 		var lo: Vector2 = w[1]
 		var hi: Vector2 = w[2]
+		var direction := 0 if w[0] == "n" else 2 if w[0] == "s" else 1 if w[0] == "e" else 3
+		if PixelShopArt.wall_run(view, key, lo, hi, direction, true, bool(w[3])):
+			continue
 		var shell: Dictionary = StoreShell.build_wall(lo, hi, true, accent, {"ts": view.texture_size})
 		view._set_mesh_item(key, shell["mesh"], VillageAssets.make_materials(shell["specs"]), lo, hi, float(shell["total_blocks"]), "", NAN, true)
 
 		if w[3]:
 			view._items[key]["cutaway"] = {"rect": Rect2(lo, hi - lo), "h": view.block_height(WALL_BLOCKS), "factor": 1.0, "base_origin": true}
+
+	PixelShopArt.wall_corners(view, "rwall_" + name, Vector2(x0,y0),Vector2(x1,y1),false)
 
 	# 입구 문(서쪽 벽, 방 안쪽 = +x 를 본다)
 	var door_id: String = str(info["door"])

@@ -1,7 +1,7 @@
 class_name ReceivedWorldArt
 extends RefCounted
 ## 받은그림의 선택된 원본을 표시한다. 게임의 96x48 좌표/충돌/저장값은 그대로 둔다.
-## 카메라만 64x32 표시로 맞추며 없는 그림과 동적 재고/쌓기 상태는 기존 모델을 쓴다.
+## 카메라만 64x32 표시로 맞춘다. 진열대·문은 PixelShopArt가 실제 상태로 합성한다.
 const ENABLED := true
 const TILE_WIDTH := 64.0
 const CSV := "res://data/art/received_furniture.csv"
@@ -48,6 +48,10 @@ static func furniture(view: StoreView3D, key: String, node: Node, build_id: Stri
 		preview: bool = false, valid: bool = true) -> bool:
 	if not ENABLED:
 		return false
+	if PixelShopArt.furniture(view, key, node, build_id, rotation, lo, hi, base, signature, preview, valid):
+		return true
+	if PixelProductionArt.furniture(view, key, node, build_id, rotation, lo, hi, base, signature, preview):
+		return true
 	var path := furniture_path(build_id, rotation)
 	if path.is_empty():
 		return false

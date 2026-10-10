@@ -658,6 +658,9 @@ func _sync_walls() -> void:
 			lo_v = Vector2(x0, r["lo"])
 			hi_v = Vector2(x0 + WALL_THICKNESS, r["hi"])
 
+		if PixelShopArt.wall_run(self, "wall%d" % index, lo_v, hi_v, int(r["direction"]), bool(r["tall"]), int(r["direction"]) in [1,2]):
+			index += 1
+			continue
 		# 현대 편의점 벽: 안쪽은 흰 벽 + 브랜드색 띠, 길 쪽 낮은 벽은 유리 진열창(StoreShell)
 		var wall_blocks: float = WALL_TALL_BLOCKS if r["tall"] else WALL_LOW_BLOCKS
 		var shell: Dictionary = StoreShell.build_wall(lo_v, hi_v, bool(r["tall"]), StoreShell.BRAND, {"ts": texture_size})
@@ -665,6 +668,11 @@ func _sync_walls() -> void:
 		# 앞쪽 벽(카메라에 가까운 동·남쪽 면)은 플레이어가 가까이 오면 낮아진다(벽 뒤에 서면 몸이 가려지므로). 뒤쪽 벽은 그대로.
 		_items["wall%d" % index]["cutaway"] = {"rect": Rect2(lo_v, hi_v - lo_v), "h": block_height(wall_blocks), "factor": 1.0, "base_origin": true} if r["direction"] == 1 or r["direction"] == 2 else {}
 		index += 1
+	var store_rect: Rect2i = floor_node.get_store_rect()
+	var low_front := false
+	for segment in segments:
+		if int(segment.direction) == 1: low_front = not bool(segment.tall)
+	PixelShopArt.wall_corners(self,"wall",Vector2(store_rect.position)-Vector2.ONE*0.5,Vector2(store_rect.end)-Vector2.ONE*0.5,low_front)
 
 
 # 앞쪽 벽 투시: 플레이어가 벽 2.4칸 안으로 들어오면 벽 높이를 부드럽게 0.38배까지 낮추고, 멀어지면 되돌린다.
@@ -700,6 +708,10 @@ func _update_wall_cutaway(delta: float) -> void:
 
 		cut["factor"] = f
 		var h: float = float(cut["h"])
+		if item.has("received_art"):
+			for material_key in ["material", "id_material"]:
+				(item[material_key] as ShaderMaterial).set_shader_parameter("frame_scale", Vector2(1.0, f))
+
 
 		for node_key in ["mesh", "id_mesh"]:
 			var inst: MeshInstance3D = item.get(node_key)
@@ -783,6 +795,8 @@ func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, al
 				stock_sig += "%s:%d," % [str((sl as Dictionary).get("item_id", "")), int((sl as Dictionary).get("amount", 0))]
 
 		var sig: String = "%s|%s|%s|%d|%d|%d|%d|%s|%s|%s" % [build_id, str(anchor), str(origin), rotation_index, fx, fy, stack, str(is_preview), str(preview_valid), stock_sig]
+
+		sig += "|production=" + PixelProductionArt.signature(node)
 
 		if _items.has(key) and _items[key]["signature"] == sig:
 			continue
@@ -955,6 +969,7 @@ func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: 
 	var is_preview := bool(node.get_meta("is_build_preview", false))
 	var preview_valid := bool(node.get_meta("preview_valid", true))
 	var sig: String = "%s|%s|%s|%d|%s|%s" % [build_id, str(anchor), str(origin), rotation_index, is_preview, preview_valid]
+	sig += "|open=" + str(PixelShopArt.door_open(self, build_id))
 	alive[base_key + "a"] = true
 	alive[base_key + "b"] = true
 	alive[base_key + "c"] = true
