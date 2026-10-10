@@ -118,7 +118,7 @@ func _action(id: String) -> void:
 		var recipe_id := id.trim_prefix("craft:")
 		var result := VillageSmithyFlow.craft(recipe_id)
 		panel.refresh()
-		panel.message.text = "제작 완료: %s ×%d · 창고에 받았습니다." % [ItemData.get_item_name(str(result["item"])),int(result["amount"])] if not result.is_empty() else VillageSmithyFlow.blocked_reason(recipe_id)
+		panel.message.text = UiText.f("service.smith.done", [ItemData.get_item_name(str(result["item"])),int(result["amount"])]) if not result.is_empty() else VillageSmithyFlow.blocked_reason(recipe_id)
 func _close() -> void:
 	if not open: return
 	open = false

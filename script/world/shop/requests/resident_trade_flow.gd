@@ -28,7 +28,7 @@ static func blocked_reason(id: String) -> String:
 	if int(entry["give_amount"]) <= 0 or int(entry["receive_amount"]) <= 0 or int(entry["daily_limit"]) <= 0 \
 		or not ItemData.has_item(str(entry["give"])) or not ItemData.has_item(str(entry["receive"])): return "이 교환은 준비 중입니다."
 	if remaining(id) <= 0: return "오늘 준비한 수량이 끝났어요. 다음 날 다시 만나요."
-	if GameState.get_item_count(str(entry["give"])) < int(entry["give_amount"]): return "교환할 재료가 창고에 부족해요."
+	if GameState.get_item_count(str(entry["give"])) < int(entry["give_amount"]): return UiText.t("service.supply.insufficient")
 	return ""
 
 static func exchange(id: String) -> Dictionary:

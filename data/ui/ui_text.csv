@@ -58,3 +58,11 @@ register.restock.warehouse,창고 선반 %d개 · 먼저 꺼낸 뒤 진열대에
 register.restock.fridge,냉장 보관 %d개 · 냉장함에서 꺼낸 뒤 진열대에 보충하세요.
 register.restock.freezer,냉동 보관 %d개 · 냉동함에서 꺼낸 뒤 진열대에 보충하세요.
 register.restock.empty,이 상품을 보충할 재고가 없습니다. 가진 다른 상품을 먼저 진열해도 괜찮아요.
+service.supply.instructions,재료는 소지품에서 사용합니다. 보관한 재료는 먼저 꺼내세요. 장비 제작은 배운 제조법만 보여 줍니다.
+service.supply.insufficient,소지품에 필요한 재료가 부족합니다.
+service.supply.item,%s · 소지 %d / 필요 %d · %d개 부족
+service.supply.warehouse,창고 선반 %d개 · 이 창을 닫고 꺼낸 뒤 다시 찾아오세요.
+service.trade.stock,%s ×%d → %s ×%d\n소지 %s %d개 · 오늘 남은 교환 %d회
+service.trade.done,교환 완료: %s ×%d를 소지품에 받았습니다.
+service.smith.done,제작 완료: %s ×%d · 소지품에 받았습니다.
+service.trade.intro,도구는 보유 장비로 받습니다. 원정 준비에서 가방에 넣고 출발하세요.\n교환할 재료는 소지품에서 사용합니다. 창고 선반에 맡긴 재료는 먼저 꺼내 오세요.

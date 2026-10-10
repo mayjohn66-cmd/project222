@@ -39,5 +39,5 @@ func _on_action(id: String) -> void:
 		panel.refresh()
 		return
 	var result := ResidentTradeFlow.exchange(id)
-	panel.message.text = ResidentTradeFlow.blocked_reason(id) if result.is_empty() else "교환 완료: %s ×%d를 창고에 받았습니다." % [ItemData.get_item_name(result["item"]), result["amount"]]
+	panel.message.text = ResidentTradeFlow.blocked_reason(id) if result.is_empty() else UiText.f("service.trade.done", [ItemData.get_item_name(result["item"]), result["amount"]])
 	panel.refresh()

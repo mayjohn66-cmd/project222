@@ -93,7 +93,7 @@ func hide_panel() -> void:
 func select_mode(id: String) -> void:
 	mode = id
 	selected.clear()
-	message.text = "재료는 창고에서 사용합니다. 장비 제작은 배운 제조법만 보여 줍니다."
+	message.text = UiText.t("service.supply.instructions")
 	refresh()
 	call_deferred("fit")
 func refresh() -> void:
@@ -118,6 +118,12 @@ func refresh() -> void:
 			for material in recipe["materials"]: text += "%s %d/%d · " % [ItemData.get_item_name(str(material["item_id"])),GameState.get_item_count(str(material["item_id"])),int(material["amount"])]
 			var reason := VillageSmithyFlow.blocked_reason(id)
 			if not reason.is_empty(): text += "\n" + reason
+			var costs := {}
+			for material in recipe["materials"]:
+				var item := str(material["item_id"])
+				costs[item] = int(costs.get(item,0)) + int(material["amount"])
+			var supply := NpcServiceSupplyGuide.missing(self,costs)
+			if not supply.is_empty(): text += "\n" + supply
 			list.add_child(label(text,18))
 			var button := make_button("제작하기")
 			button.disabled = not VillageSmithyFlow.blocked_reason(id).is_empty()
@@ -163,6 +169,8 @@ func refresh_detail() -> void:
 	if data.get("equipment_type","") == ExpeditionEquipmentData.TYPE_WEAPON: text += ExpeditionWeaponLoadout.get_style_text(id) + "\n"
 	for material in check.get("costs", {}): text += "%s %d개 · 보유 %d개\n" % [ItemData.get_item_name(str(material)),int(check["costs"][material]),GameState.get_item_count(str(material))]
 	if not check.get("success",false): text += str(check.get("message","강화할 수 없습니다."))
+	var supply := NpcServiceSupplyGuide.missing(self,check.get("costs",{}))
+	if not supply.is_empty(): text += "\n" + supply
 	detail.text = text
 	confirm_button.text = "최대 단계입니다" if capped else "선택 장비 #%d · +%d 강화 확정" % [int(selected["instance_id"]),level+1]
 	confirm_button.disabled = not check.get("success",false)

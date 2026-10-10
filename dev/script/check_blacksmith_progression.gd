@@ -9,6 +9,7 @@ class LootHost extends RefCounted:
 	var selected_bag_uid := -1
 	var bag_grid_view = null
 	var loot_grid := GridContainer.new()
+	var discard_loot_dialog := ConfirmationDialog.new()
 	func refresh_loot_ui() -> void: pass
 	func refresh_bag_ui() -> void: pass
 func check(ok: bool, label: String) -> void:
@@ -84,10 +85,12 @@ func run() -> void:
 	loot_host.temporary_loot = [{"item_id":"iron_ore","amount":1,"blacksmith_ore_origin":true}]
 	var controller := ExpeditionBagController.new()
 	controller.setup(loot_host)
+	check(loot_host.discard_loot_dialog.confirmed.is_connected(controller.finish_loot_organization),"loot fixture setup completes with current discard confirmation contract")
 	# The UI card refresh accesses loot_grid; an unattached empty container is enough for no remaining loot.
 	controller.drop_grid_data("bag",{"source":"loot","loot_index":0},Vector2i.ZERO)
 	check(loot_host.expedition_bag.placements[0].get("blacksmith_ore_origin",false),"actual loot-to-bag operation preserves acquisition origin")
 	loot_host.loot_grid.free()
+	loot_host.discard_loot_dialog.free()
 	var restored := ExpeditionBag.new()
 	check(restored.load_placements(bag.placements.duplicate(true)) and restored.placements[0].get("blacksmith_ore_origin",false),"checkpoint load preserves actual loot evidence")
 	check(result_service.deposit_items(restored,{"region":"mine","explored":true}).get("success",false) and BlacksmithProgressionRecords.has("ore_returned"),"actual new ore deposit records evidence")

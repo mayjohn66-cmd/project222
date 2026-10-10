@@ -9,7 +9,7 @@ func entries() -> Array[Dictionary]:
 	result.append_array(RequestTextData.enrich_all(ResidentTradeFlow.SETTINGS.offers, "trade_offer"))
 	return result
 func panel_title() -> String: return "타블렌의 노점 · 도구와 재료" if ResidentMerchantSupply.ENABLED else RequestTextData.text("service_text", "trade_panel", "title", "재료 교환")
-func introduction() -> String: return "도구는 보유 장비로 받습니다. 원정 준비에서 가방에 넣고 출발하세요.\n" + RequestTextData.text("service_text", "trade_panel", "summary")
+func introduction() -> String: return UiText.t("service.trade.intro")
 
 func refresh() -> void:
 	count_label.text = str(VillageLifeFlow.resident("naru")["name"]) + " · " + VillageLifeFlow.friendship_name("naru") + " · 보유금 %d G" % GameState.get_money()
@@ -25,9 +25,11 @@ func refresh() -> void:
 			card["action"].text = "도구 구매 · %d G" % ExpeditionShopData.get_price(item)
 			card["action"].disabled = not reason.is_empty()
 			continue
-		var text := "%s ×%d → %s ×%d\n창고에 %s %d개 · 오늘 남은 교환 %d회" % [ItemData.get_item_name(entry["give"]), entry["give_amount"], ItemData.get_item_name(entry["receive"]), entry["receive_amount"], ItemData.get_item_name(entry["give"]), GameState.get_item_count(entry["give"]), ResidentTradeFlow.remaining(id)]
+		var text := UiText.f("service.trade.stock", [ItemData.get_item_name(entry["give"]), entry["give_amount"], ItemData.get_item_name(entry["receive"]), entry["receive_amount"], ItemData.get_item_name(entry["give"]), GameState.get_item_count(entry["give"]), ResidentTradeFlow.remaining(id)])
 		var reason := ResidentTradeFlow.blocked_reason(id)
 		if not reason.is_empty(): text += "\n" + reason
+		var supply := NpcServiceSupplyGuide.missing(self, {str(entry["give"]):int(entry["give_amount"])})
+		if not supply.is_empty(): text += "\n" + supply
 		card["info"].text = text
 		card["action"].text = "교환하기" if reason.is_empty() else "교환 대기"
 		card["action"].disabled = not reason.is_empty()
