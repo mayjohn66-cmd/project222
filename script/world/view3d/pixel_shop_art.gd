@@ -1,6 +1,6 @@
 class_name PixelShopArt
 extends RefCounted
-## 표시 전용. 실제 슬롯에서 상품을 합성하며 게임 좌표/충돌/저장값은 바꾸지 않는다.
+## 표시 전용. 빈/물품이 놓인 고정 그림만 사용하며 물품 종류·수량별 합성은 하지 않는다.
 const SHELL := "res://art/received/shop_shell/"
 const STORAGE := "res://art/received/shop_storage/"
 const DATA := "res://data/art/pixel_shop_frames.json"
@@ -45,40 +45,17 @@ static func glyph(item_id: String) -> Image:
 	_glyphs[item_id] = cropped
 	return cropped
 
-static func compose(f: Dictionary, slots: Array, rack: bool = false) -> Image:
-	var tex := ReceivedWorldArt.texture(STORAGE + str(f.body))
-	if tex == null: return null
-	var body := tex.get_image()
-	if body.is_compressed(): body.decompress()
-	body.convert(Image.FORMAT_RGBA8)
-	var result := body.duplicate() as Image
-	var limit: int = int(_data.warehouse_max_visible_goods if rack else _data.max_visible_goods)
-	var anchors: Array = f.get("slot_anchors", [])
-	for j in mini(slots.size(), anchors.size()):
-		var slot: Dictionary = slots[j]
-		var count := clampi(int(slot.get("amount" if rack else "stock", 0)), 0, limit)
-		if count == 0: continue
-		var icon := glyph(str(slot.get("item_id", "")))
-		if icon == null: continue
-		var a: Array = anchors[j]
-		var budget := maxi(4, floori(float(a[2]) / count) - 1)
-		var scale := minf(1.0, float(budget) / icon.get_width())
-		var good := icon.duplicate() as Image
-		good.resize(maxi(1, roundi(icon.get_width() * scale)), maxi(1, roundi(icon.get_height() * scale)), Image.INTERPOLATE_NEAREST)
-		for n in count:
-			var x := float(a[0]) + (n - (count - 1) * 0.5) * minf(budget + 1, float(a[2]) / count)
-			var y := float(a[1]) + (x - float(a[0])) * (0.5 if int(f.view) == 0 else -0.5)
-			var pos := Vector2i(roundi(x - good.get_width() * 0.5), roundi(y - good.get_height()))
-			var placed := good.duplicate() as Image
-			# 닫힌 몸체 바깥으로 상품이 튀어나오지 않도록 알파를 동일하게 제한한다.
-			if not rack:
-				for gx in good.get_width():
-					for gy in good.get_height():
-						var at := pos + Vector2i(gx, gy)
-						if not Rect2i(Vector2i.ZERO, body.get_size()).has_point(at) or body.get_pixelv(at).a == 0:
-							placed.set_pixel(gx, gy, Color.TRANSPARENT)
-			result.blend_rect(placed, Rect2i(Vector2i.ZERO, good.get_size()), pos)
-	return result
+static func has_stock(slots: Array, rack: bool = false) -> bool:
+	for slot in slots:
+		if not str(slot.get("item_id","")).is_empty() and int(slot.get("amount" if rack else "stock",0)) > 0: return true
+	return false
+
+static func storage_path(f: Dictionary, rotation: int, stocked: bool) -> String:
+	if stocked: return STORAGE + "stocked/" + str(f.body).get_file()
+	if str(f.build_id) in ["warehouse_rack","steel_warehouse_rack"]:
+		return ReceivedWorldArt.furniture_path(str(f.build_id),rotation)
+	return STORAGE + str(f.body)
+
 
 static func furniture(view: StoreView3D, key: String, node: Node, build_id: String,
 		rotation: int, lo: Vector2, hi: Vector2, base: Vector2, signature: String,
@@ -99,12 +76,12 @@ static func furniture(view: StoreView3D, key: String, node: Node, build_id: Stri
 	var rack := build_id.ends_with("warehouse_rack")
 	var slots: Array = []
 	if not preview: slots = node.get("storage_slots" if rack else "slots")
-	var image := compose(f, slots, rack)
-	if image == null: return false
-	var tex := ImageTexture.create_from_image(image)
+	var stocked := has_stock(slots,rack)
+	var path := storage_path(f,rotation,stocked)
+	var tex := ReceivedWorldArt.texture(path)
+	if tex == null: return false
 	ReceivedWorldArt.billboard(view, key, tex, Vector2(f.anchor[0],f.anchor[1]), lo, hi, base, signature, tint)
-	view._items[key]["received_art"] = STORAGE + str(f.body)
-	view._items[key]["pixel_stock"] = slots.duplicate(true)
+	view._items[key]["stocked"] = stocked
 	return true
 
 static func wall_run(view: StoreView3D, key: String, lo: Vector2, hi: Vector2,
@@ -130,6 +107,7 @@ static func wall_run(view: StoreView3D, key: String, lo: Vector2, hi: Vector2,
 		if along_x: base.y = hi.y if direction == 0 else lo.y
 		else: base.x = hi.x if direction == 3 else lo.x
 		ReceivedWorldArt.billboard(view, panel_key, tex, Vector2(32,104), a, b, base, "pixel_wall")
+		view._items[panel_key].material.set_shader_parameter("normal_base",Vector3(0,0,1) if along_x else Vector3(1,0,0))
 		if cutaway:
 			view._items[panel_key]["cutaway"] = {"rect": Rect2(a,b-a), "h": 0.0, "factor":1.0, "base_origin":true}
 	return true

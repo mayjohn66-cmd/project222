@@ -40,6 +40,7 @@ static func floor_material(kind: String, tint: Color = Color.WHITE) -> ShaderMat
 	mat.shader = FLOOR_SHADER
 	for i in images.size():
 		mat.set_shader_parameter("tile_%d" % (i + 1), images[i])
+		mat.set_shader_parameter("normal_%d" % (i + 1),SpriteNormalMaps.texture(images[i]))
 	mat.set_shader_parameter("tint", tint)
 	return mat
 
@@ -86,7 +87,7 @@ static func furniture(view: StoreView3D, key: String, node: Node, build_id: Stri
 
 static func billboard(view: StoreView3D, key: String, tex: Texture2D, anchor: Vector2,
 		lo: Vector2, hi: Vector2, base: Vector2, signature: String, tint: Color = Color.WHITE,
-		scale_factor: float = 1.0) -> void:
+		scale_factor: float = 1.0, normal_source_path: String = "") -> void:
 	var unit := sqrt(2.0) / TILE_WIDTH * scale_factor
 	var bounds := tex.get_image().get_used_rect()
 	var quad := QuadMesh.new()
@@ -100,6 +101,11 @@ static func billboard(view: StoreView3D, key: String, tex: Texture2D, anchor: Ve
 	mat.set_shader_parameter("frame_offset", offset)
 	mat.set_shader_parameter("region", region)
 	mat.set_shader_parameter("light_tint", tint)
+	var normal_source := tex if normal_source_path.is_empty() else texture(normal_source_path)
+	var extra := maxi(0,tex.get_height()-normal_source.get_height())
+	mat.set_shader_parameter("normal_texture",SpriteNormalMaps.top_padding(SpriteNormalMaps.texture(normal_source),extra))
+	if extra > 0:
+		mat.set_shader_parameter("unlit_top",float(normal_source.get_image().get_used_rect().position.y+extra)/tex.get_height())
 	quad.material = mat
 	var height_blocks := maxf(1.0, (anchor.y - bounds.position.y) * scale_factor / view.block_px)
 	view._set_mesh_item(key, quad, [mat], lo, hi, height_blocks, signature, NAN, false)
@@ -119,38 +125,11 @@ static func billboard(view: StoreView3D, key: String, tex: Texture2D, anchor: Ve
 		n.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
 static func lighting(view: StoreView3D) -> void:
-	if view._env == null:
-		return
-	var ambient := view._env.ambient_light_color
-	var light := Color(minf(1.0, ambient.r / 0.74), minf(1.0, ambient.g / 0.76), minf(1.0, ambient.b / 0.84))
-	var ground_materials: Array = [view._ground_material]
-	if view._room_mirror != null:
-		for floor_info in view._room_mirror._floors.values(): ground_materials.append(floor_info["material"])
-	if view.village != null:
-		for floor_info in view.village._ground.values(): ground_materials.append(floor_info["material"])
-	var positions := PackedVector4Array()
-	var colors := PackedVector4Array()
-	positions.resize(16)
-	colors.resize(16)
-	for i in mini(16, view._lamps.size()):
-		var lamp: OmniLight3D = view._lamps[i]
-		if lamp.visible:
-			positions[i] = Vector4(lamp.position.x, lamp.position.y, lamp.position.z, lamp.omni_range)
-			colors[i] = Vector4(lamp.light_color.r, lamp.light_color.g, lamp.light_color.b, clampf(lamp.light_energy / 1.6,0.0,1.0))
-	for material in ground_materials:
-		if material != null and material.shader == FLOOR_SHADER:
-			material.set_shader_parameter("light_tint", light)
-			material.set_shader_parameter("lamps", positions)
-			material.set_shader_parameter("lamp_colors", colors)
+	# 실제 환경광/태양/보조광/점등은 spatial 셰이더가 계산한다. 원본에 색조를 중복 곱하지 않는다.
 	for item in view._items.values():
 		if item.has("received_art"):
-			var local_light := light
-			for lamp in view._lamps:
-				if lamp.visible:
-					var distance: float = lamp.global_position.distance_to(item["mesh"].position)
-					var amount := clampf(1.0 - distance / lamp.omni_range, 0.0, 1.0) * 0.55
-					local_light = local_light.lerp(lamp.light_color, amount)
-			(item["material"] as ShaderMaterial).set_shader_parameter("light_tint", item["art_tint"] * local_light)
+			(item["material"] as ShaderMaterial).set_shader_parameter("light_tint",item["art_tint"])
+
 
 static func nature(view: StoreView3D, key: String, lo: Vector2, hi: Vector2, rule: Dictionary,
 		signature: String, scale_factor: float = 1.0) -> bool:

@@ -35,20 +35,6 @@ static func create(key: String) -> BlockyFigure:
 	return BlockyFigure.new()
 
 
-## Authored shading remains intact, while night/season tint and nearby shop lights still apply.
-static func apply_lighting(figure: BlockyFigure, environment: Environment, lamps: Array, foot: Vector3) -> void:
-	if not figure is PixelActorFigure or environment == null:
-		return
-	var ambient := environment.ambient_light_color
-	var tint := Color(minf(1.0, ambient.r / 0.74), minf(1.0, ambient.g / 0.76), minf(1.0, ambient.b / 0.84))
-	var lamp_amount := 0.0
-	var lamp_tint := Color(1.0, 0.86, 0.62)
-	for lamp in lamps:
-		if not lamp.visible:
-			continue
-		var distance: float = (lamp.global_position - foot).length()
-		var amount: float = clampf(1.0 - distance / lamp.omni_range, 0.0, 1.0) * clampf(lamp.light_energy / 1.6, 0.0, 1.0)
-		if amount > lamp_amount:
-			lamp_amount = amount
-			lamp_tint = lamp.light_color
-	(figure as PixelActorFigure).set_light_tint(tint.lerp(lamp_tint, lamp_amount * 0.55))
+## spatial 셰이더에서 실제 빛을 계산한다. 시간 색조를 원본에 중복 곱하지 않는다.
+static func apply_lighting(figure: BlockyFigure, _environment: Environment, _lamps: Array, _foot: Vector3) -> void:
+	if figure is PixelActorFigure: (figure as PixelActorFigure).set_light_tint(Color.WHITE)

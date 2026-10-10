@@ -108,7 +108,7 @@ func run() -> void:
 			var item := item_for(node)
 			var expected := ReceivedWorldArt.furniture_path(id,rotation)
 			var pixel_frame := PixelShopArt.frame(id, rotation)
-			if not pixel_frame.is_empty(): expected = PixelShopArt.STORAGE + str(pixel_frame.body)
+			if not pixel_frame.is_empty(): expected = PixelShopArt.storage_path(pixel_frame,rotation,false)
 			if id in ["door","production_door","warehouse_door"]: expected = PixelShopArt.door_path(id,rotation,false)
 			check(item.get("received_art", "") == expected, "selected rotation " + id + str(rotation))
 			check(item["id_material"].shader == PixelActorFigure.SPRITE_ID_SHADER, "alpha silhouette mask " + id)
@@ -131,7 +131,7 @@ func run() -> void:
 	check(item_for(shelf).has("received_art"),"fully stocked single shelf uses art")
 	shelf.slots[0]["stock"] = 0
 	sync()
-	check(item_for(shelf).has("received_art"),"partial stock retains dynamic display")
+	check(item_for(shelf).has("received_art"),"partial stock retains common stocked drawing")
 	shelf.slots[0]["stock"] = 4
 	shelf.stack_level = 2
 	sync()
@@ -143,7 +143,7 @@ func run() -> void:
 	rack.storage_slots[0]["item_id"] = "dry_branch"
 	rack.storage_slots[0]["amount"] = 12
 	sync()
-	check(item_for(rack).has("received_art"),"loaded warehouse displays real stored goods")
+	check(item_for(rack).has("received_art"),"loaded warehouse displays fixed stocked drawing")
 	rack.storage_slots[0]["amount"] = 0
 	sync()
 	check(item_for(rack).has("received_art"),"warehouse becomes empty again")
@@ -220,6 +220,8 @@ func run() -> void:
 	check(shape_preview.received_preview.visible and not shape_preview.display.visible, "blueprint shows supplied shape")
 	shape_preview.show_furniture("modern_shelf_2x1")
 	check(shape_preview.received_preview.visible and not shape_preview.display.visible, "blueprint uses modern empty body")
+	shape_preview.show_furniture("steel_warehouse_rack")
+	check((shape_preview.received_preview.texture as AtlasTexture).atlas == ReceivedWorldArt.texture(ReceivedWorldArt.furniture_path("steel_warehouse_rack",0)),"blueprint and empty placed rack share the same body")
 	shape_preview.free()
 	var sample := ["register","shelf_2x1","drink_machine","plant_small","magic_oven","fridge_unit","freezer_unit","night_lantern"]
 	for i in sample.size():
@@ -229,11 +231,11 @@ func run() -> void:
 	sync()
 	view._sort_and_update()
 	await shot("shop")
-	var day_color: Color = item_for(view.objects_node.get_children()[0])["material"].get_shader_parameter("light_tint")
+	var day_lights: Array = [view._sun.light_color,view._sun.light_energy,view._env.ambient_light_color,view._env.ambient_light_energy]
 	view.apply_hour(23.0)
 	view._sort_and_update()
-	var night_color: Color = item_for(view.objects_node.get_children()[0])["material"].get_shader_parameter("light_tint")
-	check(day_color != night_color,"received sprites respond to day/night")
+	var night_lights: Array = [view._sun.light_color,view._sun.light_energy,view._env.ambient_light_color,view._env.ambient_light_energy]
+	check(day_lights != night_lights,"scene lights respond to day/night")
 	await shot("night")
 	view.apply_hour(12.0)
 	# Real camera motion and deterministic artist-independent floor mapping.

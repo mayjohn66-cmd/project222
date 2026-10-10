@@ -33,7 +33,7 @@ func run() -> void:
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--snap="): capture_prefix = arg.trim_prefix("--snap=")
 	var manifest: Dictionary = JSON.parse_string(FileAccess.get_file_as_string("res://data/art/pixel_shop_assets.json"))
-	check(manifest.assets.size() == 220, "220 runtime pixel assets")
+	check(manifest.assets.size() == 316, "220 originals plus 96 copied stock presets")
 	for asset in manifest.assets:
 		check(FileAccess.get_sha256(asset.path) == asset.sha256, "pixels unchanged " + asset.path)
 		check(ReceivedWorldArt.texture(asset.path) != null, "imported " + asset.path)
@@ -49,6 +49,24 @@ func run() -> void:
 	view = world.get_node("StoreView3D")
 	manager = world.get_node("BuildManager")
 	freeze(world)
+	check(view._container.get_canvas() != world.get_node("Floor").get_canvas(), "render layer is separate from 2D day tint")
+	var source := ReceivedWorldArt.texture(PixelShopArt.STORAGE+"bodies/shelf_1x1_0_stack1.png")
+	var before := source.get_image().get_data()
+	var normals := SpriteNormalMaps.texture(source)
+	check(normals.get_size() == source.get_size(),"normal canvas matches original")
+	check(SpriteNormalMaps.texture(source) == normals,"generated normals cached")
+	check(source.get_image().get_data() == before,"normal calculation preserves source pixels")
+	var normal_image := normals.get_image()
+	var detail := false
+	for x in normal_image.get_width():
+		for y in normal_image.get_height():
+			var n := normal_image.get_pixel(x,y)
+			if absf(n.r-0.5) > 0.02 or absf(n.g-0.5) > 0.02: detail = true
+	check(detail,"normal texture contains surface detail")
+	var roof := load("res://art/world3d/moss_cottage/roof_tiles.png") as Texture2D
+	check(SpriteNormalMaps.texture(roof).resource_path.ends_with("roof_tiles_n.png"),"authored normals take priority")
+	for i in range(1,4):
+		check(view._ground_material.get_shader_parameter("normal_%d" % i) is Texture2D,"actual floor normal bound "+str(i))
 	view.forced_hour = 12.0
 	view.apply_hour(12.0)
 	for node in view.objects_node.get_children(): node.free()
@@ -64,24 +82,30 @@ func run() -> void:
 			node.stack_level = int(f.get("stack",1))
 			node.ensure_slot_count()
 		sync()
-		var empty := image_for(node).get_data()
-		check(item_for(node).received_art == PixelShopArt.STORAGE + str(f.body), "actual body " + str(f.body))
+		var clean := image_for(node)
+		var empty := clean.get_data()
+		check(item_for(node).received_art == PixelShopArt.storage_path(f,rotation,false), "actual body " + str(f.body))
+		check(item_for(node).material.get_shader_parameter("normal_texture").get_size() == Vector2(clean.get_size()),"actual furniture normal bound "+str(f.body))
 		var slots: Array = node.storage_slots if rack else node.slots
 		var quantity := "amount" if rack else "stock"
 		for i in slots.size():
 			slots[i].item_id = "water" if i % 2 == 0 else "bread"
 			slots[i][quantity] = 1
 		sync()
-		check((image_for(node).get_data() != empty) == bool(f.visible_front), "real stock visible only on front " + str(f.body))
+		check(image_for(node).get_data() == ReceivedWorldArt.texture(PixelShopArt.storage_path(f,rotation,true)).get_image().get_data(),"exact fixed stocked artwork " + str(f.body))
+		check(item_for(node).material.get_shader_parameter("normal_texture").get_size() == Vector2(image_for(node).get_size()),"stocked picture normal matches canvas "+str(f.body))
 		if bool(f.visible_front):
-			var sparse := image_for(node).get_data()
-			for slot in slots: slot[quantity] = 5
-			sync()
-			check(image_for(node).get_data() != sparse, "stock count changes display " + str(f.body))
-			var water := image_for(node).get_data()
-			for slot in slots: slot.item_id = "iron_ore"
-			sync()
-			check(image_for(node).get_data() != water, "item type changes display " + str(f.body))
+			check(image_for(node).get_data() != empty,"visible front changes from empty to stocked " + str(f.body))
+		var sparse := image_for(node).get_data()
+		var mesh_id: int = item_for(node).mesh.get_instance_id()
+		check(image_for(node).get_size() == clean.get_size(),"stocked picture adds no icon/padding " + str(f.body))
+		for slot in slots: slot[quantity] = 5
+		sync()
+		check(image_for(node).get_data() == sparse and item_for(node).mesh.get_instance_id() == mesh_id,"quantity changes keep same artwork without rebuilding " + str(f.body))
+		for slot in slots: slot.item_id = "iron_ore"
+		sync()
+		check(image_for(node).get_data() == sparse,"item type keeps same common artwork " + str(f.body))
+
 		for slot in slots: slot[quantity] = 0
 		sync()
 		check(image_for(node).get_data() == empty, "empty returns exact clean body " + str(f.body))
@@ -107,6 +131,7 @@ func run() -> void:
 	view._room_mirror.sync()
 	for key in view._items:
 		if str(key).begins_with("wall") or str(key).begins_with("rwall"):
+			check(view._items[key].material.get_shader_parameter("normal_texture") is Texture2D,"wall normal bound "+key)
 			check(view._items[key].received_art.contains("_tile.png"), "wall/window uses repeated image " + key)
 	# A 2-tile run must remain 2 equally spaced native strips at the floor boundary.
 	var cases := [
@@ -151,10 +176,19 @@ func run() -> void:
 	world.get_node("DayManager").shop_open = false
 	sync()
 	await shot("stock-closed")
+	for hour in [6.0,12.0,18.0,22.0]:
+		view.apply_hour(hour)
+		await shot("hour-"+str(int(hour)))
+	view.apply_hour(12.0)
 	var rack := make("wood_warehouse_rack",0,Vector2i(6,5))
 	rack.storage_slots[0].item_id = "iron_ore"
 	rack.storage_slots[0].amount = 6
 	sync()
+	var steel := make("steel_warehouse_rack",0,Vector2i(4,5))
+	steel.storage_slots[0].item_id = "bread"
+	steel.storage_slots[0].amount = 1
+	sync()
+	check(image_for(steel).get_data() == load("res://art/received/shop_storage/stocked/steel_warehouse_rack_0.png").get_image().get_data(),"steel rack uses selected filled drawing")
 	await shot("rack")
 	for pair in [["drink_machine","bottled_water","water"],["magic_oven","bake_bread","bread"]]:
 		var machine := make(pair[0],0,Vector2i(4,4)) as ProductionFacility
@@ -197,6 +231,7 @@ func run() -> void:
 	sync()
 	var figure: PixelActorFigure = view._actors[view.player.get_instance_id()].figure
 	check(figure.visible and figure._mesh.mesh.size.length() > 0, "actual player sprite is shown")
+	check(figure._material.get_shader_parameter("normal_texture") is Texture2D,"player frame normal bound")
 	if DisplayServer.get_name() != "headless":
 		await frames(4)
 		await RenderingServer.frame_post_draw
@@ -207,9 +242,57 @@ func run() -> void:
 		check(get_viewport().get_texture().get_image().get_data() != shown, "player makes visible GPU pixels")
 		figure.set_shown(true)
 		await shot("player-clear")
+		await check_lighting(figure)
 	print("CHECK_PIXEL_SHOP checks=%d failures=%d" % [checks,failures])
 	get_tree().quit(1 if failures else 0)
 
 func image_for_after_sync(node: Node) -> Image:
 	sync()
 	return image_for(node)
+
+func rendered() -> Image:
+	await frames(4)
+	await RenderingServer.frame_post_draw
+	return view._viewport.get_texture().get_image()
+
+func surface_materials(figure: PixelActorFigure) -> Array[ShaderMaterial]:
+	var materials: Array[ShaderMaterial] = [view._ground_material,figure._material]
+	for item in view._items.values():
+		if item.has("received_art"): materials.append(item.material)
+		elif item.material.shader == ReceivedWorldArt.FLOOR_SHADER: materials.append(item.material)
+	return materials
+
+func check_lighting(figure: PixelActorFigure) -> void:
+	var materials := surface_materials(figure)
+	view.apply_hour(12.0)
+	var noon := await rendered()
+	for material in materials: material.set_shader_parameter("use_normal",false)
+	var flat := await rendered()
+	check(flat.get_data() != noon.get_data(),"normal maps change actual GPU shading")
+	for material in materials: material.set_shader_parameter("use_normal",true)
+	var direction := view._sun.rotation_degrees
+	view._sun.rotation_degrees.y += 90.0
+	var turned := await rendered()
+	check(turned.get_data() != noon.get_data(),"light direction changes shading with fixed color/energy")
+	view._sun.rotation_degrees = direction
+	var images: Array[Image] = []
+	for hour in [6.0,12.0,18.0,22.0]:
+		view.apply_hour(hour)
+		images.append(await rendered())
+	for i in range(1,images.size()):
+		check(images[i].get_data() != images[i-1].get_data(),"morning/noon/evening/night render differently "+str(i))
+	var night: Image = images.back()
+	for lamp in view._lamps: lamp.visible = false
+	var dark := await rendered()
+	check(dark.get_data() != night.get_data(),"real ceiling lamps illuminate the shop at night")
+	view.weather = {"kind":"rain","intensity":0.85}
+	view.apply_hour(12.0)
+	var rain := await rendered()
+	check(rain.get_data() != noon.get_data(),"weather still affects real scene lights")
+	view.weather = {"kind":"clear","intensity":0.0}
+	view.season_override = "winter"
+	view.apply_hour(12.0)
+	var winter := await rendered()
+	check(winter.get_data() != noon.get_data(),"season still affects real scene lights")
+	view.season_override = ""
+	view.apply_hour(12.0)

@@ -110,6 +110,7 @@ func configure_scale(n: int) -> void:
 	match_zoom = 1.125 if shrink == 3 else 1.0
 	if ReceivedWorldArt.ENABLED:
 		match_zoom = ReceivedWorldArt.TILE_WIDTH / GAME_TILE.x
+		tint_strength = 0.35
 	tile_low = GAME_TILE.x * match_zoom / float(shrink)
 	block_px = roundf(tile_low * 22.0 / 36.0)
 	texture_size = int(roundf(tile_low * 0.5))
@@ -199,8 +200,9 @@ func _build_view() -> void:
 	_post_material.set_shader_parameter("id_tex", _id_viewport.get_texture())
 	_container.material = _post_material
 	_post_material.set_shader_parameter("levels", color_levels)
-	_post_material.set_shader_parameter("shadow_amount", 0.28)  # 어두운 부분의 푸른 눌림(옛 0.45)을 줄여 그림자 속도 보이게
-	_post_material.set_shader_parameter("exposure", 0.9 if PlaceholderTextures.clean else 1.0)
+	_post_material.set_shader_parameter("knee",1.0 if ReceivedWorldArt.ENABLED else 0.78)
+	_post_material.set_shader_parameter("shadow_amount", 0.0 if ReceivedWorldArt.ENABLED else 0.28)  # 받은 그림에는 추가 그림자 색을 중복 곱하지 않는다
+	_post_material.set_shader_parameter("exposure", 1.0 if ReceivedWorldArt.ENABLED else (0.9 if PlaceholderTextures.clean else 1.0))
 	if exterior != null:
 		village = VillageMirror.new(self, exterior)
 		decals = GroundDecals.new(self, village)
@@ -389,7 +391,9 @@ func apply_hour(h: float) -> void:
 	var sst: Dictionary = SeasonStyle.style(current_season())
 	tint = tint * (sst["sun_tint"] as Color).lerp(Color.WHITE, 0.4)
 	var dark: float = 1.0 - clampf((luminance - 0.35) / 0.65, 0.0, 1.0)  # 0 = 낮, 1 = 한밤
-	var day_amt: float = smoothstep(5.0, 7.0, hour) * (1.0 - smoothstep(17.0, 19.0, hour))
+	var sunrise_start := 4.0 if ReceivedWorldArt.ENABLED else 5.0
+	var sunrise_end := 6.0 if ReceivedWorldArt.ENABLED else 7.0
+	var day_amt: float = smoothstep(sunrise_start, sunrise_end, hour) * (1.0 - smoothstep(17.0, 19.0, hour))
 	var sun_curve: float = clampf(sin((hour - 6.0) / 12.0 * PI), 0.0, 1.0)
 	var elev: float = lerpf(42.0, lerpf(10.0, 62.0, sun_curve), day_amt)
 	var yaw: float = lerpf(-110.0, lerpf(-75.0, 75.0, clampf((hour - 6.0) / 12.0, 0.0, 1.0)), day_amt)
@@ -401,6 +405,10 @@ func apply_hour(h: float) -> void:
 	_sun.light_energy = light_scale * sun_k * lerpf(0.9, lerpf(0.8, 1.2, sun_curve), day_amt)
 	_env.ambient_light_color = Color(0.74, 0.76, 0.84) * tint * (sst["ambient_tint"] as Color)
 	_env.ambient_light_energy = light_scale * lerpf(1.35, 1.3 * amb_k, day_amt)
+	if ReceivedWorldArt.ENABLED:
+		# 공간 조명으로 새벽/낮/저녁을 구분하고, 밤의 태양과 환경광은 낮춘다.
+		_sun.light_energy *= lerpf(0.15,0.55,day_amt)
+		_env.ambient_light_energy = light_scale * lerpf(0.45,0.78,day_amt)
 	var wk: float = float(weather["intensity"])
 	_sun.shadow_opacity = lerpf(1.0, 0.35, wk)  # 흐린 날은 그림자가 연하다
 
@@ -410,7 +418,7 @@ func apply_hour(h: float) -> void:
 		_env.ambient_light_color = _env.ambient_light_color.lerp(Color(0.62, 0.68, 0.8) if rainy else Color(0.8, 0.84, 0.95), wk * 0.7)
 		_env.ambient_light_energy *= lerpf(1.0, 1.0 if rainy else 1.15, wk)
 	_fill.light_color = tint.lerp(Color(0.85, 0.9, 1.0), 0.35)
-	_fill.light_energy = lerpf(0.3, 0.3 if PlaceholderTextures.clean else 0.5, day_amt)
+	_fill.light_energy = lerpf(0.08,0.16,day_amt) if ReceivedWorldArt.ENABLED else lerpf(0.3, 0.3 if PlaceholderTextures.clean else 0.5, day_amt)
 
 	for lamp in _lamps:
 		(lamp as OmniLight3D).light_energy = 1.6 * dark
@@ -781,14 +789,17 @@ func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, al
 		var as_model: bool = is_shelf and not is_preview
 		var stock_sig: String = ""
 
-		if as_model and node.get("slots") != null:
-			for sl in node.get("slots"):
-				stock_sig += "%s:%d," % [str((sl as Dictionary).get("item_id", "")), mini(int((sl as Dictionary).get("stock", 0)), ShelfAssets.MAX_VISIBLE)]
-
-		# 창고 선반: 저장 칸의 (아이템, 수량)이 바뀌면 다시 만든다.
-		if as_model and node.get("storage_slots") != null:
-			for sl in node.get("storage_slots"):
-				stock_sig += "%s:%d," % [str((sl as Dictionary).get("item_id", "")), int((sl as Dictionary).get("amount", 0))]
+		if as_model and ReceivedWorldArt.ENABLED and not PixelShopArt.frame(build_id,rotation_index,stack).is_empty():
+			var rack := build_id.ends_with("warehouse_rack")
+			stock_sig = str(PixelShopArt.has_stock(node.get("storage_slots" if rack else "slots"),rack))
+		elif as_model:
+			# 전용 그림이 없는 기존 모델만 상세 상품 표시를 유지한다.
+			if node.get("slots") != null:
+				for sl in node.get("slots"):
+					stock_sig += "%s:%d," % [str(sl.get("item_id","")),mini(int(sl.get("stock",0)),ShelfAssets.MAX_VISIBLE)]
+			if node.get("storage_slots") != null:
+				for sl in node.get("storage_slots"):
+					stock_sig += "%s:%d," % [str(sl.get("item_id","")),int(sl.get("amount",0))]
 
 		var sig: String = "%s|%s|%s|%d|%d|%d|%d|%s|%s|%s" % [build_id, str(anchor), str(origin), rotation_index, fx, fy, stack, str(is_preview), str(preview_valid), stock_sig]
 

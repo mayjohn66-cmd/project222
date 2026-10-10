@@ -49,7 +49,7 @@ static func furniture(view: StoreView3D, key: String, node: Node, build_id: Stri
 	var image := compose(source,node)
 	var anchor := Vector2(source.get_width()*0.5,152.0 if build_id == "magic_oven" else source.get_height()-24.0)
 	if node.production_state != ProductionFacility.ProductionState.IDLE: anchor.y += BADGE_HEIGHT
-	ReceivedWorldArt.billboard(view,key,ImageTexture.create_from_image(image),anchor,lo,hi,base,sig)
+	ReceivedWorldArt.billboard(view,key,ImageTexture.create_from_image(image),anchor,lo,hi,base,sig,Color.WHITE,1.0,path)
 	view._items[key]["received_art"] = path
 	view._items[key]["production_state"] = int(node.production_state)
 	return true

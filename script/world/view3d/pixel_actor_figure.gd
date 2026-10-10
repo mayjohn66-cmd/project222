@@ -84,6 +84,7 @@ func _apply_frame() -> void:
 		material.set_shader_parameter("frame_texture", texture)
 		material.set_shader_parameter("region", region)
 		material.set_shader_parameter("frame_offset", offset)
+	_material.set_shader_parameter("normal_texture", SpriteNormalMaps.texture(texture))
 
 
 func sync_sort(rank: float, count: float, camera: Camera3D, id_value: float) -> void:

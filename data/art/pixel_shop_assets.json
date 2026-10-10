@@ -1759,6 +1759,870 @@
         16
       ],
       "sha256": "0d696ccad208f7f4b8d6ee1acadcb3c39436cc8eff0090b9ee4b8843cd39f01b"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_1x1_0_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_1x1_0_stack1_full.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "59d46a861b7b0f431f7d7c68d670566f8b1117d8f830d304cb92a2a7aa65f6d8"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_1x1_1_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_1x1_1_stack1_full.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "abba0f2d37028cdc2baae179ee2cdeaa904424479491efb13902b4624de5769a"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_1x1_2_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_1x1_2_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "dbbfb2820e71beb0a04efe2bc2b0c5fbf7ba16cdbf5c42b04e77e1ccf1835bd7"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_1x1_3_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_1x1_3_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "08a689518bf29e2aa88d3f909528196ff71eb535988e99a0b87fc0fa01cfbc39"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_0_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_2x1_0_stack1_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7b70dfae6c9ef6e00fa58c3e3d204e3e514dd0447ee8236de9215d91beac53ef"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_1_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_2x1_1_stack1_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "19a8f47abf362fde1847752acec69843e101a427fee74f2e81cba29b6d8c6851"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_2_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_2x1_2_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "1b13b1835974965128cf92220aa3a91116b51299daf0316133b0dfe61da4af57"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_3_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_2x1_3_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "be71b1a2c8ac954e9b0a500ed9391464b4e6bd8f1bda5a7e54392052515c8a15"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_0_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_2x1_0_stack2_full.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "d7b2e37147d5f2884efef14460050472d5d7f28d073343b4296831eef6ffa32b"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_1_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_2x1_1_stack2_full.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "b16578895a3891cb7eb25a9ac3a9a941ee3408609c5bddf4e5c24b1c4d4d8870"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_2_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_2x1_2_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "ca8339136a5ae200767169089acaeb107d9eb75c30a956e6ecff07824fd17f2d"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_3_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_2x1_3_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "b3f4e48c94fbb79abb63789ee703b605c676c7d2f802ccb39fcbcddac197f13a"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_0_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_2x1_0_stack3_full.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "010c64e3e517ac17b9f794713a6acac4d3cfd20b2709a73ff9f838e0217529e9"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_1_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_2x1_1_stack3_full.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "754a15ce5705b9c5d77c8d69c9f1efa1feeb02753db0dfd12e599d04d4811cf3"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_2_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_2x1_2_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "052df002f7b592f811ee7b1d035889a1d92c1c27ef02988bf0557aabebe79f81"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_2x1_3_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_2x1_3_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "1a0d0a81688046dcafe27429ce9368c522991411813380891305a9c3459b293d"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_0_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_3x1_0_stack1_full.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "384390fa5c9037c452cc514db09966af22c4d7800ce6a70376b66994f6b6b8ce"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_1_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_3x1_1_stack1_full.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "a8fd4abe57b076b272d11761236ecfbed47229c8218073402735cf12bd40fa84"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_2_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_3x1_2_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "9796503f745c69502a3c32acf273bb42b6627aece5986c4088bff8aaf225f329"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_3_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_3x1_3_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "c2c19c3a84cd5bfd691bfabf7d7a5fb50aa336e03bc2804142268e6a2506ff21"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_0_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_3x1_0_stack2_full.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "1cae2f2e3afa9a22118bba0f002e4a4c5591eeba655a086ee986b0b8cc64939b"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_1_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_3x1_1_stack2_full.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "f3ce9ba6de83b08883af63776db84c5175384c38720e5fee0225c86eb6c784d4"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_2_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_3x1_2_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "52f5c10e510ea140e1c49f883f661d974ba5600e67812efc20a9dbcdb6897b7e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_3_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_3x1_3_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "d955eb65b7def082876c3acff9de18aa3c8084e59b447f0b112a1f4679063693"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_0_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_3x1_0_stack3_full.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "33cbe329c4b95420066f15524791d770799c66a57edea0f9785e852ca9196820"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_1_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/shelf_3x1_1_stack3_full.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "1551312ee4ded28f327bc314a8ddae7b106a4bb9eb45b9c4b853684348bf5daa"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_2_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_3x1_2_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "8a0e92bd353da126e0653bcda301d30ccb011dba35aa5fbd26f60091f2f1ebfa"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/shelf_3x1_3_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/shelf_3x1_3_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "fe787097a5c0fbb79cb554de9ef1e0dbbfb1f9988639c78237053b1179dcb673"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_shelf_1x1_0_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/wood_shelf_1x1_0_stack1_full.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "cdce1140617fc402531db177933414442c15c43c184263b7be1e8b43511c2447"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_shelf_1x1_1_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/wood_shelf_1x1_1_stack1_full.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "1a9b9b038ee15682ad13b2e8e4e0886bdc508b1f151cb0c56e57f5e30b1358e3"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_shelf_1x1_2_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/wood_shelf_1x1_2_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "c7dced161e3cb0ec17aeb767c02257b0ee59d4e92f17e6c596df06c195c6a4f2"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_shelf_1x1_3_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/wood_shelf_1x1_3_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "a455433dd27a1014d21f703b9ceee497b6965c23436dc9fc05feafdabb8eb594"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_shelf_2x1_0_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/wood_shelf_2x1_0_stack1_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "f9838edf7b33f62eed12fc198d0a067cd2ffd0cab77217dcb049c33117b1fe6f"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_shelf_2x1_1_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/wood_shelf_2x1_1_stack1_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "e2618415aeb4819c6967142e60ab31b8859287b2153935602579656ed9cd729b"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_shelf_2x1_2_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/wood_shelf_2x1_2_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "e7cd43d612ad24f09d8d89a61833b9f12fb568dd018309b95492d6dc2a020390"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_shelf_2x1_3_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/wood_shelf_2x1_3_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "54b60a32253561f42db398ea25795041047236cc5a0526c4e19243a194b4767e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_0_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/reinforced_shelf_2x1_0_stack1_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "eff8c280f34428227309590ec0ed907a6e51febea4b8063936562724c9da298b"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_1_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/reinforced_shelf_2x1_1_stack1_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "64767cebe5b31376d5b61622d8eb602892102c9aaad79e99720f5c2513ec28d6"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_2_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/reinforced_shelf_2x1_2_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "debec606df8b5d0e72e335b91f70840a77adb289c88464e8020bf05441483e3a"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_3_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/reinforced_shelf_2x1_3_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "15a94d7028caa78c5ffdf11737ad9e6bec27103f881dc14d665080b4ab8b718f"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_0_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/reinforced_shelf_2x1_0_stack2_full.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "f68012848137d2bec684a1e516596410cbf6f70dfca94954f2b0bef3a5e59b68"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_1_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/reinforced_shelf_2x1_1_stack2_full.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "0c140cae59a571ac5ed0b736600b64681758f904a2a1fdc76d611ebe363d63ac"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_2_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/reinforced_shelf_2x1_2_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "c6bf2c0845d1725da3b5ab79a54653cbca933abb9d6a3c2c17180469c33437b1"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_3_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/reinforced_shelf_2x1_3_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "95363f2c7955aba1b8dcaaea5e45113b2b9acf4657fdad4586e940778523a472"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_0_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/reinforced_shelf_2x1_0_stack3_full.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "4e4401e4dab520320275a23e3c52e57911b5f0df6ede365600bf1c6a1d61ab27"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_1_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/reinforced_shelf_2x1_1_stack3_full.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "ae64cc54210ac79e07c56a01c20f71301b01c32b941e7dd22f78a2de9b1b12aa"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_2_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/reinforced_shelf_2x1_2_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "d42d81f442985e6149a126351c505b91edbc86a8e13c33a0ef4cec9b185fa13e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/reinforced_shelf_2x1_3_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/reinforced_shelf_2x1_3_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "5497117a8bdb3e23cd804955dbd381adaffa32627fb790daa09ac5e5445bb695"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_0_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_1x1_0_stack1_full.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "15083658983e3b085262311baa880d8658595878a1e60386a4364936c6e32966"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_1_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_1x1_1_stack1_full.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "957712623863c3c7f15de5f1e9f962df6f413081a661e4971282a58d4c031cad"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_2_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_1x1_2_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "3c99d61bdf3ab7f3e243a6a4aee2b9c35d7103b6ef9f83ce9cd8db2060760483"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_3_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_1x1_3_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "787282f5a281d0a9e94ab210b08cae08f7d19c3b87fa6e1516b5032a41dbc681"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_0_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_1x1_0_stack2_full.png",
+      "size": [
+        64,
+        192
+      ],
+      "sha256": "c4dc78b93aff089b4ca39fc6a2877216041a1e1103f8e443c60eec33d1b28378"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_1_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_1x1_1_stack2_full.png",
+      "size": [
+        64,
+        192
+      ],
+      "sha256": "79a4c8a8cc94954215f1ecbc12809e46df0e4c7799912c3766bb6d715b5526de"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_2_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_1x1_2_stack2.png",
+      "size": [
+        64,
+        192
+      ],
+      "sha256": "566d7a7e17d09617d1b2197ec2558d93d7f9d5fe7ccae56c00120789d4016f77"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_3_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_1x1_3_stack2.png",
+      "size": [
+        64,
+        192
+      ],
+      "sha256": "e1e022be53067a949700555fc0e2acdcfa888d3e6ebdb3ad5dfb14aca15f7d5e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_0_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_1x1_0_stack3_full.png",
+      "size": [
+        64,
+        256
+      ],
+      "sha256": "a49165634e6ef9e3dfc48fa1b8d70154824770e3c53b562bd7a098dba143d64c"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_1_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_1x1_1_stack3_full.png",
+      "size": [
+        64,
+        256
+      ],
+      "sha256": "a7989117b8b94a6acab0c597429733e2248f6b77d842dfca947edf7214a5baf6"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_2_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_1x1_2_stack3.png",
+      "size": [
+        64,
+        256
+      ],
+      "sha256": "36d6eba38abde0a603adb174be9f8c2496a63282c87d959b658380bc4c190169"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_1x1_3_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_1x1_3_stack3.png",
+      "size": [
+        64,
+        256
+      ],
+      "sha256": "06039912da39f2ad565307e337dc31530e34ad7ebbade2cda52fff618a50cac1"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_0_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_2x1_0_stack1_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "d78e7bcf7b58018d9ce0b30de320d8a2a3c287d35d9a9f047014ecce920bdcc0"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_1_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_2x1_1_stack1_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "0fa40a978459fc7b8a0087c06aca7c24b12db194b50b5aba876c601e0ced79b6"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_2_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_2x1_2_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7066f1034de0891e597ef204ebc4c8f9560a88cdd6c94e64c9c443b5442b0c5e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_3_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_2x1_3_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "1de439e11da0c6bb215d67b345baf4fde5e24876ab5f27a1a2207828844dfd71"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_0_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_2x1_0_stack2_full.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "e0e049a270d8649ddcdcd56e4b9d6c258b1d4020e9c83165e16854023744f94e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_1_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_2x1_1_stack2_full.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "751c5032ef501365bdb1f8c523aa9a06c048cfdfece75798a25aca884a35ec21"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_2_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_2x1_2_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "f5129ea6f455eaeb5ce084a1b596edb8765f9d52ec37dd94389a0eabb591df9e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_3_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_2x1_3_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "bca660ef58b3bfad7e046caaad558f2283bbd5dab8ecb8bd6526441a63bc0533"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_0_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_2x1_0_stack3_full.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "4eb42accc4a3bef2329b44f929ac1f20ba3f16291805f6d464a680916a6a4812"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_1_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_2x1_1_stack3_full.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "459129e1af1ac45a9130c2768f9850ac5b08f69002e6f3a1cc04767f2cea103b"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_2_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_2x1_2_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "74804d8142fea04eb5f56977d7478fe7f14ff384fafab368fee928276646b53a"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_2x1_3_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_2x1_3_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "a77b6294e6d8bd6484813837ab35a5fd5d885fac104ee66ae37da36ec2112bb6"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_0_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_3x1_0_stack1_full.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "95e7d22fc83f322e4f301b9597e5dfb9dbfce452c57028cc5cbae49637e21554"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_1_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_3x1_1_stack1_full.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "10fb0f8c69ad9195b53955c3b0043db292cc732b34ebf063fbcda320125a1325"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_2_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_3x1_2_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "01d02be469e75d7e980e424755c6ae58e7414051ebe1ac9cc4d8c4ef47aaf45e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_3_stack1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_3x1_3_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "a4b6e7afd2000e95ade1157eb9a86e9e624fc3ecfd41e9c0d5fcd9ebe67754ca"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_0_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_3x1_0_stack2_full.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "b35261a1694f2a304cf1de5f7e24c11e4e2ac05761135cfef283ed52ff66f990"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_1_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_3x1_1_stack2_full.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "abcf7519ca9d0e434bf3f76d32bf714a655a4a7274b0f595b5496df1f0490616"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_2_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_3x1_2_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "ec4b479323fd863ba347a331a9a3006c4e7d6121e7b94f7d3cb8c032b079ab3e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_3_stack2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_3x1_3_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "b8b2d01bc4621ed9d76132671e28d2d7c3953bcbcb6c7c9a4802408aae81f695"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_0_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_3x1_0_stack3_full.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "fdce383004c2bca1faf8e05e0824b763790b2b8fd33c4e9b82598edd6bf7ab42"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_1_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/modern_shelf_3x1_1_stack3_full.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "5d58394ff9975b9f0c1ab49412f11fa8efb2f1dcea31b5b987dda5e73ab9a34d"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_2_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_3x1_2_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "b08200a880907ef9ecf98ac47ba098e2bd5fc4d69063cf7310f2fdda021aec12"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/modern_shelf_3x1_3_stack3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/modern_shelf_3x1_3_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "f0898da451970c054523880f17014f7ef142d21bcb2f5e357e64de22bf351230"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/warehouse_rack_0.png",
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_rack/rot0.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "8ed726b27f0aa7bd868d6e31f9668a7fb5d468e58fae30004fd7b3e3dc8ef7a8"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/warehouse_rack_1.png",
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_rack/rot1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "860865baa657d6ad3aea35d67e9fb56b5e76bcb611f12497e078517febd0dd48"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/warehouse_rack_2.png",
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_rack/rot2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "9eb0c499d8eab5c56244ca6dad652fe4755d15e1511e80df3c2a78d176475fa4"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/warehouse_rack_3.png",
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_rack/rot3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7bc270870c153d6280e5fba4e04318dfe6595f1ba662916f607609812d953c71"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_warehouse_rack_0.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/wood_warehouse_rack_0_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "68d846236dd47f68d03c5019ce28921aef2cdb0ccd2bf533419f07e6f694af9e"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_warehouse_rack_1.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/examples/wood_warehouse_rack_1_full.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "5bcf02c58fefed6c381e0c8f7131deea334c037dbd1968d2029c601193bba8bd"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_warehouse_rack_2.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/wood_warehouse_rack_2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "de5df5bdeade9d40f11ed8cfc46f07c1be18672c76742783e6ce224acefbf4d0"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/wood_warehouse_rack_3.png",
+      "source": "docs/그림_작업/받은그림/진열대_상태/픽셀_정리/bodies/wood_warehouse_rack_3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "2874c7c5cf874cd1ebf088b943aab96895f5a5ab19e4ec8f1823663f5b2d833d"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/steel_warehouse_rack_0.png",
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/steel_warehouse_rack/rot0.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7fd0b2008a627fdf8a0617c1bf13a91ec89a5350a2fb6771c63a6f929e1c9c36"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/steel_warehouse_rack_1.png",
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/steel_warehouse_rack/rot1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "67d982549f043ebed192b17795a2edbe9201d3f7fc2a4f6274ad5af28ea3c92c"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/steel_warehouse_rack_2.png",
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/steel_warehouse_rack/rot2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7067242b14233550ac5abfd8fd4aba04c1023c814bc205c2360ed69ac926cc15"
+    },
+    {
+      "path": "res://art/received/shop_storage/stocked/steel_warehouse_rack_3.png",
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/steel_warehouse_rack/rot3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "aa36549a5724587a274d6583f76d9ec773997625000608d807d3af0c15ec111a"
     }
   ]
 }
