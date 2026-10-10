@@ -73,7 +73,6 @@ func run() -> void:
 	sync()
 	PixelShopArt.prepare()
 	check(PixelShopArt._frames.size() == 96, "all supported body/rotation/stack combinations")
-	check(PixelShopArt._goods.size() == 81, "all merchandise has glyph mapping")
 	for f in PixelShopArt._frames.values():
 		var rotation: int = [0,3,2,1].find(int(f.view))
 		var node := make(str(f.build_id), rotation)
@@ -111,6 +110,71 @@ func run() -> void:
 		check(image_for(node).get_data() == empty, "empty returns exact clean body " + str(f.body))
 		node.free()
 		sync()
+	# 전용 상태 그림을 찾지 못해도 물품 종류/수량에 맞춘 모델을 생성하지 않는다.
+	var saved_frames := PixelShopArt._frames.duplicate()
+	for build_id in ["shelf_1x1","warehouse_rack"]:
+		for frame_key in PixelShopArt._frames.keys():
+			if str(frame_key).begins_with(build_id+":"): PixelShopArt._frames.erase(frame_key)
+		var fallback := make(build_id,0)
+		sync()
+		var clean_mesh: Mesh = item_for(fallback).mesh.mesh
+		var slots: Array = fallback.storage_slots if build_id == "warehouse_rack" else fallback.slots
+		var quantity := "amount" if build_id == "warehouse_rack" else "stock"
+		slots[0].item_id = "water"
+		slots[0][quantity] = 1
+		sync()
+		var filled_mesh: Mesh = item_for(fallback).mesh.mesh
+		var same_body := clean_mesh.get_surface_count() == filled_mesh.get_surface_count()
+		if same_body:
+			for surface in clean_mesh.get_surface_count():
+				same_body = same_body and clean_mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX] == filled_mesh.surface_get_arrays(surface)[Mesh.ARRAY_VERTEX]
+		check(same_body,"missing state artwork cannot synthesize individual goods "+build_id)
+		var filled_id: int = item_for(fallback).mesh.get_instance_id()
+		slots[0][quantity] = 5
+		sync()
+		check(item_for(fallback).mesh.get_instance_id() == filled_id,"missing artwork ignores quantity changes "+build_id)
+		slots[0].item_id = "iron_ore"
+		sync()
+		check(item_for(fallback).mesh.get_instance_id() == filled_id,"missing artwork ignores product changes "+build_id)
+		fallback.free()
+		sync()
+	PixelShopArt._frames = saved_frames
+	for build_id in ["fridge_unit","freezer_unit"]:
+		var unit: String = ContainerStockArt.COLD_UNITS[build_id]
+		PreservationService.install(unit,true)
+		for rotation in 4:
+			var cold := make(build_id,rotation)
+			sync()
+			check(not item_for(cold).stocked,"empty cold unit state "+build_id+str(rotation))
+			var original_state := GameState.preservation_state.duplicate(true)
+			var pair := ContainerStockArt.cold_pair(build_id,rotation)
+			check(item_for(cold).received_art == pair.empty,"cold empty uses selected empty artwork "+build_id+str(rotation))
+			var empty := image_for(cold).get_data()
+			check(GameState.preservation_state == original_state,"rendering cannot settle or mutate cold contents")
+			GameState.add_item("bread",4)
+			check(PreservationService.deposit(unit,"bread",1) == 1,"real cold deposit "+unit)
+			sync()
+			check(item_for(cold).stocked and item_for(cold).received_art == pair.filled,"real deposit selects common filled artwork "+build_id+str(rotation))
+			var mesh_id: int = item_for(cold).mesh.get_instance_id()
+			PreservationService.deposit(unit,"bread",1)
+			sync()
+			check(item_for(cold).mesh.get_instance_id() == mesh_id,"cold quantity changes cannot rebuild artwork")
+			GameState.add_item("camp_bread",1)
+			PreservationService.deposit(unit,"camp_bread",1)
+			sync()
+			check(item_for(cold).mesh.get_instance_id() == mesh_id,"cold product changes cannot rebuild artwork")
+			PreservationService.withdraw(unit,"bread",2)
+			PreservationService.withdraw(unit,"camp_bread",1)
+			sync()
+			check(not item_for(cold).stocked and image_for(cold).get_data() == empty,"actual withdrawal returns empty state "+build_id+str(rotation))
+			cold.set_meta("is_build_preview",true)
+			GameState.add_item("bread",1)
+			PreservationService.deposit(unit,"bread",1)
+			sync()
+			check(not item_for(cold).stocked,"cold placement preview always uses empty state")
+			PreservationService.withdraw(unit,"bread",1)
+			cold.free()
+			sync()
 	for id in ["door", "production_door", "warehouse_door"]:
 		for rot in range(4):
 			var node := make(id,rot,Vector2i(4,7))

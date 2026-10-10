@@ -1,7 +1,7 @@
 class_name ReceivedWorldArt
 extends RefCounted
 ## 받은그림의 선택된 원본을 표시한다. 게임의 96x48 좌표/충돌/저장값은 그대로 둔다.
-## 카메라만 64x32 표시로 맞춘다. 진열대·문은 PixelShopArt가 실제 상태로 합성한다.
+## 카메라만 64x32 표시로 맞춘다. 진열대·문은 PixelShopArt가 상태에 맞는 고정 그림을 선택한다.
 const ENABLED := true
 const TILE_WIDTH := 64.0
 const CSV := "res://data/art/received_furniture.csv"
@@ -56,23 +56,9 @@ static func furniture(view: StoreView3D, key: String, node: Node, build_id: Stri
 	var path := furniture_path(build_id, rotation)
 	if path.is_empty():
 		return false
-	# 그림에 상품이 그려져 있다. 빈/일부 품절/쌓인 진열대를 채워진 그림으로 표시하지 않는다.
-	if build_id.begins_with("shelf_") and not preview:
-		if int(node.get("stack_level")) != 1:
-			return false
-		var slots: Array = node.get("slots")
-		if slots.is_empty():
-			return false
-		for slot in slots:
-			if str(slot.get("item_id", "")).is_empty() or int(slot.get("stock", 0)) <= 0:
-				return false
-	# 빈 선반 그림은 빈 상태에만. 저장품의 종류/수량 표시는 기존 동적 모델이 맡는다.
-	if build_id in ["warehouse_rack", "steel_warehouse_rack", "wood_warehouse_rack"] and not preview:
-		var loaded := false
-		for slot in node.get("storage_slots"):
-			loaded = loaded or int(slot.get("amount", 0)) > 0
-		if loaded or build_id == "wood_warehouse_rack":
-			return false
+	# 보관 가구는 전용 두 상태 그림만 쓴다. 그림이 없으면 호출자가 빈 가구 틀을 표시한다.
+	if build_id.begins_with("shelf_") or build_id.ends_with("warehouse_rack"):
+		return false
 	var tex := texture(path)
 	if tex == null:
 		return false

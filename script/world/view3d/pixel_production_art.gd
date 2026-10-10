@@ -3,6 +3,7 @@ extends RefCounted
 ## 설비 원본을 유지하고 실제 작업/완료 상태를 작은 도트 표지로 덧붙인다.
 const BADGE_HEIGHT := 24
 const PROGRESS_STEPS := 12
+static var _glyphs: Dictionary = {}
 
 static func progress_step(node: ProductionFacility) -> int:
 	var recipe := ProductRecipeData.get_recipe(node.active_recipe_id)
@@ -23,8 +24,7 @@ static func compose(source: Image, node: ProductionFacility) -> Image:
 	var top := source.get_used_rect().position.y
 	image.fill_rect(Rect2i(x,top+1,24,21),Color("543d2a"))
 	image.fill_rect(Rect2i(x+1,top+2,22,19),Color("fff0c9"))
-	PixelShopArt.prepare()
-	var icon := PixelShopArt.glyph(node.pending_item_id)
+	var icon := result_glyph(node.pending_item_id)
 	if icon != null:
 		image.blend_rect(icon,Rect2i(Vector2i.ZERO,icon.get_size()),Vector2i(x+12-icon.get_width()/2,top+3))
 	var ready := node.production_state == ProductionFacility.ProductionState.READY
@@ -53,3 +53,19 @@ static func furniture(view: StoreView3D, key: String, node: Node, build_id: Stri
 	view._items[key]["received_art"] = path
 	view._items[key]["production_state"] = int(node.production_state)
 	return true
+
+# 결과 표지는 생산 UI 용도다. 진열대·보관 가구의 상태 그림과 분리한다.
+static func result_glyph(item_id: String) -> Image:
+	if _glyphs.has(item_id): return _glyphs[item_id]
+	var mapping: Dictionary = JSON.parse_string(FileAccess.get_file_as_string(PixelShopArt.DATA))
+	for item in mapping.items:
+		if str(item.item_id) != item_id: continue
+		var tex := ReceivedWorldArt.texture(PixelShopArt.STORAGE+str(item.glyph))
+		if tex == null: return null
+		var image := tex.get_image()
+		if image.is_compressed(): image.decompress()
+		image.convert(Image.FORMAT_RGBA8)
+		var cropped := image.get_region(image.get_used_rect())
+		_glyphs[item_id] = cropped
+		return cropped
+	return null

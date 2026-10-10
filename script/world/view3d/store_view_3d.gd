@@ -766,7 +766,7 @@ func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, al
 			_sync_wall_mounted(node, build_id, row, alive, origin, store_rect)
 			continue
 
-		# 진열대: 미리보기는 색 상자, 실제 진열대는 틀 + 상품이 놓인 모델(ShelfAssets). 행의 kind 가 shelf 면 아래에서 따로 만든다.
+		# 진열대는 빈/수납 고정 그림을 사용한다. 그림이 없는 경우에는 가구 틀만 표시한다.
 		var is_shelf: bool = row["kind"] == "shelf" or row["kind"] == "model"
 
 		if row["kind"] != "box" and not is_shelf:
@@ -789,17 +789,8 @@ func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, al
 		var as_model: bool = is_shelf and not is_preview
 		var stock_sig: String = ""
 
-		if as_model and ReceivedWorldArt.ENABLED and not PixelShopArt.frame(build_id,rotation_index,stack).is_empty():
-			var rack := build_id.ends_with("warehouse_rack")
-			stock_sig = str(PixelShopArt.has_stock(node.get("storage_slots" if rack else "slots"),rack))
-		elif as_model:
-			# 전용 그림이 없는 기존 모델만 상세 상품 표시를 유지한다.
-			if node.get("slots") != null:
-				for sl in node.get("slots"):
-					stock_sig += "%s:%d," % [str(sl.get("item_id","")),mini(int(sl.get("stock",0)),ShelfAssets.MAX_VISIBLE)]
-			if node.get("storage_slots") != null:
-				for sl in node.get("storage_slots"):
-					stock_sig += "%s:%d," % [str(sl.get("item_id","")),int(sl.get("amount",0))]
+		if is_shelf or ContainerStockArt.COLD_UNITS.has(build_id):
+			stock_sig = str(ContainerStockArt.filled(node,build_id,is_preview))
 
 		var sig: String = "%s|%s|%s|%d|%d|%d|%d|%s|%s|%s" % [build_id, str(anchor), str(origin), rotation_index, fx, fy, stack, str(is_preview), str(preview_valid), stock_sig]
 
@@ -839,17 +830,12 @@ func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, al
 			var built: Dictionary
 
 			if row["kind"] == "model":
-				var extra: Dictionary = {}
-
-				if node.get("storage_slots") != null:
-					extra["storage_slots"] = node.get("storage_slots")
-
-				built = FurnitureAssets.build(build_id, lo, hi, rotation_index, pp, extra)
+				# 전용 그림이 없는 경우에도 실제 물품을 모델로 합성하지 않는다.
+				built = FurnitureAssets.build(build_id, lo, hi, rotation_index, pp, {})
 			else:
 				pp["furniture_stage"] = FurnitureObjectCatalog.get_object(build_id).get("stage", "")
 				var spl: int = int(node.get("slots_per_level")) if node.get("slots_per_level") != null else 2
-				var slot_list: Array = node.get("slots") if node.get("slots") != null else []
-				built = ShelfAssets.build(lo, hi, rotation_index, stack, slot_list, spl, pp)
+				built = ShelfAssets.build(lo, hi, rotation_index, stack, [], spl, pp)
 
 			_set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), lo, hi, float(built["total_blocks"]), sig, NAN, true)
 			continue

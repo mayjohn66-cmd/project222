@@ -5,8 +5,6 @@ const SHELL := "res://art/received/shop_shell/"
 const STORAGE := "res://art/received/shop_storage/"
 const DATA := "res://data/art/pixel_shop_frames.json"
 static var _frames: Dictionary = {}
-static var _goods: Dictionary = {}
-static var _glyphs: Dictionary = {}
 static var _data: Dictionary = {}
 
 static func prepare() -> void:
@@ -14,7 +12,6 @@ static func prepare() -> void:
 	_data = JSON.parse_string(FileAccess.get_file_as_string(DATA))
 	for f in _data.frames:
 		_frames["%s:%d:%d" % [f.build_id, int(f.view), int(f.get("stack", 1))]] = f
-	for item in _data.items: _goods[item.item_id] = STORAGE + item.glyph
 
 static func frame(build_id: String, rotation: int, stack: int = 1) -> Dictionary:
 	prepare()
@@ -34,22 +31,6 @@ static func door_path(build_id: String, rotation: int, opened: bool) -> String:
 	var kind := "entrance" if build_id == "door" else build_id.trim_suffix("_door")
 	return SHELL + "%s_%d_%s.png" % [kind, posmod(rotation, 4), "open" if opened else "closed"]
 
-static func glyph(item_id: String) -> Image:
-	if _glyphs.has(item_id): return _glyphs[item_id]
-	var tex := ReceivedWorldArt.texture(str(_goods.get(item_id, "")))
-	if tex == null: return null
-	var im := tex.get_image()
-	if im.is_compressed(): im.decompress()
-	im.convert(Image.FORMAT_RGBA8)
-	var cropped := im.get_region(im.get_used_rect())
-	_glyphs[item_id] = cropped
-	return cropped
-
-static func has_stock(slots: Array, rack: bool = false) -> bool:
-	for slot in slots:
-		if not str(slot.get("item_id","")).is_empty() and int(slot.get("amount" if rack else "stock",0)) > 0: return true
-	return false
-
 static func storage_path(f: Dictionary, rotation: int, stocked: bool) -> String:
 	if stocked: return STORAGE + "stocked/" + str(f.body).get_file()
 	if str(f.build_id) in ["warehouse_rack","steel_warehouse_rack"]:
@@ -68,15 +49,22 @@ static func furniture(view: StoreView3D, key: String, node: Node, build_id: Stri
 		if tex == null: return false
 		ReceivedWorldArt.billboard(view, key, tex, Vector2(32,104), lo, hi, base, signature, tint)
 		return true
+	if ContainerStockArt.COLD_UNITS.has(build_id):
+		var stocked := ContainerStockArt.filled(node,build_id,preview)
+		var pair := ContainerStockArt.cold_pair(build_id,rotation)
+		var path: String = pair.filled if stocked else pair.empty
+		var tex := ReceivedWorldArt.texture(path)
+		if tex == null: return false
+		ReceivedWorldArt.billboard(view,key,tex,Vector2(tex.get_width()*0.5,tex.get_height()-24.0),lo,hi,base,signature,tint)
+		view._items[key]["stocked"] = stocked
+		view._items[key]["stock_art_ready"] = pair.ready
+		return true
 	var stack := 1
 	if node.get("stack_level") != null: stack = int(node.get("stack_level"))
 	if preview: stack = int(node.get_meta("preview_stack", 1))
 	var f := frame(build_id, rotation, stack)
 	if f.is_empty(): return false
-	var rack := build_id.ends_with("warehouse_rack")
-	var slots: Array = []
-	if not preview: slots = node.get("storage_slots" if rack else "slots")
-	var stocked := has_stock(slots,rack)
+	var stocked := ContainerStockArt.filled(node,build_id,preview)
 	var path := storage_path(f,rotation,stocked)
 	var tex := ReceivedWorldArt.texture(path)
 	if tex == null: return false
