@@ -1,0 +1,1764 @@
+{
+  "assets": [
+    {
+      "path": "res://art/received/shop_shell/corner_full_inside.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "9345871aa37c6c037535586cdaf379e8495464037c2b9aafee497350550b2182"
+    },
+    {
+      "path": "res://art/received/shop_shell/corner_full_outside.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "9bc56d932047c453790d3f984dc862d1fd4bd5f322afec85e6b0e92229e6cf44"
+    },
+    {
+      "path": "res://art/received/shop_shell/corner_low_inside.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "56cc6c5a82f9d61ac283a11e84a9661ee07340792232949666d556479d8edb55"
+    },
+    {
+      "path": "res://art/received/shop_shell/corner_low_outside.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "7c3a8070d304cbebfca1cce966ecd471ab493e6878a40fc62aa5509b48a99a66"
+    },
+    {
+      "path": "res://art/received/shop_shell/doorway_left.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "95949b6706d383736fb186ba6b0bafb03643aa7e2a4e799bbf94f4a90dd49c03"
+    },
+    {
+      "path": "res://art/received/shop_shell/doorway_right.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "a5fc8c1162e2c19c07a10fe7544d107abb3ff2f9e5abfefd65796479fd35ff4d"
+    },
+    {
+      "path": "res://art/received/shop_shell/entrance_0_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "f8e12a813a2f705e27f5644fe7db8d7b46ef7fbec73db77706faf09f89b58d57"
+    },
+    {
+      "path": "res://art/received/shop_shell/entrance_0_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "3f17f075412a9410314fc307f7be27c191ee0119fb1cd90722f7992559285d04"
+    },
+    {
+      "path": "res://art/received/shop_shell/entrance_1_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "ca1559261e994d477303858a04d7ecf43f61c66026ea102787b29e84539d3b70"
+    },
+    {
+      "path": "res://art/received/shop_shell/entrance_1_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "c226222210720a59276f4694181d214ddf4efb7dad39007a4cf10516c79655f4"
+    },
+    {
+      "path": "res://art/received/shop_shell/entrance_2_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "d983890756b7e30c43678378666f60ae0480a651c2cbe243f743e6e31db7f513"
+    },
+    {
+      "path": "res://art/received/shop_shell/entrance_2_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "8f05e1cd79ca0d636cf0dac20f3817b300beacbd033b8b3de66ecde46dfc78ed"
+    },
+    {
+      "path": "res://art/received/shop_shell/entrance_3_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "ab5d28839c0d68b86c1500a62c19bb82b2ca141aebefcf033101fca6281cebfc"
+    },
+    {
+      "path": "res://art/received/shop_shell/entrance_3_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "30bdb57bcc707c91153868ae8dc3eaca8b3f894ad777a495239a3b69b1af2bda"
+    },
+    {
+      "path": "res://art/received/shop_shell/production_0_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "7e912b105233b1995e8222e9a7d77a308ee6bd64ca54c515a5c223ea0e57464c"
+    },
+    {
+      "path": "res://art/received/shop_shell/production_0_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "cc4ce3c2653de33a811e08cdbc78b809998f2465515fcaeeb92aaf9fe86fd600"
+    },
+    {
+      "path": "res://art/received/shop_shell/production_1_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "e56f24125c131b2c2d88c62e9598eb9c99e4bfdce73d9a5410893d476e8fe170"
+    },
+    {
+      "path": "res://art/received/shop_shell/production_1_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "9d46d8b88ff04211ae3bc97eee4a35ac8c97e5ca2948e888d760b16c5b218615"
+    },
+    {
+      "path": "res://art/received/shop_shell/production_2_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "8ae34298f3809d68c6a3a02f111c2a436e05c3a742ec91aed18c4568a1047747"
+    },
+    {
+      "path": "res://art/received/shop_shell/production_2_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "d9cdd672519be838294d6f8cf1a65dce624e8de2f5ef2b9d38de0c22bbd3a12e"
+    },
+    {
+      "path": "res://art/received/shop_shell/production_3_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "4d391f313ad9e4a14579e95582e6a0a34ef360ad2a499e6d8524dcc9e9772972"
+    },
+    {
+      "path": "res://art/received/shop_shell/production_3_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "8ce7bbf37aa045b07888571bc1ae8efc3bd17eef529cdf690eea8c780d00df5c"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_cap_left.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "e2ebb01f3daaa1f442b762fc97256206f7063b234e4d02b06744d2853d63f38c"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_cap_right.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "01096f762bf430ba2f0c0283e89ceee2f8ad34fe23bb121ed01bdd052599582a"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_full_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "562ac806f7c8be2701f45b507d026e17372f1ab29e0396e5ab1412616319bf66"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_full_0_tile.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "af3fa24264b7a1468cb0a3690c5136a624a5e4906ed648a2adaf4f2ee153dcd0"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_full_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "07a91b3f6e341bc9ec04925ab4af5891f159f699d5744be57af2dc5ec80b94bb"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_full_1_tile.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "3fb393614a3a8a31a7e9305f714d7ab2a0234fbc289335155fba109e5cb552cf"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_full_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "42651f3ae231a8ff6dc527b8f3aa51866b4c9c2486abe63d68aaf9217ec104ea"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_full_2_tile.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "5f7054223dc17a9359a02f39770df5b900d974521d61c7f18267a0396e669416"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_full_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "d6349b2ee5d29cf174fb7faf9309b5bfbc202882ae619f59fb860d38c0700f8e"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_full_3_tile.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "2dd4d56dcf8114591b8c2f4c66494083b726bc0995c13aae1166c3756f37cce6"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_low_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "fb7a8aa0ed20fa7938a7468322fe7e509304bab5515d433469e5c5b79a51b88d"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_low_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "31bc37d8acebf9255e06f69ddca5240a974e3f758e7851fdf6976d86467722c4"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_low_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "57877ae6e19b2a1a51b79192578030157e331b8c8a09af6ba446cfa0121caef4"
+    },
+    {
+      "path": "res://art/received/shop_shell/wall_low_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "7a4579ed86d67de37b4bc94f9e7c270fb30036daada77cc11f435883e548a1ba"
+    },
+    {
+      "path": "res://art/received/shop_shell/warehouse_0_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "1987060277c1910f015d8b451c3d9aa55bfd3b92f0575f38e83f040fb590d244"
+    },
+    {
+      "path": "res://art/received/shop_shell/warehouse_0_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "6e302261728ce56eee10fe20192b6252ef8eae671562b22c2ab1b080d6969cb4"
+    },
+    {
+      "path": "res://art/received/shop_shell/warehouse_1_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "38dad7d3e19097688f025ae05f61a92e03b376843ac8ba4c93b4343796489d6d"
+    },
+    {
+      "path": "res://art/received/shop_shell/warehouse_1_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "381bb8a151bf3c8f8c8bb7a5ba1ef50373d7fbe7011f447aed13345eae50a932"
+    },
+    {
+      "path": "res://art/received/shop_shell/warehouse_2_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "916314f61525b95cdaac1b87a92238ac3192ba733d3f30dde6ea646aa8f782ba"
+    },
+    {
+      "path": "res://art/received/shop_shell/warehouse_2_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "e8cd74a2db264726fc77fbc0b234d41da299bca620725ec11d6b456c9c185459"
+    },
+    {
+      "path": "res://art/received/shop_shell/warehouse_3_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "8babc587a9a89a2df74269141eacbc79dbb5d281769cb63fd5459bb02ad51b81"
+    },
+    {
+      "path": "res://art/received/shop_shell/warehouse_3_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "6cc444099b8ca4baf7eee16069e8344a45f1c14c67350a5cd7d8fc7ca08cd721"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "8ea0199fa252dc9259599b431a88a26c98d12f79812d764431b8e857ae281f60"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_0_tile.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "d13275748f36bf150b708b21396c8dedbd058f83e5fa0916253791d1d14a0476"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "8fb60ebb429373b118dedbee3e4503f30903c3abfed203d77e6e4bf1a8afa235"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_1_tile.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "9d47a8f43ee83ac23ed970fa0ea8f39d9a419b00715b78e36f5227a48805a997"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "147a10215f34c301af4e592575843bdcf18566657c157b50dbf4e7ff9a3b9432"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_2_tile.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "14f50c701f4f432d2bd241139fdf22e4e15462f7a8ebbf49f2cbf673d5b6842a"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "8c4bcd844008afed0a827065a1bec8078b94576699aafe6411cd410d63bdb517"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_3_tile.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "57ccf35d410ecd8a0453f7187c854b3c14385e58805949658315a66e50eaa313"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_cap_left.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "df7823d02743695090e0db93f13c555435919e90ddc6cdcf5bc1201ff87646de"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_cap_right.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "5c9a445a2970e27396f01672b11bc52fa843ad4163396d01a08652a793b2f4a8"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_corner_inside.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "5aada91e0f9b232030eb02a7245ed9bf3715240a64f9333133c2fbe4ed82e27a"
+    },
+    {
+      "path": "res://art/received/shop_shell/window_corner_outside.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "bfea0c47cb680f5daa3c64658f33b917242fd2faea003cc1036b7f29dbe3a0c2"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_0_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "765af9d0a29acfba5537650abe8c5b677319e21e2cb47ca89a6c19e861f5bf8d"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_0_stack2.png",
+      "size": [
+        64,
+        192
+      ],
+      "sha256": "9d077f91f0f00a74aa4bc6311b32df726298177466a308c462caa43b723949d4"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_0_stack3.png",
+      "size": [
+        64,
+        256
+      ],
+      "sha256": "d4ddc462200686d161717effa792f04b6396ca6253a909d0a2bd12b97af231b4"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_1_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "cf8559e5616164d703dbc7518ed5b7332ca638120a822affc06367e40c2d9929"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_1_stack2.png",
+      "size": [
+        64,
+        192
+      ],
+      "sha256": "a738d6d0048feb4f8a63b38e7e7454e9450d301c3da07d91e2879e3f150525d4"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_1_stack3.png",
+      "size": [
+        64,
+        256
+      ],
+      "sha256": "1804943bed4f2dc2846fdc5ca383ed49c6972dec9a82f44da5b6d8f9ff944b55"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_2_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "3c99d61bdf3ab7f3e243a6a4aee2b9c35d7103b6ef9f83ce9cd8db2060760483"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_2_stack2.png",
+      "size": [
+        64,
+        192
+      ],
+      "sha256": "566d7a7e17d09617d1b2197ec2558d93d7f9d5fe7ccae56c00120789d4016f77"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_2_stack3.png",
+      "size": [
+        64,
+        256
+      ],
+      "sha256": "36d6eba38abde0a603adb174be9f8c2496a63282c87d959b658380bc4c190169"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_3_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "787282f5a281d0a9e94ab210b08cae08f7d19c3b87fa6e1516b5032a41dbc681"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_3_stack2.png",
+      "size": [
+        64,
+        192
+      ],
+      "sha256": "e1e022be53067a949700555fc0e2acdcfa888d3e6ebdb3ad5dfb14aca15f7d5e"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_1x1_3_stack3.png",
+      "size": [
+        64,
+        256
+      ],
+      "sha256": "06039912da39f2ad565307e337dc31530e34ad7ebbade2cda52fff618a50cac1"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_0_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "f0d8940b782c9acd9c41ebfd2e29e40ded5f79e11cdf70c53801cabe859e8387"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_0_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "23c68bfbffd8269a486acd99ca402ed3d9f3657a450b633cef7eec8cddc2152f"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_0_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "e7298f56d5312a6f65d44f07a9a04dbc84bae8124f27cd5969d81aff2749eaee"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_1_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "269637038f9cbd56480e180d205df0e4b90a0ef28cb05b67f0c3ea2c60d5cb80"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_1_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "8de2507347013911506a0e23e8e9f0e603299b0611ed789dbd411ce227ca97ad"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_1_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "76b2d8c5be02be0c7f13e7dd4bea4e1f57032c68a92b5edb3297cd209dadf4b7"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_2_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7066f1034de0891e597ef204ebc4c8f9560a88cdd6c94e64c9c443b5442b0c5e"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_2_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "f5129ea6f455eaeb5ce084a1b596edb8765f9d52ec37dd94389a0eabb591df9e"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_2_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "74804d8142fea04eb5f56977d7478fe7f14ff384fafab368fee928276646b53a"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_3_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "1de439e11da0c6bb215d67b345baf4fde5e24876ab5f27a1a2207828844dfd71"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_3_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "bca660ef58b3bfad7e046caaad558f2283bbd5dab8ecb8bd6526441a63bc0533"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_2x1_3_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "a77b6294e6d8bd6484813837ab35a5fd5d885fac104ee66ae37da36ec2112bb6"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_0_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "e99a32511dbbf028afe83aee3131cca0be9e13f2ac7247fc3957e1101587a84b"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_0_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "3a04427a6f4eba975c8d86512ca86037f11b3d22b4e4d9f244f85cee5f01c3f8"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_0_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "6e52bd8fe206a5290c73e1dfb33e8e211ac7c922029c8511f4fcf27b558cfb34"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_1_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "8c1489e4aadd71affe143585b027eec266658e1f4e7ed3610a898ac6f8224256"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_1_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "9e059163da5b57326c3f3d8c1b1f84824254b00ac254d2d858cd1056b463f1fe"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_1_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "6ca0b766668826c3045033ad50453410d07567490c377bebd2719a56e72774a9"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_2_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "01d02be469e75d7e980e424755c6ae58e7414051ebe1ac9cc4d8c4ef47aaf45e"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_2_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "ec4b479323fd863ba347a331a9a3006c4e7d6121e7b94f7d3cb8c032b079ab3e"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_2_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "b08200a880907ef9ecf98ac47ba098e2bd5fc4d69063cf7310f2fdda021aec12"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_3_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "a4b6e7afd2000e95ade1157eb9a86e9e624fc3ecfd41e9c0d5fcd9ebe67754ca"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_3_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "b8b2d01bc4621ed9d76132671e28d2d7c3953bcbcb6c7c9a4802408aae81f695"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/modern_shelf_3x1_3_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "f0898da451970c054523880f17014f7ef142d21bcb2f5e357e64de22bf351230"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_0_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "a5b9ad5bc7b1fd1ae7ef41299cff55fc6287ee459235bb8326333d1cf5460e84"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_0_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "16f0f291c0873ee82dad2e7e0e6b76c1523dcd34569f91491863ffd4dea95b7d"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_0_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "68a5c292315c3a8a3855a9f6eb849d76e6b57c8d0df219bdbb8d3b7c0bcbfc58"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_1_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "167c980b16494960315d0166895c54cecf16d07005b6563e51ade1b724832f5b"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_1_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "90abdef224081e6c1ae4457f9dbdff9fb92886ef6c1bf56bd913f4a30cd7613f"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_1_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "d81b4d63cf5478792395f90560f07dfa852b8a09ab6c0801bf8796c6624b7837"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_2_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "debec606df8b5d0e72e335b91f70840a77adb289c88464e8020bf05441483e3a"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_2_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "c6bf2c0845d1725da3b5ab79a54653cbca933abb9d6a3c2c17180469c33437b1"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_2_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "d42d81f442985e6149a126351c505b91edbc86a8e13c33a0ef4cec9b185fa13e"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_3_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "15a94d7028caa78c5ffdf11737ad9e6bec27103f881dc14d665080b4ab8b718f"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_3_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "95363f2c7955aba1b8dcaaea5e45113b2b9acf4657fdad4586e940778523a472"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/reinforced_shelf_2x1_3_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "5497117a8bdb3e23cd804955dbd381adaffa32627fb790daa09ac5e5445bb695"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_1x1_0_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "7d846600d628bcf594293b6bb66d92774ff8d3cfaf0f44b284cf32f347081ec0"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_1x1_1_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "1d55bcc534518307a9e239b112036a7d8af94c2a5eb0911378e03a83ce321f85"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_1x1_2_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "dbbfb2820e71beb0a04efe2bc2b0c5fbf7ba16cdbf5c42b04e77e1ccf1835bd7"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_1x1_3_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "08a689518bf29e2aa88d3f909528196ff71eb535988e99a0b87fc0fa01cfbc39"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_0_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7edbda9a6bb20b958d37463080356632abaae3b3ef0a8315a8209adcad6e2ca7"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_0_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "aebb4c41cd56fba64d37604a696acdcd63308e033c8dd3a1c9dfa582e6266396"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_0_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "c8e9edb20800fff57f2fab9ea9967edda68e619ab5ab13fc34ed94a51bf654ff"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_1_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "0f80496667736f9fd3b287dd7dba76c29ee724ef15e7a84f9632181d8dc94206"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_1_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "bfd26d693e6a2e60af3cb21d990e9e7de72ecc64fce70731d40f1390b9fd7315"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_1_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "9d6a4a9746aaa4ed6d92384f83ac3a6dbf58b29122cd33a1ada83e1437697eef"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_2_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "1b13b1835974965128cf92220aa3a91116b51299daf0316133b0dfe61da4af57"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_2_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "ca8339136a5ae200767169089acaeb107d9eb75c30a956e6ecff07824fd17f2d"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_2_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "052df002f7b592f811ee7b1d035889a1d92c1c27ef02988bf0557aabebe79f81"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_3_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "be71b1a2c8ac954e9b0a500ed9391464b4e6bd8f1bda5a7e54392052515c8a15"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_3_stack2.png",
+      "size": [
+        128,
+        192
+      ],
+      "sha256": "b3f4e48c94fbb79abb63789ee703b605c676c7d2f802ccb39fcbcddac197f13a"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_2x1_3_stack3.png",
+      "size": [
+        128,
+        256
+      ],
+      "sha256": "1a0d0a81688046dcafe27429ce9368c522991411813380891305a9c3459b293d"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_0_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "2c546a26183fc20d19b3fb6f43ee66e08250f006545850863ff3acda6e4fb291"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_0_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "f285dd50fd549bbd195ddbdd4eb2cae3ae42bb4e30a2e28ac985f82e48e2f83d"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_0_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "0d4a9291241d87b5745f3d9f59c0c8d3f2bc9c5c6ff73694accd534f9bd0d22b"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_1_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "eebe88dcff9c6068f72bd71081570543bd3b60ba4f1fb12e8d66b4d938749b65"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_1_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "b472599c8f9e939292380a2e454c18a3e476617e437eff32606085f1328ab2fc"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_1_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "a140f5355cc109d447dfd68ae4c88144ffd288cb656202937f377ce2146b4666"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_2_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "9796503f745c69502a3c32acf273bb42b6627aece5986c4088bff8aaf225f329"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_2_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "52f5c10e510ea140e1c49f883f661d974ba5600e67812efc20a9dbcdb6897b7e"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_2_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "8a0e92bd353da126e0653bcda301d30ccb011dba35aa5fbd26f60091f2f1ebfa"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_3_stack1.png",
+      "size": [
+        192,
+        192
+      ],
+      "sha256": "c2c19c3a84cd5bfd691bfabf7d7a5fb50aa336e03bc2804142268e6a2506ff21"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_3_stack2.png",
+      "size": [
+        192,
+        256
+      ],
+      "sha256": "d955eb65b7def082876c3acff9de18aa3c8084e59b447f0b112a1f4679063693"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/shelf_3x1_3_stack3.png",
+      "size": [
+        192,
+        320
+      ],
+      "sha256": "fe787097a5c0fbb79cb554de9ef1e0dbbfb1f9988639c78237053b1179dcb673"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/steel_warehouse_rack_0.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "490c27ecdf435259b7eae065c2e2a97851651b1b2b34c0853eec7475e5e3cc98"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/steel_warehouse_rack_1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "b21d7725ece0c24fcfd4e6d75816cc0fb3f427a9a0e6225c72b8d4b05da49473"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/steel_warehouse_rack_2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "6e6c29bcd0b4521d14d119a2f916b3886b4f28a535a5557cad68cc4582212c2d"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/steel_warehouse_rack_3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "99e79e962659c8fe50327d9e07586468c10b336ebf824354df95f827183737c2"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/warehouse_rack_0.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "45320cb7a3c8d9162f8a5d93597584bfb7fdec464ae0267687d8f063cc293738"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/warehouse_rack_1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "b4f235ed8901a8ff17a354608273aaa11b27b495f7fcc38e5f8a1a4b8391ef16"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/warehouse_rack_2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "485c2e52b32012ad9d04a15921e7816f135349ffcd6f3b4cc291e3f1f3279ed9"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/warehouse_rack_3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "e508cf2aff984dbba967d6a90585bc941233a4b8e39541790cd5d3da16ef3e84"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_shelf_1x1_0_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "38aa858d75c0a0dd9f17dcf896417ee6d203519f10d3f068aba19ada135d2839"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_shelf_1x1_1_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "f8e13363ae42f79cfd8374be15f4b71a29b6e44e87bbdbc8918e10ff081db66d"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_shelf_1x1_2_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "c7dced161e3cb0ec17aeb767c02257b0ee59d4e92f17e6c596df06c195c6a4f2"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_shelf_1x1_3_stack1.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "a455433dd27a1014d21f703b9ceee497b6965c23436dc9fc05feafdabb8eb594"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_shelf_2x1_0_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "6439fa11cb341e7652dad1b05f3c08f9df3a8858562139c7ac97e5eafc3f4aea"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_shelf_2x1_1_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "624c3abe75516a81742e4982ee375a96b5430fe3f4a107cfb6921d00385bbcaa"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_shelf_2x1_2_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "e7cd43d612ad24f09d8d89a61833b9f12fb568dd018309b95492d6dc2a020390"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_shelf_2x1_3_stack1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "54b60a32253561f42db398ea25795041047236cc5a0526c4e19243a194b4767e"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_warehouse_rack_0.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "ea005423e7d72b1d638301fab5f359426ab45582773273c5e6f5a45027cd7f74"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_warehouse_rack_1.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "7341288c4c55006287674af84c11b61dff0f81b890d0be2483d67cebf7538d32"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_warehouse_rack_2.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "de5df5bdeade9d40f11ed8cfc46f07c1be18672c76742783e6ce224acefbf4d0"
+    },
+    {
+      "path": "res://art/received/shop_storage/bodies/wood_warehouse_rack_3.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "2874c7c5cf874cd1ebf088b943aab96895f5a5ab19e4ec8f1823663f5b2d833d"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/amber_sap.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "6c7f895390bae838cd7cc254f32b04a9417c1e0a37657b319c5618d2751bee3b"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/ancient_fragment.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "1f47508ff2b559d50efe32ec330967fec7a5427eedd25059238ed0adef15bf16"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/ancient_relic.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "327f8d782ac170208823710fe40b3188c8c69d990c6349992097cff9439d2ecf"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/berry_juice.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "c9c99f385f65a62927fb94fbb07a37603d7dcffcb718b0cdd673013e1cc0e817"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/bog_mud.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "5df374f02ae891ca9dbc411dde1c355eb5b7c8ec74e15efb200272fae1b6a315"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/bog_soup.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "3794718e56298d4b050e94795fc449759aee575920d88ad689d0f0cb2043d395"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/bread.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b4a829347b3d8b451293aea4d4309669352eaaf2da68ced0da717035e4ecb332"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/coal.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "7cf09a9a7e854e7a06c565b6daad0423c0ea2993442e13082882167157ec2d0b"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/copper_kettle.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "fbccb54c1e43f54dc838224a6fbbfc62ca56e6953ec5640b92ca7d24bc881712"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/copper_ore.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "332b104fe53a571bc25e7f7bf7e5f7c72cce673aa3287ebdd384137fcaec0ea8"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/deep_gem.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "c701a1933cb50a58237460985be7dbfe471b594d3864c254a4d6612f074371b9"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/dried_fruit.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "be0f1012271d7d49ed1a323f895315fe6c7833cd96eeead3a24f96d12bfc3411"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/dry_branch.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "a6d63bf62016c04d475a7732820855d95e7a8e11a9d0d55483d38dfa842049d7"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/elder_seed.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "9735113ee4b26f382c4793ad4f6a5ebd4351119bcefe2adda1fabb153671c8bb"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/elder_tonic.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "4821c09ed1437bc24306f56ceb0c9d9fc0bcc694560692237f6414d5e440121d"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/explorer_kit.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "1265b7cd681cdf2cf4e9b63b3625232cf8fcc3db471a0434314aa605e3a314b1"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_blossom_minnow_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "24aacb0aa28ab7e97206a6692ada40a7dc88bedfbecd477b366b62d738903aff"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_bread_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "31e69064eb45cf88829b04d3497a19900962db26381aa7c84dd165d1444c46fa"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_bud_crucian_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "965ac8b4bb1aafb6a67c53ac6bae90917f92daa2ed17f477eaa8ab4324dca94a"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_dried_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ebf03c679c9f83ad326d13ac067184a5cd1db7767fb22b91801efd7c5b63700d"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_dusk_crucian_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "80ab4eff3027b11680da6231ef98a79585f13cea054145915c4ee0a41079fa67"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_frost_smelt_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "62662cab1a9c3cdb25526a488be8642e07bd72cbaa64a50fbe779f54567c0b87"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_grilled_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ff38343a75ab2180df5ffa80d106276a5711fdc80ff7a8a5d83a101c7cd14937"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_leaf_dace_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b2c888420f145c976f2ab24d8b45fd00de15a02fda0ec47521d77fbfa6f21264"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_lunch_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "62fb47df8b673bac9f46330229d6ade60f5ca36802ee47073ff944c347f4fb96"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_moon_carp_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "d01149740390e6587f455bd1caa83f69cf311b5538538e7c96fd454900de569f"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_rain_catfish_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "af4d4c479a42b72caf235756e2390019c430b701496da61cbdff1887648bd4d9"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_reed_loach_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "0c12de9572aaea37c3b95d292e32c4bbb0440a16f3599617204229e3950347a1"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_ripple_carp_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "b8c2ddd193be98ea84256e68163aab70d90c6781990a89e281698101f98b2dcc"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_snow_trout_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "342aba20180f7506959738ece556885ff8750df30f44657692de87a77f100c9c"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_soup_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "22c16fc9058eb0b19d2b9baf84a85240b2d9a020278ebcca80ffaddb17f66849"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_stone_crucian_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "fab4b56dc4ebc83988b1cc14ac3049fc64308b5bd199a61441600c083d335139"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_stream_minnow_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "a27b80a766ab5386e2ad51ac490b6009cba097be167e7893332ca8b02d8351c1"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/fish_winter_stew_64.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "f243a8869d74c13774575661ab5499fd62fe9e9ad4806d6de7273d3022c2feec"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/forest_herb.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "baeb4735a22b56559987971f97ec28132f6e77231e09298e68ef78f76818f83e"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/forest_mushroom.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "96ba793e02b7d6f7ab3cc3a52d3294150641978ae7d3fb259011d491f29e4a00"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/gem_lantern.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "d809e5af6ab6e47b9b8a590770413b9432cf62c2559e221c59836c29408b6e10"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/glow_algae.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "1acc9aba07e0d8bc84c6d2266365e2cfca413e599062b03e5416ede9200b6f45"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/glow_lamp.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "bd09b0051bfa0dc7652032b1ed205d21d71e84887e79279ee22caf753126dd36"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/hand_warmer.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "a785231d9d16c8c7828751bd81242f275dbd3e6120285be0c78a787405668339"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/herb_drink.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "f2dd9f7a28677957b9c6f2b0296d50763a55f891e3b756909a8b8d2ae44152c0"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/herbal_bread.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "549135da1bc2ecac5b01f9f0d59eadfd5e000cbbb54655fc41d1e1fa66a8387a"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/iron_ore.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "1377f441bc81a36d62552bbf7a1e50b3d6542fb0bcf25f6f37b6494953c18c43"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/marsh_reed.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "fcfa48600ec037003fd060b10b6417c5d9be0206149d0339ce6134c0adc1ff4f"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/mine_crystal.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "e6a2ff6e8bd044e06448cdb148b479d3bb44a8531a3ef1938b076e06e56aa8c8"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/mineral_water.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "e1b7b25ada0f654fffca9f47f2ecd6748ecd19cbc95f60d55e0be6f1186d664d"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/mud_pack.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "20424dedaccf6513f8530f7acaed61f4ed87a130ea577c00beadc1de20e54b9e"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/mushroom_stew.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "3bda92a302642f395e3ad3d3f7bb6ce701f02566bd2076d4e7eebe38d7cd608d"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/plywood.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ebc3c34e683c2b9f84ab7f8eb603a617419ba2bf409cac36f363473170632a79"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/potion.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "cb3fcc27fc0d0ad406c98bb43d08582624e708eb730d4bcbd33952399fa3c1fc"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/queen_jelly.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "3af83581caf94c0537247531295662105b8b1d39f50848b3cc22aac253de6b8a"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/rainbow_tonic.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "74f0bb29995583acebd4706732de325454975184b538b2b57c15130986e0216e"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/raw_water.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "c31ba720a64b924f3c1f382b54c5348be2271b766fe95ae762bc271b0ba6b29a"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/reed_tea.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "660b09d97f311f75a498d6f710f931b14434a7487fd2a1f95fcf524f07f9c883"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/rune_dust.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "e8d0edae460cd8872a31c64c6c8e6d52b318b07658ec23d0bafeacb3ed160b41"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/rune_stone.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "ef4d9ee17b7023bc77198cf4d4daeb18cee7a60f43d4d57b7a8bc4a7ed98128c"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/sealed_scroll.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "cb1f763463dcfabfcfb861bbeaad6f07fd826f1f0d2052864c9398913a5dc7c8"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/silver_ore.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "dde3bd043a76c25cc020beb136e9ee0c57e0883daa41be827760454738751a93"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/silver_pendant.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "e1d9f8639c3e9356d2294aeab4616bcda8af0f76e2ff6c81358c052e00a63eb4"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/stone_shard.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "709af4fbad0124eb2b84217e5b39ff68a6e7286ec9dff069383901e03c41ec79"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/swamp_elixir.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "5d528246eafc561e2944d0de14b7884a8a0d9d5790497165983de7e4e36c2864"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/swamp_moss.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "bdcabdc1c7971d30b66b3b3d9f77a2455779aa115a1300e8beff4a8c754b3da5"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/toxic_spore.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "c6c1b80e50bb50081c79ccef9a4b2dd9547157cd8c3bab76afbd0a7be453cb42"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/traveler_stew.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "090d2ca086d298eb85c6441b80eb40e3e8e67110a0f2ebd931eb68dd6d754ab2"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/water.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "7d0f503d531780112c5327a7cff1427d5f5de8f4eacbc07f6cadcf31e7117d9c"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/wheat.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "6ae96cf8f0f0b229f373e37b385759bfc894b4dc2c8b0980a0f50a261986daed"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/wild_berry.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "eeb1a0b8d92e5343ac0b2816538a626a7977bda19e46e69c7eafc14abec1b69b"
+    },
+    {
+      "path": "res://art/received/shop_storage/goods/worn_coin.png",
+      "size": [
+        16,
+        16
+      ],
+      "sha256": "0d696ccad208f7f4b8d6ee1acadcb3c39436cc8eff0090b9ee4b8843cd39f01b"
+    }
+  ]
+}

@@ -1,0 +1,3384 @@
+{
+  "rotation_views": [
+    0,
+    3,
+    2,
+    1
+  ],
+  "max_visible_goods": 5,
+  "warehouse_max_visible_goods": 6,
+  "frames": [
+    {
+      "build_id": "shelf_1x1",
+      "view": 0,
+      "stack": 1,
+      "body": "bodies/shelf_1x1_0_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [
+        [
+          26,
+          102,
+          37.0
+        ],
+        [
+          26,
+          78,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_1x1",
+      "view": 1,
+      "stack": 1,
+      "body": "bodies/shelf_1x1_1_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [
+        [
+          36,
+          102,
+          37.0
+        ],
+        [
+          36,
+          78,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_1x1",
+      "view": 2,
+      "stack": 1,
+      "body": "bodies/shelf_1x1_2_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_1x1",
+      "view": 3,
+      "stack": 1,
+      "body": "bodies/shelf_1x1_3_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 0,
+      "stack": 1,
+      "body": "bodies/shelf_2x1_0_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [
+        [
+          42,
+          94,
+          37.0
+        ],
+        [
+          42,
+          70,
+          37.0
+        ],
+        [
+          74,
+          110,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 1,
+      "stack": 1,
+      "body": "bodies/shelf_2x1_1_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [
+        [
+          84,
+          94,
+          37.0
+        ],
+        [
+          84,
+          70,
+          37.0
+        ],
+        [
+          52,
+          110,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 2,
+      "stack": 1,
+      "body": "bodies/shelf_2x1_2_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 3,
+      "stack": 1,
+      "body": "bodies/shelf_2x1_3_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 0,
+      "stack": 2,
+      "body": "bodies/shelf_2x1_0_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [
+        [
+          42,
+          158,
+          37.0
+        ],
+        [
+          42,
+          134,
+          37.0
+        ],
+        [
+          74,
+          174,
+          37.0
+        ],
+        [
+          42,
+          102,
+          37.0
+        ],
+        [
+          42,
+          78,
+          37.0
+        ],
+        [
+          74,
+          118,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 1,
+      "stack": 2,
+      "body": "bodies/shelf_2x1_1_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [
+        [
+          84,
+          158,
+          37.0
+        ],
+        [
+          84,
+          134,
+          37.0
+        ],
+        [
+          52,
+          174,
+          37.0
+        ],
+        [
+          84,
+          102,
+          37.0
+        ],
+        [
+          84,
+          78,
+          37.0
+        ],
+        [
+          52,
+          118,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 2,
+      "stack": 2,
+      "body": "bodies/shelf_2x1_2_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 3,
+      "stack": 2,
+      "body": "bodies/shelf_2x1_3_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 0,
+      "stack": 3,
+      "body": "bodies/shelf_2x1_0_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [
+        [
+          42,
+          222,
+          37.0
+        ],
+        [
+          42,
+          198,
+          37.0
+        ],
+        [
+          74,
+          238,
+          37.0
+        ],
+        [
+          42,
+          166,
+          37.0
+        ],
+        [
+          42,
+          142,
+          37.0
+        ],
+        [
+          74,
+          182,
+          37.0
+        ],
+        [
+          42,
+          110,
+          37.0
+        ],
+        [
+          42,
+          86,
+          37.0
+        ],
+        [
+          74,
+          126,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 1,
+      "stack": 3,
+      "body": "bodies/shelf_2x1_1_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [
+        [
+          84,
+          222,
+          37.0
+        ],
+        [
+          84,
+          198,
+          37.0
+        ],
+        [
+          52,
+          238,
+          37.0
+        ],
+        [
+          84,
+          166,
+          37.0
+        ],
+        [
+          84,
+          142,
+          37.0
+        ],
+        [
+          52,
+          182,
+          37.0
+        ],
+        [
+          84,
+          110,
+          37.0
+        ],
+        [
+          84,
+          86,
+          37.0
+        ],
+        [
+          52,
+          126,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 2,
+      "stack": 3,
+      "body": "bodies/shelf_2x1_2_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_2x1",
+      "view": 3,
+      "stack": 3,
+      "body": "bodies/shelf_2x1_3_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 0,
+      "stack": 1,
+      "body": "bodies/shelf_3x1_0_stack1.png",
+      "canvas": [
+        192,
+        192
+      ],
+      "anchor": [
+        96,
+        152
+      ],
+      "slot_anchors": [
+        [
+          68,
+          138,
+          55.5
+        ],
+        [
+          68,
+          114,
+          55.5
+        ],
+        [
+          113,
+          161,
+          55.5
+        ],
+        [
+          113,
+          137,
+          55.5
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 1,
+      "stack": 1,
+      "body": "bodies/shelf_3x1_1_stack1.png",
+      "canvas": [
+        192,
+        192
+      ],
+      "anchor": [
+        96,
+        152
+      ],
+      "slot_anchors": [
+        [
+          123,
+          138,
+          55.5
+        ],
+        [
+          123,
+          114,
+          55.5
+        ],
+        [
+          78,
+          161,
+          55.5
+        ],
+        [
+          78,
+          137,
+          55.5
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 2,
+      "stack": 1,
+      "body": "bodies/shelf_3x1_2_stack1.png",
+      "canvas": [
+        192,
+        192
+      ],
+      "anchor": [
+        96,
+        152
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 3,
+      "stack": 1,
+      "body": "bodies/shelf_3x1_3_stack1.png",
+      "canvas": [
+        192,
+        192
+      ],
+      "anchor": [
+        96,
+        152
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 0,
+      "stack": 2,
+      "body": "bodies/shelf_3x1_0_stack2.png",
+      "canvas": [
+        192,
+        256
+      ],
+      "anchor": [
+        96,
+        216
+      ],
+      "slot_anchors": [
+        [
+          68,
+          202,
+          55.5
+        ],
+        [
+          68,
+          178,
+          55.5
+        ],
+        [
+          113,
+          225,
+          55.5
+        ],
+        [
+          113,
+          201,
+          55.5
+        ],
+        [
+          68,
+          146,
+          55.5
+        ],
+        [
+          68,
+          122,
+          55.5
+        ],
+        [
+          113,
+          169,
+          55.5
+        ],
+        [
+          113,
+          145,
+          55.5
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 1,
+      "stack": 2,
+      "body": "bodies/shelf_3x1_1_stack2.png",
+      "canvas": [
+        192,
+        256
+      ],
+      "anchor": [
+        96,
+        216
+      ],
+      "slot_anchors": [
+        [
+          123,
+          202,
+          55.5
+        ],
+        [
+          123,
+          178,
+          55.5
+        ],
+        [
+          78,
+          225,
+          55.5
+        ],
+        [
+          78,
+          201,
+          55.5
+        ],
+        [
+          123,
+          146,
+          55.5
+        ],
+        [
+          123,
+          122,
+          55.5
+        ],
+        [
+          78,
+          169,
+          55.5
+        ],
+        [
+          78,
+          145,
+          55.5
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 2,
+      "stack": 2,
+      "body": "bodies/shelf_3x1_2_stack2.png",
+      "canvas": [
+        192,
+        256
+      ],
+      "anchor": [
+        96,
+        216
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 3,
+      "stack": 2,
+      "body": "bodies/shelf_3x1_3_stack2.png",
+      "canvas": [
+        192,
+        256
+      ],
+      "anchor": [
+        96,
+        216
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 0,
+      "stack": 3,
+      "body": "bodies/shelf_3x1_0_stack3.png",
+      "canvas": [
+        192,
+        320
+      ],
+      "anchor": [
+        96,
+        280
+      ],
+      "slot_anchors": [
+        [
+          68,
+          266,
+          55.5
+        ],
+        [
+          68,
+          242,
+          55.5
+        ],
+        [
+          113,
+          289,
+          55.5
+        ],
+        [
+          113,
+          265,
+          55.5
+        ],
+        [
+          68,
+          210,
+          55.5
+        ],
+        [
+          68,
+          186,
+          55.5
+        ],
+        [
+          113,
+          233,
+          55.5
+        ],
+        [
+          113,
+          209,
+          55.5
+        ],
+        [
+          68,
+          154,
+          55.5
+        ],
+        [
+          68,
+          130,
+          55.5
+        ],
+        [
+          113,
+          177,
+          55.5
+        ],
+        [
+          113,
+          153,
+          55.5
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 1,
+      "stack": 3,
+      "body": "bodies/shelf_3x1_1_stack3.png",
+      "canvas": [
+        192,
+        320
+      ],
+      "anchor": [
+        96,
+        280
+      ],
+      "slot_anchors": [
+        [
+          123,
+          266,
+          55.5
+        ],
+        [
+          123,
+          242,
+          55.5
+        ],
+        [
+          78,
+          289,
+          55.5
+        ],
+        [
+          78,
+          265,
+          55.5
+        ],
+        [
+          123,
+          210,
+          55.5
+        ],
+        [
+          123,
+          186,
+          55.5
+        ],
+        [
+          78,
+          233,
+          55.5
+        ],
+        [
+          78,
+          209,
+          55.5
+        ],
+        [
+          123,
+          154,
+          55.5
+        ],
+        [
+          123,
+          130,
+          55.5
+        ],
+        [
+          78,
+          177,
+          55.5
+        ],
+        [
+          78,
+          153,
+          55.5
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 2,
+      "stack": 3,
+      "body": "bodies/shelf_3x1_2_stack3.png",
+      "canvas": [
+        192,
+        320
+      ],
+      "anchor": [
+        96,
+        280
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "shelf_3x1",
+      "view": 3,
+      "stack": 3,
+      "body": "bodies/shelf_3x1_3_stack3.png",
+      "canvas": [
+        192,
+        320
+      ],
+      "anchor": [
+        96,
+        280
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "wood_shelf_1x1",
+      "view": 0,
+      "stack": 1,
+      "body": "bodies/wood_shelf_1x1_0_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [
+        [
+          26,
+          102,
+          37.0
+        ],
+        [
+          26,
+          78,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "wood_shelf_1x1",
+      "view": 1,
+      "stack": 1,
+      "body": "bodies/wood_shelf_1x1_1_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [
+        [
+          36,
+          102,
+          37.0
+        ],
+        [
+          36,
+          78,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "wood_shelf_1x1",
+      "view": 2,
+      "stack": 1,
+      "body": "bodies/wood_shelf_1x1_2_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "wood_shelf_1x1",
+      "view": 3,
+      "stack": 1,
+      "body": "bodies/wood_shelf_1x1_3_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "wood_shelf_2x1",
+      "view": 0,
+      "stack": 1,
+      "body": "bodies/wood_shelf_2x1_0_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [
+        [
+          42,
+          94,
+          37.0
+        ],
+        [
+          42,
+          70,
+          37.0
+        ],
+        [
+          74,
+          110,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "wood_shelf_2x1",
+      "view": 1,
+      "stack": 1,
+      "body": "bodies/wood_shelf_2x1_1_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [
+        [
+          84,
+          94,
+          37.0
+        ],
+        [
+          84,
+          70,
+          37.0
+        ],
+        [
+          52,
+          110,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "wood_shelf_2x1",
+      "view": 2,
+      "stack": 1,
+      "body": "bodies/wood_shelf_2x1_2_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "wood_shelf_2x1",
+      "view": 3,
+      "stack": 1,
+      "body": "bodies/wood_shelf_2x1_3_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 0,
+      "stack": 1,
+      "body": "bodies/reinforced_shelf_2x1_0_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [
+        [
+          42,
+          94,
+          37.0
+        ],
+        [
+          42,
+          70,
+          37.0
+        ],
+        [
+          74,
+          110,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 1,
+      "stack": 1,
+      "body": "bodies/reinforced_shelf_2x1_1_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [
+        [
+          84,
+          94,
+          37.0
+        ],
+        [
+          84,
+          70,
+          37.0
+        ],
+        [
+          52,
+          110,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 2,
+      "stack": 1,
+      "body": "bodies/reinforced_shelf_2x1_2_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 3,
+      "stack": 1,
+      "body": "bodies/reinforced_shelf_2x1_3_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 0,
+      "stack": 2,
+      "body": "bodies/reinforced_shelf_2x1_0_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [
+        [
+          42,
+          158,
+          37.0
+        ],
+        [
+          42,
+          134,
+          37.0
+        ],
+        [
+          74,
+          174,
+          37.0
+        ],
+        [
+          42,
+          102,
+          37.0
+        ],
+        [
+          42,
+          78,
+          37.0
+        ],
+        [
+          74,
+          118,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 1,
+      "stack": 2,
+      "body": "bodies/reinforced_shelf_2x1_1_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [
+        [
+          84,
+          158,
+          37.0
+        ],
+        [
+          84,
+          134,
+          37.0
+        ],
+        [
+          52,
+          174,
+          37.0
+        ],
+        [
+          84,
+          102,
+          37.0
+        ],
+        [
+          84,
+          78,
+          37.0
+        ],
+        [
+          52,
+          118,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 2,
+      "stack": 2,
+      "body": "bodies/reinforced_shelf_2x1_2_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 3,
+      "stack": 2,
+      "body": "bodies/reinforced_shelf_2x1_3_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 0,
+      "stack": 3,
+      "body": "bodies/reinforced_shelf_2x1_0_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [
+        [
+          42,
+          222,
+          37.0
+        ],
+        [
+          42,
+          198,
+          37.0
+        ],
+        [
+          74,
+          238,
+          37.0
+        ],
+        [
+          42,
+          166,
+          37.0
+        ],
+        [
+          42,
+          142,
+          37.0
+        ],
+        [
+          74,
+          182,
+          37.0
+        ],
+        [
+          42,
+          110,
+          37.0
+        ],
+        [
+          42,
+          86,
+          37.0
+        ],
+        [
+          74,
+          126,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 1,
+      "stack": 3,
+      "body": "bodies/reinforced_shelf_2x1_1_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [
+        [
+          84,
+          222,
+          37.0
+        ],
+        [
+          84,
+          198,
+          37.0
+        ],
+        [
+          52,
+          238,
+          37.0
+        ],
+        [
+          84,
+          166,
+          37.0
+        ],
+        [
+          84,
+          142,
+          37.0
+        ],
+        [
+          52,
+          182,
+          37.0
+        ],
+        [
+          84,
+          110,
+          37.0
+        ],
+        [
+          84,
+          86,
+          37.0
+        ],
+        [
+          52,
+          126,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 2,
+      "stack": 3,
+      "body": "bodies/reinforced_shelf_2x1_2_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "reinforced_shelf_2x1",
+      "view": 3,
+      "stack": 3,
+      "body": "bodies/reinforced_shelf_2x1_3_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 0,
+      "stack": 1,
+      "body": "bodies/modern_shelf_1x1_0_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [
+        [
+          26,
+          102,
+          37.0
+        ],
+        [
+          26,
+          78,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 1,
+      "stack": 1,
+      "body": "bodies/modern_shelf_1x1_1_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [
+        [
+          36,
+          102,
+          37.0
+        ],
+        [
+          36,
+          78,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 2,
+      "stack": 1,
+      "body": "bodies/modern_shelf_1x1_2_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 3,
+      "stack": 1,
+      "body": "bodies/modern_shelf_1x1_3_stack1.png",
+      "canvas": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 0,
+      "stack": 2,
+      "body": "bodies/modern_shelf_1x1_0_stack2.png",
+      "canvas": [
+        64,
+        192
+      ],
+      "anchor": [
+        32,
+        168
+      ],
+      "slot_anchors": [
+        [
+          26,
+          166,
+          37.0
+        ],
+        [
+          26,
+          142,
+          37.0
+        ],
+        [
+          26,
+          110,
+          37.0
+        ],
+        [
+          26,
+          86,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 1,
+      "stack": 2,
+      "body": "bodies/modern_shelf_1x1_1_stack2.png",
+      "canvas": [
+        64,
+        192
+      ],
+      "anchor": [
+        32,
+        168
+      ],
+      "slot_anchors": [
+        [
+          36,
+          166,
+          37.0
+        ],
+        [
+          36,
+          142,
+          37.0
+        ],
+        [
+          36,
+          110,
+          37.0
+        ],
+        [
+          36,
+          86,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 2,
+      "stack": 2,
+      "body": "bodies/modern_shelf_1x1_2_stack2.png",
+      "canvas": [
+        64,
+        192
+      ],
+      "anchor": [
+        32,
+        168
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 3,
+      "stack": 2,
+      "body": "bodies/modern_shelf_1x1_3_stack2.png",
+      "canvas": [
+        64,
+        192
+      ],
+      "anchor": [
+        32,
+        168
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 0,
+      "stack": 3,
+      "body": "bodies/modern_shelf_1x1_0_stack3.png",
+      "canvas": [
+        64,
+        256
+      ],
+      "anchor": [
+        32,
+        232
+      ],
+      "slot_anchors": [
+        [
+          26,
+          230,
+          37.0
+        ],
+        [
+          26,
+          206,
+          37.0
+        ],
+        [
+          26,
+          174,
+          37.0
+        ],
+        [
+          26,
+          150,
+          37.0
+        ],
+        [
+          26,
+          118,
+          37.0
+        ],
+        [
+          26,
+          94,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 1,
+      "stack": 3,
+      "body": "bodies/modern_shelf_1x1_1_stack3.png",
+      "canvas": [
+        64,
+        256
+      ],
+      "anchor": [
+        32,
+        232
+      ],
+      "slot_anchors": [
+        [
+          36,
+          230,
+          37.0
+        ],
+        [
+          36,
+          206,
+          37.0
+        ],
+        [
+          36,
+          174,
+          37.0
+        ],
+        [
+          36,
+          150,
+          37.0
+        ],
+        [
+          36,
+          118,
+          37.0
+        ],
+        [
+          36,
+          94,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 2,
+      "stack": 3,
+      "body": "bodies/modern_shelf_1x1_2_stack3.png",
+      "canvas": [
+        64,
+        256
+      ],
+      "anchor": [
+        32,
+        232
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_1x1",
+      "view": 3,
+      "stack": 3,
+      "body": "bodies/modern_shelf_1x1_3_stack3.png",
+      "canvas": [
+        64,
+        256
+      ],
+      "anchor": [
+        32,
+        232
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 0,
+      "stack": 1,
+      "body": "bodies/modern_shelf_2x1_0_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [
+        [
+          42,
+          94,
+          37.0
+        ],
+        [
+          42,
+          70,
+          37.0
+        ],
+        [
+          74,
+          110,
+          37.0
+        ],
+        [
+          74,
+          86,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 1,
+      "stack": 1,
+      "body": "bodies/modern_shelf_2x1_1_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [
+        [
+          84,
+          94,
+          37.0
+        ],
+        [
+          84,
+          70,
+          37.0
+        ],
+        [
+          52,
+          110,
+          37.0
+        ],
+        [
+          52,
+          86,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 2,
+      "stack": 1,
+      "body": "bodies/modern_shelf_2x1_2_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 3,
+      "stack": 1,
+      "body": "bodies/modern_shelf_2x1_3_stack1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 0,
+      "stack": 2,
+      "body": "bodies/modern_shelf_2x1_0_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [
+        [
+          42,
+          158,
+          37.0
+        ],
+        [
+          42,
+          134,
+          37.0
+        ],
+        [
+          74,
+          174,
+          37.0
+        ],
+        [
+          74,
+          150,
+          37.0
+        ],
+        [
+          42,
+          102,
+          37.0
+        ],
+        [
+          42,
+          78,
+          37.0
+        ],
+        [
+          74,
+          118,
+          37.0
+        ],
+        [
+          74,
+          94,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 1,
+      "stack": 2,
+      "body": "bodies/modern_shelf_2x1_1_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [
+        [
+          84,
+          158,
+          37.0
+        ],
+        [
+          84,
+          134,
+          37.0
+        ],
+        [
+          52,
+          174,
+          37.0
+        ],
+        [
+          52,
+          150,
+          37.0
+        ],
+        [
+          84,
+          102,
+          37.0
+        ],
+        [
+          84,
+          78,
+          37.0
+        ],
+        [
+          52,
+          118,
+          37.0
+        ],
+        [
+          52,
+          94,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 2,
+      "stack": 2,
+      "body": "bodies/modern_shelf_2x1_2_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 3,
+      "stack": 2,
+      "body": "bodies/modern_shelf_2x1_3_stack2.png",
+      "canvas": [
+        128,
+        192
+      ],
+      "anchor": [
+        64,
+        168
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 0,
+      "stack": 3,
+      "body": "bodies/modern_shelf_2x1_0_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [
+        [
+          42,
+          222,
+          37.0
+        ],
+        [
+          42,
+          198,
+          37.0
+        ],
+        [
+          74,
+          238,
+          37.0
+        ],
+        [
+          74,
+          214,
+          37.0
+        ],
+        [
+          42,
+          166,
+          37.0
+        ],
+        [
+          42,
+          142,
+          37.0
+        ],
+        [
+          74,
+          182,
+          37.0
+        ],
+        [
+          74,
+          158,
+          37.0
+        ],
+        [
+          42,
+          110,
+          37.0
+        ],
+        [
+          42,
+          86,
+          37.0
+        ],
+        [
+          74,
+          126,
+          37.0
+        ],
+        [
+          74,
+          102,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 1,
+      "stack": 3,
+      "body": "bodies/modern_shelf_2x1_1_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [
+        [
+          84,
+          222,
+          37.0
+        ],
+        [
+          84,
+          198,
+          37.0
+        ],
+        [
+          52,
+          238,
+          37.0
+        ],
+        [
+          52,
+          214,
+          37.0
+        ],
+        [
+          84,
+          166,
+          37.0
+        ],
+        [
+          84,
+          142,
+          37.0
+        ],
+        [
+          52,
+          182,
+          37.0
+        ],
+        [
+          52,
+          158,
+          37.0
+        ],
+        [
+          84,
+          110,
+          37.0
+        ],
+        [
+          84,
+          86,
+          37.0
+        ],
+        [
+          52,
+          126,
+          37.0
+        ],
+        [
+          52,
+          102,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 2,
+      "stack": 3,
+      "body": "bodies/modern_shelf_2x1_2_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_2x1",
+      "view": 3,
+      "stack": 3,
+      "body": "bodies/modern_shelf_2x1_3_stack3.png",
+      "canvas": [
+        128,
+        256
+      ],
+      "anchor": [
+        64,
+        232
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 0,
+      "stack": 1,
+      "body": "bodies/modern_shelf_3x1_0_stack1.png",
+      "canvas": [
+        192,
+        192
+      ],
+      "anchor": [
+        96,
+        152
+      ],
+      "slot_anchors": [
+        [
+          58,
+          134,
+          37.0
+        ],
+        [
+          58,
+          110,
+          37.0
+        ],
+        [
+          90,
+          150,
+          37.0
+        ],
+        [
+          90,
+          126,
+          37.0
+        ],
+        [
+          122,
+          166,
+          37.0
+        ],
+        [
+          122,
+          142,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 1,
+      "stack": 1,
+      "body": "bodies/modern_shelf_3x1_1_stack1.png",
+      "canvas": [
+        192,
+        192
+      ],
+      "anchor": [
+        96,
+        152
+      ],
+      "slot_anchors": [
+        [
+          132,
+          134,
+          37.0
+        ],
+        [
+          132,
+          110,
+          37.0
+        ],
+        [
+          100,
+          150,
+          37.0
+        ],
+        [
+          100,
+          126,
+          37.0
+        ],
+        [
+          68,
+          166,
+          37.0
+        ],
+        [
+          68,
+          142,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 2,
+      "stack": 1,
+      "body": "bodies/modern_shelf_3x1_2_stack1.png",
+      "canvas": [
+        192,
+        192
+      ],
+      "anchor": [
+        96,
+        152
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 3,
+      "stack": 1,
+      "body": "bodies/modern_shelf_3x1_3_stack1.png",
+      "canvas": [
+        192,
+        192
+      ],
+      "anchor": [
+        96,
+        152
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 0,
+      "stack": 2,
+      "body": "bodies/modern_shelf_3x1_0_stack2.png",
+      "canvas": [
+        192,
+        256
+      ],
+      "anchor": [
+        96,
+        216
+      ],
+      "slot_anchors": [
+        [
+          58,
+          198,
+          37.0
+        ],
+        [
+          58,
+          174,
+          37.0
+        ],
+        [
+          90,
+          214,
+          37.0
+        ],
+        [
+          90,
+          190,
+          37.0
+        ],
+        [
+          122,
+          230,
+          37.0
+        ],
+        [
+          122,
+          206,
+          37.0
+        ],
+        [
+          58,
+          142,
+          37.0
+        ],
+        [
+          58,
+          118,
+          37.0
+        ],
+        [
+          90,
+          158,
+          37.0
+        ],
+        [
+          90,
+          134,
+          37.0
+        ],
+        [
+          122,
+          174,
+          37.0
+        ],
+        [
+          122,
+          150,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 1,
+      "stack": 2,
+      "body": "bodies/modern_shelf_3x1_1_stack2.png",
+      "canvas": [
+        192,
+        256
+      ],
+      "anchor": [
+        96,
+        216
+      ],
+      "slot_anchors": [
+        [
+          132,
+          198,
+          37.0
+        ],
+        [
+          132,
+          174,
+          37.0
+        ],
+        [
+          100,
+          214,
+          37.0
+        ],
+        [
+          100,
+          190,
+          37.0
+        ],
+        [
+          68,
+          230,
+          37.0
+        ],
+        [
+          68,
+          206,
+          37.0
+        ],
+        [
+          132,
+          142,
+          37.0
+        ],
+        [
+          132,
+          118,
+          37.0
+        ],
+        [
+          100,
+          158,
+          37.0
+        ],
+        [
+          100,
+          134,
+          37.0
+        ],
+        [
+          68,
+          174,
+          37.0
+        ],
+        [
+          68,
+          150,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 2,
+      "stack": 2,
+      "body": "bodies/modern_shelf_3x1_2_stack2.png",
+      "canvas": [
+        192,
+        256
+      ],
+      "anchor": [
+        96,
+        216
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 3,
+      "stack": 2,
+      "body": "bodies/modern_shelf_3x1_3_stack2.png",
+      "canvas": [
+        192,
+        256
+      ],
+      "anchor": [
+        96,
+        216
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 0,
+      "stack": 3,
+      "body": "bodies/modern_shelf_3x1_0_stack3.png",
+      "canvas": [
+        192,
+        320
+      ],
+      "anchor": [
+        96,
+        280
+      ],
+      "slot_anchors": [
+        [
+          58,
+          262,
+          37.0
+        ],
+        [
+          58,
+          238,
+          37.0
+        ],
+        [
+          90,
+          278,
+          37.0
+        ],
+        [
+          90,
+          254,
+          37.0
+        ],
+        [
+          122,
+          294,
+          37.0
+        ],
+        [
+          122,
+          270,
+          37.0
+        ],
+        [
+          58,
+          206,
+          37.0
+        ],
+        [
+          58,
+          182,
+          37.0
+        ],
+        [
+          90,
+          222,
+          37.0
+        ],
+        [
+          90,
+          198,
+          37.0
+        ],
+        [
+          122,
+          238,
+          37.0
+        ],
+        [
+          122,
+          214,
+          37.0
+        ],
+        [
+          58,
+          150,
+          37.0
+        ],
+        [
+          58,
+          126,
+          37.0
+        ],
+        [
+          90,
+          166,
+          37.0
+        ],
+        [
+          90,
+          142,
+          37.0
+        ],
+        [
+          122,
+          182,
+          37.0
+        ],
+        [
+          122,
+          158,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 1,
+      "stack": 3,
+      "body": "bodies/modern_shelf_3x1_1_stack3.png",
+      "canvas": [
+        192,
+        320
+      ],
+      "anchor": [
+        96,
+        280
+      ],
+      "slot_anchors": [
+        [
+          132,
+          262,
+          37.0
+        ],
+        [
+          132,
+          238,
+          37.0
+        ],
+        [
+          100,
+          278,
+          37.0
+        ],
+        [
+          100,
+          254,
+          37.0
+        ],
+        [
+          68,
+          294,
+          37.0
+        ],
+        [
+          68,
+          270,
+          37.0
+        ],
+        [
+          132,
+          206,
+          37.0
+        ],
+        [
+          132,
+          182,
+          37.0
+        ],
+        [
+          100,
+          222,
+          37.0
+        ],
+        [
+          100,
+          198,
+          37.0
+        ],
+        [
+          68,
+          238,
+          37.0
+        ],
+        [
+          68,
+          214,
+          37.0
+        ],
+        [
+          132,
+          150,
+          37.0
+        ],
+        [
+          132,
+          126,
+          37.0
+        ],
+        [
+          100,
+          166,
+          37.0
+        ],
+        [
+          100,
+          142,
+          37.0
+        ],
+        [
+          68,
+          182,
+          37.0
+        ],
+        [
+          68,
+          158,
+          37.0
+        ]
+      ],
+      "visible_front": true
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 2,
+      "stack": 3,
+      "body": "bodies/modern_shelf_3x1_2_stack3.png",
+      "canvas": [
+        192,
+        320
+      ],
+      "anchor": [
+        96,
+        280
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "modern_shelf_3x1",
+      "view": 3,
+      "stack": 3,
+      "body": "bodies/modern_shelf_3x1_3_stack3.png",
+      "canvas": [
+        192,
+        320
+      ],
+      "anchor": [
+        96,
+        280
+      ],
+      "slot_anchors": [],
+      "visible_front": false
+    },
+    {
+      "build_id": "warehouse_rack",
+      "view": 0,
+      "body": "bodies/warehouse_rack_0.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": true,
+      "slot_anchors": [
+        [
+          64,
+          102,
+          58
+        ],
+        [
+          64,
+          78,
+          58
+        ],
+        [
+          64,
+          55,
+          58
+        ]
+      ]
+    },
+    {
+      "build_id": "warehouse_rack",
+      "view": 1,
+      "body": "bodies/warehouse_rack_1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": true,
+      "slot_anchors": [
+        [
+          64,
+          102,
+          58
+        ],
+        [
+          64,
+          78,
+          58
+        ],
+        [
+          64,
+          54,
+          58
+        ]
+      ]
+    },
+    {
+      "build_id": "warehouse_rack",
+      "view": 2,
+      "body": "bodies/warehouse_rack_2.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": false
+    },
+    {
+      "build_id": "warehouse_rack",
+      "view": 3,
+      "body": "bodies/warehouse_rack_3.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": false
+    },
+    {
+      "build_id": "wood_warehouse_rack",
+      "view": 0,
+      "body": "bodies/wood_warehouse_rack_0.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": true,
+      "slot_anchors": [
+        [
+          64,
+          101,
+          58
+        ],
+        [
+          64,
+          76,
+          58
+        ],
+        [
+          64,
+          51,
+          58
+        ]
+      ]
+    },
+    {
+      "build_id": "wood_warehouse_rack",
+      "view": 1,
+      "body": "bodies/wood_warehouse_rack_1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": true,
+      "slot_anchors": [
+        [
+          64,
+          101,
+          58
+        ],
+        [
+          64,
+          76,
+          58
+        ],
+        [
+          64,
+          51,
+          58
+        ]
+      ]
+    },
+    {
+      "build_id": "wood_warehouse_rack",
+      "view": 2,
+      "body": "bodies/wood_warehouse_rack_2.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": false
+    },
+    {
+      "build_id": "wood_warehouse_rack",
+      "view": 3,
+      "body": "bodies/wood_warehouse_rack_3.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": false
+    },
+    {
+      "build_id": "steel_warehouse_rack",
+      "view": 0,
+      "body": "bodies/steel_warehouse_rack_0.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": true,
+      "slot_anchors": [
+        [
+          64,
+          101,
+          58
+        ],
+        [
+          64,
+          76,
+          58
+        ],
+        [
+          64,
+          51,
+          58
+        ]
+      ]
+    },
+    {
+      "build_id": "steel_warehouse_rack",
+      "view": 1,
+      "body": "bodies/steel_warehouse_rack_1.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": true,
+      "slot_anchors": [
+        [
+          64,
+          101,
+          58
+        ],
+        [
+          64,
+          76,
+          58
+        ],
+        [
+          64,
+          51,
+          58
+        ]
+      ]
+    },
+    {
+      "build_id": "steel_warehouse_rack",
+      "view": 2,
+      "body": "bodies/steel_warehouse_rack_2.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": false
+    },
+    {
+      "build_id": "steel_warehouse_rack",
+      "view": 3,
+      "body": "bodies/steel_warehouse_rack_3.png",
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        104
+      ],
+      "visible_front": false
+    }
+  ],
+  "items": [
+    {
+      "item_id": "water",
+      "glyph": "goods/water.png"
+    },
+    {
+      "item_id": "bread",
+      "glyph": "goods/bread.png"
+    },
+    {
+      "item_id": "potion",
+      "glyph": "goods/potion.png"
+    },
+    {
+      "item_id": "herb_drink",
+      "glyph": "goods/herb_drink.png"
+    },
+    {
+      "item_id": "iron_ore",
+      "glyph": "goods/iron_ore.png"
+    },
+    {
+      "item_id": "wheat",
+      "glyph": "goods/wheat.png"
+    },
+    {
+      "item_id": "raw_water",
+      "glyph": "goods/raw_water.png"
+    },
+    {
+      "item_id": "forest_herb",
+      "glyph": "goods/forest_herb.png"
+    },
+    {
+      "item_id": "mine_crystal",
+      "glyph": "goods/mine_crystal.png"
+    },
+    {
+      "item_id": "swamp_moss",
+      "glyph": "goods/swamp_moss.png"
+    },
+    {
+      "item_id": "ancient_fragment",
+      "glyph": "goods/ancient_fragment.png"
+    },
+    {
+      "item_id": "ancient_relic",
+      "glyph": "goods/ancient_relic.png"
+    },
+    {
+      "item_id": "wild_berry",
+      "glyph": "goods/wild_berry.png"
+    },
+    {
+      "item_id": "plywood",
+      "glyph": "goods/plywood.png"
+    },
+    {
+      "item_id": "dry_branch",
+      "glyph": "goods/dry_branch.png"
+    },
+    {
+      "item_id": "forest_mushroom",
+      "glyph": "goods/forest_mushroom.png"
+    },
+    {
+      "item_id": "amber_sap",
+      "glyph": "goods/amber_sap.png"
+    },
+    {
+      "item_id": "elder_seed",
+      "glyph": "goods/elder_seed.png"
+    },
+    {
+      "item_id": "coal",
+      "glyph": "goods/coal.png"
+    },
+    {
+      "item_id": "stone_shard",
+      "glyph": "goods/stone_shard.png"
+    },
+    {
+      "item_id": "copper_ore",
+      "glyph": "goods/copper_ore.png"
+    },
+    {
+      "item_id": "silver_ore",
+      "glyph": "goods/silver_ore.png"
+    },
+    {
+      "item_id": "deep_gem",
+      "glyph": "goods/deep_gem.png"
+    },
+    {
+      "item_id": "marsh_reed",
+      "glyph": "goods/marsh_reed.png"
+    },
+    {
+      "item_id": "bog_mud",
+      "glyph": "goods/bog_mud.png"
+    },
+    {
+      "item_id": "toxic_spore",
+      "glyph": "goods/toxic_spore.png"
+    },
+    {
+      "item_id": "glow_algae",
+      "glyph": "goods/glow_algae.png"
+    },
+    {
+      "item_id": "queen_jelly",
+      "glyph": "goods/queen_jelly.png"
+    },
+    {
+      "item_id": "rune_dust",
+      "glyph": "goods/rune_dust.png"
+    },
+    {
+      "item_id": "worn_coin",
+      "glyph": "goods/worn_coin.png"
+    },
+    {
+      "item_id": "rune_stone",
+      "glyph": "goods/rune_stone.png"
+    },
+    {
+      "item_id": "sealed_scroll",
+      "glyph": "goods/sealed_scroll.png"
+    },
+    {
+      "item_id": "berry_juice",
+      "glyph": "goods/berry_juice.png"
+    },
+    {
+      "item_id": "mushroom_stew",
+      "glyph": "goods/mushroom_stew.png"
+    },
+    {
+      "item_id": "elder_tonic",
+      "glyph": "goods/elder_tonic.png"
+    },
+    {
+      "item_id": "mineral_water",
+      "glyph": "goods/mineral_water.png"
+    },
+    {
+      "item_id": "hand_warmer",
+      "glyph": "goods/hand_warmer.png"
+    },
+    {
+      "item_id": "gem_lantern",
+      "glyph": "goods/gem_lantern.png"
+    },
+    {
+      "item_id": "reed_tea",
+      "glyph": "goods/reed_tea.png"
+    },
+    {
+      "item_id": "mud_pack",
+      "glyph": "goods/mud_pack.png"
+    },
+    {
+      "item_id": "swamp_elixir",
+      "glyph": "goods/swamp_elixir.png"
+    },
+    {
+      "item_id": "dried_fruit",
+      "glyph": "goods/dried_fruit.png"
+    },
+    {
+      "item_id": "herbal_bread",
+      "glyph": "goods/herbal_bread.png"
+    },
+    {
+      "item_id": "copper_kettle",
+      "glyph": "goods/copper_kettle.png"
+    },
+    {
+      "item_id": "silver_pendant",
+      "glyph": "goods/silver_pendant.png"
+    },
+    {
+      "item_id": "bog_soup",
+      "glyph": "goods/bog_soup.png"
+    },
+    {
+      "item_id": "glow_lamp",
+      "glyph": "goods/glow_lamp.png"
+    },
+    {
+      "item_id": "traveler_stew",
+      "glyph": "goods/traveler_stew.png"
+    },
+    {
+      "item_id": "explorer_kit",
+      "glyph": "goods/explorer_kit.png"
+    },
+    {
+      "item_id": "rainbow_tonic",
+      "glyph": "goods/rainbow_tonic.png"
+    },
+    {
+      "item_id": "camp_bread",
+      "glyph": "goods/bread.png"
+    },
+    {
+      "item_id": "spring_bud",
+      "glyph": "goods/forest_herb.png"
+    },
+    {
+      "item_id": "summer_mint",
+      "glyph": "goods/forest_herb.png"
+    },
+    {
+      "item_id": "autumn_nut",
+      "glyph": "goods/forest_mushroom.png"
+    },
+    {
+      "item_id": "winter_frost",
+      "glyph": "goods/mine_crystal.png"
+    },
+    {
+      "item_id": "rain_pearl",
+      "glyph": "goods/raw_water.png"
+    },
+    {
+      "item_id": "snow_bloom",
+      "glyph": "goods/swamp_moss.png"
+    },
+    {
+      "item_id": "wilted_greens",
+      "glyph": "goods/forest_herb.png"
+    },
+    {
+      "item_id": "dried_spring_bud",
+      "glyph": "goods/forest_herb.png"
+    },
+    {
+      "item_id": "dried_summer_mint",
+      "glyph": "goods/forest_herb.png"
+    },
+    {
+      "item_id": "berry_filled_bread",
+      "glyph": "goods/bread.png"
+    },
+    {
+      "item_id": "packed_mushroom_meal",
+      "glyph": "goods/bread.png"
+    },
+    {
+      "item_id": "food_compost",
+      "glyph": "goods/forest_herb.png"
+    },
+    {
+      "item_id": "fish_stream_minnow",
+      "glyph": "goods/fish_stream_minnow_64.png"
+    },
+    {
+      "item_id": "fish_stone_crucian",
+      "glyph": "goods/fish_stone_crucian_64.png"
+    },
+    {
+      "item_id": "fish_reed_loach",
+      "glyph": "goods/fish_reed_loach_64.png"
+    },
+    {
+      "item_id": "fish_blossom_minnow",
+      "glyph": "goods/fish_blossom_minnow_64.png"
+    },
+    {
+      "item_id": "fish_bud_crucian",
+      "glyph": "goods/fish_bud_crucian_64.png"
+    },
+    {
+      "item_id": "fish_ripple_carp",
+      "glyph": "goods/fish_ripple_carp_64.png"
+    },
+    {
+      "item_id": "fish_rain_catfish",
+      "glyph": "goods/fish_rain_catfish_64.png"
+    },
+    {
+      "item_id": "fish_leaf_dace",
+      "glyph": "goods/fish_leaf_dace_64.png"
+    },
+    {
+      "item_id": "fish_dusk_crucian",
+      "glyph": "goods/fish_dusk_crucian_64.png"
+    },
+    {
+      "item_id": "fish_frost_smelt",
+      "glyph": "goods/fish_frost_smelt_64.png"
+    },
+    {
+      "item_id": "fish_snow_trout",
+      "glyph": "goods/fish_snow_trout_64.png"
+    },
+    {
+      "item_id": "fish_moon_carp",
+      "glyph": "goods/fish_moon_carp_64.png"
+    },
+    {
+      "item_id": "fish_grilled",
+      "glyph": "goods/fish_grilled_64.png"
+    },
+    {
+      "item_id": "fish_dried",
+      "glyph": "goods/fish_dried_64.png"
+    },
+    {
+      "item_id": "fish_soup",
+      "glyph": "goods/fish_soup_64.png"
+    },
+    {
+      "item_id": "fish_bread",
+      "glyph": "goods/fish_bread_64.png"
+    },
+    {
+      "item_id": "fish_lunch",
+      "glyph": "goods/fish_lunch_64.png"
+    },
+    {
+      "item_id": "fish_winter_stew",
+      "glyph": "goods/fish_winter_stew_64.png"
+    }
+  ]
+}
