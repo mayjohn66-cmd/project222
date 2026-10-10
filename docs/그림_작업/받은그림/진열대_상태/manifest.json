@@ -1,0 +1,90 @@
+{
+  "date": "2026-10-10",
+  "tool": "built-in image_gen + user-authorized Pillow processing",
+  "status": "pixel_candidates_not_runtime_connected",
+  "source_assets": [
+    {
+      "file": "shelf_empty_source.png",
+      "sha256": "14e2ea9a78ab80cb9f426dc4ec9de6dfb7d38d4d79c70fbdeca7dc58751e8164",
+      "size": [
+        1224,
+        1285
+      ]
+    },
+    {
+      "file": "rack_empty_source.png",
+      "sha256": "335b072c72c9d0871ce2b637eaabd74d8ba6fd305eda23a265f7df390ffe6862",
+      "size": [
+        1536,
+        1024
+      ]
+    }
+  ],
+  "catalogs": [
+    {
+      "path": "data/core/items.csv",
+      "sha256": "d2e18adc922aea248105b01ebbca9b359ea4e875c1f119536cd4f8ba3983abf7",
+      "normalized_sha256": "8b8f28cec708b20fd9f5f359491a62d78173d1ee46db8e2618745df614986842"
+    },
+    {
+      "path": "data/shop/catalogs/shelf_data.csv",
+      "sha256": "bc41a26ed5e4c38e0f9bff7526fcd84551e6ec6833d34340bf648cc690193280",
+      "normalized_sha256": "9719ddfbdaa4daeb26784a51653ff00281675b0bfd340baf305928d4abd51948"
+    },
+    {
+      "path": "data/shop/catalogs/build_objects.csv",
+      "sha256": "1898623e3c8c1ecf6a44a8ef2dadfe2ce4ccff12c107ba40ab21956058edd89b",
+      "normalized_sha256": "7231c93801a3e42fad5d014a8597d338d112957e63822ada9f15a6e6464362c2"
+    }
+  ],
+  "counts": {
+    "shelf_bodies": 84,
+    "warehouse_bodies": 12,
+    "empty_units": 16,
+    "glyphs": 68,
+    "mapped_items": 81,
+    "native_pngs": 372,
+    "runtime_icon_items": 63,
+    "received_fish_candidate_items": 18
+  },
+  "remaining": [
+    "user selection",
+    "runtime 2D adapter",
+    "rotation matching",
+    "modular seam and stacking overlap calibration",
+    "goods plane positions and front edge occlusion",
+    "warehouse rear braces and three distinct items in runtime"
+  ],
+  "references": [
+    {
+      "path": "art/received/furniture/shelf_1x1/rotation_0.png",
+      "sha256": "51dbf22dd164870004c3c674404232fc0a5756d99c923e2b58c3a9283f2ca640"
+    },
+    {
+      "path": "art/received/furniture/shelf_1x1/rotation_1.png",
+      "sha256": "5f853e8ff023b50b99eff42c2f3d61183d0aa0aff5e2eb05c3c3fc7c39d88545"
+    },
+    {
+      "path": "art/received/furniture/shelf_1x1/rotation_2.png",
+      "sha256": "77e17443f9143e82a5c90c6f2a73acb1f65243ee4be372eec1c03233a05bb863"
+    },
+    {
+      "path": "art/received/furniture/shelf_1x1/rotation_3.png",
+      "sha256": "b1c3ec9fe724726c92e5e88d6bf351106cca7784e996e9b698a8e4f5d5caaf6b"
+    },
+    {
+      "path": "art/received/furniture/warehouse_rack/rotation_0.png",
+      "sha256": "881332d580af8725173ce5ef203c0aa0ce37fc6f6adaae1f934018bd3bfc9997"
+    },
+    {
+      "path": "art/received/furniture/wood_warehouse_rack/rotation_0.png",
+      "sha256": "eefb3ff20aa5f82eae253d449d49812629cebce098522d0c823d7202e00f7b86"
+    },
+    {
+      "path": "art/received/furniture/steel_warehouse_rack/rotation_0.png",
+      "sha256": "d5ab8fae6be8e4c52e52a8977988bf817ac8febb98108160238aa3cd0566cf37"
+    }
+  ],
+  "authorization": "User requested priority 2 continuation after approving Codex image generation and Python pixel processing. General Claude/Pixel Lab policy remains unchanged.",
+  "warehouse_plane_edit": "One middle shelf band duplicated along its isometric slope; feet fixed, top cap plus 3 load boards. Geometry remains a candidate."
+}

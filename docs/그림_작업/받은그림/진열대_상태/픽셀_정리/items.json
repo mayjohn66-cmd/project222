@@ -1,0 +1,978 @@
+{
+  "shelf_allowed_items": 81,
+  "unique_glyphs": 68,
+  "items": [
+    {
+      "item_id": "water",
+      "name": "물",
+      "glyph": "goods/water.png",
+      "source": "art/items/pixel_v1/water.png",
+      "source_sha256": "897da5c69445a58a502215cc47a31f845efaa2e4b4ade939c3e70caeca9589e1",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "bread",
+      "name": "빵",
+      "glyph": "goods/bread.png",
+      "source": "art/items/pixel_v1/bread.png",
+      "source_sha256": "7390d50722d3bae860934c4181a2e60bb5bbf63f73b7cf3b8eb396a436401ce1",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "potion",
+      "name": "포션",
+      "glyph": "goods/potion.png",
+      "source": "art/items/pixel_v1/potion.png",
+      "source_sha256": "2beadc365594652f5b97a46063c253e205f1020d81725fd946df6dcfca1c54ce",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "herb_drink",
+      "name": "약초 음료",
+      "glyph": "goods/herb_drink.png",
+      "source": "art/items/pixel_v1/herb_drink.png",
+      "source_sha256": "fc0504f39b7ff44511ef61a426538347491ed5530b2d6d7255deda38f44a8208",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "iron_ore",
+      "name": "철광석",
+      "glyph": "goods/iron_ore.png",
+      "source": "art/items/pixel_v1/iron_ore.png",
+      "source_sha256": "3447f207568421fd281f00f631f6946424d3dada1a2a64b13c9dd48aea389faf",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "wheat",
+      "name": "밀",
+      "glyph": "goods/wheat.png",
+      "source": "art/items/pixel_v1/wheat.png",
+      "source_sha256": "40e3ec2ce02a3b4df88911d0f03ceb1f61696b8b5f9e1c00ff0ffb94f784cadb",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "raw_water",
+      "name": "채집한 물",
+      "glyph": "goods/raw_water.png",
+      "source": "art/items/pixel_v1/raw_water.png",
+      "source_sha256": "d463ff05cf822fa658694daabd5fb2aab9df4422bd9cb1201df3cd75935c421b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "forest_herb",
+      "name": "숲 약초",
+      "glyph": "goods/forest_herb.png",
+      "source": "art/items/pixel_v1/forest_herb.png",
+      "source_sha256": "77e7c4d71fafc56af110d3c079ab8983d5375c2174c4ab8972631e154b87146b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "mine_crystal",
+      "name": "수정 원석",
+      "glyph": "goods/mine_crystal.png",
+      "source": "art/items/pixel_v1/mine_crystal.png",
+      "source_sha256": "2883cbb9797badc3d1062a99ea2bdb5b0c135da78f13fb39461185b1056337c1",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "swamp_moss",
+      "name": "늪 이끼",
+      "glyph": "goods/swamp_moss.png",
+      "source": "art/items/pixel_v1/swamp_moss.png",
+      "source_sha256": "097d095453df00bc75f430d21bf293429569fe38938b53306512519aa651eabf",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "ancient_fragment",
+      "name": "고대 파편",
+      "glyph": "goods/ancient_fragment.png",
+      "source": "art/items/pixel_v1/ancient_fragment.png",
+      "source_sha256": "40c9126e8f7fa12b8b719a71a23b0973ae905466ac96fdde04ad7f3ae94c0d02",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "ancient_relic",
+      "name": "고대 유물",
+      "glyph": "goods/ancient_relic.png",
+      "source": "art/items/pixel_v1/ancient_relic.png",
+      "source_sha256": "e0d14d6c15eb0ff18aa14936a343d7581f24f76c503f439fd0435f5aaad28bc6",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "wild_berry",
+      "name": "야생 열매",
+      "glyph": "goods/wild_berry.png",
+      "source": "art/items/pixel_v1/wild_berry.png",
+      "source_sha256": "06e31c693316f315d79a0cd2f2256dc510ef950cf16d794eac7482af018ba4c4",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "plywood",
+      "name": "합판",
+      "glyph": "goods/plywood.png",
+      "source": "art/items/pixel_v1/plywood.png",
+      "source_sha256": "5171ce8affd6ebd4ca1fd331acc026a575a6e345e8bd6b299b07724239ac4e30",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "dry_branch",
+      "name": "마른 가지",
+      "glyph": "goods/dry_branch.png",
+      "source": "art/items/pixel_v1/dry_branch.png",
+      "source_sha256": "096e7f4bb94c4c9a24ba6067c65871e39745ee869a651fb88c71c6d5587fac5b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "forest_mushroom",
+      "name": "숲 버섯",
+      "glyph": "goods/forest_mushroom.png",
+      "source": "art/items/pixel_v1/forest_mushroom.png",
+      "source_sha256": "9af7274b88ac5f397f23d58525b80489d7fe7d7b262c526bccd1c4178ecb2c77",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "amber_sap",
+      "name": "호박 수액",
+      "glyph": "goods/amber_sap.png",
+      "source": "art/items/pixel_v1/amber_sap.png",
+      "source_sha256": "0a4954dff81c6f074d3936b34f982de4f33eb992e10f39b3515718459d00497a",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "elder_seed",
+      "name": "고목의 씨앗",
+      "glyph": "goods/elder_seed.png",
+      "source": "art/items/pixel_v1/elder_seed.png",
+      "source_sha256": "f8cc111267444940c6c4357d878537833b90b86a541615dc846ef8d0d86a731d",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "coal",
+      "name": "석탄",
+      "glyph": "goods/coal.png",
+      "source": "art/items/pixel_v1/coal.png",
+      "source_sha256": "a666a4fa5bffcd0bfb753acad044aa43792b6931d6ca7216c1f37d53fea0dd00",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "stone_shard",
+      "name": "돌 조각",
+      "glyph": "goods/stone_shard.png",
+      "source": "art/items/pixel_v1/stone_shard.png",
+      "source_sha256": "7f3845cce32c37ac21234f5ec7249de89b4fa17a1059e69cb24b87b735c4696f",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "copper_ore",
+      "name": "구리 광석",
+      "glyph": "goods/copper_ore.png",
+      "source": "art/items/pixel_v1/copper_ore.png",
+      "source_sha256": "bcf8ce7a4bb19726fe5aea38b6695332eef80b0bb5438f75fa6390c87d4ac8ea",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "silver_ore",
+      "name": "은광석",
+      "glyph": "goods/silver_ore.png",
+      "source": "art/items/pixel_v1/silver_ore.png",
+      "source_sha256": "dc2a03f70675c4c8eb17069fe75fd22c5f4bd999bd692f4b81e91efccf585a40",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "deep_gem",
+      "name": "심층 보석",
+      "glyph": "goods/deep_gem.png",
+      "source": "art/items/pixel_v1/deep_gem.png",
+      "source_sha256": "09a19f5671bb0c074a2db01ee2d71da39a868dd0647a8ec7ac344853b56a84f7",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "marsh_reed",
+      "name": "늪 갈대",
+      "glyph": "goods/marsh_reed.png",
+      "source": "art/items/pixel_v1/marsh_reed.png",
+      "source_sha256": "c7ab5c34b0d9ca18aa2f09aaa8bc502b9830e2a7a8badcec760e0bd607105a86",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "bog_mud",
+      "name": "늪 진흙",
+      "glyph": "goods/bog_mud.png",
+      "source": "art/items/pixel_v1/bog_mud.png",
+      "source_sha256": "8c5986568f25370bfe90a1f9e5955eb577e95076faeb5b746520a4ab9b1dddc6",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "toxic_spore",
+      "name": "독 포자",
+      "glyph": "goods/toxic_spore.png",
+      "source": "art/items/pixel_v1/toxic_spore.png",
+      "source_sha256": "bd8fbc894762e7c3417bd2d4a3a3c9bcff5dcd3c76f97e27a3aadb0936937ac3",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "glow_algae",
+      "name": "발광 해초",
+      "glyph": "goods/glow_algae.png",
+      "source": "art/items/pixel_v1/glow_algae.png",
+      "source_sha256": "79ef20a0a9435afa34c4b204d88ba0d8afeb92bbff7c181c9c8c59c2667271e5",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "queen_jelly",
+      "name": "여왕의 젤리",
+      "glyph": "goods/queen_jelly.png",
+      "source": "art/items/pixel_v1/queen_jelly.png",
+      "source_sha256": "af64651387e339af665a3deb67b32719cebfb37b106ca877e4b11cc45f8ebaf7",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "rune_dust",
+      "name": "룬 가루",
+      "glyph": "goods/rune_dust.png",
+      "source": "art/items/pixel_v1/rune_dust.png",
+      "source_sha256": "88beb3287c3569b6dddb7fb6fabf872448240de61ac0077aeb0f4ecfc7aa364d",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "worn_coin",
+      "name": "낡은 동전",
+      "glyph": "goods/worn_coin.png",
+      "source": "art/items/pixel_v1/worn_coin.png",
+      "source_sha256": "a274cbd2f8122fd4ca9994ee82df9b01af7bc22fc46c959c0720b0ce7a9f9577",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "rune_stone",
+      "name": "룬석",
+      "glyph": "goods/rune_stone.png",
+      "source": "art/items/pixel_v1/rune_stone.png",
+      "source_sha256": "d6ca477b2bf925d13f93fe237ea3bc3605397855c37209d250c5f1ba14fa9a2d",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "sealed_scroll",
+      "name": "봉인된 두루마리",
+      "glyph": "goods/sealed_scroll.png",
+      "source": "art/items/pixel_v1/sealed_scroll.png",
+      "source_sha256": "83998f38a83b00d324285295c54974637f8a65a97759e29ff311067279769e21",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "berry_juice",
+      "name": "열매 주스",
+      "glyph": "goods/berry_juice.png",
+      "source": "art/items/pixel_v1/berry_juice.png",
+      "source_sha256": "34f10d92028fe4febbe0148eb4a8386a4fd1050b70c75749bc42840e17711271",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "mushroom_stew",
+      "name": "버섯 스튜",
+      "glyph": "goods/mushroom_stew.png",
+      "source": "art/items/pixel_v1/mushroom_stew.png",
+      "source_sha256": "e0536693f6887bf2e6d81deba649b82a7f6db71ac5e5269f0a203127a520b505",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "elder_tonic",
+      "name": "고목 강장제",
+      "glyph": "goods/elder_tonic.png",
+      "source": "art/items/pixel_v1/elder_tonic.png",
+      "source_sha256": "586d9042d0252615a47b76e9f547fe9203745be294a1145cc19c7993a96897e7",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "mineral_water",
+      "name": "미네랄 워터",
+      "glyph": "goods/mineral_water.png",
+      "source": "art/items/pixel_v1/mineral_water.png",
+      "source_sha256": "483a5b6fbc447127ff322548a2f9975e1f47a70f42904265a1a749d1ebd06c64",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "hand_warmer",
+      "name": "손난로",
+      "glyph": "goods/hand_warmer.png",
+      "source": "art/items/pixel_v1/hand_warmer.png",
+      "source_sha256": "0c638c95088daf3c7cc895f125cae2146491ee1ed5945977bccd2f2a63adb3b5",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "gem_lantern",
+      "name": "보석 랜턴",
+      "glyph": "goods/gem_lantern.png",
+      "source": "art/items/pixel_v1/gem_lantern.png",
+      "source_sha256": "c3a1774f8e647686a52c29cf2cffb37e66ee1b46a299fb363fe42f4800d5901a",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "reed_tea",
+      "name": "갈대 차",
+      "glyph": "goods/reed_tea.png",
+      "source": "art/items/pixel_v1/reed_tea.png",
+      "source_sha256": "c5bcf951264c9e3ea4832d07128cd30f8e3ef0ce053e37fe185c1141000fb34a",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "mud_pack",
+      "name": "진흙 팩",
+      "glyph": "goods/mud_pack.png",
+      "source": "art/items/pixel_v1/mud_pack.png",
+      "source_sha256": "6518973ad814ee5ca8cbd6babe3ec2484ec02741c8e7302f525c225f5c742fa5",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "swamp_elixir",
+      "name": "늪의 비약",
+      "glyph": "goods/swamp_elixir.png",
+      "source": "art/items/pixel_v1/swamp_elixir.png",
+      "source_sha256": "e3e0858e562d4d49e7ec08715897dc4234572012f8998cb03f8a1214dba2ca6d",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "dried_fruit",
+      "name": "말린 열매",
+      "glyph": "goods/dried_fruit.png",
+      "source": "art/items/pixel_v1/dried_fruit.png",
+      "source_sha256": "4a93cfd8c9ba87a2f19114dd130672f7c36aa51bfcc7776aa3906c934fb74bbe",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "herbal_bread",
+      "name": "약초 빵",
+      "glyph": "goods/herbal_bread.png",
+      "source": "art/items/pixel_v1/herbal_bread.png",
+      "source_sha256": "7f661790c69c93d62ab9f44409b378abbf73489f71f03df837fa73023047df99",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "copper_kettle",
+      "name": "구리 주전자",
+      "glyph": "goods/copper_kettle.png",
+      "source": "art/items/pixel_v1/copper_kettle.png",
+      "source_sha256": "6c35e99e1d0b5315c4b71a5660789b74807569c00bb0596ae930a4a76f03433a",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "silver_pendant",
+      "name": "은 펜던트",
+      "glyph": "goods/silver_pendant.png",
+      "source": "art/items/pixel_v1/silver_pendant.png",
+      "source_sha256": "c044ad124b8093df37f339eb36a019d1ffe1a8bd46b566cf955396b0e6ad43b1",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "bog_soup",
+      "name": "늪 수프",
+      "glyph": "goods/bog_soup.png",
+      "source": "art/items/pixel_v1/bog_soup.png",
+      "source_sha256": "a30059f1947fae70620c8c2a8409499eb74d630817542ca0f8936d0306dc0504",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "glow_lamp",
+      "name": "발광 등불",
+      "glyph": "goods/glow_lamp.png",
+      "source": "art/items/pixel_v1/glow_lamp.png",
+      "source_sha256": "ac539be45c535be87307478b0baa36507a7e8645c241a06276a17a9a28312c22",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "traveler_stew",
+      "name": "여행자 스튜",
+      "glyph": "goods/traveler_stew.png",
+      "source": "art/items/pixel_v1/traveler_stew.png",
+      "source_sha256": "3e9b762924a70610441a38dce2b5e8c993a42f9e281895591a4b6f2d525eaa87",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "explorer_kit",
+      "name": "탐험가 세트",
+      "glyph": "goods/explorer_kit.png",
+      "source": "art/items/pixel_v1/explorer_kit.png",
+      "source_sha256": "f0d7cd24d0ecd1ebdda4be4b3ce67bf92ca444f3437d145ef62d13a5ef6f16b9",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "rainbow_tonic",
+      "name": "삼색 강장제",
+      "glyph": "goods/rainbow_tonic.png",
+      "source": "art/items/pixel_v1/rainbow_tonic.png",
+      "source_sha256": "a3424babf80b415f61d8a960b19df5a91e879efc291b3f7ad1425d328c530caf",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "camp_bread",
+      "name": "현지식 빵",
+      "glyph": "goods/bread.png",
+      "source": "art/items/pixel_v1/bread.png",
+      "source_sha256": "7390d50722d3bae860934c4181a2e60bb5bbf63f73b7cf3b8eb396a436401ce1",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "spring_bud",
+      "name": "봄 새순",
+      "glyph": "goods/forest_herb.png",
+      "source": "art/items/pixel_v1/forest_herb.png",
+      "source_sha256": "77e7c4d71fafc56af110d3c079ab8983d5375c2174c4ab8972631e154b87146b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "summer_mint",
+      "name": "여름 물박하",
+      "glyph": "goods/forest_herb.png",
+      "source": "art/items/pixel_v1/forest_herb.png",
+      "source_sha256": "77e7c4d71fafc56af110d3c079ab8983d5375c2174c4ab8972631e154b87146b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "autumn_nut",
+      "name": "가을 들밤",
+      "glyph": "goods/forest_mushroom.png",
+      "source": "art/items/pixel_v1/forest_mushroom.png",
+      "source_sha256": "9af7274b88ac5f397f23d58525b80489d7fe7d7b262c526bccd1c4178ecb2c77",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "winter_frost",
+      "name": "서리 얼음",
+      "glyph": "goods/mine_crystal.png",
+      "source": "art/items/pixel_v1/mine_crystal.png",
+      "source_sha256": "2883cbb9797badc3d1062a99ea2bdb5b0c135da78f13fb39461185b1056337c1",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "rain_pearl",
+      "name": "빗방울 구슬",
+      "glyph": "goods/raw_water.png",
+      "source": "art/items/pixel_v1/raw_water.png",
+      "source_sha256": "d463ff05cf822fa658694daabd5fb2aab9df4422bd9cb1201df3cd75935c421b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "snow_bloom",
+      "name": "눈꽃 이끼",
+      "glyph": "goods/swamp_moss.png",
+      "source": "art/items/pixel_v1/swamp_moss.png",
+      "source_sha256": "097d095453df00bc75f430d21bf293429569fe38938b53306512519aa651eabf",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "wilted_greens",
+      "name": "시든 풀잎",
+      "glyph": "goods/forest_herb.png",
+      "source": "art/items/pixel_v1/forest_herb.png",
+      "source_sha256": "77e7c4d71fafc56af110d3c079ab8983d5375c2174c4ab8972631e154b87146b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "dried_spring_bud",
+      "name": "말린 봄 새순",
+      "glyph": "goods/forest_herb.png",
+      "source": "art/items/pixel_v1/forest_herb.png",
+      "source_sha256": "77e7c4d71fafc56af110d3c079ab8983d5375c2174c4ab8972631e154b87146b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "dried_summer_mint",
+      "name": "말린 물박하",
+      "glyph": "goods/forest_herb.png",
+      "source": "art/items/pixel_v1/forest_herb.png",
+      "source_sha256": "77e7c4d71fafc56af110d3c079ab8983d5375c2174c4ab8972631e154b87146b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "berry_filled_bread",
+      "name": "열매 소를 넣은 빵",
+      "glyph": "goods/bread.png",
+      "source": "art/items/pixel_v1/bread.png",
+      "source_sha256": "7390d50722d3bae860934c4181a2e60bb5bbf63f73b7cf3b8eb396a436401ce1",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "packed_mushroom_meal",
+      "name": "버섯 도시락",
+      "glyph": "goods/bread.png",
+      "source": "art/items/pixel_v1/bread.png",
+      "source_sha256": "7390d50722d3bae860934c4181a2e60bb5bbf63f73b7cf3b8eb396a436401ce1",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "food_compost",
+      "name": "퇴비 재료",
+      "glyph": "goods/forest_herb.png",
+      "source": "art/items/pixel_v1/forest_herb.png",
+      "source_sha256": "77e7c4d71fafc56af110d3c079ab8983d5375c2174c4ab8972631e154b87146b",
+      "runtime_icon_connected": true,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_stream_minnow",
+      "name": "개울 송사리",
+      "glyph": "goods/fish_stream_minnow_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_stream_minnow/fish_stream_minnow_64.png",
+      "source_sha256": "1d9f5d1c7e2b705e0fd4b1f0b2bc76f48b42023a8388fddc52f080be96be5c02",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_stone_crucian",
+      "name": "돌빛 붕어",
+      "glyph": "goods/fish_stone_crucian_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_stone_crucian/fish_stone_crucian_64.png",
+      "source_sha256": "fda27c857e81136486b3a87978ca29a03d8967bd2fab325b561aeb6b857c6589",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_reed_loach",
+      "name": "갈대 미꾸라지",
+      "glyph": "goods/fish_reed_loach_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_reed_loach/fish_reed_loach_64.png",
+      "source_sha256": "1d5c4bb8250ace6b23ec63d5ee537f48cf51033c35c941f016bf0626a9a008b6",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_blossom_minnow",
+      "name": "꽃비 피라미",
+      "glyph": "goods/fish_blossom_minnow_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_blossom_minnow/fish_blossom_minnow_64.png",
+      "source_sha256": "28671db01c8aafea87025addc0a4359ae23b4c72fb7bab578af4ef1b858c6236",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_bud_crucian",
+      "name": "새순 붕어",
+      "glyph": "goods/fish_bud_crucian_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_bud_crucian/fish_bud_crucian_64.png",
+      "source_sha256": "d74996a018fd8819d8e86b85be900dd4ee326cf9b724ae944ce7606039f02cc6",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_ripple_carp",
+      "name": "물결 잉어",
+      "glyph": "goods/fish_ripple_carp_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_ripple_carp/fish_ripple_carp_64.png",
+      "source_sha256": "12a29da35734f8c786f2d8483c343ee6514a27091f7d0566573cdf4b48eb70bc",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_rain_catfish",
+      "name": "비늘빛 메기",
+      "glyph": "goods/fish_rain_catfish_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_rain_catfish/fish_rain_catfish_64.png",
+      "source_sha256": "6562ff3f3b1c709bea476d478c55b27273b21526e79bcaa5546c64ada014226e",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_leaf_dace",
+      "name": "단풍 피라미",
+      "glyph": "goods/fish_leaf_dace_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_leaf_dace/fish_leaf_dace_64.png",
+      "source_sha256": "57a30e1fb78beffc68e85ea66c503ac819b801ff511cf0102d775443e424af39",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_dusk_crucian",
+      "name": "저녁빛 붕어",
+      "glyph": "goods/fish_dusk_crucian_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_dusk_crucian/fish_dusk_crucian_64.png",
+      "source_sha256": "d5d08a8de083357cc66ff168e1f425053885a6483a325627e7931123085736fe",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_frost_smelt",
+      "name": "서리 빙어",
+      "glyph": "goods/fish_frost_smelt_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_frost_smelt/fish_frost_smelt_64.png",
+      "source_sha256": "64e6e5a2d6c377219446ae19e3e3fc29751c2b50e5fae41a619c002742574f5c",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_snow_trout",
+      "name": "눈등 송어",
+      "glyph": "goods/fish_snow_trout_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_snow_trout/fish_snow_trout_64.png",
+      "source_sha256": "ce620703af1a82f78c24d163cc29396a7bfc1c2499a33ff1b4e2ba1e4058bd15",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_moon_carp",
+      "name": "달무늬 잉어",
+      "glyph": "goods/fish_moon_carp_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_moon_carp/fish_moon_carp_64.png",
+      "source_sha256": "5aeaacb1239e9c48e19daa7378526348a4b4468071ede0232c5d974804fdad7c",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_grilled",
+      "name": "약초 생선구이",
+      "glyph": "goods/fish_grilled_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_grilled/fish_grilled_64.png",
+      "source_sha256": "fbfa7041d69ef4376e48b9185435311163d36082c3325dd775898c8717aa7064",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_dried",
+      "name": "말린 생선",
+      "glyph": "goods/fish_dried_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_dried/fish_dried_64.png",
+      "source_sha256": "d6178057ce6ddf18e765daa39425aab5536867cdb62ac098b67bdaeff6c182d0",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_soup",
+      "name": "물가의 맑은 수프",
+      "glyph": "goods/fish_soup_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_soup/fish_soup_64.png",
+      "source_sha256": "8a29a685c71d52e1997d6befd309b9e9dcfe63d6ea8e288af58cd9b27891f633",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_bread",
+      "name": "생선 속을 넣은 빵",
+      "glyph": "goods/fish_bread_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_bread/fish_bread_64.png",
+      "source_sha256": "183be805fd203d4767b5702c564d308a1df2e804524ba6ad28586fed52b52338",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_lunch",
+      "name": "물가의 작은 도시락",
+      "glyph": "goods/fish_lunch_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_lunch/fish_lunch_64.png",
+      "source_sha256": "158be86556dc7711f403ed9f9757a4e311047d11021c18617f042dd423551dca",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    },
+    {
+      "item_id": "fish_winter_stew",
+      "name": "겨울 생선 스튜",
+      "glyph": "goods/fish_winter_stew_64.png",
+      "source": "docs/그림_작업/받은그림/아이템/fish_winter_stew/fish_winter_stew_64.png",
+      "source_sha256": "f1978f923e487a2110d94a7bcfbe1719d21339014834acd9275f56c2e5354937",
+      "runtime_icon_connected": false,
+      "anchor": [
+        8,
+        14
+      ]
+    }
+  ]
+}
