@@ -1,0 +1,64 @@
+{
+  "fridge": {
+    "canvas": [
+      64,
+      128
+    ],
+    "anchor": [
+      32,
+      104
+    ],
+    "interior_polygon": [
+      [
+        14,
+        67
+      ],
+      [
+        33,
+        77
+      ],
+      [
+        33,
+        108
+      ],
+      [
+        14,
+        98
+      ]
+    ],
+    "changed_pixels": 470,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0
+  },
+  "freezer": {
+    "canvas": [
+      128,
+      128
+    ],
+    "anchor": [
+      64,
+      104
+    ],
+    "interior_polygon": [
+      [
+        35,
+        71
+      ],
+      [
+        52,
+        62
+      ],
+      [
+        90,
+        79
+      ],
+      [
+        72,
+        89
+      ]
+    ],
+    "changed_pixels": 529,
+    "outside_interior_changes": 0,
+    "alpha_difference": 0
+  }
+}

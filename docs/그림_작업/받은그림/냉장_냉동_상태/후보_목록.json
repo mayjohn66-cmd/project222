@@ -1,0 +1,116 @@
+{
+  "date": "2026-10-11",
+  "selection_status": "candidate_not_selected",
+  "runtime_applied": false,
+  "rotation": 0,
+  "tool": "built-in image_gen.imagegen",
+  "pixel_edit_permission": "기존 사용자 허용: 파이썬으로 게임용 픽셀 보정",
+  "assets": [
+    {
+      "path": "상태_비교.png",
+      "size": [
+        1280,
+        400
+      ],
+      "sha256": "b3ff7db1584f219d734f078061b0348abda6e16e220f204f310f31cc029de2a6"
+    },
+    {
+      "path": "생성_원본/freezer_empty_rotation_0.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "sha256": "d0cb350b2a5e8770764bebe7ba069a9176cb52a558cc34acd1a6fa9069e23cb7"
+    },
+    {
+      "path": "생성_원본/freezer_filled_rotation_0.png",
+      "size": [
+        1254,
+        1254
+      ],
+      "sha256": "d374ab03d12dcda6f98c4e84b7a11480f63858ed88d045b969b269a6602fb259"
+    },
+    {
+      "path": "생성_원본/fridge_empty_rotation_0.png",
+      "size": [
+        887,
+        1774
+      ],
+      "sha256": "460b64ceae6bb061270fc07bdd4ecc31c7daafffcc94bc7384376c19013d0180"
+    },
+    {
+      "path": "생성_원본/fridge_filled_rotation_0.png",
+      "size": [
+        887,
+        1774
+      ],
+      "sha256": "458cec8fc90969faa1d6f17425db46f8088ebd74fc52042d605e3f5e60ba65d7"
+    },
+    {
+      "path": "픽셀_정리/freezer_empty_rotation_0.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "8e2ee679523b4174ddee578d5ad1160a34583e7b503b428a30a284acd06e75d2"
+    },
+    {
+      "path": "픽셀_정리/freezer_filled_rotation_0.png",
+      "size": [
+        128,
+        128
+      ],
+      "sha256": "0b0c8d2182878f7def35de225d9a9938ed402319ad9aa56f85fcddedabda2ffc"
+    },
+    {
+      "path": "픽셀_정리/fridge_empty_rotation_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "0e8547b7aeeed47ce782cef31f274e349a965830289e221a2a7516f7e65d23d0"
+    },
+    {
+      "path": "픽셀_정리/fridge_filled_rotation_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "sha256": "04a0fcdb7eab2bac0091857bd424ceca5986fbbae0366baae78543a4f3e8ef34"
+    }
+  ],
+  "runtime_originals": [
+    {
+      "path": "art/received/furniture/freezer_unit/rotation_0.png",
+      "sha256": "a6243208f43793b789757b8e20fbfe98d266503cc6f899fd774f8e8491e4722c"
+    },
+    {
+      "path": "art/received/furniture/freezer_unit/rotation_1.png",
+      "sha256": "8b94dc4fa3f3fb1348280e4e801c27cbb943f8b3a67b05b4edaa2d4161f5ae46"
+    },
+    {
+      "path": "art/received/furniture/freezer_unit/rotation_2.png",
+      "sha256": "8c39b04f960f5badc3ea034a884c43186aacd07c8a08fe31a33038b9fe03158c"
+    },
+    {
+      "path": "art/received/furniture/freezer_unit/rotation_3.png",
+      "sha256": "91af11d2940f3f06582b64407f76b050b286830f8eccd0008f4ea35db395fa9b"
+    },
+    {
+      "path": "art/received/furniture/fridge_unit/rotation_0.png",
+      "sha256": "adbdd84cacad7699412efbaf5fa165d705decb25fab9530692ebd3ac889b965d"
+    },
+    {
+      "path": "art/received/furniture/fridge_unit/rotation_1.png",
+      "sha256": "96f0b1ecf80841b20c906bbd4a62ed856e5c5452b93b4c7c05a396edbc3dfcd2"
+    },
+    {
+      "path": "art/received/furniture/fridge_unit/rotation_2.png",
+      "sha256": "27212476d09a0dff646dc807402e38370e9cdf1714857121f34f9206d37980de"
+    },
+    {
+      "path": "art/received/furniture/fridge_unit/rotation_3.png",
+      "sha256": "0594d7148ee42b21c5b3a2dc8d0a55642e4fd66110b26fe19aafc39cf583dfcb"
+    }
+  ]
+}
