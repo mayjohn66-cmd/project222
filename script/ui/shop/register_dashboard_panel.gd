@@ -95,7 +95,9 @@ func _details(product: Dictionary) -> String:
 	var status := RegisterProductOverview.status_text(product)
 	if int(product["days_left"]) >= 0: status = "가장 빠른 " + status
 	if product["min_price"] != product["max_price"]: status += " · 날짜별 재고에 따라 가격이 다릅니다."
-	return "%s · 진열 %d/%d개 · %s\n%s\n%s" % [product["name"], product["stock"], product["capacity"], RegisterProductOverview.price_text(product), status, product["description"]]
+	var text := "%s · 진열 %d/%d개 · %s\n%s\n%s" % [product["name"], product["stock"], product["capacity"], RegisterProductOverview.price_text(product), status, product["description"]]
+	var restock := RegisterRestockGuide.note(get_parent().get_parent(), product)
+	return text if restock.is_empty() else text + "\n\n" + restock
 
 func _acknowledge() -> void:
 	if cleanup_seen: FoodShelfLife.state()["learned"] = true

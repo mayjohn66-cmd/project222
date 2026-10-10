@@ -52,3 +52,9 @@ save.slot.store,가게 %s 정비
 save.slot.expedition,원정 체크포인트
 save.slot.unknown_time,알 수 없음
 save.slot.invalid,사용할 수 없는 저장 데이터 · 덮어쓰기 가능
+register.restock.heading,[보충할 물품 찾기]
+register.restock.carried,소지 %d개 · 조회를 닫고 진열대에서 [E]로 보충하세요.
+register.restock.warehouse,창고 선반 %d개 · 먼저 꺼낸 뒤 진열대에 보충하세요.
+register.restock.fridge,냉장 보관 %d개 · 냉장함에서 꺼낸 뒤 진열대에 보충하세요.
+register.restock.freezer,냉동 보관 %d개 · 냉동함에서 꺼낸 뒤 진열대에 보충하세요.
+register.restock.empty,이 상품을 보충할 재고가 없습니다. 가진 다른 상품을 먼저 진열해도 괜찮아요.
