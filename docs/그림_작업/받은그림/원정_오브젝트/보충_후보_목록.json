@@ -1,0 +1,63 @@
+{
+  "status": "candidate_not_installed",
+  "tool": "built-in image_gen",
+  "runtime_applied": false,
+  "canvas": [
+    64,
+    64
+  ],
+  "anchor": [
+    32,
+    56
+  ],
+  "view": "south-west",
+  "assets": [
+    {
+      "id": "wheat",
+      "item": "wheat",
+      "selector": {
+        "site_table": "gather_wheat"
+      },
+      "item_hint": null,
+      "guaranteed_item": null,
+      "kind": "gather_site",
+      "gather_table": "gather_wheat",
+      "sprite": "픽셀_정리/wheat.png",
+      "source": "생성_원본/wheat.png",
+      "sha256": "9220deb6d3165f01dcfe33f26f7cd2ec64f0285803951157d4288ee8a90023d7",
+      "state": "harvestable"
+    },
+    {
+      "id": "healing_spring",
+      "item": null,
+      "selector": {
+        "object_kind": "heal"
+      },
+      "item_hint": null,
+      "guaranteed_item": null,
+      "kind": "heal",
+      "gather_table": null,
+      "sprite": "픽셀_정리/healing_spring.png",
+      "source": "생성_원본/healing_spring.png",
+      "sha256": "703b54378c886977cfdfb9865be3c1fc3dca0c20ddf462f72807cdd93013ad0f",
+      "state": "unused"
+    },
+    {
+      "id": "mineral_outcrop",
+      "item": null,
+      "selector": {
+        "object_kind": "gather",
+        "event_target_id": "mine_gather",
+        "current_renderer_forwards_event_target": false
+      },
+      "item_hint": "mine_crystal",
+      "guaranteed_item": false,
+      "kind": "gather",
+      "gather_table": "mine_gather",
+      "sprite": "픽셀_정리/mineral_outcrop.png",
+      "source": "생성_원본/mineral_outcrop.png",
+      "sha256": "8e8671b8e71f695833e89f6f53e970dca67002de279399fc18478af646b36a82",
+      "state": "harvestable"
+    }
+  ]
+}

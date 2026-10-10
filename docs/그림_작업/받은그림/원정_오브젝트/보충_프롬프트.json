@@ -1,0 +1,75 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-11",
+  "status": "candidate_not_installed",
+  "assets": [
+    {
+      "id": "wheat",
+      "name": "야생 밀",
+      "item": "wheat",
+      "kind": "gather_site",
+      "table": "gather_wheat",
+      "selector": {
+        "site_table": "gather_wheat"
+      },
+      "state": "harvestable",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD interaction sprite for a cozy isometric fantasy convenience-store game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clean outlines, bright readable midtones, compact footprint, neutral daylight and2:1isometric ground perspective viewed from south-west. Single complete centered object, genuine transparent background. Intended for nearest-neighbor reduction to64x64logical pixels, limited palette, simple readable shapes. No text, labels, UI, inventory frame, panels, characters, outside cast shadow, scenery, blurred glow, sparkles, photorealism, smooth painting or new surrounding props. Primary request: A small standing patch of RIPE WHEAT for gathering in a meadow. Seven sturdy short golden stalks of varied heights, each with recognizable segmented tapered wheat ears showing plump grain clusters, narrow golden-green blade leaves. At least three ears must be large enough to remain visible after downscale. Compact brown soil oval at base, just one tiny pebble. NOT cattail reeds: no brown cylindrical seedheads. Not a tied bundle, basket, haystack or field scene. Fit roughly46x46logical pixels. Image1 bush is pixelcluster, footprint and outline style reference.",
+      "generated": "exec-c602996f-863e-46b8-a6b9-632c052d86e7.png",
+      "references": [
+        "art/received/nature/bush.png"
+      ],
+      "max_size": [
+        46,
+        46
+      ],
+      "accent": "gold"
+    },
+    {
+      "id": "healing_spring",
+      "name": "회복 샘",
+      "item": null,
+      "kind": "heal",
+      "table": null,
+      "selector": {
+        "object_kind": "heal"
+      },
+      "state": "unused",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD interaction sprite for a cozy isometric fantasy convenience-store game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clean outlines, bright readable midtones, compact footprint, neutral daylight and2:1isometric ground perspective viewed from south-west. Single complete centered object, genuine transparent background. Intended for nearest-neighbor reduction to64x64logical pixels, limited palette, simple readable shapes. No text, labels, UI, inventory frame, panels, characters, outside cast shadow, scenery, blurred glow, sparkles, photorealism, smooth painting or new surrounding props. Primary request: A small RESTORATIVE SPRING used as a fantasy exploration rest spot. A LOW WIDE circular basin of calm pale aqua water, surrounded by one continuous rim assembled from modest rounded pale grey stone blocks. Compact brown earth base, very little green moss. TWO small smooth cyan-blue mineral stones set at opposite sides of the rim to distinguish it from the ordinary raw-water gathering pool. Water surface large and clear with two simple pale ripples. Neutral daylight, no emitted light, external halo, healing cross, labels, fountains, buildings, buckets, snow or ice. Fits50x30logical pixels. Image1 ordinary water pool is overall footprint and art style reference, Image2 rocks is stone outline reference. Create a new smoother round-rimmed restorative pool, do not copy the irregular ordinary water pool unchanged.",
+      "generated": "exec-f942bcba-3ba7-4476-b2ba-e063f41bb07b.png",
+      "references": [
+        "docs/그림_작업/받은그림/일반_채집물/픽셀_정리/raw_water.png",
+        "art/received/nature/rocks.png"
+      ],
+      "max_size": [
+        50,
+        30
+      ],
+      "accent": "cyan"
+    },
+    {
+      "id": "mineral_outcrop",
+      "name": "수정 광물 지점",
+      "item": null,
+      "item_hint": "mine_crystal",
+      "guaranteed_item": false,
+      "kind": "gather",
+      "table": "mine_gather",
+      "selector": {
+        "object_kind": "gather",
+        "event_target_id": "mine_gather",
+        "current_renderer_forwards_event_target": false
+      },
+      "state": "harvestable",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent pixel-art WORLD interaction sprite for a cozy isometric fantasy convenience-store game. Input images are STYLE references only. Match crisp chunky logical pixel clusters, dark brown clean outlines, bright readable midtones, compact footprint, neutral daylight and2:1isometric ground perspective viewed from south-west. Single complete centered object, genuine transparent background. Intended for nearest-neighbor reduction to64x64logical pixels, limited palette, simple readable shapes. No text, labels, UI, inventory frame, panels, characters, outside cast shadow, scenery, blurred glow, sparkles, photorealism, smooth painting or new surrounding props. Primary request: A compact ordinary MINERAL OUTCROP for a mixed mining gathering event. Three low angular grey rock chunks with THREE stout muted blue-teal quartz crystal points emerging from their center, tallest at rear and modest height. Subtle dark charcoal mineral seam and a few small earthy copper-brown flecks in the grey rock. Crystals cool cyan midtones with pale blue highlights, clearly different from PURPLE rune crystals and opaque white winter ice. Keep rocks roughly half the visible mass. No magical symbol, runes, aura, external glow, tall crystal tower, ingots or pile of loose loot. Small brown earth/gravel footprint, fits48x40logical pixels. Image1 rocks is outline, footprint and palette style reference.",
+      "generated": "exec-2b680af1-8aba-4766-9ec5-84ca7bb165e1.png",
+      "references": [
+        "art/received/nature/rocks.png"
+      ],
+      "max_size": [
+        48,
+        40
+      ],
+      "accent": "cyan"
+    }
+  ]
+}
