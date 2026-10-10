@@ -281,6 +281,20 @@ func run() -> void:
 	await settle_dialogues()
 	check(GameState.get_money() == 0 and OpeningCleanup.cleaned_count() == 0,"genuine new game starts alone with no earnings")
 	checkpoint("new_game")
+	# --no-cutscene omits visual debris. For captures only, restore the same
+	# dressing fixture without changing cleanup history, items or collisions.
+	var cleanup_dressing: OpeningStoreDressing
+	if DisplayServer.get_name() != "headless":
+		for arg in OS.get_cmdline_user_args():
+			if arg.begins_with("--snap="):
+				cleanup_dressing = OpeningStoreDressing.new(world.get_node("StoreView3D"))
+				cleanup_dressing.smash()
+	await snap("cleanup-before")
+	var initial_position: Vector2 = player.global_position
+	player.global_position = world.get_node("StoreView3D").cell_to_world(Vector2(4.5,7.0))
+	await snap("cleanup-near-window")
+	player.global_position = initial_position
+	if cleanup_dressing != null: cleanup_dressing.clear_all()
 	for pile in OpeningCleanup.piles():
 		player.global_position = world.get_node("TutorialDirector")._cell_world(pile["stand"])
 		check(world.get_node("TutorialDirector").try_interact(),"actual E cleans rubble")

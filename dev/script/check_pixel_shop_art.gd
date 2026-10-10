@@ -83,7 +83,25 @@ func run() -> void:
 	view._room_mirror.sync()
 	for key in view._items:
 		if str(key).begins_with("wall") or str(key).begins_with("rwall"):
-			check(view._items[key].received_art.contains("_tile.png") or view._items[key].received_art.contains("corner_"), "wall/window uses repeated image " + key)
+			check(view._items[key].received_art.contains("_tile.png"), "wall/window uses repeated image " + key)
+	# A 2-tile run must remain 2 equally spaced native strips at the floor boundary.
+	var cases := [
+		[Vector2(0,-0.3),Vector2(2,0),Vector3(0.5,0,0),Vector3(1,0,0)],
+		[Vector2(2,0),Vector2(2.3,2),Vector3(2,0,0.5),Vector3(0,0,1)],
+		[Vector2(0,2),Vector2(2,2.3),Vector3(0.5,0,2),Vector3(1,0,0)],
+		[Vector2(-0.3,0),Vector2(0,2),Vector3(0,0,0.5),Vector3(0,0,1)],
+	]
+	for direction in 4:
+		var c: Array = cases[direction]
+		PixelShopArt.wall_run(view,"proportion_probe",c[0],c[1],direction,true,false)
+		var first: MeshInstance3D = view._items["proportion_probe_0"].mesh
+		var second: MeshInstance3D = view._items["proportion_probe_1"].mesh
+		check(first.position.is_equal_approx(c[2]),"wall anchors meet exact floor edge " + str(direction))
+		check((second.position-first.position).is_equal_approx(c[3]),"wall repeat advances exactly one tile " + str(direction))
+		view._remove_item("proportion_probe_0")
+		view._remove_item("proportion_probe_1")
+	check(not PixelActorFigure.SPRITE_SHADER.code.contains("frame_scale"),"color shader cannot vertically compress artwork")
+	check(not PixelActorFigure.SPRITE_ID_SHADER.code.contains("frame_scale"),"mask shader cannot vertically compress artwork")
 	view.player.global_position = view.cell_to_world(Vector2(4.5,7.0))
 	view.camera2d.reset_smoothing()
 	view._sync_actors(0.016)
@@ -91,7 +109,8 @@ func run() -> void:
 	for key in view._items:
 		var item: Dictionary = view._items[key]
 		if not item.get("cutaway",{}).is_empty():
-			check(item.material.get_shader_parameter("frame_scale") == item.id_material.get_shader_parameter("frame_scale"), "wall color/mask shrink together " + key)
+			check(item.material.get_shader_parameter("cutaway_visibility") == item.id_material.get_shader_parameter("cutaway_visibility"), "wall color/mask fade together " + key)
+			check(item.mesh.scale == Vector3.ONE and item.id_mesh.scale == Vector3.ONE, "native wall proportions fixed " + key)
 	var samples := ["shelf_1x1","wood_shelf_1x1","reinforced_shelf_2x1","modern_shelf_2x1"]
 	for i in samples.size():
 		var node := make(samples[i],0,Vector2i(1+i*2,2))

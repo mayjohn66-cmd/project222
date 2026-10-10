@@ -126,16 +126,10 @@ static func wall_run(view: StoreView3D, key: String, lo: Vector2, hi: Vector2,
 			b.y = lo.y + (i + 1) * length / count
 		var panel_key := key + "_" + str(i)
 		var base := (a + b) * 0.5
+		# 이미지 면은 바닥 경계에 놓는다. 3D 벽 두께의 중심에 놓으면 모서리에 틈이 생긴다.
+		if along_x: base.y = hi.y if direction == 0 else lo.y
+		else: base.x = hi.x if direction == 3 else lo.x
 		ReceivedWorldArt.billboard(view, panel_key, tex, Vector2(32,104), a, b, base, "pixel_wall")
 		if cutaway:
 			view._items[panel_key]["cutaway"] = {"rect": Rect2(a,b-a), "h": 0.0, "factor":1.0, "base_origin":true}
 	return true
-
-static func wall_corners(view: StoreView3D, prefix: String, lo: Vector2, hi: Vector2, low_front: bool) -> void:
-	for info in [["back",lo,"corner_full_inside",false],["front",hi,"window_corner_outside" if low_front else "corner_full_outside",true]]:
-		var tex := ReceivedWorldArt.texture(SHELL + str(info[2]) + ".png")
-		if tex == null: continue
-		var at: Vector2 = info[1]
-		var key := prefix + "_corner_" + str(info[0])
-		ReceivedWorldArt.billboard(view,key,tex,Vector2(32,104),at-Vector2(0.15,0.15),at+Vector2(0.15,0.15),at,"pixel_corner")
-		if info[3]: view._items[key]["cutaway"] = {"rect":Rect2(at-Vector2.ONE*0.15,Vector2.ONE*0.3), "h":0.0,"factor":1.0,"base_origin":true}

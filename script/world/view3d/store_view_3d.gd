@@ -668,14 +668,9 @@ func _sync_walls() -> void:
 		# 앞쪽 벽(카메라에 가까운 동·남쪽 면)은 플레이어가 가까이 오면 낮아진다(벽 뒤에 서면 몸이 가려지므로). 뒤쪽 벽은 그대로.
 		_items["wall%d" % index]["cutaway"] = {"rect": Rect2(lo_v, hi_v - lo_v), "h": block_height(wall_blocks), "factor": 1.0, "base_origin": true} if r["direction"] == 1 or r["direction"] == 2 else {}
 		index += 1
-	var store_rect: Rect2i = floor_node.get_store_rect()
-	var low_front := false
-	for segment in segments:
-		if int(segment.direction) == 1: low_front = not bool(segment.tall)
-	PixelShopArt.wall_corners(self,"wall",Vector2(store_rect.position)-Vector2.ONE*0.5,Vector2(store_rect.end)-Vector2.ONE*0.5,low_front)
 
 
-# 앞쪽 벽 투시: 플레이어가 벽 2.4칸 안으로 들어오면 벽 높이를 부드럽게 0.38배까지 낮추고, 멀어지면 되돌린다.
+# 앞쪽 벽 투시: 그림은 크기를 유지한 채 가까워지면 알파 컷아웃으로 시야를 연다. 모델 폴백은 기존 높이 처리를 유지한다.
 const CUTAWAY_NEAR: float = 1.2
 const CUTAWAY_FAR: float = 2.6
 const CUTAWAY_MIN: float = 0.38
@@ -710,7 +705,8 @@ func _update_wall_cutaway(delta: float) -> void:
 		var h: float = float(cut["h"])
 		if item.has("received_art"):
 			for material_key in ["material", "id_material"]:
-				(item[material_key] as ShaderMaterial).set_shader_parameter("frame_scale", Vector2(1.0, f))
+				(item[material_key] as ShaderMaterial).set_shader_parameter("cutaway_visibility", f)
+			continue
 
 
 		for node_key in ["mesh", "id_mesh"]:

@@ -93,7 +93,7 @@ func _build_floor(name: String, info: Dictionary, origin: Vector2, cols: int, ro
 		(_floors[name][k] as MeshInstance3D).position = center
 
 
-# 벽 네 면(안쪽 면이 방 가장자리 선). 입구(서쪽 벽, 행 rows/2)는 한 칸 비우고 문 모델을 세운다. 동·남쪽 앞벽은 플레이어가 다가오면 낮아진다.
+# 벽 네 면(안쪽 면이 방 가장자리 선). 입구(서쪽 벽, 행 rows/2)는 한 칸 비우고 문 모델을 세운다. 동·남쪽 앞벽 그림은 플레이어가 다가오면 비율을 유지한 채 투명해진다.
 func _build_walls(name: String, info: Dictionary, origin: Vector2, cols: int, rows: int) -> void:
 	for key in view._items.keys():
 		if str(key).begins_with("rwall_" + name) or str(key).begins_with("rdoor_" + name):
@@ -108,8 +108,8 @@ func _build_walls(name: String, info: Dictionary, origin: Vector2, cols: int, ro
 	var ey0: float = origin.y + float(entry_row) - 0.5
 	var ey1: float = ey0 + 1.0
 	var walls: Array = [
-		["n", Vector2(x0 - t, y0 - t), Vector2(x1 + t, y0), false],
-		["s", Vector2(x0 - t, y1), Vector2(x1 + t, y1 + t), true],
+		["n", Vector2(x0, y0 - t), Vector2(x1, y0), false],
+		["s", Vector2(x0, y1), Vector2(x1, y1 + t), true],
 		["w1", Vector2(x0 - t, y0), Vector2(x0, ey0), false],
 		["w2", Vector2(x0 - t, ey1), Vector2(x0, y1), false],
 		["e", Vector2(x1, y0), Vector2(x1 + t, y1), true],
@@ -128,8 +128,6 @@ func _build_walls(name: String, info: Dictionary, origin: Vector2, cols: int, ro
 
 		if w[3]:
 			view._items[key]["cutaway"] = {"rect": Rect2(lo, hi - lo), "h": view.block_height(WALL_BLOCKS), "factor": 1.0, "base_origin": true}
-
-	PixelShopArt.wall_corners(view, "rwall_" + name, Vector2(x0,y0),Vector2(x1,y1),false)
 
 	# 입구 문(서쪽 벽, 방 안쪽 = +x 를 본다)
 	var door_id: String = str(info["door"])
