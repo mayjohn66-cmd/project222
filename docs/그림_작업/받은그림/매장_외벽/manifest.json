@@ -1,0 +1,146 @@
+{
+  "date": "2026-10-10",
+  "generator": "built-in image_gen",
+  "authorization": "User explicitly authorized Codex generation for priority 1 and requested matching existing art. General Claude/Pixel Lab policy is not changed.",
+  "assets": [
+    {
+      "file": "walls_reference_matched.png",
+      "sha256": "d6cb7ae2005b0b0f4b70ed5172f46f98d5c2bbeba7f98cc4cc3aa5a7ff303752",
+      "size": [
+        1024,
+        1536
+      ],
+      "mode": "RGBA",
+      "requested_layout": {
+        "columns": 4,
+        "rows": 4,
+        "pieces": 16
+      },
+      "alpha": {
+        "range": [
+          0,
+          254
+        ],
+        "transparent_pixels": 778895,
+        "opaque_pixels": 0,
+        "partial_alpha_pixels": 793969
+      },
+      "visible_rgba_colors": 163293,
+      "status": "visual_candidate_not_native_game_tiles",
+      "generated_source": "exec-8939b1e0-7e2e-4f9c-a2c8-b17b284c0345.png"
+    },
+    {
+      "file": "windows_reference_matched.png",
+      "sha256": "bb7d9523051998de37f4e63805602f5fe81d263a46b67adfce9e0ff9219a57fc",
+      "size": [
+        1774,
+        887
+      ],
+      "mode": "RGBA",
+      "requested_layout": {
+        "columns": 4,
+        "rows": 2,
+        "pieces": 8
+      },
+      "alpha": {
+        "range": [
+          0,
+          255
+        ],
+        "transparent_pixels": 898119,
+        "opaque_pixels": 1631,
+        "partial_alpha_pixels": 673788
+      },
+      "visible_rgba_colors": 116597,
+      "status": "visual_candidate_not_native_game_tiles",
+      "generated_source": "exec-c4b41d2b-9309-4b9b-9c01-22514aab7a5b.png"
+    },
+    {
+      "file": "door_states_reference_matched.png",
+      "sha256": "58c8ed0909981aafa9c7908a874e9e79fa85a6c16a70a33cc7399ce4820a072f",
+      "size": [
+        2048,
+        768
+      ],
+      "mode": "RGBA",
+      "requested_layout": {
+        "columns": 8,
+        "rows": 3,
+        "pieces": 24
+      },
+      "alpha": {
+        "range": [
+          0,
+          254
+        ],
+        "transparent_pixels": 826197,
+        "opaque_pixels": 0,
+        "partial_alpha_pixels": 746667
+      },
+      "visible_rgba_colors": 241558,
+      "status": "visual_candidate_not_native_game_tiles",
+      "generated_source": "exec-52d15695-1fae-4fdf-b824-a774514b0064.png"
+    }
+  ],
+  "references": [
+    {
+      "path": "art/received/furniture/door/rotation_0.png",
+      "sha256": "b28708c598565d1cee53aa7892cc14614437d51c5f606bbc063f75331718826e",
+      "role": "existing_game_style_reference_unchanged"
+    },
+    {
+      "path": "art/received/furniture/production_door/rotation_0.png",
+      "sha256": "de37923a746d4f6a4433fd301209f1b0b9257133c425cb129121907899e0f99c",
+      "role": "existing_game_style_reference_unchanged"
+    },
+    {
+      "path": "art/received/furniture/warehouse_door/rotation_0.png",
+      "sha256": "4bec717009e54cd6a99de5d8b5f14f5c14ff4b9faa52c201d38b1435eb05ed24",
+      "role": "existing_game_style_reference_unchanged"
+    },
+    {
+      "path": "art/received/furniture/shelf_1x1/rotation_0.png",
+      "sha256": "51dbf22dd164870004c3c674404232fc0a5756d99c923e2b58c3a9283f2ca640",
+      "role": "existing_game_style_reference_unchanged"
+    }
+  ],
+  "target_game_grid": [
+    64,
+    32
+  ],
+  "target_sprite_canvas": [
+    64,
+    128
+  ],
+  "target_anchor": [
+    32,
+    104
+  ],
+  "target_metadata_only": true,
+  "remaining": [
+    "Verify true front/back orientation and fixed jamb/threshold across door frame pairs; current numbered views are candidates, not verified rotations.",
+    "Calibrate repeat seams, wall/corner/window sizes and anchor against actual 2D boundary segments.",
+    "Check collision and Y sorting, map expansion, window visibility and door switching when connected to 2D rendering.",
+    "User selection required before art/ replacement."
+  ],
+  "pixel_processing_authorization": "User explicitly authorized Python pixel normalization on 2026-10-10.",
+  "native_outputs": {
+    "directory": "픽셀_정리",
+    "frames_manifest": "픽셀_정리/frames.json",
+    "processor": "pixelize_candidates.py",
+    "frame_count": 48,
+    "canvas": [
+      64,
+      128
+    ],
+    "max_opaque_colors": 32,
+    "alpha_values": [
+      0,
+      255
+    ],
+    "resample": "NEAREST",
+    "runtime_imported": false,
+    "geometry_verified": false,
+    "status": "native_pixel_candidates"
+  }
+}

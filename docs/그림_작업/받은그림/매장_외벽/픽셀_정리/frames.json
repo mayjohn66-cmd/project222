@@ -1,0 +1,1721 @@
+{
+  "alpha_threshold": 160,
+  "max_opaque_colors": 32,
+  "resample": "NEAREST",
+  "canvas": [
+    64,
+    128
+  ],
+  "declared_anchor": [
+    32,
+    104
+  ],
+  "runtime_imported": false,
+  "geometry_verified": false,
+  "frames": [
+    {
+      "id": "wall_full_0",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        44,
+        75,
+        246,
+        401
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_full_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        37,
+        57,
+        116
+      ],
+      "sha256": "562ac806f7c8be2701f45b507d026e17372f1ab29e0396e5ab1412616319bf66",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "wall_full_1",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        298,
+        81,
+        494,
+        405
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_full_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        37,
+        56,
+        116
+      ],
+      "sha256": "07a91b3f6e341bc9ec04925ab4af5891f159f699d5744be57af2dc5ec80b94bb",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "wall_full_2",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        544,
+        75,
+        736,
+        404
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_full_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 28,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        36,
+        55,
+        116
+      ],
+      "sha256": "42651f3ae231a8ff6dc527b8f3aa51866b4c9c2486abe63d68aaf9217ec104ea",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "wall_full_3",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        792,
+        75,
+        986,
+        400
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_full_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        37,
+        55,
+        116
+      ],
+      "sha256": "d6349b2ee5d29cf174fb7faf9309b5bfbc202882ae619f59fb860d38c0700f8e",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "wall_low_0",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        42,
+        486,
+        247,
+        722
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_low_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        7,
+        59,
+        57,
+        116
+      ],
+      "sha256": "fb7a8aa0ed20fa7938a7468322fe7e509304bab5515d433469e5c5b79a51b88d",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "wall_low_1",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        298,
+        493,
+        492,
+        723
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_low_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        60,
+        55,
+        116
+      ],
+      "sha256": "31bc37d8acebf9255e06f69ddca5240a974e3f758e7851fdf6976d86467722c4",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "wall_low_2",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        543,
+        489,
+        741,
+        723
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_low_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 28,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        59,
+        56,
+        116
+      ],
+      "sha256": "57877ae6e19b2a1a51b79192578030157e331b8c8a09af6ba446cfa0121caef4",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "wall_low_3",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        795,
+        489,
+        991,
+        722
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_low_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        59,
+        56,
+        116
+      ],
+      "sha256": "7a4579ed86d67de37b4bc94f9e7c270fb30036daada77cc11f435883e548a1ba",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "corner_full_inside",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        39,
+        772,
+        262,
+        1061
+      ],
+      "scale": 0.24316109422492402,
+      "file": "corner_full_inside.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        5,
+        46,
+        59,
+        116
+      ],
+      "sha256": "9345871aa37c6c037535586cdaf379e8495464037c2b9aafee497350550b2182",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "corner_full_outside",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        309,
+        782,
+        506,
+        1069
+      ],
+      "scale": 0.24316109422492402,
+      "file": "corner_full_outside.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        46,
+        56,
+        116
+      ],
+      "sha256": "9bc56d932047c453790d3f984dc862d1fd4bd5f322afec85e6b0e92229e6cf44",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "corner_low_inside",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        541,
+        848,
+        761,
+        1045
+      ],
+      "scale": 0.24316109422492402,
+      "file": "corner_low_inside.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        6,
+        68,
+        59,
+        116
+      ],
+      "sha256": "56cc6c5a82f9d61ac283a11e84a9661ee07340792232949666d556479d8edb55",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "corner_low_outside",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        798,
+        863,
+        995,
+        1060
+      ],
+      "scale": 0.24316109422492402,
+      "file": "corner_low_outside.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        68,
+        56,
+        116
+      ],
+      "sha256": "7c3a8070d304cbebfca1cce966ecd471ab493e6878a40fc62aa5509b48a99a66",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "wall_cap_left",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        47,
+        1117,
+        247,
+        1450
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_cap_left.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 31,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        35,
+        57,
+        116
+      ],
+      "sha256": "e2ebb01f3daaa1f442b762fc97256206f7063b234e4d02b06744d2853d63f38c",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "wall_cap_right",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        304,
+        1122,
+        497,
+        1451
+      ],
+      "scale": 0.24316109422492402,
+      "file": "wall_cap_right.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 29,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        36,
+        55,
+        116
+      ],
+      "sha256": "01096f762bf430ba2f0c0283e89ceee2f8ad34fe23bb121ed01bdd052599582a",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "doorway_left",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        543,
+        1117,
+        743,
+        1449
+      ],
+      "scale": 0.24316109422492402,
+      "file": "doorway_left.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        35,
+        57,
+        116
+      ],
+      "sha256": "95949b6706d383736fb186ba6b0bafb03643aa7e2a4e799bbf94f4a90dd49c03",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "doorway_right",
+      "source": "walls_reference_matched.png",
+      "source_bounds": [
+        793,
+        1126,
+        986,
+        1451
+      ],
+      "scale": 0.24316109422492402,
+      "file": "doorway_right.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        37,
+        55,
+        116
+      ],
+      "sha256": "a5fc8c1162e2c19c07a10fe7544d107abb3ff2f9e5abfefd65796479fd35ff4d",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "window_0",
+      "source": "windows_reference_matched.png",
+      "source_bounds": [
+        78,
+        25,
+        400,
+        425
+      ],
+      "scale": 0.14778162625762822,
+      "file": "window_0.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 31,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        57,
+        56,
+        116
+      ],
+      "sha256": "8ea0199fa252dc9259599b431a88a26c98d12f79812d764431b8e857ae281f60",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "window_1",
+      "source": "windows_reference_matched.png",
+      "source_bounds": [
+        488,
+        25,
+        811,
+        425
+      ],
+      "scale": 0.14778162625762822,
+      "file": "window_1.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 29,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        57,
+        56,
+        116
+      ],
+      "sha256": "8fb60ebb429373b118dedbee3e4503f30903c3abfed203d77e6e4bf1a8afa235",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "window_2",
+      "source": "windows_reference_matched.png",
+      "source_bounds": [
+        964,
+        23,
+        1286,
+        424
+      ],
+      "scale": 0.14778162625762822,
+      "file": "window_2.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        57,
+        56,
+        116
+      ],
+      "sha256": "147a10215f34c301af4e592575843bdcf18566657c157b50dbf4e7ff9a3b9432",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "window_3",
+      "source": "windows_reference_matched.png",
+      "source_bounds": [
+        1375,
+        23,
+        1698,
+        422
+      ],
+      "scale": 0.14778162625762822,
+      "file": "window_3.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 29,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        57,
+        56,
+        116
+      ],
+      "sha256": "8c4bcd844008afed0a827065a1bec8078b94576699aafe6411cd410d63bdb517",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "window_corner_inside",
+      "source": "windows_reference_matched.png",
+      "source_bounds": [
+        64,
+        464,
+        384,
+        804
+      ],
+      "scale": 0.14778162625762822,
+      "file": "window_corner_inside.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 30,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        66,
+        55,
+        116
+      ],
+      "sha256": "5aada91e0f9b232030eb02a7245ed9bf3715240a64f9333133c2fbe4ed82e27a",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "window_corner_outside",
+      "source": "windows_reference_matched.png",
+      "source_bounds": [
+        508,
+        472,
+        822,
+        821
+      ],
+      "scale": 0.14778162625762822,
+      "file": "window_corner_outside.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 29,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        9,
+        64,
+        55,
+        116
+      ],
+      "sha256": "bfea0c47cb680f5daa3c64658f33b917242fd2faea003cc1036b7f29dbe3a0c2",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "window_cap_left",
+      "source": "windows_reference_matched.png",
+      "source_bounds": [
+        988,
+        462,
+        1239,
+        839
+      ],
+      "scale": 0.14778162625762822,
+      "file": "window_cap_left.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 29,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        14,
+        60,
+        51,
+        116
+      ],
+      "sha256": "df7823d02743695090e0db93f13c555435919e90ddc6cdcf5bc1201ff87646de",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "window_cap_right",
+      "source": "windows_reference_matched.png",
+      "source_bounds": [
+        1410,
+        482,
+        1660,
+        845
+      ],
+      "scale": 0.14778162625762822,
+      "file": "window_cap_right.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 27,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        14,
+        62,
+        51,
+        116
+      ],
+      "sha256": "5c9a445a2970e27396f01672b11bc52fa843ad4163396d01a08652a793b2f4a8",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "entrance_0_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        60,
+        4,
+        206,
+        251
+      ],
+      "scale": 0.3076923076923077,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        10,
+        40
+      ],
+      "file": "entrance_0_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        10,
+        40,
+        55,
+        116
+      ],
+      "sha256": "f8e12a813a2f705e27f5644fe7db8d7b46ef7fbec73db77706faf09f89b58d57",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "entrance_0_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        311,
+        4,
+        459,
+        251
+      ],
+      "scale": 0.3076923076923077,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        8,
+        40
+      ],
+      "file": "entrance_0_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        40,
+        54,
+        116
+      ],
+      "sha256": "3f17f075412a9410314fc307f7be27c191ee0119fb1cd90722f7992559285d04",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "entrance_1_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        563,
+        4,
+        711,
+        252
+      ],
+      "scale": 0.3064516129032258,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        10,
+        40
+      ],
+      "file": "entrance_1_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        10,
+        40,
+        55,
+        116
+      ],
+      "sha256": "ca1559261e994d477303858a04d7ecf43f61c66026ea102787b29e84539d3b70",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "entrance_1_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        819,
+        4,
+        968,
+        252
+      ],
+      "scale": 0.3064516129032258,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        10,
+        40
+      ],
+      "file": "entrance_1_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        10,
+        40,
+        56,
+        116
+      ],
+      "sha256": "c226222210720a59276f4694181d214ddf4efb7dad39007a4cf10516c79655f4",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "entrance_2_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1086,
+        4,
+        1230,
+        249
+      ],
+      "scale": 0.3076923076923077,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        10,
+        40
+      ],
+      "file": "entrance_2_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        10,
+        40,
+        54,
+        115
+      ],
+      "sha256": "d983890756b7e30c43678378666f60ae0480a651c2cbe243f743e6e31db7f513",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "entrance_2_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1337,
+        4,
+        1485,
+        251
+      ],
+      "scale": 0.3076923076923077,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        9,
+        40
+      ],
+      "file": "entrance_2_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        9,
+        40,
+        55,
+        116
+      ],
+      "sha256": "8f05e1cd79ca0d636cf0dac20f3817b300beacbd033b8b3de66ecde46dfc78ed",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "entrance_3_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1590,
+        4,
+        1738,
+        251
+      ],
+      "scale": 0.3076923076923077,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        9,
+        40
+      ],
+      "file": "entrance_3_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        9,
+        40,
+        55,
+        116
+      ],
+      "sha256": "ab5d28839c0d68b86c1500a62c19bb82b2ca141aebefcf033101fca6281cebfc",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "entrance_3_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1844,
+        4,
+        1993,
+        250
+      ],
+      "scale": 0.3076923076923077,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        10,
+        40
+      ],
+      "file": "entrance_3_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        10,
+        40,
+        56,
+        116
+      ],
+      "sha256": "30bdb57bcc707c91153868ae8dc3eaca8b3f894ad777a495239a3b69b1af2bda",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "production_0_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        62,
+        264,
+        209,
+        496
+      ],
+      "scale": 0.3275862068965517,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        8,
+        40
+      ],
+      "file": "production_0_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 31,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        40,
+        56,
+        116
+      ],
+      "sha256": "7e912b105233b1995e8222e9a7d77a308ee6bd64ca54c515a5c223ea0e57464c",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "production_0_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        314,
+        264,
+        462,
+        496
+      ],
+      "scale": 0.3275862068965517,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        8,
+        40
+      ],
+      "file": "production_0_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        40,
+        56,
+        116
+      ],
+      "sha256": "cc4ce3c2653de33a811e08cdbc78b809998f2465515fcaeeb92aaf9fe86fd600",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "production_1_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        560,
+        264,
+        707,
+        496
+      ],
+      "scale": 0.3275862068965517,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        8,
+        40
+      ],
+      "file": "production_1_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 31,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        40,
+        56,
+        116
+      ],
+      "sha256": "e56f24125c131b2c2d88c62e9598eb9c99e4bfdce73d9a5410893d476e8fe170",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "production_1_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        816,
+        264,
+        961,
+        496
+      ],
+      "scale": 0.3275862068965517,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        8,
+        40
+      ],
+      "file": "production_1_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        40,
+        56,
+        116
+      ],
+      "sha256": "9d46d8b88ff04211ae3bc97eee4a35ac8c97e5ca2948e888d760b16c5b218615",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "production_2_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1088,
+        265,
+        1234,
+        499
+      ],
+      "scale": 0.3247863247863248,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        8,
+        40
+      ],
+      "file": "production_2_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        40,
+        55,
+        116
+      ],
+      "sha256": "8ae34298f3809d68c6a3a02f111c2a436e05c3a742ec91aed18c4568a1047747",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "production_2_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1341,
+        265,
+        1490,
+        499
+      ],
+      "scale": 0.3247863247863248,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        8,
+        40
+      ],
+      "file": "production_2_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 31,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        40,
+        56,
+        116
+      ],
+      "sha256": "d9cdd672519be838294d6f8cf1a65dce624e8de2f5ef2b9d38de0c22bbd3a12e",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "production_3_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1585,
+        264,
+        1732,
+        496
+      ],
+      "scale": 0.3275862068965517,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        8,
+        40
+      ],
+      "file": "production_3_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        40,
+        56,
+        116
+      ],
+      "sha256": "4d391f313ad9e4a14579e95582e6a0a34ef360ad2a499e6d8524dcc9e9772972",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "production_3_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1840,
+        264,
+        1986,
+        496
+      ],
+      "scale": 0.3275862068965517,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        8,
+        40
+      ],
+      "file": "production_3_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        8,
+        40,
+        56,
+        116
+      ],
+      "sha256": "8ce7bbf37aa045b07888571bc1ae8efc3bd17eef529cdf690eea8c780d00df5c",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "warehouse_0_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        52,
+        504,
+        211,
+        739
+      ],
+      "scale": 0.31932773109243695,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        6,
+        40
+      ],
+      "file": "warehouse_0_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        6,
+        40,
+        57,
+        115
+      ],
+      "sha256": "1987060277c1910f015d8b451c3d9aa55bfd3b92f0575f38e83f040fb590d244",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "warehouse_0_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        304,
+        504,
+        463,
+        742
+      ],
+      "scale": 0.31932773109243695,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        7,
+        40
+      ],
+      "file": "warehouse_0_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 31,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        7,
+        40,
+        58,
+        116
+      ],
+      "sha256": "6e302261728ce56eee10fe20192b6252ef8eae671562b22c2ab1b080d6969cb4",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "warehouse_1_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        559,
+        504,
+        717,
+        739
+      ],
+      "scale": 0.31932773109243695,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        7,
+        40
+      ],
+      "file": "warehouse_1_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        7,
+        40,
+        57,
+        115
+      ],
+      "sha256": "38dad7d3e19097688f025ae05f61a92e03b376843ac8ba4c93b4343796489d6d",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "warehouse_1_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        816,
+        504,
+        974,
+        742
+      ],
+      "scale": 0.31932773109243695,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        6,
+        40
+      ],
+      "file": "warehouse_1_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        6,
+        40,
+        56,
+        116
+      ],
+      "sha256": "381bb8a151bf3c8f8c8bb7a5ba1ef50373d7fbe7011f447aed13345eae50a932",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "warehouse_2_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1078,
+        504,
+        1236,
+        740
+      ],
+      "scale": 0.3220338983050847,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        6,
+        40
+      ],
+      "file": "warehouse_2_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        6,
+        40,
+        57,
+        116
+      ],
+      "sha256": "916314f61525b95cdaac1b87a92238ac3192ba733d3f30dde6ea646aa8f782ba",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "warehouse_2_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1324,
+        504,
+        1489,
+        740
+      ],
+      "scale": 0.3220338983050847,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        6,
+        40
+      ],
+      "file": "warehouse_2_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        6,
+        40,
+        59,
+        116
+      ],
+      "sha256": "e8cd74a2db264726fc77fbc0b234d41da299bca620725ec11d6b456c9c185459",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "warehouse_3_closed",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1584,
+        504,
+        1741,
+        740
+      ],
+      "scale": 0.3220338983050847,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        6,
+        40
+      ],
+      "file": "warehouse_3_closed.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        6,
+        40,
+        57,
+        116
+      ],
+      "sha256": "8babc587a9a89a2df74269141eacbc79dbb5d281769cb63fd5459bb02ad51b81",
+      "status": "native_pixel_candidate_geometry_unverified"
+    },
+    {
+      "id": "warehouse_3_open",
+      "source": "door_states_reference_matched.png",
+      "source_bounds": [
+        1839,
+        504,
+        2002,
+        739
+      ],
+      "scale": 0.3220338983050847,
+      "pair_landmark": "top_lintel_peak",
+      "offset": [
+        7,
+        40
+      ],
+      "file": "warehouse_3_open.png",
+      "size": [
+        64,
+        128
+      ],
+      "anchor": [
+        32,
+        104
+      ],
+      "opaque_colors": 32,
+      "alpha_values": [
+        0,
+        255
+      ],
+      "bounds": [
+        7,
+        40,
+        59,
+        116
+      ],
+      "sha256": "6cc444099b8ca4baf7eee16069e8344a45f1c14c67350a5cd7d8fc7ca08cd721",
+      "status": "native_pixel_candidate_geometry_unverified"
+    }
+  ]
+}
