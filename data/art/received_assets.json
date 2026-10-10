@@ -1,0 +1,739 @@
+{
+  "assets": [
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/register/rot0.png",
+      "path": "res://art/received/furniture/register/rotation_0.png",
+      "sha256": "f2e1119e555e6015396d13873c02be48f3631c54a8a6853f969641cda9efc888"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/register/rot3.png",
+      "path": "res://art/received/furniture/register/rotation_1.png",
+      "sha256": "43b7251fee7e288ed8b186c09ac9323d8a6603659197807806462f05d3e2d84b"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/register/rot2.png",
+      "path": "res://art/received/furniture/register/rotation_2.png",
+      "sha256": "b0bff1e865e4e5b01eb60260c0e2c0b37d33f30dc5cf2513490737ccda60fda5"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/register/rot1.png",
+      "path": "res://art/received/furniture/register/rotation_3.png",
+      "sha256": "7ab704ffb5e44ae880b110c23aa46cd0246f25d16c80233834d93839bfae6835"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/shelf_1x1/rot0.png",
+      "path": "res://art/received/furniture/shelf_1x1/rotation_0.png",
+      "sha256": "51dbf22dd164870004c3c674404232fc0a5756d99c923e2b58c3a9283f2ca640"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/shelf_1x1/rot3.png",
+      "path": "res://art/received/furniture/shelf_1x1/rotation_1.png",
+      "sha256": "5f853e8ff023b50b99eff42c2f3d61183d0aa0aff5e2eb05c3c3fc7c39d88545"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/shelf_1x1/rot2.png",
+      "path": "res://art/received/furniture/shelf_1x1/rotation_2.png",
+      "sha256": "77e17443f9143e82a5c90c6f2a73acb1f65243ee4be372eec1c03233a05bb863"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/shelf_1x1/rot1.png",
+      "path": "res://art/received/furniture/shelf_1x1/rotation_3.png",
+      "sha256": "b1c3ec9fe724726c92e5e88d6bf351106cca7784e996e9b698a8e4f5d5caaf6b"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/shelf_2x1_합성/rot0.png",
+      "path": "res://art/received/furniture/shelf_2x1/rotation_0.png",
+      "sha256": "78a5e5cb1b4973b25d3e949ea30932d4a18aa75f2693455a010c21f66c4c4df6"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/shelf_2x1_합성/rot3.png",
+      "path": "res://art/received/furniture/shelf_2x1/rotation_1.png",
+      "sha256": "66cadc94f02b01d8486c1ede9c96c434313084ecb9554890ff68201f3c8ccc73"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/shelf_2x1_합성/rot2.png",
+      "path": "res://art/received/furniture/shelf_2x1/rotation_2.png",
+      "sha256": "cad36ce4d13601767ce3fe7a3b0643facab234ce73f1045e1b84495badce31c6"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/shelf_2x1_합성/rot1.png",
+      "path": "res://art/received/furniture/shelf_2x1/rotation_3.png",
+      "sha256": "1056fb3c6e32e682a54ec87f1147ec5e75eafbe6cdc20881fc20349ac6fa3e61"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/drink_machine/rot0.png",
+      "path": "res://art/received/furniture/drink_machine/rotation_0.png",
+      "sha256": "ce40648b360943c02dda48bfe424bc8bc4db5f57dd99330ba4257a4e126c6667"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/drink_machine/rot3.png",
+      "path": "res://art/received/furniture/drink_machine/rotation_1.png",
+      "sha256": "728a13402d6a7c05004409763f033fe2addf1f3f418e71e8258b56bb81934d1a"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/drink_machine/rot2.png",
+      "path": "res://art/received/furniture/drink_machine/rotation_2.png",
+      "sha256": "7a4ba69e0b9927e60810210ec989aba2e0d80aaee51eb1fa045b1cef3a96ab94"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/drink_machine/rot1.png",
+      "path": "res://art/received/furniture/drink_machine/rotation_3.png",
+      "sha256": "3316eddba2a80491fbbd4798b7a06adbb8b5e1f686c1891fb79c0927b1abae89"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/plant_small/rot0.png",
+      "path": "res://art/received/furniture/plant_small/rotation_0.png",
+      "sha256": "86cb20f208622d81c9ed41bfb5fef944ac8a8feaa62814048921d30f25ca1472"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/plant_small/rot3.png",
+      "path": "res://art/received/furniture/plant_small/rotation_1.png",
+      "sha256": "7e7b86c6fc6a40dceee37595a3d90844af89295c3ff9899ffeffd331fc4dc77b"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/plant_small/rot2.png",
+      "path": "res://art/received/furniture/plant_small/rotation_2.png",
+      "sha256": "569162d1b48877688db5e76edaefab0b595cadaae0ed275d6bf477132a566d8a"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/plant_small/rot1.png",
+      "path": "res://art/received/furniture/plant_small/rotation_3.png",
+      "sha256": "5f36bcb8aee000da5f99c263fdacdff0a87d7ca6d6e70f40e4197b874ee0f73f"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_rack_empty/rot0.png",
+      "path": "res://art/received/furniture/warehouse_rack/rotation_0.png",
+      "sha256": "881332d580af8725173ce5ef203c0aa0ce37fc6f6adaae1f934018bd3bfc9997"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_rack_empty/rot3.png",
+      "path": "res://art/received/furniture/warehouse_rack/rotation_1.png",
+      "sha256": "89caf783f68f8345809529dd104d818855568df4cb35c936616f14dbb3491ca2"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_rack_empty/rot2.png",
+      "path": "res://art/received/furniture/warehouse_rack/rotation_2.png",
+      "sha256": "267197259ea44b1da5bc167488448faddcd2d0d07fa3fd0e851e2937c714eeb3"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_rack_empty/rot1.png",
+      "path": "res://art/received/furniture/warehouse_rack/rotation_3.png",
+      "sha256": "fa57f59a9a5674eab4619c642b510b6fe46edb6e5eeb81a2bebd04f5c381c2e6"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/magic_oven_합성/rot0.png",
+      "path": "res://art/received/furniture/magic_oven/rotation_0.png",
+      "sha256": "802944657006b488a05ee55a0f90c407f8c03cc531777ef05f66c3d5973637ce"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/magic_oven_합성/rot3.png",
+      "path": "res://art/received/furniture/magic_oven/rotation_1.png",
+      "sha256": "ad700996166b8df7f540ff29eabfc7cfab2c0a6a7f5eded7a5fd7b34c5a66cfb"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/magic_oven_합성/rot2.png",
+      "path": "res://art/received/furniture/magic_oven/rotation_2.png",
+      "sha256": "7c1f86e4ce72aeae8e59704aedaa81fd28aea076d0763d1d1674383d6c99d4b0"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/magic_oven_합성/rot1.png",
+      "path": "res://art/received/furniture/magic_oven/rotation_3.png",
+      "sha256": "b31cce4367af8ee2c31fe6844f2453b7fdff916add400552ad1a8e00b7ee86c1"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/fridge_unit/rot0.png",
+      "path": "res://art/received/furniture/fridge_unit/rotation_0.png",
+      "sha256": "adbdd84cacad7699412efbaf5fa165d705decb25fab9530692ebd3ac889b965d"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/fridge_unit/rot3.png",
+      "path": "res://art/received/furniture/fridge_unit/rotation_1.png",
+      "sha256": "96f0b1ecf80841b20c906bbd4a62ed856e5c5452b93b4c7c05a396edbc3dfcd2"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/fridge_unit/rot2.png",
+      "path": "res://art/received/furniture/fridge_unit/rotation_2.png",
+      "sha256": "27212476d09a0dff646dc807402e38370e9cdf1714857121f34f9206d37980de"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/fridge_unit/rot1.png",
+      "path": "res://art/received/furniture/fridge_unit/rotation_3.png",
+      "sha256": "0594d7148ee42b21c5b3a2dc8d0a55642e4fd66110b26fe19aafc39cf583dfcb"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/freezer_unit/rot0.png",
+      "path": "res://art/received/furniture/freezer_unit/rotation_0.png",
+      "sha256": "a6243208f43793b789757b8e20fbfe98d266503cc6f899fd774f8e8491e4722c"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/freezer_unit/rot3.png",
+      "path": "res://art/received/furniture/freezer_unit/rotation_1.png",
+      "sha256": "8b94dc4fa3f3fb1348280e4e801c27cbb943f8b3a67b05b4edaa2d4161f5ae46"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/freezer_unit/rot2.png",
+      "path": "res://art/received/furniture/freezer_unit/rotation_2.png",
+      "sha256": "8c39b04f960f5badc3ea034a884c43186aacd07c8a08fe31a33038b9fe03158c"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/freezer_unit/rot1.png",
+      "path": "res://art/received/furniture/freezer_unit/rotation_3.png",
+      "sha256": "91af11d2940f3f06582b64407f76b050b286830f8eccd0008f4ea35db395fa9b"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/night_lantern/rot0.png",
+      "path": "res://art/received/furniture/night_lantern/rotation_0.png",
+      "sha256": "09adc956772e4c338109b1c15a4d91b973002d2ed5bde4b004675d9f785779b4"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/night_lantern/rot3.png",
+      "path": "res://art/received/furniture/night_lantern/rotation_1.png",
+      "sha256": "875dbaf36cd5eb510038d57d16ba4039403900fc9b7844e4c400edb7e3395d29"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/night_lantern/rot2.png",
+      "path": "res://art/received/furniture/night_lantern/rotation_2.png",
+      "sha256": "69da6ce0693c2d94f2ce7b251ec072f920c75c757f3c149124961d29d9a2e740"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/night_lantern/rot1.png",
+      "path": "res://art/received/furniture/night_lantern/rotation_3.png",
+      "sha256": "50703db06eaa0aec7b561e112e769cdf5b1ee68e92e44f869853a6c0a8bc1ad2"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/antique_cabinet/rot0.png",
+      "path": "res://art/received/furniture/antique_cabinet/rotation_0.png",
+      "sha256": "899bf4e8cc2d02d08361c787a68ec648a87cdeb5ce3128b93e6ab7a30c1d26be"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/antique_cabinet/rot3.png",
+      "path": "res://art/received/furniture/antique_cabinet/rotation_1.png",
+      "sha256": "7ec056ebb904d4cb5a08bb280be1f43528a0ca1ae55b09b0bfbcad0bf64786ad"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/antique_cabinet/rot2.png",
+      "path": "res://art/received/furniture/antique_cabinet/rotation_2.png",
+      "sha256": "00a076b59e1b8139fdc0f1e9b1b45c024d8b4af552c1e1145cddf7fc1ba9cf08"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/antique_cabinet/rot1.png",
+      "path": "res://art/received/furniture/antique_cabinet/rotation_3.png",
+      "sha256": "31667cbadd1ada8f67615fa945ce485ff17bf70f66e040e56e83af2544b15ce3"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/door/rot0.png",
+      "path": "res://art/received/furniture/door/rotation_0.png",
+      "sha256": "b28708c598565d1cee53aa7892cc14614437d51c5f606bbc063f75331718826e"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/door/rot1.png",
+      "path": "res://art/received/furniture/door/rotation_1.png",
+      "sha256": "96e5a90f4dcdd7c752835f8abad8a042ee5feca3ee7e1ffc7c1c0649b52d6d9d"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/door/rot2.png",
+      "path": "res://art/received/furniture/door/rotation_2.png",
+      "sha256": "c1edc7697c5abac89dec8b99e6ba5d75d2741b6525dfa6ec7315a77d56e99c5b"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/door/rot3.png",
+      "path": "res://art/received/furniture/door/rotation_3.png",
+      "sha256": "082c9e46dcee92a95a26dbfd6bacaec3562fd6f20875596e5625283104e97e96"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_door/rot0.png",
+      "path": "res://art/received/furniture/warehouse_door/rotation_0.png",
+      "sha256": "4bec717009e54cd6a99de5d8b5f14f5c14ff4b9faa52c201d38b1435eb05ed24"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_door/rot1.png",
+      "path": "res://art/received/furniture/warehouse_door/rotation_1.png",
+      "sha256": "e136274cd66464dc76585723b550c65a2425a26dca1dff353d357da8f91a366f"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_door/rot2.png",
+      "path": "res://art/received/furniture/warehouse_door/rotation_2.png",
+      "sha256": "492ffa5b07407475b1595e103bd987093da834bbd144dd669254ff5d11f8e2f0"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/warehouse_door/rot3.png",
+      "path": "res://art/received/furniture/warehouse_door/rotation_3.png",
+      "sha256": "49fd5ae84872b2cfe80e807154d90bbf9dff7f73e859dd1417711e93289de685"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/production_door/rot0.png",
+      "path": "res://art/received/furniture/production_door/rotation_0.png",
+      "sha256": "de37923a746d4f6a4433fd301209f1b0b9257133c425cb129121907899e0f99c"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/production_door/rot1.png",
+      "path": "res://art/received/furniture/production_door/rotation_1.png",
+      "sha256": "38d8f3492a4082040773007e634f0d43ac1d57fea67841314e7f0e128d46f2a8"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/production_door/rot2.png",
+      "path": "res://art/received/furniture/production_door/rotation_2.png",
+      "sha256": "6bc8b65f7bc638913682351709bf74a14330d081a837f992a2c868c5cc9a013c"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/production_door/rot3.png",
+      "path": "res://art/received/furniture/production_door/rotation_3.png",
+      "sha256": "ed80b5db18126ca3a8cd430de2dcb07b74c8298c5be9b5900fe466c1f6235638"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wall_poster/rot0.png",
+      "path": "res://art/received/furniture/wall_poster/rotation_0.png",
+      "sha256": "0879796e2d9488a855157ad4063e7124afe6576e164ef7a8494c2cbf116069b2"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wall_poster/rot1.png",
+      "path": "res://art/received/furniture/wall_poster/rotation_1.png",
+      "sha256": "2b9eef73e0e94d0c35d478ee948ab8db03176c8bdbdb8e009a4962e675fdc70c"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wall_poster/rot2.png",
+      "path": "res://art/received/furniture/wall_poster/rotation_2.png",
+      "sha256": "6874250f82baad8d3224baf82ed0f507aae86c47705d1f0c497f6b639e7904b4"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wall_poster/rot3.png",
+      "path": "res://art/received/furniture/wall_poster/rotation_3.png",
+      "sha256": "b6b73e004f8ba0e3bbc5e22c420123ffbe8c584a41df9c6012651cd946a22582"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/old_world_map/rot0.png",
+      "path": "res://art/received/furniture/old_world_map/rotation_0.png",
+      "sha256": "9af53e64d2886fdbdb4f062c2f53eb15a10710ac099d1d78b5ef3a761b4eab24"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/old_world_map/rot1.png",
+      "path": "res://art/received/furniture/old_world_map/rotation_1.png",
+      "sha256": "b53570c71a0568d133f97bf06ea08cb66c9216d0f39f95fd2083e699143a69e4"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/old_world_map/rot2.png",
+      "path": "res://art/received/furniture/old_world_map/rotation_2.png",
+      "sha256": "125915ea2febeb0383b2a2d2946837a1ee62ae233137769e4891ff57a3234c01"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/old_world_map/rot3.png",
+      "path": "res://art/received/furniture/old_world_map/rotation_3.png",
+      "sha256": "347e66d3dec754f015f285ce8bc06156479c8862a91311e7c1852b933293c53f"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/adventurer_banner/rot0.png",
+      "path": "res://art/received/furniture/adventurer_banner/rotation_0.png",
+      "sha256": "dd6833e39eb09e69857ae489c5bb9087a2c9149b75a7be869d6efc1b90170814"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/adventurer_banner/rot1.png",
+      "path": "res://art/received/furniture/adventurer_banner/rotation_1.png",
+      "sha256": "7e80f926e119aada3688e69f22975e7b1b4082d6fbc9309a6187412ef9a42631"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/adventurer_banner/rot2.png",
+      "path": "res://art/received/furniture/adventurer_banner/rotation_2.png",
+      "sha256": "bd0e65e90e4498772ac6e48958e0a148070767ca08ab3bbdcdce41344a10dbda"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/adventurer_banner/rot3.png",
+      "path": "res://art/received/furniture/adventurer_banner/rotation_3.png",
+      "sha256": "1366e84615ee6e6d18ef9a69c90815f7da7f1e621631b17cd274ad1ab18460bc"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wood_register_소형/rot0.png",
+      "path": "res://art/received/furniture/wood_register/rotation_0.png",
+      "sha256": "e56d0afa724382b0161a513e60aa9680c9dcc2555a8e2ff6ab727b2f1e7c54e2"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wood_register_소형/rot3.png",
+      "path": "res://art/received/furniture/wood_register/rotation_1.png",
+      "sha256": "79bd551f20af06f07853948e2a61a590d364c1ec30a1852b2ec5af164643bb7e"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wood_register_소형/rot2.png",
+      "path": "res://art/received/furniture/wood_register/rotation_2.png",
+      "sha256": "82ea29d3b438425a30bac9fa616a4ad0c4c3b9ffd91c829378849941a1b4bf9f"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wood_register_소형/rot1.png",
+      "path": "res://art/received/furniture/wood_register/rotation_3.png",
+      "sha256": "90a2dc518390945dab65f8af26b2e3e54fa46c87222406134724802e3892136d"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/modern_register/rot0.png",
+      "path": "res://art/received/furniture/modern_register/rotation_0.png",
+      "sha256": "29b8296c864aeaf831bd952bfea020f197d6725518d76f39160f866d23af21bf"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/modern_register/rot3.png",
+      "path": "res://art/received/furniture/modern_register/rotation_1.png",
+      "sha256": "745b8475534858288c6da1bc8eab9227b856a48dacf6745c1d2964926544aecb"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/modern_register/rot2.png",
+      "path": "res://art/received/furniture/modern_register/rotation_2.png",
+      "sha256": "e785fd734e707cf2afcea66f0ea3931efa014e472fa60eec30aadc4a04d95d12"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/modern_register/rot1.png",
+      "path": "res://art/received/furniture/modern_register/rotation_3.png",
+      "sha256": "5284cfe062feb19bacdd0d3f08224fd3dbfd580670e0d468e79663838a5f3c4f"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wood_warehouse_rack/rot0.png",
+      "path": "res://art/received/furniture/wood_warehouse_rack/rotation_0.png",
+      "sha256": "eefb3ff20aa5f82eae253d449d49812629cebce098522d0c823d7202e00f7b86"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wood_warehouse_rack/rot3.png",
+      "path": "res://art/received/furniture/wood_warehouse_rack/rotation_1.png",
+      "sha256": "6adba9dfa22bb04650bb013feabc0cf15d1c14bf1fa6305376712a38b0e463d2"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wood_warehouse_rack/rot2.png",
+      "path": "res://art/received/furniture/wood_warehouse_rack/rotation_2.png",
+      "sha256": "8c63b11c4e6a29a4eec7ca3b0ea5d4d9794b74e12f8ae1f079072745070d8cdf"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/wood_warehouse_rack/rot1.png",
+      "path": "res://art/received/furniture/wood_warehouse_rack/rotation_3.png",
+      "sha256": "21c47fec47b5947db77dc7aba8c0629b3c7695f2371104da93d61f9fa2ced5c0"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/steel_warehouse_rack_empty/rot0.png",
+      "path": "res://art/received/furniture/steel_warehouse_rack/rotation_0.png",
+      "sha256": "d5ab8fae6be8e4c52e52a8977988bf817ac8febb98108160238aa3cd0566cf37"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/steel_warehouse_rack_empty/rot3.png",
+      "path": "res://art/received/furniture/steel_warehouse_rack/rotation_1.png",
+      "sha256": "6bec4dc031fac2859fcc465bb091e69955dc09277358f129e3b7d0114dc3d345"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/steel_warehouse_rack_empty/rot2.png",
+      "path": "res://art/received/furniture/steel_warehouse_rack/rotation_2.png",
+      "sha256": "a12db99b4f90c59199962003cdbbde801fc5a00e40c7c612bc88aa23e32a2d01"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/가구_등각/정렬본/steel_warehouse_rack_empty/rot1.png",
+      "path": "res://art/received/furniture/steel_warehouse_rack/rotation_3.png",
+      "sha256": "8f755b6e79fe7b1f826992a60acb6bb4dcde7741373d58056426e2938609ec8a"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/dirt_1.png",
+      "path": "res://art/received/floors/dirt_1.png",
+      "sha256": "6b40d349df6f09d1e213565b80f91c3fb5334bae4ca4cab068fce7bcdaa24607"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/dirt_2.png",
+      "path": "res://art/received/floors/dirt_2.png",
+      "sha256": "7439171cf3b68782f15d533a329211130c608cd3a8ee2a28ffd476ea77ce5095"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/dirt_3.png",
+      "path": "res://art/received/floors/dirt_3.png",
+      "sha256": "4ff7d7dd5bda29ab35177d950b09c0eedd5d7cde05b97a0b80388874108558af"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/grass_1.png",
+      "path": "res://art/received/floors/grass_1.png",
+      "sha256": "f476fd32ca5b4d9bcd71f3f2881672e5f169f7eb085d4dd6e9fc83dbfa607975"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/grass_2.png",
+      "path": "res://art/received/floors/grass_2.png",
+      "sha256": "049fa44850b3f66861434844e28d8de6e47e13d05076fa27fc8242df385b5dff"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/grass_3.png",
+      "path": "res://art/received/floors/grass_3.png",
+      "sha256": "50f4fdf6f10f8e14c39e0d0a12f180faacedfc11c0cdffb5efbd689f77908fa5"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/paving_1.png",
+      "path": "res://art/received/floors/paving_1.png",
+      "sha256": "20aad07f4c722233dbfcb257c3c8aed5aed826f8bf2d9109ed9b37a7a70bc180"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/paving_2.png",
+      "path": "res://art/received/floors/paving_2.png",
+      "sha256": "5651860ee380620a21fbdf26a1492a5e533257c21f121747c1bb33081aa20a87"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/paving_3.png",
+      "path": "res://art/received/floors/paving_3.png",
+      "sha256": "6a257e96e139c97767d71c433c22f2216b5e39a5160b6015dcfb803abf31467e"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/road_1.png",
+      "path": "res://art/received/floors/road_1.png",
+      "sha256": "9c9655c9dfe4927d0d4eb8f69c0a63632d98fdfe988c6db49015b9be0626516f"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/road_2.png",
+      "path": "res://art/received/floors/road_2.png",
+      "sha256": "033a9efd24f3a1c8d7570879289100c613a565078d46c76d742fd98afc3c8eb2"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/road_3.png",
+      "path": "res://art/received/floors/road_3.png",
+      "sha256": "2185f12f121cdb5a368092585fba901d428b008394036885462d124e48e96651"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/tile_1.png",
+      "path": "res://art/received/floors/tile_1.png",
+      "sha256": "e8ab532857edfe9c29af8849d246279faf796165a80f9e3be36d8066307c20a0"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/tile_2.png",
+      "path": "res://art/received/floors/tile_2.png",
+      "sha256": "ee71471bd8d30401169403e2352042d77b64e4f9d4545f7edb18e06250c2f959"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/tile_3.png",
+      "path": "res://art/received/floors/tile_3.png",
+      "sha256": "aca5df75a8733b9d29fe378ef770d089c3ca600ff01cf80158a8c1df49e20403"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/wood_1.png",
+      "path": "res://art/received/floors/wood_1.png",
+      "sha256": "e0f3dfc3da4696e500d19609b9c201ce1d326da0229d51072eb52a36c04c1951"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/wood_2.png",
+      "path": "res://art/received/floors/wood_2.png",
+      "sha256": "fc86bb8aaa4aef05e590fabc450a277ac6ad52dca4e7e2b644f977e40f9f2163"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/바닥_등각/정리/wood_3.png",
+      "path": "res://art/received/floors/wood_3.png",
+      "sha256": "5f76356db0082a89d9c3c6e1c8f31bea034025f60dd67ce7d2dbd058e0f91c04"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_female_determined.png",
+      "path": "res://art/portraits/player/aligned/player_female_determined.png",
+      "sha256": "3d4666300a347be49b49df36ffc0540d1a239b99b7b143e7c44295575f4091f0"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_female_flustered.png",
+      "path": "res://art/portraits/player/aligned/player_female_flustered.png",
+      "sha256": "0aecd29ab16baf67ac7793ca9db8a4c6093ec7e3f63250ffd0168caf1e514143"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_female_neutral.png",
+      "path": "res://art/portraits/player/aligned/player_female_neutral.png",
+      "sha256": "84179b4602ce6b2c74a5b3c61c25ef46834a207d123b91dd5914a3d0b465cb46"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_female_smile.png",
+      "path": "res://art/portraits/player/aligned/player_female_smile.png",
+      "sha256": "1e7bb182b57c851e1376aacdfefb166dfb630a30f3f174076e9baaaa44d80063"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_female_surprised.png",
+      "path": "res://art/portraits/player/aligned/player_female_surprised.png",
+      "sha256": "fea54d3154a16d92ccd45803eb5465d076d1d29504ac2e68717452194c16e515"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_female_tired.png",
+      "path": "res://art/portraits/player/aligned/player_female_tired.png",
+      "sha256": "ad48f80e5dc591adec1a234c8e37bc1a4f525c6b1836df29952bc4bce2cecc83"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_female_worried.png",
+      "path": "res://art/portraits/player/aligned/player_female_worried.png",
+      "sha256": "4a50513ec61f64046efc7ceb3818d4f994bc24340f20317a4114e489167b3863"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_male_determined.png",
+      "path": "res://art/portraits/player/aligned/player_male_determined.png",
+      "sha256": "7a0819ef83097d76f577f8b4a39f2d53e5570033aa3c60e1d819d2d9d729f6ea"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_male_flustered.png",
+      "path": "res://art/portraits/player/aligned/player_male_flustered.png",
+      "sha256": "1ce360a8c2f4120f295b13e861c8ef2493c9502e7b9f53d043f9ac51fd9236dc"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_male_neutral.png",
+      "path": "res://art/portraits/player/aligned/player_male_neutral.png",
+      "sha256": "3c1cbc9254d658c9fa5cccf02b01540d692848f7cc3cbc6ca7cff230ed7b8b86"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_male_smile.png",
+      "path": "res://art/portraits/player/aligned/player_male_smile.png",
+      "sha256": "9e92260342032b4ad842b111dca44d8c246b909ca1d31828be39b9d25ee1771a"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_male_surprised.png",
+      "path": "res://art/portraits/player/aligned/player_male_surprised.png",
+      "sha256": "e2d9f23faa88690b04c46e1e6cc0104d847d45cb77e91e04cba0a49b8e3694dc"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_male_tired.png",
+      "path": "res://art/portraits/player/aligned/player_male_tired.png",
+      "sha256": "60d5e0f22e15a5002190916b6bc004bdcba0aebe07332abeada70b05784e972e"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_male_worried.png",
+      "path": "res://art/portraits/player/aligned/player_male_worried.png",
+      "sha256": "f1bb4c2ffb513218cfb83dfad8a9e8101e113803b33b757dfedcb57ca7f54ac2"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/apron_stone.png",
+      "path": "res://art/received/world3d/moss_cottage/apron_stone.png",
+      "sha256": "df01f7e090f55a68d354f819a9e934da54634c4496c4309b61f5b27433a444f6"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/bush.png",
+      "path": "res://art/received/world3d/moss_cottage/bush.png",
+      "sha256": "69bc98dad7cb0cd1ab3470f4a20ffe91680c72f656758a856c8329c5e4386f10"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/chimney_stone.png",
+      "path": "res://art/received/world3d/moss_cottage/chimney_stone.png",
+      "sha256": "f4ed9d8a18db5d62fffb686be9e0ff7f139ce6f5442f749c630f5c53466921c6"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/eave_tile.png",
+      "path": "res://art/received/world3d/moss_cottage/eave_tile.png",
+      "sha256": "9e80d9bcc8e6ef7b8684a4ff9e051e66556b9eddd32ad51255f818080efd0e61"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/gable_wall.png",
+      "path": "res://art/received/world3d/moss_cottage/gable_wall.png",
+      "sha256": "0ca3a1807d6fffb2faf71f6b59f203f8cd3fc9385f8495175518fa3b8c395428"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/planter_box.png",
+      "path": "res://art/received/world3d/moss_cottage/planter_box.png",
+      "sha256": "0732dca47c4b298a9dda717a6d8b2527d8dfe7d9ce9cbef4f965c811e6e72d0c"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/planter_flowers.png",
+      "path": "res://art/received/world3d/moss_cottage/planter_flowers.png",
+      "sha256": "69bc98dad7cb0cd1ab3470f4a20ffe91680c72f656758a856c8329c5e4386f10"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/plinth_stone.png",
+      "path": "res://art/received/world3d/moss_cottage/plinth_stone.png",
+      "sha256": "b5d40c31d494d7ca1ad3e8d73ed84f86cfd68969b511d565598c528d7563da34"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/roof_tiles.png",
+      "path": "res://art/received/world3d/moss_cottage/roof_tiles.png",
+      "sha256": "dc51df03377fbfebfc0d4efa9bbab7b5c74d2481d8f9d311f3c350d1bdeaaa0d"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/roof_tiles_h.png",
+      "path": "res://art/received/world3d/moss_cottage/roof_tiles_h.png",
+      "sha256": "1d6cfaf254deb88ac7c23c8e51cb90b768a85025e49c67430ea030b44c13d0ea"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/roof_trim.png",
+      "path": "res://art/received/world3d/moss_cottage/roof_trim.png",
+      "sha256": "bea4855962d117506993f6d1aa15a8a9c3f407288a17fed1b0a4f4f1d599737d"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/shutter_wood.png",
+      "path": "res://art/received/world3d/moss_cottage/shutter_wood.png",
+      "sha256": "e64c052287e9476c996e0a2d12b6299edecd4bd83a928fd2d527b084fbf5b82b"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/smoke.png",
+      "path": "res://art/received/world3d/moss_cottage/smoke.png",
+      "sha256": "0824e3d85a7e10b7e56b4417a9d4fefeff788d3bd7328a44b525eca90eec8b33"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/step.png",
+      "path": "res://art/received/world3d/moss_cottage/step.png",
+      "sha256": "f2d95ef967f0324e7045ab8f4cadc3ead7a2bd7e246dc5b13cdca444a4f6105a"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/wall_front.png",
+      "path": "res://art/received/world3d/moss_cottage/wall_front.png",
+      "sha256": "e9a49a336f0f273ac4466a1e1bdfe651fb60706a0689bcc91634099290c57643"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/moss_cottage/최종/wall_side.png",
+      "path": "res://art/received/world3d/moss_cottage/wall_side.png",
+      "sha256": "de2004056e4c65030a2abf6d90188f39bae9329a1935c59011b66dbff394a40e"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/iso_tree_round.png",
+      "path": "res://art/received/nature/iso_tree_round.png",
+      "sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/tree_pine.png",
+      "path": "res://art/received/nature/tree_pine.png",
+      "sha256": "115e41e7a9c0e7bc348df23cff5e063fea8708dd2215be658026d6b323b03a23"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/tree_dead.png",
+      "path": "res://art/received/nature/tree_dead.png",
+      "sha256": "b4e1e81045d27382e0b8b18328f8b78c4bdf271a09b3e634e38ee8bbaa84c767"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/tree_birch.png",
+      "path": "res://art/received/nature/tree_birch.png",
+      "sha256": "5470c0f68f2c8e25619d2216c0e2377c9cfc232bc5b96cb512fa44de60549e5a"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/tree_big_oak.png",
+      "path": "res://art/received/nature/tree_big_oak.png",
+      "sha256": "0f847779a11f95e47e7a048fd1ee79410b00b9a4c4e51789ccb5c5f0eafdefb6"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/tree_cherry.png",
+      "path": "res://art/received/nature/tree_cherry.png",
+      "sha256": "6315a1880238cafe0fa4fe92c8d3750cfd61a685310168cb72a9a5840a749cfb"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/tree_poplar.png",
+      "path": "res://art/received/nature/tree_poplar.png",
+      "sha256": "eec7f3de72b2d39b4f2152d989e141bf80411abe45cbc7d7d7e19a9826ae5961"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/tree_willow.png",
+      "path": "res://art/received/nature/tree_willow.png",
+      "sha256": "85db1943eea01f20e1c5578c12b4417debdb198e9864a653432bd0d30f8a5a22"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/tree_apple.png",
+      "path": "res://art/received/nature/tree_apple.png",
+      "sha256": "5a7805d0d066f3e32a311bf701068ae5b7c62ceb3d0c09bb338db9f1508a4ec8"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/flower_bush.png",
+      "path": "res://art/received/nature/flower_bush.png",
+      "sha256": "0aff475b1ea062b35137a35b98b460acc624c967dcb9ed7a32fa2ed47d5c9f0f"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/bush.png",
+      "path": "res://art/received/nature/bush.png",
+      "sha256": "2d786fc7f5f6f3bfd0afaf46373d7a664e380f37f8a738bbd90261ec9c673689"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/rocks.png",
+      "path": "res://art/received/nature/rocks.png",
+      "sha256": "42a29ae0d6b6e174282f129f2a3c786f036f918c1111f9c2f165078dbb0522f5"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/iso_log.png",
+      "path": "res://art/received/nature/iso_log.png",
+      "sha256": "4a0c325bc928da4a57db8add6485b6e4323ea58444a5fd7c04bd65bec28d1e25"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/iso_stump.png",
+      "path": "res://art/received/nature/iso_stump.png",
+      "sha256": "531d1567912de319f2f3ed6a6368c4f4197edfb75d30d446bc1cf1c9d3abb149"
+    },
+    {
+      "source": "docs/그림_작업/받은그림/자연물/mushroom.png",
+      "path": "res://art/received/nature/mushroom.png",
+      "sha256": "2906170a8bc2542251e68fc613af21acf1c5983b75d89ca6c71965d288f58253"
+    }
+  ]
+}

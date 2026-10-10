@@ -4,6 +4,7 @@ extends SubViewportContainer
 
 var viewport: SubViewport
 var camera: Camera3D
+var received_preview: ReceivedFurniturePreview
 var display: MeshInstance3D
 
 func _ready() -> void:
@@ -33,11 +34,15 @@ func _ready() -> void:
 	viewport.add_child(world)
 	display = MeshInstance3D.new()
 	viewport.add_child(display)
+	received_preview = ReceivedFurniturePreview.new()
+	add_child(received_preview)
+	received_preview.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 
 func show_furniture(id: String) -> void:
 	var data := BuildObjectData.get_build_object(id)
 	visible = not data.is_empty() and (FurnitureAssets.has_model(id) or not ShelfData.get_shelf_data(id).is_empty())
 	if not visible: return
+	display.visible = not received_preview.show_shape(id)
 	var size: Vector2i = data["grid_size"]
 	var row := Furniture3DData.get_row(id)
 	var lo := Vector2.ZERO

@@ -70,7 +70,7 @@ func sync() -> void:
 func _build_floor(name: String, info: Dictionary, origin: Vector2, cols: int, rows: int) -> void:
 	if not _floors.has(name):
 		var f: Dictionary = {}
-		f["material"] = view._make_surface_material(str(info["floor"]), info["tint"])
+		f["material"] = view._make_floor_material(str(info["floor"]), info["tint"])
 		f["mesh"] = MeshInstance3D.new()
 		(f["mesh"] as MeshInstance3D).layers = 1
 		(f["mesh"] as MeshInstance3D).material_override = f["material"]
@@ -131,6 +131,8 @@ func _build_walls(name: String, info: Dictionary, origin: Vector2, cols: int, ro
 	var pp: Dictionary = {"ts": view.texture_size, "block_px": view.block_px, "unit_px_z": (view.tile_low / sqrt(2.0)) * cos(deg_to_rad(30.0))}
 	var dlo := Vector2(x0 - t * 0.5, ey0)
 	var dhi := Vector2(x0 + t * 0.5, ey1)
+	if ReceivedWorldArt.furniture(view, "rdoor_" + name, view.world.get_node(name), door_id, 3, dlo, dhi, (dlo + dhi) * 0.5, "room_door"):
+		return
 	var built: Dictionary = FurnitureAssets.build(door_id, dlo, dhi, FurnitureAssets.wall_front_rot(3), pp)
 	view._set_mesh_item("rdoor_" + name, built["mesh"], VillageAssets.make_materials(built["specs"]), dlo, Vector2(dhi.x + 0.65, dhi.y), float(built["total_blocks"]), "", NAN, true)
 

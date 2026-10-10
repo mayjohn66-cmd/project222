@@ -108,7 +108,9 @@ var forced_hour: float = -1.0
 func configure_scale(n: int) -> void:
 	shrink = clampi(n, 1, 3)
 	match_zoom = 1.125 if shrink == 3 else 1.0
-	tile_low = 96.0 * match_zoom / float(shrink)
+	if ReceivedWorldArt.ENABLED:
+		match_zoom = ReceivedWorldArt.TILE_WIDTH / GAME_TILE.x
+	tile_low = GAME_TILE.x * match_zoom / float(shrink)
 	block_px = roundf(tile_low * 22.0 / 36.0)
 	texture_size = int(roundf(tile_low * 0.5))
 	actor_height_px = tile_low * 25.0 / 36.0
@@ -558,7 +560,7 @@ func _sync_floor() -> void:
 	if _ground_mesh == null:
 		_ground_mesh = MeshInstance3D.new()
 		_ground_mesh.layers = 1
-		_ground_material = _make_surface_material("tile", Color(1.0, 1.0, 1.0))  # 현대 편의점: 흰 타일 바닥
+		_ground_material = _make_floor_material("tile", Color.WHITE)  # 현대 편의점: 흰 타일 바닥
 		_ground_mesh.material_override = _ground_material
 		_viewport.add_child(_ground_mesh)
 		_ground_id_mesh = MeshInstance3D.new()
@@ -807,6 +809,10 @@ func _sync_furniture_from(objects: Node, origin: Vector2, store_rect: Rect2i, al
 		if is_preview:
 			item_tint = item_tint.lerp(Color(0.55, 1.0, 0.9) if preview_valid else Color(1.0, 0.25, 0.25), 0.4 if preview_valid else 0.65)
 
+		var art_base := Vector2(float(anchor.x) + (fx - 1) * 0.5, float(anchor.y) + (fy - 1) * 0.5) + origin
+		if ReceivedWorldArt.furniture(self, key, node, build_id, rotation_index, lo, hi, art_base, sig, is_preview, preview_valid):
+			continue
+
 		if as_model:
 			var pp: Dictionary = {"ts": texture_size, "block_px": block_px, "unit_px_z": (tile_low / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))}
 			var built: Dictionary
@@ -946,7 +952,9 @@ func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: 
 		rotation_index = posmod(int(visual.get("rotation_index")), 4)
 
 	var base_key: String = "wmount%d" % node.get_instance_id()
-	var sig: String = "%s|%s|%s|%d" % [build_id, str(anchor), str(origin), rotation_index]
+	var is_preview := bool(node.get_meta("is_build_preview", false))
+	var preview_valid := bool(node.get_meta("preview_valid", true))
+	var sig: String = "%s|%s|%s|%d|%s|%s" % [build_id, str(anchor), str(origin), rotation_index, is_preview, preview_valid]
 	alive[base_key + "a"] = true
 	alive[base_key + "b"] = true
 	alive[base_key + "c"] = true
@@ -992,6 +1000,15 @@ func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: 
 		lo_v = Vector2(a0, center_along - 0.5)
 		hi_v = Vector2(a1, center_along + 0.5)
 
+	var base := (lo_v + hi_v) * 0.5
+	if ReceivedWorldArt.furniture(self, base_key + "a", node, build_id, rotation_index, lo_v, hi_v, base, sig, is_preview, preview_valid):
+		var art_lift := block_height(float(row["base_blocks"]))
+		for node_key in ["mesh", "id_mesh"]:
+			(_items[base_key + "a"][node_key] as MeshInstance3D).position.y = art_lift
+		alive.erase(base_key + "b")
+		alive.erase(base_key + "c")
+		return
+
 	var pp: Dictionary = {"ts": texture_size, "block_px": block_px, "unit_px_z": (tile_low / sqrt(2.0)) * cos(deg_to_rad(PITCH_DEG))}
 	var built: Dictionary = FurnitureAssets.build(build_id, lo_v, hi_v, front_rot, pp)
 	var sort_lo: Vector2 = lo_v
@@ -1029,6 +1046,11 @@ func _sync_wall_mounted(node: Node2D, build_id: String, row: Dictionary, alive: 
 
 
 # ---------------------------------------------------------------- 상자 만들기·지우기
+
+func _make_floor_material(kind: String, tint: Color) -> ShaderMaterial:
+	var provided := ReceivedWorldArt.floor_material(kind, tint)
+	return provided if provided != null else _make_surface_material(kind, tint)
+
 
 func _make_surface_material(kind: String, tint: Color) -> ShaderMaterial:
 	if not _texture_cache.has(kind):
@@ -1222,6 +1244,7 @@ func _sync_actors(delta: float) -> void:
 # ---------------------------------------------------------------- 정렬·깊이 순서
 
 func _sort_and_update() -> void:
+	ReceivedWorldArt.lighting(self)
 	var t0: int = Time.get_ticks_usec()
 	var boxes: Array = []
 	# 카메라 주변(보이는 범위 + 여유)의 물체만 정렬에 넣는다(마을 전체를 매 프레임 정렬하면 느림).

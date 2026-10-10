@@ -221,7 +221,11 @@ func sync_ground() -> void:
 		else:
 			info[1] = (info[1] as Color) * (sst["paving_tint"] as Color)
 
-		var material: ShaderMaterial = view._make_surface_material(str(info[0]), info[1])
+		var received_kind: String = kind if str(info[0]) != "snow" else "snow"
+		var material: ShaderMaterial = ReceivedWorldArt.floor_material(received_kind,
+			sst["grass_tint"] if kind == "grass" else (sst["road_tint"] if kind in ["road", "dirt"] else sst["paving_tint"]))
+		if material == null:
+			material = view._make_surface_material(str(info[0]), info[1])
 		var inst := MeshInstance3D.new()
 		inst.mesh = mesh
 		inst.layers = 1
@@ -734,10 +738,11 @@ func _sync_trees() -> void:
 		SeasonStyle.tint_specs(built["specs"], rule, season if season != "" else "spring")
 		var key: String = "tree_%d_%d" % [cell.x, cell.y]
 		var lo := Vector2(float(cell.x) - 0.5, float(cell.y) - 0.5)
-		view._set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), lo, lo + Vector2.ONE, float(built["total_blocks"]) * scale_f, "tree", NAN, true)
-		var inst: MeshInstance3D = view._items[key]["mesh"]
-		inst.position = Vector3(float(cell.x), 0.0, float(cell.y))
-		inst.scale = Vector3.ONE * scale_f
+		if not ReceivedWorldArt.nature(view, key, lo, lo + Vector2.ONE, rule, "tree", scale_f):
+			view._set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), lo, lo + Vector2.ONE, float(built["total_blocks"]) * scale_f, "tree", NAN, true)
+			var model: MeshInstance3D = view._items[key]["mesh"]
+			model.position = Vector3(float(cell.x), 0.0, float(cell.y))
+			model.scale = Vector3.ONE * scale_f
 		_tree_keys.append(key)
 
 		if view.sync_collision and view.world != null:
@@ -828,10 +833,12 @@ func _sync_bushes() -> void:
 		SeasonStyle.tint_specs(built["specs"], rule, season if season != "" else "spring")
 		var key: String = "bush_%d_%d" % [cell.x, cell.y]
 		var lo := Vector2(float(cell.x) - 0.5, float(cell.y) - 0.5)
-		view._set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), lo, lo + Vector2.ONE, float(built["total_blocks"]) * scale_f, "bush", NAN, true)
-		var inst: MeshInstance3D = view._items[key]["mesh"]
-		inst.position = Vector3(float(cell.x), 0.0, float(cell.y))
-		inst.scale = Vector3.ONE * scale_f
+		rule["style"] = "flower_bush"
+		if not ReceivedWorldArt.nature(view, key, lo, lo + Vector2.ONE, rule, "bush", scale_f):
+			view._set_mesh_item(key, built["mesh"], VillageAssets.make_materials(built["specs"]), lo, lo + Vector2.ONE, float(built["total_blocks"]) * scale_f, "bush", NAN, true)
+			var model: MeshInstance3D = view._items[key]["mesh"]
+			model.position = Vector3(float(cell.x), 0.0, float(cell.y))
+			model.scale = Vector3.ONE * scale_f
 		_bush_keys.append(key)
 
 
@@ -971,6 +978,10 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 
 	if body != null and view.sync_collision:
 		_apply_collision(body, lo, hi)
+
+	if kind == "prop" and ReceivedWorldArt.nature(view, key + "a", lo, hi, rule, sig):
+		_keys[key + "a"] = true
+		return
 
 	if kind == "gable" or kind == "prop":
 		var built: Dictionary

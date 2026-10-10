@@ -40,6 +40,9 @@ static func apply_overrides(specs: Array, asset_id: String, p: Dictionary) -> in
 		var face: String = str(s["name"])
 		var path: String = "%s%s/%s.png" % [REAL_ART_DIR, asset_id, face]
 
+		var provided_path := ReceivedWorldArt.ROOT + "world3d/" + asset_id + "/" + face + ".png"
+		if ReceivedWorldArt.ENABLED and ResourceLoader.exists(provided_path):
+			path = provided_path
 		if not ResourceLoader.exists(path):
 			continue
 
