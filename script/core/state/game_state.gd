@@ -306,80 +306,9 @@ func initialize_inventory_slots() -> void:
 		)
 
 func rebuild_inventory_slots_from_counts() -> bool:
-	initialize_inventory_slots()
-
-	var item_ids: Array[String] = []
-
-	for raw_item_id in inventory.keys():
-		var item_id: String = str(
-			raw_item_id
-		)
-
-		var amount: int = maxi(
-			int(
-				inventory.get(
-					item_id,
-					0
-				)
-			),
-			0
-		)
-
-		if item_id.is_empty():
-			continue
-
-		if amount <= 0:
-			continue
-
-		if not ItemData.has_item(
-			item_id
-		):
-			continue
-
-		item_ids.append(
-			item_id
-		)
-
-	item_ids.sort()
-
-	var target_slot_index: int = 0
-
-	for item_id in item_ids:
-		var remaining_amount: int = (
-			get_item_count(
-				item_id
-			)
-		)
-
-		while remaining_amount > 0:
-			if (
-				target_slot_index
-				>= inventory_slots.size()
-			):
-				push_warning(
-					"[플레이어 인벤토리] 슬롯 부족 / "
-					+ item_id
-					+ " ×"
-					+ str(remaining_amount)
-				)
-
-				return false
-
-			var stack_amount: int = mini(
-				remaining_amount,
-				PLAYER_INVENTORY_STACK_LIMIT
-			)
-
-			inventory_slots[
-				target_slot_index
-			] = {
-				"item_id": item_id,
-				"amount": stack_amount
-			}
-
-			remaining_amount -= stack_amount
-			target_slot_index += 1
-
+	# Counts are the saved source of truth. The legacy slot projection must
+	# represent actual inventory, including more than the initial twelve slots.
+	inventory_slots = InventoryCountSlots.build(inventory, PLAYER_INVENTORY_SLOT_COUNT, PLAYER_INVENTORY_STACK_LIMIT)
 	return true
 
 

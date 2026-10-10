@@ -784,6 +784,9 @@ func checkout_item() -> void:
 
 
 func go_to_exit():
+	# A second close/departure request must not restart a customer already
+	# crossing the doorway or walking away on the exterior sidewalk.
+	if exit_animation_running or is_queued_for_deletion(): return
 	_return_unpaid_items_to_shelf()
 
 	service_worker = null
@@ -1006,6 +1009,8 @@ func create_astar_grid_path(
 	start_cell: Vector2i,
 	target_cell: Vector2i
 ) -> Array[Vector2i]:
+	# Pedestrians outside the shop have no path in the interior grid.
+	if not floor_node.is_cell_inside(start_cell): return []
 
 	var astar := AStarGrid2D.new()
 
