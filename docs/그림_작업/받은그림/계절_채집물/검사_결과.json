@@ -1,0 +1,118 @@
+[
+  {
+    "item": "spring_bud",
+    "table": "climate_spring_bud",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      236,
+      293,
+      1039,
+      1016
+    ],
+    "scaled": [
+      50,
+      45
+    ],
+    "position": [
+      7,
+      11
+    ],
+    "colors": 32,
+    "sha256": "dfc49bfea3d3300e6e1506a279f643242cd8571bb09d836e5c068f6ac31d7c86",
+    "source_sha256": "e3ab50e9dfad78459509d9b660dc7bccda6ac962e8d0c4b96b6bf5596b045d1b"
+  },
+  {
+    "item": "summer_mint",
+    "table": "climate_summer_mint",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      236,
+      251,
+      1041,
+      1009
+    ],
+    "scaled": [
+      50,
+      47
+    ],
+    "position": [
+      7,
+      9
+    ],
+    "colors": 32,
+    "sha256": "e95ca33b81a4c97a96ccdf5e624c6903367412f8a06e4465791ac96b22e03b90",
+    "source_sha256": "6cdb1c59553cb3ebd94190f9bc22202173ad9cee540244666a0dc161c0c6ca4e"
+  },
+  {
+    "item": "autumn_nut",
+    "table": "climate_autumn_nut",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      127,
+      314,
+      1160,
+      1006
+    ],
+    "scaled": [
+      50,
+      33
+    ],
+    "position": [
+      7,
+      23
+    ],
+    "colors": 32,
+    "sha256": "e77365ec78ce630e3200dc61578e26b51488ccef2ecb94100f5ae7b8a549f2da",
+    "source_sha256": "38132860a848e1bd6f408d0176803c9f7a46927ee2d96c0676d3d3e85d2cf0bc"
+  },
+  {
+    "item": "winter_frost",
+    "table": "climate_winter_frost",
+    "canvas": [
+      64,
+      64
+    ],
+    "anchor": [
+      32,
+      56
+    ],
+    "crop": [
+      205,
+      300,
+      1086,
+      1021
+    ],
+    "scaled": [
+      50,
+      41
+    ],
+    "position": [
+      7,
+      15
+    ],
+    "colors": 32,
+    "sha256": "f4d2fbb8216651c2fab38629b3fc300fce5ee038e4619419607c48c586527129",
+    "source_sha256": "db7a3693c44da440c640a41f2253b07c931c9ca5b6e5b43253139fecac485abe"
+  }
+]

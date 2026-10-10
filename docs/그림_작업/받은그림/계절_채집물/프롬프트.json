@@ -1,0 +1,46 @@
+{
+  "tool": "built-in image_gen",
+  "date": "2026-10-11",
+  "assets": [
+    {
+      "item": "spring_bud",
+      "table": "climate_spring_bud",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent isometric pixel-art gathering object for a cozy fantasy convenience-store Godot game. Reference images are style references only: preserve their chunky 64x64 logical pixel clusters, crisp dark brown outline, bright readable greens, restrained highlights, 2:1 ground perspective seen from south-west, same level of detail. The new object must be legible when downscaled to 48x48 pixels within a 64x64 sprite. Entire single object centered, small oval soil footprint, detached on genuine transparent background. Neutral daylight, no cast shadow outside footprint. No text, no labels, no UI, no panels, no decorative sparkles, no glow, no smooth painted textures, no multiple views, no sprite sheet. Primary request: Spring tender-shoot gathering patch. Five small young spring shoots growing from a compact brown-soil mound, upright slender stems with folded light lime-green new leaves. Low airy silhouette, fresh yellow-green tips, darker green basal leaves, several shoots at distinct heights. This is a harvestable plant patch in the world, not a harvested inventory bundle. Use Image1 bush only to match pixel style.",
+      "generated": "exec-b90fb071-d4df-44c6-a544-c826e924d6fc.png",
+      "max_size": [
+        50,
+        48
+      ]
+    },
+    {
+      "item": "summer_mint",
+      "table": "climate_summer_mint",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent isometric pixel-art gathering object for a cozy fantasy convenience-store Godot game. Reference images are style references only: preserve their chunky 64x64 logical pixel clusters, crisp dark brown outline, bright readable greens, restrained highlights, 2:1 ground perspective seen from south-west, same level of detail. The new object must be legible when downscaled to 48x48 pixels within a 64x64 sprite. Entire single object centered, small oval soil footprint, detached on genuine transparent background. Neutral daylight, no cast shadow outside footprint. No text, no labels, no UI, no panels, no decorative sparkles, no glow, no smooth painted textures, no multiple views, no sprite sheet. Primary request: Summer wild water-mint gathering patch. Compact low cluster of serrated paired oval mint-green leaves, three purple lilac tiny flower spikes, damp dark soil oval with two small pebbles. Broader softer darker green leaves than spring shoots, clear stems and only a few flower pixels. No water pond or surrounding scene. Image1 flower_bush and Image2 bush are style references only.",
+      "generated": "exec-26caafa6-6478-4fe5-828b-0f9307b24608.png",
+      "max_size": [
+        50,
+        48
+      ]
+    },
+    {
+      "item": "autumn_nut",
+      "table": "climate_autumn_nut",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent isometric pixel-art gathering object for a cozy fantasy convenience-store Godot game. Reference images are style references only: preserve their chunky 64x64 logical pixel clusters, crisp dark brown outline, bright readable greens, restrained highlights, 2:1 ground perspective seen from south-west, same level of detail. The new object must be legible when downscaled to 48x48 pixels within a 64x64 sprite. Entire single object centered, small oval soil footprint, detached on genuine transparent background. Neutral daylight, no cast shadow outside footprint. No text, no labels, no UI, no panels, no decorative sparkles, no glow, no smooth painted textures, no multiple views, no sprite sheet. Primary request: Autumn wild-chestnut gathering site, a SMALL low ground cluster, NOT a tree. Three spiky olive-brown chestnut burrs, two split open revealing glossy warm reddish-brown chestnuts with cream base, on a compact oval brown-soil mound with four ochre-orange fallen leaves. Distinct burr silhouettes chunky spikes, limited warm palette, bright legible brown nuts. Image1 rocks for object scale/ground perspective and Image2 bush for pixel cluster style. No basket, no container.",
+      "generated": "exec-77e6f2b9-ee18-4dc7-ba3e-a17af3baa36c.png",
+      "max_size": [
+        50,
+        36
+      ]
+    },
+    {
+      "item": "winter_frost",
+      "table": "climate_winter_frost",
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent isometric pixel-art gathering object for a cozy fantasy convenience-store Godot game. Reference images are style references only: preserve their chunky 64x64 logical pixel clusters, crisp dark brown outline, bright readable greens, restrained highlights, 2:1 ground perspective seen from south-west, same level of detail. The new object must be legible when downscaled to 48x48 pixels within a 64x64 sprite. Entire single object centered, small oval soil footprint, detached on genuine transparent background. Neutral daylight, no cast shadow outside footprint. No text, no labels, no UI, no panels, no decorative sparkles, no glow, no smooth painted textures, no multiple views, no sprite sheet. Primary request: Winter frost-ice gathering site. Three ordinary squat dark slate-grey stones joined as a low rock cluster, with short irregular translucent-looking PALE CYAN frost ice plates and jagged icicles growing inside the central crack, a little snow resting on rock tops and on the small oval base. The ice must look like frozen WATER caught in a rock crevice, not gemstones, a fantasy blue crystal tower, magic, or a mining ore. Cool light blue, blue-grey shadows, off-white snow, no pure-white bloom. Image1 rocks is the silhouette/pixel-style reference. Similar low height and small footprint.",
+      "generated": "exec-1a9c0ea9-2918-4b7e-83df-a12ff3ba5ff7.png",
+      "max_size": [
+        50,
+        44
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "status": "candidate_not_installed",
+  "tool": "built-in image_gen",
+  "runtime_applied": false,
+  "canvas": [
+    64,
+    64
+  ],
+  "anchor": [
+    32,
+    56
+  ],
+  "view": "south-west",
+  "states": [
+    "harvestable"
+  ],
+  "assets": [
+    {
+      "item": "spring_bud",
+      "gather_table": "climate_spring_bud",
+      "sprite": "픽셀_정리/spring_bud.png",
+      "source": "생성_원본/spring_bud.png",
+      "sha256": "dfc49bfea3d3300e6e1506a279f643242cd8571bb09d836e5c068f6ac31d7c86"
+    },
+    {
+      "item": "summer_mint",
+      "gather_table": "climate_summer_mint",
+      "sprite": "픽셀_정리/summer_mint.png",
+      "source": "생성_원본/summer_mint.png",
+      "sha256": "e95ca33b81a4c97a96ccdf5e624c6903367412f8a06e4465791ac96b22e03b90"
+    },
+    {
+      "item": "autumn_nut",
+      "gather_table": "climate_autumn_nut",
+      "sprite": "픽셀_정리/autumn_nut.png",
+      "source": "생성_원본/autumn_nut.png",
+      "sha256": "e77365ec78ce630e3200dc61578e26b51488ccef2ecb94100f5ae7b8a549f2da"
+    },
+    {
+      "item": "winter_frost",
+      "gather_table": "climate_winter_frost",
+      "sprite": "픽셀_정리/winter_frost.png",
+      "source": "생성_원본/winter_frost.png",
+      "sha256": "f4d2fbb8216651c2fab38629b3fc300fce5ee038e4619419607c48c586527129"
+    }
+  ]
+}
