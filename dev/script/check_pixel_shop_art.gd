@@ -3,6 +3,28 @@ extends "res://dev/script/check_received_world_art.gd"
 func image_for(node: Node) -> Image:
 	return item_for(node).material.get_shader_parameter("frame_texture").get_image()
 
+func check_wall_tile(kind: String, direction: int) -> void:
+	var path := PixelShopArt.SHELL + "%s_%d_tile.png" % [kind,direction]
+	var image := ReceivedWorldArt.texture(path).get_image()
+	if image.is_compressed(): image.decompress()
+	var top := 44 if kind == "wall_full" else 66
+	var upper := 15 if kind == "wall_full" else 12
+	var lower := 34 if kind == "wall_full" else 27
+	var sign := 1 if direction in [0,2] else -1
+	var silhouette_ok := image.get_size() == Vector2i(64,128)
+	var borders_ok := true
+	for x in 64:
+		var offset := sign * floori(float(x-32)/2.0)
+		for y in 128:
+			var inside := x >= 16 and x < 48 and y >= top+offset and y <= 104+offset
+			if not is_equal_approx(image.get_pixel(x,y).a,1.0 if inside else 0.0): silhouette_ok = false
+		if x < 16 or x >= 48: continue
+		for i in range(105-top):
+			if i >= upper and i < lower: continue
+			if image.get_pixel(x,top+offset+i) != image.get_pixel(32,top+i): borders_ok = false
+	check(silhouette_ok,"imported wall keeps exact 2:1 silhouette " + path)
+	check(borders_ok,"imported cap/stripe/footer has no seam step " + path)
+
 func run() -> void:
 	if not OS.get_user_data_dir().contains("foodbag_checks"):
 		push_error("Use isolated foodbag_checks project")
@@ -15,6 +37,8 @@ func run() -> void:
 	for asset in manifest.assets:
 		check(FileAccess.get_sha256(asset.path) == asset.sha256, "pixels unchanged " + asset.path)
 		check(ReceivedWorldArt.texture(asset.path) != null, "imported " + asset.path)
+	for kind in ["wall_full","window"]:
+		for direction in 4: check_wall_tile(kind,direction)
 	GameState.initialize_new_game()
 	PlayerProgress.reset()
 	world = load("res://scenes/shop/main.tscn").instantiate()

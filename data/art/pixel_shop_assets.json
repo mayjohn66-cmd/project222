@@ -206,7 +206,7 @@
         64,
         128
       ],
-      "sha256": "af3fa24264b7a1468cb0a3690c5136a624a5e4906ed648a2adaf4f2ee153dcd0"
+      "sha256": "a63db7eb339fc153848c120d719665426627028584b65f0441e8c413e54e6b49"
     },
     {
       "path": "res://art/received/shop_shell/wall_full_1.png",
@@ -222,7 +222,7 @@
         64,
         128
       ],
-      "sha256": "3fb393614a3a8a31a7e9305f714d7ab2a0234fbc289335155fba109e5cb552cf"
+      "sha256": "4d6e67c6aa9de0b5bb902602ff6aa140d0f17c4710e07044a563fa5f95120ed7"
     },
     {
       "path": "res://art/received/shop_shell/wall_full_2.png",
@@ -238,7 +238,7 @@
         64,
         128
       ],
-      "sha256": "5f7054223dc17a9359a02f39770df5b900d974521d61c7f18267a0396e669416"
+      "sha256": "2c68fa4ab2303b01ba4bfed6dbbe4799c92dcaf7ad0490a7a5f0f3d2af9ddbda"
     },
     {
       "path": "res://art/received/shop_shell/wall_full_3.png",
@@ -254,7 +254,7 @@
         64,
         128
       ],
-      "sha256": "2dd4d56dcf8114591b8c2f4c66494083b726bc0995c13aae1166c3756f37cce6"
+      "sha256": "14681f22a8eed618ab96b65f41933bf2f85a799e10119f75c9326da4a4ff0bc4"
     },
     {
       "path": "res://art/received/shop_shell/wall_low_0.png",
@@ -366,7 +366,7 @@
         64,
         128
       ],
-      "sha256": "d13275748f36bf150b708b21396c8dedbd058f83e5fa0916253791d1d14a0476"
+      "sha256": "1eb6684987582d3f3e72f60a73ee01b8daab618b3e0ec70efd37277bf3d8bc3b"
     },
     {
       "path": "res://art/received/shop_shell/window_1.png",
@@ -382,7 +382,7 @@
         64,
         128
       ],
-      "sha256": "9d47a8f43ee83ac23ed970fa0ea8f39d9a419b00715b78e36f5227a48805a997"
+      "sha256": "3b060e144e4442f670a4fd5c899b74a3a08d19ad03c58813d0fbb07a726983d7"
     },
     {
       "path": "res://art/received/shop_shell/window_2.png",
@@ -398,7 +398,7 @@
         64,
         128
       ],
-      "sha256": "14f50c701f4f432d2bd241139fdf22e4e15462f7a8ebbf49f2cbf673d5b6842a"
+      "sha256": "fa66fba8aa33365c9eec902313605946822d487b8b0211721d318e6618925f8f"
     },
     {
       "path": "res://art/received/shop_shell/window_3.png",
@@ -414,7 +414,7 @@
         64,
         128
       ],
-      "sha256": "57ccf35d410ecd8a0453f7187c854b3c14385e58805949658315a66e50eaa313"
+      "sha256": "e71195c58b1ddb5b57d9a5b78739d6b09f4e1ff16620f6df4288ef4f4a16ea32"
     },
     {
       "path": "res://art/received/shop_shell/window_cap_left.png",
