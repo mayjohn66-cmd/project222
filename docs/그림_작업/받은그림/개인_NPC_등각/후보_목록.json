@@ -1,235 +1,258 @@
 {
-  "status": "static_candidate_not_runtime",
+  "status": "corrected_static_candidate_not_runtime",
   "assets": [
     {
       "id": "naru",
       "name": "타블렌",
       "direction": "south-west",
-      "file": "픽셀_정리/naru_south_west.png",
+      "file": "픽셀_정리/naru_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        17,
-        8,
-        46,
-        60
+        25,
+        6,
+        71,
+        90
       ],
       "source_sha256": "aeadfa59ff0700be564a9c693952703194e8fa32e669ce7f37f3da330e2fa91a",
-      "sha256": "97d317ed26826facfe29834a531e4a25eb04e135068f0b97a119ae211a424134",
-      "status": "static_candidate_not_runtime"
+      "sha256": "045917d8d600effeff778598df4e86a07dcd0a4c4a92e69550593e83b8170d40",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 94
     },
     {
       "id": "doyun",
       "name": "코르빈",
       "direction": "south-west",
-      "file": "픽셀_정리/doyun_south_west.png",
+      "file": "픽셀_정리/doyun_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        21,
-        8,
-        43,
-        60
+        30,
+        6,
+        66,
+        90
       ],
       "source_sha256": "0c2f79b099df2785bbc315ce9e94ff0e868f7c7868edfb2646e32c13f726f0cb",
-      "sha256": "cc97dd5aaf09165034d7ae1a2828b57f3808bc250a0ff6d505893f7757bb3500",
-      "status": "static_candidate_not_runtime"
+      "sha256": "2e2f91f9a4ef2abe15453dba4b8854686fe638b9615d7e690e3c7326fb1126e7",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 96
     },
     {
       "id": "sora",
       "name": "이세르",
       "direction": "south-west",
-      "file": "픽셀_정리/sora_south_west.png",
+      "file": "픽셀_정리/sora_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        20,
-        8,
-        44,
-        60
+        28,
+        6,
+        67,
+        90
       ],
       "source_sha256": "6080653b497b672860f163bbd621f0076b8f2582d8e19faa61d926bbbabb174c",
-      "sha256": "a946a61e1fa42f0292def4b4ea1e1b71cb5a78c4716e100be0c795cc2d3848e9",
-      "status": "static_candidate_not_runtime"
+      "sha256": "0eab714e5bc7e88314ec660704fe17a1d9c1a2908841a1ded2ce159fb55425b9",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 93
     },
     {
       "id": "neighbor_bread",
       "name": "오렐",
       "direction": "south-west",
-      "file": "픽셀_정리/neighbor_bread_south_west.png",
+      "file": "픽셀_정리/neighbor_bread_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        22,
-        8,
-        42,
-        60
+        32,
+        6,
+        64,
+        90
       ],
       "source_sha256": "5e105d7ec96d7d95f4072641269e49f0526b695f543df6ba9503ef7f6653dbe3",
-      "sha256": "2b989a4ea3b20d3d08a4043f072bc23ecb6ebb66e626ed4476f42a8c83c3a48a",
-      "status": "static_candidate_not_runtime"
+      "sha256": "fe25370f6dc3d89192d725d541d1fca673e14a25402d3797cff759f3ebd179bb",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 95
     },
     {
       "id": "child_berries",
       "name": "피니아",
       "direction": "south-west",
-      "file": "픽셀_정리/child_berries_south_west.png",
+      "file": "픽셀_정리/child_berries_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        17,
-        8,
-        47,
-        60
+        24,
+        6,
+        72,
+        90
       ],
       "source_sha256": "6db9402404fbcc8726efe57dde341b9168cc68f11b1c7f45ccfeaa0d6b538209",
-      "sha256": "b688df8176746f2db7aab5ea02a6fc0821e13a599f786cf5f72abd3df6ff303a",
-      "status": "static_candidate_not_runtime"
+      "sha256": "8066b054898527822caacb9b1d3b1ffeb91ed50a76513059f2bb798425febea3",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 95
     },
     {
       "id": "traveler_water",
       "name": "라슈",
       "direction": "south-west",
-      "file": "픽셀_정리/traveler_water_south_west.png",
+      "file": "픽셀_정리/traveler_water_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        18,
-        8,
-        46,
-        60
+        25,
+        6,
+        70,
+        90
       ],
       "source_sha256": "d7f466ab0dad17bc00282b69a616424df2e96d86bc7d1d67fb9abdf9ed23d5a5",
-      "sha256": "6cee14b3da2e8a63ff3660efef23774038e9bfa70c765e5cb1bcbd7570beffc9",
-      "status": "static_candidate_not_runtime"
+      "sha256": "5dadcd174a441518ad8d73902dfef25bc5f5abe905bcc26748cc54ee9c3cdcae",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 95
     },
     {
       "id": "gatherer_herbs",
       "name": "엘미",
       "direction": "south-west",
-      "file": "픽셀_정리/gatherer_herbs_south_west.png",
+      "file": "픽셀_정리/gatherer_herbs_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        20,
-        8,
-        44,
-        60
+        28,
+        6,
+        67,
+        90
       ],
       "source_sha256": "bf2b7adf2f260469f8dc366288bd1fc0a2086f77eb460216993a455753f38201",
-      "sha256": "5b9de178fe4d67a7030c986b695e63ddb08810a92f98ec6ca63543974025e2e3",
-      "status": "static_candidate_not_runtime"
+      "sha256": "8e372319fc380b8fc83228203d52d0ddbe63678da59b4fada5fd6157baecce52",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 95
     },
     {
       "id": "miner_ore",
       "name": "바르크",
       "direction": "south-west",
-      "file": "픽셀_정리/miner_ore_south_west.png",
+      "file": "픽셀_정리/miner_ore_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        17,
-        8,
-        47,
-        60
+        24,
+        6,
+        72,
+        90
       ],
       "source_sha256": "2536a14343e10ee5f99aeb1a002166123d007122ffb4f4ebfeaffcfcf59deb46",
-      "sha256": "4b5f8cff47090a7078274203e50743acc9d8fff7160fe68ffd49dcaf77e628db",
-      "status": "static_candidate_not_runtime"
+      "sha256": "965a14f49e9cd8a99d0f122e9340d582fb41cf64243cb103f0444958ca836bad",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 94
     },
     {
       "id": "healer_moss",
       "name": "세이나",
       "direction": "south-west",
-      "file": "픽셀_정리/healer_moss_south_west.png",
+      "file": "픽셀_정리/healer_moss_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        20,
-        8,
-        44,
-        60
+        29,
+        6,
+        67,
+        90
       ],
       "source_sha256": "373246185f886354a6b73faeffbef2f21f94e86ec539d209c855f9c512137a02",
-      "sha256": "d1a0608e13301af2ef9977d0da0eae7821aa12b987017ea9fcb18042d080a3c7",
-      "status": "static_candidate_not_runtime"
+      "sha256": "ce7c135bce28d3341a01721c4d678d1fc4aef8ce2f4099861d92af5f08fb0656",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 95
     },
     {
       "id": "delvin",
       "name": "델빈",
       "direction": "south-west",
-      "file": "픽셀_정리/delvin_south_west.png",
+      "file": "픽셀_정리/delvin_south_west_96.png",
       "size": [
-        64,
-        64
+        96,
+        96
       ],
       "feet": [
-        32,
-        60
+        48,
+        90
       ],
       "opaque_bbox": [
-        19,
-        8,
-        43,
-        60
+        28,
+        6,
+        68,
+        90
       ],
       "source_sha256": "b052a4ab410d60581c3deb515472cc3ed025615b5865036a0c69f4474cc3e67e",
-      "sha256": "8a5697cbbf0289379a7ba07eef3ffb27c11e6f22605040e042e3d8bdef7178c8",
-      "status": "static_candidate_not_runtime"
+      "sha256": "9e0adf10339ff4c2814efda943fedccdf2369aca1518945d6147b60ff25bef3f",
+      "status": "corrected_static_candidate_not_runtime",
+      "opaque_colors": 95
     }
-  ]
+  ],
+  "rejected_outputs": {
+    "naru": "픽셀_정리/naru_south_west.png",
+    "doyun": "픽셀_정리/doyun_south_west.png",
+    "sora": "픽셀_정리/sora_south_west.png",
+    "neighbor_bread": "픽셀_정리/neighbor_bread_south_west.png",
+    "child_berries": "픽셀_정리/child_berries_south_west.png",
+    "traveler_water": "픽셀_정리/traveler_water_south_west.png",
+    "gatherer_herbs": "픽셀_정리/gatherer_herbs_south_west.png",
+    "miner_ore": "픽셀_정리/miner_ore_south_west.png",
+    "healer_moss": "픽셀_정리/healer_moss_south_west.png",
+    "delvin": "픽셀_정리/delvin_south_west.png"
+  },
+  "reason": "64 canvas / 52px content sampled below source pixel density; faces and outlines lost"
 }
