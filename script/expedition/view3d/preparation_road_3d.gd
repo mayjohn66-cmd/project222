@@ -6,7 +6,6 @@ extends CanvasLayer
 
 const PITCH_DEG: float = 30.0
 const YAW_DEG: float = 45.0
-const SHRINK: int = 3
 const ROAD_X0: float = 6.5
 const ROAD_X1: float = 9.5
 const ROAD_Y0: float = -0.5
@@ -31,7 +30,7 @@ func _ready() -> void:
 	layer = -1
 	_container = SubViewportContainer.new()
 	_container.stretch = true
-	_container.stretch_shrink = SHRINK
+	_container.stretch_shrink = 1  # 원정 방과 같이 화면 해상도 그대로 표시한다.
 	_container.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_container.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	add_child(_container)
@@ -237,16 +236,10 @@ func _process(delta: float) -> void:
 	_light.light_energy = 1.4 if near else 0.8
 
 
-# 카메라를 플레이어 칸에 맞춘다(한 칸 가로 96px). 이동이 칸 픽셀 격자에 맞게 스냅해 도트가 흔들리지 않게 한다.
+# 카메라를 플레이어 칸에 연속적으로 맞춘다(한 칸 가로 96px).
 func _layout(center_cell: Vector2) -> void:
 	var screen_h: float = get_viewport().get_visible_rect().size.y
 	var ppu: float = 96.0 / sqrt(2.0)
 	_cam.size = screen_h / ppu
 	var target := Vector3(center_cell.x, 0.0, center_cell.y)
-	var px: float = _cam.size / maxf(1.0, float(_vp.size.y))
-	var right: Vector3 = _cam.basis.x
-	var up: Vector3 = _cam.basis.y
-	var r: float = target.dot(right)
-	var u: float = target.dot(up)
-	target += (roundf(r / px) * px - r) * right + (roundf(u / px) * px - u) * up
 	_cam.position = target + _cam.basis.z * 40.0

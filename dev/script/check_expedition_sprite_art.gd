@@ -49,6 +49,41 @@ func capture(name: String) -> void:
 	await RenderingServer.frame_post_draw
 	get_viewport().get_texture().get_image().save_png("user://" + name + ".png")
 
+func verify_render_resolution() -> void:
+	var original_size := view.size
+	var room := model("field_slime")
+	for screen_size in [original_size, Vector2(593, 523)]:
+		view.size = screen_size
+		await frames()
+		bind(room, "forest")
+		check(view.stage.stretch_shrink == 1, "expedition does not upscale a reduced framebuffer")
+		check(view.stage._vp.size == Vector2i(view.stage.size), "native framebuffer at " + str(screen_size))
+		var center := view.board.position + view.board.size * 0.5
+		check(view.stage.project(Vector2(4, 4)).distance_to(center) < 0.1, "overlay and map center stay aligned at " + str(screen_size))
+		room.player_position = Vector2(3.12345, 4.56789)
+		room.enemies[0].position = Vector2(5.23456, 2.34567)
+		view.stage._sync(room, 0.0)
+		check(view.stage._player.position.is_equal_approx(Vector3(3.12345, 0, 4.56789)), "player position is not snapped to coarse screen pixels")
+		var enemy_node: MeshInstance3D = view.stage._enemy_nodes[0].node
+		check(Vector2(enemy_node.position.x, enemy_node.position.z).is_equal_approx(room.enemies[0].position), "monster position is not snapped to coarse screen pixels")
+		room.player_position.x += 0.001
+		view.stage._sync(room, 0.0)
+		check(is_equal_approx(view.stage._player.position.x, room.player_position.x), "subpixel player movement is retained")
+		if screen_size == Vector2(593, 523): await capture("expedition_narrow_native")
+	view.size = original_size
+	await frames()
+	var preparation := PreparationRoad3D.new()
+	add_child(preparation)
+	await frames()
+	check(preparation._container.stretch_shrink == 1, "preparation road does not upscale a reduced framebuffer")
+	check(preparation._vp.size == Vector2i(preparation._container.size), "preparation road renders at native resolution")
+	var preparation_center := Vector2(7.12345, 6.56789)
+	preparation._layout(preparation_center)
+	var camera_target := preparation._cam.position - preparation._cam.basis.z * 40.0
+	check(camera_target.is_equal_approx(Vector3(preparation_center.x, 0, preparation_center.y)), "preparation camera follows without pixel snapping")
+	preparation.queue_free()
+	await frames()
+
 func run() -> void:
 	GameState.initialize_new_game()
 	PlayerProgress.reset()
@@ -63,6 +98,7 @@ func run() -> void:
 	check(view.stage._player.hurt_amount() > 0.0, "pixel player hit feedback runs")
 	view.stage._player.animate(0.3)
 	check(view.stage._player.hurt_amount() == 0.0, "pixel player hit feedback expires")
+	await verify_render_resolution()
 	check(ExpeditionSpriteArt.assets().size() == 47, "45 prepared drawings and 2 reused gathering pictures indexed")
 	for row in ExpeditionSpriteArt.assets().values():
 		if str(row.group) == "monsters":

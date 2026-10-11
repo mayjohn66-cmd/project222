@@ -1,7 +1,7 @@
 class_name ExpeditionStage3D
 extends SubViewportContainer
 ## 원정 던전 방(8×8)의 도트 그림과 조명을 표시하는 무대. ExpeditionRoomView 뒤에 깔리고 방 모델을 그대로 읽는다.
-## 마을 3D(StoreView3D)와 같은 카메라 각도·낮은 해상도 도트 느낌을 쓰지만, 정렬 순번 대신 진짜 깊이로 가려서 기둥 뒤에 서면 캐릭터가 가려진다.
+## 등각 카메라와 깊이 가림은 유지하고 화면 해상도 그대로 그린다. 도트 느낌은 원본 그림에서 가져온다.
 ## 방 안 좌표(타일) (x, y) 는 3D 의 (x, 0, y) 이다. 지역(숲·광산·늪·유적)마다 바닥·벽·소품 모양과 빛이 다르다.
 
 const PITCH_DEG: float = 30.0
@@ -9,7 +9,6 @@ const YAW_DEG: float = 45.0
 const WALL_H: float = 1.7
 const WALL_T: float = 0.4
 const GRID: int = 8
-const SHRINK: int = 3
 
 # 지역별 꾸밈: floor(질감 종류)·floor_tint·wall_tint·wall_kind·bg(배경색)·ambient·sun(빛 세기)·torch(횃불 불빛)
 const THEMES: Dictionary = {
@@ -55,7 +54,7 @@ var _pixel_floor: MeshInstance3D
 
 func _ready() -> void:
 	stretch = true
-	stretch_shrink = SHRINK
+	stretch_shrink = 1  # 화면 전체를 저해상도로 줄였다 확대하지 않는다.
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -114,7 +113,7 @@ func project(tile: Vector2, height: float = 0.0) -> Vector2:
 		return Vector2.ZERO
 
 	var p: Vector2 = _cam.unproject_position(Vector3(tile.x, height, tile.y))
-	return p * (size.x / float(_vp.size.x))
+	return p * (size / Vector2(_vp.size))
 
 
 func _layout() -> void:
@@ -752,15 +751,6 @@ func _process(delta: float) -> void:
 	_sync(model, delta)
 
 
-func _snap(p: Vector3) -> Vector3:
-	var px: float = _cam.size / float(maxi(1, _vp.size.y))
-	var right: Vector3 = _cam.basis.x
-	var up: Vector3 = _cam.basis.y
-	var r: float = p.dot(right)
-	var u: float = p.dot(up)
-	return p + (roundf(r / px) * px - r) * right + (roundf(u / px) * px - u) * up
-
-
 var _hurt_dir: Vector2 = Vector2.ZERO
 
 
@@ -818,7 +808,7 @@ func _sync(model: RefCounted, delta: float) -> void:
 	_player.animate(delta)
 	var hk: float = _player.hurt_amount()
 	_player.set_tint(Color.WHITE.lerp(Color(2.3, 0.5, 0.5), hk))
-	_player.position = _snap(Vector3(pos.x + _hurt_dir.x * 0.3 * hk, 0.0, pos.y + _hurt_dir.y * 0.3 * hk))
+	_player.position = Vector3(pos.x + _hurt_dir.x * 0.3 * hk, 0.0, pos.y + _hurt_dir.y * 0.3 * hk)
 	var blink: bool = float(model.hurt_remaining) > 0.0 and float(model.hurt_remaining) < 0.32 and int(_time * 16.0) % 2 == 0
 	_player.set_shown(not blink)
 
@@ -863,7 +853,7 @@ func _sync(model: RefCounted, delta: float) -> void:
 			if lt >= 1.0:
 				en["lunge"] = -1.0
 
-		node.position = _snap(Vector3(ep.x + off.x, absf(bob) + (0.12 * sin(clampf(float(en["lunge"]) / 0.26, 0.0, 1.0) * PI) if float(en["lunge"]) >= 0.0 else 0.0), ep.y + off.y))
+		node.position = Vector3(ep.x + off.x, absf(bob) + (0.12 * sin(clampf(float(en["lunge"]) / 0.26, 0.0, 1.0) * PI) if float(en["lunge"]) >= 0.0 else 0.0), ep.y + off.y)
 		if node.has_meta("expedition_sprite_id"):
 			# 정지 도트의 자세/종횡비 유지. 예고·도약은 위치와 색으로 표현한다.
 			node.rotation = Vector3.ZERO
