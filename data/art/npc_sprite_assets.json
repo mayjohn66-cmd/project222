@@ -1,113 +1,123 @@
 {
   "naru": {
-    "path": "res://art/actors/npc/naru/south_west.png",
+    "path": "res://art/actors/npc/naru/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "045917d8d600effeff778598df4e86a07dcd0a4c4a92e69550593e83b8170d40",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/naru_south_west_96.png",
-    "name": "타블렌"
+    "sha256": "240269ed1dd8d492428d926260a89cbfc876a6d0e859ff32826dff139961b57d",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/naru.png",
+    "name": "타블렌",
+    "original_path": "res://art/actors/npc/naru/south_west.png"
   },
   "doyun": {
-    "path": "res://art/actors/npc/doyun/south_west.png",
+    "path": "res://art/actors/npc/doyun/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "2e2f91f9a4ef2abe15453dba4b8854686fe638b9615d7e690e3c7326fb1126e7",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/doyun_south_west_96.png",
-    "name": "코르빈"
+    "sha256": "b88db2896f6f51deeb27f7b7b39251c69f023dd68f6285b7088cd92acb7ea738",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/doyun.png",
+    "name": "코르빈",
+    "original_path": "res://art/actors/npc/doyun/south_west.png"
   },
   "sora": {
-    "path": "res://art/actors/npc/sora/south_west.png",
+    "path": "res://art/actors/npc/sora/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "0eab714e5bc7e88314ec660704fe17a1d9c1a2908841a1ded2ce159fb55425b9",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/sora_south_west_96.png",
-    "name": "이세르"
+    "sha256": "ec9f78bcaa999c86259c56a8fcc460abaf3a805af2a5d92f2e621edca58a90b6",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/sora.png",
+    "name": "이세르",
+    "original_path": "res://art/actors/npc/sora/south_west.png"
   },
   "neighbor_bread": {
-    "path": "res://art/actors/npc/neighbor_bread/south_west.png",
+    "path": "res://art/actors/npc/neighbor_bread/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "fe25370f6dc3d89192d725d541d1fca673e14a25402d3797cff759f3ebd179bb",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/neighbor_bread_south_west_96.png",
-    "name": "오렐"
+    "sha256": "e5a5ad84de32233a2b7b05c8b5944ef0d87b539da9836942ac144ac96e811395",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/neighbor_bread.png",
+    "name": "오렐",
+    "original_path": "res://art/actors/npc/neighbor_bread/south_west.png"
   },
   "child_berries": {
-    "path": "res://art/actors/npc/child_berries/south_west.png",
+    "path": "res://art/actors/npc/child_berries/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "8066b054898527822caacb9b1d3b1ffeb91ed50a76513059f2bb798425febea3",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/child_berries_south_west_96.png",
+    "sha256": "2887acc865d586b58cdb94227a7cb51a01c530eb80dbd955030fc06b74ed17da",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/child_berries.png",
     "name": "피니아",
-    "display_height": 0.6235382879999999
+    "display_height": 0.6235382879999999,
+    "original_path": "res://art/actors/npc/child_berries/south_west.png"
   },
   "traveler_water": {
-    "path": "res://art/actors/npc/traveler_water/south_west.png",
+    "path": "res://art/actors/npc/traveler_water/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "5dadcd174a441518ad8d73902dfef25bc5f5abe905bcc26748cc54ee9c3cdcae",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/traveler_water_south_west_96.png",
-    "name": "라슈"
+    "sha256": "dbdd9089fbce46253eded8ac837b3d1be35a24301fd95db28d052bde84e11cd0",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/traveler_water.png",
+    "name": "라슈",
+    "original_path": "res://art/actors/npc/traveler_water/south_west.png"
   },
   "gatherer_herbs": {
-    "path": "res://art/actors/npc/gatherer_herbs/south_west.png",
+    "path": "res://art/actors/npc/gatherer_herbs/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "8e372319fc380b8fc83228203d52d0ddbe63678da59b4fada5fd6157baecce52",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/gatherer_herbs_south_west_96.png",
-    "name": "엘미"
+    "sha256": "a41affdb3cb24ac72af8b233891f3ec530609de19db544ba2b8d7edcb0138e24",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/gatherer_herbs.png",
+    "name": "엘미",
+    "original_path": "res://art/actors/npc/gatherer_herbs/south_west.png"
   },
   "miner_ore": {
-    "path": "res://art/actors/npc/miner_ore/south_west.png",
+    "path": "res://art/actors/npc/miner_ore/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "965a14f49e9cd8a99d0f122e9340d582fb41cf64243cb103f0444958ca836bad",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/miner_ore_south_west_96.png",
-    "name": "바르크"
+    "sha256": "44d971fc532e37ef262aa098716559ef66912e79e71be2fa6015bdc71eedd435",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/miner_ore.png",
+    "name": "바르크",
+    "original_path": "res://art/actors/npc/miner_ore/south_west.png"
   },
   "healer_moss": {
-    "path": "res://art/actors/npc/healer_moss/south_west.png",
+    "path": "res://art/actors/npc/healer_moss/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "ce7c135bce28d3341a01721c4d678d1fc4aef8ce2f4099861d92af5f08fb0656",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/healer_moss_south_west_96.png",
-    "name": "세이나"
+    "sha256": "7fb17096fd62247e283b248770e6c61c69e95bfb0f7a54df9b895a2b49f2786d",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/healer_moss.png",
+    "name": "세이나",
+    "original_path": "res://art/actors/npc/healer_moss/south_west.png"
   },
   "delvin": {
-    "path": "res://art/actors/npc/delvin/south_west.png",
+    "path": "res://art/actors/npc/delvin/south_west_compact.png",
     "direction": "south-west",
     "feet": [
       48,
       90
     ],
-    "sha256": "9e0adf10339ff4c2814efda943fedccdf2369aca1518945d6147b60ff25bef3f",
-    "source": "docs/그림_작업/받은그림/개인_NPC_등각/픽셀_정리/delvin_south_west_96.png",
-    "name": "델빈"
+    "sha256": "08bbc365785a31530bc93848be4ba9c722df1d739e18b85a50b14c2705199fca",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/delvin.png",
+    "name": "델빈",
+    "original_path": "res://art/actors/npc/delvin/south_west.png"
   }
 }

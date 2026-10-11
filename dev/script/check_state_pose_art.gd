@@ -43,7 +43,13 @@ func run() -> void:
 		check(FileAccess.get_sha256(str(row.path)) == row.sha256,"pose source selected: " + str(id))
 		var set_data := ActorSpriteFrames.load_set(ActorPoseArt.PREFIX+str(id))
 		check(not set_data.is_empty() and set_data.has("static_direction"),"only prepared static pose")
-		check(is_equal_approx(float(set_data.reference_height),84.0),"seated scale uses standing height")
+		var identity := str(row.get("identity",""))
+		if NpcSpriteArt.assets().has(identity):
+			var standing := NpcSpriteArt.load_set("npc:"+identity)
+			check(is_equal_approx(float(set_data.reference_height),float(standing.reference_height)),"seated head shares actual standing pixel scale")
+			check(float(set_data.directions[row.direction].idle.bounds.size.y) < float(standing.reference_height),"seated pose remains shorter than standing")
+		else:
+			check(float(set_data.reference_height) > 0.0,"pose has valid standing reference height")
 	var modern := StoryNpc.new()
 	var ordinary = load("res://script/actor/customer.gd").new()
 	ordinary.customer_type_id = "commuter"
@@ -86,7 +92,11 @@ func run() -> void:
 		check(absf(figure._mesh.mesh.size.y-adult_figure._mesh.mesh.size.y) < 0.01,"standing height matches existing adult NPC")
 		var offset: Vector2 = figure._material.get_shader_parameter("frame_offset")
 		check(absf(offset.y-figure._mesh.mesh.size.y*0.5) < 0.0001,"standing sprite feet stay on common ground line")
-	view.camera2d.global_position = lineup_base+Vector2(180,-30)
+	var lineup_player := view.player
+	var previous_position: Vector2 = lineup_player.global_position
+	lineup_player.global_position = lineup_base+Vector2(-90,0)
+	lineup_player.set_meta("face_lock",Vector2(0,1))
+	view.camera2d.global_position = lineup_base+Vector2(135,-30)
 	view.camera2d.zoom *= 2.0
 	view.camera2d.reset_smoothing()
 	view.camera2d.force_update_scroll()
@@ -94,6 +104,18 @@ func run() -> void:
 	view.apply_hour(12)
 	sync()
 	await capture("costumes")
+	for gender in ["male","female"]:
+		PlayerProgress.player_gender = gender
+		sync()
+		var figure: PixelActorFigure = view._actors[lineup_player.get_instance_id()].figure
+		# 검사 위치로 옮긴 직후의 걷기 유예 프레임 대신 실제 정지 그림을 비교한다.
+		figure.walking = false
+		figure.animate(0.0)
+		view._sort_and_update()
+		check(absf(figure._mesh.mesh.size.y-adult_figure._mesh.mesh.size.y) < 0.03,"named adults match player standing height: "+gender)
+		await capture("player-"+gender)
+	lineup_player.global_position = previous_position
+	lineup_player.remove_meta("face_lock")
 	for reference in references: reference.queue_free()
 	var player := view.player
 	var actors := world.get_node("Actors")

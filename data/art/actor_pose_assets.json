@@ -1,29 +1,31 @@
 {
   "blacksmith": {
-    "path": "res://art/actors/poses/blacksmith_south_west.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/blacksmith.png",
-    "sha256": "6b1358a34a5e32354edce6315917d854c35e34d01ef1799e6d6ee1a5fccca842",
+    "path": "res://art/actors/poses/blacksmith_south_west_compact.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/blacksmith.png",
+    "sha256": "eff16ad52b4ad72d64782536ff87ad1af56865b7f5634b2d939eebc726d2e790",
     "feet": [
       48,
       90
     ],
     "direction": "south-west",
-    "reference_height": 84,
+    "reference_height": 70,
     "display_height": 0.9872689559999999,
-    "pose": "standing"
+    "pose": "standing",
+    "original_path": "res://art/actors/poses/blacksmith_south_west.png"
   },
   "commuter": {
-    "path": "res://art/actors/poses/commuter_south_west.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/commuter.png",
-    "sha256": "f4f3e8edf77e26863df5fd558f67ba7d5eaed84f98423f3e6b85e3ac58ba6381",
+    "path": "res://art/actors/poses/commuter_south_west_compact.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/commuter.png",
+    "sha256": "dfb9e3f1d5fea45742fb533503615a74e1d99ec59373daba33a9fc9f8a848604",
     "feet": [
       48,
       90
     ],
     "direction": "south-west",
-    "reference_height": 84,
+    "reference_height": 70,
     "display_height": 0.9872689559999999,
-    "pose": "standing"
+    "pose": "standing",
+    "original_path": "res://art/actors/poses/commuter_south_west.png"
   },
   "player_male:seat:south-west": {
     "path": "res://art/actors/poses/player_male_seat_south_west.png",
@@ -206,93 +208,99 @@
     "identity": "player_female"
   },
   "doyun:seat:south-west": {
-    "path": "res://art/actors/poses/doyun_seat_south_west.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/doyun_seat_south_west.png",
-    "sha256": "7ba27154e081f6380aa8e127ea2c56bd6813063df107e3d6fa21e1f545d72455",
+    "path": "res://art/actors/poses/doyun_seat_south_west_compact.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/doyun_seat_south-west.png",
+    "sha256": "cce9bc4ac9ceff9be7a1a52b0c3c5bf775dbe425ba34f31a6652d83dc04db091",
     "feet": [
       48,
       90
     ],
     "direction": "south-west",
-    "reference_height": 84,
+    "reference_height": 66,
     "display_height": 0.9872689559999999,
     "pose": "seat",
     "mirrored": false,
-    "identity": "doyun"
+    "identity": "doyun",
+    "original_path": "res://art/actors/poses/doyun_seat_south_west.png"
   },
   "doyun:seat:south-east": {
-    "path": "res://art/actors/poses/doyun_seat_south_east.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/doyun_seat_south_east.png",
-    "sha256": "21e6a354a48895db74b0ab022d8be6f17c16e2dfb7ebb5afdc9b69fb89c76002",
+    "path": "res://art/actors/poses/doyun_seat_south_east_compact.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/doyun_seat_south-east.png",
+    "sha256": "8e0e82b1573c717e8856ab86f180157873d3013ec635c1b39e430911cb10f9dc",
     "feet": [
       48,
       90
     ],
     "direction": "south-east",
-    "reference_height": 84,
+    "reference_height": 66,
     "display_height": 0.9872689559999999,
     "pose": "seat",
     "mirrored": true,
-    "identity": "doyun"
+    "identity": "doyun",
+    "original_path": "res://art/actors/poses/doyun_seat_south_east.png"
   },
   "naru:seat:south-west": {
-    "path": "res://art/actors/poses/naru_seat_south_west.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/naru_seat_south_west.png",
-    "sha256": "df5b78b2143599a4de588f4562d8121b3452ae60be8a8d9b915c9a57de65d4bb",
+    "path": "res://art/actors/poses/naru_seat_south_west_compact.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/naru_seat_south-west.png",
+    "sha256": "ea0b4ac2a1dea116c3d503e9dd796b5a098ee4f071acedcec167a2821142de89",
     "feet": [
       48,
       90
     ],
     "direction": "south-west",
-    "reference_height": 84,
+    "reference_height": 76,
     "display_height": 0.9872689559999999,
     "pose": "seat",
     "mirrored": false,
-    "identity": "naru"
+    "identity": "naru",
+    "original_path": "res://art/actors/poses/naru_seat_south_west.png"
   },
   "naru:seat:south-east": {
-    "path": "res://art/actors/poses/naru_seat_south_east.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/naru_seat_south_east.png",
-    "sha256": "6ee516a5c3a3de855e070259beecb8bd5ba8acc97030ff1a2161c3803fbed89b",
+    "path": "res://art/actors/poses/naru_seat_south_east_compact.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/naru_seat_south-east.png",
+    "sha256": "8fa2540bfca841eafc563ce13c399dc667ae88c8157d6d51cc1d98459a2662a7",
     "feet": [
       48,
       90
     ],
     "direction": "south-east",
-    "reference_height": 84,
+    "reference_height": 76,
     "display_height": 0.9872689559999999,
     "pose": "seat",
     "mirrored": true,
-    "identity": "naru"
+    "identity": "naru",
+    "original_path": "res://art/actors/poses/naru_seat_south_east.png"
   },
   "sora:seat:south-west": {
-    "path": "res://art/actors/poses/sora_seat_south_west.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/sora_seat_south_west.png",
-    "sha256": "7bb78c0773ee4ce22b76f1cef24d631420a0d74668fb0ed1837114b64403d04b",
+    "path": "res://art/actors/poses/sora_seat_south_west_compact.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/sora_seat_south-west.png",
+    "sha256": "1d73bc584f634dc48c64a0f263d3884ba85c33c69c0976cc61671220a7773df5",
     "feet": [
       48,
       90
     ],
     "direction": "south-west",
-    "reference_height": 84,
+    "reference_height": 68,
     "display_height": 0.9872689559999999,
     "pose": "seat",
     "mirrored": false,
-    "identity": "sora"
+    "identity": "sora",
+    "original_path": "res://art/actors/poses/sora_seat_south_west.png"
   },
   "sora:seat:south-east": {
-    "path": "res://art/actors/poses/sora_seat_south_east.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/sora_seat_south_east.png",
-    "sha256": "2bd21117cbc5124f553fe426e53ed0901b5d7ae14fe3c746b0bd42fd8a22f50d",
+    "path": "res://art/actors/poses/sora_seat_south_east_compact.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/sora_seat_south-east.png",
+    "sha256": "d89cb2ace69624563001a63d1577250becd90a923af8aaafc39a9e820b39bf3a",
     "feet": [
       48,
       90
     ],
     "direction": "south-east",
-    "reference_height": 84,
+    "reference_height": 68,
     "display_height": 0.9872689559999999,
     "pose": "seat",
     "mirrored": true,
-    "identity": "sora"
+    "identity": "sora",
+    "original_path": "res://art/actors/poses/sora_seat_south_east.png"
   }
 }

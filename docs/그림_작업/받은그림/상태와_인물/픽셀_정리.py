@@ -177,3 +177,7 @@ for index,name in enumerate(['doyun','naru','sora','blacksmith','commuter']):
 for y in [250,550]: draw.line((0,y,1000,y),fill=(150,135,110))
 comparison.save(HERE/'비율_비교.png')
 print(f"runtime {len(cards)} PNG, preserved heads {len(REPORT['preserved_heads'])}, berry overlay {len(berry_pixels)} pixels")
+
+# 마지막 선택은 플레이어 체형 기준의 정지/좌식 보정본이다.
+from 체형_정리 import apply as apply_compact_proportions
+apply_compact_proportions()
