@@ -17,10 +17,10 @@
   "frames": 4,
   "coverage": {
     "enemy_ids": 24,
-    "generated_ids": 4,
-    "remaining_ids": 20,
-    "ordinary_remaining": 14,
-    "boss_remaining": 6
+    "generated_ids": 24,
+    "remaining_ids": 0,
+    "ordinary_remaining": 0,
+    "boss_remaining": 0
   },
   "assets": [
     {

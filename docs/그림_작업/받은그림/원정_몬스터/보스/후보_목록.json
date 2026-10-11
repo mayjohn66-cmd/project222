@@ -1,0 +1,147 @@
+{
+  "status": "candidate_not_installed",
+  "tool": "built-in image_gen",
+  "runtime_applied": false,
+  "canvas": [
+    128,
+    128
+  ],
+  "anchor": [
+    64,
+    112
+  ],
+  "view": "south-west",
+  "anchors_provisional": true,
+  "animation": false,
+  "subjects": 6,
+  "frames": 6,
+  "coverage": {
+    "enemy_ids": 24,
+    "generated_ids": 24,
+    "remaining_ids": 0,
+    "ordinary_remaining": 0,
+    "boss_remaining": 0
+  },
+  "assets": [
+    {
+      "id": "forest_alpha_slime",
+      "enemy_id": "forest_alpha_slime",
+      "name": "거대 슬라임",
+      "data_name": "거대 슬라임",
+      "loot_table": "forest_boss",
+      "events": [
+        "boss_forest_event"
+      ],
+      "source_sha256": "0d141bf0674f90dea5066eb1fe0c84a0092371573c7bced618572f711ee83fb0",
+      "sprite": "픽셀_정리/forest_alpha_slime.png",
+      "source": "생성_원본/forest_alpha_slime.png",
+      "sha256": "a6514e2c7821869f5eb2690a255fefa503f267b6ef76c8af826ac149f83e5ec2",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        64,
+        112
+      ]
+    },
+    {
+      "id": "mine_golem",
+      "enemy_id": "mine_golem",
+      "name": "광산 골렘",
+      "data_name": "광산 골렘",
+      "loot_table": "mine_boss",
+      "events": [
+        "boss_mine_event"
+      ],
+      "source_sha256": "b13721af27347b0c3aa67150642b80064741ac4138ff34b44a630117db8eb4e3",
+      "sprite": "픽셀_정리/mine_golem.png",
+      "source": "생성_원본/mine_golem.png",
+      "sha256": "235932706eda43e88014bffd1d33fa5bd59e520ccc2b297c48b5f5d0eb35b9c4",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        64,
+        112
+      ]
+    },
+    {
+      "id": "swamp_queen_slime",
+      "enemy_id": "swamp_queen_slime",
+      "name": "늪의 여왕 슬라임",
+      "data_name": "늪의 여왕 슬라임",
+      "loot_table": "swamp_boss",
+      "events": [
+        "boss_swamp_event"
+      ],
+      "source_sha256": "4727a1f7f4247f4337f53c512ed2f83a95ff63817df0b967da4a6f35c691555a",
+      "sprite": "픽셀_정리/swamp_queen_slime.png",
+      "source": "생성_원본/swamp_queen_slime.png",
+      "sha256": "7b8654d2903050a4c67f27c9a579543849438decaa09e04fc11e89413a5be45e",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        64,
+        112
+      ]
+    },
+    {
+      "id": "ancient_guardian",
+      "enemy_id": "ancient_guardian",
+      "name": "고대 수호자",
+      "data_name": "고대 수호자",
+      "loot_table": "ruins_boss",
+      "events": [
+        "hidden_boss"
+      ],
+      "source_sha256": "89cdf8fe15e4c8a19bd05d1a06ba4d8e138fadc55abe3ae366376756b66c30b8",
+      "sprite": "픽셀_정리/ancient_guardian.png",
+      "source": "생성_원본/ancient_guardian.png",
+      "sha256": "86824c7fab56906bbf09cc9f544c5ac4822dae97867e8423ead593f2b5dacb29",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        64,
+        112
+      ]
+    },
+    {
+      "id": "meadow_guardian",
+      "enemy_id": "meadow_guardian",
+      "name": "바람갈기 수호수",
+      "data_name": "바람갈기 수호수",
+      "loot_table": "meadow_boss",
+      "events": [
+        "meadow_boss"
+      ],
+      "source_sha256": "cea25f42f9b00e7b0fa9d56abb3707d578e895ce11e6e5f21503588c6db6778d",
+      "sprite": "픽셀_정리/meadow_guardian.png",
+      "source": "생성_원본/meadow_guardian.png",
+      "sha256": "1d5dd27382b512ff669b60fca59ff1eca98709551b4c014184b2cb42cb5f7b82",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        64,
+        112
+      ]
+    },
+    {
+      "id": "river_guardian",
+      "enemy_id": "river_guardian",
+      "name": "갈대뿌리 수호자",
+      "data_name": "갈대뿌리 수호자",
+      "loot_table": "river_boss",
+      "events": [
+        "river_valley_boss"
+      ],
+      "source_sha256": "afbb53658d0f37f5e55f265a9e5af80f20016858351f31b56bb43c155a16ba77",
+      "sprite": "픽셀_정리/river_guardian.png",
+      "source": "생성_원본/river_guardian.png",
+      "sha256": "acb4da80aa8ab0678fbf25a476fb3fe4049aa1d292204f0e5e100b492b7e3dad",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        64,
+        112
+      ]
+    }
+  ]
+}

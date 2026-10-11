@@ -1,0 +1,168 @@
+{
+  "generation_mode": "built-in image_gen",
+  "date": "2026-10-11",
+  "assets": [
+    {
+      "id": "forest_alpha_slime",
+      "name": "거대 슬라임",
+      "max_size": [
+        72,
+        56
+      ],
+      "accent": "cyan",
+      "min_accent": 10,
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        112
+      ],
+      "bottom": 112,
+      "preserve_small_features": false,
+      "prompt": "Use case: stylized-concept. One transparent static BOSS creature sprite for a cozy isometric fantasy exploration game. Input images are STYLE references only; match the thick dark brown outlines, bright readable midtones, crisp chunky pixel clusters and simple face of those game sprites. Orthographic 2:1 isometric view facing southwest, neutral daylight. One complete centered creature, ONE idle pose, enlarged distinctive silhouette. Intended uniform nearest-neighbor reduction into a 128x128 logical canvas, body no larger than about72x84 logical pixels. Eyes must be LARGE simple distinct dark sockets, features readable at small scale. No sheet, animation, text, UI, healthbar, extra creatures, separate scenery, soil island, cast shadow, halo, particles, smooth gradients or painted blur. A HUGE TURQUOISE FOREST SLIME, twice the width of the reference ordinary slime. Broad heavy rounded blob with clearly opaque aqua body, large front face with two separate dark eyes and tiny mouth, two broad rounded side lobes. One raised aqua crest and two small folded forest-green leaf-like nubs on top, thick darker teal lower edge, pale aqua upper highlight. Low wide silhouette, no legs, arms, crown, flower or transparent glass body.",
+      "references": [
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png",
+        "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/mine_shardling.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/ruins_sentinel.png"
+      ],
+      "generated": "C:/Users/john9/.codex/generated_images/01a0f21e-f0fe-7852-bbc3-ba543c654967/exec-52647fa3-a342-4d4f-a97e-a87e3fc5149a.png"
+    },
+    {
+      "id": "mine_golem",
+      "name": "광산 골렘",
+      "max_size": [
+        56,
+        78
+      ],
+      "accent": "none",
+      "min_accent": 0,
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        112
+      ],
+      "bottom": 112,
+      "preserve_small_features": false,
+      "prompt": "Use case: stylized-concept. One transparent static BOSS creature sprite for a cozy isometric fantasy exploration game. Input images are STYLE references only; match the thick dark brown outlines, bright readable midtones, crisp chunky pixel clusters and simple face of those game sprites. Orthographic 2:1 isometric view facing southwest, neutral daylight. One complete centered creature, ONE idle pose, enlarged distinctive silhouette. Intended uniform nearest-neighbor reduction into a 128x128 logical canvas, body no larger than about72x84 logical pixels. Eyes must be LARGE simple distinct dark sockets, features readable at small scale. No sheet, animation, text, UI, healthbar, extra creatures, separate scenery, soil island, cast shadow, halo, particles, smooth gradients or painted blur. A STOCKY MINERAL GOLEM made of large angular warm grey and beige mine stones. Broad block shoulders, small rocky head with two big dark eye sockets and tiny ochre pupils, massive short stone forearms with closed fists, squat torso and two planted stone feet. Three large pale mineral seams across torso, rough angular surfaces with just a few chips. Larger and heavier than the reference shard creature. No humanoid helmet, weapon, jeweled treasure, crystalline spikes, moss, floating debris or magical aura.",
+      "references": [
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png",
+        "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/mine_shardling.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/ruins_sentinel.png"
+      ],
+      "generated": "C:/Users/john9/.codex/generated_images/01a0f21e-f0fe-7852-bbc3-ba543c654967/exec-a8d8d417-1fe5-49cd-bd13-63fff9caa662.png"
+    },
+    {
+      "id": "swamp_queen_slime",
+      "name": "늪의 여왕 슬라임",
+      "max_size": [
+        72,
+        62
+      ],
+      "accent": "moss",
+      "min_accent": 10,
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        112
+      ],
+      "bottom": 112,
+      "preserve_small_features": false,
+      "prompt": "Use case: stylized-concept. One transparent static BOSS creature sprite for a cozy isometric fantasy exploration game. Input images are STYLE references only; match the thick dark brown outlines, bright readable midtones, crisp chunky pixel clusters and simple face of those game sprites. Orthographic 2:1 isometric view facing southwest, neutral daylight. One complete centered creature, ONE idle pose, enlarged distinctive silhouette. Intended uniform nearest-neighbor reduction into a 128x128 logical canvas, body no larger than about72x84 logical pixels. Eyes must be LARGE simple distinct dark sockets, features readable at small scale. No sheet, animation, text, UI, healthbar, extra creatures, separate scenery, soil island, cast shadow, halo, particles, smooth gradients or painted blur. A LARGE SWAMP QUEEN SLIME, wide heavy olive-green and moss-green jelly body with a tall central dome, two big dark eyes clearly visible on front, tiny mouth, muddy dark lower folds and two short side lobes. A compact crown-like cluster of three short pale reed tips and brown cattail heads grows directly from the top, with two broad dark olive leaves. Natural wetland queen silhouette, no human female features, hair, jewels, clothing, literal metal crown, extra swamp scenery or translucent glass.",
+      "references": [
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png",
+        "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/mine_shardling.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/ruins_sentinel.png"
+      ],
+      "generated": "C:/Users/john9/.codex/generated_images/01a0f21e-f0fe-7852-bbc3-ba543c654967/exec-4e89a68a-e5c1-43f0-aa37-031062602666.png"
+    },
+    {
+      "id": "ancient_guardian",
+      "name": "고대 수호자",
+      "max_size": [
+        60,
+        84
+      ],
+      "accent": "turquoise",
+      "min_accent": 4,
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        112
+      ],
+      "bottom": 112,
+      "preserve_small_features": true,
+      "prompt": "Use case: stylized-concept. One transparent static BOSS creature sprite for a cozy isometric fantasy exploration game. Input images are STYLE references only; match the thick dark brown outlines, bright readable midtones, crisp chunky pixel clusters and simple face of those game sprites. Orthographic 2:1 isometric view facing southwest, neutral daylight. One complete centered creature, ONE idle pose, enlarged distinctive silhouette. Intended uniform nearest-neighbor reduction into a 128x128 logical canvas, body no larger than about72x84 logical pixels. Eyes must be LARGE simple distinct dark sockets, features readable at small scale. No sheet, animation, text, UI, healthbar, extra creatures, separate scenery, soil island, cast shadow, halo, particles, smooth gradients or painted blur. A LARGE ANCIENT STONE GUARDIAN, a heavier evolved form of the small reference sandstone sentinel. Broad rectangular sandstone torso with one simple recessed teal rune panel, bulky squared shoulders with worn dark bronze band edges, helmet-like carved stone head with two recessed teal eye slits, thick empty stone fists, sturdy segmented legs, both planted feet visible. Two short geometric raised stone ridges frame the head, muted beige grey and warm stone palette. No separate shield, sword, staff, huge detailed armor, cape, aura, sparkles or scenery. Strong simple biped silhouette.",
+      "references": [
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png",
+        "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/mine_shardling.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/ruins_sentinel.png"
+      ],
+      "generated": "C:/Users/john9/.codex/generated_images/01a0f21e-f0fe-7852-bbc3-ba543c654967/exec-61620c60-53e6-4cdb-b33a-f8803c76ff28.png"
+    },
+    {
+      "id": "meadow_guardian",
+      "name": "바람갈기 수호수",
+      "max_size": [
+        72,
+        56
+      ],
+      "accent": "gold",
+      "min_accent": 8,
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        112
+      ],
+      "bottom": 112,
+      "preserve_small_features": false,
+      "prompt": "Use case: stylized-concept. One transparent static BOSS creature sprite for a cozy isometric fantasy exploration game. Input images are STYLE references only; match the thick dark brown outlines, bright readable midtones, crisp chunky pixel clusters and simple face of those game sprites. Orthographic 2:1 isometric view facing southwest, neutral daylight. One complete centered creature, ONE idle pose, enlarged distinctive silhouette. Intended uniform nearest-neighbor reduction into a 128x128 logical canvas, body no larger than about72x84 logical pixels. Eyes must be LARGE simple distinct dark sockets, features readable at small scale. No sheet, animation, text, UI, healthbar, extra creatures, separate scenery, soil island, cast shadow, halo, particles, smooth gradients or painted blur. A WIND-MANED MEADOW GUARDIAN BEAST, a compact lion-like fantasy quadruped with warm golden-beige body, broad simple face with two big dark eyes and a small brown nose, four thick short paws, a large swept-back mane made of three broad straw-gold flowing tufts and a few olive leaf accents. A short curled tail, sturdy calm guarded idle stance facing southwest. No wings, horns, crown, fire, separate wind effects, grass field or accessories. Boss-sized silhouette but readable low-detail friendly fantasy animal.",
+      "references": [
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png",
+        "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/mine_shardling.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/ruins_sentinel.png"
+      ],
+      "generated": "C:/Users/john9/.codex/generated_images/01a0f21e-f0fe-7852-bbc3-ba543c654967/exec-e14944cb-2017-472c-9be9-f3952e2ab890.png"
+    },
+    {
+      "id": "river_guardian",
+      "name": "갈대뿌리 수호자",
+      "max_size": [
+        64,
+        76
+      ],
+      "accent": "moss",
+      "min_accent": 10,
+      "canvas": [
+        128,
+        128
+      ],
+      "anchor": [
+        64,
+        112
+      ],
+      "bottom": 112,
+      "preserve_small_features": false,
+      "prompt": "Use case: stylized-concept. One transparent static BOSS creature sprite for a cozy isometric fantasy exploration game. Input images are STYLE references only; match the thick dark brown outlines, bright readable midtones, crisp chunky pixel clusters and simple face of those game sprites. Orthographic 2:1 isometric view facing southwest, neutral daylight. One complete centered creature, ONE idle pose, enlarged distinctive silhouette. Intended uniform nearest-neighbor reduction into a 128x128 logical canvas, body no larger than about72x84 logical pixels. Eyes must be LARGE simple distinct dark sockets, features readable at small scale. No sheet, animation, text, UI, healthbar, extra creatures, separate scenery, soil island, cast shadow, halo, particles, smooth gradients or painted blur. A REED-ROOT RIVER GUARDIAN, a large squat living root creature. A broad intertwined warm-brown root trunk with two LARGE clear dark eyes and tiny mouth, thick curved root arms with closed root hands, two wide stable root feet. Three tall cattail stalks rise from the shoulders and head, two broad olive-green reed leaves hang from either side; small blue-grey river pebble plates are embedded in shoulders. Distinct broad woody torso rather than narrow straw bundle. No long tangled thin vines, thorns, human clothing, pot, water scenery, extra plants or floating debris.",
+      "references": [
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png",
+        "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/mine_shardling.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/ruins_sentinel.png"
+      ],
+      "generated": "C:/Users/john9/.codex/generated_images/01a0f21e-f0fe-7852-bbc3-ba543c654967/exec-df36941f-9865-4e4d-a59c-3f1851fbe619.png"
+    }
+  ]
+}

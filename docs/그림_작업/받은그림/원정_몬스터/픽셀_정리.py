@@ -3,6 +3,10 @@ import argparse, json, hashlib, shutil, csv
 from PIL import Image, ImageDraw, ImageFont
 
 HERE = Path(__file__).resolve().parent
+import sys
+sys.path.insert(0, str(HERE))
+from 목록_갱신 import known_ids, refresh_catalog
+
 
 def digest(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
@@ -40,11 +44,7 @@ def main():
     with (root/'data/expedition/expedition_events.csv').open(encoding='utf-8-sig',newline='') as stream:
         events = list(csv.DictReader(stream))
     enemy_lookup = {e['id']:e for e in enemies}
-    generated_ids = {a['id'] for a in config['assets']}
-    extra_manifest = HERE/'일반_추가/후보_목록.json'
-    if extra_manifest.is_file():
-        generated_ids.update(a['id'] for a in json.loads(extra_manifest.read_text(encoding='utf-8-sig'))['assets'])
-
+    generated_ids = known_ids(HERE, (a["id"] for a in config["assets"]))
     remaining = [dict(id=e['id'],name=e['name'],boss=e['loot_table'].endswith('_boss'),status='not_generated')
                  for e in enemies if e['id'] not in generated_ids]
     coverage = dict(enemy_ids=len(enemies),generated_ids=len(generated_ids),remaining_ids=len(remaining),
@@ -123,6 +123,7 @@ def main():
         assets.append(dict(id=spec['id'],enemy_id=spec['id'],name=spec['name'],data_name=enemy_lookup[spec['id']]['name'],loot_table=enemy_lookup[spec['id']]['loot_table'],events=[e['event_id'] for e in events if e['result_type']=='battle' and e['target_id']==spec['id']],source_sha256=digest(raw),sprite='픽셀_정리/'+output.name,source='생성_원본/'+raw.name,sha256=digest(output),state='idle',frames=1,anchor=[32,56]))
     for name,data in [('검사_결과.json',dict(method='uniform_nearest_24_base_8_accent_with_eye_centroid_samples',checks=checks)),('후보_목록.json',dict(status='candidate_not_installed',tool='built-in image_gen',runtime_applied=False,canvas=[64,64],anchor=[32,56],view='south-west',anchors_provisional=True,animation=False,subjects=len(config['assets']),frames=len(assets),coverage=coverage,assets=assets))]:
         (HERE/name).write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n',encoding='utf-8')
+    refresh_catalog(HERE)
     preview = Image.new('RGB',(1120,360),(47,40,33))
     draw = ImageDraw.Draw(preview)
     font_path = Path('C:/Windows/Fonts/malgun.ttf')
