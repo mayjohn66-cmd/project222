@@ -1,0 +1,119 @@
+{
+  "mode": "built-in image_gen; authorized Python pixel preparation",
+  "date": "2026-10-12",
+  "footprint": [
+    1,
+    1
+  ],
+  "floor_tile": [
+    64,
+    32
+  ],
+  "canvas": [
+    64,
+    96
+  ],
+  "anchor": [
+    32,
+    64
+  ],
+  "run_step": [
+    32,
+    16
+  ],
+  "orientation": "upper-left to lower-right",
+  "actual_wall_thickness_cells": 0.25,
+  "palette_limit": 48,
+  "alpha_threshold": 128,
+  "filter": "NEAREST",
+  "runtime_connected": false,
+  "asset_count": 1,
+  "selection": "single_repeat_wall",
+  "pillars": false,
+  "repeat_strip": [
+    16,
+    32,
+    48,
+    69
+  ],
+  "historical_sources": {
+    "left": {
+      "source": "docs/그림_작업/받은그림/돌담_모듈/좌_원본.png",
+      "source_sha256": "208d26c42ddeb1bfc41663db76454fea404d12991f40a9ba4472232cc975d66f",
+      "source_size": [
+        1323,
+        1189
+      ],
+      "bounds": [
+        184,
+        176,
+        1139,
+        1071
+      ],
+      "uniform_scale": 0.041884816753926704,
+      "body_size": [
+        40,
+        37
+      ],
+      "registration_translation": [
+        0,
+        0
+      ]
+    },
+    "middle": {
+      "source": "docs/그림_작업/받은그림/돌담_모듈/중간_원본.png",
+      "source_sha256": "5b76ddf81c530dce46f3f6870c7d04fcdec7e7d302efc9a95d0c0407c2a15a11",
+      "source_size": [
+        1322,
+        1190
+      ],
+      "bounds": [
+        174,
+        171,
+        1140,
+        1076
+      ],
+      "uniform_scale": 0.041407867494824016,
+      "body_size": [
+        40,
+        37
+      ]
+    },
+    "right": {
+      "source": "docs/그림_작업/받은그림/돌담_모듈/우_원본.png",
+      "source_sha256": "8e0cf4236459d4aa17d14399a3aedca0ded0300e918a4275d5204bc997575002",
+      "source_size": [
+        1322,
+        1190
+      ],
+      "bounds": [
+        172,
+        170,
+        1150,
+        1074
+      ],
+      "uniform_scale": 0.0408997955010225,
+      "body_size": [
+        40,
+        37
+      ],
+      "registration_translation": [
+        0,
+        0
+      ]
+    }
+  },
+  "outputs": {
+    "wall": {
+      "path": "docs/그림_작업/받은그림/돌담_모듈/stone_wall.png",
+      "sha256": "56f6a91a957f1defbdcae184ace147b5645e0f74a8d40771eb4cdea2b26ea1ab",
+      "colors": 48,
+      "bounds": [
+        16,
+        32,
+        48,
+        69
+      ]
+    }
+  }
+}

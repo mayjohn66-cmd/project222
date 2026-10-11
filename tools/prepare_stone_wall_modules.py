@@ -1,4 +1,4 @@
-"""Prepare three 1-cell wall modules from generated art. --install writes candidates only."""
+"""Prepare the single selected 1-cell wall. Original variants preserve palette history."""
 import argparse
 import hashlib
 import json
@@ -85,23 +85,21 @@ def prepare():
 
 
 def preview(results):
-    # Three separate modules, then a long assembled row on the actual paving.
+    # One selected image, repeated unchanged on the actual paving.
     canvas = Image.new("RGBA", (240, 256), (46, 40, 35, 255))
-    for i, part in enumerate(PARTS):
-        canvas.alpha_composite(results[part], (20+i*72, -12))
+    wall = results["wall"]
+    canvas.alpha_composite(wall, (88, -12))
     floor = Image.open(ROOT / "art/received/floors/paving_1.png").convert("RGBA")
     for i in range(6):
         x, y = 8+i*32, 100+i*16
         canvas.alpha_composite(floor, (x, y))
-    run = ["left"] + ["middle"]*4 + ["right"]
-    for i, part in enumerate(run):
-        canvas.alpha_composite(results[part], (8+i*32, 100+i*16-48))
+    for i in range(6):
+        canvas.alpha_composite(wall, (8+i*32, 100+i*16-48))
     out = canvas.resize((960, 1024), Image.Resampling.NEAREST)
     font_path = Path("C:/Windows/Fonts/malgun.ttf")
     font = ImageFont.truetype(str(font_path), 24) if font_path.exists() else ImageFont.load_default()
     draw = ImageDraw.Draw(out)
-    for i, label in enumerate(("좌측 끝", "중간 · 반복", "우측 끝")):
-        draw.text(((52+i*72)*4, 25), label, fill=(232, 215, 188), font=font, anchor="mt")
+    draw.text((480, 25), "돌담 1종 · 같은 그림 반복", fill=(232, 215, 188), font=font, anchor="mt")
     draw.text((40, 980), "1칸: 64×32 바닥 / 연결 간격: 가로 32 · 세로 16", fill=(232, 215, 188), font=font)
     return out
 
@@ -110,15 +108,18 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--install", action="store_true")
     args = ap.parse_args()
-    results, sources = prepare()
+    legacy_results, sources = prepare()
+    # User correction: one active image; do not output or select left/right variants.
+    results = {"wall": legacy_results["middle"]}
     records = dict(mode="built-in image_gen; authorized Python pixel preparation", date="2026-10-12",
                    footprint=[1, 1], floor_tile=[64, 32], canvas=[64, 96], anchor=[32, 64],
                    run_step=[32, 16], orientation="upper-left to lower-right",
                    actual_wall_thickness_cells=0.25, palette_limit=48,
                    alpha_threshold=128, filter="NEAREST", runtime_connected=False,
-                   common_strip=[16, 32, 48, 69], sources=sources, outputs={})
+                   asset_count=1, selection="single_repeat_wall", pillars=False,
+                   repeat_strip=[16, 32, 48, 69], historical_sources=sources, outputs={})
     for part, image in results.items():
-        path = DOC / ("stone_wall_" + part + ".png")
+        path = DOC / "stone_wall.png"
         colors = {p[:3] for p in image.get_flattened_data() if p[3]}
         assert len(colors) <= 48 and set(image.getchannel("A").get_flattened_data()) <= {0, 255}
         if args.install:
@@ -128,20 +129,20 @@ def main():
             assert selected.size == image.size and selected.tobytes() == image.tobytes(), part
         records["outputs"][part] = dict(path=path.relative_to(ROOT).as_posix(), sha256=digest(path),
                                       colors=len(colors), bounds=list(image.getbbox()))
-    reference = results["middle"].crop((16, 32, 48, 69)).tobytes()
-    assert all(im.crop((16, 32, 48, 69)).tobytes() == reference for im in results.values())
+    original_middle = Image.open(DOC / "stone_wall_middle.png").convert("RGBA")
+    assert results["wall"].tobytes() == original_middle.tobytes(), "Selected masonry changed"
     # At the join, both opaque vertical profiles differ by exactly the grid step.
-    mid = results["middle"]
+    mid = results["wall"]
     profiles = [[y for y in range(96) if mid.getpixel((x, y))[3]] for x in (16, 47)]
     assert abs(profiles[1][0] - (profiles[0][0]+16)) <= 1
     assert abs(profiles[1][-1] - (profiles[0][-1]+16)) <= 1
     if args.install:
-        (DOC / "선택_기록.json").write_text(json.dumps(records, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
-        preview(results).save(DOC / "좌_중간_우_연결_4배.png")
+        (DOC / "통일_기록.json").write_text(json.dumps(records, ensure_ascii=False, indent=2)+"\n", encoding="utf-8")
+        preview(results).save(DOC / "돌담_통일_연결_4배.png")
     else:
-        saved = json.loads((DOC / "선택_기록.json").read_text(encoding="utf-8"))
+        saved = json.loads((DOC / "통일_기록.json").read_text(encoding="utf-8"))
         assert records == saved, "Manifest changed"
-    print("3 wall modules: 1x1, 64x96, step32/16, shared join, <=48 colors, binary alpha, reproducible; candidates only")
+    print("1 active wall: 1x1, 64x96, step32/16, original middle pixels unchanged, <=48 colors, binary alpha; candidates only")
 
 
 if __name__ == "__main__":
