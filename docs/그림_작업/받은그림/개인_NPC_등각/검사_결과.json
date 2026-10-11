@@ -1,0 +1,14 @@
+{
+  "count": 10,
+  "failures": 0,
+  "checks": [
+    "64x64",
+    "binary_alpha",
+    "transparent_RGB_zero",
+    "opaque_colors<=48",
+    "feet_bottom60",
+    "sha256"
+  ],
+  "runtime_connected": false,
+  "animation": false
+}

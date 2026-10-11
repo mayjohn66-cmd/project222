@@ -1,0 +1,92 @@
+[
+  {
+    "id": "naru",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: naru, top left portrait: middle aged travelling merchant man, broad brown hat, dark moustache and beard, orange ochre coat, red neck scarf, blue inner vest, brown trousers, boots. Small satchel.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-c500c479-54f4-4ff6-920c-e00d07456b48.png"
+  },
+  {
+    "id": "doyun",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: doyun, second top portrait: young adult muscular man, black spiky hair, blue short sleeve work shirt, dark navy apron, rolled sleeves, dark work trousers and boots. No weapons.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-259853d0-4c03-4a64-ada6-fe40324ab1e7.png"
+  },
+  {
+    "id": "sora",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: sora, third top portrait: young adult woman long dark auburn hair, tan long coat, moss green high neck shirt, brown trousers, boots. Small closed brown journal held in one hand.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-2f6da804-af75-44f9-8b0f-c80f5fd89daa.png"
+  },
+  {
+    "id": "neighbor_bread",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: neighbor_bread, fourth top portrait: friendly adult woman, auburn hair tied low at back, burgundy blouse, pale cream apron over long muted brown skirt, brown shoes.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-654929e9-9e01-4963-8717-532a7d8105c2.png"
+  },
+  {
+    "id": "child_berries",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: child_berries, top right portrait: red high ponytail female resident, teal vest, mustard yellow shirt, muted brown skirt and brown boots. Match the portrait, do not add childish toys.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-d3699bcc-bfff-4e28-afeb-143ddb1082a6.png"
+  },
+  {
+    "id": "traveler_water",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: traveler_water, bottom left portrait: young adult man with short tousled dark purple black hair, blue grey hooded scarf and travel cloak, muted brown trousers, walking boots. Small belt pouch.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-539736dd-df9f-40f5-84c9-5481a0e2eb66.png"
+  },
+  {
+    "id": "gatherer_herbs",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: gatherer_herbs, second bottom portrait: young adult woman with long brown hair and loose braid, green shirt and moss green cape, tan skirt, sturdy brown shoes. Small herbal bag.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-15bd17ff-fd5c-456e-93cc-5cda22e6a209.png"
+  },
+  {
+    "id": "miner_ore",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: miner_ore, third bottom portrait: broad stocky mature miner man, tan miner helmet with round brass lamp, bushy dark violet beard and moustache, tan work shirt, brown shoulder straps, dark trousers, heavy boots.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-c569b463-4049-451d-b14c-509c5c137f6f.png"
+  },
+  {
+    "id": "healer_moss",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: healer_moss, fourth bottom portrait: young adult woman, tied black hair with fringe, teal green hooded cape, pale cream shirt, muted green trousers, boots. Small herb satchel. No magic effects.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-80ca80b5-640e-4eef-9e8b-a36b9213eead.png"
+  },
+  {
+    "id": "delvin",
+    "prompt": "Create ONE transparent full-body static pixel-art NPC sprite for a cozy isometric convenience-store fantasy game. Reference image 1 is a portrait roster: copy ONLY the specified character's identity, hair and clothing. Reference image 2 is the IN-GAME SCALE AND PIXEL STYLE reference: match its chibi head/body proportions, crisp discrete pixels, restrained palette, small dot eyes and overhead isometric viewpoint. South-west facing (toward viewer and slightly left), standing neutrally with both feet visible; not an attack pose, not a portrait. Single figure centered, no ground tile, no shadow ellipse, no scenery, no labels, no frame, no extra character, transparent background. The subject should read clearly at a final 64x64 canvas, roughly 50 pixels tall with generous transparent margins. Use a limited warm palette, clean 1-pixel dark outline, no gradients, no blur, no painted lighting, no high resolution facial details. This is static art, no animation or multiple poses. Character: delvin, bottom right portrait: friendly young adult guide man, tousled ochre brown hair, blue open coat, pale yellow shirt, dark blue trousers, brown boots. Small gold pouch at belt.",
+    "references": [
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/docs/그림_작업/받은그림/초상화/_서브컬처_전체.png",
+      "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/traveler/rotations/south_west.png"
+    ],
+    "source": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-bfb06a01-37e8-4460-9b46-94d2cc1ae524.png"
+  }
+]
