@@ -1128,6 +1128,126 @@
       ],
       "colors": 76,
       "alpha_threshold": 220
+    },
+    {
+      "anchor": [
+        64.0,
+        128.0
+      ],
+      "id": "village_well",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/village_well.png",
+      "source_sha256": "b084819d3b4aae288065fd88742311444b775e8dc59a07d798d7ffd7dbd65924",
+      "path": "res://art/received/village/village_well.png",
+      "sha256": "1554ab9ea3f2fe9de06ab8ef98f0a0117bff870f24b36c90c44393873a8bd261",
+      "colors": 82,
+      "alpha_binary": true,
+      "size": [
+        128,
+        192
+      ],
+      "preserve_collision": true,
+      "footprint": [
+        [
+          64.0,
+          104.0
+        ],
+        [
+          112.0,
+          128.0
+        ],
+        [
+          64.0,
+          152.0
+        ],
+        [
+          16.0,
+          128.0
+        ]
+      ],
+      "alpha_threshold": 128,
+      "aliases": [
+        "res://art/world/village_decor_v1/village_well.png"
+      ]
+    },
+    {
+      "anchor": [
+        96.0,
+        128.0
+      ],
+      "id": "low_wall",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/low_wall_0.png",
+      "source_sha256": "cae988358df92f7b4d1f527475849f34dae36f06b3e22da8b6391c4e164bd50a",
+      "path": "res://art/received/village/low_wall_0.png",
+      "sha256": "a51340ef25326c241c411f2cedb755c1b87c721b7d10af9c6ed594de96a2118e",
+      "colors": 10,
+      "alpha_binary": true,
+      "size": [
+        192,
+        192
+      ],
+      "preserve_collision": true,
+      "footprint": [
+        [
+          40.0,
+          92.0
+        ],
+        [
+          168.0,
+          156.0
+        ],
+        [
+          152.0,
+          164.0
+        ],
+        [
+          24.0,
+          100.0
+        ]
+      ],
+      "alpha_threshold": 128,
+      "aliases": [
+        "res://art/world/village_decor_v1/low_wall.png"
+      ],
+      "axis_y": {
+        "anchor": [
+          96.0,
+          128.0
+        ],
+        "pixel_unit": 0.0220970869120313,
+        "yaw": 1.5707963267949,
+        "source": "docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/low_wall_1.png",
+        "source_sha256": "e01df8aa0ae7c86664c7c256eac24eb5cbbef3b6f52a3709b0c29da38b062428",
+        "path": "res://art/received/village/low_wall_1.png",
+        "sha256": "c273cef3923e688adc2a9ded76799c494ac451d594cabcdc1848e1c94deade39",
+        "colors": 10,
+        "alpha_binary": true,
+        "size": [
+          192,
+          192
+        ],
+        "footprint": [
+          [
+            152.0,
+            92.0
+          ],
+          [
+            168.0,
+            100.0
+          ],
+          [
+            40.0,
+            164.0
+          ],
+          [
+            24.0,
+            156.0
+          ]
+        ]
+      }
     }
   ]
 }

@@ -1,0 +1,719 @@
+{
+  "description": "Existing scenery templates converted to static sprites; existing nature and floor pictures reused, locations/collisions/gameplay unchanged.",
+  "assets": [
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "f_grass_b",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/f_grass_b.png",
+      "source_sha256": "7e8b78398dea0ec9a0c5a5f4e4452629a5560d426f4a6e78c510e5062b959d34",
+      "path": "res://art/received/expedition/background/f_grass_b.png",
+      "sha256": "4fa4f481cb01a1f0bc4c1b199b3d5331ded16fa35a4224fea64aaac8dbdb0d57",
+      "colors": 86,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "f_grass",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/f_grass.png",
+      "source_sha256": "3ba0cf377e1432468e48d23d1794025da460206c708fb7bf9efa7cef479f373a",
+      "path": "res://art/received/expedition/background/f_grass.png",
+      "sha256": "731addaca45529aa9f55f2b00ce76efb4754ecdb42f3e857cdd8530f15cbf1fc",
+      "colors": 94,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "f_fl_a",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/f_fl_a.png",
+      "source_sha256": "9845a39b35c21fc75914062f240c1c1ba5e66b4c0ab91a9925ccee8b9b0d5f48",
+      "path": "res://art/received/expedition/background/f_fl_a.png",
+      "sha256": "d00ab9fcb6b781e43867eb8a025fd0ef6d59eae0cbb1be41b82ecf3bd77b386f",
+      "colors": 25,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "f_fl_b",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/f_fl_b.png",
+      "source_sha256": "d7602c206597b1b8ac09f22e0d0b2a8fb978dab53eb2c31d0ec876bcc10c34ec",
+      "path": "res://art/received/expedition/background/f_fl_b.png",
+      "sha256": "8c92436f36c0fe1fa32555d0e963e3085afe0040d693ae91e8291e5c5d7b0fab",
+      "colors": 38,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "f_fl_c",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/f_fl_c.png",
+      "source_sha256": "2ba591769374afb2f38c073c1e82661765139200b3c362509c6842a14af84633",
+      "path": "res://art/received/expedition/background/f_fl_c.png",
+      "sha256": "cf26785f9791d4e721ae050595966d112133fc59878a4e679bee70c4ccb35fcc",
+      "colors": 35,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "m_stal",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/m_stal.png",
+      "source_sha256": "975f95317c3a4d33b3721765bfda4f59ab4fc881ffdcfeee8dfcce6e85055fe6",
+      "path": "res://art/received/expedition/background/m_stal.png",
+      "sha256": "af46a72e8aff739bd9b6b5d9b8b5ccb1bc4bfd83a62e421881a9ea39e5974727",
+      "colors": 21,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "m_crystal",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/m_crystal.png",
+      "source_sha256": "498edc5238da0bcdbb24800da08bac2844d45e870bf989a9f1b502203df7ab07",
+      "path": "res://art/received/expedition/background/m_crystal.png",
+      "sha256": "d1c4779085b26e31fffc3ed65b50bd6d2712bb41e0f3701ee233b2c4e1ba5ae4",
+      "colors": 94,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "m_rubble",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/m_rubble.png",
+      "source_sha256": "e5d71af7b13002c42306334aed6f0c7400ace14344978ccac1afa2ae408d398b",
+      "path": "res://art/received/expedition/background/m_rubble.png",
+      "sha256": "4de1184119d4e3a08519c55e0f457888bd6d56cd5d2f29918262bd468e843105",
+      "colors": 19,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "s_reeds",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/s_reeds.png",
+      "source_sha256": "bcd315fd142c3d14cadeec86c004d32f8e208fab94dbde3de3055792c259810a",
+      "path": "res://art/received/expedition/background/s_reeds.png",
+      "sha256": "3629dc66b8dbffb8cf7a25e86d391484c1458c811abcffb0714d9f7300f52609",
+      "colors": 94,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "s_grass",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/s_grass.png",
+      "source_sha256": "22c961edcfbd41a1a308ca5c9cfdebf59151a28dc7052e9d5ccc79750a18486e",
+      "path": "res://art/received/expedition/background/s_grass.png",
+      "sha256": "f75c903dbe44ffcbca90d1cd2614876c5836eb5d4ab7836b900f3ecae08f1e64",
+      "colors": 85,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "s_mush",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/s_mush.png",
+      "source_sha256": "1a2619232d9bc9f2de8af9a2ddd7010661834e07e265835a1d927777eac8f320",
+      "path": "res://art/received/expedition/background/s_mush.png",
+      "sha256": "a51a78642f0300eb48cb288cc9f8da98d6b91fecf0dd4710a7b776396075c96a",
+      "colors": 25,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "r_rubble_b",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_rubble_b.png",
+      "source_sha256": "b1b8b5b520f15dd64826db3dc66a2a72b2951d7a261aa7d516aef636df000a06",
+      "path": "res://art/received/expedition/background/r_rubble_b.png",
+      "sha256": "8c4a5e4906caa1eca24c6ee6db487a1f03f25f5142502cde9977a50eee934396",
+      "colors": 28,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "r_rubble",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_rubble.png",
+      "source_sha256": "3082c6ddff99cb660b20edfe1687f184da5c9f25b82630c3292f01b3bf9f9e77",
+      "path": "res://art/received/expedition/background/r_rubble.png",
+      "sha256": "a158af2956133cf9eeb691ef394cc6194614378e967afcb45670ec65caa4f37b",
+      "colors": 26,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "r_grass_b",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_grass_b.png",
+      "source_sha256": "03388f09ff6cdd15209b45b50eba84e048b844df690a56e70df21573506ad254",
+      "path": "res://art/received/expedition/background/r_grass_b.png",
+      "sha256": "d8404995308e9c825d2968e17e2e1366a20fc89b16bf8768b9740339755fe45b",
+      "colors": 65,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "r_grass",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_grass.png",
+      "source_sha256": "e1a959bbcff717d884aa56019931a8b8ff307c2137f9aeb982ef8566a923a013",
+      "path": "res://art/received/expedition/background/r_grass.png",
+      "sha256": "c34bd5c8c1caafd34af61af128cca2f2c70fb58e49da6fa451aa690b8e7d161f",
+      "colors": 55,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_0_rot0",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_0_rot0.png",
+      "source_sha256": "b050f7eda566aa007c64a179c14031b4702756ab91a6aa82c18325100a909c23",
+      "path": "res://art/received/expedition/background/r_wall_0_rot0.png",
+      "sha256": "0ca45eaade4a8d8c47e194f106ff7a3edc52b8eb06d5be2c4949c9f4904544f3",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_0_rot1",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 1.5707963267949,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_0_rot1.png",
+      "source_sha256": "b42d883f493ffb0b88d3eddc9cfe366bd1d5ba412994f9f155a7b08009f7cf9b",
+      "path": "res://art/received/expedition/background/r_wall_0_rot1.png",
+      "sha256": "e83355a3ab4fb85694bddc9d74a1023123872bdb814628bfa234588d74d3068e",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_0_rot2",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 3.14159265358979,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_0_rot2.png",
+      "source_sha256": "a682e97c748cd94db939a96872d8d0bfc826c4f41931db8f220ae529d79db511",
+      "path": "res://art/received/expedition/background/r_wall_0_rot2.png",
+      "sha256": "603e1c89407c3b92a4e2d9f1ee36b6379ae033932f2c5162d97db4f9b463e945",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_0_rot3",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 4.71238898038469,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_0_rot3.png",
+      "source_sha256": "a819e66548504b464adfd72f3b581435a9525669a599355305777ccbac6ad890",
+      "path": "res://art/received/expedition/background/r_wall_0_rot3.png",
+      "sha256": "bf57d50a60ea519671354c296a3f46b966595a03d2c0e5df7ac26b06c4479f53",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_1_rot0",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_1_rot0.png",
+      "source_sha256": "7dd5908053f3b686fd9062260a5a651938d20a8fda4a42c9d491514dcb150d33",
+      "path": "res://art/received/expedition/background/r_wall_1_rot0.png",
+      "sha256": "97e40b8096f0a258c3130791a6502f7794c1d1fa347d56bbff6a9ac702362302",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_1_rot1",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 1.5707963267949,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_1_rot1.png",
+      "source_sha256": "49546a4104b9911e77556b347d1526367fdb250e5ba564f589e119db133c88cd",
+      "path": "res://art/received/expedition/background/r_wall_1_rot1.png",
+      "sha256": "16cd0b29c8ca9aed05a611a1bdbfab9e5f5c0ecd86686d46f1d110312e19c614",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_1_rot2",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 3.14159265358979,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_1_rot2.png",
+      "source_sha256": "4392ccf3133e3548c58d76a66226e31260b05da1d2d8d8d392b8c1deb36d697d",
+      "path": "res://art/received/expedition/background/r_wall_1_rot2.png",
+      "sha256": "78a57929395699ec36c3b0a98052adcde2fec238b258c9061ec2df0738cc12cf",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_1_rot3",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 4.71238898038469,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_1_rot3.png",
+      "source_sha256": "2d01e112ddcdc8e045b809a3bdf1803c22bdd836435002c17d9f9ad32e50cec0",
+      "path": "res://art/received/expedition/background/r_wall_1_rot3.png",
+      "sha256": "91d1618f1b404dccba0f19cd68ab389b778fc8b0b2d7926940ab290be5868543",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_2_rot0",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_2_rot0.png",
+      "source_sha256": "3bfec35d713be632807cd0385bbc9f8bd7191b1859b16eaac5b17dec096b3f48",
+      "path": "res://art/received/expedition/background/r_wall_2_rot0.png",
+      "sha256": "d527f02ff7b6704e564e482e29da0e9318e7408dbe2e7a9e7184a3cb5cf7fe4a",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_2_rot1",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 1.5707963267949,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_2_rot1.png",
+      "source_sha256": "c67210903b13caaab31fb11ddc17a85d1642c823dc332a28d90e7bb0a1c52c47",
+      "path": "res://art/received/expedition/background/r_wall_2_rot1.png",
+      "sha256": "2a4509d0005a754a6e539c55f6455be21b93b6b655aea3bb1a802bfd0af8f233",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_2_rot2",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 3.14159265358979,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_2_rot2.png",
+      "source_sha256": "e4eac3521e7ed08371fbbb1a0b21774fc3eb93d31f790e7790fd370bd174d0bc",
+      "path": "res://art/received/expedition/background/r_wall_2_rot2.png",
+      "sha256": "1d757032523a18f944536c9f9aea086da06bc5dbdc80906cd91d8eec732540cb",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        64.0,
+        104.0
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "id": "r_wall_2_rot3",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 4.71238898038469,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_wall_2_rot3.png",
+      "source_sha256": "bd12f5bcf1d02e37cc06b05b4dfade492c610666596a0a9109d2555ecf72624b",
+      "path": "res://art/received/expedition/background/r_wall_2_rot3.png",
+      "sha256": "c30b5419869b6a46c4879aea9b261d77ce6d117f74348be3eb3be0e470ca00ef",
+      "colors": 6,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "r_col_0",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_col_0.png",
+      "source_sha256": "3de451690bac475623093626930c4cbf88975ba5cb6c82872281e6890dd829a7",
+      "path": "res://art/received/expedition/background/r_col_0.png",
+      "sha256": "f4298602b968bc63eb14fb03f253141b4cfe2ec72664046ede2ab65b0556eb41",
+      "colors": 13,
+      "alpha_binary": true
+    },
+    {
+      "anchor": [
+        32.0,
+        104.0
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "id": "r_col_1",
+      "pixel_unit": 0.0220970869120313,
+      "yaw": 0.0,
+      "source": "res://docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/r_col_1.png",
+      "source_sha256": "82acdf69b5107d21d023896bc8e72c51c9464546e63083357557bf15e4157d2f",
+      "path": "res://art/received/expedition/background/r_col_1.png",
+      "sha256": "fca0de11790bef4aa18df4a30cc333b6f48ec150957a33b208522923fbb17c70",
+      "colors": 14,
+      "alpha_binary": true
+    },
+    {
+      "id": "f_tree_big_oak",
+      "path": "res://art/received/nature/tree_big_oak.png",
+      "anchor": [
+        48.0,
+        121
+      ],
+      "pixel_unit": 0.02209708691207961,
+      "canvas": [
+        96,
+        128
+      ],
+      "sha256": "0f847779a11f95e47e7a048fd1ee79410b00b9a4c4e51789ccb5c5f0eafdefb6",
+      "source": "existing received nature sprite"
+    },
+    {
+      "id": "f_tree_pine",
+      "path": "res://art/received/nature/tree_pine.png",
+      "anchor": [
+        48.0,
+        117
+      ],
+      "pixel_unit": 0.02209708691207961,
+      "canvas": [
+        96,
+        128
+      ],
+      "sha256": "115e41e7a9c0e7bc348df23cff5e063fea8708dd2215be658026d6b323b03a23",
+      "source": "existing received nature sprite"
+    },
+    {
+      "id": "f_tree_round",
+      "path": "res://art/received/nature/iso_tree_round.png",
+      "anchor": [
+        49.0,
+        115
+      ],
+      "pixel_unit": 0.02209708691207961,
+      "canvas": [
+        96,
+        128
+      ],
+      "sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91",
+      "source": "existing received nature sprite"
+    },
+    {
+      "id": "f_tree_birch",
+      "path": "res://art/received/nature/tree_birch.png",
+      "anchor": [
+        47.5,
+        126
+      ],
+      "pixel_unit": 0.02209708691207961,
+      "canvas": [
+        96,
+        128
+      ],
+      "sha256": "5470c0f68f2c8e25619d2216c0e2377c9cfc232bc5b96cb512fa44de60549e5a",
+      "source": "existing received nature sprite"
+    },
+    {
+      "id": "f_bush_",
+      "path": "res://art/received/nature/flower_bush.png",
+      "anchor": [
+        31.5,
+        52
+      ],
+      "pixel_unit": 0.02209708691207961,
+      "canvas": [
+        64,
+        64
+      ],
+      "sha256": "0aff475b1ea062b35137a35b98b460acc624c967dcb9ed7a32fa2ed47d5c9f0f",
+      "source": "existing received nature sprite"
+    },
+    {
+      "id": "m_rock",
+      "path": "res://art/received/nature/rocks.png",
+      "anchor": [
+        32.0,
+        54
+      ],
+      "pixel_unit": 0.018,
+      "canvas": [
+        64,
+        64
+      ],
+      "sha256": "42a29ae0d6b6e174282f129f2a3c786f036f918c1111f9c2f165078dbb0522f5",
+      "source": "existing received nature sprite"
+    },
+    {
+      "id": "s_dead",
+      "path": "res://art/received/nature/tree_dead.png",
+      "anchor": [
+        47.0,
+        88
+      ],
+      "pixel_unit": 0.04375,
+      "canvas": [
+        96,
+        128
+      ],
+      "sha256": "b4e1e81045d27382e0b8b18328f8b78c4bdf271a09b3e634e38ee8bbaa84c767",
+      "source": "existing received nature sprite"
+    },
+    {
+      "id": "obstacle_tree",
+      "path": "res://art/received/nature/tree_pine.png",
+      "anchor": [
+        48.0,
+        117
+      ],
+      "pixel_unit": 0.02209708691207961,
+      "canvas": [
+        96,
+        128
+      ],
+      "sha256": "115e41e7a9c0e7bc348df23cff5e063fea8708dd2215be658026d6b323b03a23",
+      "source": "existing received nature sprite"
+    },
+    {
+      "id": "obstacle_rock",
+      "path": "res://art/received/nature/rocks.png",
+      "anchor": [
+        32.0,
+        54
+      ],
+      "pixel_unit": 0.018,
+      "canvas": [
+        64,
+        64
+      ],
+      "sha256": "42a29ae0d6b6e174282f129f2a3c786f036f918c1111f9c2f165078dbb0522f5",
+      "source": "existing received nature sprite"
+    },
+    {
+      "id": "obstacle_stump",
+      "path": "res://art/received/nature/iso_stump.png",
+      "anchor": [
+        31.5,
+        57
+      ],
+      "pixel_unit": 0.018,
+      "canvas": [
+        64,
+        64
+      ],
+      "sha256": "531d1567912de319f2f3ed6a6368c4f4197edfb75d30d446bc1cf1c9d3abb149",
+      "source": "existing received nature sprite"
+    },
+    {
+      "path": "res://art/received/nature_states/berry_ready.png",
+      "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/berry_ready.png",
+      "sha256": "e00e6fda55968b40cd1122349483a5b8b64a82efe3684d0767206d02eaca61f1",
+      "anchor": [
+        32,
+        56
+      ],
+      "normal_source": "res://art/received/nature/bush.png",
+      "reference_sha256": "2d786fc7f5f6f3bfd0afaf46373d7a664e380f37f8a738bbd90261ec9c673689",
+      "id": "f_bush_berry",
+      "pixel_unit": 0.02209708691207961
+    }
+  ]
+}

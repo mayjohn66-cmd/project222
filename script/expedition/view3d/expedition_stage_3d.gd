@@ -1,6 +1,6 @@
 class_name ExpeditionStage3D
 extends SubViewportContainer
-## 원정 던전 방(8×8)을 3D 로 그리는 무대. ExpeditionRoomView 의 뒤(show_behind_parent)에 깔리고, 방 모델(ExpeditionRoomModel)을 그대로 읽는다.
+## 원정 던전 방(8×8)의 도트 그림과 조명을 표시하는 무대. ExpeditionRoomView 뒤에 깔리고 방 모델을 그대로 읽는다.
 ## 마을 3D(StoreView3D)와 같은 카메라 각도·낮은 해상도 도트 느낌을 쓰지만, 정렬 순번 대신 진짜 깊이로 가려서 기둥 뒤에 서면 캐릭터가 가려진다.
 ## 방 안 좌표(타일) (x, y) 는 3D 의 (x, 0, y) 이다. 지역(숲·광산·늪·유적)마다 바닥·벽·소품 모양과 빛이 다르다.
 
@@ -49,6 +49,8 @@ var _torches: Array = []  # OmniLight3D
 var _anims: Array = []  # {node, mats, an}
 var _time: float = 0.0
 var _tile_scale: float = 1.0
+var _pixel_floor_material: ShaderMaterial
+var _pixel_floor: MeshInstance3D
 
 
 func _ready() -> void:
@@ -211,6 +213,7 @@ func _node(b: VillageAssets.PartBuilder) -> MeshInstance3D:
 
 
 func _build_floor() -> void:
+	if ExpeditionEnvironmentArt.build_floor(self): return
 	var ts: int = int(_p["ts"])
 	var kind: String = str(_theme["floor"])
 	var tint: Color = _theme["floor_tint"]
@@ -352,6 +355,8 @@ func _build_obstacle(r: Rect2) -> void:
 	var c: Vector2 = r.get_center()
 	var kind: String = str(_theme["obstacle"])
 	var half := Vector2(0.5, 0.5)
+	if kind != "column":
+		if ExpeditionEnvironmentArt.create(self,"obstacle_"+kind,c,1.25 if kind=="rock" else 1.0) != null: return
 
 	if kind == "column":
 		if ExpeditionSpriteArt.create(_content, "broken_column", Vector3(c.x, 0, c.y)) != null:

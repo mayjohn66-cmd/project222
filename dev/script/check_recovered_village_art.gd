@@ -18,7 +18,9 @@ func run() -> void:
 		elif path.ends_with("apple_tree.png"):
 			var rule := VillageMirror.find_rule(view.village.rules,path)
 			check(rule.get("variant","") == "apple","placeholder apple uses existing apple tree")
-		else: check(VillageSpriteArt.row_for(path).is_empty(),"placeholder well/wall isn't drawn as finished art")
+		else:
+			var replacement := VillageSpriteArt.row_for(path)
+			check(not replacement.is_empty() and str(replacement.path) != path,"placeholder well/wall selects transparent native art")
 	var assets: Array = JSON.parse_string(FileAccess.get_file_as_string(VillageSpriteArt.DATA_PATH)).assets
 	for row in assets:
 		check(FileAccess.get_sha256(str(row.source)) == str(row.source_sha256),"source unchanged: " + str(row.id))
@@ -95,6 +97,8 @@ func run() -> void:
 		var size := Vector2(float(rule.get("canon_w",1.0)),float(rule.get("canon_d",1.0)))
 		var base := view.world_to_cell(body.global_position)
 		var key := "fixture" + str(body.get_instance_id())
+		view.village._apply_collision(body,base-size*.5,base+size*.5)
+		var prior_polygon := shape.polygon.duplicate()
 		var result := VillageSpriteArt.render(view,key,body,base-size*.5,base+size*.5,"recovered")
 		check(not result.is_empty(),"all source poses render: " + str(row.id))
 		var entry: Dictionary = view._items[key]
@@ -108,8 +112,11 @@ func run() -> void:
 		check(contains_body(view.cell_to_world(center),body),"actual movement blocks floor: " + str(row.id))
 		check(not contains_body(view.cell_to_world(center+Vector2(10,10)),body),"outside approach free: " + str(row.id))
 		var inset := float(row.get("collision_inset",.97))
-		for i in 4:
-			check(view.world_to_cell(body.to_global(shape.polygon[i])).distance_to(base+(footprint[i]-base)*inset) < .001,"calibrated floor collision: " + str(row.id))
+		if bool(row.get("preserve_collision",false)):
+			check(shape.polygon == prior_polygon,"native sprite preserves original canonical collision: " + str(row.id))
+		else:
+			for i in 4:
+				check(view.world_to_cell(body.to_global(shape.polygon[i])).distance_to(base+(footprint[i]-base)*inset) < .001,"calibrated floor collision: " + str(row.id))
 		if row.id == "street_lantern": check(bool(entry.material.get_shader_parameter("use_emission")),"glass emission survives billboard conversion")
 		view._remove_item(key)
 		body.queue_free()

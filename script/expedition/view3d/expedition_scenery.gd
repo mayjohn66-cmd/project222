@@ -7,6 +7,7 @@ extends RefCounted
 var st: ExpeditionStage3D
 var _cache: Dictionary = {}
 var _half := Vector2(0.5, 0.5)
+var use_prepared_art := true # Native export tool can still render the original editable templates.
 
 const EXIT_X: float = 3.5
 const GAP := Rect2(2.45, -2.2, 2.1, 2.5)  # 출구 틈(여기엔 아무것도 놓지 않는다)
@@ -25,6 +26,10 @@ func clear_cache() -> void:
 func _tpl_prop(style: String, rule: Dictionary, key: String) -> Dictionary:
 	if _cache.has(key):
 		return _cache[key]
+	var prepared := ExpeditionEnvironmentArt.template(key) if use_prepared_art else {}
+	if not prepared.is_empty():
+		_cache[key] = prepared
+		return prepared
 
 	var built: Dictionary = VillageAssets.build_prop(style, -_half, _half, rule, st._p)
 	var mats: Array = VillageAssets.make_materials(built["specs"])
@@ -40,6 +45,10 @@ func _tpl_prop(style: String, rule: Dictionary, key: String) -> Dictionary:
 func _tpl_builder(b: VillageAssets.PartBuilder, key: String) -> Dictionary:
 	if _cache.has(key):
 		return _cache[key]
+	var prepared := ExpeditionEnvironmentArt.template(key) if use_prepared_art else {}
+	if not prepared.is_empty():
+		_cache[key] = prepared
+		return prepared
 
 	var mesh := ArrayMesh.new()
 	var specs: Array = b.commit_into(mesh)
@@ -54,6 +63,8 @@ func _tpl_builder(b: VillageAssets.PartBuilder, key: String) -> Dictionary:
 
 
 func _inst(t: Dictionary, pos: Vector2, scale: float, yaw: float, y: float = 0.0) -> MeshInstance3D:
+	if t.has("pixel_key"):
+		return ExpeditionEnvironmentArt.create(st,str(t.pixel_key),pos,scale,yaw,y)
 	var node := MeshInstance3D.new()
 	node.mesh = t["mesh"]
 
@@ -207,6 +218,9 @@ func _build_forest(rng: RandomNumberGenerator) -> void:
 
 
 func _forest_path(rng: RandomNumberGenerator) -> void:
+	if st._pixel_floor_material != null:
+		st._pixel_floor_material.set_shader_parameter("forest_path",true)
+		return
 	var b := VillageAssets.PartBuilder.new()
 	var dirt: Dictionary = VillageAssets._noise_spec(int(st._p["ts"]), Color(0.46, 0.34, 0.22), Color(0.58, 0.45, 0.3), "forest_path", 61, Color.WHITE, 0.12)
 	var part: SurfaceTool = b.new_part(dirt, Vector3(-1, 0, -1), Vector3(1, 1, 1))
@@ -259,9 +273,10 @@ func _build_swamp(rng: RandomNumberGenerator) -> void:
 
 	for pt in _walk_border(rng, -0.9, 1.4, 2.4, 0.3, 0.1):
 		var pr: float = rng.randf_range(0.5, 0.95)
-		VillageAssets.oct_st(wp, pt["pos"].x, pt["pos"].y, pr, 0.0, 0.025, pr * 0.97)
+		if st._pixel_floor_material != null: ExpeditionEnvironmentArt.puddle(st,pt["pos"],pr)
+		else: VillageAssets.oct_st(wp, pt["pos"].x, pt["pos"].y, pr, 0.0, 0.025, pr * 0.97)
 
-	st._node(wb)
+	if st._pixel_floor_material == null: st._node(wb)
 	var reeds: Dictionary = _tpl_reeds("s_reeds")
 
 	for pt in _walk_border(rng, -0.45, 0.6, 1.3, 0.35, 0.15):
@@ -487,9 +502,10 @@ func _floor_puddles(rng: RandomNumberGenerator, field: Array, avoid: Array, coun
 
 	for p in _scatter(rng, field, avoid, count, 2.0):
 		var r: float = 0.4 + rng.randf() * 0.35
-		VillageAssets.oct_st(wp, p.x, p.y, r, 0.0, 0.02, r * 0.97)
+		if st._pixel_floor_material != null: ExpeditionEnvironmentArt.puddle(st,p,r)
+		else: VillageAssets.oct_st(wp, p.x, p.y, r, 0.0, 0.02, r * 0.97)
 
-	st._node(b)
+	if st._pixel_floor_material == null: st._node(b)
 
 
 func _tpl_flowers(color: Color, key: String) -> Dictionary:

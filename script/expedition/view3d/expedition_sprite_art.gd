@@ -24,7 +24,11 @@ static func object_id(kind: String, table: String) -> String:
 
 static func create(parent: Node3D, id: String, position: Vector3) -> MeshInstance3D:
 	var row: Dictionary = assets().get(id, {})
+	return create_row(parent, row, position)
+
+static func create_row(parent: Node3D, row: Dictionary, position: Vector3) -> MeshInstance3D:
 	if row.is_empty(): return null
+	var id := str(row.id)
 	var texture := ReceivedWorldArt.texture(str(row.path))
 	if texture == null: return null
 	var bounds := texture.get_image().get_used_rect()

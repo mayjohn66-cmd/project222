@@ -38,6 +38,11 @@ static func render(view: StoreView3D, key: String, body: StaticBody2D,
 	if art == null: return {}
 	var row := row_for(art.art_path)
 	if row.is_empty(): return {}
+	var mirrored := art.scale.x < 0.0
+	# Horizontal mirroring swaps the two isometric ground axes.
+	if row.has("axis_y") and ((hi.y-lo.y > hi.x-lo.x) != mirrored):
+		row = row.duplicate()
+		row.merge(row.axis_y, true)
 	var path := str(row.path)
 	var roof_colour := str(art.get_meta("roof_color", ""))
 	if row.get("roof_variants", {}).has(roof_colour):
@@ -53,7 +58,6 @@ static func render(view: StoreView3D, key: String, body: StaticBody2D,
 		points.append(p)
 		left = minf(left,p.x)
 		right = maxf(right,p.x)
-	var mirrored := art.scale.x < 0.0
 	if mirrored:
 		tex = texture_for(path,true)
 		anchor.x = tex.get_width() - anchor.x
@@ -80,7 +84,7 @@ static func render(view: StoreView3D, key: String, body: StaticBody2D,
 			item.material.set_shader_parameter("use_emission",true)
 			item.material.set_shader_parameter("emission_strength",0.85)
 	# 지붕의 돌출은 보행을 막지 않는다. 빛과 마스크는 동일한 그림을 사용한다.
-	if view.sync_collision:
+	if view.sync_collision and not bool(row.get("preserve_collision", false)):
 		var collider := body.get_node_or_null(VillageMirror.COLLISION_3D) as CollisionPolygon2D
 		if collider != null:
 			var polygon := PackedVector2Array()
