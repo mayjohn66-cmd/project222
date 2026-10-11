@@ -1,30 +1,30 @@
-﻿catalog_path,catalog_png_exists,connected_id,runtime_png,status
-res://art/world/village_decor_v1/apple_tree.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_decor_v1/village_well.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_decor_v6/market_stall_quarter_turn.png,False,market_stall,res://art/received/village/market_stall.png,기존 원본 대체 경로 연결
-res://art/world/village_decor_v1/low_wall.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/plaza_props_v1/herb_stall_roof_diamond_v6.png,False,herb_stall,res://art/received/village/herb_stall.png,기존 원본 대체 경로 연결
-res://art/world/plaza_props_v1/supply_cart_tile_aligned_v3.png,False,supply_cart,res://art/received/village/supply_cart.png,기존 원본 대체 경로 연결
-res://art/world/plaza_props_v1/plaza_crates.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/market_stalls_v3/fish_front.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/market_stalls_v3/fish_rear.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/market_stalls_v3/bakery_front.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/market_stalls_v3/bakery_rear.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/market_stalls_v3/cloth_front.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/market_stalls_v3/cloth_rear.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_gathering_v1/village_noticeboard.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_gathering_v1/oak_bench.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_gathering_v1/street_lantern.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/route_props_v1/flower_bush.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_buildings_v1/bakery.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_buildings_v1/granary.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_buildings_v1/stable.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/tool_shop_v1/tool_shop.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/blacksmith_v2/blacksmith_iso.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/houses_v1/red_house.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/houses_v1/red_house_quarter_turn.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_houses_v2/moss_cottage_rear.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/village_houses_v2/moss_cottage_180.png,False,moss_cottage_front,res://art/received/village/moss_cottage_front.png,기존 원본 대체 경로 연결
-res://art/world/village_houses_v2/ochre_townhouse_rear_aligned.png,False,ochre_townhouse_rear,res://art/received/village/ochre_townhouse_rear.png,기존 원본 대체 경로 연결
-res://art/world/route_props_v1/road_sign.png,False,,,그림 미연결: 기존 표시 유지
-res://art/world/route_props_v1/wood_fence.png,False,,,그림 미연결: 기존 표시 유지
+﻿catalog_path,catalog_png_exists,connected_id,runtime_png,status,recovered_path,recovered_kind
+res://art/world/village_decor_v1/apple_tree.png,False,,,원본은 임시 자리표: 제작/재사용 검토,docs/그림_작업/받은그림/마을_원본_복구/apple_tree.png,임시 자리표
+res://art/world/village_decor_v1/village_well.png,False,,,원본은 임시 자리표: 제작/재사용 검토,docs/그림_작업/받은그림/마을_원본_복구/village_well.png,임시 자리표
+res://art/world/village_decor_v6/market_stall_quarter_turn.png,False,market_stall,res://art/received/village/market_stall.png,기존 원본 대체 경로 연결,docs/그림_작업/받은그림/마을_원본_복구/market_stall_quarter_turn.png,비자리표 원본
+res://art/world/village_decor_v1/low_wall.png,False,,,원본은 임시 자리표: 제작/재사용 검토,docs/그림_작업/받은그림/마을_원본_복구/low_wall.png,임시 자리표
+res://art/world/plaza_props_v1/herb_stall_roof_diamond_v6.png,False,herb_stall,res://art/received/village/herb_stall.png,기존 원본 대체 경로 연결,docs/그림_작업/받은그림/마을_원본_복구/herb_stall_roof_diamond_v6.png,비자리표 원본
+res://art/world/plaza_props_v1/supply_cart_tile_aligned_v3.png,False,supply_cart,res://art/received/village/supply_cart.png,기존 원본 대체 경로 연결,docs/그림_작업/받은그림/마을_원본_복구/supply_cart_tile_aligned_v3.png,비자리표 원본
+res://art/world/plaza_props_v1/plaza_crates.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/plaza_crates.png,비자리표 원본
+res://art/world/market_stalls_v3/fish_front.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/fish_front.png,비자리표 원본
+res://art/world/market_stalls_v3/fish_rear.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/fish_rear.png,비자리표 원본
+res://art/world/market_stalls_v3/bakery_front.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/bakery_front.png,비자리표 원본
+res://art/world/market_stalls_v3/bakery_rear.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/bakery_rear.png,비자리표 원본
+res://art/world/market_stalls_v3/cloth_front.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/cloth_front.png,비자리표 원본
+res://art/world/market_stalls_v3/cloth_rear.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/cloth_rear.png,비자리표 원본
+res://art/world/village_gathering_v1/village_noticeboard.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/village_noticeboard.png,비자리표 원본
+res://art/world/village_gathering_v1/oak_bench.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/oak_bench.png,비자리표 원본
+res://art/world/village_gathering_v1/street_lantern.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/street_lantern.png,비자리표 원본
+res://art/world/route_props_v1/flower_bush.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/flower_bush.png,비자리표 원본
+res://art/world/village_buildings_v1/bakery.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/bakery.png,비자리표 원본
+res://art/world/village_buildings_v1/granary.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/granary.png,비자리표 원본
+res://art/world/village_buildings_v1/stable.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/stable.png,비자리표 원본
+res://art/world/tool_shop_v1/tool_shop.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/tool_shop.png,비자리표 원본
+res://art/world/blacksmith_v2/blacksmith_iso.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/blacksmith_iso.png,비자리표 원본
+res://art/world/houses_v1/red_house.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/red_house.png,비자리표 원본
+res://art/world/houses_v1/red_house_quarter_turn.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/red_house_quarter_turn.png,비자리표 원본
+res://art/world/village_houses_v2/moss_cottage_rear.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/moss_cottage_rear.png,비자리표 원본
+res://art/world/village_houses_v2/moss_cottage_180.png,False,moss_cottage_front,res://art/received/village/moss_cottage_front.png,기존 원본 대체 경로 연결,docs/그림_작업/받은그림/마을_원본_복구/moss_cottage_180.png,비자리표 원본
+res://art/world/village_houses_v2/ochre_townhouse_rear_aligned.png,False,ochre_townhouse_rear,res://art/received/village/ochre_townhouse_rear.png,기존 원본 대체 경로 연결,docs/그림_작업/받은그림/마을_원본_복구/ochre_townhouse_rear_aligned.png,비자리표 원본
+res://art/world/route_props_v1/road_sign.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/road_sign.png,비자리표 원본
+res://art/world/route_props_v1/wood_fence.png,False,,,Git 원본 복구: 보정·연결 대상,docs/그림_작업/받은그림/마을_원본_복구/wood_fence.png,비자리표 원본

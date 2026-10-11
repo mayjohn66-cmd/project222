@@ -1,0 +1,296 @@
+{
+  "deletion_commit": "2835365b",
+  "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+  "assets": [
+    {
+      "original_path": "art/world/blacksmith_v2/blacksmith_iso.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/blacksmith_iso.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "85a7fd5652fa23a952a5c81ba7ecddbebca2d13562e42e7979cdc70a0b6d83da",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 223690,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/houses_v1/red_house.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/red_house.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "f5c1fc7ad6c9751cec8e7f9ec272f2f1cfffd157aece04fcb47ac2ca85cd79e1",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 168544,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/houses_v1/red_house_quarter_turn.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/red_house_quarter_turn.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "d32d94bd8e0b969bd110136109386620da4a6d6c064e793e530469d36da87f62",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 172519,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/market_stalls_v3/bakery_front.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/bakery_front.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "3e3530933b75fd1e4eb3272983e01389b45181e3a933d9becfa8ad937ee0b3d6",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 233163,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/market_stalls_v3/bakery_rear.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/bakery_rear.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "b8b5f92f4bc3241e9050753156c72690e7d220542a8c2f1a44d6e2cf6071a5e0",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 153682,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/market_stalls_v3/cloth_front.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/cloth_front.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "50c5e84ada23761d14361ee761ac9df49a58139a39d2de142e692595b85a062b",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 255769,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/market_stalls_v3/cloth_rear.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/cloth_rear.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "02293ee97080347d37fa44eeaf73aeda6ecd7bfceff67c3f4629c9a72048b915",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 218782,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/market_stalls_v3/fish_front.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/fish_front.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "efed8a6ee3ba513d40cc765635c867e01755425fbf1a6c921469ee78b0221602",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 283834,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/market_stalls_v3/fish_rear.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/fish_rear.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "a50fe5c1ef860d8308543be6b3c13dde39f4bfdbc54b075c2f116ee6b71358c5",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 184776,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/plaza_props_v1/herb_stall_roof_diamond_v6.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/herb_stall_roof_diamond_v6.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "3f1df77c718e379a983720fc00b6447e107040c26c0c4f2ef1229b17f6caa7ff",
+      "width": 1536,
+      "height": 1152,
+      "rgba_colours": 173301,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/plaza_props_v1/plaza_crates.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/plaza_crates.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "4c18d685ce685444f2c822c2ca26004cac0429a627510a10fdd720179099e6c5",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 157775,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/plaza_props_v1/supply_cart_tile_aligned_v3.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/supply_cart_tile_aligned_v3.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "3fec2fcd3a6fb257ccab2dd147759126136da913051142c81d2de339cc79302b",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 94139,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/route_props_v1/flower_bush.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/flower_bush.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "a6cb91589986977416818e619e1e18f572436da138dec7f77837bb91677c0156",
+      "width": 1774,
+      "height": 887,
+      "rgba_colours": 176201,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/route_props_v1/road_sign.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/road_sign.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "02c7557a8655378cb51e6402ba663099e0932ee0a4a2c451416454361073c9c8",
+      "width": 1070,
+      "height": 1470,
+      "rgba_colours": 81090,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/route_props_v1/wood_fence.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/wood_fence.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "22608302070b24d37c465024afb487ee920331bebc33d0baa7c08f804ccf6867",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 86937,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/tool_shop_v1/tool_shop.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/tool_shop.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "c348ba673ba57bfd83ddc358167464022654f7e57ddf0ddca4eb05cd796637b1",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 194072,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_buildings_v1/bakery.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/bakery.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "8f836879d446fe65c3e1118c20a2530348ca7a6f8aec0b8bd6ab528ba21fe0ae",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 185612,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_buildings_v1/granary.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/granary.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "b8a37ed212e54da6f1d5746419fb30770b36b9710fd410ab00c643eef80ff8f3",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 211457,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_buildings_v1/stable.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/stable.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "ceecb685ab484df65c8b5aa3f5c839a6a493d0b0939fa9d537d2ad3c097616b8",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 145708,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_decor_v1/apple_tree.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/apple_tree.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "f7dbd3fdf73b02d717287e86c0b419d147ad91c55ee0cfecc1d72fac35327c3a",
+      "width": 128,
+      "height": 160,
+      "rgba_colours": 2,
+      "status": "임시 자리표: 새 그림 필요"
+    },
+    {
+      "original_path": "art/world/village_decor_v1/low_wall.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/low_wall.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "87a527716c690e62c0c8803e891e62b37e654b2dfac5fe81947106fc91266f8c",
+      "width": 1536,
+      "height": 768,
+      "rgba_colours": 2,
+      "status": "임시 자리표: 새 그림 필요"
+    },
+    {
+      "original_path": "art/world/village_decor_v1/village_well.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/village_well.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "9d037494a337c9769c2a9fa2a585bb62085107c543b93c72f698affc64062dab",
+      "width": 96,
+      "height": 96,
+      "rgba_colours": 2,
+      "status": "임시 자리표: 새 그림 필요"
+    },
+    {
+      "original_path": "art/world/village_decor_v6/market_stall_quarter_turn.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/market_stall_quarter_turn.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "210a236268998f1714e2e0917bd5a7b4fcaba9363f07e49249dec6fcbdb3b8b7",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 262617,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_gathering_v1/oak_bench.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/oak_bench.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "22273d2871a1d2c4633e4074b9ba850480a09a8894a2bd4d9db800e4d6be8bc3",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 83164,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_gathering_v1/street_lantern.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/street_lantern.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "1fb5c1836bcce8bc270848097517a67e35e9d17ea455028c6b3299e8ebb306e1",
+      "width": 1774,
+      "height": 887,
+      "rgba_colours": 84861,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_gathering_v1/village_noticeboard.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/village_noticeboard.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "01c0297034e9a4aa3b1f08571b6be6807b4ebe77763c868098ca29103e9ccb16",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 122744,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_houses_v2/moss_cottage_180.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/moss_cottage_180.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "f1761377647838be88ace7c81b0d00ff929a1c0410e12e5e03dcbd1d2a9dfcfb",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 218914,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_houses_v2/moss_cottage_rear.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/moss_cottage_rear.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "43fe3e415e631a55282f732f43727e227eb17c0ba27a38edef811aae2b423cbc",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 210481,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    },
+    {
+      "original_path": "art/world/village_houses_v2/ochre_townhouse_rear_aligned.png",
+      "restored_path": "docs/그림_작업/받은그림/마을_원본_복구/ochre_townhouse_rear_aligned.png",
+      "source_commit": "ecea51f1d7f5442d36c8841ca6059a5b26b6d150",
+      "sha256": "2e0dfe79362ff4a1d667f9b89e63fea4488bc016634aa9cbef089e9369c59f11",
+      "width": 1536,
+      "height": 1024,
+      "rgba_colours": 208423,
+      "status": "원본 복구: 품질 확인 및 보정·연결 대상"
+    }
+  ]
+}
