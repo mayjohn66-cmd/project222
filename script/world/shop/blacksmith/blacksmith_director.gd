@@ -47,7 +47,7 @@ func refresh() -> void:
 		npc = VillageResident.new()
 		npc.name = "VillageBlacksmithNpc"
 		npc.resident_id = "village_blacksmith"
-		npc.set_meta("look_key","story_npc") # 정식 그림 확정 전 기존 인물 모델.
+		npc.set_meta("look_key","story_npc") # resident_id로 대장장이 전용 그림을 고른다.
 		world.get_node("Actors").add_child(npc)
 		npc.set_physics_process(false)
 	npc.global_position = point

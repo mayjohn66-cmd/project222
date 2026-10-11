@@ -1,0 +1,177 @@
+{
+  "date": "2026-10-11",
+  "tool": "built-in imagegen",
+  "results": [
+    {
+      "key": "state_autumn",
+      "file": "생성_원본/state_autumn.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-4e31091d-9b20-43a9-a2f2-3fbd86886dc4.png"
+    },
+    {
+      "key": "state_berry",
+      "file": "생성_원본/state_berry.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-41561ff2-71e2-4862-972c-96faf05834fc.png"
+    },
+    {
+      "key": "actor_blacksmith",
+      "file": "생성_원본/actor_blacksmith.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-e20c2d24-c0db-42b6-8754-b6813ccc903b.png"
+    },
+    {
+      "key": "actor_commuter",
+      "file": "생성_원본/actor_commuter.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-b011bebb-2ab4-499e-8125-f533b82dbb9c.png"
+    },
+    {
+      "key": "actor_player_male_seat",
+      "file": "생성_원본/actor_player_male_seat.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-31bacef1-02de-4086-b4cf-2b115b1d3874.png"
+    },
+    {
+      "key": "actor_player_female_seat",
+      "file": "생성_원본/actor_player_female_seat.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-102e3a6f-9cc2-4a34-8aa1-ff8ee021e9e3.png"
+    },
+    {
+      "key": "actor_player_male_floor",
+      "file": "생성_원본/actor_player_male_floor.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-2add2efe-dccd-496e-a215-ee5519506bcb.png"
+    },
+    {
+      "key": "actor_player_female_floor",
+      "file": "생성_원본/actor_player_female_floor.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-0ed333ee-e04d-4671-b96a-749f8989669e.png"
+    },
+    {
+      "key": "actor_doyun_seat",
+      "file": "생성_원본/actor_doyun_seat.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-2d529a73-21d2-42f8-9f77-d3baf5220758.png"
+    },
+    {
+      "key": "actor_naru_seat",
+      "file": "생성_원본/actor_naru_seat.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-dc3b9323-45fa-47a9-846f-3f51731f549e.png"
+    },
+    {
+      "key": "actor_sora_seat",
+      "file": "생성_원본/actor_sora_seat.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-74b57d39-34e7-44f6-a957-68a65f094b35.png"
+    },
+    {
+      "key": "actor_player_male_seat_back",
+      "file": "생성_원본/actor_player_male_seat_back.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-f8018b54-5182-4c68-a950-71f92e453896.png"
+    },
+    {
+      "key": "actor_player_female_seat_back",
+      "file": "생성_원본/actor_player_female_seat_back.png",
+      "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-b6163cf5-2a98-4c8a-a6c3-f3b0812962b7.png"
+    }
+  ],
+  "prompts": [
+    {
+      "key": "state_autumn",
+      "prompt": "Use case: lighting-weather / precise-object-edit. Edit target: the provided game tree sprite. Produce ONE isolated autumn-state sprite of EXACTLY the same tree, on true alpha transparency. Preserve its round clustered canopy silhouette, visible trunk, roots, overall dimensions, camera angle (2:1 isometric game), and original painterly pixel art material/style. Change green foliage only to warm orange, golden yellow, and gentle rust red; keep trunk and root structure identical and neutral lighting equally bright. Keep the green ground patch under its roots exactly as in the reference, since this is part of the existing tree sprite. No new fallen leaves outside that footprint, no snow, no scene, no text, no border, no sprite sheet, no blur or extra glowing effects. This must align with the reference when seasons switch. One sprite filling most of canvas, generous transparent margin, no clipped pixels.",
+      "references": [
+        "art/received/nature/iso_tree_round.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "state_berry",
+      "prompt": "Use case precise-object-edit. Edit target: the supplied existing green bush game sprite. Create ONE ripe wild berry state sprite. Keep exactly the bush silhouette, leaves, tiny original ground base, camera angle and pixel art shading of the reference. Add only a handful of clearly readable ripe red berry clusters tucked among leaves, about eight clusters, each occupying a small area. No baskets, person, signs, text, symbols or scenery. Genuine transparent background. Maintain neutral bright lighting, crisp pixelated edges. Reference foliage and footprint must remain aligned with the existing empty bush; avoid wholesale redesign or smooth painted shading. Single isolated sprite with transparent margins.",
+      "references": [
+        "art/received/nature/bush.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_blacksmith",
+      "prompt": "Use case stylized-concept. Reference is STYLE AND BODY PROPORTIONS ONLY, do not copy this character's identity. ONE full-body world sprite of a fantasy village BLACKSMITH: sturdy middle-aged male, short dark graying hair and short beard, kind serious face, cream rolled-sleeve work shirt, dark brown leather smith apron with small belt tools, charcoal trousers, heavy brown work boots. Small steel smith hammer held low close to body, no sword. No miner helmet. Pixel art game sprite with same crisp anime pixel shading and small adult proportions as reference (not big chibi head). Three-quarter facing screen SOUTH-WEST, viewed slightly from above at same 2:1 isometric angle. Neutral bright light, true transparent background, no ground patch, no cast shadow, no scene, no text, no sheet. Complete head-to-boots silhouette, generous margin, maximum clear detail for a 96px-high game sprite.",
+      "references": [
+        "art/actors/npc/doyun/south_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_commuter",
+      "prompt": "Use case stylized-concept. Reference is STYLE/ADULT PROPORTIONS ONLY. ONE modern ordinary office commuter full-body world sprite for an early convenience-store prologue. Male adult, tidy dark brown short hair, light gray/off-white buttoned shirt, unbuttoned muted navy office jacket, dark slate trousers, black formal shoes. Small plain dark brown briefcase at side, no logo, no fantasy weapons or armor. Facing SOUTH-WEST in a three-quarter 2:1 isometric game view, slightly overhead, same small adult anime pixel proportions and crisp pixel shading as the reference, no large chibi head. Bright neutral lighting. Genuine transparent background, no ground/shadow/backdrop, no words, no panels or sprite sheet. Single full-body sprite with ample transparent margin and legible detail at 96px tall.",
+      "references": [
+        "art/actors/npc/doyun/south_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_player_male_seat",
+      "prompt": "Use case identity-preserve / precise-object-edit. Edit target: the provided convenience-store protagonist pixel world sprite. Keep exactly the SAME male protagonist face, haircut, colors and convenience store uniform (white shirt and navy/teal vest, dark pants, same shoes). Change pose only: sitting calmly on an INVISIBLE bench or chair, three-quarter SOUTH-WEST facing, same slightly overhead isometric camera as reference. Upright relaxed torso, both thighs forward horizontally, bent knees, lower legs hanging down, shoes flat, hands resting on thighs. No chair or bench pixels whatsoever: furniture is a separate asset in the game. Anatomically clear seated hips, not squatting, not standing, not floating yoga. Total head-to-sole height about 72 percent of the original standing character at unchanged head scale. Match crisp native pixel art and adult proportions, no oversize chibi head, neutral bright shading. SINGLE isolated complete seated character on true transparent background, no text, shadow, ground, scene, border or sprite sheet. Generous blank margin.",
+      "references": [
+        "art/actors/player_male/rotations/south_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_player_female_seat",
+      "prompt": "Use case identity-preserve / precise-object-edit. Edit target: the provided convenience-store protagonist pixel world sprite. Keep exactly the SAME female protagonist face, haircut, colors and convenience store uniform (white shirt and navy/teal vest, dark pants, same shoes). Change pose only: sitting calmly on an INVISIBLE bench or chair, three-quarter SOUTH-WEST facing, same slightly overhead isometric camera as reference. Upright relaxed torso, both thighs forward horizontally, bent knees, lower legs hanging down, shoes flat, hands resting on thighs. No chair or bench pixels whatsoever: furniture is a separate asset in the game. Anatomically clear seated hips, not squatting, not standing, not floating yoga. Total head-to-sole height about 72 percent of the original standing character at unchanged head scale. Match crisp native pixel art and adult proportions, no oversize chibi head, neutral bright shading. SINGLE isolated complete seated character on true transparent background, no text, shadow, ground, scene, border or sprite sheet. Generous blank margin.",
+      "references": [
+        "art/actors/player_female/rotations/south_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_player_male_floor",
+      "prompt": "Use case identity-preserve / precise-object-edit. Edit target is the supplied male convenience-store protagonist world sprite. Keep the exact same face, haircut, navy/teal store vest over white short-sleeve shirt, dark trousers and shoes, crisp anime pixel art adult proportions, neutral bright shading and slightly overhead SOUTH-WEST isometric view. Change POSE ONLY: sitting directly on the ground after a surprise, knees bent up near chest and together, both shoes on floor, one palm placed by hip on ground, other hand resting on bent knee. Calm startled resting body, not injured. Head size unchanged relative to reference body, total head-to-ground seated height about HALF of the standing height. Clearly distinct from sitting on a chair: hips rest on ground, knees raised, NO vertical hanging lower legs. ONE complete isolated character, true transparency. No ground patch, shadows, furniture, background, text, border, sheet or other characters. Generous transparent margins.",
+      "references": [
+        "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/player_male/rotations/south_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_player_female_floor",
+      "prompt": "Use case identity-preserve / precise-object-edit. Edit target is the supplied female convenience-store protagonist world sprite. Keep the exact same face, haircut, navy/teal store vest over white short-sleeve shirt, dark trousers and shoes, crisp anime pixel art adult proportions, neutral bright shading and slightly overhead SOUTH-WEST isometric view. Change POSE ONLY: sitting directly on the ground after a surprise, knees bent up near chest and together, both shoes on floor, one palm placed by hip on ground, other hand resting on bent knee. Calm startled resting body, not injured. Head size unchanged relative to reference body, total head-to-ground seated height about HALF of the standing height. Clearly distinct from sitting on a chair: hips rest on ground, knees raised, NO vertical hanging lower legs. ONE complete isolated character, true transparency. No ground patch, shadows, furniture, background, text, border, sheet or other characters. Generous transparent margins.",
+      "references": [
+        "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/player_female/rotations/south_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_doyun_seat",
+      "prompt": "Use case identity-preserve / precise-object-edit. Edit target: this EXACT named village resident pixel art sprite, doyun. Preserve identity completely: same face, same hair or hat, same beard if present, same clothes, all colors and props. Change POSE ONLY to sitting relaxed on an INVISIBLE bench facing SOUTH-WEST, same slightly overhead isometric camera. Thighs project forward horizontally, knees bent, shins point down, shoes on ground, both hands relaxed on thighs or same book/prop held in lap. No actual bench or chair rendered; furniture is separate. Keep original adult proportions, matching pixel shading, same head size. Character head-to-shoes seated height about 72% of standing at unchanged head scale. Do not draw a different generic villager. SINGLE complete isolated sprite, bright neutral light, true alpha transparency, ample margin. No background, ground patch, cast shadow, text, border, sprite sheet, or animation frames.",
+      "references": [
+        "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/npc/doyun/south_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_naru_seat",
+      "prompt": "Use case identity-preserve / precise-object-edit. Edit target: this EXACT named village resident pixel art sprite, naru. Preserve identity completely: same face, same hair or hat, same beard if present, same clothes, all colors and props. Change POSE ONLY to sitting relaxed on an INVISIBLE bench facing SOUTH-WEST, same slightly overhead isometric camera. Thighs project forward horizontally, knees bent, shins point down, shoes on ground, both hands relaxed on thighs or same book/prop held in lap. No actual bench or chair rendered; furniture is separate. Keep original adult proportions, matching pixel shading, same head size. Character head-to-shoes seated height about 72% of standing at unchanged head scale. Do not draw a different generic villager. SINGLE complete isolated sprite, bright neutral light, true alpha transparency, ample margin. No background, ground patch, cast shadow, text, border, sprite sheet, or animation frames.",
+      "references": [
+        "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/npc/naru/south_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_sora_seat",
+      "prompt": "Use case identity-preserve / precise-object-edit. Edit target: this EXACT named village resident pixel art sprite, sora. Preserve identity completely: same face, same hair or hat, same beard if present, same clothes, all colors and props. Change POSE ONLY to sitting relaxed on an INVISIBLE bench facing SOUTH-WEST, same slightly overhead isometric camera. Thighs project forward horizontally, knees bent, shins point down, shoes on ground, both hands relaxed on thighs or same book/prop held in lap. No actual bench or chair rendered; furniture is separate. Keep original adult proportions, matching pixel shading, same head size. Character head-to-shoes seated height about 72% of standing at unchanged head scale. Do not draw a different generic villager. SINGLE complete isolated sprite, bright neutral light, true alpha transparency, ample margin. No background, ground patch, cast shadow, text, border, sprite sheet, or animation frames.",
+      "references": [
+        "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/npc/sora/south_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_player_male_seat_back",
+      "prompt": "Use case identity-preserve / precise-object-edit. Edit target the supplied male convenience-store protagonist BACK view world sprite. Same exact hairstyle, white short sleeves, navy/teal store uniform vest, dark trousers, shoes and crisp pixel art. Generate ONE seated pose viewed from BACK, facing NORTH-WEST, isometric camera slightly overhead exactly like the supplied reference. Sitting on an INVISIBLE chair/bench: hips resting at chair seat height, thighs forward away from camera, knees bent, shins down, shoes on ground, hands resting on thighs. Only back of head is visible, NO front face or eyes. No actual chair/bench pixels. Unchanged head size, seated height about72% of standing height. Match source color palette and proportions; full head-to-shoes figure with genuine alpha transparency and ample margin. No shadows, background, ground, text, border, sheet or additional character.",
+      "references": [
+        "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/player_male/rotations/north_west.png"
+      ],
+      "transparent_background": true
+    },
+    {
+      "key": "actor_player_female_seat_back",
+      "prompt": "Use case identity-preserve / precise-object-edit. Edit target the supplied female convenience-store protagonist BACK view world sprite. Same exact hairstyle, white short sleeves, navy/teal store uniform vest, dark trousers, shoes and crisp pixel art. Generate ONE seated pose viewed from BACK, facing NORTH-WEST, isometric camera slightly overhead exactly like the supplied reference. Sitting on an INVISIBLE chair/bench: hips resting at chair seat height, thighs forward away from camera, knees bent, shins down, shoes on ground, hands resting on thighs. Only back of head is visible, NO front face or eyes. No actual chair/bench pixels. Unchanged head size, seated height about72% of standing height. Match source color palette and proportions; full head-to-shoes figure with genuine alpha transparency and ample margin. No shadows, background, ground, text, border, sheet or additional character.",
+      "references": [
+        "C:/Users/john9/Documents/Codex/2026-09-30/clade/work/project222/art/actors/player_female/rotations/north_west.png"
+      ],
+      "transparent_background": true
+    }
+  ]
+}

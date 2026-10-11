@@ -11,6 +11,7 @@ var manager
 var previous_paused := false
 var previous_physics := true
 var label_visibility: Dictionary = {}
+var seating := VillageRestPose.new()
 
 func _ready() -> void:
 	life = get_parent()
@@ -50,6 +51,11 @@ func try_interact() -> bool:
 	player.set_physics_process(false)
 	player.velocity = Vector2.ZERO
 	world.set_meta("village_rest_open", true)
+	var seated: Node2D = player
+	if stage == "opening":
+		var participant := VillageRestFlow.SETTINGS.participants[0]
+		seated = life.residents.get(participant,player)
+	seating.begin(world,seated,VillageRestFlow.site(world))
 	world.get_node("ResidentRequestDirector").refresh()
 	var lines: Array[String]
 	if stage == "opening":
@@ -69,6 +75,7 @@ func _end_talk() -> void:
 		elif stage == "rest": VillageRestFlow.rest(world)
 	stage = ""
 	talking = false
+	seating.restore()
 	world.remove_meta("village_rest_open")
 	for label in label_visibility:
 		if is_instance_valid(label): label.visible = label_visibility[label]

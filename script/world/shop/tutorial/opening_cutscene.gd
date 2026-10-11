@@ -436,10 +436,12 @@ func _body_action(action: String) -> void:
 
 	match action:
 		"floor_sit":
+			player.set_meta("sit_kind", "floor")
 			player.set_meta("sitting", true)
 			await _wait(0.7)
 		"stand":
 			player.remove_meta("sitting")
+			if player.has_meta("sit_kind"): player.remove_meta("sit_kind")
 			await _wait(0.6)
 		"back_away":
 			var cell: Vector2 = view.world_to_cell(player.global_position)
@@ -478,6 +480,7 @@ func _sit_down() -> void:
 		return
 
 	player.set_meta("face_dir", Vector2(seat["face"]))   # 탁자(창) 쪽을 보고 앉는다
+	player.set_meta("sit_kind", "seat")
 	player.set_meta("sitting", true)
 	await _wait(0.7)
 	await _look_out_window()
@@ -501,6 +504,8 @@ func _stand_up() -> void:
 
 	if player != null and player.has_meta("sitting"):
 		player.remove_meta("sitting")
+	if player != null and player.has_meta("sit_kind"):
+		player.remove_meta("sit_kind")
 
 	if player != null:
 		for key in ["face_dir", "face_lock"]:

@@ -121,16 +121,17 @@ static func nature(view: StoreView3D, key: String, lo: Vector2, hi: Vector2, rul
 		signature: String, scale_factor: float = 1.0) -> bool:
 	if not ENABLED:
 		return false
+	if NatureStateArt.render(view,key,lo,hi,rule,signature,scale_factor): return true
 	var style := str(rule.get("style", ""))
 	var variant := str(rule.get("variant", ""))
 	var name := ""
 	if style == "tree":
 		if variant == "autumn":
-			return false # 부위별 단풍 색조와 낙엽은 기존 계절 모델을 유지한다.
+			return false # 상태 그림이 없을 때만 기존 모델로 돌아간다.
 		name = "iso_tree_round" if variant == "round" or variant.is_empty() else "tree_" + variant
 	elif style == "flower_bush":
 		if variant == "berry":
-			return false # 실제 열매 표시와 수확 상태를 기존 모델이 표현한다.
+			return false # 상태 그림이 없을 때만 기존 모델로 돌아간다.
 		name = "flower_bush"
 	elif style in ["rocks", "rock", "stump", "log", "mushroom"]:
 		name = "iso_" + style if style in ["stump", "log"] else ("rocks" if style == "rock" else style)

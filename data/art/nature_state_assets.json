@@ -1,0 +1,76 @@
+{
+  "autumn_orange": {
+    "path": "res://art/received/nature_states/tree_autumn_orange.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/tree_autumn_orange.png",
+    "sha256": "5137fd55179188b0c30be19a5ca83b3e3201a979ba058a3b4ee18c933222cc8f",
+    "anchor": [
+      49,
+      115
+    ],
+    "normal_source": "res://art/received/nature/iso_tree_round.png",
+    "leaf_tint": "ffffff",
+    "changed_leaf_pixels": 3308,
+    "reference_sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+  },
+  "autumn_red": {
+    "path": "res://art/received/nature_states/tree_autumn_red.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/tree_autumn_red.png",
+    "sha256": "69e2e25642d90bc767e11f9ef00ffab1273b1bc858475f2e4d2b9254517b00c4",
+    "anchor": [
+      49,
+      115
+    ],
+    "normal_source": "res://art/received/nature/iso_tree_round.png",
+    "leaf_tint": "ff9a84",
+    "changed_leaf_pixels": 3308,
+    "reference_sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+  },
+  "autumn_gold": {
+    "path": "res://art/received/nature_states/tree_autumn_gold.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/tree_autumn_gold.png",
+    "sha256": "bc6977e094c05553afe56caf8425a8c4caa118965f666e750de332d7c36b13cc",
+    "anchor": [
+      49,
+      115
+    ],
+    "normal_source": "res://art/received/nature/iso_tree_round.png",
+    "leaf_tint": "ffe48a",
+    "changed_leaf_pixels": 3308,
+    "reference_sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+  },
+  "autumn_amber": {
+    "path": "res://art/received/nature_states/tree_autumn_amber.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/tree_autumn_amber.png",
+    "sha256": "840f715926ac0d249eb034cc0ca54790358b865065a0b97fb0e2c307527a9f3e",
+    "anchor": [
+      49,
+      115
+    ],
+    "normal_source": "res://art/received/nature/iso_tree_round.png",
+    "leaf_tint": "ffc070",
+    "changed_leaf_pixels": 3308,
+    "reference_sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+  },
+  "berry_empty": {
+    "path": "res://art/received/nature_states/berry_empty.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/berry_empty.png",
+    "sha256": "ac602c861a82b23daad6f16f19952a1a81c2d7664c520ec04cf3b3d0dddad694",
+    "anchor": [
+      32,
+      56
+    ],
+    "normal_source": "res://art/received/nature/bush.png",
+    "reference_sha256": "2d786fc7f5f6f3bfd0afaf46373d7a664e380f37f8a738bbd90261ec9c673689"
+  },
+  "berry_ready": {
+    "path": "res://art/received/nature_states/berry_ready.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/berry_ready.png",
+    "sha256": "e00e6fda55968b40cd1122349483a5b8b64a82efe3684d0767206d02eaca61f1",
+    "anchor": [
+      32,
+      56
+    ],
+    "normal_source": "res://art/received/nature/bush.png",
+    "reference_sha256": "2d786fc7f5f6f3bfd0afaf46373d7a664e380f37f8a738bbd90261ec9c673689"
+  }
+}

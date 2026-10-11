@@ -1,0 +1,298 @@
+{
+  "blacksmith": {
+    "path": "res://art/actors/poses/blacksmith_south_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/blacksmith.png",
+    "sha256": "693a47b44c1b3ca8b9de62822489237caa2c12e630bce136924147a08701391f",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "standing"
+  },
+  "commuter": {
+    "path": "res://art/actors/poses/commuter_south_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/commuter.png",
+    "sha256": "bbea0e1fe602c613ff5110c81b863e83432a67e7ef81d77f351e4f15e9400f67",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "standing"
+  },
+  "player_male:seat:south-west": {
+    "path": "res://art/actors/poses/player_male_seat_south_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_male_seat_south_west.png",
+    "sha256": "1f0c94915045867889a3224bb9f7f0d0395bea20fe2f1a7421c9dff1fae4696d",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": false,
+    "identity": "player_male"
+  },
+  "player_male:seat:south-east": {
+    "path": "res://art/actors/poses/player_male_seat_south_east.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_male_seat_south_east.png",
+    "sha256": "7797cd1d79bdf1a4cecb0e1332e6d790ab0e6e63fa38a51934bbb39e5ac7f7c6",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-east",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": true,
+    "identity": "player_male"
+  },
+  "player_male:floor:south-west": {
+    "path": "res://art/actors/poses/player_male_floor_south_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_male_floor_south_west.png",
+    "sha256": "ad1f3513bd9e94ea487b8a0122de928f9252d7cea25816ffb5a0a3a9026bbabe",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "floor",
+    "mirrored": false,
+    "identity": "player_male"
+  },
+  "player_male:floor:south-east": {
+    "path": "res://art/actors/poses/player_male_floor_south_east.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_male_floor_south_east.png",
+    "sha256": "4ed1699ac92861249b6954d654d6ee0ce1c7c75166c00c05744aafd7833a1767",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-east",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "floor",
+    "mirrored": true,
+    "identity": "player_male"
+  },
+  "player_male:seat:north-west": {
+    "path": "res://art/actors/poses/player_male_seat_north_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_male_seat_north_west.png",
+    "sha256": "c02993d5621aa93e42ac9353533176877429ce6e44fcd3b52056218abf23f5b9",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "north-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": false,
+    "identity": "player_male"
+  },
+  "player_male:seat:north-east": {
+    "path": "res://art/actors/poses/player_male_seat_north_east.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_male_seat_north_east.png",
+    "sha256": "1206b19ed998fdd19951ef379e9ce7752bddf14b607f3d9d8f049f24a3b63b43",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "north-east",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": true,
+    "identity": "player_male"
+  },
+  "player_female:seat:south-west": {
+    "path": "res://art/actors/poses/player_female_seat_south_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_female_seat_south_west.png",
+    "sha256": "5a4fd6b253c6595569d3a98e2d292676d4450bf1ac1dcb12adb9e206bf7b7f39",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": false,
+    "identity": "player_female"
+  },
+  "player_female:seat:south-east": {
+    "path": "res://art/actors/poses/player_female_seat_south_east.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_female_seat_south_east.png",
+    "sha256": "6dcb0bccc8a1821bb29b7e9f9e5c18d446e76b4c8bdef93d1b967afcac0beeb3",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-east",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": true,
+    "identity": "player_female"
+  },
+  "player_female:floor:south-west": {
+    "path": "res://art/actors/poses/player_female_floor_south_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_female_floor_south_west.png",
+    "sha256": "ede99ea7c59bb78ccf6e2174d618361c41a3a7d56cf996dd46199f2d6b32aa35",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "floor",
+    "mirrored": false,
+    "identity": "player_female"
+  },
+  "player_female:floor:south-east": {
+    "path": "res://art/actors/poses/player_female_floor_south_east.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_female_floor_south_east.png",
+    "sha256": "9d5eb802991ea1943ba185d8c051aa8d72feb880083bb21d75a77b1988cdd179",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-east",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "floor",
+    "mirrored": true,
+    "identity": "player_female"
+  },
+  "player_female:seat:north-west": {
+    "path": "res://art/actors/poses/player_female_seat_north_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_female_seat_north_west.png",
+    "sha256": "c72bb1943932e2867599c6c96003253a4368ac4904a689fe29d36f57d51adbca",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "north-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": false,
+    "identity": "player_female"
+  },
+  "player_female:seat:north-east": {
+    "path": "res://art/actors/poses/player_female_seat_north_east.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/player_female_seat_north_east.png",
+    "sha256": "ef2cb7b5a538a773ea3eff2c2c21b191cfd9cde5670298260b7095f3155f9d34",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "north-east",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": true,
+    "identity": "player_female"
+  },
+  "doyun:seat:south-west": {
+    "path": "res://art/actors/poses/doyun_seat_south_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/doyun_seat_south_west.png",
+    "sha256": "7ba27154e081f6380aa8e127ea2c56bd6813063df107e3d6fa21e1f545d72455",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": false,
+    "identity": "doyun"
+  },
+  "doyun:seat:south-east": {
+    "path": "res://art/actors/poses/doyun_seat_south_east.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/doyun_seat_south_east.png",
+    "sha256": "21e6a354a48895db74b0ab022d8be6f17c16e2dfb7ebb5afdc9b69fb89c76002",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-east",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": true,
+    "identity": "doyun"
+  },
+  "naru:seat:south-west": {
+    "path": "res://art/actors/poses/naru_seat_south_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/naru_seat_south_west.png",
+    "sha256": "df5b78b2143599a4de588f4562d8121b3452ae60be8a8d9b915c9a57de65d4bb",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": false,
+    "identity": "naru"
+  },
+  "naru:seat:south-east": {
+    "path": "res://art/actors/poses/naru_seat_south_east.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/naru_seat_south_east.png",
+    "sha256": "6ee516a5c3a3de855e070259beecb8bd5ba8acc97030ff1a2161c3803fbed89b",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-east",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": true,
+    "identity": "naru"
+  },
+  "sora:seat:south-west": {
+    "path": "res://art/actors/poses/sora_seat_south_west.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/sora_seat_south_west.png",
+    "sha256": "7bb78c0773ee4ce22b76f1cef24d631420a0d74668fb0ed1837114b64403d04b",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-west",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": false,
+    "identity": "sora"
+  },
+  "sora:seat:south-east": {
+    "path": "res://art/actors/poses/sora_seat_south_east.png",
+    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/sora_seat_south_east.png",
+    "sha256": "2bd21117cbc5124f553fe426e53ed0901b5d7ae14fe3c746b0bd42fd8a22f50d",
+    "feet": [
+      48,
+      90
+    ],
+    "direction": "south-east",
+    "reference_height": 84,
+    "display_height": 0.9872689559999999,
+    "pose": "seat",
+    "mirrored": true,
+    "identity": "sora"
+  }
+}

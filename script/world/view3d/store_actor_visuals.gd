@@ -1,9 +1,11 @@
 class_name StoreActorVisuals
 extends RefCounted
-## 역할/직원 ID로 그림을 고른다. 전용 NPC 그림을 우선하고, 좌식 전용 그림이 없는 앉는 연출은 기존 모델을 사용한다.
+## 역할/직원 ID로 그림을 고른다. 제작된 의상/좌식을 우선하고 미제작 자세는 기존 모델을 사용한다.
 
 
 static func sprite_key(actor: Node, look_key: String) -> String:
+	var pose_key := ActorPoseArt.key_for(actor,look_key)
+	if not pose_key.is_empty(): return pose_key
 	if bool(actor.get_meta("sitting", false)):
 		return ""
 	# 명시된 연출 의상은 일반 손님 역할보다 우선한다. story_npc는 예전 임시 표식이다.
@@ -14,7 +16,7 @@ static func sprite_key(actor: Node, look_key: String) -> String:
 	var named_key := NpcSpriteArt.identity(actor)
 	if not named_key.is_empty(): return named_key
 	if actor is VillageResident:
-		# 대장장이의 개별 그림은 아직 없다. 기존 광부 공용 도트로 임시 표시한다.
+		# 전용 그림 로드에 실패한 경우에만 기존 공용 도트로 표시한다.
 		if actor.resident_id == "village_blacksmith": return "miner"
 		var resident_group := str(actor.get("customer_group_id"))
 		if resident_group.is_empty():

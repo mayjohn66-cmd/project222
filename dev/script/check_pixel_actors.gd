@@ -126,7 +126,7 @@ func run() -> void:
 	subtype_actor.customer_type_id = "warrior"
 	check(StoreActorVisuals.sprite_key(subtype_actor,"warrior") == "adventurer", "customer subtype maps to supplied group art")
 	subtype_actor.set_meta("look_key","commuter")
-	check(StoreActorVisuals.sprite_key(subtype_actor,"commuter").is_empty(), "modern cutscene costume overrides customer group art")
+	check(StoreActorVisuals.sprite_key(subtype_actor,"commuter") == "pose:commuter", "modern cutscene costume overrides customer group art")
 	subtype_actor.remove_meta("look_key")
 	subtype_actor.customer_type_id = "normal"
 	var actor: TestActor = actors[0]

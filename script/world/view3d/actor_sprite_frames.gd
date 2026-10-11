@@ -12,6 +12,10 @@ static var _cache: Dictionary = {}
 static func load_set(key: String) -> Dictionary:
 	if _cache.has(key):
 		return _cache[key]
+	if key.begins_with(ActorPoseArt.PREFIX):
+		var pose_set := ActorPoseArt.load_set(key)
+		_cache[key] = pose_set
+		return pose_set
 	if key.begins_with(NpcSpriteArt.PREFIX):
 		var static_set := NpcSpriteArt.load_set(key)
 		_cache[key] = static_set

@@ -879,8 +879,12 @@ func sync_objects(world: Node) -> void:
 				rule["fixed_spot"] = true  # 채집 자리: 덤불·나무를 랜덤 배치로 바꾸지 않고 그 자리에 둔다
 
 			rule = SeasonStyle.adjust_rule(rule, season if season != "" else "spring", obj_seed)
+			# 상태 표시만 전달한다. 채집/재생/보상 규칙은 여기서 만들지 않는다.
+			if str(rule.get("variant","")) == "berry":
+				rule["berry_state"] = str(body.get_meta("berry_state","ready"))
 			var key: String = "vil%d" % body.get_instance_id()
 			var sig: String = "%s|%s|%s|%s" % [str(rect.position.snapped(Vector2(0.02, 0.02))), str(rect.size.snapped(Vector2(0.02, 0.02))), text, season]
+			if rule.has("berry_state"): sig += "|berry:" + str(rule.berry_state)
 			var village_art := VillageSpriteArt.sprite_of(body)
 			if village_art != null:
 				sig += "|%s|%s" % [str(village_art.scale.x < 0.0),str(village_art.get_meta("roof_color",""))]

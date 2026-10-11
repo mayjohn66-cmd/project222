@@ -87,7 +87,7 @@ func run() -> void:
 	check(StoreActorVisuals.sprite_key(resident,"story_npc") == "child", "story subtype preserves its supplied role group")
 	resident.resident_id = "village_blacksmith"
 	resident.set_meta("look_key","story_npc")
-	check(StoreActorVisuals.sprite_key(resident,"story_npc") == "miner", "blacksmith placeholder uses supplied 2D role")
+	check(StoreActorVisuals.sprite_key(resident,"story_npc") == "pose:blacksmith", "blacksmith uses dedicated 2D work clothes")
 	resident.free()
 	var extra := StoryNpc.new()
 	extra.setup({"npc_id":"neighbor"})
@@ -95,7 +95,7 @@ func run() -> void:
 	extra.set_meta("look_key","backpacker")
 	check(StoreActorVisuals.sprite_key(extra,"backpacker") == "traveler", "prologue visitor uses matching supplied role")
 	extra.set_meta("look_key","commuter")
-	check(StoreActorVisuals.sprite_key(extra,"commuter").is_empty(), "unsupplied modern costume isn't replaced by fantasy art")
+	check(StoreActorVisuals.sprite_key(extra,"commuter") == "pose:commuter", "modern costume uses dedicated office worker art")
 	extra.free()
 	var customer = load("res://script/actor/customer.gd").new()
 	customer.customer_type_id = "peddler"

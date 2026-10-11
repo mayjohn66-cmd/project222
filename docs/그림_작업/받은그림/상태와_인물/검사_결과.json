@@ -1,0 +1,909 @@
+{
+  "preserved_heads": [
+    {
+      "key": "player_male_seat",
+      "reference": "art/actors/player_male/rotations/south_west.png",
+      "reference_sha256": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+      "source_head_box": [
+        27,
+        6,
+        67,
+        34
+      ],
+      "shift_y": 13,
+      "head_sha256": "d0c2741797a947b9491b3a4efb01ceffbe9d6b25dbbd8d5ff4b3344d7c59f69a"
+    },
+    {
+      "key": "player_male_floor",
+      "reference": "art/actors/player_male/rotations/south_west.png",
+      "reference_sha256": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+      "source_head_box": [
+        27,
+        6,
+        67,
+        34
+      ],
+      "shift_y": 22,
+      "head_sha256": "d0c2741797a947b9491b3a4efb01ceffbe9d6b25dbbd8d5ff4b3344d7c59f69a"
+    },
+    {
+      "key": "player_male_seat_back",
+      "reference": "art/actors/player_male/rotations/north_west.png",
+      "reference_sha256": "5ced41c1479c9f06663a9ce77efc303ee41fe7500ffafecc47dc2aeca945c7df",
+      "source_head_box": [
+        29,
+        8,
+        67,
+        34
+      ],
+      "shift_y": 13,
+      "head_sha256": "5356aad8ffbd63d7110f63a104da46b979621b7eb18fc9b157d2d87c42bbf582"
+    },
+    {
+      "key": "player_female_seat",
+      "reference": "art/actors/player_female/rotations/south_west.png",
+      "reference_sha256": "80aaf361763b2a87d624aaa56207af7b334f80373d16894875492caeb8d3bde3",
+      "source_head_box": [
+        33,
+        8,
+        71,
+        34
+      ],
+      "shift_y": 13,
+      "head_sha256": "d983b4cc82eaa54f2f594a598b338faacbc6634ed7c187aac98b7a632f966d31"
+    },
+    {
+      "key": "player_female_floor",
+      "reference": "art/actors/player_female/rotations/south_west.png",
+      "reference_sha256": "80aaf361763b2a87d624aaa56207af7b334f80373d16894875492caeb8d3bde3",
+      "source_head_box": [
+        33,
+        8,
+        71,
+        34
+      ],
+      "shift_y": 22,
+      "head_sha256": "d983b4cc82eaa54f2f594a598b338faacbc6634ed7c187aac98b7a632f966d31"
+    },
+    {
+      "key": "player_female_seat_back",
+      "reference": "art/actors/player_female/rotations/north_west.png",
+      "reference_sha256": "72983c72d9dff4c2aabb1d21b47f7725c5691b5f8c328a689f69bc938dcedf6e",
+      "source_head_box": [
+        33,
+        8,
+        70,
+        34
+      ],
+      "shift_y": 13,
+      "head_sha256": "30931fd0a35ce73dacb49f4e638faa5d8645f4ed4b3b2d8074b1b89044403471"
+    },
+    {
+      "key": "doyun_seat",
+      "reference": "art/actors/npc/doyun/south_west.png",
+      "reference_sha256": "2e2f91f9a4ef2abe15453dba4b8854686fe638b9615d7e690e3c7326fb1126e7",
+      "source_head_box": [
+        31,
+        6,
+        61,
+        32
+      ],
+      "shift_y": 18,
+      "head_sha256": "652ee5f8b6479430f976359a18111ff86a845b2aecb9d5ccd811e41b762b2f44"
+    },
+    {
+      "key": "naru_seat",
+      "reference": "art/actors/npc/naru/south_west.png",
+      "reference_sha256": "045917d8d600effeff778598df4e86a07dcd0a4c4a92e69550593e83b8170d40",
+      "source_head_box": [
+        25,
+        6,
+        70,
+        44
+      ],
+      "shift_y": 11,
+      "head_sha256": "debfa2bb01b7018dda1c94c53405324452f4951ae3e7c25d3e1674f2ebf19bca"
+    },
+    {
+      "key": "sora_seat",
+      "reference": "art/actors/npc/sora/south_west.png",
+      "reference_sha256": "0eab714e5bc7e88314ec660704fe17a1d9c1a2908841a1ded2ce159fb55425b9",
+      "source_head_box": [
+        29,
+        6,
+        61,
+        36
+      ],
+      "shift_y": 14,
+      "head_sha256": "a22619e9adef35e4494a41e1aa4e779fe3c8826322ff7e55c7fbd2de6fb6f61f"
+    }
+  ],
+  "assets": [
+    {
+      "id": "tree_autumn_orange",
+      "path": "art/received/nature_states/tree_autumn_orange.png",
+      "sha256": "5137fd55179188b0c30be19a5ca83b3e3201a979ba058a3b4ee18c933222cc8f",
+      "size": [
+        96,
+        128
+      ],
+      "colors": 54
+    },
+    {
+      "id": "tree_autumn_red",
+      "path": "art/received/nature_states/tree_autumn_red.png",
+      "sha256": "69e2e25642d90bc767e11f9ef00ffab1273b1bc858475f2e4d2b9254517b00c4",
+      "size": [
+        96,
+        128
+      ],
+      "colors": 54
+    },
+    {
+      "id": "tree_autumn_gold",
+      "path": "art/received/nature_states/tree_autumn_gold.png",
+      "sha256": "bc6977e094c05553afe56caf8425a8c4caa118965f666e750de332d7c36b13cc",
+      "size": [
+        96,
+        128
+      ],
+      "colors": 54
+    },
+    {
+      "id": "tree_autumn_amber",
+      "path": "art/received/nature_states/tree_autumn_amber.png",
+      "sha256": "840f715926ac0d249eb034cc0ca54790358b865065a0b97fb0e2c307527a9f3e",
+      "size": [
+        96,
+        128
+      ],
+      "colors": 54
+    },
+    {
+      "id": "berry_empty",
+      "path": "art/received/nature_states/berry_empty.png",
+      "sha256": "ac602c861a82b23daad6f16f19952a1a81c2d7664c520ec04cf3b3d0dddad694",
+      "size": [
+        64,
+        64
+      ],
+      "colors": 21
+    },
+    {
+      "id": "berry_ready",
+      "path": "art/received/nature_states/berry_ready.png",
+      "sha256": "e00e6fda55968b40cd1122349483a5b8b64a82efe3684d0767206d02eaca61f1",
+      "size": [
+        64,
+        64
+      ],
+      "colors": 23
+    },
+    {
+      "id": "blacksmith",
+      "path": "art/actors/poses/blacksmith_south_west.png",
+      "sha256": "693a47b44c1b3ca8b9de62822489237caa2c12e630bce136924147a08701391f",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 78
+    },
+    {
+      "id": "commuter",
+      "path": "art/actors/poses/commuter_south_west.png",
+      "sha256": "bbea0e1fe602c613ff5110c81b863e83432a67e7ef81d77f351e4f15e9400f67",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 79
+    },
+    {
+      "id": "player_male_seat_south_west",
+      "path": "art/actors/poses/player_male_seat_south_west.png",
+      "sha256": "1f0c94915045867889a3224bb9f7f0d0395bea20fe2f1a7421c9dff1fae4696d",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 36
+    },
+    {
+      "id": "player_male_seat_south_east",
+      "path": "art/actors/poses/player_male_seat_south_east.png",
+      "sha256": "7797cd1d79bdf1a4cecb0e1332e6d790ab0e6e63fa38a51934bbb39e5ac7f7c6",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 36
+    },
+    {
+      "id": "player_male_floor_south_west",
+      "path": "art/actors/poses/player_male_floor_south_west.png",
+      "sha256": "ad1f3513bd9e94ea487b8a0122de928f9252d7cea25816ffb5a0a3a9026bbabe",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 37
+    },
+    {
+      "id": "player_male_floor_south_east",
+      "path": "art/actors/poses/player_male_floor_south_east.png",
+      "sha256": "4ed1699ac92861249b6954d654d6ee0ce1c7c75166c00c05744aafd7833a1767",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 37
+    },
+    {
+      "id": "player_male_seat_north_west",
+      "path": "art/actors/poses/player_male_seat_north_west.png",
+      "sha256": "c02993d5621aa93e42ac9353533176877429ce6e44fcd3b52056218abf23f5b9",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 31
+    },
+    {
+      "id": "player_male_seat_north_east",
+      "path": "art/actors/poses/player_male_seat_north_east.png",
+      "sha256": "1206b19ed998fdd19951ef379e9ce7752bddf14b607f3d9d8f049f24a3b63b43",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 31
+    },
+    {
+      "id": "player_female_seat_south_west",
+      "path": "art/actors/poses/player_female_seat_south_west.png",
+      "sha256": "5a4fd6b253c6595569d3a98e2d292676d4450bf1ac1dcb12adb9e206bf7b7f39",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 33
+    },
+    {
+      "id": "player_female_seat_south_east",
+      "path": "art/actors/poses/player_female_seat_south_east.png",
+      "sha256": "6dcb0bccc8a1821bb29b7e9f9e5c18d446e76b4c8bdef93d1b967afcac0beeb3",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 33
+    },
+    {
+      "id": "player_female_floor_south_west",
+      "path": "art/actors/poses/player_female_floor_south_west.png",
+      "sha256": "ede99ea7c59bb78ccf6e2174d618361c41a3a7d56cf996dd46199f2d6b32aa35",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 35
+    },
+    {
+      "id": "player_female_floor_south_east",
+      "path": "art/actors/poses/player_female_floor_south_east.png",
+      "sha256": "9d5eb802991ea1943ba185d8c051aa8d72feb880083bb21d75a77b1988cdd179",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 35
+    },
+    {
+      "id": "player_female_seat_north_west",
+      "path": "art/actors/poses/player_female_seat_north_west.png",
+      "sha256": "c72bb1943932e2867599c6c96003253a4368ac4904a689fe29d36f57d51adbca",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 24
+    },
+    {
+      "id": "player_female_seat_north_east",
+      "path": "art/actors/poses/player_female_seat_north_east.png",
+      "sha256": "ef2cb7b5a538a773ea3eff2c2c21b191cfd9cde5670298260b7095f3155f9d34",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 24
+    },
+    {
+      "id": "doyun_seat_south_west",
+      "path": "art/actors/poses/doyun_seat_south_west.png",
+      "sha256": "7ba27154e081f6380aa8e127ea2c56bd6813063df107e3d6fa21e1f545d72455",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 79
+    },
+    {
+      "id": "doyun_seat_south_east",
+      "path": "art/actors/poses/doyun_seat_south_east.png",
+      "sha256": "21e6a354a48895db74b0ab022d8be6f17c16e2dfb7ebb5afdc9b69fb89c76002",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 79
+    },
+    {
+      "id": "naru_seat_south_west",
+      "path": "art/actors/poses/naru_seat_south_west.png",
+      "sha256": "df5b78b2143599a4de588f4562d8121b3452ae60be8a8d9b915c9a57de65d4bb",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 89
+    },
+    {
+      "id": "naru_seat_south_east",
+      "path": "art/actors/poses/naru_seat_south_east.png",
+      "sha256": "6ee516a5c3a3de855e070259beecb8bd5ba8acc97030ff1a2161c3803fbed89b",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 89
+    },
+    {
+      "id": "sora_seat_south_west",
+      "path": "art/actors/poses/sora_seat_south_west.png",
+      "sha256": "7bb78c0773ee4ce22b76f1cef24d631420a0d74668fb0ed1837114b64403d04b",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 80
+    },
+    {
+      "id": "sora_seat_south_east",
+      "path": "art/actors/poses/sora_seat_south_east.png",
+      "sha256": "2bd21117cbc5124f553fe426e53ed0901b5d7ae14fe3c746b0bd42fd8a22f50d",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 80
+    }
+  ],
+  "berry_pixels": [
+    [
+      21,
+      17
+    ],
+    [
+      22,
+      17
+    ],
+    [
+      21,
+      18
+    ],
+    [
+      22,
+      18
+    ],
+    [
+      23,
+      18
+    ],
+    [
+      40,
+      18
+    ],
+    [
+      41,
+      18
+    ],
+    [
+      42,
+      18
+    ],
+    [
+      43,
+      18
+    ],
+    [
+      20,
+      19
+    ],
+    [
+      22,
+      19
+    ],
+    [
+      41,
+      19
+    ],
+    [
+      42,
+      19
+    ],
+    [
+      43,
+      19
+    ],
+    [
+      19,
+      20
+    ],
+    [
+      20,
+      20
+    ],
+    [
+      21,
+      20
+    ],
+    [
+      22,
+      20
+    ],
+    [
+      41,
+      20
+    ],
+    [
+      42,
+      20
+    ],
+    [
+      43,
+      20
+    ],
+    [
+      44,
+      20
+    ],
+    [
+      20,
+      21
+    ],
+    [
+      21,
+      21
+    ],
+    [
+      41,
+      21
+    ],
+    [
+      42,
+      21
+    ],
+    [
+      20,
+      22
+    ],
+    [
+      25,
+      25
+    ],
+    [
+      27,
+      25
+    ],
+    [
+      25,
+      26
+    ],
+    [
+      26,
+      26
+    ],
+    [
+      28,
+      26
+    ],
+    [
+      45,
+      26
+    ],
+    [
+      46,
+      26
+    ],
+    [
+      25,
+      27
+    ],
+    [
+      26,
+      27
+    ],
+    [
+      27,
+      27
+    ],
+    [
+      28,
+      27
+    ],
+    [
+      29,
+      27
+    ],
+    [
+      45,
+      27
+    ],
+    [
+      46,
+      27
+    ],
+    [
+      47,
+      27
+    ],
+    [
+      25,
+      28
+    ],
+    [
+      26,
+      28
+    ],
+    [
+      27,
+      28
+    ],
+    [
+      44,
+      28
+    ],
+    [
+      45,
+      28
+    ],
+    [
+      46,
+      28
+    ],
+    [
+      47,
+      28
+    ],
+    [
+      48,
+      28
+    ],
+    [
+      45,
+      29
+    ],
+    [
+      46,
+      29
+    ],
+    [
+      47,
+      29
+    ],
+    [
+      45,
+      30
+    ],
+    [
+      46,
+      30
+    ],
+    [
+      47,
+      30
+    ],
+    [
+      13,
+      31
+    ],
+    [
+      14,
+      31
+    ],
+    [
+      13,
+      32
+    ],
+    [
+      14,
+      32
+    ],
+    [
+      15,
+      32
+    ],
+    [
+      16,
+      32
+    ],
+    [
+      13,
+      33
+    ],
+    [
+      14,
+      33
+    ],
+    [
+      15,
+      33
+    ],
+    [
+      38,
+      33
+    ],
+    [
+      39,
+      33
+    ],
+    [
+      13,
+      34
+    ],
+    [
+      37,
+      34
+    ],
+    [
+      38,
+      34
+    ],
+    [
+      39,
+      34
+    ],
+    [
+      40,
+      34
+    ],
+    [
+      38,
+      35
+    ],
+    [
+      39,
+      35
+    ],
+    [
+      40,
+      35
+    ],
+    [
+      41,
+      35
+    ],
+    [
+      40,
+      36
+    ],
+    [
+      39,
+      37
+    ],
+    [
+      40,
+      37
+    ],
+    [
+      48,
+      39
+    ],
+    [
+      23,
+      40
+    ],
+    [
+      46,
+      40
+    ],
+    [
+      48,
+      40
+    ],
+    [
+      21,
+      41
+    ],
+    [
+      22,
+      41
+    ],
+    [
+      23,
+      41
+    ],
+    [
+      24,
+      41
+    ],
+    [
+      25,
+      41
+    ],
+    [
+      46,
+      41
+    ],
+    [
+      47,
+      41
+    ],
+    [
+      48,
+      41
+    ],
+    [
+      49,
+      41
+    ],
+    [
+      46,
+      42
+    ],
+    [
+      47,
+      42
+    ],
+    [
+      49,
+      42
+    ],
+    [
+      50,
+      42
+    ],
+    [
+      23,
+      43
+    ],
+    [
+      47,
+      43
+    ],
+    [
+      49,
+      43
+    ],
+    [
+      48,
+      44
+    ],
+    [
+      16,
+      46
+    ],
+    [
+      16,
+      47
+    ],
+    [
+      16,
+      48
+    ],
+    [
+      17,
+      48
+    ],
+    [
+      18,
+      48
+    ],
+    [
+      20,
+      48
+    ],
+    [
+      44,
+      48
+    ],
+    [
+      45,
+      48
+    ],
+    [
+      48,
+      48
+    ],
+    [
+      18,
+      49
+    ],
+    [
+      19,
+      49
+    ],
+    [
+      21,
+      49
+    ],
+    [
+      42,
+      49
+    ],
+    [
+      43,
+      49
+    ],
+    [
+      44,
+      49
+    ],
+    [
+      45,
+      49
+    ],
+    [
+      19,
+      50
+    ],
+    [
+      22,
+      50
+    ],
+    [
+      24,
+      50
+    ],
+    [
+      41,
+      50
+    ],
+    [
+      42,
+      50
+    ],
+    [
+      43,
+      50
+    ],
+    [
+      44,
+      50
+    ],
+    [
+      45,
+      50
+    ],
+    [
+      26,
+      51
+    ],
+    [
+      27,
+      51
+    ],
+    [
+      28,
+      51
+    ],
+    [
+      30,
+      51
+    ],
+    [
+      37,
+      51
+    ],
+    [
+      39,
+      51
+    ],
+    [
+      42,
+      51
+    ]
+  ]
+}
