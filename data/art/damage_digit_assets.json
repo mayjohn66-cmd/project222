@@ -1,0 +1,111 @@
+{
+  "palette": [
+    [
+      51,
+      34,
+      28
+    ],
+    [
+      233,
+      183,
+      101
+    ],
+    [
+      255,
+      244,
+      207
+    ]
+  ],
+  "assets": [
+    {
+      "id": "0",
+      "path": "res://art/ui/damage_digits/digit_0.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_0_received.png",
+      "sha256": "ed1e7f1ca4c9abd25dc0a85afdce131e9dbda70b4ad7b856bee6e69347bb0759",
+      "source_sha256": "f78135b8936992ce52914e8edee6668a1e1e5f37d08f176a8c352236eeee02b0",
+      "width": 12,
+      "height": 16
+    },
+    {
+      "id": "1",
+      "path": "res://art/ui/damage_digits/digit_1.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_1_received.png",
+      "sha256": "d48b07a30fed28c0f7786b0613ee18c8c2ffd888a0a394ed90c15ed901b04349",
+      "source_sha256": "c932fd535169764d13be7854cad019dde4b82fbfc3f4e38a6e30d887bf7d0086",
+      "width": 12,
+      "height": 16
+    },
+    {
+      "id": "2",
+      "path": "res://art/ui/damage_digits/digit_2.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_2_received.png",
+      "sha256": "a96d26083d13eedfb7b91d772fe0792ad28f5344dae8603e33b862e07322a4c3",
+      "source_sha256": "72d1b844e50f14c27fdeaf3b19f6ebad952359e3a9fa148043fd90905ab9a1c1",
+      "width": 12,
+      "height": 16
+    },
+    {
+      "id": "3",
+      "path": "res://art/ui/damage_digits/digit_3.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_3_received.png",
+      "sha256": "460822289d5241ab286e488f15a35bab08871c062350b9b4c1767407dcb88278",
+      "source_sha256": "0b457f25b5bc237bdfa0f0060a76c298b00545cf25f077a37fd106b0ef5a12fa",
+      "width": 12,
+      "height": 16
+    },
+    {
+      "id": "4",
+      "path": "res://art/ui/damage_digits/digit_4.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_4_received.png",
+      "sha256": "23c657c2d2b46e14975677634c24bf984a4229be4fef01b7717c632d9bf8cdef",
+      "source_sha256": "82f75b3705bb850825c06d22251570a3472c4af87a50e76abfa70d8f73261f0b",
+      "width": 12,
+      "height": 16
+    },
+    {
+      "id": "5",
+      "path": "res://art/ui/damage_digits/digit_5.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_5_received.png",
+      "sha256": "d25d61c5cf88af084c0b3ed25bb52ebf3ac547e160a17a9629dafbf8149c903a",
+      "source_sha256": "9d2dfe674d908f539d9ac51c3ab2e0f411f0df1813ea38f1c832b19e1ef47d84",
+      "width": 12,
+      "height": 16
+    },
+    {
+      "id": "6",
+      "path": "res://art/ui/damage_digits/digit_6.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_6_received.png",
+      "sha256": "069b6ba809f6792c7a00775a6b1653cf9891b3070ded0a95bc611ab68a90bd8e",
+      "source_sha256": "18653c41d39c540b93f01a036fc20fde6a685a1932b55de3d2dbe835499a3942",
+      "width": 12,
+      "height": 16
+    },
+    {
+      "id": "7",
+      "path": "res://art/ui/damage_digits/digit_7.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_7_received.png",
+      "sha256": "9cb2da3f8d85783aef201e0afc77963fd9226ec190fdb137c88263cf90f9ed4c",
+      "source_sha256": "429182defdbb004475bd5f96c1751ec2873bd1d7d3a0e058799e31c2d8e240ac",
+      "width": 12,
+      "height": 16
+    },
+    {
+      "id": "8",
+      "path": "res://art/ui/damage_digits/digit_8.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_8_received.png",
+      "sha256": "7d8b94e68c20fc56697f796274bbe86589452cc2de6b40a7b9f8a9fd59513a2d",
+      "source_sha256": "664de451bcdf092f265a52781dab01970c09bbe10f21fac2ed40589b80748e5a",
+      "width": 12,
+      "height": 16
+    },
+    {
+      "id": "9",
+      "path": "res://art/ui/damage_digits/digit_9.png",
+      "source": "docs/그림_작업/받은그림/피해_숫자/digit_9_received.png",
+      "sha256": "e458c2dcd28a1cdd1c933c3ca3c465a4624bbce972f72aeb12c9ea66e7d90fb7",
+      "source_sha256": "47ecb0bca680ebc04548188dc1fe87c2ca50501ea29d0ac7ca6e5b585172c78d",
+      "width": 12,
+      "height": 16
+    }
+  ]
+}

@@ -80,7 +80,7 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 	model.exited.connect(_exit)
 	model.defeated.connect(_defeat)
 	view.model = model
-	view.notice = "두 지점 중 한 곳에서 [E] · 한 방에서 한 곳만 채집할 수 있어요." if model.gathering_sites.size() > 1 else ("채집 지점에 다가가 [E] · 한 번만 채집할 수 있어요." if model.gathering_sites.size() == 1 else "")
+	view.notice = "한 방에서 한 곳만 채집할 수 있어요." if not model.gathering_sites.is_empty() else ""
 	view.title_label.text = "%s · %s" % [str(ExpeditionMapData.get_region_data(host.current_region_id).get("name", host.current_region_id)),
 		host.get_map_node_display_name(room_type)]
 	view.region_id = host.current_region_id
@@ -104,11 +104,11 @@ func _enemies_cleared() -> void:
 	host.expedition_battle_controller.generate_loot(host.combat_enemy_id)
 	pending_loot = host.temporary_loot.duplicate(true)
 	host.temporary_loot.clear()
-	view.notice = "몬스터 처치! 출구로 이동하세요."
+	view.notice = "몬스터 처치! 출구가 열렸습니다."
 	if boss:
 		model.finished = true
-		# 공격 반복문의 호출 스택을 벗어난 뒤 결과 흐름으로 넘어간다.
-		Callable(self, "_exit").call_deferred()
+		# 마지막 피해 숫자를 잠깐 보여 준 뒤 결과 흐름으로 넘어간다.
+		ExpeditionDamageDigits.finish_room(self, model)
 
 func _object_used() -> void:
 	if model.object_kind == "heal":

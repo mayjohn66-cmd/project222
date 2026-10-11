@@ -8,11 +8,11 @@ management.tab.schedule.desc,손님에게서 얻은 예정 정보를 확인합�
 management.tab.history.desc,편의점 현황과 지난 영업 결과를 확인합니다.
 expedition.room.required_tool,채집 도구
 expedition.room.missing_tool,필수 도구: %s · 이번 원정 가방에 준비되지 않았습니다.
-expedition.room.other_site,채집 기회는 남아 있습니다. 다른 지점을 선택하거나 출구로 이동하세요.
-expedition.room.skip_gather,이곳은 지나쳐도 됩니다. 출구에 다가가 [E]로 다음 방으로 이동하세요.
-expedition.room.exit,출구에 다가가 [E]로 다음 방으로 이동하세요.
-expedition.room.contact,가까이 있는 사람과 [E]로 이야기할 수 있습니다.
-expedition.room.interact,%s [E]
+expedition.room.other_site,채집 기회는 남아 있습니다. 이곳에는 다른 지점도 있습니다.
+expedition.room.skip_gather,이곳은 지나쳐도 됩니다. 출구가 열려 있습니다.
+expedition.room.exit,출구가 열렸습니다.
+expedition.room.contact,가까이 있는 사람이 이야기를 기다리고 있습니다.
+expedition.room.interact,%s
 expedition.room.cancel_gather,이동하거나 공격하면 채집을 중단합니다.
 expedition.room.progress,%s 중 %d%%
 request.followthrough.personal_hint,마을 게시판에서 개인 부탁을 맡거나 준비한 물품을 전달할 수 있어요.

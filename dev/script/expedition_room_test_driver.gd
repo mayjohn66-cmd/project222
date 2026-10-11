@@ -56,6 +56,8 @@ static func play(controller: ExpeditionRoomController) -> bool:
 		if steps % 120 == 0:
 			await controller.view.get_tree().process_frame
 	# 보스 처치 뒤 지연된 결과 전환을 기다린다.
+	if room.finished and room.player_hp > 0 and controller.is_active():
+		await controller.view.get_tree().create_timer(ExpeditionDamageDigits.FINISH_DELAY + 0.05).timeout
 	await controller.view.get_tree().process_frame
 	controller.view.set_physics_process(true)
 	if controller.is_active():

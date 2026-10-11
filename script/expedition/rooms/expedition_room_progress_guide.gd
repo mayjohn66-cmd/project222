@@ -53,7 +53,7 @@ func hint(fallback: String) -> String:
 	if model.object_consumed:
 		return (controller.view.notice + "\n" if not controller.view.notice.is_empty() else "") + exit_hint
 	if not caption.is_empty() and caption != "다음 방으로":
-		return UiText.f("expedition.room.interact",[caption]) + ("\n" + UiText.t("expedition.room.cancel_gather") if model.object_kind == "gather" else "")
+		return UiText.f("expedition.room.interact",[caption])
 	if model.exit_open:
 		if not controller.view.notice.is_empty(): return controller.view.notice + "\n" + exit_hint
 		return exit_hint

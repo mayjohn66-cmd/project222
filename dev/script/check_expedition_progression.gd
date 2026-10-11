@@ -127,7 +127,7 @@ func run() -> void:
 	model.interact()
 	model.step(2.0,Vector2.ZERO,false)
 	check(controller.pending_loot == reward,"same site cannot grant duplicate reward")
-	check(controller.view.hint_label.text.contains("획득") and controller.view.hint_label.text.contains("출구") and controller.view.hint_label.text.contains("[E]"),"reward feedback retains explicit next-room action")
+	check(controller.view.hint_label.text.contains("획득") and controller.view.hint_label.text.contains("출구") and not controller.view.hint_label.text.contains("[E]"),"reward feedback retains exit status without control instructions")
 	await snap("gathered")
 	await walk(model.exit_position)
 	await click(controller.view.interact_button)

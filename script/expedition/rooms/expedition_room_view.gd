@@ -24,60 +24,15 @@ var stage: ExpeditionStage3D
 var weather_overlay: ExpeditionWeatherOverlay
 var progress_guide: ExpeditionRoomProgressGuide
 var ground_overlay := Color.TRANSPARENT
+var hud: ExpeditionRoomHud
 
 func _ready() -> void:
 	set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	mouse_filter = Control.MOUSE_FILTER_STOP
 	texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-	var column := VBoxContainer.new()
-	add_child(column)
-	column.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-	column.add_theme_constant_override("separation", 8)
-	column.offset_left = 16
-	column.offset_right = -16
-	column.offset_top = 12
-	column.offset_bottom = -12
-	title_label = Label.new()
-	title_label.add_theme_color_override("font_color", Color("f4eddb"))
-	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	column.add_child(title_label)
-	hp_bar = HpBar.new()
-	hp_bar.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	column.add_child(hp_bar)
-	hp_label = Label.new()
-	hp_label.add_theme_color_override("font_color", Color("f4eddb"))
-	hp_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	column.add_child(hp_label)
-	var spacer := Control.new()
-	spacer.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	spacer.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	column.add_child(spacer)
-	hint_label = Label.new()
-	hint_label.add_theme_color_override("font_color", Color("f4eddb"))
-	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	column.add_child(hint_label)
-	var controls := HBoxContainer.new()
-	controls.alignment = BoxContainer.ALIGNMENT_END
-	column.add_child(controls)
-	for entry in [["←", Vector2.LEFT], ["↑", Vector2.UP], ["↓", Vector2.DOWN], ["→", Vector2.RIGHT]]:
-		var button := _button(str(entry[0]), controls)
-		move_buttons[button] = entry[1]
-	attack_button = _button("공격 [J / Space]", controls)
-	swap_button = _button("무기 교체 [Q]", controls)
-	swap_button.pressed.connect(func():
-		if _can_play(): model.swap_weapon())
-	interact_button = _button("상호작용 [E]", controls)
-	interact_button.pressed.connect(func():
-		if _can_play(): model.interact())
-	var retreat := _button("철수", controls)
-	retreat.pressed.connect(func():
-		if _can_play(): retreat_requested.emit())
-	var help := Label.new()
-	help.add_theme_font_override("font", ThemeDB.fallback_font)
-	help.add_theme_color_override("font_color", Color("c9d9d1"))
-	help.text = "이동 WASD / 방향키 · 기본 공격 J / Space · 무기 교체 Q · 상호작용 E"
-	help.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	column.add_child(help)
+	hud = ExpeditionRoomHud.new()
+	add_child(hud)
+	hud.build(self)
 	# 3D 무대: 이 뷰의 뒤에 깔려 바닥·벽·장애물·적·플레이어를 그린다. 체력 막대·글자·공격 표시는 이 뷰가 그 위에 2D 로 그린다.
 	stage = ExpeditionStage3D.new()
 	stage.view = self
@@ -88,6 +43,7 @@ func _ready() -> void:
 		if _can_play(): model.basic_attack())
 	weather_overlay = ExpeditionWeatherOverlay.new()
 	add_child(weather_overlay)
+	move_child(hud, get_child_count() - 1)
 
 func _button(caption: String, parent: Control) -> Button:
 	var button := Button.new()
@@ -122,17 +78,20 @@ func _physics_process(delta: float) -> void:
 		var attacking: bool = attack_button.is_pressed() or Input.is_physical_key_pressed(KEY_J) \
 			or Input.is_physical_key_pressed(KEY_SPACE)
 		model.step(delta, GRID.screen_direction(direction.limit_length(), tile_size), attacking)
+	elif model.finished:
+		model.step(delta, Vector2.ZERO, false)
 	var weapon_text: String = model.attack_profile.display_name
 	if model.loadout != null and not model.loadout.slots.is_empty():
 		weapon_text = "%s(%s)" % [model.loadout.active_name(), model.attack_profile.display_name]
 		if model.loadout.has_choice():
 			weapon_text += " ⇄ " + model.loadout.other_name()
 	swap_button.disabled = model.loadout == null or not model.loadout.has_choice() or not _can_play()
+	attack_button.disabled = not _can_play()
 	hp_bar.set_hp(model.player_hp, model.player_max_hp)
 	hp_label.text = "%s   ·   남은 적 %d" % [weapon_text, model.alive_enemies()]
 	var caption := model.interaction_label()
 	interact_button.disabled = caption.is_empty() or not _can_play()
-	interact_button.text = "%s [E]" % ("상호작용" if caption.is_empty() else caption)
+	interact_button.text = "상호작용" if caption.is_empty() else caption
 	if model.interacting:
 		hint_label.text = "채집 중 %d%%" % roundi(100.0 * model.interaction_progress / model.interaction_seconds())
 	elif not notice.is_empty():
@@ -141,6 +100,7 @@ func _physics_process(delta: float) -> void:
 		hint_label.text = "출구가 열렸습니다" if model.exit_open else "몬스터를 처치하면 출구가 열립니다"
 	if progress_guide != null:
 		hint_label.text = progress_guide.hint(hint_label.text)
+	hud.layout()
 	queue_redraw()
 
 func _stage_on() -> bool:
@@ -211,6 +171,9 @@ func _draw() -> void:
 		elif kind == "hurt":
 			var hurt_life: float = clampf(float(note["life"]) / 0.45, 0.0, 1.0)
 			draw_arc(note_at, cell * (0.3 + 0.35 * (1.0 - hurt_life)), 0, TAU, 24, Color(1, 0.3, 0.3, hurt_life), 4)
+		elif kind == "damage":
+			var damage_at := stage.project(note["position"], float(note.get("height", 0.9)))
+			ExpeditionDamageDigits.draw_number(self, damage_at, int(note["amount"]), float(note["life"]))
 		else:
 			draw_string(ThemeDB.fallback_font, note_at - Vector2(0, cell * 0.5), str(note["text"]), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
 	# 피격: 화면 가장자리가 붉게 번쩍인다(무적 시간 동안 서서히 사라짐). 네 변을 대각선으로 맞닿는 사다리꼴 그라데이션으로 그려

@@ -122,14 +122,16 @@ func _ready() -> void:
 	bare.build(CONFIG, {"placements": []})
 	expect(bare.active_profile() == CONFIG.default_attack and bare.active_bonus() == 0 and bare.active_name() == "맨손", "무기가 없으면 맨손")
 	expect(ExpeditionWeaponLoadout.get_style_text("hunting_bow").find("원거리") >= 0 and ExpeditionWeaponLoadout.get_style_text("hunting_bow").find("+") < 0, "공격 방식 설명은 숫자 없이")
-	# 공개하는 능력치는 HP 그림뿐: 타격·피해는 숫자 문구 없이 표시 종류만 낸다.
+	# HP는 그림 막대, 공격 피해는 별도 숫자 그림으로 표시한다.
 	model = room(slime)
 	model.player_position = Vector2(2.5, 3.0)
 	model.enemies[0]["position"] = Vector2(2.5, 2.2)
 	model.facing = Vector2.UP
 	model.basic_attack()
 	var hit_notes: Array = model.feedback.filter(func(n): return str(n.get("kind", "")) == "hit")
-	expect(not hit_notes.is_empty() and hit_notes.all(func(n): return str(n["text"]).is_empty()), "타격 표시에 피해 숫자가 없어야 함")
+	expect(not hit_notes.is_empty() and hit_notes.all(func(n): return str(n["text"]).is_empty()), "타격 선 효과는 숫자 그림과 분리")
+	var damage_notes: Array = model.feedback.filter(func(n): return str(n.get("kind", "")) == "damage")
+	expect(damage_notes.size() == hit_notes.size() and int(damage_notes[0]["amount"]) > 0, "명중마다 실제 피해량 그림 기록")
 	var bar := HpBar.new()
 	bar.set_hp(50, 100)
 	expect(is_equal_approx(bar.ratio, 0.5), "HP 막대 비율")

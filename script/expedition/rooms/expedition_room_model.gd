@@ -95,14 +95,13 @@ func configure_region(profile: Dictionary) -> void:
 
 func step(delta: float, movement: Vector2, attacking: bool) -> void:
 	if finished:
+		_step_feedback(delta)
 		return
 	elapsed += delta
 	attack_remaining = maxf(0.0, attack_remaining - delta)
 	attack_flash = maxf(0.0, attack_flash - delta)
 	hurt_remaining = maxf(0.0, hurt_remaining - delta)
-	for note in feedback:
-		note["life"] -= delta
-	feedback = feedback.filter(func(note: Dictionary) -> bool: return float(note["life"]) > 0.0)
+	_step_feedback(delta)
 	if movement.length_squared() > 0.0:
 		facing = movement.normalized()
 		player_position = move_actor(player_position, facing * settings.player_speed * delta)
@@ -125,6 +124,10 @@ func step(delta: float, movement: Vector2, attacking: bool) -> void:
 				object_consumed = true
 				interacting = false
 				object_used.emit()
+
+func _step_feedback(delta: float) -> void:
+	for note in feedback: note["life"] -= delta
+	feedback = feedback.filter(func(note: Dictionary) -> bool: return float(note["life"]) > 0.0)
 
 func move_actor(origin: Vector2, offset: Vector2) -> Vector2:
 	var candidate := origin
@@ -198,8 +201,10 @@ func _hit_enemy(enemy: Dictionary, direction: Vector2) -> void:
 	enemy["hp"] = maxi(0, int(enemy["hp"]) - damage)
 	enemy["position"] = move_actor(enemy["position"], direction * attack_profile.knockback)
 	player_hp = mini(player_max_hp, player_hp + roundi(damage * attack_profile.heal_fraction))
-	# 피해 숫자는 보이지 않고 타격 표시만 낸다(공개하는 능력치는 HP 그림뿐).
+	# 능력치 표와 별개로, 명중 시 실제 HP 감소량을 도트 숫자로 띄운다.
 	feedback.append({"position": enemy["position"], "text": "", "kind": "hit", "life": 0.35})
+	feedback.append({"position": enemy["position"], "kind": "damage", "amount": damage,
+		"height": 1.25 if bool(enemy["boss"]) else 0.9, "life": ExpeditionDamageDigits.LIFETIME})
 	if alive_enemies() == 0 and not exit_open:
 		exit_open = true
 		enemies_cleared.emit()

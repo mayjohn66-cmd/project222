@@ -43,6 +43,7 @@ RULES = [
     ("legacy-ui-reference", "art/ui/reference_theme/",   {"legacy": True}),
     ("world3d-src",         "art/world3d/_src/",         {"source": True}),
     ("world3d",             "art/world3d/",              {"world3d": True, "max_colors": 16, "no_partial_alpha": True}),
+    ("damage-digit",        "art/ui/damage_digits/",     {"size": (12, 16), "max_colors": 3, "no_partial_alpha": True}),
     ("ui",                  "art/ui/",                   {"multiple_of": 8}),
     ("item-icon",           "art/items/",                {"size": (64, 64), "max_colors": 32, "no_partial_alpha": True}),
     ("furniture",           "art/furniture/",            {"frame": 64, "max_colors": 48, "no_partial_alpha": True}),
