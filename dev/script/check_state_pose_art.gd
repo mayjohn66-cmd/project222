@@ -75,13 +75,14 @@ func run() -> void:
 	# 캔버스가 같아도 머리/몸 비율은 다를 수 있다. 기존 성인과 같은 발 위치에서 실제 그림을 비교한다.
 	var references: Array[VillageResident] = []
 	var lineup_base := modern.global_position
-	for npc_id in ["doyun","naru","sora"]:
+	for npc_id in ["doyun","naru","sora","neighbor_bread","child_berries","traveler_water","gatherer_herbs","miner_ore","healer_moss","delvin"]:
 		var reference := VillageResident.new()
 		reference.resident_id = npc_id
 		reference.set_meta("look_key","story_npc")
 		world.get_node("Actors").add_child(reference)
 		reference.set_physics_process(false)
-		reference.global_position = lineup_base + Vector2(references.size()*90.0,0)
+		var n := references.size()
+		reference.global_position = lineup_base + (Vector2(n*90.0,0) if n < 3 else Vector2((n-4)*90.0,170))
 		references.append(reference)
 	smith.global_position = lineup_base + Vector2(270,0)
 	modern.global_position = lineup_base + Vector2(360,0)
@@ -96,12 +97,15 @@ func run() -> void:
 	var previous_position: Vector2 = lineup_player.global_position
 	lineup_player.global_position = lineup_base+Vector2(-90,0)
 	lineup_player.set_meta("face_lock",Vector2(0,1))
-	view.camera2d.global_position = lineup_base+Vector2(135,-30)
+	view.camera2d.global_position = lineup_base+Vector2(180,60)
 	view.camera2d.zoom *= 2.0
 	view.camera2d.reset_smoothing()
 	view.camera2d.force_update_scroll()
 	view.forced_hour = 12
 	view.apply_hour(12)
+	var ui: CanvasLayer = world.get_node("UI")
+	var ui_was_visible := ui.visible
+	ui.hide()
 	sync()
 	await capture("costumes")
 	for gender in ["male","female"]:
@@ -114,6 +118,25 @@ func run() -> void:
 		view._sort_and_update()
 		check(absf(figure._mesh.mesh.size.y-adult_figure._mesh.mesh.size.y) < 0.03,"named adults match player standing height: "+gender)
 		await capture("player-"+gender)
+	# 실제 기본 줌에서도 전체 개인 NPC와 전용 의상을 확인한다.
+	# 벽 바깥에 놓인 인물이 가려지지 않도록 검사 장면의 매장 안에 배치한다.
+	var all_figures: Array = [lineup_player, smith, modern]
+	all_figures.append_array(references)
+	for i in all_figures.size():
+		all_figures[i].global_position = view.cell_to_world(Vector2(0.9+i%5*1.8,1.6+int(i/5)*2.1))
+	view.camera2d.global_position = view.cell_to_world(Vector2(4.5,3.7))
+	var zoomed_size: float = view._camera.size
+	view.camera2d.zoom *= 0.5
+	view.camera2d.reset_smoothing()
+	view.camera2d.force_update_scroll()
+	sync()
+	check(is_equal_approx(view._camera.size,zoomed_size*2.0),"normal zoom actually updates the rendering camera")
+	await capture("all-npcs-normal")
+	view.camera2d.zoom *= 2.0
+	view.camera2d.reset_smoothing()
+	view.camera2d.force_update_scroll()
+	view._sync_camera()
+	ui.visible = ui_was_visible
 	lineup_player.global_position = previous_position
 	lineup_player.remove_meta("face_lock")
 	for reference in references: reference.queue_free()

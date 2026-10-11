@@ -6,7 +6,7 @@
       48,
       90
     ],
-    "sha256": "240269ed1dd8d492428d926260a89cbfc876a6d0e859ff32826dff139961b57d",
+    "sha256": "961b20f4dda1fee51b3b6599aebd6dbda3aecb2885cc6d6efe53d8ad19dfe2c5",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/naru.png",
     "name": "타블렌",
     "original_path": "res://art/actors/npc/naru/south_west.png"
@@ -18,7 +18,7 @@
       48,
       90
     ],
-    "sha256": "b88db2896f6f51deeb27f7b7b39251c69f023dd68f6285b7088cd92acb7ea738",
+    "sha256": "68d6186e8b65adee303235799b9ba37c1598a1924a90065c2ad1a85158b9916a",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/doyun.png",
     "name": "코르빈",
     "original_path": "res://art/actors/npc/doyun/south_west.png"
@@ -30,7 +30,7 @@
       48,
       90
     ],
-    "sha256": "ec9f78bcaa999c86259c56a8fcc460abaf3a805af2a5d92f2e621edca58a90b6",
+    "sha256": "c021761a5859b37997cebd72adbeb06428d8aaa9cd62f43fa22418e56b42b68a",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/sora.png",
     "name": "이세르",
     "original_path": "res://art/actors/npc/sora/south_west.png"
@@ -42,7 +42,7 @@
       48,
       90
     ],
-    "sha256": "e5a5ad84de32233a2b7b05c8b5944ef0d87b539da9836942ac144ac96e811395",
+    "sha256": "4b839862c6fcc236ee64684b42d34b63bed7a2b1db5836eceb958b5bda997433",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/neighbor_bread.png",
     "name": "오렐",
     "original_path": "res://art/actors/npc/neighbor_bread/south_west.png"
@@ -54,7 +54,7 @@
       48,
       90
     ],
-    "sha256": "2887acc865d586b58cdb94227a7cb51a01c530eb80dbd955030fc06b74ed17da",
+    "sha256": "74c2e1e38e1a2c626bb3cf98fd3eb00d83ed2f42d697b8249029778ae72a9a22",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/child_berries.png",
     "name": "피니아",
     "display_height": 0.6235382879999999,
@@ -67,7 +67,7 @@
       48,
       90
     ],
-    "sha256": "dbdd9089fbce46253eded8ac837b3d1be35a24301fd95db28d052bde84e11cd0",
+    "sha256": "294a0e14c956950eb68bcc971eba261f8a1998c767bef1b89418b02f9cf7b868",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/traveler_water.png",
     "name": "라슈",
     "original_path": "res://art/actors/npc/traveler_water/south_west.png"
@@ -79,7 +79,7 @@
       48,
       90
     ],
-    "sha256": "a41affdb3cb24ac72af8b233891f3ec530609de19db544ba2b8d7edcb0138e24",
+    "sha256": "36fe5ae73bf9d6e4c548679597327b5205ee46000d571ef320e3513340928841",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/gatherer_herbs.png",
     "name": "엘미",
     "original_path": "res://art/actors/npc/gatherer_herbs/south_west.png"
@@ -91,7 +91,7 @@
       48,
       90
     ],
-    "sha256": "44d971fc532e37ef262aa098716559ef66912e79e71be2fa6015bdc71eedd435",
+    "sha256": "cc62ab7989b407dfb66253437fd177daad133f65f1d44f7e66f473779536cdb4",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/miner_ore.png",
     "name": "바르크",
     "original_path": "res://art/actors/npc/miner_ore/south_west.png"
@@ -103,7 +103,7 @@
       48,
       90
     ],
-    "sha256": "7fb17096fd62247e283b248770e6c61c69e95bfb0f7a54df9b895a2b49f2786d",
+    "sha256": "011dea34536797d0a48fcf926c8a9e2d92eaa28ecf76f494dea61a771cf7f33d",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/healer_moss.png",
     "name": "세이나",
     "original_path": "res://art/actors/npc/healer_moss/south_west.png"
@@ -115,7 +115,7 @@
       48,
       90
     ],
-    "sha256": "08bbc365785a31530bc93848be4ba9c722df1d739e18b85a50b14c2705199fca",
+    "sha256": "2967ed31b44c6791a0230623df8d4e04ba9b29dea9264271250210e1ac0f31ea",
     "source": "docs/그림_작업/받은그림/상태와_인물/체형_정리/delvin.png",
     "name": "델빈",
     "original_path": "res://art/actors/npc/delvin/south_west.png"

@@ -1,0 +1,41 @@
+{
+  "common_frames": 936,
+  "common_unchanged": 936,
+  "common_binary_alpha": 936,
+  "common_sizes": {
+    "(64, 64)": 104,
+    "(84, 84)": 416,
+    "(88, 88)": 344,
+    "(92, 92)": 72
+  },
+  "selected_assets": 18,
+  "date": "2026-10-11",
+  "baseline_commit": "d3af58666402c1309a67c3ff155834082d5c5e17",
+  "idle_directions_reviewed": 104,
+  "selected_bodies_redrawn": 18,
+  "original_head_crops_unchanged": 18,
+  "original_source_png_unchanged": 18,
+  "full_pipeline_idempotent": true,
+  "renderer": {
+    "godot": "4.7.1",
+    "imports": 2,
+    "import_errors": 0,
+    "loaded_files": 875,
+    "load_failures": 0,
+    "npc_checks": 164,
+    "common_actor_checks": 1809,
+    "gpu_state_pose_checks": 13394,
+    "gpu_failures": 0,
+    "script_errors": 0,
+    "assets_fail": 0,
+    "assets_warn_existing": 28
+  },
+  "visual_review": [
+    "native nearest-neighbor 4x before/after for all 18 selected sprites",
+    "104 original common idle sprites across 8 directions",
+    "all 12 named/special NPCs and player visible inside shop at original zoom",
+    "male and female player plus 5 adult NPCs at 2x zoom",
+    "bench front/mirrored; daylight and night"
+  ],
+  "scope": "Player/common customer/worker images unchanged. Named actors remain static south-west; seated opposite direction is mirrored. New walking animation is not part of this repair."
+}

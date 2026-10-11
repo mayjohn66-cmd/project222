@@ -1,9 +1,9 @@
-"""플레이어의 도트 체형에 맞춰 얼굴을 보존하고 몸통/하체 길이를 정리한다.
+"""원본 얼굴과 새로 그린 짧은 몸을 합성한다. 몸의 축별 압축은 사용하지 않는다.
 
 기존 원본은 유지한다. 픽셀_정리.py 뒤에 실행해 정지/좌식 선택본을 갱신한다.
 """
 from pathlib import Path
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont, ImageOps
 import hashlib
 import json
 import re
@@ -22,20 +22,53 @@ def sha(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
-def compact(source, cut, height):
+def compact(source, cut, height, raw_path):
     top = source.getbbox()[1]
     head = source.crop((0, top, 96, cut))
-    body = source.crop((0, cut, 96, 90))
-    new_body_height = height - head.height
-    assert 0 < new_body_height <= body.height
-    body = body.resize((96, new_body_height), Image.Resampling.NEAREST)
+    body = Image.open(raw_path).convert('RGBA')
+    body.putalpha(body.getchannel('A').point(lambda a: 255 if a >= 200 else 0))
+    # 생성 여백의 작은 점만 제거한다. 머리는 이 처리 대상이 아니다.
+    pixels = body.load()
+    seen = set()
+    components = []
+    for y in range(body.height):
+        for x in range(body.width):
+            if not pixels[x,y][3] or (x,y) in seen:
+                continue
+            stack, component = [(x,y)], []
+            seen.add((x,y))
+            while stack:
+                px, py = stack.pop()
+                component.append((px,py))
+                for dx, dy in [(a,b) for a in (-1,0,1) for b in (-1,0,1) if a or b]:
+                    q = (px+dx, py+dy)
+                    if 0 <= q[0] < body.width and 0 <= q[1] < body.height and q not in seen and pixels[q][3]:
+                        seen.add(q)
+                        stack.append(q)
+            components.append(component)
+    largest = max(components, key=len)
+    for component in components:
+        if component is not largest:
+            for x, y in component: pixels[x,y] = (0,0,0,0)
+    body = body.crop(body.getbbox())
+    # 전체 그림 하나에 같은 배율을 적용한다. 반올림 오차는 최대 1픽셀이다.
+    body = body.resize((round(body.width*height/body.height), height), Image.Resampling.NEAREST)
+    colors = sorted({p[:3] for p in source.get_flattened_data() if p[3]})
+    assert len(colors) <= 96
+    palette = Image.new('P', (1,1))
+    flat = [c for rgb in colors for c in rgb]
+    palette.putpalette(flat + [0]*(768-len(flat)))
+    alpha = body.getchannel('A')
+    body = body.convert('RGB').quantize(palette=palette, dither=Image.Dither.NONE).convert('RGBA')
+    body.putalpha(alpha)
     selected = Image.new('RGBA', (96, 96))
+    selected.paste(body, (48-body.width//2, 90-height))
+    # 얼굴·머리·모자·수염은 원본 그대로 복사한다. 투명부도 바꿔 생성 머리를 남기지 않는다.
     selected.paste(head, (0, 90-height))
-    selected.paste(body, (0, 90-height+head.height))
     assert selected.crop((0, 90-height, 96, 90-height+head.height)).tobytes() == head.tobytes()
     assert selected.getbbox()[3] == 90
-    assert set(selected.getchannel('A').getdata()) <= {0, 255}
-    assert len({p[:3] for p in selected.getdata() if p[3]}) <= 96
+    assert set(selected.getchannel('A').get_flattened_data()) <= {0, 255}
+    assert len({p[:3] for p in selected.get_flattened_data() if p[3]}) <= 96
     return selected, hashlib.sha256(head.tobytes()).hexdigest()
 
 
@@ -46,18 +79,21 @@ def apply():
     npcs = json.loads(npc_path.read_text(encoding='utf-8'))
     poses = json.loads(pose_path.read_text(encoding='utf-8'))
     heads = json.loads((HERE/'검사_결과.json').read_text(encoding='utf-8'))['preserved_heads']
-    report = {'method': 'original head pixels + nearest body resampling; uniform runtime scale', 'assets': []}
+    report = {'method': 'newly drawn compact body, whole-image uniform scale, original head pixel composite; no per-axis body compression', 'date': '2026-10-11', 'assets': []}
     originals = {}
     for identity, (cut, height) in SPEC.items():
         row = (npcs if identity in npcs else poses)[identity]
         original = row.get('original_path', row['path'])
         source_path = ROOT/original.removeprefix('res://')
         originals[identity] = Image.open(source_path).convert('RGBA')
-        selected, head_sha = compact(originals[identity], cut, height)
+        raw_path = HERE/'생성_원본'/('redraw_'+identity+'.png')
+        selected, head_sha = compact(originals[identity], cut, height, raw_path)
         write(row, source_path, selected, identity, head_sha, height, report)
+        report['assets'][-1].update(redrawn_body=raw_path.relative_to(ROOT).as_posix(), redrawn_body_sha256=sha(raw_path))
         if identity in poses:
             row['reference_height'] = height
     # 주민 좌식도 같은 얼굴 픽셀 배율을 사용한다. 앉을 때 머리만 작아지지 않도록 한다.
+    seat_cache = {}
     for key, row in poses.items():
         identity = row.get('identity', '')
         if identity not in npcs:
@@ -68,10 +104,18 @@ def apply():
         original = row.get('original_path', row['path'])
         source_path = ROOT/original.removeprefix('res://')
         source = Image.open(source_path).convert('RGBA')
-        ratio = (standing_height-(cut-6))/(90-cut)
-        selected_height = head_end-source.getbbox()[1]+round((90-head_end)*ratio)
-        selected, head_sha = compact(source, head_end, selected_height)
+        raw_path = HERE/'생성_원본'/('redraw_'+identity+'_seat.png')
+        selected_height = {'doyun':54, 'naru':67, 'sora':58}[identity]
+        if row['direction'] == 'south-west':
+            selected, head_sha = compact(source, head_end, selected_height, raw_path)
+            seat_cache[identity] = selected
+        else:
+            selected = ImageOps.mirror(seat_cache[identity])
+            head = source.crop((0, source.getbbox()[1], 96, head_end))
+            assert selected.crop((0,90-selected_height,96,90-selected_height+head.height)).tobytes() == head.tobytes()
+            head_sha = hashlib.sha256(head.tobytes()).hexdigest()
         write(row, source_path, selected, key.replace(':','_'), head_sha, standing_height, report)
+        report['assets'][-1].update(redrawn_body=raw_path.relative_to(ROOT).as_posix(), redrawn_body_sha256=sha(raw_path))
         row['reference_height'] = standing_height
     for path, data in [(npc_path, npcs), (pose_path, poses), (HERE/'체형_검사.json', report)]:
         path.write_text(json.dumps(data, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')

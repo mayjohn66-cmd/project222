@@ -208,5 +208,239 @@
         }
       }
     ]
+  },
+  "body_redraw": {
+    "date": "2026-10-11",
+    "tool": "built-in imagegen",
+    "reason": "몸만 세로 압축하여 옷과 팔다리가 납작해진 문제 수정. 플레이어는 그대로 유지하고 자연스러운 짧은 몸을 다시 그림.",
+    "transparent_background": true,
+    "processing": "binary alpha, remove detached generation specks, uniform whole-character scale, original palette without dithering, original head pixel composite",
+    "results": [
+      {
+        "id": "doyun",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-3f108ea5-89be-4f98-902f-6ec90675b1f2.png",
+        "file": "생성_원본/redraw_doyun.png",
+        "prompt": "Edit target: second image, the blue-shirt worker with short black spiky hair and navy apron. First image is the PLAYER anatomy/pixel-art reference, do not edit player. Redraw ONLY the worker's body as naturally constructed short chibi pixel art, approximately 2.5 heads tall, matching player body proportions. Keep exactly the second image's original hairstyle, face identity, blue rolled-sleeve shirt, navy apron, brown belt and dark brown trousers/boots. Face south-west (towards viewer lower-left), standing neutral, both feet visible, no extra prop. Large original-size head, small rounded torso, short BUT VOLUMETRIC arms and legs, boots with distinct uppers and soles, hands with intact outlines. Draw the shorter body anew; do not squeeze or flatten the old body. Crisp pixel clusters, hard pixel outlines, no anti-aliasing, limited original palette. ONE centered full-body sprite on a transparent background, ample margin, no floor, shadows, labels or other figures. The head and clothing shapes should have the same clean pixel density, not painted detail. This will be reduced uniformly to a 96px canvas with a 66px-tall character; keep details legible at that scale.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/doyun/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/doyun/south_west.png": "2e2f91f9a4ef2abe15453dba4b8854686fe638b9615d7e690e3c7326fb1126e7"
+        },
+        "sha256": "bcaac002c3cb2bca5c0c4ccf1358e9b76128e206a0ad1f49a63fdb38177d4590"
+      },
+      {
+        "id": "naru",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-b27ae3eb-ded9-4303-97b5-5976c72f31ae.png",
+        "file": "생성_원본/redraw_naru.png",
+        "prompt": "Edit target is SECOND input sprite: bearded middle-aged merchant, wide-brim brown hat, red scarf, ochre brown coat, leather satchel, brown trousers and boots. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 76px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/naru/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/naru/south_west.png": "045917d8d600effeff778598df4e86a07dcd0a4c4a92e69550593e83b8170d40"
+        },
+        "sha256": "166219e6d7c63f977646a75347e0aa940d470981b709985915d21adc03b74358"
+      },
+      {
+        "id": "sora",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-6015d619-c5ec-401d-ba2f-7bcb232d3ea1.png",
+        "file": "생성_원본/redraw_sora.png",
+        "prompt": "Edit target is SECOND input sprite: brown/red long-haired woman, olive turtleneck, tan long coat, dark trousers, brown boots, little notebook held. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 68px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/sora/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/sora/south_west.png": "0eab714e5bc7e88314ec660704fe17a1d9c1a2908841a1ded2ce159fb55425b9"
+        },
+        "sha256": "116402da25bef82576348ca7dc978e8340883889e24dc14c1f5af8ee0d502300"
+      },
+      {
+        "id": "neighbor_bread",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-7ddfcaaa-7274-4d7c-b50d-9ccfbf296946.png",
+        "file": "생성_원본/redraw_neighbor_bread.png",
+        "prompt": "Edit target is SECOND input sprite: brown long-haired woman, plum blouse, cream apron and skirt, brown shoes, hands gently in front. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 70px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/neighbor_bread/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/neighbor_bread/south_west.png": "fe25370f6dc3d89192d725d541d1fca673e14a25402d3797cff759f3ebd179bb"
+        },
+        "sha256": "7fa8da11e0aace139b1217e621c7caf50e213cd4a4789a5f8db41f063de867c6"
+      },
+      {
+        "id": "child_berries",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-f1aac982-5a08-4906-8118-2ac19a05b655.png",
+        "file": "생성_원본/redraw_child_berries.png",
+        "prompt": "Edit target is SECOND input sprite: girl with red high ponytail, teal blue coat, mustard shirt, brown belt/pouch, denim shorts with leggings, brown boots. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 72px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/child_berries/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/child_berries/south_west.png": "8066b054898527822caacb9b1d3b1ffeb91ed50a76513059f2bb798425febea3"
+        },
+        "sha256": "9f8413d20e2575ed3b60b05ae696c1cb1cabf29e4d146d8a074626332b4477dd"
+      },
+      {
+        "id": "traveler_water",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-9fcc151f-4daa-4d13-bd61-0ed1715534bd.png",
+        "file": "생성_원본/redraw_traveler_water.png",
+        "prompt": "Edit target is SECOND input sprite: dark purple-haired male traveler, thick slate-blue hooded scarf/cloak, brown leather tunic/trousers, brown satchel/waterskin and boots. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 66px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/traveler_water/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/traveler_water/south_west.png": "5dadcd174a441518ad8d73902dfef25bc5f5abe905bcc26748cc54ee9c3cdcae"
+        },
+        "sha256": "bc670f8bdecd929ddabdc831587ab6589b0c1d619ccb192304cadffd40b646d5"
+      },
+      {
+        "id": "gatherer_herbs",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-d9e3d7f4-6d16-4e3e-accc-e163780d888f.png",
+        "file": "생성_원본/redraw_gatherer_herbs.png",
+        "prompt": "Edit target is SECOND input sprite: brown shoulder-length-haired woman, green blouse, cream green skirt, brown waist pouch and satchel with herbs. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 68px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/gatherer_herbs/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/gatherer_herbs/south_west.png": "8e372319fc380b8fc83228203d52d0ddbe63678da59b4fada5fd6157baecce52"
+        },
+        "sha256": "7ef5657c8609ba60bfe404da5b572ceb773b32b9c7215b7a776299e654778e70"
+      },
+      {
+        "id": "miner_ore",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-577c5f99-1b2e-4f1f-9593-a33a3878b7da.png",
+        "file": "생성_원본/redraw_miner_ore.png",
+        "prompt": "Edit target is SECOND input sprite: stocky bearded miner, golden hardhat and goggles, dark purple beard, cream rolled sleeves, brown apron/toolbelt, brown trousers and boots. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 80px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/miner_ore/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/miner_ore/south_west.png": "965a14f49e9cd8a99d0f122e9340d582fb41cf64243cb103f0444958ca836bad"
+        },
+        "sha256": "d6c4500f52a88ba2de725835f0d6b8ef1910527747fb28be4a99c6e27b381a6c"
+      },
+      {
+        "id": "healer_moss",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-ea059bda-fe8a-4ab9-a8bb-bc896a043425.png",
+        "file": "생성_원본/redraw_healer_moss.png",
+        "prompt": "Edit target is SECOND input sprite: black-haired female healer, dark teal hooded robe, cream undershirt, belt and medicine pouch, brown boots. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 68px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/healer_moss/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/healer_moss/south_west.png": "ce7c135bce28d3341a01721c4d678d1fc4aef8ce2f4099861d92af5f08fb0656"
+        },
+        "sha256": "89451d8d4e32419fb91c24f87663152ecb4aac675da06ec6e2acaf111b46a78b"
+      },
+      {
+        "id": "delvin",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-09324fb6-6e4f-4a4f-83a4-2eafd7e9f20c.png",
+        "file": "생성_원본/redraw_delvin.png",
+        "prompt": "Edit target is SECOND input sprite: young messy brown-haired man, blue jacket, mustard shirt, brown trousers and boots, small golden pouch at side. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 68px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/npc/delvin/south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/npc/delvin/south_west.png": "9e0adf10339ff4c2814efda943fedccdf2369aca1518945d6147b60ff25bef3f"
+        },
+        "sha256": "b1e818b94de3f16269768b11066070889f214a35445c04c7140780ddc5589cf1"
+      },
+      {
+        "id": "blacksmith",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-7eb5033d-62f6-485d-97d5-a4f13fbbe145.png",
+        "file": "생성_원본/redraw_blacksmith.png",
+        "prompt": "Edit target is SECOND input sprite: black-haired male blacksmith with short beard, ivory rolled sleeves, brown leather apron and belt, brown trousers and boots, small hammer held. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 70px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/poses/blacksmith_south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/poses/blacksmith_south_west.png": "6b1358a34a5e32354edce6315917d854c35e34d01ef1799e6d6ee1a5fccca842"
+        },
+        "sha256": "bb88908bd9255c385c3e74e87b71c9d96b095eaec85d9f12c5da300f7ecb2075"
+      },
+      {
+        "id": "commuter",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-2714cdf7-9a9d-471f-b33c-94386e7a041f.png",
+        "file": "생성_원본/redraw_commuter.png",
+        "prompt": "Edit target is SECOND input sprite: brown tidy side-parted-haired young adult office man, navy business jacket, white shirt, muted blue tie, navy trousers, dark shoes, small brown briefcase in hand. FIRST input is the player anatomy and crisp pixel density reference; player must not be modified. Redraw this exact NPC's body as naturally constructed compact chibi pixel art matching the player's rounded head, compact torso and short limbs, 2.4 to 2.7 heads tall. Keep original hairstyle, face identity, clothing colors, accessories and all costume items in SECOND image. Standing facing SOUTH-WEST (viewer lower-left), neutral pose, both feet visible. The shorter body must be drawn anew: rounded sleeves, hands with continuous outlines, intact folded clothing, short volumetric legs, boots with visible uppers/soles. No vertical squeezing, flattened boots, stretched thin outlines or realistic long body. Same large original head, naturally joined shoulders. Single full-body sprite, genuine transparent background, centered generous margin. No floor, shadows, props beyond existing costume, text, labels, sheet or other characters. Crisp hard-edged pixel clusters with the same logical pixel density across face and body, limited original palette, no blur or airbrushing. Intended uniformly resized to a 96x96 canvas with 70px character height; maintain readable low resolution details.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/poses/commuter_south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/poses/commuter_south_west.png": "f4f3e8edf77e26863df5fd558f67ba7d5eaed84f98423f3e6b85e3ac58ba6381"
+        },
+        "sha256": "859cf85e98e0dd641bd31d09d990d0b2cd0077cef87816c4c310662afc0f08bc"
+      },
+      {
+        "id": "doyun_seat",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-73c3c388-4ae0-4856-b2a2-a2f2ff723a22.png",
+        "file": "생성_원본/redraw_doyun_seat.png",
+        "prompt": "Edit target is SECOND input, the seated doyun NPC. FIRST input is PLAYER anatomy/pixel density reference, do not modify the player. Preserve the NPC's original face identity, hair/hat/beard, and exact original costume/accessories/colors. Redraw its body naturally as a short compact chibi matching the player, large head and short BUT volumetric torso, arms and legs. Pose sitting on an invisible bench, facing south-west viewer lower-left, thighs projecting forward, bent knees, hanging shins, clearly formed thick shoes resting on ground, hands relaxed on thighs or original book in lap. Head width unchanged relative to second image. Reconstruct bent limbs and boots, DO NOT vertically compress any body pixels. Crisp clean low resolution pixel clusters, hard outlines, limited palette, no antialiasing/blur/realistic details. Single full-body seated sprite on genuine transparent background, generous margins, NO actual bench/chair or floor/shadow, no labels/text or other characters. Intended to be reduced uniformly to 96x96 canvas, 54-67px seated height; readable pixel forms.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/poses/doyun_seat_south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/poses/doyun_seat_south_west.png": "7ba27154e081f6380aa8e127ea2c56bd6813063df107e3d6fa21e1f545d72455"
+        },
+        "sha256": "7364ba9dc1b94acb7804191abd7b591d40626a7346dbd83fd8ffb24ccf742dda"
+      },
+      {
+        "id": "naru_seat",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-77d12ead-265d-41b5-a3d2-daeda4e3f6e0.png",
+        "file": "생성_원본/redraw_naru_seat.png",
+        "prompt": "Edit target is SECOND input, the seated naru NPC. FIRST input is PLAYER anatomy/pixel density reference, do not modify the player. Preserve the NPC's original face identity, hair/hat/beard, and exact original costume/accessories/colors. Redraw its body naturally as a short compact chibi matching the player, large head and short BUT volumetric torso, arms and legs. Pose sitting on an invisible bench, facing south-west viewer lower-left, thighs projecting forward, bent knees, hanging shins, clearly formed thick shoes resting on ground, hands relaxed on thighs or original book in lap. Head width unchanged relative to second image. Reconstruct bent limbs and boots, DO NOT vertically compress any body pixels. Crisp clean low resolution pixel clusters, hard outlines, limited palette, no antialiasing/blur/realistic details. Single full-body seated sprite on genuine transparent background, generous margins, NO actual bench/chair or floor/shadow, no labels/text or other characters. Intended to be reduced uniformly to 96x96 canvas, 54-67px seated height; readable pixel forms.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/poses/naru_seat_south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/poses/naru_seat_south_west.png": "df5b78b2143599a4de588f4562d8121b3452ae60be8a8d9b915c9a57de65d4bb"
+        },
+        "sha256": "e7024a8f01f474f8d17ab26aa2d4a7c5767340968db918d2a5d0236a4cd30280"
+      },
+      {
+        "id": "sora_seat",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-d90ea15b-284f-4eb4-88f1-08ecab1ea796.png",
+        "file": "생성_원본/redraw_sora_seat.png",
+        "prompt": "Edit target is SECOND input, the seated sora NPC. FIRST input is PLAYER anatomy/pixel density reference, do not modify the player. Preserve the NPC's original face identity, hair/hat/beard, and exact original costume/accessories/colors. Redraw its body naturally as a short compact chibi matching the player, large head and short BUT volumetric torso, arms and legs. Pose sitting on an invisible bench, facing south-west viewer lower-left, thighs projecting forward, bent knees, hanging shins, clearly formed thick shoes resting on ground, hands relaxed on thighs or original book in lap. Head width unchanged relative to second image. Reconstruct bent limbs and boots, DO NOT vertically compress any body pixels. Crisp clean low resolution pixel clusters, hard outlines, limited palette, no antialiasing/blur/realistic details. Single full-body seated sprite on genuine transparent background, generous margins, NO actual bench/chair or floor/shadow, no labels/text or other characters. Intended to be reduced uniformly to 96x96 canvas, 54-67px seated height; readable pixel forms.",
+        "references": [
+          "art/actors/player_male/rotations/south_west.png",
+          "art/actors/poses/sora_seat_south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/player_male/rotations/south_west.png": "a7d1f653e512837d4aeb3ea3d8aad0a8d9dc6618bedbf9060a8db796419b8c3f",
+          "art/actors/poses/sora_seat_south_west.png": "7bb78c0773ee4ce22b76f1cef24d631420a0d74668fb0ed1837114b64403d04b"
+        },
+        "sha256": "668314eb92a6b8cb991a88c20085263a519a34952788d8a3fb9d8b31070a8759"
+      }
+    ]
   }
 }

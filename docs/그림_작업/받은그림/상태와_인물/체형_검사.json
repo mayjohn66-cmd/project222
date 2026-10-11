@@ -1,57 +1,64 @@
 {
-  "method": "original head pixels + nearest body resampling; uniform runtime scale",
+  "method": "newly drawn compact body, whole-image uniform scale, original head pixel composite; no per-axis body compression",
+  "date": "2026-10-11",
   "assets": [
     {
       "id": "naru",
       "path": "res://art/actors/npc/naru/south_west_compact.png",
       "source_path": "res://art/actors/npc/naru/south_west.png",
       "source_sha256": "045917d8d600effeff778598df4e86a07dcd0a4c4a92e69550593e83b8170d40",
-      "sha256": "240269ed1dd8d492428d926260a89cbfc876a6d0e859ff32826dff139961b57d",
+      "sha256": "961b20f4dda1fee51b3b6599aebd6dbda3aecb2885cc6d6efe53d8ad19dfe2c5",
       "head_sha256": "edbb10f7443b8d98d2b99f56f48fe5b5e700ecf5166e7d4858016c471843c456",
       "bounds": [
         25,
         14,
-        71,
+        70,
         90
       ],
-      "standing_reference_height": 76
+      "standing_reference_height": 76,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_naru.png",
+      "redrawn_body_sha256": "166219e6d7c63f977646a75347e0aa940d470981b709985915d21adc03b74358"
     },
     {
       "id": "doyun",
       "path": "res://art/actors/npc/doyun/south_west_compact.png",
       "source_path": "res://art/actors/npc/doyun/south_west.png",
       "source_sha256": "2e2f91f9a4ef2abe15453dba4b8854686fe638b9615d7e690e3c7326fb1126e7",
-      "sha256": "b88db2896f6f51deeb27f7b7b39251c69f023dd68f6285b7088cd92acb7ea738",
+      "sha256": "68d6186e8b65adee303235799b9ba37c1598a1924a90065c2ad1a85158b9916a",
       "head_sha256": "c2fad80d8c780b6f654bf280627dd41f8695fc552be54c270c19c4f717344d1f",
       "bounds": [
-        30,
+        31,
         24,
-        66,
+        63,
         90
       ],
-      "standing_reference_height": 66
+      "standing_reference_height": 66,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_doyun.png",
+      "redrawn_body_sha256": "bcaac002c3cb2bca5c0c4ccf1358e9b76128e206a0ad1f49a63fdb38177d4590"
     },
     {
       "id": "sora",
       "path": "res://art/actors/npc/sora/south_west_compact.png",
       "source_path": "res://art/actors/npc/sora/south_west.png",
       "source_sha256": "0eab714e5bc7e88314ec660704fe17a1d9c1a2908841a1ded2ce159fb55425b9",
-      "sha256": "ec9f78bcaa999c86259c56a8fcc460abaf3a805af2a5d92f2e621edca58a90b6",
+      "sha256": "c021761a5859b37997cebd72adbeb06428d8aaa9cd62f43fa22418e56b42b68a",
       "head_sha256": "4c9820612a97ae06004cb3d9c5e7f115c5503889f33054b1530da211b3579148",
       "bounds": [
-        28,
+        29,
         22,
-        67,
+        66,
         90
       ],
-      "standing_reference_height": 68
+      "standing_reference_height": 68,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_sora.png",
+      "redrawn_body_sha256": "116402da25bef82576348ca7dc978e8340883889e24dc14c1f5af8ee0d502300"
     },
     {
       "id": "neighbor_bread",
       "path": "res://art/actors/npc/neighbor_bread/south_west_compact.png",
       "source_path": "res://art/actors/npc/neighbor_bread/south_west.png",
       "source_sha256": "fe25370f6dc3d89192d725d541d1fca673e14a25402d3797cff759f3ebd179bb",
-      "sha256": "e5a5ad84de32233a2b7b05c8b5944ef0d87b539da9836942ac144ac96e811395",
+      "sha256": "4b839862c6fcc236ee64684b42d34b63bed7a2b1db5836eceb958b5bda997433",
       "head_sha256": "12e948540789ac321425d0d91f60f034831846a517c45b1927ca5987dc36010e",
       "bounds": [
         32,
@@ -59,14 +66,16 @@
         64,
         90
       ],
-      "standing_reference_height": 70
+      "standing_reference_height": 70,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_neighbor_bread.png",
+      "redrawn_body_sha256": "7fa8da11e0aace139b1217e621c7caf50e213cd4a4789a5f8db41f063de867c6"
     },
     {
       "id": "child_berries",
       "path": "res://art/actors/npc/child_berries/south_west_compact.png",
       "source_path": "res://art/actors/npc/child_berries/south_west.png",
       "source_sha256": "8066b054898527822caacb9b1d3b1ffeb91ed50a76513059f2bb798425febea3",
-      "sha256": "2887acc865d586b58cdb94227a7cb51a01c530eb80dbd955030fc06b74ed17da",
+      "sha256": "74c2e1e38e1a2c626bb3cf98fd3eb00d83ed2f42d697b8249029778ae72a9a22",
       "head_sha256": "9571a334275cc8f98193e920b84b7b1b127cd5ff40a1b6e00a6c6139d215a911",
       "bounds": [
         24,
@@ -74,74 +83,84 @@
         72,
         90
       ],
-      "standing_reference_height": 72
+      "standing_reference_height": 72,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_child_berries.png",
+      "redrawn_body_sha256": "9f8413d20e2575ed3b60b05ae696c1cb1cabf29e4d146d8a074626332b4477dd"
     },
     {
       "id": "traveler_water",
       "path": "res://art/actors/npc/traveler_water/south_west_compact.png",
       "source_path": "res://art/actors/npc/traveler_water/south_west.png",
       "source_sha256": "5dadcd174a441518ad8d73902dfef25bc5f5abe905bcc26748cc54ee9c3cdcae",
-      "sha256": "dbdd9089fbce46253eded8ac837b3d1be35a24301fd95db28d052bde84e11cd0",
+      "sha256": "294a0e14c956950eb68bcc971eba261f8a1998c767bef1b89418b02f9cf7b868",
       "head_sha256": "e9cbe7c47be42218886f86b17103e082f43d0751bc084638b06f90bd042f9a65",
       "bounds": [
         25,
         24,
-        70,
+        66,
         90
       ],
-      "standing_reference_height": 66
+      "standing_reference_height": 66,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_traveler_water.png",
+      "redrawn_body_sha256": "bc670f8bdecd929ddabdc831587ab6589b0c1d619ccb192304cadffd40b646d5"
     },
     {
       "id": "gatherer_herbs",
       "path": "res://art/actors/npc/gatherer_herbs/south_west_compact.png",
       "source_path": "res://art/actors/npc/gatherer_herbs/south_west.png",
       "source_sha256": "8e372319fc380b8fc83228203d52d0ddbe63678da59b4fada5fd6157baecce52",
-      "sha256": "a41affdb3cb24ac72af8b233891f3ec530609de19db544ba2b8d7edcb0138e24",
+      "sha256": "36fe5ae73bf9d6e4c548679597327b5205ee46000d571ef320e3513340928841",
       "head_sha256": "516ffa9652c51a45aa42dfaa3d77b237bc5d9d8120a1c0050fa2fbbd63c55666",
       "bounds": [
         28,
         22,
-        67,
+        65,
         90
       ],
-      "standing_reference_height": 68
+      "standing_reference_height": 68,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_gatherer_herbs.png",
+      "redrawn_body_sha256": "7ef5657c8609ba60bfe404da5b572ceb773b32b9c7215b7a776299e654778e70"
     },
     {
       "id": "miner_ore",
       "path": "res://art/actors/npc/miner_ore/south_west_compact.png",
       "source_path": "res://art/actors/npc/miner_ore/south_west.png",
       "source_sha256": "965a14f49e9cd8a99d0f122e9340d582fb41cf64243cb103f0444958ca836bad",
-      "sha256": "44d971fc532e37ef262aa098716559ef66912e79e71be2fa6015bdc71eedd435",
+      "sha256": "cc62ab7989b407dfb66253437fd177daad133f65f1d44f7e66f473779536cdb4",
       "head_sha256": "ba4597edf18efcd940d0b154f3f0d69f319bff2de0dcaff12ce03ebf39bffd3e",
       "bounds": [
-        24,
+        26,
         10,
-        72,
+        70,
         90
       ],
-      "standing_reference_height": 80
+      "standing_reference_height": 80,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_miner_ore.png",
+      "redrawn_body_sha256": "d6c4500f52a88ba2de725835f0d6b8ef1910527747fb28be4a99c6e27b381a6c"
     },
     {
       "id": "healer_moss",
       "path": "res://art/actors/npc/healer_moss/south_west_compact.png",
       "source_path": "res://art/actors/npc/healer_moss/south_west.png",
       "source_sha256": "ce7c135bce28d3341a01721c4d678d1fc4aef8ce2f4099861d92af5f08fb0656",
-      "sha256": "7fb17096fd62247e283b248770e6c61c69e95bfb0f7a54df9b895a2b49f2786d",
+      "sha256": "011dea34536797d0a48fcf926c8a9e2d92eaa28ecf76f494dea61a771cf7f33d",
       "head_sha256": "3e8fc9180755be6aa00baa3f5cdd70c8b12fe9f17e412849c9dca7be25c53338",
       "bounds": [
         29,
         22,
-        67,
+        65,
         90
       ],
-      "standing_reference_height": 68
+      "standing_reference_height": 68,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_healer_moss.png",
+      "redrawn_body_sha256": "89451d8d4e32419fb91c24f87663152ecb4aac675da06ec6e2acaf111b46a78b"
     },
     {
       "id": "delvin",
       "path": "res://art/actors/npc/delvin/south_west_compact.png",
       "source_path": "res://art/actors/npc/delvin/south_west.png",
       "source_sha256": "9e0adf10339ff4c2814efda943fedccdf2369aca1518945d6147b60ff25bef3f",
-      "sha256": "08bbc365785a31530bc93848be4ba9c722df1d739e18b85a50b14c2705199fca",
+      "sha256": "2967ed31b44c6791a0230623df8d4e04ba9b29dea9264271250210e1ac0f31ea",
       "head_sha256": "44b9507fca262b1d5c876a2231d3dd3ce6d7b68685288d347e4de4e45ba998c1",
       "bounds": [
         28,
@@ -149,74 +168,84 @@
         68,
         90
       ],
-      "standing_reference_height": 68
+      "standing_reference_height": 68,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_delvin.png",
+      "redrawn_body_sha256": "b1e818b94de3f16269768b11066070889f214a35445c04c7140780ddc5589cf1"
     },
     {
       "id": "blacksmith",
       "path": "res://art/actors/poses/blacksmith_south_west_compact.png",
       "source_path": "res://art/actors/poses/blacksmith_south_west.png",
       "source_sha256": "6b1358a34a5e32354edce6315917d854c35e34d01ef1799e6d6ee1a5fccca842",
-      "sha256": "eff16ad52b4ad72d64782536ff87ad1af56865b7f5634b2d939eebc726d2e790",
+      "sha256": "50cd396989498da19cba3643df9f4cb03506be67933288050362289272a42f94",
       "head_sha256": "b60068fe166b52ebb4ab2792489677c53c306db844b90cc340345d5ee079dc24",
       "bounds": [
-        26,
+        29,
         20,
-        71,
+        67,
         90
       ],
-      "standing_reference_height": 70
+      "standing_reference_height": 70,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_blacksmith.png",
+      "redrawn_body_sha256": "bb88908bd9255c385c3e74e87b71c9d96b095eaec85d9f12c5da300f7ecb2075"
     },
     {
       "id": "commuter",
       "path": "res://art/actors/poses/commuter_south_west_compact.png",
       "source_path": "res://art/actors/poses/commuter_south_west.png",
       "source_sha256": "f4f3e8edf77e26863df5fd558f67ba7d5eaed84f98423f3e6b85e3ac58ba6381",
-      "sha256": "dfb9e3f1d5fea45742fb533503615a74e1d99ec59373daba33a9fc9f8a848604",
+      "sha256": "5dc45133e97e8b1ebddb33d4f26b626751fbce55816821cadcc949bafb148558",
       "head_sha256": "b777225d745ad6e7deb13286588c37b7dc3a5e60cfdc7f0d08f3beb1f6788dab",
       "bounds": [
-        28,
+        29,
         20,
         68,
         90
       ],
-      "standing_reference_height": 70
+      "standing_reference_height": 70,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_commuter.png",
+      "redrawn_body_sha256": "859cf85e98e0dd641bd31d09d990d0b2cd0077cef87816c4c310662afc0f08bc"
     },
     {
       "id": "doyun_seat_south-west",
       "path": "res://art/actors/poses/doyun_seat_south_west_compact.png",
       "source_path": "res://art/actors/poses/doyun_seat_south_west.png",
       "source_sha256": "7ba27154e081f6380aa8e127ea2c56bd6813063df107e3d6fa21e1f545d72455",
-      "sha256": "cce9bc4ac9ceff9be7a1a52b0c3c5bf775dbe425ba34f31a6652d83dc04db091",
+      "sha256": "9e1ff2c36385a7eefcd7860a010c9ea4b7e996dad54ce0be623f957f774151ee",
       "head_sha256": "c2fad80d8c780b6f654bf280627dd41f8695fc552be54c270c19c4f717344d1f",
       "bounds": [
         31,
         36,
-        64,
+        62,
         90
       ],
-      "standing_reference_height": 66
+      "standing_reference_height": 66,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_doyun_seat.png",
+      "redrawn_body_sha256": "7364ba9dc1b94acb7804191abd7b591d40626a7346dbd83fd8ffb24ccf742dda"
     },
     {
       "id": "doyun_seat_south-east",
       "path": "res://art/actors/poses/doyun_seat_south_east_compact.png",
       "source_path": "res://art/actors/poses/doyun_seat_south_east.png",
       "source_sha256": "21e6a354a48895db74b0ab022d8be6f17c16e2dfb7ebb5afdc9b69fb89c76002",
-      "sha256": "8e0e82b1573c717e8856ab86f180157873d3013ec635c1b39e430911cb10f9dc",
+      "sha256": "ca4aedd4788c09405d18d1dd749815680621ed5f90e65ac061e2c1cdd609420d",
       "head_sha256": "e90df78d817ea0be110e073b1c377800f89719b511393d96e2ad77b04186f32b",
       "bounds": [
-        32,
+        34,
         36,
         65,
         90
       ],
-      "standing_reference_height": 66
+      "standing_reference_height": 66,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_doyun_seat.png",
+      "redrawn_body_sha256": "7364ba9dc1b94acb7804191abd7b591d40626a7346dbd83fd8ffb24ccf742dda"
     },
     {
       "id": "naru_seat_south-west",
       "path": "res://art/actors/poses/naru_seat_south_west_compact.png",
       "source_path": "res://art/actors/poses/naru_seat_south_west.png",
       "source_sha256": "df5b78b2143599a4de588f4562d8121b3452ae60be8a8d9b915c9a57de65d4bb",
-      "sha256": "ea0b4ac2a1dea116c3d503e9dd796b5a098ee4f071acedcec167a2821142de89",
+      "sha256": "1b65d52739b46745da181e3c76985d2b0f62132d499fed770b36a89e33946873",
       "head_sha256": "edbb10f7443b8d98d2b99f56f48fe5b5e700ecf5166e7d4858016c471843c456",
       "bounds": [
         25,
@@ -224,14 +253,16 @@
         70,
         90
       ],
-      "standing_reference_height": 76
+      "standing_reference_height": 76,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_naru_seat.png",
+      "redrawn_body_sha256": "e7024a8f01f474f8d17ab26aa2d4a7c5767340968db918d2a5d0236a4cd30280"
     },
     {
       "id": "naru_seat_south-east",
       "path": "res://art/actors/poses/naru_seat_south_east_compact.png",
       "source_path": "res://art/actors/poses/naru_seat_south_east.png",
       "source_sha256": "6ee516a5c3a3de855e070259beecb8bd5ba8acc97030ff1a2161c3803fbed89b",
-      "sha256": "8fa2540bfca841eafc563ce13c399dc667ae88c8157d6d51cc1d98459a2662a7",
+      "sha256": "fac0c4abf30e799ce64b5a6d32b944cab81e7ecd208b17c8fc79d1eacaf1f4d4",
       "head_sha256": "14741da662cb2bac9b7cb1e49ee4044d277c36929f7fb24bc26c7c1fe9dfb0a8",
       "bounds": [
         26,
@@ -239,37 +270,43 @@
         71,
         90
       ],
-      "standing_reference_height": 76
+      "standing_reference_height": 76,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_naru_seat.png",
+      "redrawn_body_sha256": "e7024a8f01f474f8d17ab26aa2d4a7c5767340968db918d2a5d0236a4cd30280"
     },
     {
       "id": "sora_seat_south-west",
       "path": "res://art/actors/poses/sora_seat_south_west_compact.png",
       "source_path": "res://art/actors/poses/sora_seat_south_west.png",
       "source_sha256": "7bb78c0773ee4ce22b76f1cef24d631420a0d74668fb0ed1837114b64403d04b",
-      "sha256": "1d73bc584f634dc48c64a0f263d3884ba85c33c69c0976cc61671220a7773df5",
+      "sha256": "61f5e755d7787bc2f21eb8d073ed3d6a5b525f0129d60f87d1d80912b20e3edc",
       "head_sha256": "4c9820612a97ae06004cb3d9c5e7f115c5503889f33054b1530da211b3579148",
       "bounds": [
         29,
         32,
-        66,
+        65,
         90
       ],
-      "standing_reference_height": 68
+      "standing_reference_height": 68,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_sora_seat.png",
+      "redrawn_body_sha256": "668314eb92a6b8cb991a88c20085263a519a34952788d8a3fb9d8b31070a8759"
     },
     {
       "id": "sora_seat_south-east",
       "path": "res://art/actors/poses/sora_seat_south_east_compact.png",
       "source_path": "res://art/actors/poses/sora_seat_south_east.png",
       "source_sha256": "2bd21117cbc5124f553fe426e53ed0901b5d7ae14fe3c746b0bd42fd8a22f50d",
-      "sha256": "d89cb2ace69624563001a63d1577250becd90a923af8aaafc39a9e820b39bf3a",
+      "sha256": "efd11f84414f9b15c83ef62a2271796f23d0bcca391ffe38293c4b4c18cbff15",
       "head_sha256": "269f0263e2796cfdc1e1776ae5b9f9d84006c535782a3922192a49aa3d02afa5",
       "bounds": [
-        30,
+        31,
         32,
         67,
         90
       ],
-      "standing_reference_height": 68
+      "standing_reference_height": 68,
+      "redrawn_body": "docs/그림_작업/받은그림/상태와_인물/생성_원본/redraw_sora_seat.png",
+      "redrawn_body_sha256": "668314eb92a6b8cb991a88c20085263a519a34952788d8a3fb9d8b31070a8759"
     }
   ]
 }
