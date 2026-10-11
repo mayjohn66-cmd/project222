@@ -89,7 +89,15 @@ func _ready() -> void:
 	_id_dummy = Node3D.new()
 	_id_dummy.visible = false
 	_vp.add_child(_id_dummy)
-	_player = BlockyFigure.new()
+	var player_key := "player_" + PlayerProgress.player_gender
+	var player_frames := ActorSpriteFrames.load_set(player_key)
+	if not player_frames.is_empty():
+		var pixel := ExpeditionPixelPlayer.new()
+		pixel.sprite_key = player_key
+		pixel.frame_set = player_frames
+		_player = pixel
+	else:
+		_player = BlockyFigure.new()
 	_player.build(_content, _id_dummy, 3.0, 1.14, 0.308)
 	_player.set_sorted(false)
 	_player.weapon_always = true
@@ -312,6 +320,16 @@ func add_wisp(pos: Vector3, color: Color) -> void:
 
 
 func _add_torch(pos: Vector3) -> void:
+	var sprite := ExpeditionSpriteArt.create(_content, "wall_torch", pos)
+	if sprite != null:
+		var sprite_light := OmniLight3D.new()
+		sprite_light.light_color = _theme["torch"]
+		sprite_light.light_energy = 0.9
+		sprite_light.omni_range = 3.6
+		sprite_light.position = pos + Vector3(0.1, 0.25, 0.1)
+		_content.add_child(sprite_light)
+		_torches.append(sprite_light)
+		return
 	var b := VillageAssets.PartBuilder.new()
 	var wood_s: Dictionary = VillageAssets._flat_spec(int(_p["ts"]), Color(0.3, 0.2, 0.12), "torch_wood")
 	var fire: Dictionary = VillageAssets._flat_spec(int(_p["ts"]), Color(1.0, 0.7, 0.2), "torch_fire")
@@ -336,6 +354,8 @@ func _build_obstacle(r: Rect2) -> void:
 	var half := Vector2(0.5, 0.5)
 
 	if kind == "column":
+		if ExpeditionSpriteArt.create(_content, "broken_column", Vector3(c.x, 0, c.y)) != null:
+			return
 		var b := VillageAssets.PartBuilder.new()
 		var stone: Dictionary = _spec_tex("stone", Color(0.82, 0.78, 0.9), "column")
 		VillageAssets.box(b, "base", stone, Vector3(c.x - 0.38, 0, c.y - 0.38), Vector3(c.x + 0.38, 0.22, c.y + 0.38))
@@ -367,7 +387,7 @@ func _build_objects(model: RefCounted) -> void:
 		return
 
 	if model.gathering_sites.is_empty():
-		_object_nodes.append(_make_object(str(model.object_kind), "", model.object_position, Color("edd18a")))
+		_object_nodes.append(_make_object(str(model.object_kind), str(model.object_loot_table), model.object_position, Color("edd18a")))
 	else:
 		for site in model.gathering_sites:
 			_object_nodes.append(_make_object("gather_site", str(site.get("table", "")), Vector2(float(site["x"]), float(site["y"])), Color(str(site["color"]))))
@@ -385,6 +405,8 @@ func _part(b: VillageAssets.PartBuilder, spec: Dictionary) -> SurfaceTool:
 
 
 func _make_object(kind: String, table: String, at: Vector2, color: Color) -> Node3D:
+	var sprite := ExpeditionSpriteArt.create(_content, ExpeditionSpriteArt.object_id(kind, table), Vector3(at.x, 0, at.y))
+	if sprite != null: return sprite
 	var rng: RandomNumberGenerator = _rng_for(at, 7)
 	var node: Node3D
 
@@ -684,6 +706,10 @@ func _object_crystals(rng: RandomNumberGenerator, color: Color) -> Node3D:
 
 func _build_enemies(model: RefCounted) -> void:
 	for e in model.enemies:
+		var sprite := ExpeditionSpriteArt.create(_content, str(e.get("id", "")), Vector3.ZERO)
+		if sprite != null:
+			_enemy_nodes.append({"node": sprite, "enemy": e, "hp_prev": int(e["hp"]), "flash": 0.0, "prev_windup": -1.0, "wmax": 0.65, "lunge": -1.0, "lunge_dir": Vector2.ZERO})
+			continue
 		var boss: bool = bool(e["boss"])
 		var r: float = 0.55 if boss else 0.3
 		var col: Color = Color(str(e.get("color", "85bad4")))
@@ -833,8 +859,13 @@ func _sync(model: RefCounted, delta: float) -> void:
 				en["lunge"] = -1.0
 
 		node.position = _snap(Vector3(ep.x + off.x, absf(bob) + (0.12 * sin(clampf(float(en["lunge"]) / 0.26, 0.0, 1.0) * PI) if float(en["lunge"]) >= 0.0 else 0.0), ep.y + off.y))
-		node.rotation.y = atan2(to_p.x, to_p.y) - PI * 0.25
-		node.scale = Vector3(sx, sy, sx)
+		if node.has_meta("expedition_sprite_id"):
+			# 정지 도트의 자세/종횡비 유지. 예고·도약은 위치와 색으로 표현한다.
+			node.rotation = Vector3.ZERO
+			node.scale = Vector3.ONE
+		else:
+			node.rotation.y = atan2(to_p.x, to_p.y) - PI * 0.25
+			node.scale = Vector3(sx, sy, sx)
 
 		# 맞으면 하얗게 번쩍이며 뒤로 떨린다
 		if int(e["hp"]) < int(en["hp_prev"]):
@@ -851,6 +882,8 @@ func _sync(model: RefCounted, delta: float) -> void:
 
 		for m in node.get_meta("mats", []):
 			(m as ShaderMaterial).set_shader_parameter("tint", tint)
+		if node.has_meta("expedition_sprite_id"):
+			(node.material_override as ShaderMaterial).set_shader_parameter("light_tint", tint)
 
 	# ---- 투사체(멀리 쏘는 무기): 빛나는 구슬
 	_sync_projectiles(model)

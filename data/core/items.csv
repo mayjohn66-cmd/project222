@@ -116,23 +116,23 @@ dried_summer_mint,말린 물박하,material,material,35,1,1,true,true,res://art/
 berry_filled_bread,열매 소를 넣은 빵,store_product,food,400,0,0,true,true,res://art/items/pixel_v1/bread.png,현지 열매와 익숙한 빵을 조합해 만든 간식이다.,0,0,inventory,shelf,0
 packed_mushroom_meal,버섯 도시락,store_product,food,650,0,0,true,true,res://art/items/pixel_v1/bread.png,버섯 음식과 빵을 함께 챙긴 한 끼다.,0,0,inventory,shelf,0
 food_compost,퇴비 재료,material,material,5,1,1,true,true,res://art/items/pixel_v1/forest_herb.png,기한이 지나 분리한 식품을 재활용한 재료다. 식품으로는 되돌릴 수 없다.,0,0,inventory,shelf,1
-fish_stream_minnow,개울 송사리,material,food,40,1,1,true,true,,밝은 은색 몸과 작은 검은 점. 처음 찌를 보는 연습에 어울린다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_stone_crucian,돌빛 붕어,material,food,50,1,1,true,true,,둥근 회갈색 몸. 돌 그늘 부근에서 만나는 일상적인 식재료. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_reed_loach,갈대 미꾸라지,material,food,45,1,1,true,true,,가늘고 갈색인 몸과 짧은 수염. 기본 개울에서도 잡혀 길 해금이 막히지 않는다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_blossom_minnow,꽃비 피라미,material,food,55,1,1,true,true,,봄의 물빛처럼 등 옆에 옅은 분홍빛이 돈다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_bud_crucian,새순 붕어,material,food,60,1,1,true,true,,올리브빛 등과 밝은 배. 갈대 사이의 봄 식탁 재료. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_ripple_carp,물결 잉어,material,food,65,1,1,true,true,,넓은 황금빛 비늘. 잔물결과 어울리는 여름 어종. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_rain_catfish,비늘빛 메기,material,food,70,1,1,true,true,,짙은 청회색 몸과 긴 수염. 비 오는 여름에만 만나는 선택 어종. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_leaf_dace,단풍 피라미,material,food,55,1,1,true,true,,구릿빛 옆선. 떨어지는 잎을 따라 가을 이야기가 열린다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_dusk_crucian,저녁빛 붕어,material,food,65,1,1,true,true,,보랏빛 회색 등. 가을 저녁에 만나는 선택 어종. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_frost_smelt,서리 빙어,material,food,60,1,1,true,true,,작고 반투명한 은빛 몸. 얼지 않은 물가에서 잡으며 얼음 깨기 조작은 없다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_snow_trout,눈등 송어,material,food,70,1,1,true,true,,흰 점이 있는 푸른 등. 겨울의 묵직한 식재료. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_moon_carp,달무늬 잉어,material,food,85,1,1,true,true,,등 옆의 밝은 점무늬. 마법 효과·전이 원인·전설의 정체는 설정하지 않는다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_grilled,약초 생선구이,store_product,food,90,1,1,true,true,,기본 생선의 첫 요리. 의료·전투 회복 효과 없음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_dried,말린 생선,store_product,food,65,1,1,true,true,,원정 재료의 영구 보존 가공품과 구분. 일반 식품 기한을 가진 길 음식. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_soup,물가의 맑은 수프,store_product,food,125,1,1,true,true,,물을 현장 설비에서 가열해 만든 상품. 채집한 물을 바로 마시는 장면 없음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_bread,생선 속을 넣은 빵,store_product,food,150,1,1,true,true,,현지식 빵을 배운 뒤 확장하는 상품. 초기 현대 빵 재현 조건을 우회하지 않음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_lunch,물가의 작은 도시락,store_product,food,195,1,1,true,true,,갈대는 포장 재료이며 먹는 재료로 설명하지 않음. 실제 세 재료 소비. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_winter_stew,겨울 생선 스튜,store_product,food,170,1,1,true,true,,겨울 생선을 남겨 다른 계절에도 만들 수 있음. 최초 소개 조건만 겨울. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fishing_rod_wood,소박한 낚싯대,special,tool,0,1,1,false,false,,없음,0,0,inventory,shelf,0
-fishing_rod_reinforced,손잡이를 보강한 낚싯대,special,tool,0,1,1,false,false,,외형·생활 이야기만. 새 어종 해금·성공률·수익 보너스 없음.,0,0,inventory,shelf,0
+fish_stream_minnow,개울 송사리,material,food,40,1,1,true,true,res://art/items/fish_stream_minnow.png,밝은 은색 몸과 작은 검은 점. 처음 찌를 보는 연습에 어울린다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_stone_crucian,돌빛 붕어,material,food,50,1,1,true,true,res://art/items/fish_stone_crucian.png,둥근 회갈색 몸. 돌 그늘 부근에서 만나는 일상적인 식재료. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_reed_loach,갈대 미꾸라지,material,food,45,1,1,true,true,res://art/items/fish_reed_loach.png,가늘고 갈색인 몸과 짧은 수염. 기본 개울에서도 잡혀 길 해금이 막히지 않는다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_blossom_minnow,꽃비 피라미,material,food,55,1,1,true,true,res://art/items/fish_blossom_minnow.png,봄의 물빛처럼 등 옆에 옅은 분홍빛이 돈다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_bud_crucian,새순 붕어,material,food,60,1,1,true,true,res://art/items/fish_bud_crucian.png,올리브빛 등과 밝은 배. 갈대 사이의 봄 식탁 재료. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_ripple_carp,물결 잉어,material,food,65,1,1,true,true,res://art/items/fish_ripple_carp.png,넓은 황금빛 비늘. 잔물결과 어울리는 여름 어종. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_rain_catfish,비늘빛 메기,material,food,70,1,1,true,true,res://art/items/fish_rain_catfish.png,짙은 청회색 몸과 긴 수염. 비 오는 여름에만 만나는 선택 어종. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_leaf_dace,단풍 피라미,material,food,55,1,1,true,true,res://art/items/fish_leaf_dace.png,구릿빛 옆선. 떨어지는 잎을 따라 가을 이야기가 열린다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_dusk_crucian,저녁빛 붕어,material,food,65,1,1,true,true,res://art/items/fish_dusk_crucian.png,보랏빛 회색 등. 가을 저녁에 만나는 선택 어종. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_frost_smelt,서리 빙어,material,food,60,1,1,true,true,res://art/items/fish_frost_smelt.png,작고 반투명한 은빛 몸. 얼지 않은 물가에서 잡으며 얼음 깨기 조작은 없다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_snow_trout,눈등 송어,material,food,70,1,1,true,true,res://art/items/fish_snow_trout.png,흰 점이 있는 푸른 등. 겨울의 묵직한 식재료. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_moon_carp,달무늬 잉어,material,food,85,1,1,true,true,res://art/items/fish_moon_carp.png,등 옆의 밝은 점무늬. 마법 효과·전이 원인·전설의 정체는 설정하지 않는다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_grilled,약초 생선구이,store_product,food,90,1,1,true,true,res://art/items/fish_grilled.png,기본 생선의 첫 요리. 의료·전투 회복 효과 없음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_dried,말린 생선,store_product,food,65,1,1,true,true,res://art/items/fish_dried.png,원정 재료의 영구 보존 가공품과 구분. 일반 식품 기한을 가진 길 음식. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_soup,물가의 맑은 수프,store_product,food,125,1,1,true,true,res://art/items/fish_soup.png,물을 현장 설비에서 가열해 만든 상품. 채집한 물을 바로 마시는 장면 없음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_bread,생선 속을 넣은 빵,store_product,food,150,1,1,true,true,res://art/items/fish_bread.png,현지식 빵을 배운 뒤 확장하는 상품. 초기 현대 빵 재현 조건을 우회하지 않음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_lunch,물가의 작은 도시락,store_product,food,195,1,1,true,true,res://art/items/fish_lunch.png,갈대는 포장 재료이며 먹는 재료로 설명하지 않음. 실제 세 재료 소비. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_winter_stew,겨울 생선 스튜,store_product,food,170,1,1,true,true,res://art/items/fish_winter_stew.png,겨울 생선을 남겨 다른 계절에도 만들 수 있음. 최초 소개 조건만 겨울. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fishing_rod_wood,소박한 낚싯대,special,tool,0,1,1,false,false,res://art/items/fishing_rod_wood.png,없음,0,0,inventory,shelf,0
+fishing_rod_reinforced,손잡이를 보강한 낚싯대,special,tool,0,1,1,false,false,res://art/items/fishing_rod_reinforced.png,외형·생활 이야기만. 새 어종 해금·성공률·수익 보너스 없음.,0,0,inventory,shelf,0

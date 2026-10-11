@@ -334,6 +334,7 @@ func _glow_quad(color: Color, w: float, h: float, name: String) -> MeshInstance3
 
 
 func _exit_forest() -> void:
+	if _pixel_exit(Color(0.9, 1.0, 0.7), 0.9, 3.4): return
 	var b := VillageAssets.PartBuilder.new()
 	var thorn: Dictionary = st._flat(Color(0.28, 0.2, 0.14), "thorn")
 	var leaf: Dictionary = st._flat(Color(0.2, 0.36, 0.18), "thorn_leaf")
@@ -354,6 +355,7 @@ func _exit_forest() -> void:
 
 
 func _exit_mine() -> void:
+	if _pixel_exit(Color(1.0, 0.7, 0.4), 1.0, 3.4): return
 	var plug := _inst(_tpl_prop("rock", {}, "m_rock"), Vector2(EXIT_X, -0.2), 2.4, 1.0)
 	st._exit_bars = plug
 	st._exit_glow = _glow_quad(Color(1.0, 0.7, 0.35), 1.2, 1.4, "mine_glow")
@@ -361,6 +363,7 @@ func _exit_mine() -> void:
 
 
 func _exit_swamp() -> void:
+	if _pixel_exit(Color(0.7, 1.0, 0.8), 0.8, 3.2): return
 	var b := VillageAssets.PartBuilder.new()
 	var root: Dictionary = st._flat(Color(0.2, 0.15, 0.1), "root")
 	var moss: Dictionary = st._flat(Color(0.28, 0.42, 0.24), "root_moss")
@@ -380,6 +383,7 @@ func _exit_swamp() -> void:
 
 
 func _exit_ruins() -> void:
+	if _pixel_exit(Color(0.8, 0.55, 1.0), 1.0, 3.4): return
 	var b := VillageAssets.PartBuilder.new()
 	var stone: Dictionary = VillageAssets.stone_spec(st._p, Color(0.8, 0.76, 0.9), "ruin_arch")
 	var rune: Dictionary = st._flat(Color(0.7, 0.45, 1.0), "ruin_rune", 0.9)
@@ -396,6 +400,15 @@ func _exit_ruins() -> void:
 	st._exit_bars = st._node(door)
 	st._exit_glow = _glow_quad(Color(0.75, 0.5, 1.0), 1.2, 1.5, "ruin_light")
 	st.add_glow_light(Vector3(EXIT_X, 0.8, 0.2), Color(0.8, 0.55, 1.0), 1.0, 3.4)
+
+
+func _pixel_exit(color: Color, energy: float, radius: float) -> bool:
+	if not ExpeditionSpriteArt.gate(st, Vector3(EXIT_X, 0, -0.2)): return false
+	st.add_glow_light(Vector3(EXIT_X, 0.8, 0.2), color, energy, radius)
+	if st._theme_id in ["mine", "hidden_ruins"]:
+		for x in [-0.85, 0.85]:
+			st._add_torch(Vector3(EXIT_X + x, 0.4, -0.2))
+	return true
 
 
 # ---------------------------------------------------------------- 바닥 장식(방 안)

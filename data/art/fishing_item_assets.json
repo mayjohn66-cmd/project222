@@ -1,0 +1,183 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "id": "fish_stream_minnow",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_stream_minnow/fish_stream_minnow_64.png",
+      "path": "res://art/items/fish_stream_minnow.png",
+      "sha256": "1d9f5d1c7e2b705e0fd4b1f0b2bc76f48b42023a8388fddc52f080be96be5c02",
+      "source_sha256": "1d9f5d1c7e2b705e0fd4b1f0b2bc76f48b42023a8388fddc52f080be96be5c02"
+    },
+    {
+      "id": "fish_stone_crucian",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_stone_crucian/fish_stone_crucian_64.png",
+      "path": "res://art/items/fish_stone_crucian.png",
+      "sha256": "fda27c857e81136486b3a87978ca29a03d8967bd2fab325b561aeb6b857c6589",
+      "source_sha256": "fda27c857e81136486b3a87978ca29a03d8967bd2fab325b561aeb6b857c6589"
+    },
+    {
+      "id": "fish_reed_loach",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_reed_loach/fish_reed_loach_64.png",
+      "path": "res://art/items/fish_reed_loach.png",
+      "sha256": "1d5c4bb8250ace6b23ec63d5ee537f48cf51033c35c941f016bf0626a9a008b6",
+      "source_sha256": "1d5c4bb8250ace6b23ec63d5ee537f48cf51033c35c941f016bf0626a9a008b6"
+    },
+    {
+      "id": "fish_blossom_minnow",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_blossom_minnow/fish_blossom_minnow_64.png",
+      "path": "res://art/items/fish_blossom_minnow.png",
+      "sha256": "28671db01c8aafea87025addc0a4359ae23b4c72fb7bab578af4ef1b858c6236",
+      "source_sha256": "28671db01c8aafea87025addc0a4359ae23b4c72fb7bab578af4ef1b858c6236"
+    },
+    {
+      "id": "fish_bud_crucian",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_bud_crucian/fish_bud_crucian_64.png",
+      "path": "res://art/items/fish_bud_crucian.png",
+      "sha256": "d74996a018fd8819d8e86b85be900dd4ee326cf9b724ae944ce7606039f02cc6",
+      "source_sha256": "d74996a018fd8819d8e86b85be900dd4ee326cf9b724ae944ce7606039f02cc6"
+    },
+    {
+      "id": "fish_ripple_carp",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_ripple_carp/fish_ripple_carp_64.png",
+      "path": "res://art/items/fish_ripple_carp.png",
+      "sha256": "50a2b7a4b22b2ab1befade1ee64c2d149eb1c234fa05d31315ecee15366884c9",
+      "palette_cleanup": {
+        "original_colors": 36,
+        "final_colors": 32,
+        "changed_pixels": 16,
+        "shape_preserved": true
+      },
+      "source_sha256": "12a29da35734f8c786f2d8483c343ee6514a27091f7d0566573cdf4b48eb70bc"
+    },
+    {
+      "id": "fish_rain_catfish",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_rain_catfish/fish_rain_catfish_64.png",
+      "path": "res://art/items/fish_rain_catfish.png",
+      "sha256": "6562ff3f3b1c709bea476d478c55b27273b21526e79bcaa5546c64ada014226e",
+      "source_sha256": "6562ff3f3b1c709bea476d478c55b27273b21526e79bcaa5546c64ada014226e"
+    },
+    {
+      "id": "fish_leaf_dace",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_leaf_dace/fish_leaf_dace_64.png",
+      "path": "res://art/items/fish_leaf_dace.png",
+      "sha256": "57a30e1fb78beffc68e85ea66c503ac819b801ff511cf0102d775443e424af39",
+      "source_sha256": "57a30e1fb78beffc68e85ea66c503ac819b801ff511cf0102d775443e424af39"
+    },
+    {
+      "id": "fish_dusk_crucian",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_dusk_crucian/fish_dusk_crucian_64.png",
+      "path": "res://art/items/fish_dusk_crucian.png",
+      "sha256": "d5d08a8de083357cc66ff168e1f425053885a6483a325627e7931123085736fe",
+      "source_sha256": "d5d08a8de083357cc66ff168e1f425053885a6483a325627e7931123085736fe"
+    },
+    {
+      "id": "fish_frost_smelt",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_frost_smelt/fish_frost_smelt_64.png",
+      "path": "res://art/items/fish_frost_smelt.png",
+      "sha256": "64e6e5a2d6c377219446ae19e3e3fc29751c2b50e5fae41a619c002742574f5c",
+      "source_sha256": "64e6e5a2d6c377219446ae19e3e3fc29751c2b50e5fae41a619c002742574f5c"
+    },
+    {
+      "id": "fish_snow_trout",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_snow_trout/fish_snow_trout_64.png",
+      "path": "res://art/items/fish_snow_trout.png",
+      "sha256": "ce620703af1a82f78c24d163cc29396a7bfc1c2499a33ff1b4e2ba1e4058bd15",
+      "source_sha256": "ce620703af1a82f78c24d163cc29396a7bfc1c2499a33ff1b4e2ba1e4058bd15"
+    },
+    {
+      "id": "fish_moon_carp",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_moon_carp/fish_moon_carp_64.png",
+      "path": "res://art/items/fish_moon_carp.png",
+      "sha256": "5aeaacb1239e9c48e19daa7378526348a4b4468071ede0232c5d974804fdad7c",
+      "source_sha256": "5aeaacb1239e9c48e19daa7378526348a4b4468071ede0232c5d974804fdad7c"
+    },
+    {
+      "id": "fish_grilled",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_grilled/fish_grilled_64.png",
+      "path": "res://art/items/fish_grilled.png",
+      "sha256": "17b60c8d1a59315d5debc9148944f7ad939e814b38adccc04b0631fff949c344",
+      "palette_cleanup": {
+        "original_colors": 46,
+        "final_colors": 32,
+        "changed_pixels": 100,
+        "shape_preserved": true
+      },
+      "source_sha256": "fbfa7041d69ef4376e48b9185435311163d36082c3325dd775898c8717aa7064"
+    },
+    {
+      "id": "fish_dried",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_dried/fish_dried_64.png",
+      "path": "res://art/items/fish_dried.png",
+      "sha256": "d6178057ce6ddf18e765daa39425aab5536867cdb62ac098b67bdaeff6c182d0",
+      "source_sha256": "d6178057ce6ddf18e765daa39425aab5536867cdb62ac098b67bdaeff6c182d0"
+    },
+    {
+      "id": "fish_soup",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_soup/fish_soup_64.png",
+      "path": "res://art/items/fish_soup.png",
+      "sha256": "8a29a685c71d52e1997d6befd309b9e9dcfe63d6ea8e288af58cd9b27891f633",
+      "source_sha256": "8a29a685c71d52e1997d6befd309b9e9dcfe63d6ea8e288af58cd9b27891f633"
+    },
+    {
+      "id": "fish_bread",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_bread/fish_bread_64.png",
+      "path": "res://art/items/fish_bread.png",
+      "sha256": "183be805fd203d4767b5702c564d308a1df2e804524ba6ad28586fed52b52338",
+      "source_sha256": "183be805fd203d4767b5702c564d308a1df2e804524ba6ad28586fed52b52338"
+    },
+    {
+      "id": "fish_lunch",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_lunch/fish_lunch_64.png",
+      "path": "res://art/items/fish_lunch.png",
+      "sha256": "a40083b92bf42c9bffeae289c5f3f0dc3972042148eded938f9b778de6f6eb9d",
+      "palette_cleanup": {
+        "original_colors": 43,
+        "final_colors": 32,
+        "changed_pixels": 112,
+        "shape_preserved": true
+      },
+      "source_sha256": "158be86556dc7711f403ed9f9757a4e311047d11021c18617f042dd423551dca"
+    },
+    {
+      "id": "fish_winter_stew",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fish_winter_stew/fish_winter_stew_64.png",
+      "path": "res://art/items/fish_winter_stew.png",
+      "sha256": "f1978f923e487a2110d94a7bcfbe1719d21339014834acd9275f56c2e5354937",
+      "source_sha256": "f1978f923e487a2110d94a7bcfbe1719d21339014834acd9275f56c2e5354937"
+    },
+    {
+      "id": "fishing_rod_wood",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fishing_rod_wood/fishing_rod_wood_64.png",
+      "path": "res://art/items/fishing_rod_wood.png",
+      "sha256": "02a1abc64d49e60c7536a3e995261c4f7d1c1c3350260a1153dfc96ac2bd416e",
+      "source_sha256": "02a1abc64d49e60c7536a3e995261c4f7d1c1c3350260a1153dfc96ac2bd416e"
+    },
+    {
+      "id": "fishing_rod_reinforced",
+      "group": "items",
+      "source": "docs/그림_작업/받은그림/아이템/fishing_rod_reinforced/fishing_rod_reinforced_64.png",
+      "path": "res://art/items/fishing_rod_reinforced.png",
+      "sha256": "6cd56e6b4f016eb29a0571e79cd74473771893ff7eae157cd2be96b72396da28",
+      "source_sha256": "6cd56e6b4f016eb29a0571e79cd74473771893ff7eae157cd2be96b72396da28"
+    }
+  ]
+}

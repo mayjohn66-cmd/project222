@@ -1,0 +1,907 @@
+{
+  "version": 1,
+  "runtime_applied": true,
+  "animation": false,
+  "assets": [
+    {
+      "id": "field_slime",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png",
+      "path": "res://art/received/expedition/monsters/field_slime.png",
+      "sha256": "394ffe69c456ce8bb4e07e976d03916a99519f91de2af88a4fa6125df8a758ca",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "394ffe69c456ce8bb4e07e976d03916a99519f91de2af88a4fa6125df8a758ca"
+    },
+    {
+      "id": "mine_bat",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/mine_bat.png",
+      "path": "res://art/received/expedition/monsters/mine_bat.png",
+      "sha256": "abc440f46e39c2504f4a8af3e72beb1e231bd1210392500aab4b9478f7f82916",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "abc440f46e39c2504f4a8af3e72beb1e231bd1210392500aab4b9478f7f82916"
+    },
+    {
+      "id": "swamp_slime",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/swamp_slime.png",
+      "path": "res://art/received/expedition/monsters/swamp_slime.png",
+      "sha256": "880210983ae23990b77d115e8111d7e9e2aee2fa858ec23bf630c4a3d20f05b4",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "880210983ae23990b77d115e8111d7e9e2aee2fa858ec23bf630c4a3d20f05b4"
+    },
+    {
+      "id": "ruins_sentinel",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/ruins_sentinel.png",
+      "path": "res://art/received/expedition/monsters/ruins_sentinel.png",
+      "sha256": "06e481020b306bf48de611e6a9b8bfd7c6ce105da991dd0ca1d64465f592b448",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "06e481020b306bf48de611e6a9b8bfd7c6ce105da991dd0ca1d64465f592b448"
+    },
+    {
+      "id": "forest_thornling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/forest_thornling.png",
+      "path": "res://art/received/expedition/monsters/forest_thornling.png",
+      "sha256": "2059b7a04f3b1a711211757346ef679f223be80ed90a71458bd6b9aa7cbdb7ac",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "2059b7a04f3b1a711211757346ef679f223be80ed90a71458bd6b9aa7cbdb7ac"
+    },
+    {
+      "id": "mine_shardling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/mine_shardling.png",
+      "path": "res://art/received/expedition/monsters/mine_shardling.png",
+      "sha256": "ce51ec8168a89a7653b53db760adafd254d4ddd1944885022736c91ff0638ed9",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "ce51ec8168a89a7653b53db760adafd254d4ddd1944885022736c91ff0638ed9"
+    },
+    {
+      "id": "swamp_reedling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/swamp_reedling.png",
+      "path": "res://art/received/expedition/monsters/swamp_reedling.png",
+      "sha256": "82fd43cc6c1f1e022eb86251ccaf2be12853ebbe6f0dfd8d7c0c316649e64204",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "82fd43cc6c1f1e022eb86251ccaf2be12853ebbe6f0dfd8d7c0c316649e64204"
+    },
+    {
+      "id": "ruins_wisp",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/ruins_wisp.png",
+      "path": "res://art/received/expedition/monsters/ruins_wisp.png",
+      "sha256": "d9754f26e962632b44a9e6e1477f2810f555038da777d8a56771eae02c14eb40",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "d9754f26e962632b44a9e6e1477f2810f555038da777d8a56771eae02c14eb40"
+    },
+    {
+      "id": "meadow_fluffling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/meadow_fluffling.png",
+      "path": "res://art/received/expedition/monsters/meadow_fluffling.png",
+      "sha256": "21cf2dfd90f7863f1be1de1c5936b2a2b68951c180978a2a28b6df598a603719",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "21cf2dfd90f7863f1be1de1c5936b2a2b68951c180978a2a28b6df598a603719"
+    },
+    {
+      "id": "meadow_seedling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/meadow_seedling.png",
+      "path": "res://art/received/expedition/monsters/meadow_seedling.png",
+      "sha256": "9a76c5a77f76b219573436af2888ed518ed22ec093b91ffbd4fbf717d666f66f",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "9a76c5a77f76b219573436af2888ed518ed22ec093b91ffbd4fbf717d666f66f"
+    },
+    {
+      "id": "river_crab",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/river_crab.png",
+      "path": "res://art/received/expedition/monsters/river_crab.png",
+      "sha256": "8232423e2342c6fe4b865563b6299145c36591e02bbd2ed89dad036d046dea80",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "8232423e2342c6fe4b865563b6299145c36591e02bbd2ed89dad036d046dea80"
+    },
+    {
+      "id": "river_pebbling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/river_pebbling.png",
+      "path": "res://art/received/expedition/monsters/river_pebbling.png",
+      "sha256": "d049a1616942fbf209e0a21d2d6ffb9e5b30fd2d11c16ab0067a5896b17a4ad8",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "d049a1616942fbf209e0a21d2d6ffb9e5b30fd2d11c16ab0067a5896b17a4ad8"
+    },
+    {
+      "id": "budling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/budling.png",
+      "path": "res://art/received/expedition/monsters/budling.png",
+      "sha256": "55a7db2909fce317841944e423f45a57c03791fc32c44d73c16200e1552a6858",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "55a7db2909fce317841944e423f45a57c03791fc32c44d73c16200e1552a6858"
+    },
+    {
+      "id": "mintling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/mintling.png",
+      "path": "res://art/received/expedition/monsters/mintling.png",
+      "sha256": "5a4ffe9ae1399a1adf1e063fa3c4bc97f8e2f1d193ce4adf6a51731e3dbde401",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "5a4ffe9ae1399a1adf1e063fa3c4bc97f8e2f1d193ce4adf6a51731e3dbde401"
+    },
+    {
+      "id": "nutling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/nutling.png",
+      "path": "res://art/received/expedition/monsters/nutling.png",
+      "sha256": "e08c9db1743f12c291c6c36936943b999f6612b7647046b3a98aadae50723d2a",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "e08c9db1743f12c291c6c36936943b999f6612b7647046b3a98aadae50723d2a"
+    },
+    {
+      "id": "frostling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/frostling.png",
+      "path": "res://art/received/expedition/monsters/frostling.png",
+      "sha256": "ef6131166a6295548f9c105285e29923502419a3b4660f2d514a0450fc466bff",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "ef6131166a6295548f9c105285e29923502419a3b4660f2d514a0450fc466bff"
+    },
+    {
+      "id": "rainling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/rainling.png",
+      "path": "res://art/received/expedition/monsters/rainling.png",
+      "sha256": "9281c9c68bbad7d33d4248682c856fb4b8e4a6796d4511d7fb8868abec09aac5",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "9281c9c68bbad7d33d4248682c856fb4b8e4a6796d4511d7fb8868abec09aac5"
+    },
+    {
+      "id": "snowling",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/일반_추가/픽셀_정리/snowling.png",
+      "path": "res://art/received/expedition/monsters/snowling.png",
+      "sha256": "5a97079675522eedc8a82e2fafd9fca71574241ce426d8457d510033dce9ecb0",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "5a97079675522eedc8a82e2fafd9fca71574241ce426d8457d510033dce9ecb0"
+    },
+    {
+      "id": "forest_alpha_slime",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/보스/픽셀_정리/forest_alpha_slime.png",
+      "path": "res://art/received/expedition/monsters/forest_alpha_slime.png",
+      "sha256": "a6514e2c7821869f5eb2690a255fefa503f267b6ef76c8af826ac149f83e5ec2",
+      "anchor": [
+        64,
+        112
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "table": null,
+      "kind": null,
+      "boss": true,
+      "pixel_unit": 0.018,
+      "source_sha256": "a6514e2c7821869f5eb2690a255fefa503f267b6ef76c8af826ac149f83e5ec2"
+    },
+    {
+      "id": "mine_golem",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/보스/픽셀_정리/mine_golem.png",
+      "path": "res://art/received/expedition/monsters/mine_golem.png",
+      "sha256": "235932706eda43e88014bffd1d33fa5bd59e520ccc2b297c48b5f5d0eb35b9c4",
+      "anchor": [
+        64,
+        112
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "table": null,
+      "kind": null,
+      "boss": true,
+      "pixel_unit": 0.018,
+      "source_sha256": "235932706eda43e88014bffd1d33fa5bd59e520ccc2b297c48b5f5d0eb35b9c4"
+    },
+    {
+      "id": "swamp_queen_slime",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/보스/픽셀_정리/swamp_queen_slime.png",
+      "path": "res://art/received/expedition/monsters/swamp_queen_slime.png",
+      "sha256": "7b8654d2903050a4c67f27c9a579543849438decaa09e04fc11e89413a5be45e",
+      "anchor": [
+        64,
+        112
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "table": null,
+      "kind": null,
+      "boss": true,
+      "pixel_unit": 0.018,
+      "source_sha256": "7b8654d2903050a4c67f27c9a579543849438decaa09e04fc11e89413a5be45e"
+    },
+    {
+      "id": "ancient_guardian",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/보스/픽셀_정리/ancient_guardian.png",
+      "path": "res://art/received/expedition/monsters/ancient_guardian.png",
+      "sha256": "86824c7fab56906bbf09cc9f544c5ac4822dae97867e8423ead593f2b5dacb29",
+      "anchor": [
+        64,
+        112
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "table": null,
+      "kind": null,
+      "boss": true,
+      "pixel_unit": 0.018,
+      "source_sha256": "86824c7fab56906bbf09cc9f544c5ac4822dae97867e8423ead593f2b5dacb29"
+    },
+    {
+      "id": "meadow_guardian",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/보스/픽셀_정리/meadow_guardian.png",
+      "path": "res://art/received/expedition/monsters/meadow_guardian.png",
+      "sha256": "1d5dd27382b512ff669b60fca59ff1eca98709551b4c014184b2cb42cb5f7b82",
+      "anchor": [
+        64,
+        112
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "table": null,
+      "kind": null,
+      "boss": true,
+      "pixel_unit": 0.018,
+      "source_sha256": "1d5dd27382b512ff669b60fca59ff1eca98709551b4c014184b2cb42cb5f7b82"
+    },
+    {
+      "id": "river_guardian",
+      "group": "monsters",
+      "source": "docs/그림_작업/받은그림/원정_몬스터/보스/픽셀_정리/river_guardian.png",
+      "path": "res://art/received/expedition/monsters/river_guardian.png",
+      "sha256": "acb4da80aa8ab0678fbf25a476fb3fe4049aa1d292204f0e5e100b492b7e3dad",
+      "anchor": [
+        64,
+        112
+      ],
+      "canvas": [
+        128,
+        128
+      ],
+      "table": null,
+      "kind": null,
+      "boss": true,
+      "pixel_unit": 0.018,
+      "source_sha256": "acb4da80aa8ab0678fbf25a476fb3fe4049aa1d292204f0e5e100b492b7e3dad"
+    },
+    {
+      "id": "raw_water",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/일반_채집물/픽셀_정리/raw_water.png",
+      "path": "res://art/received/expedition/objects/raw_water.png",
+      "sha256": "b34173d32e81853febb6bd4809312dbb745923f5b095ec7f4e9c0729abdf9bc7",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "gather_water",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "b34173d32e81853febb6bd4809312dbb745923f5b095ec7f4e9c0729abdf9bc7"
+    },
+    {
+      "id": "forest_herb",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/일반_채집물/픽셀_정리/forest_herb.png",
+      "path": "res://art/received/expedition/objects/forest_herb.png",
+      "sha256": "0da9c4f70c045c5283882d0036bf80413d9837c3e9ab450853c421705c5396da",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "choice_forest_herb",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "0da9c4f70c045c5283882d0036bf80413d9837c3e9ab450853c421705c5396da"
+    },
+    {
+      "id": "iron_ore",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/일반_채집물/픽셀_정리/iron_ore.png",
+      "path": "res://art/received/expedition/objects/iron_ore.png",
+      "sha256": "489e336992e7dbc24f8d4fad05e322bab26adae39109b71de76b3b0f02a9c6b2",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "choice_iron_ore",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "489e336992e7dbc24f8d4fad05e322bab26adae39109b71de76b3b0f02a9c6b2"
+    },
+    {
+      "id": "marsh_reed",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/일반_채집물/픽셀_정리/marsh_reed.png",
+      "path": "res://art/received/expedition/objects/marsh_reed.png",
+      "sha256": "24657457e9bbd7b401639252693e77b2d48987337686157dd353db17ea209c2f",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "choice_marsh_reed",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "24657457e9bbd7b401639252693e77b2d48987337686157dd353db17ea209c2f"
+    },
+    {
+      "id": "spring_bud",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/계절_채집물/픽셀_정리/spring_bud.png",
+      "path": "res://art/received/expedition/objects/spring_bud.png",
+      "sha256": "dfc49bfea3d3300e6e1506a279f643242cd8571bb09d836e5c068f6ac31d7c86",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "climate_spring_bud",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "dfc49bfea3d3300e6e1506a279f643242cd8571bb09d836e5c068f6ac31d7c86"
+    },
+    {
+      "id": "summer_mint",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/계절_채집물/픽셀_정리/summer_mint.png",
+      "path": "res://art/received/expedition/objects/summer_mint.png",
+      "sha256": "e95ca33b81a4c97a96ccdf5e624c6903367412f8a06e4465791ac96b22e03b90",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "climate_summer_mint",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "e95ca33b81a4c97a96ccdf5e624c6903367412f8a06e4465791ac96b22e03b90"
+    },
+    {
+      "id": "autumn_nut",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/계절_채집물/픽셀_정리/autumn_nut.png",
+      "path": "res://art/received/expedition/objects/autumn_nut.png",
+      "sha256": "e77365ec78ce630e3200dc61578e26b51488ccef2ecb94100f5ae7b8a549f2da",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "climate_autumn_nut",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "e77365ec78ce630e3200dc61578e26b51488ccef2ecb94100f5ae7b8a549f2da"
+    },
+    {
+      "id": "winter_frost",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/계절_채집물/픽셀_정리/winter_frost.png",
+      "path": "res://art/received/expedition/objects/winter_frost.png",
+      "sha256": "f4d2fbb8216651c2fab38629b3fc300fce5ee038e4619419607c48c586527129",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "climate_winter_frost",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "f4d2fbb8216651c2fab38629b3fc300fce5ee038e4619419607c48c586527129"
+    },
+    {
+      "id": "rain_pearl",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/계절_채집물/픽셀_정리/rain_pearl.png",
+      "path": "res://art/received/expedition/objects/rain_pearl.png",
+      "sha256": "5884546e8aa5cad5f94e1fb2308178c4d965ac3f21cabf3886ec1a75cd97a0b9",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "climate_rain_pearl",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "5884546e8aa5cad5f94e1fb2308178c4d965ac3f21cabf3886ec1a75cd97a0b9"
+    },
+    {
+      "id": "snow_bloom",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/계절_채집물/픽셀_정리/snow_bloom.png",
+      "path": "res://art/received/expedition/objects/snow_bloom.png",
+      "sha256": "f2f925f1b38a4016674796903069d96c8609687bea361b473c7ed2d1d194ef5e",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "climate_snow_bloom",
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "f2f925f1b38a4016674796903069d96c8609687bea361b473c7ed2d1d194ef5e"
+    },
+    {
+      "id": "swamp_moss",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/swamp_moss.png",
+      "path": "res://art/received/expedition/objects/swamp_moss.png",
+      "sha256": "0e2593ef0733743ecb70df835110e72cd0d240d1b306a6539a3e317be1461a4f",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "choice_swamp_moss",
+      "kind": "gather_site",
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "0e2593ef0733743ecb70df835110e72cd0d240d1b306a6539a3e317be1461a4f"
+    },
+    {
+      "id": "ancient_fragment",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/ancient_fragment.png",
+      "path": "res://art/received/expedition/objects/ancient_fragment.png",
+      "sha256": "f82b7ec7e11a5d9f06c64c6c4501db203c83939e5716eef462aeb3226e372f63",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "choice_ancient_fragment",
+      "kind": "gather_site",
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "f82b7ec7e11a5d9f06c64c6c4501db203c83939e5716eef462aeb3226e372f63"
+    },
+    {
+      "id": "rune_dust",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/rune_dust.png",
+      "path": "res://art/received/expedition/objects/rune_dust.png",
+      "sha256": "e170dc54b1394d2e8f8bf437de96bf20960a1e6749ce454900a8170710b3d607",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "choice_rune_dust",
+      "kind": "gather_site",
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "e170dc54b1394d2e8f8bf437de96bf20960a1e6749ce454900a8170710b3d607"
+    },
+    {
+      "id": "treasure_chest",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/treasure_chest.png",
+      "path": "res://art/received/expedition/objects/treasure_chest.png",
+      "sha256": "402f778fc1b3a1758935cf4fd23ae2998b6433daa494e9bbbcb0a8875211ae97",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": "chest",
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "402f778fc1b3a1758935cf4fd23ae2998b6433daa494e9bbbcb0a8875211ae97"
+    },
+    {
+      "id": "wheat",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/wheat.png",
+      "path": "res://art/received/expedition/objects/wheat.png",
+      "sha256": "9220deb6d3165f01dcfe33f26f7cd2ec64f0285803951157d4288ee8a90023d7",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "gather_wheat",
+      "kind": "gather_site",
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "9220deb6d3165f01dcfe33f26f7cd2ec64f0285803951157d4288ee8a90023d7"
+    },
+    {
+      "id": "healing_spring",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/healing_spring.png",
+      "path": "res://art/received/expedition/objects/healing_spring.png",
+      "sha256": "703b54378c886977cfdfb9865be3c1fc3dca0c20ddf462f72807cdd93013ad0f",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": "heal",
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "703b54378c886977cfdfb9865be3c1fc3dca0c20ddf462f72807cdd93013ad0f"
+    },
+    {
+      "id": "mineral_outcrop",
+      "group": "objects",
+      "source": "docs/그림_작업/받은그림/원정_오브젝트/픽셀_정리/mineral_outcrop.png",
+      "path": "res://art/received/expedition/objects/mineral_outcrop.png",
+      "sha256": "8e8671b8e71f695833e89f6f53e970dca67002de279399fc18478af646b36a82",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "mine_gather",
+      "kind": "gather",
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "8e8671b8e71f695833e89f6f53e970dca67002de279399fc18478af646b36a82"
+    },
+    {
+      "id": "broken_column",
+      "group": "environment",
+      "source": "docs/그림_작업/받은그림/원정_환경_소품/픽셀_정리/broken_column.png",
+      "path": "res://art/received/expedition/environment/broken_column.png",
+      "sha256": "99f604983d1ba7e3b579b2d727fda309f001a896d01653845c88920e2b5f9bbe",
+      "anchor": [
+        32,
+        104
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "99f604983d1ba7e3b579b2d727fda309f001a896d01653845c88920e2b5f9bbe"
+    },
+    {
+      "id": "wall_torch",
+      "group": "environment",
+      "source": "docs/그림_작업/받은그림/원정_환경_소품/픽셀_정리/wall_torch.png",
+      "path": "res://art/received/expedition/environment/wall_torch.png",
+      "sha256": "f1522fb5eb0f35ab234fbbbf81d3b1353f7dc0d8131eceab5048cb401b3216c3",
+      "anchor": [
+        32,
+        45
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.018,
+      "source_sha256": "f1522fb5eb0f35ab234fbbbf81d3b1353f7dc0d8131eceab5048cb401b3216c3"
+    },
+    {
+      "id": "exit_open",
+      "group": "environment",
+      "source": "docs/그림_작업/받은그림/원정_환경_소품/픽셀_정리/exit_open.png",
+      "path": "res://art/received/expedition/environment/exit_open.png",
+      "sha256": "50f1d7197bed5d7c7b7dccd41a1afabefdef5d6e617b28948af627cfd4487748",
+      "anchor": [
+        32,
+        104
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.022,
+      "source_sha256": "50f1d7197bed5d7c7b7dccd41a1afabefdef5d6e617b28948af627cfd4487748"
+    },
+    {
+      "id": "exit_closed",
+      "group": "environment",
+      "source": "docs/그림_작업/받은그림/원정_환경_소품/픽셀_정리/exit_closed.png",
+      "path": "res://art/received/expedition/environment/exit_closed.png",
+      "sha256": "2baa76725acc1083208f1b95a9ee8357e4132f49b39613b85511a47937ea640d",
+      "anchor": [
+        32,
+        104
+      ],
+      "canvas": [
+        64,
+        128
+      ],
+      "table": null,
+      "kind": null,
+      "boss": false,
+      "pixel_unit": 0.022,
+      "source_sha256": "2baa76725acc1083208f1b95a9ee8357e4132f49b39613b85511a47937ea640d"
+    }
+  ]
+}

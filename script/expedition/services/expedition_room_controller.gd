@@ -72,6 +72,7 @@ func enter(event_data: Dictionary, room_type: String) -> void:
 		host.combat_player_max_hp, host.BASE_PLAYER_ATTACK + loadout.active_bonus(), host.combat_player_defense,
 		enemy, host.get_run_difficulty(), boss, kind, loadout)
 	var region_profile: Dictionary = model.CONTENT.region_profile(host.current_region_id)
+	model.object_loot_table = str(event.get("target_id", ""))
 	model.configure_region(region_profile)
 	model.configure_gathering(model.CONTENT.gathering(str(event.get("event_id", ""))))
 	model.object_used.connect(_object_used)

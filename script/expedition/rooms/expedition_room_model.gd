@@ -31,6 +31,7 @@ var projectiles: Array[Dictionary] = []
 var feedback: Array[Dictionary] = []
 var object_position := Vector2(5.5, 3.5)
 var object_kind: String = ""
+var object_loot_table: String = "" # 실제 이벤트의 target_id. 혼합 광맥을 특정 재료 확정으로 표시하지 않는다.
 var object_consumed: bool = false
 var interaction_progress: float = 0.0
 var interacting: bool = false
@@ -65,6 +66,7 @@ func setup(config: ExpeditionRoomSettings, profile: ExpeditionAttackProfile,
 			var max_enemy_hp: int = maxi(1, roundi(float(enemy.get("max_hp", 1))
 				* ExpeditionDifficultyData.get_monster_hp_mult(difficulty)))
 			enemies.append({
+				"id": str(enemy.get("id", "")),
 				"position": Vector2(4.0, 2.0) if boss else Vector2(2.5 + i * 2.5, 2.0),
 				"hp": max_enemy_hp, "max_hp": max_enemy_hp,
 				"attack": maxi(1, roundi(float(enemy.get("attack", 1))

@@ -1,0 +1,23 @@
+{
+  "pngs": 65,
+  "byte_identical_copies": 62,
+  "palette_only": 3,
+  "dimensions_and_alpha_preserved": 65,
+  "item_icon_path_changes": 20,
+  "other_csv_fields_changed": 0,
+  "nearest_lossless_imports": 65,
+  "godot_version": "4.7.1",
+  "gpu_checks": 706,
+  "gpu_failures": 0,
+  "resources": 879,
+  "load_failures": 0,
+  "expedition_runs": 16,
+  "expedition_results": 16,
+  "expedition_nodes": 104,
+  "expedition_stuck": 0,
+  "asset_failures": 0,
+  "asset_existing_warnings": 28,
+  "import_script_errors": 0,
+  "unicode_nul_warnings": 3,
+  "expedition_contact_roles": 3
+}

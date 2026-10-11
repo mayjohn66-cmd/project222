@@ -67,7 +67,7 @@ func _process(delta: float) -> void:
 	sprite.position = at - Vector2(0,30 * view.tile_scale)
 	sprite.scale = Vector2.ONE * view.tile_scale
 	if view._stage_on() and not is_instance_valid(figure):
-		figure = BlockyFigure.new()
+		figure = StoreActorVisuals.create(CustomerTypeData.get_group_id(str(entry["type"])))
 		figure.build(view.stage._vp,figure,3.0,1.05)
 		figure._id_root.hide()
 		figure.set_sorted(false)
