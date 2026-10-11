@@ -1,0 +1,41 @@
+{
+  "source": "data/expedition/enemies.csv",
+  "remaining": [
+    {
+      "id": "forest_alpha_slime",
+      "name": "거대 슬라임",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "mine_golem",
+      "name": "광산 골렘",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "swamp_queen_slime",
+      "name": "늪의 여왕 슬라임",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "ancient_guardian",
+      "name": "고대 수호자",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "meadow_guardian",
+      "name": "바람갈기 수호수",
+      "boss": true,
+      "status": "not_generated"
+    },
+    {
+      "id": "river_guardian",
+      "name": "갈대뿌리 수호자",
+      "boss": true,
+      "status": "not_generated"
+    }
+  ]
+}

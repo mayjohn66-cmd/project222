@@ -1,0 +1,264 @@
+{
+  "date": "2026-10-11",
+  "tool": "built-in image_gen",
+  "transparent_background": true,
+  "status": "candidate_not_installed",
+  "animation_deferred_by_user": true,
+  "assets": [
+    {
+      "id": "forest_thornling",
+      "name": "숲 가시덩굴",
+      "max_size": [
+        36,
+        40
+      ],
+      "accent": "moss",
+      "min_accent": 10,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small squat living THORNY VINE creature. A compact knotted brown vine trunk with two large dark recessed eyes, bright sage-green pointed leaf tufts on top, two curled vine arms with only two or three chunky thorns, two short root feet. Wider at base, visible woody trunk, leaves do not cover face. Friendly fantasy menace, no pot, no flower, no forest bush mound. Body fits36x40.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-df7f5e35-1c6b-49b4-8048-b3760f6e4c68.png"
+    },
+    {
+      "id": "mine_shardling",
+      "name": "돌조각 정령",
+      "max_size": [
+        32,
+        38
+      ],
+      "accent": "none",
+      "min_accent": 0,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small STONE SHARD elemental built from three irregular angular sandstone-grey chunks stacked into a squat body, two large dark recessed eyes cut in the upper stone, two short angular stone arms and stubby feet. Warm beige mineral edges, cool grey shaded faces. No crystal jewel, moss, golem armor, humanoid helmet, glowing runes. Low-detail angular shape, fits32x38.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-9df3f3fc-7806-452f-865f-f9031efffc9e.png"
+    },
+    {
+      "id": "swamp_reedling",
+      "name": "늪 갈대괴물",
+      "max_size": [
+        30,
+        40
+      ],
+      "accent": "moss",
+      "min_accent": 6,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small living REED creature: tightly bundled pale straw-yellow reeds make a squat narrow trunk, two large dark eyes on clear front face, two green ribbonlike reed-leaf arms curved outward, two short muddy brown root feet. Three big brown cattail tips on top. Pale yellow-green olive palette. No humanoid clothing, no pot, no flower, no background swamp patch. Fits30x40.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-a9b0f287-3af4-48bb-97e0-3bc8049423f5.png"
+    },
+    {
+      "id": "ruins_wisp",
+      "name": "유적 잔불",
+      "max_size": [
+        28,
+        38
+      ],
+      "accent": "purple",
+      "min_accent": 10,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small floating RUIN EMBER spirit, compact lilac-purple teardrop flame with two LARGE dark eye sockets in lower central face and one pale lavender inner flame patch. A curved pointed flame crest above head and short wispy curled tail below, no separate scattered particles. OPAQUE crisp pixel body without atmospheric glow. No legs, arms, candle, skull, lantern, scenery or blue water drop. Fits28x38.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-91c662f0-5cf0-4f75-9791-95dd381cfd83.png"
+    },
+    {
+      "id": "meadow_fluffling",
+      "name": "초원 솜털짐승",
+      "max_size": [
+        36,
+        30
+      ],
+      "accent": "none",
+      "min_accent": 0,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small cream-beige FLUFF creature, round squat fluffy body with just four chunky fur tufts, two short floppy furry ears angled outward, two large dark eyes, tiny warm brown triangular nose, two tiny brown paws visible at base. Compact cuddly creature hostile only by game behavior. No clothes, ribbon, wings, elaborate whiskers or grass. Fits36x30.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-5055b6a7-5232-464a-b467-c99b214afc30.png"
+    },
+    {
+      "id": "meadow_seedling",
+      "name": "밀이삭 정령",
+      "max_size": [
+        28,
+        40
+      ],
+      "accent": "gold",
+      "min_accent": 6,
+      "prompt": "Create one small cute wheat plant character as a transparent pixel-art game sprite. Golden oval wheat ear body with a few broad grain segments, two clearly separated large dark eyes, short wheat awns on top, two olive-green leaf arms and two short root feet. One static standing pose facing southwest in a cozy 2:1 isometric view. Chunky crisp pixel clusters, dark brown outline, warm bright daylight colors, few large details. It will be reduced to a 28x40 pixel body in a 64x64 canvas. Match the pixel style of the references, using them only as style references. One complete character centered on genuine transparent background. No text, scenery, frames, UI, ground, shadows or separate particles.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "prior_generation_error": "output moderation_blocked; no image returned",
+      "generated": "exec-bdfa78f9-364a-4466-bf37-6519a9fc9284.png"
+    },
+    {
+      "id": "river_crab",
+      "name": "물가 돌게",
+      "max_size": [
+        42,
+        26
+      ],
+      "accent": "none",
+      "min_accent": 0,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small STONE-SHELLED RIVER CRAB. Broad flat rounded grey stone carapace with three simple segment seams, two squat large pincers to sides, four clearly visible short angular legs at lower sides, two prominent black eye stalks, cool grey and warm stone beige palette. Readable low wide crab silhouette, no pile of river rocks, shell glitter, aquatic scenery or islands. Fits42x26.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-41f43300-a356-4d5a-a6ad-094ba6367f52.png"
+    },
+    {
+      "id": "river_pebbling",
+      "name": "물돌 정령",
+      "max_size": [
+        32,
+        32
+      ],
+      "accent": "cyan",
+      "min_accent": 6,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small WATER-WORN PEBBLE spirit: squat body made of two or three smooth rounded BLUE-GREY pebbles, two LARGE dark eyes on front upper pebble, two rounded pebble arms and two tiny rounded feet. Pale cyan mineral highlights along one upper edge. Clearly smooth river stones rather than jagged mine shards, no flame, helmet, armor, jewels, splash particles, lake or soil. Fits32x32.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-703a293b-e956-4493-9f51-b4c85f2563b2.png"
+    },
+    {
+      "id": "budling",
+      "name": "새순 정령",
+      "max_size": [
+        26,
+        32
+      ],
+      "accent": "moss",
+      "min_accent": 10,
+      "prompt": "Create one friendly little spring sprout character as a transparent pixel-art game sprite. A light green round bud body with two big clearly separated dark eyes, two broad fresh leaves growing above the head, small folded leaf arms and two short brown root feet. One static idle pose facing southwest in a cozy 2:1 isometric view. Thick dark brown outline, chunky crisp pixel shapes, fresh green and yellow-green colors in neutral daylight. Simple silhouette readable as a 26x32 pixel body inside a 64x64 canvas. Use the reference pictures for pixel style only. One centered complete plant character, genuine transparent background. No pot, vase, flowers, scenery, platform, text, UI or other objects.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "prior_generation_error": "output moderation_blocked; no image returned",
+      "generated": "exec-0fd8f5ee-b4b0-4d84-8d85-06c4316f2851.png"
+    },
+    {
+      "id": "mintling",
+      "name": "물박하 정령",
+      "max_size": [
+        30,
+        34
+      ],
+      "accent": "turquoise",
+      "min_accent": 8,
+      "prompt": "Create one small friendly mint-leaf character as a transparent pixel-art game sprite. Pale teal-green oval body, two big clearly separated dark eyes, two broad serrated mint leaves above the head, tiny leaf arms, short stem feet, simple pale aqua belly patch. Use only a few large notches to show the mint leaves. One static standing pose facing southwest in a cozy isometric 2:1 view. Crisp chunky pixel clusters, dark brown outline, bright readable colors in neutral daylight. Fit a 30x34 pixel body inside a 64x64 canvas. Input images are style references only. One complete centered character on genuine transparent background. No flowers, pot, scenery, halo, particles, text, UI or other objects.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "prior_generation_error": "output moderation_blocked; no image returned",
+      "generated": "exec-81097ff8-1317-4f41-9aed-0767ff965a63.png"
+    },
+    {
+      "id": "nutling",
+      "name": "들밤 껍질짐승",
+      "max_size": [
+        28,
+        34
+      ],
+      "accent": "none",
+      "min_accent": 0,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small AUTUMN CHESTNUT SHELL beast: squat warm-brown chestnut nut body with an oversized darker brown rough husk cap bearing only four chunky short spikes, two LARGE dark eyes on a clear tan front face, stubby twig arms, two short brown feet. Chestnut round shape with pale nut seam, no acorn stem, full green spiky sphere, clothing or forest scenery. Fits28x34.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-e5e18abf-243a-448c-bee4-e7ce14ce5b14.png"
+    },
+    {
+      "id": "frostling",
+      "name": "서리 결정짐승",
+      "max_size": [
+        36,
+        30
+      ],
+      "accent": "cyan",
+      "min_accent": 10,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small WINTER FROST CRYSTAL beast, low squat pale cyan faceted quadruped body with four stubby angular feet, two chunky triangular crystal ears and one short dorsal icy shard. Broad simple front face with two LARGE dark eyes, icy white highlight patches and deeper teal outlines. Creature with visible body and legs rather than mineral gathering node. No jewelry, halo, icicles hanging in scene, separate snowflake or particles. Fits36x30.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-84c73e04-a9e1-442b-8ac4-314a346d0689.png"
+    },
+    {
+      "id": "rainling",
+      "name": "빗방울 정령",
+      "max_size": [
+        26,
+        32
+      ],
+      "accent": "cyan",
+      "min_accent": 10,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small RAIN DROP spirit, single opaque azure-blue round-bottom water droplet body with curved pointed top leaning left, two LARGE dark eyes and tiny neutral mouth, two tiny rounded side hands and short lobe feet. One pale aqua highlight across upper left, deeper blue lower shade. Compact living water silhouette, not bottle, slime wide blob, purple flame, gem, puddle scene or scattered droplets. Fits26x32.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-1807b171-45dc-4853-99fb-e3146f16f4be.png"
+    },
+    {
+      "id": "snowling",
+      "name": "눈꽃 솜털짐승",
+      "max_size": [
+        30,
+        28
+      ],
+      "accent": "none",
+      "min_accent": 0,
+      "prompt": "Use case: stylized-concept. Asset type: ONE transparent static ENEMY sprite for a cozy fantasy isometric game. Input images are STYLE references only. Match chunky crisp logical pixel clusters, dark brown outlines, readable bright midtones, neutral daylight, limited 3-4 tones per material, orthographic 2:1 isometric view facing southwest. One complete centered ordinary creature with simple small silhouette, suitable for nearest-neighbor reduction to a 64x64 game canvas. Eyes and face must be BIG SIMPLE clearly separated pixel features readable at final 32-ish pixel body size. Only ONE idle pose. No animation sheet, multiple poses, UI, text, symbols above head, health bar, loot, scenery, ground island, cast shadow, glow halo, sparkles, blur, soft painting, smooth gradients or other creatures. Small SNOW BLOSSOM FLUFF beast, compact white round snowy-fur body with two small upright pale ice-blue triangular ears, two LARGE dark eyes, tiny blue nose and two icy-blue stubby paws. Three big soft pointed fur clumps outline the round body, one tiny pale blue frost marking on forehead. Distinct cool white creature unlike beige meadow fluff with floppy ears. No hat, scarf, snowman, outside snowflakes, halo or ground snow mound. Fits30x28.",
+      "preserve_small_features": false,
+      "references": [
+        "art/received/nature/bush.png",
+        "art/received/nature/rocks.png",
+        "docs/그림_작업/받은그림/원정_몬스터/픽셀_정리/field_slime.png"
+      ],
+      "generated": "exec-c0bb6e7b-5310-4123-9db1-371d0ccc4df8.png"
+    }
+  ]
+}

@@ -41,6 +41,10 @@ def main():
         events = list(csv.DictReader(stream))
     enemy_lookup = {e['id']:e for e in enemies}
     generated_ids = {a['id'] for a in config['assets']}
+    extra_manifest = HERE/'일반_추가/후보_목록.json'
+    if extra_manifest.is_file():
+        generated_ids.update(a['id'] for a in json.loads(extra_manifest.read_text(encoding='utf-8-sig'))['assets'])
+
     remaining = [dict(id=e['id'],name=e['name'],boss=e['loot_table'].endswith('_boss'),status='not_generated')
                  for e in enemies if e['id'] not in generated_ids]
     coverage = dict(enemy_ids=len(enemies),generated_ids=len(generated_ids),remaining_ids=len(remaining),

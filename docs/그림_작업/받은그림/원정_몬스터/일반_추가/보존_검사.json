@@ -1,0 +1,18 @@
+{
+  "new_sprites": 14,
+  "enemy_ids_exist": true,
+  "battle_events_exist": true,
+  "binary_alpha": true,
+  "transparent_rgb_zero": true,
+  "previous_candidate_hashes_preserved": 25,
+  "runtime_hashes_preserved": {
+    "data/art/received_assets.json": 147,
+    "data/art/pixel_shop_assets.json": 332
+  },
+  "runtime_manifest_unchanged": true,
+  "ordinary_enemy_ids_total": 18,
+  "ordinary_candidate_ids": 18,
+  "boss_remaining": 6,
+  "runtime_applied": false,
+  "godot_run": false
+}

@@ -1,0 +1,319 @@
+{
+  "status": "candidate_not_installed",
+  "tool": "built-in image_gen",
+  "runtime_applied": false,
+  "canvas": [
+    64,
+    64
+  ],
+  "anchor": [
+    32,
+    56
+  ],
+  "view": "south-west",
+  "anchors_provisional": true,
+  "animation": false,
+  "subjects": 14,
+  "frames": 14,
+  "coverage": {
+    "enemy_ids": 24,
+    "generated_ids": 18,
+    "remaining_ids": 6,
+    "ordinary_remaining": 0,
+    "boss_remaining": 6
+  },
+  "assets": [
+    {
+      "id": "forest_thornling",
+      "enemy_id": "forest_thornling",
+      "name": "숲 가시덩굴",
+      "data_name": "숲 가시덩굴",
+      "loot_table": "forest_enemy",
+      "events": [
+        "battle_forest_thornling",
+        "unknown_forest_thornling"
+      ],
+      "source_sha256": "6539622ad9fb547bc1cd22f6d090c6785f89ca28c2c0db2bdd7c57cacd3584fb",
+      "sprite": "픽셀_정리/forest_thornling.png",
+      "source": "생성_원본/forest_thornling.png",
+      "sha256": "2059b7a04f3b1a711211757346ef679f223be80ed90a71458bd6b9aa7cbdb7ac",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "mine_shardling",
+      "enemy_id": "mine_shardling",
+      "name": "돌조각 정령",
+      "data_name": "돌조각 정령",
+      "loot_table": "mine_enemy",
+      "events": [
+        "battle_mine_shardling",
+        "unknown_mine_shardling"
+      ],
+      "source_sha256": "efad4592bf905a4d5d4626545d9964cd7da0c4d3b845f9014dc8dcebfb2c90ca",
+      "sprite": "픽셀_정리/mine_shardling.png",
+      "source": "생성_원본/mine_shardling.png",
+      "sha256": "ce51ec8168a89a7653b53db760adafd254d4ddd1944885022736c91ff0638ed9",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "swamp_reedling",
+      "enemy_id": "swamp_reedling",
+      "name": "늪 갈대괴물",
+      "data_name": "늪 갈대괴물",
+      "loot_table": "swamp_enemy",
+      "events": [
+        "battle_swamp_reedling",
+        "unknown_swamp_reedling"
+      ],
+      "source_sha256": "2f3f968b32acff179ddabad91627373d873c2d461dd0acd8cc8775cc9b746087",
+      "sprite": "픽셀_정리/swamp_reedling.png",
+      "source": "생성_원본/swamp_reedling.png",
+      "sha256": "82fd43cc6c1f1e022eb86251ccaf2be12853ebbe6f0dfd8d7c0c316649e64204",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "ruins_wisp",
+      "enemy_id": "ruins_wisp",
+      "name": "유적 잔불",
+      "data_name": "유적 잔불",
+      "loot_table": "ruins_enemy",
+      "events": [
+        "battle_ruins_wisp",
+        "unknown_ruins_wisp"
+      ],
+      "source_sha256": "c52bb4a338d05e3619233191c5a9e8e06e735bd3e24b4a265d72408e82e3a1f3",
+      "sprite": "픽셀_정리/ruins_wisp.png",
+      "source": "생성_원본/ruins_wisp.png",
+      "sha256": "d9754f26e962632b44a9e6e1477f2810f555038da777d8a56771eae02c14eb40",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "meadow_fluffling",
+      "enemy_id": "meadow_fluffling",
+      "name": "초원 솜털짐승",
+      "data_name": "초원 솜털짐승",
+      "loot_table": "meadow_enemy",
+      "events": [
+        "meadow_battle"
+      ],
+      "source_sha256": "908c353971a66a8986577d85effe14ab5463de77808a20a5e36c85339d0a2d7e",
+      "sprite": "픽셀_정리/meadow_fluffling.png",
+      "source": "생성_원본/meadow_fluffling.png",
+      "sha256": "21cf2dfd90f7863f1be1de1c5936b2a2b68951c180978a2a28b6df598a603719",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "meadow_seedling",
+      "enemy_id": "meadow_seedling",
+      "name": "밀이삭 정령",
+      "data_name": "밀이삭 정령",
+      "loot_table": "meadow_enemy",
+      "events": [
+        "meadow_battle_second",
+        "meadow_unknown_enemy"
+      ],
+      "source_sha256": "eb570ebf2b909a1b48b8073588a95c96695f485884082413a4d94467f46b8218",
+      "sprite": "픽셀_정리/meadow_seedling.png",
+      "source": "생성_원본/meadow_seedling.png",
+      "sha256": "9a76c5a77f76b219573436af2888ed518ed22ec093b91ffbd4fbf717d666f66f",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "river_crab",
+      "enemy_id": "river_crab",
+      "name": "물가 돌게",
+      "data_name": "물가 돌게",
+      "loot_table": "river_enemy",
+      "events": [
+        "river_valley_battle"
+      ],
+      "source_sha256": "35ac1661da6a11c00595a338a412cb6f2c5d9851a8712d21904238d0077a8e0a",
+      "sprite": "픽셀_정리/river_crab.png",
+      "source": "생성_원본/river_crab.png",
+      "sha256": "8232423e2342c6fe4b865563b6299145c36591e02bbd2ed89dad036d046dea80",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "river_pebbling",
+      "enemy_id": "river_pebbling",
+      "name": "물돌 정령",
+      "data_name": "물돌 정령",
+      "loot_table": "river_enemy",
+      "events": [
+        "river_valley_battle_second",
+        "river_valley_unknown_enemy"
+      ],
+      "source_sha256": "7d81af6e68a1c7b3050262643115cc747f683b38c02399797c2f064c27aa05d0",
+      "sprite": "픽셀_정리/river_pebbling.png",
+      "source": "생성_원본/river_pebbling.png",
+      "sha256": "d049a1616942fbf209e0a21d2d6ffb9e5b30fd2d11c16ab0067a5896b17a4ad8",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "budling",
+      "enemy_id": "budling",
+      "name": "새순 정령",
+      "data_name": "새순 정령",
+      "loot_table": "climate_spring_bud",
+      "events": [
+        "forest_budling_battle",
+        "meadow_budling_battle"
+      ],
+      "source_sha256": "765f5c10f4ecfa83d20a94cdbb01e5dc39341488185c39e75cc6ac7ad48de272",
+      "sprite": "픽셀_정리/budling.png",
+      "source": "생성_원본/budling.png",
+      "sha256": "55a7db2909fce317841944e423f45a57c03791fc32c44d73c16200e1552a6858",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "mintling",
+      "enemy_id": "mintling",
+      "name": "물박하 정령",
+      "data_name": "물박하 정령",
+      "loot_table": "climate_summer_mint",
+      "events": [
+        "swamp_mintling_battle",
+        "river_valley_mintling_battle"
+      ],
+      "source_sha256": "d8904c0c4c60397851be905cb98982c9ef59de2d69f15ba2005669f315d1e523",
+      "sprite": "픽셀_정리/mintling.png",
+      "source": "생성_원본/mintling.png",
+      "sha256": "5a4ffe9ae1399a1adf1e063fa3c4bc97f8e2f1d193ce4adf6a51731e3dbde401",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "nutling",
+      "enemy_id": "nutling",
+      "name": "들밤 껍질짐승",
+      "data_name": "들밤 껍질짐승",
+      "loot_table": "climate_autumn_nut",
+      "events": [
+        "forest_nutling_battle",
+        "meadow_nutling_battle"
+      ],
+      "source_sha256": "add7659971a21314a69c0e25ea3abaeb42706732c603d8d60189193aedd478c1",
+      "sprite": "픽셀_정리/nutling.png",
+      "source": "생성_원본/nutling.png",
+      "sha256": "e08c9db1743f12c291c6c36936943b999f6612b7647046b3a98aadae50723d2a",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "frostling",
+      "enemy_id": "frostling",
+      "name": "서리 결정짐승",
+      "data_name": "서리 결정짐승",
+      "loot_table": "climate_winter_frost",
+      "events": [
+        "mine_frostling_battle",
+        "river_valley_frostling_battle"
+      ],
+      "source_sha256": "bf885e69f05b9ca12ef1ba0bc54568fcccce05c528ac0bbf707cb60827db6f42",
+      "sprite": "픽셀_정리/frostling.png",
+      "source": "생성_원본/frostling.png",
+      "sha256": "ef6131166a6295548f9c105285e29923502419a3b4660f2d514a0450fc466bff",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "rainling",
+      "enemy_id": "rainling",
+      "name": "빗방울 정령",
+      "data_name": "빗방울 정령",
+      "loot_table": "climate_rain_pearl",
+      "events": [
+        "forest_rainling_battle",
+        "swamp_rainling_battle"
+      ],
+      "source_sha256": "984f44231247e7015eb98a2b1454630e5800595ca6910c4382964b879c9dc9d8",
+      "sprite": "픽셀_정리/rainling.png",
+      "source": "생성_원본/rainling.png",
+      "sha256": "9281c9c68bbad7d33d4248682c856fb4b8e4a6796d4511d7fb8868abec09aac5",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    },
+    {
+      "id": "snowling",
+      "enemy_id": "snowling",
+      "name": "눈꽃 솜털짐승",
+      "data_name": "눈꽃 솜털짐승",
+      "loot_table": "climate_snow_bloom",
+      "events": [
+        "meadow_snowling_battle",
+        "river_valley_snowling_battle"
+      ],
+      "source_sha256": "8f2e584d710e7abeecb7132209bb7f5ee0d40e5565e84356cae8eb91c8e79446",
+      "sprite": "픽셀_정리/snowling.png",
+      "source": "생성_원본/snowling.png",
+      "sha256": "5a97079675522eedc8a82e2fafd9fca71574241ce426d8457d510033dce9ecb0",
+      "state": "idle",
+      "frames": 1,
+      "anchor": [
+        32,
+        56
+      ]
+    }
+  ]
+}

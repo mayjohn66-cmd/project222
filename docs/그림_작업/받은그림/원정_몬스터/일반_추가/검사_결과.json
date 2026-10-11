@@ -1,0 +1,551 @@
+{
+  "method": "uniform_nearest_24_base_8_accent_with_eye_centroid_samples",
+  "checks": [
+    {
+      "id": "forest_thornling",
+      "crop": [
+        120,
+        214,
+        1082,
+        1126
+      ],
+      "source_size": [
+        1189,
+        1323
+      ],
+      "scaled_size": [
+        36,
+        34
+      ],
+      "position": [
+        14,
+        22
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "moss",
+      "accent_pixels": 202,
+      "feature_samples": [],
+      "source_sha256": "6539622ad9fb547bc1cd22f6d090c6785f89ca28c2c0db2bdd7c57cacd3584fb",
+      "sha256": "2059b7a04f3b1a711211757346ef679f223be80ed90a71458bd6b9aa7cbdb7ac"
+    },
+    {
+      "id": "mine_shardling",
+      "crop": [
+        233,
+        294,
+        958,
+        1086
+      ],
+      "source_size": [
+        1161,
+        1354
+      ],
+      "scaled_size": [
+        32,
+        35
+      ],
+      "position": [
+        16,
+        21
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 24,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "none",
+      "accent_pixels": 0,
+      "feature_samples": [],
+      "source_sha256": "efad4592bf905a4d5d4626545d9964cd7da0c4d3b845f9014dc8dcebfb2c90ca",
+      "sha256": "ce51ec8168a89a7653b53db760adafd254d4ddd1944885022736c91ff0638ed9"
+    },
+    {
+      "id": "swamp_reedling",
+      "crop": [
+        195,
+        175,
+        905,
+        1222
+      ],
+      "source_size": [
+        1086,
+        1448
+      ],
+      "scaled_size": [
+        27,
+        40
+      ],
+      "position": [
+        18,
+        16
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "moss",
+      "accent_pixels": 8,
+      "feature_samples": [],
+      "source_sha256": "2f3f968b32acff179ddabad91627373d873c2d461dd0acd8cc8775cc9b746087",
+      "sha256": "82fd43cc6c1f1e022eb86251ccaf2be12853ebbe6f0dfd8d7c0c316649e64204"
+    },
+    {
+      "id": "ruins_wisp",
+      "crop": [
+        248,
+        215,
+        861,
+        1249
+      ],
+      "source_size": [
+        1079,
+        1458
+      ],
+      "scaled_size": [
+        23,
+        38
+      ],
+      "position": [
+        20,
+        18
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "purple",
+      "accent_pixels": 373,
+      "feature_samples": [],
+      "source_sha256": "c52bb4a338d05e3619233191c5a9e8e06e735bd3e24b4a265d72408e82e3a1f3",
+      "sha256": "d9754f26e962632b44a9e6e1477f2810f555038da777d8a56771eae02c14eb40"
+    },
+    {
+      "id": "meadow_fluffling",
+      "crop": [
+        239,
+        287,
+        1106,
+        977
+      ],
+      "source_size": [
+        1374,
+        1145
+      ],
+      "scaled_size": [
+        36,
+        29
+      ],
+      "position": [
+        14,
+        27
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 24,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "none",
+      "accent_pixels": 0,
+      "feature_samples": [],
+      "source_sha256": "908c353971a66a8986577d85effe14ab5463de77808a20a5e36c85339d0a2d7e",
+      "sha256": "21cf2dfd90f7863f1be1de1c5936b2a2b68951c180978a2a28b6df598a603719"
+    },
+    {
+      "id": "meadow_seedling",
+      "crop": [
+        272,
+        107,
+        914,
+        1152
+      ],
+      "source_size": [
+        1227,
+        1282
+      ],
+      "scaled_size": [
+        25,
+        40
+      ],
+      "position": [
+        19,
+        16
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 31,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "gold",
+      "accent_pixels": 240,
+      "feature_samples": [],
+      "source_sha256": "eb570ebf2b909a1b48b8073588a95c96695f485884082413a4d94467f46b8218",
+      "sha256": "9a76c5a77f76b219573436af2888ed518ed22ec093b91ffbd4fbf717d666f66f"
+    },
+    {
+      "id": "river_crab",
+      "crop": [
+        410,
+        298,
+        1205,
+        780
+      ],
+      "source_size": [
+        1589,
+        990
+      ],
+      "scaled_size": [
+        42,
+        25
+      ],
+      "position": [
+        11,
+        31
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 24,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "none",
+      "accent_pixels": 0,
+      "feature_samples": [],
+      "source_sha256": "35ac1661da6a11c00595a338a412cb6f2c5d9851a8712d21904238d0077a8e0a",
+      "sha256": "8232423e2342c6fe4b865563b6299145c36591e02bbd2ed89dad036d046dea80"
+    },
+    {
+      "id": "river_pebbling",
+      "crop": [
+        287,
+        372,
+        968,
+        1031
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "scaled_size": [
+        32,
+        31
+      ],
+      "position": [
+        16,
+        25
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "cyan",
+      "accent_pixels": 390,
+      "feature_samples": [],
+      "source_sha256": "7d81af6e68a1c7b3050262643115cc747f683b38c02399797c2f064c27aa05d0",
+      "sha256": "d049a1616942fbf209e0a21d2d6ffb9e5b30fd2d11c16ab0067a5896b17a4ad8"
+    },
+    {
+      "id": "budling",
+      "crop": [
+        301,
+        263,
+        1043,
+        1047
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "scaled_size": [
+        26,
+        27
+      ],
+      "position": [
+        19,
+        29
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 31,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "moss",
+      "accent_pixels": 263,
+      "feature_samples": [],
+      "source_sha256": "765f5c10f4ecfa83d20a94cdbb01e5dc39341488185c39e75cc6ac7ad48de272",
+      "sha256": "55a7db2909fce317841944e423f45a57c03791fc32c44d73c16200e1552a6858"
+    },
+    {
+      "id": "mintling",
+      "crop": [
+        298,
+        166,
+        1031,
+        1106
+      ],
+      "source_size": [
+        1254,
+        1254
+      ],
+      "scaled_size": [
+        27,
+        34
+      ],
+      "position": [
+        18,
+        22
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "turquoise",
+      "accent_pixels": 282,
+      "feature_samples": [],
+      "source_sha256": "d8904c0c4c60397851be905cb98982c9ef59de2d69f15ba2005669f315d1e523",
+      "sha256": "5a4ffe9ae1399a1adf1e063fa3c4bc97f8e2f1d193ce4adf6a51731e3dbde401"
+    },
+    {
+      "id": "nutling",
+      "crop": [
+        195,
+        325,
+        950,
+        1099
+      ],
+      "source_size": [
+        1136,
+        1385
+      ],
+      "scaled_size": [
+        28,
+        29
+      ],
+      "position": [
+        18,
+        27
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 24,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "none",
+      "accent_pixels": 0,
+      "feature_samples": [],
+      "source_sha256": "add7659971a21314a69c0e25ea3abaeb42706732c603d8d60189193aedd478c1",
+      "sha256": "e08c9db1743f12c291c6c36936943b999f6612b7647046b3a98aadae50723d2a"
+    },
+    {
+      "id": "frostling",
+      "crop": [
+        291,
+        345,
+        1085,
+        997
+      ],
+      "source_size": [
+        1374,
+        1145
+      ],
+      "scaled_size": [
+        36,
+        30
+      ],
+      "position": [
+        14,
+        26
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "cyan",
+      "accent_pixels": 459,
+      "feature_samples": [],
+      "source_sha256": "bf885e69f05b9ca12ef1ba0bc54568fcccce05c528ac0bbf707cb60827db6f42",
+      "sha256": "ef6131166a6295548f9c105285e29923502419a3b4660f2d514a0450fc466bff"
+    },
+    {
+      "id": "rainling",
+      "crop": [
+        212,
+        374,
+        931,
+        1184
+      ],
+      "source_size": [
+        1132,
+        1390
+      ],
+      "scaled_size": [
+        26,
+        29
+      ],
+      "position": [
+        19,
+        27
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 32,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "cyan",
+      "accent_pixels": 336,
+      "feature_samples": [],
+      "source_sha256": "984f44231247e7015eb98a2b1454630e5800595ca6910c4382964b879c9dc9d8",
+      "sha256": "9281c9c68bbad7d33d4248682c856fb4b8e4a6796d4511d7fb8868abec09aac5"
+    },
+    {
+      "id": "snowling",
+      "crop": [
+        273,
+        287,
+        1030,
+        1003
+      ],
+      "source_size": [
+        1298,
+        1212
+      ],
+      "scaled_size": [
+        30,
+        28
+      ],
+      "position": [
+        17,
+        28
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "anchor": [
+        32,
+        56
+      ],
+      "colors": 24,
+      "alpha": [
+        0,
+        255
+      ],
+      "accent": "none",
+      "accent_pixels": 0,
+      "feature_samples": [],
+      "source_sha256": "8f2e584d710e7abeecb7132209bb7f5ee0d40e5565e84356cae8eb91c8e79446",
+      "sha256": "5a97079675522eedc8a82e2fafd9fca71574241ce426d8457d510033dce9ecb0"
+    }
+  ]
+}
