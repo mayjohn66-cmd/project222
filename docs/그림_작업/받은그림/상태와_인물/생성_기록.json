@@ -173,5 +173,40 @@
       ],
       "transparent_background": true
     }
-  ]
+  ],
+  "proportion_correction": {
+    "date": "2026-10-11",
+    "tool": "built-in imagegen",
+    "reason": "사용자 NPC 크기 차이 지적: 총키 대신 머리와 몸 비율을 기존 NPC에 맞춤",
+    "results": [
+      {
+        "id": "blacksmith",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-50bddf31-3ad8-4b8c-878b-7450e9372911.png",
+        "prompt": "Use case: style-transfer. Edit the SECOND input character (blacksmith) so it belongs to the same game character family as the FIRST input, Doyun. First input is the strict anatomy, scale, pixel density and pose reference, not merely palette reference. Second input is the identity and clothing reference. Output ONE full-body blacksmith sprite on genuinely transparent background, standing facing south-west / viewer lower-left. Match Doyun's large head (head including hair occupies about 30% of total standing height), compact torso, short legs, broad small boots, simple anime eyes and tidy pixel clusters. About 3.3 heads tall. Retain the blacksmith's short dark swept hair, short dark beard, ivory rolled-sleeve shirt, brown leather apron, belt, brown trousers, hand-held small hammer. Distinct adult face from Doyun. No ground, shadow, scene, text or borders. Do not preserve the second image's tiny head or realistic long limbs. Same full-body 84 logical pixel height and roughly 38-44 logical pixel width on 96x96 logical canvas, feet bottom at y90, head top y6. Render clean nearest-neighbor pixel art with chunky readable pixels consistent with the first image; no airbrush shading. Uniform proportions, no compressed anatomy.",
+        "file": "생성_원본/actor_blacksmith_proportions.png",
+        "references": [
+          "art/actors/npc/doyun/south_west.png",
+          "art/actors/poses/blacksmith_south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/npc/doyun/south_west.png": "2e2f91f9a4ef2abe15453dba4b8854686fe638b9615d7e690e3c7326fb1126e7",
+          "art/actors/poses/blacksmith_south_west.png": "693a47b44c1b3ca8b9de62822489237caa2c12e630bce136924147a08701391f"
+        }
+      },
+      {
+        "id": "commuter",
+        "generation_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-66519709-fdae-4ce0-b8bc-db368dd22176.png",
+        "prompt": "Use case: style-transfer. Edit the SECOND input character (modern office worker) so it belongs to the same game character family as the FIRST input, Doyun. First image is the strict anatomy, scale, pixel density and pose reference, not merely palette reference. Second image is the clothing and identity reference. Output ONE full-body office worker sprite on genuinely transparent background, standing facing south-west / viewer lower-left. Match Doyun's large head (head including hair occupies about 30% of total standing height), compact torso, short legs, small broad shoes, simple anime eyes and tidy pixel clusters. About 3.3 heads tall. Keep young adult male with tidy side-parted brown hair, navy business jacket over white shirt with muted blue tie, navy trousers, dark shoes, small brown briefcase in hand. Distinct face from Doyun. Do not preserve second image's tiny head, realistic long legs or slim realistic anatomy. Same full-body 84 logical pixel height and roughly 36-40 logical pixel width on 96x96 logical canvas, feet bottom at y90, head top y6. Clean nearest-neighbor pixel art, chunky readable pixels consistent with first image. No ground, shadow, scene, text, borders, gradients, glow.",
+        "file": "생성_원본/actor_commuter_proportions.png",
+        "references": [
+          "art/actors/npc/doyun/south_west.png",
+          "art/actors/poses/commuter_south_west.png"
+        ],
+        "reference_sha256": {
+          "art/actors/npc/doyun/south_west.png": "2e2f91f9a4ef2abe15453dba4b8854686fe638b9615d7e690e3c7326fb1126e7",
+          "art/actors/poses/commuter_south_west.png": "bbea0e1fe602c613ff5110c81b863e83432a67e7ef81d77f351e4f15e9400f67"
+        }
+      }
+    ]
+  }
 }

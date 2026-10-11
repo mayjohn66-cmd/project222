@@ -2,7 +2,7 @@
   "blacksmith": {
     "path": "res://art/actors/poses/blacksmith_south_west.png",
     "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/blacksmith.png",
-    "sha256": "693a47b44c1b3ca8b9de62822489237caa2c12e630bce136924147a08701391f",
+    "sha256": "6b1358a34a5e32354edce6315917d854c35e34d01ef1799e6d6ee1a5fccca842",
     "feet": [
       48,
       90
@@ -15,7 +15,7 @@
   "commuter": {
     "path": "res://art/actors/poses/commuter_south_west.png",
     "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/commuter.png",
-    "sha256": "bbea0e1fe602c613ff5110c81b863e83432a67e7ef81d77f351e4f15e9400f67",
+    "sha256": "f4f3e8edf77e26863df5fd558f67ba7d5eaed84f98423f3e6b85e3ac58ba6381",
     "feet": [
       48,
       90

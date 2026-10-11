@@ -182,22 +182,22 @@
     {
       "id": "blacksmith",
       "path": "art/actors/poses/blacksmith_south_west.png",
-      "sha256": "693a47b44c1b3ca8b9de62822489237caa2c12e630bce136924147a08701391f",
-      "size": [
-        96,
-        96
-      ],
-      "colors": 78
-    },
-    {
-      "id": "commuter",
-      "path": "art/actors/poses/commuter_south_west.png",
-      "sha256": "bbea0e1fe602c613ff5110c81b863e83432a67e7ef81d77f351e4f15e9400f67",
+      "sha256": "6b1358a34a5e32354edce6315917d854c35e34d01ef1799e6d6ee1a5fccca842",
       "size": [
         96,
         96
       ],
       "colors": 79
+    },
+    {
+      "id": "commuter",
+      "path": "art/actors/poses/commuter_south_west.png",
+      "sha256": "f4f3e8edf77e26863df5fd558f67ba7d5eaed84f98423f3e6b85e3ac58ba6381",
+      "size": [
+        96,
+        96
+      ],
+      "colors": 78
     },
     {
       "id": "player_male_seat_south_west",
@@ -905,5 +905,33 @@
       42,
       51
     ]
+  ],
+  "standing_proportions": [
+    {
+      "id": "blacksmith",
+      "bounds": [
+        26,
+        6,
+        71,
+        90
+      ],
+      "source": "생성_원본/actor_blacksmith_proportions.png",
+      "source_sha256": "9ec671c2f9b6b1043905cb71b7ecaa19ead0a0cdc75819bfc56456f78852b96b",
+      "reference": "art/actors/npc/doyun/south_west.png",
+      "reference_sha256": "2e2f91f9a4ef2abe15453dba4b8854686fe638b9615d7e690e3c7326fb1126e7"
+    },
+    {
+      "id": "commuter",
+      "bounds": [
+        28,
+        6,
+        68,
+        90
+      ],
+      "source": "생성_원본/actor_commuter_proportions.png",
+      "source_sha256": "22f074c9c3021be2ca08e0afe7a772db0957acb53292a8e2b750201dc945fd52",
+      "reference": "art/actors/npc/doyun/south_west.png",
+      "reference_sha256": "2e2f91f9a4ef2abe15453dba4b8854686fe638b9615d7e690e3c7326fb1126e7"
+    }
   ]
 }

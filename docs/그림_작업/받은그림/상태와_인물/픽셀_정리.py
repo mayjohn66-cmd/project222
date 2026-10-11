@@ -83,8 +83,10 @@ REPORT['berry_pixels']=berry_pixels
 assert ready.getchannel('A').tobytes()==bush.getchannel('A').tobytes()
 
 actors = {}
-def actor_image(key, identity=None, kind='', back=False):
-    src=HERE/'생성_원본'/('actor_'+key+'.png')
+def actor_image(key, identity=None, kind='', back=False, corrected=True):
+    # 서 있는 신규 인물은 기존 NPC와 머리/몸 비율을 맞춘 선택본을 사용한다.
+    suffix='_proportions' if corrected and key in ['blacksmith','commuter'] else ''
+    src=HERE/'생성_원본'/('actor_'+key+suffix+'.png')
     image=Image.open(src).convert('RGBA')
     mask=image.getchannel('A').point(lambda a:255 if a>=220 else 0)
     image=image.crop(mask.getbbox())
@@ -126,6 +128,8 @@ for identity in ['blacksmith','commuter']:
     image=actor_image(identity)
     row=save(image,identity,'art/actors/poses/'+identity+'_south_west.png')
     actors[identity]={**row,'feet':[48,90],'direction':'south-west','reference_height':84,'display_height':1.14*.8660254,'pose':'standing'}
+    source=HERE/'생성_원본'/('actor_'+identity+'_proportions.png')
+    REPORT.setdefault('standing_proportions',[]).append({'id':identity,'bounds':list(image.getbbox()),'source':str(source.relative_to(HERE)).replace('\\','/'),'source_sha256':sha(source),'reference':'art/actors/npc/doyun/south_west.png','reference_sha256':sha(ROOT/'art/actors/npc/doyun/south_west.png')})
 
 for identity in ['player_male','player_female','doyun','naru','sora']:
     variants=[('seat',False)]
@@ -156,4 +160,20 @@ for index,row in enumerate(cards):
     label=row['id'].replace('_south_','\nsouth_').replace('_north_','\nnorth_')
     draw.multiline_text((index%4*224+8,index//4*320+276),label,font=font,fill=(240,220,190))
 sheet.save(HERE/'게임용_목록.png')
+
+# 같은 발 기준선에 기존 성인3명과 두 인물의 이전/보정 그림을 놓는다.
+# 캔버스/전체 높이 검사만으로는 얼굴 크기와 몸 비율의 차이를 잡을 수 없다.
+comparison=Image.new('RGB',(1000,690),(55,48,41))
+draw=ImageDraw.Draw(comparison)
+for index,name in enumerate(['doyun','naru','sora','blacksmith','commuter']):
+    is_new=name in ['blacksmith','commuter']
+    path=ROOT/('art/actors/poses/'+name+'_south_west.png' if is_new else 'art/actors/npc/'+name+'/south_west.png')
+    selected=Image.open(path).convert('RGBA')
+    prior=actor_image(name,corrected=False) if is_new else selected
+    for y,image,label in [(70,prior,'이전' if is_new else '기존'),(370,selected,'적용')]:
+        enlarged=image.resize((192,192),Image.Resampling.NEAREST)
+        comparison.paste(enlarged,(index*200,y),enlarged)
+        draw.text((index*200+8,y+215),name+' '+label,font=font,fill='white')
+for y in [250,550]: draw.line((0,y,1000,y),fill=(150,135,110))
+comparison.save(HERE/'비율_비교.png')
 print(f"runtime {len(cards)} PNG, preserved heads {len(REPORT['preserved_heads'])}, berry overlay {len(berry_pixels)} pixels")

@@ -66,12 +66,35 @@ func run() -> void:
 		var figure: PixelActorFigure = view._actors[pair[0].get_instance_id()].figure
 		check(figure.sprite_key == str(pair[1]),"dedicated costume in actual renderer")
 		check(figure._material.get_shader_parameter("normal_texture") != null,"dedicated costume normals")
-	view.camera2d.global_position = modern.global_position+Vector2(100,-30)
+	# 캔버스가 같아도 머리/몸 비율은 다를 수 있다. 기존 성인과 같은 발 위치에서 실제 그림을 비교한다.
+	var references: Array[VillageResident] = []
+	var lineup_base := modern.global_position
+	for npc_id in ["doyun","naru","sora"]:
+		var reference := VillageResident.new()
+		reference.resident_id = npc_id
+		reference.set_meta("look_key","story_npc")
+		world.get_node("Actors").add_child(reference)
+		reference.set_physics_process(false)
+		reference.global_position = lineup_base + Vector2(references.size()*90.0,0)
+		references.append(reference)
+	smith.global_position = lineup_base + Vector2(270,0)
+	modern.global_position = lineup_base + Vector2(360,0)
+	view._sync_actors(0.016)
+	var adult_figure: PixelActorFigure = view._actors[references[0].get_instance_id()].figure
+	for actor in [references[0],references[1],references[2],smith,modern]:
+		var figure: PixelActorFigure = view._actors[actor.get_instance_id()].figure
+		check(absf(figure._mesh.mesh.size.y-adult_figure._mesh.mesh.size.y) < 0.01,"standing height matches existing adult NPC")
+		var offset: Vector2 = figure._material.get_shader_parameter("frame_offset")
+		check(absf(offset.y-figure._mesh.mesh.size.y*0.5) < 0.0001,"standing sprite feet stay on common ground line")
+	view.camera2d.global_position = lineup_base+Vector2(180,-30)
 	view.camera2d.zoom *= 2.0
 	view.camera2d.reset_smoothing()
 	view.camera2d.force_update_scroll()
+	view.forced_hour = 12
+	view.apply_hour(12)
 	sync()
 	await capture("costumes")
+	for reference in references: reference.queue_free()
 	var player := view.player
 	var actors := world.get_node("Actors")
 	var resident := VillageResident.new()
