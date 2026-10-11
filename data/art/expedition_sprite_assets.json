@@ -541,7 +541,10 @@
       "kind": null,
       "boss": false,
       "pixel_unit": 0.018,
-      "source_sha256": "489e336992e7dbc24f8d4fad05e322bab26adae39109b71de76b3b0f02a9c6b2"
+      "source_sha256": "489e336992e7dbc24f8d4fad05e322bab26adae39109b71de76b3b0f02a9c6b2",
+      "table_aliases": [
+        "gather_iron"
+      ]
     },
     {
       "id": "marsh_reed",
@@ -561,7 +564,11 @@
       "kind": null,
       "boss": false,
       "pixel_unit": 0.018,
-      "source_sha256": "24657457e9bbd7b401639252693e77b2d48987337686157dd353db17ea209c2f"
+      "source_sha256": "24657457e9bbd7b401639252693e77b2d48987337686157dd353db17ea209c2f",
+      "table_aliases": [
+        "swamp_gather",
+        "river_gather"
+      ]
     },
     {
       "id": "spring_bud",
@@ -721,7 +728,10 @@
       "kind": "gather_site",
       "boss": false,
       "pixel_unit": 0.018,
-      "source_sha256": "f82b7ec7e11a5d9f06c64c6c4501db203c83939e5716eef462aeb3226e372f63"
+      "source_sha256": "f82b7ec7e11a5d9f06c64c6c4501db203c83939e5716eef462aeb3226e372f63",
+      "table_aliases": [
+        "ruins_gather"
+      ]
     },
     {
       "id": "rune_dust",
@@ -902,6 +912,53 @@
       "boss": false,
       "pixel_unit": 0.022,
       "source_sha256": "2baa76725acc1083208f1b95a9ee8357e4132f49b39613b85511a47937ea640d"
+    },
+    {
+      "id": "wild_berry_site",
+      "group": "objects",
+      "source": "art/received/nature_states/berry_ready.png",
+      "path": "res://art/received/nature_states/berry_ready.png",
+      "sha256": "e00e6fda55968b40cd1122349483a5b8b64a82efe3684d0767206d02eaca61f1",
+      "source_sha256": "e00e6fda55968b40cd1122349483a5b8b64a82efe3684d0767206d02eaca61f1",
+      "anchor": [
+        32,
+        56
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "choice_wild_berry",
+      "table_aliases": [
+        "forest_gather",
+        "meadow_gather"
+      ],
+      "kind": "gather",
+      "boss": false,
+      "pixel_unit": 0.018,
+      "reused_existing_art": true
+    },
+    {
+      "id": "stone_shard_site",
+      "group": "objects",
+      "source": "art/received/nature/rocks.png",
+      "path": "res://art/received/nature/rocks.png",
+      "sha256": "42a29ae0d6b6e174282f129f2a3c786f036f918c1111f9c2f165078dbb0522f5",
+      "source_sha256": "42a29ae0d6b6e174282f129f2a3c786f036f918c1111f9c2f165078dbb0522f5",
+      "anchor": [
+        32.0,
+        54
+      ],
+      "canvas": [
+        64,
+        64
+      ],
+      "table": "choice_stone_shard",
+      "table_aliases": [],
+      "kind": "gather",
+      "boss": false,
+      "pixel_unit": 0.018,
+      "reused_existing_art": true
     }
   ]
 }

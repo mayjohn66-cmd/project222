@@ -18,7 +18,7 @@ static func object_id(kind: String, table: String) -> String:
 	if kind == "heal": return "healing_spring"
 	if kind not in ["gather", "gather_site"] or table.is_empty(): return ""
 	for row in assets().values():
-		if str(row.group) == "objects" and str(row.get("table", "")) == table:
+		if str(row.group) == "objects" and (str(row.get("table", "")) == table or table in row.get("table_aliases", [])):
 			return str(row.id)
 	return ""
 

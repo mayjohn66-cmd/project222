@@ -63,7 +63,7 @@ func run() -> void:
 	check(view.stage._player.hurt_amount() > 0.0, "pixel player hit feedback runs")
 	view.stage._player.animate(0.3)
 	check(view.stage._player.hurt_amount() == 0.0, "pixel player hit feedback expires")
-	check(ExpeditionSpriteArt.assets().size() == 45, "all 45 prepared expedition drawings indexed")
+	check(ExpeditionSpriteArt.assets().size() == 47, "45 prepared drawings and 2 reused gathering pictures indexed")
 	for row in ExpeditionSpriteArt.assets().values():
 		if str(row.group) == "monsters":
 			var room := model(str(row.id), "", bool(row.boss))
@@ -101,6 +101,36 @@ func run() -> void:
 	check(ExpeditionSpriteArt.object_id("gather", "") == "", "unknown gather does not claim mineral reward")
 	check(ExpeditionSpriteArt.object_id("gather", "mine_gather") == "mineral_outcrop", "mixed mine event has correct drawing")
 	check(ExpeditionSpriteArt.object_id("chest", "mine_gather") == "treasure_chest", "kind wins over loot table")
+	# Exercise every active gathering event, including mixed tables and both choices.
+	var event_file := FileAccess.open("res://data/expedition/expedition_events.csv",FileAccess.READ)
+	var headers := event_file.get_csv_line()
+	while not event_file.eof_reached():
+		var fields := event_file.get_csv_line()
+		if fields.size() != headers.size(): continue
+		var event_row := {}
+		for i in headers.size(): event_row[headers[i]] = fields[i]
+		if event_row.node_type != "gather" or event_row.result_type != "loot": continue
+		var gathering_room := model("","gather")
+		gathering_room.object_loot_table = str(event_row.target_id)
+		gathering_room.configure_gathering(gathering_room.CONTENT.gathering(str(event_row.event_id)))
+		bind(gathering_room,str(event_row.region_id))
+		for i in view.stage._object_nodes.size():
+			var table := str(gathering_room.object_loot_table) if gathering_room.gathering_sites.is_empty() else str(gathering_room.gathering_sites[i].table)
+			var selected_id := ExpeditionSpriteArt.object_id("gather",table)
+			check(not selected_id.is_empty(),"every actual gathering table has a picture: "+table)
+			var selected := view.stage._object_nodes[i] as MeshInstance3D
+			check(selected != null,"no fallback model in gathering event: "+str(event_row.event_id))
+			if selected != null and not selected_id.is_empty(): verify_sprite(selected,ExpeditionSpriteArt.assets()[selected_id])
+		await frames(1)
+	event_file.close()
+	for table in ["choice_wild_berry","choice_stone_shard","forest_gather","swamp_gather","ruins_gather","meadow_gather","river_gather","gather_iron"]:
+		var gathering_room := model("","gather")
+		gathering_room.object_loot_table = table
+		var capture_regions := {"choice_wild_berry":"forest","choice_stone_shard":"mine",
+			"forest_gather":"forest","swamp_gather":"swamp","ruins_gather":"hidden_ruins",
+			"meadow_gather":"meadow","river_gather":"river_valley","gather_iron":"mine"}
+		bind(gathering_room,str(capture_regions[table]))
+		await capture("gather_"+table)
 	# Both table-selected gathering sites must keep their corresponding image and position.
 	var sites := model("", "gather")
 	sites.configure_gathering([{"table":"gather_water","x":2.5,"y":3.5,"color":"85bad4"}, {"table":"choice_forest_herb","x":5.5,"y":3.5,"color":"85bad4"}])

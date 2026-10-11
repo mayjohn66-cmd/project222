@@ -38,6 +38,8 @@ static func render(view: StoreView3D, key: String, body: StaticBody2D,
 	if art == null: return {}
 	var row := row_for(art.art_path)
 	if row.is_empty(): return {}
+	if bool(row.get("repeat_module",false)):
+		return StoneWallArt.render(view,key,body,lo,hi,signature,row)
 	var mirrored := art.scale.x < 0.0
 	# Horizontal mirroring swaps the two isometric ground axes.
 	if row.has("axis_y") and ((hi.y-lo.y > hi.x-lo.x) != mirrored):

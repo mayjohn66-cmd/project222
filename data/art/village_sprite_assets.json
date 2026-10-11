@@ -1175,81 +1175,54 @@
     },
     {
       "anchor": [
-        96.0,
-        128.0
+        32,
+        64
       ],
       "id": "low_wall",
       "pixel_unit": 0.0220970869120313,
       "yaw": 0.0,
-      "source": "docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/low_wall_0.png",
-      "source_sha256": "cae988358df92f7b4d1f527475849f34dae36f06b3e22da8b6391c4e164bd50a",
-      "path": "res://art/received/village/low_wall_0.png",
-      "sha256": "a51340ef25326c241c411f2cedb755c1b87c721b7d10af9c6ed594de96a2118e",
-      "colors": 10,
+      "source": "docs/그림_작업/받은그림/돌담_모듈/stone_wall.png",
+      "source_sha256": "56f6a91a957f1defbdcae184ace147b5645e0f74a8d40771eb4cdea2b26ea1ab",
+      "path": "res://art/received/village/stone_wall.png",
+      "sha256": "56f6a91a957f1defbdcae184ace147b5645e0f74a8d40771eb4cdea2b26ea1ab",
+      "colors": 48,
       "alpha_binary": true,
       "size": [
-        192,
-        192
+        64,
+        96
       ],
       "preserve_collision": true,
       "footprint": [
         [
-          40.0,
-          92.0
+          12,
+          58
         ],
         [
-          168.0,
-          156.0
+          44,
+          74
         ],
         [
-          152.0,
-          164.0
+          52,
+          70
         ],
         [
-          24.0,
-          100.0
+          20,
+          54
         ]
       ],
       "alpha_threshold": 128,
       "aliases": [
         "res://art/world/village_decor_v1/low_wall.png"
       ],
-      "axis_y": {
-        "anchor": [
-          96.0,
-          128.0
-        ],
-        "pixel_unit": 0.0220970869120313,
-        "yaw": 1.5707963267949,
-        "source": "docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/low_wall_1.png",
-        "source_sha256": "e01df8aa0ae7c86664c7c256eac24eb5cbbef3b6f52a3709b0c29da38b062428",
-        "path": "res://art/received/village/low_wall_1.png",
-        "sha256": "c273cef3923e688adc2a9ded76799c494ac451d594cabcdc1848e1c94deade39",
-        "colors": 10,
-        "alpha_binary": true,
-        "size": [
-          192,
-          192
-        ],
-        "footprint": [
-          [
-            152.0,
-            92.0
-          ],
-          [
-            168.0,
-            100.0
-          ],
-          [
-            40.0,
-            164.0
-          ],
-          [
-            24.0,
-            156.0
-          ]
-        ]
-      }
+      "repeat_module": true,
+      "module_cells": [
+        1,
+        1
+      ],
+      "module_step": [
+        32,
+        16
+      ]
     }
   ]
 }

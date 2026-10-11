@@ -54,7 +54,9 @@ func run() -> void:
 			var key := "EnvironmentWall%d%d" % [axis,int(mirrored)]
 			var result := VillageSpriteArt.render(view,key,body,base-size*.5,base+size*.5,key)
 			var entry: Dictionary = view._items[key]
-			check(entry.village_sprite_path.ends_with("low_wall_%d.png" % (axis if not mirrored else 1-axis)),"wall axis compensates saved mirroring")
+			check(entry.village_sprite_path.ends_with("stone_wall.png"),"all walls use one selected drawn module")
+			check(int(entry.stone_wall_module_count) == 4,"four cells repeat the same wall without stretching stones")
+			check(bool(entry.stone_wall_axis_y) == (axis == 1),"saved mirroring does not change the wall ground axis")
 			check(result.rect.size.distance_to(size) < .001,"wall image ground matches original axis")
 			check(shape.polygon == before,"wall collision unchanged by sprite")
 			check(entry.mesh.mesh is QuadMesh,"wall is a 2D plane")
@@ -67,6 +69,14 @@ func run() -> void:
 			await get_tree().physics_frame
 			check(contains_body(body.global_position,body),"wall blocks actual player query")
 			check(not contains_body(view.cell_to_world(base+Vector2(7,7)),body),"outside wall remains traversable")
+	# Read the actual visible placements, not only synthetic fixtures.
+	for entry in view._items.values():
+		if str(entry.get("village_sprite_id","")) == "low_wall":
+			check(str(entry.village_sprite_path).ends_with("stone_wall.png"),"live map selects new single wall art")
+			check(int(entry.stone_wall_module_count) >= 1,"live wall has repeated modules")
+	for id in ["fridge_unit","freezer_unit"]:
+		var icon := FurnitureData.get_furniture_icon(id)
+		check(icon != null and icon.resource_path.ends_with("/empty_rotation_0.png"),"existing cold-unit art is available in menus: "+id)
 	view.player.global_position = well.global_position+Vector2(0,90)
 	view.camera2d.global_position = well.global_position+Vector2(200,-40)
 	view.camera2d.reset_smoothing()

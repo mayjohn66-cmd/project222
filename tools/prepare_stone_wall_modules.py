@@ -115,7 +115,8 @@ def main():
                    footprint=[1, 1], floor_tile=[64, 32], canvas=[64, 96], anchor=[32, 64],
                    run_step=[32, 16], orientation="upper-left to lower-right",
                    actual_wall_thickness_cells=0.25, palette_limit=48,
-                   alpha_threshold=128, filter="NEAREST", runtime_connected=False,
+                   alpha_threshold=128, filter="NEAREST", runtime_connected=True,
+                   runtime_path="res://art/received/village/stone_wall.png",
                    asset_count=1, selection="single_repeat_wall", pillars=False,
                    repeat_strip=[16, 32, 48, 69], historical_sources=sources, outputs={})
     for part, image in results.items():
@@ -142,7 +143,7 @@ def main():
     else:
         saved = json.loads((DOC / "통일_기록.json").read_text(encoding="utf-8"))
         assert records == saved, "Manifest changed"
-    print("1 active wall: 1x1, 64x96, step32/16, original middle pixels unchanged, <=48 colors, binary alpha; candidates only")
+    print("1 selected wall: 1x1, 64x96, step32/16, original middle pixels unchanged, <=48 colors, binary alpha; runtime connected")
 
 
 if __name__ == "__main__":
