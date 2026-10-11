@@ -1,8 +1,8 @@
 ﻿catalog_path,catalog_png_exists,connected_id,runtime_png,status,recovered_path,recovered_kind
 res://art/world/village_decor_v1/apple_tree.png,False,tree_apple,res://art/received/nature/tree_apple.png,기존 자연물 사과나무 실행 연결,docs/그림_작업/받은그림/마을_원본_복구/apple_tree.png,임시 자리표
-res://art/world/village_decor_v1/village_well.png,False,,,임시 자리표: 실제 그림 제작 또는 부품 재사용 필요,docs/그림_작업/받은그림/마을_원본_복구/village_well.png,임시 자리표
+res://art/world/village_decor_v1/village_well.png,False,,,복구 PNG는 자리표; 기존 모델/불투명 미리보기 있음; 투명2D 전환 미완료,docs/그림_작업/받은그림/마을_원본_복구/village_well.png,임시 자리표
 res://art/world/village_decor_v6/market_stall_quarter_turn.png,False,market_stall,res://art/received/village/market_stall.png,실행 연결 완료: 저장된 배치/방향/해금 유지,docs/그림_작업/받은그림/마을_원본_복구/market_stall_quarter_turn.png,비자리표 원본
-res://art/world/village_decor_v1/low_wall.png,False,,,임시 자리표: 실제 그림 제작 또는 부품 재사용 필요,docs/그림_작업/받은그림/마을_원본_복구/low_wall.png,임시 자리표
+res://art/world/village_decor_v1/low_wall.png,False,,,복구 PNG는 자리표; 기존 모델/불투명 미리보기 있음; 투명2D 전환 미완료,docs/그림_작업/받은그림/마을_원본_복구/low_wall.png,임시 자리표
 res://art/world/plaza_props_v1/herb_stall_roof_diamond_v6.png,False,herb_stall,res://art/received/village/herb_stall.png,실행 연결 완료: 저장된 배치/방향/해금 유지,docs/그림_작업/받은그림/마을_원본_복구/herb_stall_roof_diamond_v6.png,비자리표 원본
 res://art/world/plaza_props_v1/supply_cart_tile_aligned_v3.png,False,supply_cart,res://art/received/village/supply_cart.png,실행 연결 완료: 저장된 배치/방향/해금 유지,docs/그림_작업/받은그림/마을_원본_복구/supply_cart_tile_aligned_v3.png,비자리표 원본
 res://art/world/plaza_props_v1/plaza_crates.png,False,plaza_crates,res://art/received/village/plaza_crates.png,실행 연결 완료: 저장된 배치/방향/해금 유지,docs/그림_작업/받은그림/마을_원본_복구/plaza_crates.png,비자리표 원본
