@@ -27,6 +27,11 @@ func run() -> void:
 	view.village.sync_ground()
 	sync()
 	check(item(well).get("village_sprite_id","") == "village_well","live well uses transparent 2D image")
+	check(str(item(well).get("village_sprite_path","")).ends_with("village_well_drawn.png"),"live well uses newly drawn sprite")
+	var well_entry := item(well)
+	var well_texture := well_entry.material.get_shader_parameter("frame_texture") as Texture2D
+	var well_bounds := well_texture.get_image().get_used_rect()
+	check(is_equal_approx(well_entry.mesh.mesh.size.x/well_entry.mesh.mesh.size.y,float(well_bounds.size.x)/well_bounds.size.y),"drawn well retains source proportions")
 	var original_position := well.global_position
 	var polygon := (well.get_node("Collision3D") as CollisionPolygon2D).polygon.duplicate()
 	var fixtures := Node2D.new()
@@ -62,6 +67,7 @@ func run() -> void:
 			await get_tree().physics_frame
 			check(contains_body(body.global_position,body),"wall blocks actual player query")
 			check(not contains_body(view.cell_to_world(base+Vector2(7,7)),body),"outside wall remains traversable")
+	view.player.global_position = well.global_position+Vector2(0,90)
 	view.camera2d.global_position = well.global_position+Vector2(200,-40)
 	view.camera2d.reset_smoothing()
 	view.camera2d.force_update_scroll()

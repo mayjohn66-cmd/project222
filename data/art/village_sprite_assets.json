@@ -1131,17 +1131,17 @@
     },
     {
       "anchor": [
-        64.0,
-        128.0
+        64,
+        128
       ],
       "id": "village_well",
       "pixel_unit": 0.0220970869120313,
       "yaw": 0.0,
-      "source": "docs/그림_작업/받은그림/환경_정지_전환/렌더_원본/village_well.png",
-      "source_sha256": "b084819d3b4aae288065fd88742311444b775e8dc59a07d798d7ffd7dbd65924",
-      "path": "res://art/received/village/village_well.png",
-      "sha256": "1554ab9ea3f2fe9de06ab8ef98f0a0117bff870f24b36c90c44393873a8bd261",
-      "colors": 82,
+      "source": "docs/그림_작업/받은그림/우물_다시그림/원본.png",
+      "source_sha256": "4d9f0bbed2c07c6321a9464f0cdbac12d68a92efa6456e204cb2a1b54e235c4b",
+      "path": "res://art/received/village/village_well_drawn.png",
+      "sha256": "b3203362136105393cb3ceda383bc4724c9af70b8593420a3c357df2d6732aa9",
+      "colors": 63,
       "alpha_binary": true,
       "size": [
         128,
@@ -1169,7 +1169,9 @@
       "alpha_threshold": 128,
       "aliases": [
         "res://art/world/village_decor_v1/village_well.png"
-      ]
+      ],
+      "drawing": "imagegen redraw; native render kept separately",
+      "recipe": "tools/prepare_drawn_well.py"
     },
     {
       "anchor": [

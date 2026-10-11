@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-12",
+  "mode": "built-in image_gen",
+  "transparent_background": true,
+  "prompt": "프롬프트.txt",
+  "source": "원본.png",
+  "source_sha256": "4d9f0bbed2c07c6321a9464f0cdbac12d68a92efa6456e204cb2a1b54e235c4b",
+  "references": [
+    {
+      "path": "art/received/village/oak_bench.png",
+      "sha256": "3e913270effafe1df6dcc78c358dd21a4019cb49585b7b8ce83fcd2f9a52f675",
+      "role": "style reference"
+    },
+    {
+      "path": "art/received/village/noticeboard.png",
+      "sha256": "5167823164f5a38ff1cd9a94e272400b90277c9e59e76c4fa26f3c19aab3c176",
+      "role": "style reference"
+    },
+    {
+      "path": "art/received/village/village_well.png",
+      "sha256": "1554ab9ea3f2fe9de06ab8ef98f0a0117bff870f24b36c90c44393873a8bd261",
+      "role": "old well to replace"
+    },
+    {
+      "path": "art/received/floors/paving_1.png",
+      "sha256": "20aad07f4c722233dbfcb257c3c8aed5aed826f8bf2d9109ed9b37a7a70bc180",
+      "role": "style reference"
+    }
+  ]
+}
