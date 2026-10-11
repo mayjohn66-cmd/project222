@@ -249,6 +249,885 @@
       ],
       "colors": 80,
       "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.82,
+      "display_scale": 1.0,
+      "id": "blacksmith",
+      "path": "res://art/received/village/blacksmith.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/blacksmith_iso.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/blacksmith_iso.png",
+        "res://art/world/blacksmith_v2/blacksmith_iso.png"
+      ],
+      "anchor": [
+        114.733,
+        118.1437
+      ],
+      "footprint": [
+        [
+          114.1274,
+          160.3413
+        ],
+        [
+          3.5156,
+          118.7904
+        ],
+        [
+          114.1274,
+          74.6527
+        ],
+        [
+          227.1615,
+          118.7904
+        ]
+      ],
+      "source_sha256": "85a7fd5652fa23a952a5c81ba7ecddbebca2d13562e42e7979cdc70a0b6d83da",
+      "sha256": "f3659adad2e744afcd7fb4f31130bad279a64f1efb3fe572520d7e096459e994",
+      "size": [
+        232,
+        176
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.88,
+      "display_scale": 1.0,
+      "id": "tool_shop",
+      "path": "res://art/received/village/tool_shop.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/tool_shop.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/tool_shop.png",
+        "res://art/world/tool_shop_v1/tool_shop.png"
+      ],
+      "anchor": [
+        142.0737,
+        178.2022
+      ],
+      "footprint": [
+        [
+          154.5594,
+          231.1567
+        ],
+        [
+          7.1671,
+          182.4629
+        ],
+        [
+          127.7608,
+          116.7262
+        ],
+        [
+          278.8074,
+          182.4629
+        ]
+      ],
+      "source_sha256": "c348ba673ba57bfd83ddc358167464022654f7e57ddf0ddca4eb05cd796637b1",
+      "sha256": "506d828942bffab199df78649cd97b746be0c60825c5011ea353f36cbe8e684e",
+      "size": [
+        288,
+        248
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "red_house_front",
+      "path": "res://art/received/village/red_house_front.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/red_house.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/red_house.png",
+        "res://art/world/houses_v1/red_house.png"
+      ],
+      "anchor": [
+        158.6685,
+        165.815
+      ],
+      "footprint": [
+        [
+          197.105,
+          228.5245
+        ],
+        [
+          11.3798,
+          169.5038
+        ],
+        [
+          126.9968,
+          99.4168
+        ],
+        [
+          299.1923,
+          165.815
+        ]
+      ],
+      "source_sha256": "f5c1fc7ad6c9751cec8e7f9ec272f2f1cfffd157aece04fcb47ac2ca85cd79e1",
+      "sha256": "08d501d00fdc2805a82c40c0d02ff5dbd7561c90589a7c60e3d6f11602694950",
+      "size": [
+        320,
+        240
+      ],
+      "colors": 77,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "red_house_turned",
+      "path": "res://art/received/village/red_house_turned.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/red_house_quarter_turn.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/red_house_quarter_turn.png",
+        "res://art/world/houses_v1/red_house_quarter_turn.png"
+      ],
+      "anchor": [
+        158.4267,
+        136.0301
+      ],
+      "footprint": [
+        [
+          182.748,
+          209.7362
+        ],
+        [
+          9.5591,
+          116.8024
+        ],
+        [
+          144.2616,
+          60.1876
+        ],
+        [
+          297.1381,
+          157.3942
+        ]
+      ],
+      "source_sha256": "d32d94bd8e0b969bd110136109386620da4a6d6c064e793e530469d36da87f62",
+      "sha256": "829d7c0a08a1514a26b452ef44a38bb9e14f54f7d162852ac0757dc375c662d2",
+      "size": [
+        304,
+        224
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.88,
+      "display_scale": 1.0,
+      "id": "bakery",
+      "path": "res://art/received/village/bakery.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/bakery.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/bakery.png",
+        "res://art/world/village_buildings_v1/bakery.png"
+      ],
+      "anchor": [
+        121.3047,
+        156.4562
+      ],
+      "footprint": [
+        [
+          122.125,
+          212.3934
+        ],
+        [
+          4.0,
+          157.553
+        ],
+        [
+          123.2188,
+          98.3254
+        ],
+        [
+          235.875,
+          157.553
+        ]
+      ],
+      "source_sha256": "8f836879d446fe65c3e1118c20a2530348ca7a6f8aec0b8bd6ab528ba21fe0ae",
+      "sha256": "8bab864c6d5ccc269a8a8da26485ba6db9394a7d5e93fe336652d16fd5481e18",
+      "size": [
+        240,
+        224
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "granary",
+      "path": "res://art/received/village/granary.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/granary.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/granary.png",
+        "res://art/world/village_buildings_v1/granary.png"
+      ],
+      "anchor": [
+        135.3351,
+        170.873
+      ],
+      "footprint": [
+        [
+          109.0202,
+          226.4974
+        ],
+        [
+          4.9569,
+          177.4523
+        ],
+        [
+          158.0616,
+          103.2865
+        ],
+        [
+          269.3017,
+          176.256
+        ]
+      ],
+      "source_sha256": "b8a37ed212e54da6f1d5746419fb30770b36b9710fd410ab00c643eef80ff8f3",
+      "sha256": "971769bbc061c168443085fdac39515dfacfcffe73be6fc2ce62f8ed6589e64b",
+      "size": [
+        280,
+        240
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.88,
+      "display_scale": 1.0,
+      "id": "stable",
+      "path": "res://art/received/village/stable.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/stable.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/stable.png",
+        "res://art/world/village_buildings_v1/stable.png"
+      ],
+      "anchor": [
+        144.8653,
+        150.7042
+      ],
+      "footprint": [
+        [
+          156.0269,
+          214.4762
+        ],
+        [
+          14.0741,
+          138.9793
+        ],
+        [
+          138.8552,
+          80.6408
+        ],
+        [
+          270.5051,
+          168.7205
+        ]
+      ],
+      "source_sha256": "ceecb685ab484df65c8b5aa3f5c839a6a493d0b0939fa9d537d2ad3c097616b8",
+      "sha256": "adcf795d8e662207de8f2022edd33953ba8244bd3dd6785476abdf79bd91de9d",
+      "size": [
+        280,
+        232
+      ],
+      "colors": 79,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "moss_cottage_rear",
+      "path": "res://art/received/village/moss_cottage_rear.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/moss_cottage_rear.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/moss_cottage_rear.png",
+        "res://art/world/village_houses_v2/moss_cottage_rear.png"
+      ],
+      "anchor": [
+        147.0223,
+        193.28
+      ],
+      "footprint": [
+        [
+          147.0223,
+          273.08
+        ],
+        [
+          3.162,
+          191.88
+        ],
+        [
+          147.0223,
+          116.28
+        ],
+        [
+          290.8826,
+          191.88
+        ]
+      ],
+      "source_sha256": "43fe3e415e631a55282f732f43727e227eb17c0ba27a38edef811aae2b423cbc",
+      "sha256": "67e16b0c2293758b1a30fd0ab349821105e1e7437f9f79a9928a11767458e617",
+      "size": [
+        296,
+        288
+      ],
+      "colors": 80,
+      "alpha_threshold": 220,
+      "roof_variants": {
+        "597d9c": {
+          "path": "res://art/received/village/moss_cottage_rear_blue.png",
+          "sha256": "1ee044b77707cdba9e444c935d6e01d92a7160b2f1aa5a5c1e238e91de5e3cf0",
+          "roof_pixels": 18167
+        },
+        "ad6547": {
+          "path": "res://art/received/village/moss_cottage_rear_terracotta.png",
+          "sha256": "601344472c75b50a3963a9ed583916aa853e4689f13e33116cb3c88dfbf42797",
+          "roof_pixels": 18167
+        },
+        "bc934d": {
+          "path": "res://art/received/village/moss_cottage_rear_ochre.png",
+          "sha256": "28e6b2d83f7fd1bef1550b52dd55383e5044d515936743a554ae876de9693cda",
+          "roof_pixels": 18167
+        }
+      }
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "bakery_stall_front",
+      "path": "res://art/received/village/bakery_stall_front.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/bakery_front.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/bakery_front.png",
+        "res://art/world/market_stalls_v3/bakery_front.png"
+      ],
+      "anchor": [
+        78.6804,
+        99.9395
+      ],
+      "footprint": [
+        [
+          82.1701,
+          135.8669
+        ],
+        [
+          3.0694,
+          99.2742
+        ],
+        [
+          82.8348,
+          60.0202
+        ],
+        [
+          146.6471,
+          104.5968
+        ]
+      ],
+      "source_sha256": "3e3530933b75fd1e4eb3272983e01389b45181e3a933d9becfa8ad937ee0b3d6",
+      "sha256": "f4cd1d8ea00011cf115df5af7502c9bb8eef2e1fb7ae75f37baf0c3aee1f5b17",
+      "size": [
+        144,
+        144
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "bakery_stall_rear",
+      "path": "res://art/received/village/bakery_stall_rear.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/bakery_rear.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/bakery_rear.png",
+        "res://art/world/market_stalls_v3/bakery_rear.png"
+      ],
+      "anchor": [
+        76.7282,
+        109.8834
+      ],
+      "footprint": [
+        [
+          51.6233,
+          147.8762
+        ],
+        [
+          8.2602,
+          112.7472
+        ],
+        [
+          94.9864,
+          68.4541
+        ],
+        [
+          152.043,
+          110.4561
+        ]
+      ],
+      "source_sha256": "b8b5f92f4bc3241e9050753156c72690e7d220542a8c2f1a44d6e2cf6071a5e0",
+      "sha256": "a9e1b86cb3f1ceea04aaae3c578e4fbfba3ea13fa9d3ca25036f765c66f5440c",
+      "size": [
+        160,
+        160
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "cloth_stall_front",
+      "path": "res://art/received/village/cloth_stall_front.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/cloth_front.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/cloth_front.png",
+        "res://art/world/market_stalls_v3/cloth_front.png"
+      ],
+      "anchor": [
+        79.3333,
+        102.662
+      ],
+      "footprint": [
+        [
+          83.0175,
+          140.338
+        ],
+        [
+          2.3158,
+          102.3099
+        ],
+        [
+          85.8246,
+          62.169
+        ],
+        [
+          146.1754,
+          105.831
+        ]
+      ],
+      "source_sha256": "50c5e84ada23761d14361ee761ac9df49a58139a39d2de142e692595b85a062b",
+      "sha256": "cc4c286011d071e789af42d12205d2e44d710b8faf2faa79cb96563a1ff6a7b3",
+      "size": [
+        152,
+        152
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "cloth_stall_rear",
+      "path": "res://art/received/village/cloth_stall_rear.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/cloth_rear.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/cloth_rear.png",
+        "res://art/world/market_stalls_v3/cloth_rear.png"
+      ],
+      "anchor": [
+        86.4603,
+        102.4352
+      ],
+      "footprint": [
+        [
+          90.2661,
+          141.2435
+        ],
+        [
+          13.424,
+          99.171
+        ],
+        [
+          84.4667,
+          64.3523
+        ],
+        [
+          157.6842,
+          104.9741
+        ]
+      ],
+      "source_sha256": "02293ee97080347d37fa44eeaf73aeda6ecd7bfceff67c3f4629c9a72048b915",
+      "sha256": "a8c2247b0a8cf1bae03ea03b8c9485985349f1abaafec2ff740755424f0bcd19",
+      "size": [
+        160,
+        152
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "fish_stall_front",
+      "path": "res://art/received/village/fish_stall_front.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/fish_front.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/fish_front.png",
+        "res://art/world/market_stalls_v3/fish_front.png"
+      ],
+      "anchor": [
+        80.0585,
+        97.9803
+      ],
+      "footprint": [
+        [
+          87.8266,
+          134.9234
+        ],
+        [
+          2.2047,
+          97.6351
+        ],
+        [
+          84.3741,
+          60.3468
+        ],
+        [
+          145.8286,
+          99.0161
+        ]
+      ],
+      "source_sha256": "efed8a6ee3ba513d40cc765635c867e01755425fbf1a6c921469ee78b0221602",
+      "sha256": "9643f7b63e3cba3bc8c01085874934d4f7fceea0a5a6675b2cbbcc0571411031",
+      "size": [
+        152,
+        152
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "fish_stall_rear",
+      "path": "res://art/received/village/fish_stall_rear.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/fish_rear.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/fish_rear.png",
+        "res://art/world/market_stalls_v3/fish_rear.png"
+      ],
+      "anchor": [
+        87.1438,
+        112.2479
+      ],
+      "footprint": [
+        [
+          80.0392,
+          152.7645
+        ],
+        [
+          13.2169,
+          112.2479
+        ],
+        [
+          97.7048,
+          70.9669
+        ],
+        [
+          157.6145,
+          113.0124
+        ]
+      ],
+      "source_sha256": "a50fe5c1ef860d8308543be6b3c13dde39f4bfdbc54b075c2f116ee6b71358c5",
+      "sha256": "4bd79895234a9ac4f5b737fc8efdb951922b42493f993216db096096a4f94f7a",
+      "size": [
+        168,
+        160
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "plaza_crates",
+      "path": "res://art/received/village/plaza_crates.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/plaza_crates.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/plaza_crates.png",
+        "res://art/world/plaza_props_v1/plaza_crates.png"
+      ],
+      "anchor": [
+        39.2969,
+        42.167
+      ],
+      "footprint": [
+        [
+          41.5625,
+          56.81
+        ],
+        [
+          5.3125,
+          43.5125
+        ],
+        [
+          41.25,
+          25.7826
+        ],
+        [
+          69.0625,
+          42.5627
+        ]
+      ],
+      "source_sha256": "4c18d685ce685444f2c822c2ca26004cac0429a627510a10fdd720179099e6c5",
+      "sha256": "808fd55a993cd589e118668c65d99d482e9109d354dbf5e881ebd064453e9640",
+      "size": [
+        80,
+        64
+      ],
+      "colors": 66,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "oak_bench",
+      "path": "res://art/received/village/oak_bench.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/oak_bench.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/oak_bench.png",
+        "res://art/world/village_gathering_v1/oak_bench.png"
+      ],
+      "anchor": [
+        36.9295,
+        48.137
+      ],
+      "footprint": [
+        [
+          17.0376,
+          62.419
+        ],
+        [
+          5.2143,
+          58.2232
+        ],
+        [
+          56.6617,
+          32.4026
+        ],
+        [
+          68.8045,
+          39.5033
+        ]
+      ],
+      "source_sha256": "22273d2871a1d2c4633e4074b9ba850480a09a8894a2bd4d9db800e4d6be8bc3",
+      "sha256": "3e913270effafe1df6dcc78c358dd21a4019cb49585b7b8ce83fcd2f9a52f675",
+      "size": [
+        80,
+        72
+      ],
+      "colors": 70,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 0.55,
+      "id": "street_lantern",
+      "path": "res://art/received/village/street_lantern.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/street_lantern.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/street_lantern.png",
+        "res://art/world/village_gathering_v1/street_lantern.png"
+      ],
+      "anchor": [
+        24.7233,
+        129.779
+      ],
+      "footprint": [
+        [
+          24.7233,
+          137.1679
+        ],
+        [
+          8.8466,
+          130.1149
+        ],
+        [
+          24.7233,
+          121.7184
+        ],
+        [
+          40.6,
+          130.1149
+        ]
+      ],
+      "source_sha256": "1fb5c1836bcce8bc270848097517a67e35e9d17ea455028c6b3299e8ebb306e1",
+      "sha256": "cc3e327b2abdac8697622b161269eb1345817f6b00f1462b92d090c1b8f121be",
+      "size": [
+        72,
+        144
+      ],
+      "colors": 77,
+      "alpha_threshold": 220,
+      "emission_mask": "res://art/received/village/street_lantern_glow.png"
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "noticeboard",
+      "path": "res://art/received/village/noticeboard.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/village_noticeboard.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/village_noticeboard.png",
+        "res://art/world/village_gathering_v1/village_noticeboard.png"
+      ],
+      "anchor": [
+        44.2514,
+        83.5219
+      ],
+      "footprint": [
+        [
+          72.6403,
+          95.9235
+        ],
+        [
+          12.3139,
+          78.207
+        ],
+        [
+          15.8625,
+          71.1204
+        ],
+        [
+          76.1889,
+          88.8369
+        ]
+      ],
+      "source_sha256": "01c0297034e9a4aa3b1f08571b6be6807b4ebe77763c868098ca29103e9ccb16",
+      "sha256": "5167823164f5a38ff1cd9a94e272400b90277c9e59e76c4fa26f3c19aab3c176",
+      "size": [
+        88,
+        104
+      ],
+      "colors": 76,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 0.4,
+      "id": "road_sign",
+      "path": "res://art/received/village/road_sign.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/road_sign.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/road_sign.png",
+        "res://art/world/route_props_v1/road_sign.png"
+      ],
+      "anchor": [
+        64.28,
+        163.1518
+      ],
+      "footprint": [
+        [
+          64.4657,
+          170.3944
+        ],
+        [
+          47.3808,
+          163.7089
+        ],
+        [
+          65.9513,
+          154.795
+        ],
+        [
+          79.3221,
+          163.7089
+        ]
+      ],
+      "source_sha256": "02c7557a8655378cb51e6402ba663099e0932ee0a4a2c451416454361073c9c8",
+      "sha256": "15a81de7d37a839d1d9c9e2ccd4d5134dc3496fdb943cd606f76f09ed5b6c424",
+      "size": [
+        128,
+        184
+      ],
+      "colors": 79,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "wood_fence",
+      "path": "res://art/received/village/wood_fence.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/wood_fence.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/wood_fence.png",
+        "res://art/world/route_props_v1/wood_fence.png"
+      ],
+      "anchor": [
+        35.9754,
+        47.0339
+      ],
+      "footprint": [
+        [
+          9.7947,
+          61.1932
+        ],
+        [
+          4.2094,
+          58.4134
+        ],
+        [
+          61.4579,
+          33.0483
+        ],
+        [
+          68.4394,
+          35.4806
+        ]
+      ],
+      "source_sha256": "22608302070b24d37c465024afb487ee920331bebc33d0baa7c08f804ccf6867",
+      "sha256": "ea59afb9b6851be3bccbb9c6fba9f5a5245ef5b4337e1a67b7ef42821d953fca",
+      "size": [
+        80,
+        72
+      ],
+      "colors": 74,
+      "alpha_threshold": 220
+    },
+    {
+      "collision_inset": 0.97,
+      "display_scale": 1.0,
+      "id": "village_flower_bush",
+      "path": "res://art/received/village/village_flower_bush.png",
+      "source": "docs/그림_작업/받은그림/마을_원본_복구/flower_bush.png",
+      "aliases": [
+        "res://docs/그림_작업/받은그림/마을_원본_복구/flower_bush.png",
+        "res://art/world/route_props_v1/flower_bush.png"
+      ],
+      "anchor": [
+        26.1726,
+        24.3037
+      ],
+      "footprint": [
+        [
+          26.1726,
+          31.601
+        ],
+        [
+          6.0951,
+          24.5183
+        ],
+        [
+          26.1726,
+          16.5771
+        ],
+        [
+          46.2502,
+          24.5183
+        ]
+      ],
+      "source_sha256": "a6cb91589986977416818e619e1e18f572436da138dec7f77837bb91677c0156",
+      "sha256": "4f468c5c6d36bcf534affbe4191918cccc50d05af709839830e3b8d1fbd2fb3e",
+      "size": [
+        56,
+        40
+      ],
+      "colors": 76,
+      "alpha_threshold": 220
     }
   ]
 }

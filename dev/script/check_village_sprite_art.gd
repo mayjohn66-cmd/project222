@@ -116,9 +116,9 @@ func run() -> void:
 		var outside := view.cell_to_world(center + Vector2(0.0,-4.0))
 		check(not contains_body(outside,body),"approach outside base remains walkable")
 	check(bool(item(bodies[1]).get("village_mirrored",false)),"herb stall retains saved mirror direction")
-	check(VillageSpriteArt.row_for("res://art/world/village_gathering_v1/oak_bench.png").is_empty(),"missing bench is recorded, not replaced with unrelated art")
+	check(not VillageSpriteArt.row_for("res://art/world/village_gathering_v1/oak_bench.png").is_empty(),"recovered bench uses its own artwork")
 	var cottage: StaticBody2D = world.get_node("VillageExtraHouses/EastCottage")
-	check(VillageSpriteArt.row_for(VillageSpriteArt.sprite_of(cottage).art_path).is_empty(),"unpainted rear cottage doesn't silently use front image")
+	check(VillageSpriteArt.row_for(VillageSpriteArt.sprite_of(cottage).art_path).get("id","") == "moss_cottage_rear","recovered rear cottage uses rear artwork")
 	check(item(house).get("village_sprite_id","") == "moss_cottage_front","retained front cottage connects")
 	for body in world.get_node("VillageExtraHouses").get_children():
 		if not body is StaticBody2D or bool(body.get_meta("settlement_layout_removed",false)): continue

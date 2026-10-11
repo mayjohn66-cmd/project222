@@ -6,6 +6,16 @@ static var _rows: Dictionary = {}
 static var _loaded := false
 static var _mirrors: Dictionary = {}
 
+static func texture_for(path: String, mirrored: bool) -> Texture2D:
+	var tex := ReceivedWorldArt.texture(path)
+	if tex == null or not mirrored: return tex
+	if not _mirrors.has(path):
+		var image := tex.get_image()
+		if image.is_compressed(): image.decompress()
+		image.flip_x()
+		_mirrors[path] = ImageTexture.create_from_image(image)
+	return _mirrors[path]
+
 static func row_for(path: String) -> Dictionary:
 	if not _loaded:
 		_loaded = true
@@ -45,16 +55,11 @@ static func render(view: StoreView3D, key: String, body: StaticBody2D,
 		right = maxf(right,p.x)
 	var mirrored := art.scale.x < 0.0
 	if mirrored:
-		if not _mirrors.has(path):
-			var image := tex.get_image()
-			if image.is_compressed(): image.decompress()
-			image.flip_x()
-			_mirrors[path] = ImageTexture.create_from_image(image)
-		tex = _mirrors[path]
+		tex = texture_for(path,true)
 		anchor.x = tex.get_width() - anchor.x
 		for i in points.size(): points[i].x = tex.get_width() - points[i].x
 	# 64×32 등각 칸의 화면 폭에 맞춘 균일 배율. 원본의 종횡비를 바꾸지 않는다.
-	var scale_factor := ((hi.x-lo.x)+(hi.y-lo.y)) * 32.0 / maxf(right-left,1.0)
+	var scale_factor := ((hi.x-lo.x)+(hi.y-lo.y)) * 32.0 / maxf(right-left,1.0) * float(row.get("display_scale",1.0))
 	var base := (lo+hi)*0.5
 	var footprint := PackedVector2Array()
 	for p in points:
@@ -68,12 +73,18 @@ static func render(view: StoreView3D, key: String, body: StaticBody2D,
 	item["village_sprite_path"] = path
 	item["village_footprint"] = footprint
 	item["village_mirrored"] = mirrored
+	if row.has("emission_mask"):
+		var mask := texture_for(str(row.emission_mask),mirrored)
+		if mask != null:
+			item.material.set_shader_parameter("emission_texture",mask)
+			item.material.set_shader_parameter("use_emission",true)
+			item.material.set_shader_parameter("emission_strength",0.85)
 	# 지붕의 돌출은 보행을 막지 않는다. 빛과 마스크는 동일한 그림을 사용한다.
 	if view.sync_collision:
 		var collider := body.get_node_or_null(VillageMirror.COLLISION_3D) as CollisionPolygon2D
 		if collider != null:
 			var polygon := PackedVector2Array()
 			for p in footprint:
-				polygon.append(body.to_local(view.cell_to_world(base+(p-base)*0.97)))
+				polygon.append(body.to_local(view.cell_to_world(base+(p-base)*float(row.get("collision_inset",0.97)))))
 			collider.polygon = polygon
 	return {"rect":rect,"footprint":footprint}

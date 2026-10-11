@@ -881,6 +881,9 @@ func sync_objects(world: Node) -> void:
 			rule = SeasonStyle.adjust_rule(rule, season if season != "" else "spring", obj_seed)
 			var key: String = "vil%d" % body.get_instance_id()
 			var sig: String = "%s|%s|%s|%s" % [str(rect.position.snapped(Vector2(0.02, 0.02))), str(rect.size.snapped(Vector2(0.02, 0.02))), text, season]
+			var village_art := VillageSpriteArt.sprite_of(body)
+			if village_art != null:
+				sig += "|%s|%s" % [str(village_art.scale.x < 0.0),str(village_art.get_meta("roof_color",""))]
 			seen[key] = true
 			parts.append(sig)
 
