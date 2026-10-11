@@ -1,0 +1,172 @@
+{
+  "assets": [
+    {
+      "path": "res://art/received/fishing/shore_corner_nx_ny.png",
+      "sha256": "e8cd3da15cec8ba8ff0f12ef1e5ad55a288b7f95a885df81e109c6f6551ce2d2",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_corner_ny_px.png",
+      "sha256": "be6e8ac3931e836ea7dc95a3fc0da2e7bb1e98133bc1ebcf31a31896a1da9c39",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_corner_px_py.png",
+      "sha256": "624d620c3339019d9dac7a28d94aff4c11f32c65383df0c3f961c63b2138516e",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_corner_py_nx.png",
+      "sha256": "642008bef5d8d5b811e2920ec8ecadadc0f52caa1c82d913d55268ca4e299854",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_nx.png",
+      "sha256": "33385416cc135282f4c16405e9a8e39595b4c219c88c9a30b612b6e323063d4a",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_nx_ny.png",
+      "sha256": "cfc0c965be64ee43d32d2e221518686c45aae49ff4ccf6a513b637ecf4708ee9",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_nx_ny_px.png",
+      "sha256": "682a59f238219506599352df9ef6386836e12e9766e989216d33c283054f8a03",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_nx_ny_py.png",
+      "sha256": "c08ae98c6d278e0083e2cf1ed57f63973e0f84b6ea575b872fe1c6dfd515fac6",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_nx_px.png",
+      "sha256": "981e6b708bc4ef13c1e2c167e361715a6786ef1dd869d1d15147e33477d80ba5",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_nx_px_py.png",
+      "sha256": "5304e875a95f4419d08c6076b6c732c1e9d4203e563ffec7dcd0ba7e301fc17a",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_nx_py.png",
+      "sha256": "aa1db94cd099a368a684f12d979f2bdd828b78ce83db7b5a804d391ef5ce987a",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_ny.png",
+      "sha256": "43944c870afb01cc90e1df1ecb4f4acfd2c6698ba6d77a83c3ea6e5384a69243",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_ny_px.png",
+      "sha256": "ee2058ff563e69eba31fb998afd4a9602a799027620fc044cd3678b28f378a53",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_ny_px_py.png",
+      "sha256": "634b4d7b00554810c6841ab3e6ff475926a40b94a60307896bf1794a2f790e61",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_ny_py.png",
+      "sha256": "531463353bc8180fedd24060e7ec4518ec1b83b5c203e3d8f9237b35ef188d41",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_px.png",
+      "sha256": "65e6f9a182bec5dc197171c3cdeafa790a0c65cdc5544156fd5d7ce69cd4ba88",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_px_py.png",
+      "sha256": "0c0e5139c5a94a62c260f15b8260bd57444f51bb1b17ee1692610736ecbdf9cb",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/shore_py.png",
+      "sha256": "218722d0f419f2fa31d8e6eaaa6324ee9f651c3abd22a3defca25a8a3c841276",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/water_1.png",
+      "sha256": "42653e436db760a2b81069664ee8c986846749fe932941160367b73026a807df",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/water_2.png",
+      "sha256": "16e5bffad1a36696efb9cef9be421d0ad84fe0d249e31e8e7c665dda26f66e94",
+      "size": [
+        64,
+        32
+      ]
+    },
+    {
+      "path": "res://art/received/fishing/water_3.png",
+      "sha256": "e503d7e3f386c9d4c8d765041e7220d1586ab8df5253c3059868b16d504d8ee6",
+      "size": [
+        64,
+        32
+      ]
+    }
+  ]
+}

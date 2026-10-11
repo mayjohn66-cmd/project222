@@ -149,7 +149,7 @@ func _visitor(owner: String) -> Node2D:
 		if is_instance_valid(actor) and not actor.is_queued_for_deletion() and actor.get_meta("fishing_owner", "") == owner:
 			if actor.get_meta("fishing_location", "") != location:
 				actor.set_meta("fishing_location", location)
-				actor.set_destination(spots.position_for(location)+Vector2(-52,-32),"물가에서 이야기하기")
+				actor.set_destination(spots.visitor_position_for(location),"물가에서 이야기하기")
 			return actor
 	var destination := spots.position_for(location)
 	if destination == Vector2.INF: return null
@@ -160,10 +160,9 @@ func _visitor(owner: String) -> Node2D:
 	npc.set_meta("fishing_owner", owner)
 	npc.set_meta("fishing_location", location)
 	world.get_node("Actors").add_child(npc)
-	npc.global_position = destination + Vector2(-150, -40)
+	npc.global_position = spots.visitor_spawn_for(location)
 	npc.title.text = _owner_name(owner) + " · 물가 이야기 [E]"
-	var offsets := {"neighbor_bread":Vector2(-52,-32),"doyun":Vector2(24,-50),"child_berries":Vector2(80,-15)}
-	npc.set_destination(destination + offsets.get(owner,Vector2(-52,-32)), "물가에서 이야기하기")
+	npc.set_destination(spots.visitor_position_for(location), "물가에서 이야기하기")
 	owned_visitors.append(npc)
 	return npc
 func _owner_name(owner: String) -> String:
@@ -314,12 +313,15 @@ func cast() -> void:
 	if not FishingService.has_rod() or not FishingRecords.done("fishing_rod") or not clock_running():
 		_notice("정비와 정산을 마치고 시간이 흐를 때 낚싯대를 드리울 수 있습니다.")
 		return
+	if not spots.can_cast_from(player.global_position, location):
+		_notice("나무 부두 끝으로 이동한 뒤 낚싯대를 드리워 주세요.")
+		return
 	mode = "waiting"
 	_lock(false)
 	remaining = rng.randf_range(float(FishingData.data()["settings"]["bite_min_seconds"]), float(FishingData.data()["settings"]["bite_max_seconds"]))
 	panel.clear(str(FishingData.entry(location)["name"]))
 	panel.shade.color.a = 0.0
-	player.last_direction = Vector2.DOWN
+	player.last_direction = spots.facing_for(location)
 	panel.frame.anchor_left = 0.65
 	panel.frame.anchor_right = 0.98
 	panel.frame.anchor_top = 0.34

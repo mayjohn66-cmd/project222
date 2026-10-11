@@ -329,11 +329,18 @@ func _cutout_material(texture: Texture2D) -> ShaderMaterial:
 # 3D 벽과 건물 밑동에 식물이 파묻히지 않게 한다. 바닥 판이 바뀌면 다시 계산한다.
 func _floor_sig() -> String:
 	var fl: Node = view.floor_node
-	return "" if fl == null else "%s%s%s" % [str(fl.get_store_rect()), str(fl.get_production_rect()), str(fl.get_corridor_rect())]
+	var fishing = view.world.get_node_or_null("FishingSpots") if view.world != null else null
+	var fishing_count: int = fishing.points.size() if fishing != null else 0
+	return "" if fl == null else "%s%s%s|fish:%d" % [str(fl.get_store_rect()), str(fl.get_production_rect()), str(fl.get_corridor_rect()), fishing_count]
 
 
 func _blockers() -> Array:
 	var out: Array = _footprints.values()
+	var fishing = view.world.get_node_or_null("FishingSpots") if view.world != null else null
+	if fishing != null:
+		for entry in fishing.points.values():
+			for group in entry["groups"].values():
+				for cell in group: out.append(Rect2(Vector2(cell)-Vector2(0.5,0.5),Vector2.ONE))
 	var fl: Node = view.floor_node
 
 	if fl != null:

@@ -1,0 +1,4 @@
+[gd_scene load_steps=2 format=3]
+[ext_resource type="Script" path="res://dev/script/check_fishing_tiles.gd" id="1"]
+[node name="FishingTilesCheck" type="Node"]
+script = ExtResource("1")
