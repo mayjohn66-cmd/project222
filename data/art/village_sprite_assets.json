@@ -1,0 +1,254 @@
+{
+  "assets": [
+    {
+      "id": "market_stall",
+      "path": "res://art/received/village/market_stall.png",
+      "source": "art/world/village_decor_v6/market_stall_frame_tile_aligned.png",
+      "aliases": [
+        "res://art/world/village_decor_v6/market_stall_frame_tile_aligned.png",
+        "res://art/world/village_decor_v6/market_stall_quarter_turn.png"
+      ],
+      "anchor": [
+        99.7409,
+        158.7163
+      ],
+      "footprint": [
+        [
+          94.9443,
+          190.0816
+        ],
+        [
+          27.7913,
+          157.8531
+        ],
+        [
+          104.5376,
+          127.351
+        ],
+        [
+          171.6905,
+          159.5796
+        ]
+      ],
+      "source_sha256": "d66a8534c1b5542d13d55952d14cc75933e94d62f2bb032a9fdbc6f515e2e7aa",
+      "sha256": "53db4ed15b5ed96815c8feb309a02b13d02947829c0fe2adcd0c57e22ca51661",
+      "size": [
+        232,
+        200
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "id": "herb_stall",
+      "path": "res://art/received/village/herb_stall.png",
+      "source": "art/world/plaza_props_v1/herb_stall_tile_aligned_v4.png",
+      "aliases": [
+        "res://art/world/plaza_props_v1/herb_stall_tile_aligned_v4.png",
+        "res://art/world/plaza_props_v1/herb_stall_roof_diamond_v6.png"
+      ],
+      "anchor": [
+        95.9513,
+        170.9973
+      ],
+      "footprint": [
+        [
+          82.2755,
+          201.4752
+        ],
+        [
+          23.9738,
+          172.9811
+        ],
+        [
+          109.627,
+          140.5194
+        ],
+        [
+          167.9288,
+          169.0135
+        ]
+      ],
+      "source_sha256": "cb9d76980664c9293f319af7eb6d1d325a58d401002ef8c29b5ab9a685819021",
+      "sha256": "d224fe05381d9b4a2878da94e6c61bf3203b4cff3813d44a7a406c97857e5e57",
+      "size": [
+        200,
+        208
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "id": "supply_cart",
+      "path": "res://art/received/village/supply_cart.png",
+      "source": "art/world/plaza_props_v1/supply_cart_tile_aligned_v2.png",
+      "aliases": [
+        "res://art/world/plaza_props_v1/supply_cart_tile_aligned_v2.png",
+        "res://art/world/plaza_props_v1/supply_cart_tile_aligned_v3.png"
+      ],
+      "anchor": [
+        81.4243,
+        52.0481
+      ],
+      "footprint": [
+        [
+          68.682,
+          76.3762
+        ],
+        [
+          33.4892,
+          58.1301
+        ],
+        [
+          94.1665,
+          27.7199
+        ],
+        [
+          129.3594,
+          45.9661
+        ]
+      ],
+      "source_sha256": "8cb19c303095ef0b88850a05339727bb4ecf6a907ad4fcbe6157dda85fa48922",
+      "sha256": "63696fc12888a8a8027b4fc091ad8a1d948250381dbcd6eccd63b2d6032041d4",
+      "size": [
+        144,
+        96
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "id": "moss_cottage_front",
+      "path": "res://art/received/village/moss_cottage_front.png",
+      "source": "art/world/village_houses_v2/moss_cottage.png",
+      "aliases": [
+        "res://art/world/village_houses_v2/moss_cottage.png",
+        "res://art/world/village_houses_v2/moss_cottage_180.png"
+      ],
+      "anchor": [
+        148.2791,
+        202.3901
+      ],
+      "footprint": [
+        [
+          148.2791,
+          274.2786
+        ],
+        [
+          4.2791,
+          202.3901
+        ],
+        [
+          148.2791,
+          130.5015
+        ],
+        [
+          292.2791,
+          202.3901
+        ]
+      ],
+      "source_sha256": "39de19e3b82cf22add2c70e8a6c17cdab6693993010d293fc867924a49c1be5b",
+      "sha256": "5f98e6cafae9ea65a4bbb73c3ff7d29926731a465fd9270cf74a299010d13202",
+      "size": [
+        296,
+        280
+      ],
+      "colors": 80,
+      "alpha_threshold": 220,
+      "roof_variants": {
+        "597d9c": {
+          "path": "res://art/received/village/moss_cottage_front_blue.png",
+          "sha256": "1e40185ffc53f558128014222452a3291447975879f3ebd030c121cc8e2cb6c2",
+          "roof_pixels": 16965
+        },
+        "ad6547": {
+          "path": "res://art/received/village/moss_cottage_front_terracotta.png",
+          "sha256": "9c5afecf12ca00ac791f94a9939056c18f53ebe7bc6a0b6b21d518b2aae29ea5",
+          "roof_pixels": 16965
+        },
+        "bc934d": {
+          "path": "res://art/received/village/moss_cottage_front_ochre.png",
+          "sha256": "24a736a637f3787d64adc78df7b3c4f16e8eb2965c19bd51fe3c4affa01880fa",
+          "roof_pixels": 16965
+        }
+      }
+    },
+    {
+      "id": "ochre_townhouse_front",
+      "path": "res://art/received/village/ochre_townhouse_front.png",
+      "source": "art/world/village_houses_v2/ochre_townhouse.png",
+      "aliases": [
+        "res://art/world/village_houses_v2/ochre_townhouse.png"
+      ],
+      "anchor": [
+        147.7786,
+        203.199
+      ],
+      "footprint": [
+        [
+          147.7786,
+          275.2794
+        ],
+        [
+          4.0,
+          203.199
+        ],
+        [
+          147.7786,
+          131.1186
+        ],
+        [
+          291.5573,
+          203.199
+        ]
+      ],
+      "source_sha256": "f639f0f81bdc408ad6ec0181f964632c8ec330471fbab8f6472f1666f7dbb98c",
+      "sha256": "f4bd4133a93a9b2d000d65df287d411eeba40bc981eb1badddf17c1a76174907",
+      "size": [
+        296,
+        280
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    },
+    {
+      "id": "ochre_townhouse_rear",
+      "path": "res://art/received/village/ochre_townhouse_rear.png",
+      "source": "art/world/village_houses_v2/ochre_townhouse_rear.png",
+      "aliases": [
+        "res://art/world/village_houses_v2/ochre_townhouse_rear.png",
+        "res://art/world/village_houses_v2/ochre_townhouse_rear_aligned.png"
+      ],
+      "anchor": [
+        149.0332,
+        192.724
+      ],
+      "footprint": [
+        [
+          155.6983,
+          268.0
+        ],
+        [
+          5.0664,
+          192.724
+        ],
+        [
+          142.3681,
+          117.4479
+        ],
+        [
+          293.0,
+          192.724
+        ]
+      ],
+      "source_sha256": "7e6f5de046aeb3e3379e1582fd7d1700bb3ce666d7d9d4f2e23575e36a4b3ea6",
+      "sha256": "a4e13df4eaf3555642d7141da7d43f862740251c7793841d8433401f7f9ef28b",
+      "size": [
+        304,
+        272
+      ],
+      "colors": 80,
+      "alpha_threshold": 220
+    }
+  ]
+}

@@ -986,6 +986,12 @@ func _create_object(key: String, rect: Rect2, rule: Dictionary, sprite_height_px
 	if body != null and view.sync_collision:
 		_apply_collision(body, lo, hi)
 
+	var pixel_result := VillageSpriteArt.render(view, key + "a", body, lo, hi, sig)
+	if not pixel_result.is_empty():
+		_footprints[key] = pixel_result.rect
+		_keys[key + "a"] = true
+		return
+
 	if kind == "prop" and ReceivedWorldArt.nature(view, key + "a", lo, hi, rule, sig):
 		_keys[key + "a"] = true
 		return
