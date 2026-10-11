@@ -1,11 +1,11 @@
 npc_id,display_name,portrait_key,static_sprite,direction,runtime_connected,notes
-naru,타블렌,naru,픽셀_정리/naru_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
-doyun,코르빈,doyun,픽셀_정리/doyun_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
-sora,이세르,sora,픽셀_정리/sora_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
-neighbor_bread,오렐,neighbor_bread,픽셀_정리/neighbor_bread_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
-child_berries,피니아,child_berries,픽셀_정리/child_berries_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
-traveler_water,라슈,traveler_water,픽셀_정리/traveler_water_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
-gatherer_herbs,엘미,gatherer_herbs,픽셀_정리/gatherer_herbs_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
-miner_ore,바르크,miner_ore,픽셀_정리/miner_ore_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
-healer_moss,세이나,healer_moss,픽셀_정리/healer_moss_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
-delvin,델빈,delvin,픽셀_정리/delvin_south_west_96.png,south-west,false,보정 후보96x96; 기존64x64 축소본은 사용 보류; 게임 표시 배율/방향 검증 후속
+naru,타블렌,naru,픽셀_정리/naru_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속
+doyun,코르빈,doyun,픽셀_정리/doyun_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속
+sora,이세르,sora,픽셀_정리/sora_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속
+neighbor_bread,오렐,neighbor_bread,픽셀_정리/neighbor_bread_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속
+child_berries,피니아,child_berries,픽셀_정리/child_berries_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속
+traveler_water,라슈,traveler_water,픽셀_정리/traveler_water_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속
+gatherer_herbs,엘미,gatherer_herbs,픽셀_정리/gatherer_herbs_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속
+miner_ore,바르크,miner_ore,픽셀_정리/miner_ore_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속
+healer_moss,세이나,healer_moss,픽셀_정리/healer_moss_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속
+delvin,델빈,delvin,픽셀_정리/delvin_south_west_96.png,south-west,true,96x96 보정본 원본 동일 복사; 게임 남서 정지 그림 연결; 8방향·걷기·좌식 그림은 후속

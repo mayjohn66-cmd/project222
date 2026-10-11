@@ -123,7 +123,7 @@ func refresh() -> void:
 		npc.global_position = _guidance_position()
 	if not is_instance_valid(npc):
 		npc = StoryNpc.new()
-		npc.setup({"beat_id": "tutorial", "lines": step["lines"]})
+		npc.setup({"beat_id": "tutorial", "npc_id": NpcPortraits.npc_id_of(SETTINGS.merchant_name), "lines": step["lines"]})
 		get_parent().get_node("Actors").add_child(npc)
 		npc.global_position = _guidance_position()
 		npc.mark.text = SETTINGS.merchant_name + " [E]"

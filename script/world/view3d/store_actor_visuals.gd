@@ -1,13 +1,29 @@
 class_name StoreActorVisuals
 extends RefCounted
-## 역할/직원 ID로 그림을 고른다. 전용 그림이 없거나 앉는 연출이면 기존 모델을 사용한다.
+## 역할/직원 ID로 그림을 고른다. 전용 NPC 그림을 우선하고, 좌식 전용 그림이 없는 앉는 연출은 기존 모델을 사용한다.
 
 
 static func sprite_key(actor: Node, look_key: String) -> String:
 	if bool(actor.get_meta("sitting", false)):
 		return ""
-	if actor.has_meta("look_key"):
+	# 명시된 연출 의상은 일반 손님 역할보다 우선한다. story_npc는 예전 임시 표식이다.
+	if actor.has_meta("look_key") and look_key != "story_npc":
+		if look_key == "backpacker": return "traveler"
+		if not NpcSpriteArt.load_set(look_key).is_empty(): return look_key
 		return look_key if look_key in ActorSpriteFrames.KEYS else ""
+	var named_key := NpcSpriteArt.identity(actor)
+	if not named_key.is_empty(): return named_key
+	if actor is VillageResident:
+		# 대장장이의 개별 그림은 아직 없다. 기존 광부 공용 도트로 임시 표시한다.
+		if actor.resident_id == "village_blacksmith": return "miner"
+		var resident_group := str(actor.get("customer_group_id"))
+		if resident_group.is_empty():
+			var type_id := str(actor.get("customer_type_id"))
+			if ActFourCustomers.TYPES.has(type_id): type_id = str(ActFourCustomers.TYPES[type_id]["source"])
+			resident_group = CustomerTypeData.get_group_id(type_id)
+		return resident_group if resident_group in ActorSpriteFrames.KEYS else "normal"
+	if actor.is_in_group("merchant_npc"): return "collector"
+	if actor.is_in_group("story_npc"): return "normal"
 	if actor.is_in_group("worker"):
 		var employee_id := str(actor.get("employee_id"))
 		return employee_id if employee_id in ActorSpriteFrames.KEYS else ""

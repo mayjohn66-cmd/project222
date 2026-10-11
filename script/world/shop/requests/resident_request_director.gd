@@ -49,7 +49,7 @@ func _prepare_npc(id: String, npc_name: String, lines: Array) -> void:
 		npc = null
 	if not is_instance_valid(npc):
 		npc = StoryNpc.new()
-		npc.setup({"beat_id":id, "lines":lines})
+		npc.setup({"beat_id":id, "npc_id":NpcPortraits.npc_id_of(npc_name), "lines":lines})
 		get_parent().get_node("Actors").add_child(npc)
 		npc.global_position = _guidance_position()
 		npc.mark.text = npc_name + " [E]"

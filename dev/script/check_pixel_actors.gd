@@ -208,12 +208,14 @@ func run() -> void:
 	view._sort_and_update()
 	var lit: PixelActorFigure = view._actors[actor.get_instance_id()].figure
 	var daytime: Color = lit._material.get_shader_parameter("light_tint")
+	var daytime_energy: float = view._env.ambient_light_energy + view._sun.light_energy
 	await capture("day")
 	view.apply_hour(22.0)
 	view._sync_actors(0.016)
 	view._sort_and_update()
 	var nighttime: Color = lit._material.get_shader_parameter("light_tint")
-	check(nighttime.get_luminance() < daytime.get_luminance(), "sprite follows night tint instead of glowing")
+	check(nighttime == Color.WHITE and daytime == Color.WHITE, "sprite avoids double tint; world lights provide time changes")
+	check(view._env.ambient_light_energy + view._sun.light_energy < daytime_energy, "world illumination decreases at night")
 	await capture("night")
 	# A real sorted counter goes in front of one actor and behind another.
 	view.apply_hour(12.0)
