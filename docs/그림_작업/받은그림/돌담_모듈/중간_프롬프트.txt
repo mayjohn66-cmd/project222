@@ -1,0 +1,6 @@
+Use case: stylized-concept.
+Asset type: ONE modular pixel-art stone wall game sprite, MIDDLE repeat segment.
+References: match the warm hand-drawn pixel masonry, limited earthy palette and outline treatment of the pictured well; do not include a well.
+Primary request: a short LOW rough-cut stone wall, one square isometric game cell in length. The run goes upper-left to lower-right, strict 2:1 pixel isometric slope (32 pixels right, 16 pixels down per cell). Short squat segment, NOT a long wall. Gray-beige fieldstones, three stone courses, subtly rounded flat capstones, tiny muted moss at base. Bright readable daylight neutral baked shading, no dramatic shadow.
+Composition: isolated object centered on genuine transparent background. The long visible front masonry face is a parallelogram descending to the right, top thin cap surface, narrow right end face. No raised endpoint posts, no pillars, no pavement, ground, grass clumps, icons or labels. Modular join edges are vertically straight, matching top and bottom offsets so copies can butt together in a straight wall. Upper-left light.
+Style: deliberately low-resolution hand-painted pixel game sprite, chunky clean clusters, hard edges, about 40 pixels wide and 36 pixels tall when reduced, limited 24-color stone palette. NOT photorealistic, NOT smooth 3D render. Preserve transparent alpha. Single sprite only.
