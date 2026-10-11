@@ -556,164 +556,197 @@
       "id": "f_tree_big_oak",
       "path": "res://art/received/nature/tree_big_oak.png",
       "anchor": [
-        48.0,
-        121
+        64.0,
+        120
       ],
       "pixel_unit": 0.02209708691207961,
       "canvas": [
-        96,
+        128,
         128
       ],
-      "sha256": "0f847779a11f95e47e7a048fd1ee79410b00b9a4c4e51789ccb5c5f0eafdefb6",
-      "source": "existing received nature sprite"
+      "sha256": "96fec140772ac4cb73e491d5665015f1908226e63edffc1076e27b4ae926ba37",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_big_oak.png",
+      "source_sha256": "96fec140772ac4cb73e491d5665015f1908226e63edffc1076e27b4ae926ba37",
+      "colors": 23,
+      "alpha_binary": true
     },
     {
       "id": "f_tree_pine",
       "path": "res://art/received/nature/tree_pine.png",
       "anchor": [
-        48.0,
-        117
+        47.5,
+        120
       ],
       "pixel_unit": 0.02209708691207961,
       "canvas": [
         96,
         128
       ],
-      "sha256": "115e41e7a9c0e7bc348df23cff5e063fea8708dd2215be658026d6b323b03a23",
-      "source": "existing received nature sprite"
+      "sha256": "937806ec355f52ca2ba5d961fa0a8dd97723c93a29220d778ca6d1971ad81d2e",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_pine.png",
+      "source_sha256": "937806ec355f52ca2ba5d961fa0a8dd97723c93a29220d778ca6d1971ad81d2e",
+      "colors": 20,
+      "alpha_binary": true
     },
     {
       "id": "f_tree_round",
       "path": "res://art/received/nature/iso_tree_round.png",
       "anchor": [
-        49.0,
-        115
+        47.5,
+        120
       ],
       "pixel_unit": 0.02209708691207961,
       "canvas": [
         96,
         128
       ],
-      "sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91",
-      "source": "existing received nature sprite"
+      "sha256": "63e3605819bab9e37ba011745a2a20f6e04cb88d0927b86cf2d3220bf491ef7d",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/iso_tree_round.png",
+      "source_sha256": "63e3605819bab9e37ba011745a2a20f6e04cb88d0927b86cf2d3220bf491ef7d",
+      "colors": 20,
+      "alpha_binary": true
     },
     {
       "id": "f_tree_birch",
       "path": "res://art/received/nature/tree_birch.png",
       "anchor": [
         47.5,
-        126
+        120
       ],
       "pixel_unit": 0.02209708691207961,
       "canvas": [
         96,
         128
       ],
-      "sha256": "5470c0f68f2c8e25619d2216c0e2377c9cfc232bc5b96cb512fa44de60549e5a",
-      "source": "existing received nature sprite"
+      "sha256": "467b816b6b74df439b8e355eaf4200ce84b3137bb9c95e7be1c590d13bea8ef2",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_birch.png",
+      "source_sha256": "467b816b6b74df439b8e355eaf4200ce84b3137bb9c95e7be1c590d13bea8ef2",
+      "colors": 21,
+      "alpha_binary": true
     },
     {
       "id": "f_bush_",
       "path": "res://art/received/nature/flower_bush.png",
       "anchor": [
-        31.5,
-        52
+        32.0,
+        56
       ],
       "pixel_unit": 0.02209708691207961,
       "canvas": [
         64,
         64
       ],
-      "sha256": "0aff475b1ea062b35137a35b98b460acc624c967dcb9ed7a32fa2ed47d5c9f0f",
-      "source": "existing received nature sprite"
+      "sha256": "30a57446210b3615134b64348472ab623d6ba018a3b461cab7980c96c647faa2",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/flower_bush.png",
+      "source_sha256": "30a57446210b3615134b64348472ab623d6ba018a3b461cab7980c96c647faa2",
+      "colors": 16,
+      "alpha_binary": true
     },
     {
       "id": "m_rock",
       "path": "res://art/received/nature/rocks.png",
       "anchor": [
         32.0,
-        54
+        56
       ],
       "pixel_unit": 0.018,
       "canvas": [
         64,
         64
       ],
-      "sha256": "42a29ae0d6b6e174282f129f2a3c786f036f918c1111f9c2f165078dbb0522f5",
-      "source": "existing received nature sprite"
+      "sha256": "1ecf9603f8e8a4e44ea21e3ca5d5cf5cd2489e942dfa75521764c6117e79de41",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/rocks.png",
+      "source_sha256": "1ecf9603f8e8a4e44ea21e3ca5d5cf5cd2489e942dfa75521764c6117e79de41",
+      "colors": 13,
+      "alpha_binary": true
     },
     {
       "id": "s_dead",
       "path": "res://art/received/nature/tree_dead.png",
       "anchor": [
-        47.0,
-        88
+        47.5,
+        120
       ],
       "pixel_unit": 0.04375,
       "canvas": [
         96,
         128
       ],
-      "sha256": "b4e1e81045d27382e0b8b18328f8b78c4bdf271a09b3e634e38ee8bbaa84c767",
-      "source": "existing received nature sprite"
+      "sha256": "cacd525daea2e15a3bfa36b191a2b6db966b10c67a87b54ef222dba116e13711",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_dead.png",
+      "source_sha256": "cacd525daea2e15a3bfa36b191a2b6db966b10c67a87b54ef222dba116e13711",
+      "colors": 11,
+      "alpha_binary": true
     },
     {
       "id": "obstacle_tree",
       "path": "res://art/received/nature/tree_pine.png",
       "anchor": [
-        48.0,
-        117
+        47.5,
+        120
       ],
       "pixel_unit": 0.02209708691207961,
       "canvas": [
         96,
         128
       ],
-      "sha256": "115e41e7a9c0e7bc348df23cff5e063fea8708dd2215be658026d6b323b03a23",
-      "source": "existing received nature sprite"
+      "sha256": "937806ec355f52ca2ba5d961fa0a8dd97723c93a29220d778ca6d1971ad81d2e",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_pine.png",
+      "source_sha256": "937806ec355f52ca2ba5d961fa0a8dd97723c93a29220d778ca6d1971ad81d2e",
+      "colors": 20,
+      "alpha_binary": true
     },
     {
       "id": "obstacle_rock",
       "path": "res://art/received/nature/rocks.png",
       "anchor": [
         32.0,
-        54
+        56
       ],
       "pixel_unit": 0.018,
       "canvas": [
         64,
         64
       ],
-      "sha256": "42a29ae0d6b6e174282f129f2a3c786f036f918c1111f9c2f165078dbb0522f5",
-      "source": "existing received nature sprite"
+      "sha256": "1ecf9603f8e8a4e44ea21e3ca5d5cf5cd2489e942dfa75521764c6117e79de41",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/rocks.png",
+      "source_sha256": "1ecf9603f8e8a4e44ea21e3ca5d5cf5cd2489e942dfa75521764c6117e79de41",
+      "colors": 13,
+      "alpha_binary": true
     },
     {
       "id": "obstacle_stump",
       "path": "res://art/received/nature/iso_stump.png",
       "anchor": [
-        31.5,
-        57
+        32.0,
+        56
       ],
       "pixel_unit": 0.018,
       "canvas": [
         64,
         64
       ],
-      "sha256": "531d1567912de319f2f3ed6a6368c4f4197edfb75d30d446bc1cf1c9d3abb149",
-      "source": "existing received nature sprite"
+      "sha256": "00350c4b8f95ad86352018b354f3164977e37c37c7e0b90b09f525f6678aff3f",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/iso_stump.png",
+      "source_sha256": "00350c4b8f95ad86352018b354f3164977e37c37c7e0b90b09f525f6678aff3f",
+      "colors": 14,
+      "alpha_binary": true
     },
     {
       "path": "res://art/received/nature_states/berry_ready.png",
-      "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/berry_ready.png",
-      "sha256": "e00e6fda55968b40cd1122349483a5b8b64a82efe3684d0767206d02eaca61f1",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/berry_ready.png",
+      "sha256": "e8d41ed319018024915de08724467d96b8250d99bcb0b0f8a37fe27a64419863",
       "anchor": [
-        32,
+        32.0,
         56
       ],
       "normal_source": "res://art/received/nature/bush.png",
       "reference_sha256": "2d786fc7f5f6f3bfd0afaf46373d7a664e380f37f8a738bbd90261ec9c673689",
       "id": "f_bush_berry",
-      "pixel_unit": 0.02209708691207961
+      "pixel_unit": 0.02209708691207961,
+      "source_sha256": "e8d41ed319018024915de08724467d96b8250d99bcb0b0f8a37fe27a64419863",
+      "colors": 19,
+      "alpha_binary": true
     }
   ]
 }

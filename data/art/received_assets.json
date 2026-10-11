@@ -661,79 +661,184 @@
       "sha256": "de2004056e4c65030a2abf6d90188f39bae9329a1935c59011b66dbff394a40e"
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/iso_tree_round.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/iso_tree_round.png",
       "path": "res://art/received/nature/iso_tree_round.png",
-      "sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+      "sha256": "63e3605819bab9e37ba011745a2a20f6e04cb88d0927b86cf2d3220bf491ef7d",
+      "anchor": [
+        47.5,
+        120
+      ],
+      "source_sha256": "63e3605819bab9e37ba011745a2a20f6e04cb88d0927b86cf2d3220bf491ef7d",
+      "colors": 20,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/tree_pine.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_pine.png",
       "path": "res://art/received/nature/tree_pine.png",
-      "sha256": "115e41e7a9c0e7bc348df23cff5e063fea8708dd2215be658026d6b323b03a23"
+      "sha256": "937806ec355f52ca2ba5d961fa0a8dd97723c93a29220d778ca6d1971ad81d2e",
+      "anchor": [
+        47.5,
+        120
+      ],
+      "source_sha256": "937806ec355f52ca2ba5d961fa0a8dd97723c93a29220d778ca6d1971ad81d2e",
+      "colors": 20,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/tree_dead.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_dead.png",
       "path": "res://art/received/nature/tree_dead.png",
-      "sha256": "b4e1e81045d27382e0b8b18328f8b78c4bdf271a09b3e634e38ee8bbaa84c767"
+      "sha256": "cacd525daea2e15a3bfa36b191a2b6db966b10c67a87b54ef222dba116e13711",
+      "anchor": [
+        47.5,
+        120
+      ],
+      "source_sha256": "cacd525daea2e15a3bfa36b191a2b6db966b10c67a87b54ef222dba116e13711",
+      "colors": 11,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/tree_birch.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_birch.png",
       "path": "res://art/received/nature/tree_birch.png",
-      "sha256": "5470c0f68f2c8e25619d2216c0e2377c9cfc232bc5b96cb512fa44de60549e5a"
+      "sha256": "467b816b6b74df439b8e355eaf4200ce84b3137bb9c95e7be1c590d13bea8ef2",
+      "anchor": [
+        47.5,
+        120
+      ],
+      "source_sha256": "467b816b6b74df439b8e355eaf4200ce84b3137bb9c95e7be1c590d13bea8ef2",
+      "colors": 21,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/tree_big_oak.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_big_oak.png",
       "path": "res://art/received/nature/tree_big_oak.png",
-      "sha256": "0f847779a11f95e47e7a048fd1ee79410b00b9a4c4e51789ccb5c5f0eafdefb6"
+      "sha256": "96fec140772ac4cb73e491d5665015f1908226e63edffc1076e27b4ae926ba37",
+      "anchor": [
+        64.0,
+        120
+      ],
+      "source_sha256": "96fec140772ac4cb73e491d5665015f1908226e63edffc1076e27b4ae926ba37",
+      "colors": 23,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/tree_cherry.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_cherry.png",
       "path": "res://art/received/nature/tree_cherry.png",
-      "sha256": "6315a1880238cafe0fa4fe92c8d3750cfd61a685310168cb72a9a5840a749cfb"
+      "sha256": "f0c874a339221238b627bd5e410351fbb41263c01a640b11c83089bfd6124e2d",
+      "anchor": [
+        47.5,
+        120
+      ],
+      "source_sha256": "f0c874a339221238b627bd5e410351fbb41263c01a640b11c83089bfd6124e2d",
+      "colors": 19,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/tree_poplar.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_poplar.png",
       "path": "res://art/received/nature/tree_poplar.png",
-      "sha256": "eec7f3de72b2d39b4f2152d989e141bf80411abe45cbc7d7d7e19a9826ae5961"
+      "sha256": "ce07cf45ff6905caaae76455fa28968a3b9a40818e785c0df776f9392321268a",
+      "anchor": [
+        48.0,
+        120
+      ],
+      "source_sha256": "ce07cf45ff6905caaae76455fa28968a3b9a40818e785c0df776f9392321268a",
+      "colors": 21,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/tree_willow.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_willow.png",
       "path": "res://art/received/nature/tree_willow.png",
-      "sha256": "85db1943eea01f20e1c5578c12b4417debdb198e9864a653432bd0d30f8a5a22"
+      "sha256": "7bb3d22449a52565e6186226ecbe601a70ae95bf31f11be5cf5c62956ce8e919",
+      "anchor": [
+        48.0,
+        120
+      ],
+      "source_sha256": "7bb3d22449a52565e6186226ecbe601a70ae95bf31f11be5cf5c62956ce8e919",
+      "colors": 24,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/tree_apple.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/tree_apple.png",
       "path": "res://art/received/nature/tree_apple.png",
-      "sha256": "5a7805d0d066f3e32a311bf701068ae5b7c62ceb3d0c09bb338db9f1508a4ec8"
+      "sha256": "d55bbbb5fc44d5ef706e39e6f27c897d84522b3dcd2d1b17a5284219ed7f84a7",
+      "anchor": [
+        47.5,
+        120
+      ],
+      "source_sha256": "d55bbbb5fc44d5ef706e39e6f27c897d84522b3dcd2d1b17a5284219ed7f84a7",
+      "colors": 28,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/flower_bush.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/flower_bush.png",
       "path": "res://art/received/nature/flower_bush.png",
-      "sha256": "0aff475b1ea062b35137a35b98b460acc624c967dcb9ed7a32fa2ed47d5c9f0f"
+      "sha256": "30a57446210b3615134b64348472ab623d6ba018a3b461cab7980c96c647faa2",
+      "anchor": [
+        32.0,
+        56
+      ],
+      "source_sha256": "30a57446210b3615134b64348472ab623d6ba018a3b461cab7980c96c647faa2",
+      "colors": 16,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/bush.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/bush.png",
       "path": "res://art/received/nature/bush.png",
-      "sha256": "2d786fc7f5f6f3bfd0afaf46373d7a664e380f37f8a738bbd90261ec9c673689"
+      "sha256": "4cf2405703d2bcdc390277857c1b8ecdf7e612a11e771b2ea45d05e3ed26a53c",
+      "anchor": [
+        32.0,
+        56
+      ],
+      "source_sha256": "4cf2405703d2bcdc390277857c1b8ecdf7e612a11e771b2ea45d05e3ed26a53c",
+      "colors": 16,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/rocks.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/rocks.png",
       "path": "res://art/received/nature/rocks.png",
-      "sha256": "42a29ae0d6b6e174282f129f2a3c786f036f918c1111f9c2f165078dbb0522f5"
+      "sha256": "1ecf9603f8e8a4e44ea21e3ca5d5cf5cd2489e942dfa75521764c6117e79de41",
+      "anchor": [
+        32.0,
+        56
+      ],
+      "source_sha256": "1ecf9603f8e8a4e44ea21e3ca5d5cf5cd2489e942dfa75521764c6117e79de41",
+      "colors": 13,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/iso_log.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/iso_log.png",
       "path": "res://art/received/nature/iso_log.png",
-      "sha256": "4a0c325bc928da4a57db8add6485b6e4323ea58444a5fd7c04bd65bec28d1e25"
+      "sha256": "699eb626afcc24ac852a6c92a23e8cf830044f7b88a06e9ffdd2443dd0b28543",
+      "anchor": [
+        32.0,
+        56
+      ],
+      "source_sha256": "699eb626afcc24ac852a6c92a23e8cf830044f7b88a06e9ffdd2443dd0b28543",
+      "colors": 11,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/iso_stump.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/iso_stump.png",
       "path": "res://art/received/nature/iso_stump.png",
-      "sha256": "531d1567912de319f2f3ed6a6368c4f4197edfb75d30d446bc1cf1c9d3abb149"
+      "sha256": "00350c4b8f95ad86352018b354f3164977e37c37c7e0b90b09f525f6678aff3f",
+      "anchor": [
+        32.0,
+        56
+      ],
+      "source_sha256": "00350c4b8f95ad86352018b354f3164977e37c37c7e0b90b09f525f6678aff3f",
+      "colors": 14,
+      "alpha_binary": true
     },
     {
-      "source": "docs/그림_작업/받은그림/자연물/mushroom.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature/mushroom.png",
       "path": "res://art/received/nature/mushroom.png",
-      "sha256": "2906170a8bc2542251e68fc613af21acf1c5983b75d89ca6c71965d288f58253"
+      "sha256": "3a360844bbeb9ae91ce69b9f4f848372ba3008ab9e98d2f4eff1de720ed684c8",
+      "anchor": [
+        32.0,
+        56
+      ],
+      "source_sha256": "3a360844bbeb9ae91ce69b9f4f848372ba3008ab9e98d2f4eff1de720ed684c8",
+      "colors": 15,
+      "alpha_binary": true
     }
   ]
 }

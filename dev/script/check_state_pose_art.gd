@@ -37,7 +37,9 @@ func run() -> void:
 		for x in original.get_width():
 			check(original.get_pixel(x,y).a == autumn.get_pixel(x,y).a,"season preserves silhouette alpha")
 			# 원본 가져오기는 투명 여백 RGB를 채운다. 보이는 픽셀과 알파만 비교한다.
-			if y >= 82 and original.get_pixel(x,y).a > 0: check(original.get_pixel(x,y) == autumn.get_pixel(x,y),"trunk and ground unchanged")
+			var source_pixel := original.get_pixel(x,y)
+			if source_pixel.a > 0 and source_pixel.r > source_pixel.g:
+				check(source_pixel == autumn.get_pixel(x,y),"wood pixels unchanged by autumn")
 	for id in ActorPoseArt.assets():
 		var row: Dictionary = ActorPoseArt.assets()[id]
 		check(FileAccess.get_sha256(str(row.path)) == row.sha256,"pose source selected: " + str(id))

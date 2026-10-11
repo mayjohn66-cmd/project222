@@ -70,6 +70,8 @@ static func adjust_rule(rule: Dictionary, season_id: String, seed_value: int) ->
 
 	if str(rule.get("style", "")) == "tree":
 		var v: String = str(rule.get("variant", ""))
+		# Keep the original crown/trunk when autumn changes the logical variant.
+		r["nature_base_variant"] = "round" if v == "autumn" or v.is_empty() else v
 
 		if season_id != "spring" and v == "cherry":
 			v = "round" if season_id == "summer" else "autumn"

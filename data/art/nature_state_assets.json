@@ -1,76 +1,360 @@
 {
   "autumn_orange": {
     "path": "res://art/received/nature_states/tree_autumn_orange.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/tree_autumn_orange.png",
-    "sha256": "5137fd55179188b0c30be19a5ca83b3e3201a979ba058a3b4ee18c933222cc8f",
     "anchor": [
-      49,
-      115
+      47.5,
+      120
     ],
     "normal_source": "res://art/received/nature/iso_tree_round.png",
     "leaf_tint": "ffffff",
-    "changed_leaf_pixels": 3308,
-    "reference_sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+    "base_variant": "round",
+    "reference_sha256": "63e3605819bab9e37ba011745a2a20f6e04cb88d0927b86cf2d3220bf491ef7d",
+    "changed_leaf_pixels": 4913,
+    "sha256": "7f72392c2a978e6785e99d4d6e69278086b331188e340b43887f9d2e185644d0",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_orange.png"
   },
   "autumn_red": {
     "path": "res://art/received/nature_states/tree_autumn_red.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/tree_autumn_red.png",
-    "sha256": "69e2e25642d90bc767e11f9ef00ffab1273b1bc858475f2e4d2b9254517b00c4",
     "anchor": [
-      49,
-      115
+      47.5,
+      120
     ],
     "normal_source": "res://art/received/nature/iso_tree_round.png",
     "leaf_tint": "ff9a84",
-    "changed_leaf_pixels": 3308,
-    "reference_sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+    "base_variant": "round",
+    "reference_sha256": "63e3605819bab9e37ba011745a2a20f6e04cb88d0927b86cf2d3220bf491ef7d",
+    "changed_leaf_pixels": 4913,
+    "sha256": "6ba9ea1342fbffb6058efe91ff55a31cda6f4cba1eee4da96c4e4e2589e62f83",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_red.png"
   },
   "autumn_gold": {
     "path": "res://art/received/nature_states/tree_autumn_gold.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/tree_autumn_gold.png",
-    "sha256": "bc6977e094c05553afe56caf8425a8c4caa118965f666e750de332d7c36b13cc",
     "anchor": [
-      49,
-      115
+      47.5,
+      120
     ],
     "normal_source": "res://art/received/nature/iso_tree_round.png",
     "leaf_tint": "ffe48a",
-    "changed_leaf_pixels": 3308,
-    "reference_sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+    "base_variant": "round",
+    "reference_sha256": "63e3605819bab9e37ba011745a2a20f6e04cb88d0927b86cf2d3220bf491ef7d",
+    "changed_leaf_pixels": 4913,
+    "sha256": "fb34ec8d8a29002ab30fbcae729130ddbf1e5640825a59a9e94566d315bbb79a",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_gold.png"
   },
   "autumn_amber": {
     "path": "res://art/received/nature_states/tree_autumn_amber.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/tree_autumn_amber.png",
-    "sha256": "840f715926ac0d249eb034cc0ca54790358b865065a0b97fb0e2c307527a9f3e",
     "anchor": [
-      49,
-      115
+      47.5,
+      120
     ],
     "normal_source": "res://art/received/nature/iso_tree_round.png",
     "leaf_tint": "ffc070",
-    "changed_leaf_pixels": 3308,
-    "reference_sha256": "c8ac173e29d07dd949644321c4a2fc0902d7bb873ddc010d27e6abcae93afc91"
+    "base_variant": "round",
+    "reference_sha256": "63e3605819bab9e37ba011745a2a20f6e04cb88d0927b86cf2d3220bf491ef7d",
+    "changed_leaf_pixels": 4913,
+    "sha256": "65664d42ae480e60a599cf69d3b95210e9c77a2b19e63aa27883fb911febc4fb",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_amber.png"
+  },
+  "autumn_birch_orange": {
+    "path": "res://art/received/nature_states/tree_autumn_birch_orange.png",
+    "anchor": [
+      47.5,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_birch.png",
+    "leaf_tint": "ffffff",
+    "base_variant": "birch",
+    "reference_sha256": "467b816b6b74df439b8e355eaf4200ce84b3137bb9c95e7be1c590d13bea8ef2",
+    "changed_leaf_pixels": 3167,
+    "sha256": "2a23d942416edc17460c9e3e4d866b13df3ddff9edb1605cb1ce6b7fd383b3e7",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_birch_orange.png"
+  },
+  "autumn_birch_red": {
+    "path": "res://art/received/nature_states/tree_autumn_birch_red.png",
+    "anchor": [
+      47.5,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_birch.png",
+    "leaf_tint": "ff9a84",
+    "base_variant": "birch",
+    "reference_sha256": "467b816b6b74df439b8e355eaf4200ce84b3137bb9c95e7be1c590d13bea8ef2",
+    "changed_leaf_pixels": 3167,
+    "sha256": "bdcf6450d2a9fb3411916902a9699d465e018bc62e3ea15b6c5b60c99b803648",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_birch_red.png"
+  },
+  "autumn_birch_gold": {
+    "path": "res://art/received/nature_states/tree_autumn_birch_gold.png",
+    "anchor": [
+      47.5,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_birch.png",
+    "leaf_tint": "ffe48a",
+    "base_variant": "birch",
+    "reference_sha256": "467b816b6b74df439b8e355eaf4200ce84b3137bb9c95e7be1c590d13bea8ef2",
+    "changed_leaf_pixels": 3167,
+    "sha256": "363cef260419e7795fbb8c1f490347acab19a587061d2287fbf8c75f16401609",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_birch_gold.png"
+  },
+  "autumn_birch_amber": {
+    "path": "res://art/received/nature_states/tree_autumn_birch_amber.png",
+    "anchor": [
+      47.5,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_birch.png",
+    "leaf_tint": "ffc070",
+    "base_variant": "birch",
+    "reference_sha256": "467b816b6b74df439b8e355eaf4200ce84b3137bb9c95e7be1c590d13bea8ef2",
+    "changed_leaf_pixels": 3167,
+    "sha256": "f92f230ded03c68e929b133cf08a9c5df9bfad187175a0333ad01a87cb3d1353",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_birch_amber.png"
+  },
+  "autumn_big_oak_orange": {
+    "path": "res://art/received/nature_states/tree_autumn_big_oak_orange.png",
+    "anchor": [
+      64.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_big_oak.png",
+    "leaf_tint": "ffffff",
+    "base_variant": "big_oak",
+    "reference_sha256": "96fec140772ac4cb73e491d5665015f1908226e63edffc1076e27b4ae926ba37",
+    "changed_leaf_pixels": 5723,
+    "sha256": "0db62c0d8dd32ffc2c6518b969c2ce6d186e0959d49cd26b1f632b6af8eb3dfb",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_big_oak_orange.png"
+  },
+  "autumn_big_oak_red": {
+    "path": "res://art/received/nature_states/tree_autumn_big_oak_red.png",
+    "anchor": [
+      64.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_big_oak.png",
+    "leaf_tint": "ff9a84",
+    "base_variant": "big_oak",
+    "reference_sha256": "96fec140772ac4cb73e491d5665015f1908226e63edffc1076e27b4ae926ba37",
+    "changed_leaf_pixels": 5723,
+    "sha256": "4f30135e23ba9cecad60f0fc4b9b97afd05459ee053a09c9c2929f3832d9d182",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_big_oak_red.png"
+  },
+  "autumn_big_oak_gold": {
+    "path": "res://art/received/nature_states/tree_autumn_big_oak_gold.png",
+    "anchor": [
+      64.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_big_oak.png",
+    "leaf_tint": "ffe48a",
+    "base_variant": "big_oak",
+    "reference_sha256": "96fec140772ac4cb73e491d5665015f1908226e63edffc1076e27b4ae926ba37",
+    "changed_leaf_pixels": 5723,
+    "sha256": "791674d0367852100e37b4e75e43069e40ee9e66f4d8cd4fedaed4bdfeb77f66",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_big_oak_gold.png"
+  },
+  "autumn_big_oak_amber": {
+    "path": "res://art/received/nature_states/tree_autumn_big_oak_amber.png",
+    "anchor": [
+      64.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_big_oak.png",
+    "leaf_tint": "ffc070",
+    "base_variant": "big_oak",
+    "reference_sha256": "96fec140772ac4cb73e491d5665015f1908226e63edffc1076e27b4ae926ba37",
+    "changed_leaf_pixels": 5723,
+    "sha256": "b411acbd63f085532031848ba6e06fc6d3d561221b15164b3bee99809b562aca",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_big_oak_amber.png"
+  },
+  "autumn_cherry_orange": {
+    "path": "res://art/received/nature_states/tree_autumn_cherry_orange.png",
+    "anchor": [
+      47.5,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_cherry.png",
+    "leaf_tint": "ffffff",
+    "base_variant": "cherry",
+    "reference_sha256": "f0c874a339221238b627bd5e410351fbb41263c01a640b11c83089bfd6124e2d",
+    "changed_leaf_pixels": 4937,
+    "sha256": "27d880caa24158015a0109db73e731bbf8c3bea3580ca4623ed0cdf7ef4e81de",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_cherry_orange.png"
+  },
+  "autumn_cherry_red": {
+    "path": "res://art/received/nature_states/tree_autumn_cherry_red.png",
+    "anchor": [
+      47.5,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_cherry.png",
+    "leaf_tint": "ff9a84",
+    "base_variant": "cherry",
+    "reference_sha256": "f0c874a339221238b627bd5e410351fbb41263c01a640b11c83089bfd6124e2d",
+    "changed_leaf_pixels": 4937,
+    "sha256": "305809215a5c3fdcde74c77af8ed950e00c2bfac93c6cb4a1e51a4a51efdb3d4",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_cherry_red.png"
+  },
+  "autumn_cherry_gold": {
+    "path": "res://art/received/nature_states/tree_autumn_cherry_gold.png",
+    "anchor": [
+      47.5,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_cherry.png",
+    "leaf_tint": "ffe48a",
+    "base_variant": "cherry",
+    "reference_sha256": "f0c874a339221238b627bd5e410351fbb41263c01a640b11c83089bfd6124e2d",
+    "changed_leaf_pixels": 4937,
+    "sha256": "77c26aa0a73f7d42b7ee62dec08b452869aab43d845a83364fa97be4f7940376",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_cherry_gold.png"
+  },
+  "autumn_cherry_amber": {
+    "path": "res://art/received/nature_states/tree_autumn_cherry_amber.png",
+    "anchor": [
+      47.5,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_cherry.png",
+    "leaf_tint": "ffc070",
+    "base_variant": "cherry",
+    "reference_sha256": "f0c874a339221238b627bd5e410351fbb41263c01a640b11c83089bfd6124e2d",
+    "changed_leaf_pixels": 4937,
+    "sha256": "a93f7deb843d4f38c044565a8045c10380a379e408eb7ff79298d983e220bd66",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_cherry_amber.png"
+  },
+  "autumn_poplar_orange": {
+    "path": "res://art/received/nature_states/tree_autumn_poplar_orange.png",
+    "anchor": [
+      48.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_poplar.png",
+    "leaf_tint": "ffffff",
+    "base_variant": "poplar",
+    "reference_sha256": "ce07cf45ff6905caaae76455fa28968a3b9a40818e785c0df776f9392321268a",
+    "changed_leaf_pixels": 2740,
+    "sha256": "4f417763d6444d3fd706f62ebc27eb6beb8f6d0d0c7217f3d645f83e6b7c3400",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_poplar_orange.png"
+  },
+  "autumn_poplar_red": {
+    "path": "res://art/received/nature_states/tree_autumn_poplar_red.png",
+    "anchor": [
+      48.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_poplar.png",
+    "leaf_tint": "ff9a84",
+    "base_variant": "poplar",
+    "reference_sha256": "ce07cf45ff6905caaae76455fa28968a3b9a40818e785c0df776f9392321268a",
+    "changed_leaf_pixels": 2740,
+    "sha256": "616cffa01f86783275d2937585ed3966a5f6c1da33ac261c9faf087ba047f692",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_poplar_red.png"
+  },
+  "autumn_poplar_gold": {
+    "path": "res://art/received/nature_states/tree_autumn_poplar_gold.png",
+    "anchor": [
+      48.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_poplar.png",
+    "leaf_tint": "ffe48a",
+    "base_variant": "poplar",
+    "reference_sha256": "ce07cf45ff6905caaae76455fa28968a3b9a40818e785c0df776f9392321268a",
+    "changed_leaf_pixels": 2740,
+    "sha256": "408df291a83e7437f7526261a346eb3bd8760ed6d5f280343bd31ed5256268e4",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_poplar_gold.png"
+  },
+  "autumn_poplar_amber": {
+    "path": "res://art/received/nature_states/tree_autumn_poplar_amber.png",
+    "anchor": [
+      48.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_poplar.png",
+    "leaf_tint": "ffc070",
+    "base_variant": "poplar",
+    "reference_sha256": "ce07cf45ff6905caaae76455fa28968a3b9a40818e785c0df776f9392321268a",
+    "changed_leaf_pixels": 2740,
+    "sha256": "f6b0f47321131502a5f089969a797b8f0e0320cb5da3004e605d8fc15fad3bd8",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_poplar_amber.png"
+  },
+  "autumn_willow_orange": {
+    "path": "res://art/received/nature_states/tree_autumn_willow_orange.png",
+    "anchor": [
+      48.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_willow.png",
+    "leaf_tint": "ffffff",
+    "base_variant": "willow",
+    "reference_sha256": "7bb3d22449a52565e6186226ecbe601a70ae95bf31f11be5cf5c62956ce8e919",
+    "changed_leaf_pixels": 5582,
+    "sha256": "81a5656bb2f683b514aaa7a9fb77887da20ed06ad6775f2c44cdf80660b900e4",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_willow_orange.png"
+  },
+  "autumn_willow_red": {
+    "path": "res://art/received/nature_states/tree_autumn_willow_red.png",
+    "anchor": [
+      48.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_willow.png",
+    "leaf_tint": "ff9a84",
+    "base_variant": "willow",
+    "reference_sha256": "7bb3d22449a52565e6186226ecbe601a70ae95bf31f11be5cf5c62956ce8e919",
+    "changed_leaf_pixels": 5582,
+    "sha256": "a1264e3e715ae53302ed4ec2b038a39ead71b4541cde2702973299d201b70a84",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_willow_red.png"
+  },
+  "autumn_willow_gold": {
+    "path": "res://art/received/nature_states/tree_autumn_willow_gold.png",
+    "anchor": [
+      48.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_willow.png",
+    "leaf_tint": "ffe48a",
+    "base_variant": "willow",
+    "reference_sha256": "7bb3d22449a52565e6186226ecbe601a70ae95bf31f11be5cf5c62956ce8e919",
+    "changed_leaf_pixels": 5582,
+    "sha256": "329b8c1da4a06e6b01cb3ced0de72ab5e7d28009fdc8d4329e3d2240e865b59e",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_willow_gold.png"
+  },
+  "autumn_willow_amber": {
+    "path": "res://art/received/nature_states/tree_autumn_willow_amber.png",
+    "anchor": [
+      48.0,
+      120
+    ],
+    "normal_source": "res://art/received/nature/tree_willow.png",
+    "leaf_tint": "ffc070",
+    "base_variant": "willow",
+    "reference_sha256": "7bb3d22449a52565e6186226ecbe601a70ae95bf31f11be5cf5c62956ce8e919",
+    "changed_leaf_pixels": 5582,
+    "sha256": "0ff6e18772876718f1a2b96ce2973cc3656cb339308f04ace859f77cc3888cb6",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/tree_autumn_willow_amber.png"
   },
   "berry_empty": {
     "path": "res://art/received/nature_states/berry_empty.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/berry_empty.png",
-    "sha256": "ac602c861a82b23daad6f16f19952a1a81c2d7664c520ec04cf3b3d0dddad694",
     "anchor": [
-      32,
+      32.0,
       56
     ],
     "normal_source": "res://art/received/nature/bush.png",
-    "reference_sha256": "2d786fc7f5f6f3bfd0afaf46373d7a664e380f37f8a738bbd90261ec9c673689"
+    "reference_sha256": "4cf2405703d2bcdc390277857c1b8ecdf7e612a11e771b2ea45d05e3ed26a53c",
+    "sha256": "4cf2405703d2bcdc390277857c1b8ecdf7e612a11e771b2ea45d05e3ed26a53c",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/berry_empty.png"
   },
   "berry_ready": {
     "path": "res://art/received/nature_states/berry_ready.png",
-    "source": "docs/그림_작업/받은그림/상태와_인물/픽셀_정리/berry_ready.png",
-    "sha256": "e00e6fda55968b40cd1122349483a5b8b64a82efe3684d0767206d02eaca61f1",
     "anchor": [
-      32,
+      32.0,
       56
     ],
     "normal_source": "res://art/received/nature/bush.png",
-    "reference_sha256": "2d786fc7f5f6f3bfd0afaf46373d7a664e380f37f8a738bbd90261ec9c673689"
+    "reference_sha256": "4cf2405703d2bcdc390277857c1b8ecdf7e612a11e771b2ea45d05e3ed26a53c",
+    "sha256": "e8d41ed319018024915de08724467d96b8250d99bcb0b0f8a37fe27a64419863",
+    "source": "docs/그림_작업/받은그림/자연물_통일/선택본/nature_states/berry_ready.png"
   }
 }

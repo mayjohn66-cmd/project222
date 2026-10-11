@@ -1093,41 +1093,42 @@
       "display_scale": 1.0,
       "id": "village_flower_bush",
       "path": "res://art/received/village/village_flower_bush.png",
-      "source": "docs/그림_작업/받은그림/마을_원본_복구/flower_bush.png",
+      "source": "docs/그림_작업/받은그림/자연물_통일/선택본/village/village_flower_bush.png",
       "aliases": [
         "res://docs/그림_작업/받은그림/마을_원본_복구/flower_bush.png",
         "res://art/world/route_props_v1/flower_bush.png"
       ],
       "anchor": [
-        26.1726,
-        24.3037
+        32.0,
+        56
       ],
       "footprint": [
         [
-          26.1726,
-          31.601
+          32.0,
+          63.2973
         ],
         [
-          6.0951,
-          24.5183
+          11.9225,
+          56.2146
         ],
         [
-          26.1726,
-          16.5771
+          32.0,
+          48.2734
         ],
         [
-          46.2502,
-          24.5183
+          52.0776,
+          56.2146
         ]
       ],
-      "source_sha256": "a6cb91589986977416818e619e1e18f572436da138dec7f77837bb91677c0156",
-      "sha256": "4f468c5c6d36bcf534affbe4191918cccc50d05af709839830e3b8d1fbd2fb3e",
+      "source_sha256": "30a57446210b3615134b64348472ab623d6ba018a3b461cab7980c96c647faa2",
+      "sha256": "30a57446210b3615134b64348472ab623d6ba018a3b461cab7980c96c647faa2",
       "size": [
-        56,
-        40
+        64,
+        64
       ],
-      "colors": 76,
-      "alpha_threshold": 220
+      "colors": 16,
+      "alpha_threshold": 220,
+      "alpha_binary": true
     },
     {
       "anchor": [

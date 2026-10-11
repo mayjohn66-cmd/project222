@@ -13,12 +13,17 @@ static func assets() -> Dictionary:
 	return _assets
 
 static func state_id(rule: Dictionary) -> String:
-	if str(rule.get("style", "")) == "tree" and str(rule.get("variant", "")) == "autumn":
+	if str(rule.get("style", "")) == "tree" and (str(rule.get("variant", "")) == "autumn" or rule.has("season_leaf")):
 		var leaf: Color = rule.get("season_leaf", Color.WHITE)
+		var base_variant := str(rule.get("nature_base_variant", "round"))
+		if base_variant not in ["round", "birch", "big_oak", "cherry", "poplar", "willow"]:
+			base_variant = "round"
+		if base_variant == "willow" and leaf.is_equal_approx(Color.html("ffe8a0")):
+			leaf = Color.html("ffc070")
 		for id in assets():
 			var row: Dictionary = assets()[id]
-			if row.has("leaf_tint") and leaf.is_equal_approx(Color.html(str(row.leaf_tint))): return str(id)
-		return "autumn_orange"
+			if row.get("base_variant", "round") == base_variant and row.has("leaf_tint") and leaf.is_equal_approx(Color.html(str(row.leaf_tint))): return str(id)
+		return "autumn_" + (base_variant + "_" if base_variant != "round" else "") + "orange"
 	if str(rule.get("style", "")) == "flower_bush" and str(rule.get("variant", "")) == "berry":
 		return "berry_empty" if str(rule.get("berry_state", "ready")) == "empty" else "berry_ready"
 	return ""
