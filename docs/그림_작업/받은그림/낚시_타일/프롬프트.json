@@ -1,0 +1,27 @@
+{
+  "date": "2026-10-11",
+  "mode": "built-in image_gen",
+  "status": "candidate_not_installed",
+  "python_pixel_cleanup_authorized": true,
+  "canvas": [
+    64,
+    32
+  ],
+  "refs": [
+    "art/received/floors/grass_1.png",
+    "art/received/floors/dirt_1.png",
+    "art/received/floors/wood_1.png"
+  ],
+  "assets": [
+    {
+      "id": "water_base",
+      "prompt": "Use case: stylized-concept. ONE reusable WATER FLOOR TILE for the existing cozy isometric pixel-art game. The attached 64x32 grass, dirt and wood floor tiles are STYLE AND EXACT GEOMETRY references. Create a single flat 2:1 isometric diamond top surface, same camera and crisp pixel clusters, no visible side thickness. Bright natural daylight, muted turquoise blue-green freshwater, mostly even medium-light color, only a few short sparse low-contrast horizontal ripple clusters near the interior. Smooth consistent base color along ALL four tile edges so many copies join without a visible grid; NO dark perimeter outline, no center swirl, no large diagonal highlight, no transparency inside water. Entire diamond opaque, outside genuine transparent alpha. No shoreline, banks, grass, rocks, reeds, fish, dock, floating island, scenery, shadows, UI, labels or text. Centered complete tile, sharp diamond vertices, intended logical size EXACTLY64x32 after nearest-neighbor pixel cleanup. Keep the diamond width exactly twice its height; do not add decorative objects.",
+      "generated": "C:/Users/john9/.codex/generated_images/01a0f21e-f0fe-7852-bbc3-ba543c654967/exec-f2f1cad6-8e72-4809-915a-5b5a4d74d9d6.png"
+    },
+    {
+      "id": "shore_sediment",
+      "prompt": "Use case: stylized-concept. ONE flat isometric wet SHORE EARTH material tile for a cozy pixel-art game. Input images are existing grass, dirt and wooden floor STYLE AND GEOMETRY references. Same 2:1 orthographic diamond surface. A full opaque diamond of softly mottled natural warm tan clay/sandy soil, medium-light beige brown with small restrained earthy pixel clusters. It will be sampled as the narrow shoreline strip between existing grass tiles and new turquoise water, so keep texture evenly distributed with no large feature or directional lighting. Crisp game pixels, palette approximately warm tan, honey beige and muted brown, daylight bright. NO water, grass, plants, stones, shells, holes, footprints, repeated cracks, dark perimeter border, raised side walls, floating island, painted blur, shadow, text, labels or UI. Only ONE centered complete planar diamond, transparent outside, exact width:height2:1, intended64x32 logical tile after pixel cleanup. Color belongs next to the provided existing dirt rather than an orange desert.",
+      "generated": "C:/Users/john9/.codex/generated_images/01a0f21e-f0fe-7852-bbc3-ba543c654967/exec-a6bba939-0b70-4d73-b053-0b0edbb07b55.png"
+    }
+  ]
+}

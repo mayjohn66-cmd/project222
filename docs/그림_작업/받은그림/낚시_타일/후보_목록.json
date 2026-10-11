@@ -1,0 +1,505 @@
+{
+  "status": "candidate_not_installed",
+  "tool": "built-in image_gen + authorized Python pixel composition",
+  "runtime_applied": false,
+  "animation": false,
+  "canvas": [
+    64,
+    32
+  ],
+  "display_cell": [
+    96,
+    48
+  ],
+  "anchor": [
+    32,
+    16
+  ],
+  "anchor_provisional": true,
+  "generated_sources": 2,
+  "water_variants": 3,
+  "shore_variants": 18,
+  "reused_dock_variants": 3,
+  "assets": [
+    {
+      "id": "water_1",
+      "sprite": "픽셀_정리/water_1.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 12,
+      "sha256": "42653e436db760a2b81069664ee8c986846749fe932941160367b73026a807df",
+      "kind": "water",
+      "variant": 1,
+      "walkable": false
+    },
+    {
+      "id": "water_2",
+      "sprite": "픽셀_정리/water_2.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 22,
+      "sha256": "16e5bffad1a36696efb9cef9be421d0ad84fe0d249e31e8e7c665dda26f66e94",
+      "kind": "water",
+      "variant": 2,
+      "walkable": false
+    },
+    {
+      "id": "water_3",
+      "sprite": "픽셀_정리/water_3.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 20,
+      "sha256": "e503d7e3f386c9d4c8d765041e7220d1586ab8df5253c3059868b16d504d8ee6",
+      "kind": "water",
+      "variant": 3,
+      "walkable": false
+    },
+    {
+      "id": "shore_nx",
+      "sprite": "픽셀_정리/shore_nx.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 44,
+      "sha256": "33385416cc135282f4c16405e9a8e39595b4c219c88c9a30b612b6e323063d4a",
+      "kind": "shore",
+      "land_neighbors": [
+        "nx"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_ny",
+      "sprite": "픽셀_정리/shore_ny.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 45,
+      "sha256": "43944c870afb01cc90e1df1ecb4f4acfd2c6698ba6d77a83c3ea6e5384a69243",
+      "kind": "shore",
+      "land_neighbors": [
+        "ny"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_px",
+      "sprite": "픽셀_정리/shore_px.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 45,
+      "sha256": "65e6f9a182bec5dc197171c3cdeafa790a0c65cdc5544156fd5d7ce69cd4ba88",
+      "kind": "shore",
+      "land_neighbors": [
+        "px"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_py",
+      "sprite": "픽셀_정리/shore_py.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 43,
+      "sha256": "218722d0f419f2fa31d8e6eaaa6324ee9f651c3abd22a3defca25a8a3c841276",
+      "kind": "shore",
+      "land_neighbors": [
+        "py"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_nx_ny",
+      "sprite": "픽셀_정리/shore_nx_ny.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 44,
+      "sha256": "cfc0c965be64ee43d32d2e221518686c45aae49ff4ccf6a513b637ecf4708ee9",
+      "kind": "shore",
+      "land_neighbors": [
+        "nx",
+        "ny"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_nx_px",
+      "sprite": "픽셀_정리/shore_nx_px.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 45,
+      "sha256": "981e6b708bc4ef13c1e2c167e361715a6786ef1dd869d1d15147e33477d80ba5",
+      "kind": "shore",
+      "land_neighbors": [
+        "nx",
+        "px"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_nx_py",
+      "sprite": "픽셀_정리/shore_nx_py.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 46,
+      "sha256": "aa1db94cd099a368a684f12d979f2bdd828b78ce83db7b5a804d391ef5ce987a",
+      "kind": "shore",
+      "land_neighbors": [
+        "nx",
+        "py"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_ny_px",
+      "sprite": "픽셀_정리/shore_ny_px.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 46,
+      "sha256": "ee2058ff563e69eba31fb998afd4a9602a799027620fc044cd3678b28f378a53",
+      "kind": "shore",
+      "land_neighbors": [
+        "ny",
+        "px"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_ny_py",
+      "sprite": "픽셀_정리/shore_ny_py.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 46,
+      "sha256": "531463353bc8180fedd24060e7ec4518ec1b83b5c203e3d8f9237b35ef188d41",
+      "kind": "shore",
+      "land_neighbors": [
+        "ny",
+        "py"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_px_py",
+      "sprite": "픽셀_정리/shore_px_py.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 45,
+      "sha256": "0c0e5139c5a94a62c260f15b8260bd57444f51bb1b17ee1692610736ecbdf9cb",
+      "kind": "shore",
+      "land_neighbors": [
+        "px",
+        "py"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_nx_ny_px",
+      "sprite": "픽셀_정리/shore_nx_ny_px.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 46,
+      "sha256": "682a59f238219506599352df9ef6386836e12e9766e989216d33c283054f8a03",
+      "kind": "shore",
+      "land_neighbors": [
+        "nx",
+        "ny",
+        "px"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_nx_ny_py",
+      "sprite": "픽셀_정리/shore_nx_ny_py.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 45,
+      "sha256": "c08ae98c6d278e0083e2cf1ed57f63973e0f84b6ea575b872fe1c6dfd515fac6",
+      "kind": "shore",
+      "land_neighbors": [
+        "nx",
+        "ny",
+        "py"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_nx_px_py",
+      "sprite": "픽셀_정리/shore_nx_px_py.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 45,
+      "sha256": "5304e875a95f4419d08c6076b6c732c1e9d4203e563ffec7dcd0ba7e301fc17a",
+      "kind": "shore",
+      "land_neighbors": [
+        "nx",
+        "px",
+        "py"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_ny_px_py",
+      "sprite": "픽셀_정리/shore_ny_px_py.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 46,
+      "sha256": "634b4d7b00554810c6841ab3e6ff475926a40b94a60307896bf1794a2f790e61",
+      "kind": "shore",
+      "land_neighbors": [
+        "ny",
+        "px",
+        "py"
+      ],
+      "corner": null,
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_corner_nx_ny",
+      "sprite": "픽셀_정리/shore_corner_nx_ny.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 39,
+      "sha256": "e8cd3da15cec8ba8ff0f12ef1e5ad55a288b7f95a885df81e109c6f6551ce2d2",
+      "kind": "shore",
+      "land_neighbors": [],
+      "corner": [
+        "nx",
+        "ny"
+      ],
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_corner_ny_px",
+      "sprite": "픽셀_정리/shore_corner_ny_px.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 42,
+      "sha256": "be6e8ac3931e836ea7dc95a3fc0da2e7bb1e98133bc1ebcf31a31896a1da9c39",
+      "kind": "shore",
+      "land_neighbors": [],
+      "corner": [
+        "ny",
+        "px"
+      ],
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_corner_px_py",
+      "sprite": "픽셀_정리/shore_corner_px_py.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 32,
+      "sha256": "624d620c3339019d9dac7a28d94aff4c11f32c65383df0c3f961c63b2138516e",
+      "kind": "shore",
+      "land_neighbors": [],
+      "corner": [
+        "px",
+        "py"
+      ],
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "shore_corner_py_nx",
+      "sprite": "픽셀_정리/shore_corner_py_nx.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "colors": 37,
+      "sha256": "642008bef5d8d5b811e2920ec8ecadadc0f52caa1c82d913d55268ca4e299854",
+      "kind": "shore",
+      "land_neighbors": [],
+      "corner": [
+        "py",
+        "nx"
+      ],
+      "walkable": "split_by_land_water_mask"
+    },
+    {
+      "id": "dock_planks_1",
+      "sprite": "픽셀_정리/dock_planks_1.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "kind": "dock",
+      "walkable": true,
+      "colors": 26,
+      "sha256": "e0f3dfc3da4696e500d19609b9c201ce1d326da0229d51072eb52a36c04c1951",
+      "reused_from": "res://art/received/floors/wood_1.png"
+    },
+    {
+      "id": "dock_planks_2",
+      "sprite": "픽셀_정리/dock_planks_2.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "kind": "dock",
+      "walkable": true,
+      "colors": 28,
+      "sha256": "4b556b0683bd1d5d63b2f9c48f66c7e3232c0480e128722435be73ddefeb252c",
+      "reused_from": "res://art/received/floors/wood_2.png"
+    },
+    {
+      "id": "dock_planks_3",
+      "sprite": "픽셀_정리/dock_planks_3.png",
+      "canvas": [
+        64,
+        32
+      ],
+      "anchor": [
+        32,
+        16
+      ],
+      "kind": "dock",
+      "walkable": true,
+      "colors": 28,
+      "sha256": "1c34289910a9fc08317d9426adce4473a226649ee9b40d5ceeff53b546ff1a33",
+      "reused_from": "res://art/received/floors/wood_3.png"
+    }
+  ]
+}

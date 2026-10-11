@@ -1,0 +1,425 @@
+{
+  "source_checks": [
+    {
+      "id": "water_base",
+      "crop": [
+        168,
+        85,
+        1607,
+        804
+      ],
+      "source_sha256": "42318f869042acaa266a6319a8872d6fce7f1a9be357b2f03d317799e87f466a",
+      "common_edge_color": [
+        55,
+        169,
+        174
+      ],
+      "filled_mask_edge_pixels": 1
+    },
+    {
+      "id": "shore_sediment",
+      "crop": [
+        122,
+        55,
+        1652,
+        825
+      ],
+      "source_sha256": "abde64b4ad6b160778294ae9f664ff672c66712b99f37bd19dbd1aae07940ce7",
+      "common_edge_color": [
+        208,
+        168,
+        118
+      ],
+      "filled_mask_edge_pixels": 26
+    }
+  ],
+  "layout_checks": [
+    {
+      "id": "fish_bank",
+      "dry_to_stand_route": true,
+      "float_on_water": true,
+      "adjacent_cast": true,
+      "runtime_collision_test": false
+    },
+    {
+      "id": "fish_reeds",
+      "dry_to_stand_route": true,
+      "float_on_water": true,
+      "adjacent_cast": true,
+      "runtime_collision_test": false
+    },
+    {
+      "id": "fish_pond",
+      "dry_to_stand_route": true,
+      "float_on_water": true,
+      "adjacent_cast": true,
+      "runtime_collision_test": false
+    }
+  ],
+  "checks": [
+    {
+      "id": "water_1",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 12,
+      "sha256": "42653e436db760a2b81069664ee8c986846749fe932941160367b73026a807df"
+    },
+    {
+      "id": "water_2",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 22,
+      "sha256": "16e5bffad1a36696efb9cef9be421d0ad84fe0d249e31e8e7c665dda26f66e94"
+    },
+    {
+      "id": "water_3",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 20,
+      "sha256": "e503d7e3f386c9d4c8d765041e7220d1586ab8df5253c3059868b16d504d8ee6"
+    },
+    {
+      "id": "shore_nx",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 44,
+      "sha256": "33385416cc135282f4c16405e9a8e39595b4c219c88c9a30b612b6e323063d4a"
+    },
+    {
+      "id": "shore_ny",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 45,
+      "sha256": "43944c870afb01cc90e1df1ecb4f4acfd2c6698ba6d77a83c3ea6e5384a69243"
+    },
+    {
+      "id": "shore_px",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 45,
+      "sha256": "65e6f9a182bec5dc197171c3cdeafa790a0c65cdc5544156fd5d7ce69cd4ba88"
+    },
+    {
+      "id": "shore_py",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 43,
+      "sha256": "218722d0f419f2fa31d8e6eaaa6324ee9f651c3abd22a3defca25a8a3c841276"
+    },
+    {
+      "id": "shore_nx_ny",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 44,
+      "sha256": "cfc0c965be64ee43d32d2e221518686c45aae49ff4ccf6a513b637ecf4708ee9"
+    },
+    {
+      "id": "shore_nx_px",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 45,
+      "sha256": "981e6b708bc4ef13c1e2c167e361715a6786ef1dd869d1d15147e33477d80ba5"
+    },
+    {
+      "id": "shore_nx_py",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 46,
+      "sha256": "aa1db94cd099a368a684f12d979f2bdd828b78ce83db7b5a804d391ef5ce987a"
+    },
+    {
+      "id": "shore_ny_px",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 46,
+      "sha256": "ee2058ff563e69eba31fb998afd4a9602a799027620fc044cd3678b28f378a53"
+    },
+    {
+      "id": "shore_ny_py",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 46,
+      "sha256": "531463353bc8180fedd24060e7ec4518ec1b83b5c203e3d8f9237b35ef188d41"
+    },
+    {
+      "id": "shore_px_py",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 45,
+      "sha256": "0c0e5139c5a94a62c260f15b8260bd57444f51bb1b17ee1692610736ecbdf9cb"
+    },
+    {
+      "id": "shore_nx_ny_px",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 46,
+      "sha256": "682a59f238219506599352df9ef6386836e12e9766e989216d33c283054f8a03"
+    },
+    {
+      "id": "shore_nx_ny_py",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 45,
+      "sha256": "c08ae98c6d278e0083e2cf1ed57f63973e0f84b6ea575b872fe1c6dfd515fac6"
+    },
+    {
+      "id": "shore_nx_px_py",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 45,
+      "sha256": "5304e875a95f4419d08c6076b6c732c1e9d4203e563ffec7dcd0ba7e301fc17a"
+    },
+    {
+      "id": "shore_ny_px_py",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 46,
+      "sha256": "634b4d7b00554810c6841ab3e6ff475926a40b94a60307896bf1794a2f790e61"
+    },
+    {
+      "id": "shore_corner_nx_ny",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 39,
+      "sha256": "e8cd3da15cec8ba8ff0f12ef1e5ad55a288b7f95a885df81e109c6f6551ce2d2"
+    },
+    {
+      "id": "shore_corner_ny_px",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 42,
+      "sha256": "be6e8ac3931e836ea7dc95a3fc0da2e7bb1e98133bc1ebcf31a31896a1da9c39"
+    },
+    {
+      "id": "shore_corner_px_py",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 32,
+      "sha256": "624d620c3339019d9dac7a28d94aff4c11f32c65383df0c3f961c63b2138516e"
+    },
+    {
+      "id": "shore_corner_py_nx",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 37,
+      "sha256": "642008bef5d8d5b811e2920ec8ecadadc0f52caa1c82d913d55268ca4e299854"
+    },
+    {
+      "id": "dock_planks_1",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 26,
+      "sha256": "e0f3dfc3da4696e500d19609b9c201ce1d326da0229d51072eb52a36c04c1951"
+    },
+    {
+      "id": "dock_planks_2",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 28,
+      "sha256": "4b556b0683bd1d5d63b2f9c48f66c7e3232c0480e128722435be73ddefeb252c"
+    },
+    {
+      "id": "dock_planks_3",
+      "canvas": [
+        64,
+        32
+      ],
+      "alpha": [
+        0,
+        255
+      ],
+      "opaque_pixels": 1024,
+      "transparent_rgb_zero": true,
+      "colors": 28,
+      "sha256": "1c34289910a9fc08317d9426adce4473a226649ee9b40d5ceeff53b546ff1a33"
+    }
+  ],
+  "water_edge_common": true,
+  "water_variant_max_channel_delta": 2,
+  "reused_wood_bytes_equal": true,
+  "godot_runtime_test": false
+}
