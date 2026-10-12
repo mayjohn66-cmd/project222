@@ -30,12 +30,13 @@ if ($LASTEXITCODE -ne 0) { throw 'Cannot archive source revision.' }
 $stagedProject=Join-Path $buildRoot 'project.godot'
 $stagedConfig=[IO.File]::ReadAllText($stagedProject).Replace('"res://addons/revvy/plugin.cfg", ','')
 [IO.File]::WriteAllText($stagedProject,$stagedConfig)
-function Invoke-Engine([string]$Step,[string[]]$EngineArguments) {
+function Invoke-Engine([string]$Step,[string[]]$EngineArguments,[bool]$Warmup=$false) {
     $stdout=Join-Path $logRoot ($Step+'.log')
     $stderr=Join-Path $logRoot ($Step+'.err')
     $process=Start-Process -FilePath $engine -ArgumentList $EngineArguments -WindowStyle Hidden -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
     if (-not $process.WaitForExit(300000)) { Stop-Process -Id $process.Id -Force; throw ($Step+' timed out') }
-    if ($process.ExitCode -ne 0 -or (Select-String -LiteralPath $stdout,$stderr -Pattern 'SCRIPT ERROR','^ERROR:' -Quiet)) { throw ($Step+' failed; see '+$logRoot) }
+    if ($process.ExitCode -ne 0 -or ((-not $Warmup) -and (Select-String -LiteralPath $stdout,$stderr -Pattern 'SCRIPT ERROR','^ERROR:' -Quiet))) { throw ($Step+' failed; see '+$logRoot) }
+    # 처음에는 사용자 Theme가 아직 없는 .ctex를 참조한다. 캐시 생성 후 두 번째 가져오기가 필수 오류 게이트다.
     Write-Output ($Step+' PASS')
 }
 Invoke-Engine 'version' @('--version')
@@ -53,7 +54,7 @@ try {
             Copy-Item -LiteralPath (Join-Path $templateRoot $name) -Destination (Join-Path $templateTarget $name)
         }
     }
-    Invoke-Engine 'import1' @('--headless','--path',('"'+$buildRoot+'"'),'--editor','--import','--quit')
+    Invoke-Engine 'import1' @('--headless','--path',('"'+$buildRoot+'"'),'--editor','--import','--quit') $true
     Invoke-Engine 'import2' @('--headless','--path',('"'+$buildRoot+'"'),'--editor','--import','--quit')
     Invoke-Engine 'export' @('--headless','--path',('"'+$buildRoot+'"'),'--export-release','"Windows Desktop"',('"'+(Join-Path $outputRoot 'Project222.exe')+'"'))
     Invoke-Engine 'licenses' @('--headless','--script',('"'+(Join-Path $PSScriptRoot 'write_engine_licenses.gd')+'"'),'--',('"--out='+(Join-Path $outputRoot 'GODOT_LICENSES.txt')+'"'))
