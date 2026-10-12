@@ -166,3 +166,5 @@ off.
 - 2026-10-12 Codex: 목10/15 목표 사용자확정=다른사람 전달Windows EXE. Windows preset/원본CSV export plugin(내용·기존import보존)/editor전용 F6~F12·C guard/친밀도PackedArray export추론 get접근 수정. 공식4.7.1 템플릿SHA512검증·실제EXE cold-start0·release QA GPU978/연속114(seed53241 원정3+다음날 저장재개) 실패0·생산ZIP rawCSV53/JSON20/active art831·dev/docs/tools/addons0. 재현 build_windows.ps1은커밋소스 새staging import2/export/log게이트/엔진라이선스/SHA/ZIP, 후보와일정 docs/배포/목요일_전달_준비.md. 다른PC 손조작·DPI/소리·혼잡/장시간·계절/동시후반 전체는목요일전남음, 완성선언아님.
 
 - 2026-10-12 Codex: Windows RC1 후보생성완료(source5ff98926, rc1-20261012): 캐시없는 Git runtime archive import2/export/license ERROR0·ZIP80308649바이트·exe/pck/readme/licenses/BuildInfo/SHA6파일. 별도새폴더압축해제 SHA256전부통과·실제exe headless120프레임 ERROR0/exit0. clade/work/delivery/Project222-Windows-RC1.zip; docs/배포/검사/첫_후보_빌드.json. 첫coldimport테마ctex경고는import2게이트로판정, 원본프로젝트/사용자저장미수정; 다른PC실조작검사는여전히필수대기.
+
+- 2026-10-12 Codex: 사용자 배경 출력 요청→내장 image_gen 1회 숲속 편의점 타이틀 후보1672×941 RGB PNG·중앙 메뉴 여백·원본 비율 보존, docs/그림_작업/받은그림/타이틀_배경/제작_기록.md. 실제 그림/PNG디코딩/SHA 확인. UI수정 사용자연기로 art/·폰트·테마·게임연결·RC1 미변경; 다음 연결 때 제목/버튼 대비 확인.
