@@ -34,6 +34,7 @@ func _ready():
 
 
 func _input(event: InputEvent) -> void:
+	if not OS.has_feature("editor"): return
 	# 에디터에서 옵션을 켠 경우에만 C키 수동 생성을 허용한다.
 	if not allow_debug_customer_spawn:
 		return

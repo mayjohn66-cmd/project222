@@ -112,6 +112,7 @@ func _ready() -> void:
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if not OS.has_feature("editor"): return
 	if Engine.is_editor_hint():
 		return
 	var key_event := event as InputEventKey

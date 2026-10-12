@@ -261,6 +261,7 @@ func reload_village_art() -> void:
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if not OS.has_feature("editor"): return
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_F8:
 		reload_village_art()
 

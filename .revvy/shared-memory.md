@@ -162,3 +162,5 @@ off.
 - 2026-10-12 Codex: 사용자 카메라너무멀다→원화대응 match_zoom64/96과 플레이시야분리, StoreView3D.PLAY_ZOOM1.0 기본매장·프롤로그1.5배확대/마무리1.00유지. 도시검사캡처도기본시야사용·도시443/매장871/전체904 실패0·원화/법선/논리칸유지·실제전후캡처 프롤로그_도시/게임_연결.md. 매장검사의 옛3D단풍/열매 기대값은 현재 상태PNG 선택으로 정정.
 
 - 2026-10-12 Codex: 사용자 조금더가까이 요청→PLAY_ZOOM1.0→1.15(15%추가확대). 격리GPU 실제프롤로그 도시→숲→튜토리얼완료/최종zoom1.15/ERROR0, 현재캡처 프롤로그_도시/실행_확인/튜토리얼_시야_1_15.png. 이전1.0 검사기록은 역사로보존.
+
+- 2026-10-12 Codex: 목10/15 목표 사용자확정=다른사람 전달Windows EXE. Windows preset/원본CSV export plugin(내용·기존import보존)/editor전용 F6~F12·C guard/친밀도PackedArray export추론 get접근 수정. 공식4.7.1 템플릿SHA512검증·실제EXE cold-start0·release QA GPU978/연속114(seed53241 원정3+다음날 저장재개) 실패0·생산ZIP rawCSV53/JSON20/active art831·dev/docs/tools/addons0. 재현 build_windows.ps1은커밋소스 새staging import2/export/log게이트/엔진라이선스/SHA/ZIP, 후보와일정 docs/배포/목요일_전달_준비.md. 다른PC 손조작·DPI/소리·혼잡/장시간·계절/동시후반 전체는목요일전남음, 완성선언아님.

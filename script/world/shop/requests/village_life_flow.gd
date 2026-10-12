@@ -26,8 +26,11 @@ static func friendship(id: String) -> int:
 
 static func friendship_name(id: String) -> String:
 	var title := "새 이웃"
-	for index in range(SETTINGS.friendship_thresholds.size()):
-		if friendship(id) >= SETTINGS.friendship_thresholds[index]: title = SETTINGS.friendship_names[index]
+	# 내보내기 중 상수 리소스의 기본 PackedArray를 null로 추론하지 않도록 실행 시 읽는다.
+	var thresholds: PackedInt32Array = SETTINGS.get("friendship_thresholds")
+	var names: PackedStringArray = SETTINGS.get("friendship_names")
+	for index in range(thresholds.size()):
+		if friendship(id) >= thresholds[index]: title = names[index]
 	return title
 
 static func greet(id: String) -> Dictionary:

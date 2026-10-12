@@ -1,0 +1,11 @@
+{
+  "checks": 978,
+  "csv_files": 53,
+  "editor": false,
+  "engine": "4.7.1-stable (official)",
+  "failures": 0,
+  "frame_ms_median": 13.3333333333333,
+  "frame_ms_p95": 13.3339999999999,
+  "json_files": 20,
+  "manifest_art_paths": 831
+}

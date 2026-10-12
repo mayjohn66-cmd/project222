@@ -1,0 +1,364 @@
+{
+  "checks": 114,
+  "failures": 0,
+  "ledger": [
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "production_door": 1,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 0,
+        "water": 0
+      },
+      "money": 0,
+      "phase": "store",
+      "runs": 0,
+      "stage": "new_game"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "production_door": 1,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 1,
+        "leather_armor": 1,
+        "plywood": 4,
+        "rusty_sword": 1,
+        "water": 7
+      },
+      "money": 150,
+      "phase": "store",
+      "runs": 0,
+      "stage": "barter"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "production_door": 1,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 1,
+        "dry_branch": 16,
+        "plywood": 4,
+        "treasure_map": 1,
+        "water": 7,
+        "wild_berry": 4
+      },
+      "money": 150,
+      "phase": "store",
+      "runs": 1,
+      "stage": "return_1"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "production_door": 1,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 1,
+        "dry_branch": 16,
+        "plywood": 4,
+        "treasure_map": 1,
+        "water": 7,
+        "wild_berry": 3
+      },
+      "money": 170,
+      "phase": "store",
+      "runs": 1,
+      "stage": "core_tutorial"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "production_door": 1,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 1,
+        "dry_branch": 16,
+        "forest_herb": 25,
+        "plywood": 4,
+        "spring_bud": 3,
+        "treasure_map": 1,
+        "water": 7,
+        "wild_berry": 5
+      },
+      "money": 200,
+      "phase": "store",
+      "runs": 2,
+      "stage": "return_2"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "production_door": 1,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 1,
+        "dry_branch": 16,
+        "forest_herb": 22,
+        "plywood": 4,
+        "spring_bud": 3,
+        "treasure_map": 1,
+        "water": 7,
+        "wild_berry": 5
+      },
+      "money": 240,
+      "phase": "store",
+      "runs": 2,
+      "stage": "first_two_requests"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "production_door": 1,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 1,
+        "dry_branch": 12,
+        "forest_herb": 22,
+        "plywood": 4,
+        "spring_bud": 3,
+        "treasure_map": 1,
+        "water": 7,
+        "wild_berry": 5
+      },
+      "money": 280,
+      "phase": "store",
+      "runs": 2,
+      "stage": "merchant_settled"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "magic_oven": 1,
+        "production_door": 1,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 1,
+        "camp_bread": 1,
+        "dry_branch": 12,
+        "forest_herb": 22,
+        "marsh_reed": 2,
+        "plywood": 4,
+        "raw_water": 3,
+        "scroll_camp_bread": 1,
+        "spring_bud": 3,
+        "stone_shard": 8,
+        "treasure_map": 1,
+        "water": 7,
+        "wheat": 4,
+        "wild_berry": 5
+      },
+      "money": 200,
+      "phase": "make_production",
+      "runs": 3,
+      "stage": "return_3"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "magic_oven": 1,
+        "production_door": 1,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 1,
+        "camp_bread": 1,
+        "dry_branch": 12,
+        "forest_herb": 22,
+        "marsh_reed": 2,
+        "plywood": 4,
+        "raw_water": 1,
+        "scroll_camp_bread": 1,
+        "spring_bud": 3,
+        "stone_shard": 8,
+        "treasure_map": 1,
+        "water": 7,
+        "wheat": 4,
+        "wild_berry": 5
+      },
+      "money": 230,
+      "phase": "make_production",
+      "runs": 3,
+      "stage": "water_request"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "magic_oven": 0,
+        "production_door": 0,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 1,
+        "warehouse_rack": 1
+      },
+      "inventory": {
+        "bread": 1,
+        "camp_bread": 2,
+        "dry_branch": 12,
+        "forest_herb": 22,
+        "marsh_reed": 2,
+        "plywood": 4,
+        "raw_water": 1,
+        "scroll_camp_bread": 0,
+        "spring_bud": 3,
+        "stone_shard": 8,
+        "treasure_map": 1,
+        "water": 7,
+        "wheat": 2,
+        "wild_berry": 5
+      },
+      "money": 230,
+      "phase": "make_warehouse",
+      "runs": 3,
+      "stage": "first_product"
+    },
+    {
+      "day": 1,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "magic_oven": 0,
+        "production_door": 0,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 0,
+        "warehouse_rack": 0
+      },
+      "inventory": {
+        "bread": 1,
+        "camp_bread": 2,
+        "dry_branch": 12,
+        "forest_herb": 22,
+        "marsh_reed": 2,
+        "plywood": 4,
+        "raw_water": 1,
+        "scroll_camp_bread": 0,
+        "spring_bud": 3,
+        "stone_shard": 8,
+        "treasure_map": 1,
+        "water": 7,
+        "wheat": 1,
+        "wild_berry": 5
+      },
+      "money": 230,
+      "phase": "expand",
+      "runs": 3,
+      "stage": "warehouse_used"
+    },
+    {
+      "day": 2,
+      "furniture": {
+        "door": 0,
+        "drink_machine": 1,
+        "magic_oven": 0,
+        "production_door": 0,
+        "register": 0,
+        "shelf_1x1": 0,
+        "shelf_2x1": 0,
+        "shelf_3x1": 0,
+        "warehouse_door": 0,
+        "warehouse_rack": 0
+      },
+      "inventory": {
+        "bread": 1,
+        "camp_bread": 2,
+        "dry_branch": 12,
+        "forest_herb": 22,
+        "marsh_reed": 2,
+        "plywood": 4,
+        "raw_water": 1,
+        "scroll_camp_bread": 0,
+        "spring_bud": 3,
+        "stone_shard": 8,
+        "treasure_map": 1,
+        "water": 7,
+        "wheat": 1,
+        "wild_berry": 5
+      },
+      "money": 230,
+      "phase": "expand",
+      "runs": 3,
+      "stage": "complete"
+    }
+  ]
+}

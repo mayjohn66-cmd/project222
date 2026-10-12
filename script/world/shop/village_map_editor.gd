@@ -150,6 +150,7 @@ func _set_mode(value: int) -> void:
 		status_label.text = ["오브젝트를 타일에 맞춰 옮깁니다.","돌길을 칠합니다.","잔디를 칠합니다.","기본 타일로 되돌립니다.","지도 가장자리의 빈 타일을 추가합니다.","기존 지도 타일을 지웁니다.","원정 출발 지점을 돌바닥 타일로 지정합니다."][value]
 
 func _input(event: InputEvent) -> void:
+	if not OS.has_feature("editor"): return
 	if active and event is InputEventMouseButton and event.button_index in [MOUSE_BUTTON_MIDDLE,MOUSE_BUTTON_RIGHT]:
 		if event.pressed:
 			panning = not panel.get_global_rect().has_point(event.position)

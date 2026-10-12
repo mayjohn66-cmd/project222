@@ -44,6 +44,7 @@ func setup(world_node: Node, cutscene_node: OpeningCutscene) -> void:
 
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if not OS.has_feature("editor"): return
 	var key := event as InputEventKey
 
 	if key == null or not key.pressed or key.echo:

@@ -29,3 +29,6 @@ override.cfg
 # Python 캐시
 __pycache__/
 *.pyc
+
+# Windows 배포 결과와 검사 로그는 소스 저장소에 넣지 않는다.
+builds/
