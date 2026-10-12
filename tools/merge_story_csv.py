@@ -14,7 +14,7 @@
 import csv, io, re, sys
 CSV = "data/shop/requests/requests_text.csv"
 COLS = ["id", "kind", "title", "summary", "lines", "completion"]
-MARK = re.compile(r"^((?:\*|\{[^}]+\})+)")
+MARK = re.compile(r"^((?:\*|>|\{[^}]+\})+)")
 
 def split_lines(value):
     return [p for p in value.split("|")] if value else []

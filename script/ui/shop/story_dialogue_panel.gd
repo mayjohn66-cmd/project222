@@ -143,16 +143,20 @@ func _show_line() -> void:
 	var line: String = marks["text"]
 	# 서술은 행동 묘사처럼 괄호로 감싸 이름 칸 없이 흐리게 보여 준다: (뺨을 꼬집어 봤다.)
 	text_label.text = "(%s)" % line if narration else line
-	if _speaker_is_player:
+	# ">" 표시 줄은 NPC 장면 안에서도 주인공이 말한다.
+	var player_line: bool = _speaker_is_player or bool(marks.get("player", false))
+	if player_line:
 		# 표정 표시가 없는 줄은 기본 표정으로 돌아간다(앞 줄 표정이 남지 않게).
 		var expression: String = marks["expression"] if not str(marks["expression"]).is_empty() else PlayerPortraits.DEFAULT_EXPRESSION
 		portrait.texture = PlayerPortraits.find(expression)
+		portrait.visible = portrait.texture != null
 	else:
 		# NPC: 표정 그림이 있으면 쓰고, 없거나 표시가 없으면 기본 초상화.
 		var npc_face: Texture2D = NpcPortraits.find_expression(_speaker, marks["expression"])
 		portrait.texture = npc_face if npc_face != null else _base_portrait
+		portrait.visible = portrait.texture != null
 	name_label.visible = not narration
-	name_label.text = _speaker
+	name_label.text = PlayerProgress.display_player_name() if player_line else _speaker
 	text_label.add_theme_color_override("font_color", NARRATION_COLOR if narration else SPEECH_COLOR)
 	text_label.visible_ratio = 0.0
 	_show_hint(false)
