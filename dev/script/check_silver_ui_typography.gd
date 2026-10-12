@@ -31,7 +31,9 @@ func run() -> void:
 	var title_luminance: float = title.nickname_dialog.get_theme_color("title_color","Window").srgb_to_linear().get_luminance()
 	var bar_luminance: float = border.bg_color.srgb_to_linear().get_luminance()
 	check((bar_luminance+0.05)/(title_luminance+0.05) >= 4.5, "title text contrasts with neutral bar")
-	check(title.nickname_edit.get_theme_stylebox("normal").texture.resource_path.begins_with("res://art/ui/controls/"), "input uses new neutral art")
+	var input_style = title.nickname_edit.get_theme_stylebox("normal")
+	var input_text: Color = title.nickname_edit.get_theme_color("font_color")
+	check(input_style is StyleBoxFlat and (input_style.bg_color.srgb_to_linear().get_luminance()+0.05)/(input_text.srgb_to_linear().get_luminance()+0.05) >= 4.5, "input text contrasts with plain paper")
 	check(title.nickname_dialog.get_ok_button().disabled, "empty name cannot start")
 	for character in "글씨점검":
 		var key := InputEventKey.new()

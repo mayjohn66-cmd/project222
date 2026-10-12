@@ -11,7 +11,7 @@ const FORE_W := 10.0  # 오른쪽 쪽 옆면 폭
 const BOTTOM_T := 6.0  # 아래쪽 쪽 옆면 두께
 const NAV_W := 104.0  # 포스트잇 내비게이션 폭
 const ONTO := 12.0  # 펼친 탭의 포스트잇이 쪽 안쪽 여백으로 붙는 길이(쪽 내용 여백 안이라 UI 를 가리지 않는다)
-const FLAG_TEXT := Color("2b2f55")
+const FLAG_TEXT := InteractionUiStyle.INK
 const PAGE := Color("f5eddc")
 const LEATHER := Color("70503b")
 const LEATHER_DARK := Color("3d2a1d")
@@ -80,10 +80,10 @@ static func paint_flag(c: CanvasItem,font: Font,r: Rect2,color: Color,label: Str
 			var cut := maxf(0.0,ax - sh.position.x)
 			sh.position.x += cut
 			sh.size.x -= cut
-		if sh.size.x > 0.0: c.draw_rect(sh,Color(0.16,0.11,0.06,0.28))
+		if sh.size.x > 0.0: c.draw_rect(sh,InteractionUiStyle.tone(InteractionUiStyle.INK,0.65,0.28))
 	# 본체: 하나로 이어진 한 장의 종이. 위가 밝고 아래가 살짝 짙다(접힌 선·붙은 자국 없이 일체형)
-	c.draw_polygon(PackedVector2Array([Vector2(r.position.x,top),Vector2(r.end.x,top),Vector2(r.end.x,bottom),Vector2(r.position.x,bottom)]),PackedColorArray([color.lightened(0.10),color.lightened(0.10),color.darkened(0.03),color.darkened(0.03)]))
-	c.draw_rect(r,color.darkened(0.2),false,1.0)
+	c.draw_polygon(PackedVector2Array([Vector2(r.position.x,top),Vector2(r.end.x,top),Vector2(r.end.x,bottom),Vector2(r.position.x,bottom)]),PackedColorArray([InteractionUiStyle.tone(color,1.035),InteractionUiStyle.tone(color,1.035),InteractionUiStyle.tone(color,0.97),InteractionUiStyle.tone(color,0.97)]))
+	c.draw_rect(r,InteractionUiStyle.tone(InteractionUiStyle.INK,1.0,0.65),false,1.0)
 	if with_text and font != null:
 		var sz := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(15))
 		var ty := top + (bottom - top) * 0.5 + sz.y * 0.5 - font.get_descent(UiTypography.size(15))
