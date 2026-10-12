@@ -128,11 +128,11 @@ fish_dusk_crucian,저녁빛 붕어,material,food,65,1,1,true,true,res://art/item
 fish_frost_smelt,서리 빙어,material,food,60,1,1,true,true,res://art/items/fish_frost_smelt.png,작고 반투명한 은빛 몸. 얼지 않은 물가에서 잡으며 얼음 깨기 조작은 없다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
 fish_snow_trout,눈등 송어,material,food,70,1,1,true,true,res://art/items/fish_snow_trout.png,흰 점이 있는 푸른 등. 겨울의 묵직한 식재료. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
 fish_moon_carp,달무늬 잉어,material,food,85,1,1,true,true,res://art/items/fish_moon_carp.png,등 옆의 밝은 점무늬. 마법 효과·전이 원인·전설의 정체는 설정하지 않는다. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_grilled,약초 생선구이,store_product,food,90,1,1,true,true,res://art/items/fish_grilled.png,기본 생선의 첫 요리. 의료·전투 회복 효과 없음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_dried,말린 생선,store_product,food,65,1,1,true,true,res://art/items/fish_dried.png,원정 재료의 영구 보존 가공품과 구분. 일반 식품 기한을 가진 길 음식. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_soup,물가의 맑은 수프,store_product,food,125,1,1,true,true,res://art/items/fish_soup.png,물을 현장 설비에서 가열해 만든 상품. 채집한 물을 바로 마시는 장면 없음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_bread,생선 속을 넣은 빵,store_product,food,150,1,1,true,true,res://art/items/fish_bread.png,현지식 빵을 배운 뒤 확장하는 상품. 초기 현대 빵 재현 조건을 우회하지 않음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_lunch,물가의 작은 도시락,store_product,food,195,1,1,true,true,res://art/items/fish_lunch.png,갈대는 포장 재료이며 먹는 재료로 설명하지 않음. 실제 세 재료 소비. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
-fish_winter_stew,겨울 생선 스튜,store_product,food,170,1,1,true,true,res://art/items/fish_winter_stew.png,겨울 생선을 남겨 다른 계절에도 만들 수 있음. 최초 소개 조건만 겨울. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_grilled,약초 생선구이,store_product,food,150,1,1,true,true,res://art/items/fish_grilled.png,기본 생선의 첫 요리. 의료·전투 회복 효과 없음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_dried,말린 생선,store_product,food,100,1,1,true,true,res://art/items/fish_dried.png,원정 재료의 영구 보존 가공품과 구분. 일반 식품 기한을 가진 길 음식. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_soup,물가의 맑은 수프,store_product,food,200,1,1,true,true,res://art/items/fish_soup.png,물을 현장 설비에서 가열해 만든 상품. 채집한 물을 바로 마시는 장면 없음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_bread,생선 속을 넣은 빵,store_product,food,220,1,1,true,true,res://art/items/fish_bread.png,현지식 빵을 배운 뒤 확장하는 상품. 초기 현대 빵 재현 조건을 우회하지 않음. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_lunch,물가의 작은 도시락,store_product,food,580,1,1,true,true,res://art/items/fish_lunch.png,갈대는 포장 재료이며 먹는 재료로 설명하지 않음. 실제 세 재료 소비. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
+fish_winter_stew,겨울 생선 스튜,store_product,food,300,1,1,true,true,res://art/items/fish_winter_stew.png,겨울 생선을 남겨 다른 계절에도 만들 수 있음. 최초 소개 조건만 겨울. 상온에서는 날짜가 지나면 만료됩니다.,0,0,inventory,shelf,1
 fishing_rod_wood,소박한 낚싯대,special,tool,0,1,1,false,false,res://art/items/fishing_rod_wood.png,없음,0,0,inventory,shelf,0
 fishing_rod_reinforced,손잡이를 보강한 낚싯대,special,tool,0,1,1,false,false,res://art/items/fishing_rod_reinforced.png,외형·생활 이야기만. 새 어종 해금·성공률·수익 보너스 없음.,0,0,inventory,shelf,0
