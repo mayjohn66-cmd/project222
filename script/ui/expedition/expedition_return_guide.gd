@@ -20,7 +20,7 @@ func _ready() -> void:
 	note.name = "ReturnGuideText"
 	note.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	note.add_theme_font_size_override("font_size",18)
+	note.add_theme_font_size_override("font_size",UiTypography.size(18))
 	note.hide()
 	host.get_node("VBoxContainer/ResultScroll/ResultBody").add_child(note)
 	entry = Button.new()

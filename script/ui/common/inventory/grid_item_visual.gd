@@ -221,7 +221,7 @@ func _create_fallback_label() -> void:
 
 	label.add_theme_font_size_override(
 		"font_size",
-		10
+		UiTypography.size(10)
 	)
 
 	add_child(
@@ -242,7 +242,7 @@ func _create_count_badge(count_text: String) -> void:
 	label.offset_bottom = -2
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	label.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
-	label.add_theme_font_size_override("font_size",14)
+	label.add_theme_font_size_override("font_size",UiTypography.size(14))
 	label.add_theme_color_override("font_color",Color("fff4d6"))
 	label.add_theme_color_override("font_outline_color",Color("593e28"))
 	label.add_theme_constant_override("outline_size",3)
@@ -473,7 +473,7 @@ func _create_drag_preview(
 
 	label.add_theme_font_size_override(
 		"font_size",
-		12
+		UiTypography.size(12)
 	)
 
 	label.autowrap_mode = (

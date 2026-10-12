@@ -55,18 +55,18 @@ func _setup_hud() -> void:
  var title := Label.new()
  title.text = "원정으로 가는 길"
  title.position = Vector2(28,22)
- title.add_theme_font_size_override("font_size",24)
+ title.add_theme_font_size_override("font_size",UiTypography.size(24))
  hud.add_child(title)
  var guide := Label.new()
  guide.text = "WASD 이동 · 출구에서 E"
  guide.position = Vector2(28,58)
- guide.add_theme_font_size_override("font_size",16)
+ guide.add_theme_font_size_override("font_size",UiTypography.size(16))
  hud.add_child(guide)
  prompt = Label.new()
  prompt.position = Vector2(260,583)
  prompt.size = Vector2(620,36)
  prompt.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
- prompt.add_theme_font_size_override("font_size",20)
+ prompt.add_theme_font_size_override("font_size",UiTypography.size(20))
  hud.add_child(prompt)
  for label in [title,guide,prompt]:
   label.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -130,7 +130,7 @@ class ExitMark extends Node2D:
   label.position = Vector2(-85,-84)
   label.size.x = 170
   label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-  label.add_theme_font_size_override("font_size",18)
+  label.add_theme_font_size_override("font_size",UiTypography.size(18))
   label.add_theme_color_override("font_color",Color("fff0d0"))
   label.add_theme_color_override("font_outline_color",Color("334b3d"))
   label.add_theme_constant_override("outline_size",4)

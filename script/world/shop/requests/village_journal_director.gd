@@ -32,7 +32,7 @@ func _ready() -> void:
 	get_parent().add_child.call_deferred(marker)
 
 func _style_label(label: Label) -> void:
-	label.add_theme_font_size_override("font_size",20)
+	label.add_theme_font_size_override("font_size",UiTypography.size(20))
 	label.add_theme_color_override("font_color",Color("fff0d0"))
 	label.add_theme_color_override("font_outline_color",Color("302415"))
 	label.add_theme_constant_override("outline_size",4)

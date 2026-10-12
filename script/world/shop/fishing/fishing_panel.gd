@@ -34,7 +34,7 @@ func _ready() -> void:
 	column.add_theme_constant_override("separation",12)
 	panel.add_child(column)
 	title = Label.new()
-	title.add_theme_font_size_override("font_size",23)
+	title.add_theme_font_size_override("font_size",UiTypography.size(23))
 	title.add_theme_color_override("font_color",Color("322f29"))
 	column.add_child(title)
 	scroll = ScrollContainer.new()
@@ -68,7 +68,7 @@ func text(value: String) -> Label:
 	label.text = value
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.add_theme_color_override("font_color",Color("443c32"))
-	label.add_theme_font_size_override("font_size",18)
+	label.add_theme_font_size_override("font_size",UiTypography.size(18))
 	body.add_child(label)
 	return label
 func button(value: String, action: Callable, disabled: bool = false) -> Button:

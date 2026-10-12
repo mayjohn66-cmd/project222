@@ -30,7 +30,7 @@ var hint_tween: Tween = null
 var beat_handler: Callable = Callable()
 var _beat_busy: bool = false
 
-const HINT_HOLDER_HEIGHT := 44.0   # 움찔거리는 범위와 테두리 사이 여유까지 포함
+const HINT_HOLDER_HEIGHT := 30.0   # 본문 줄 공간을 확보하며 표시의 움직임과 여백을 포함
 const HINT_MARGIN_RIGHT := 22.0    # 오른쪽 테두리에서 띄우는 거리
 const HINT_REST_Y := 6.0
 const HINT_BOB_PIXELS := 5.0      # ▼가 아래로 움찔하는 거리
@@ -83,14 +83,14 @@ func _ready() -> void:
 	row.add_child(column)
 
 	name_label = Label.new()
-	name_label.add_theme_font_size_override("font_size", 24)
+	name_label.add_theme_font_size_override("font_size", UiTypography.size(24))
 	name_label.add_theme_color_override("font_color", Color(0.97, 0.85, 0.55))
 	column.add_child(name_label)
 
 	text_label = Label.new()
 	text_label.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	text_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	text_label.add_theme_font_size_override("font_size", 21)
+	text_label.add_theme_font_size_override("font_size", UiTypography.size(21))
 	text_label.add_theme_color_override("font_color", Color(0.96, 0.93, 0.85))
 	column.add_child(text_label)
 
@@ -102,7 +102,7 @@ func _ready() -> void:
 	hint_label = Label.new()
 	hint_label.text = "▼"
 	hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	hint_label.add_theme_font_size_override("font_size", 18)
+	hint_label.add_theme_font_size_override("font_size", UiTypography.size(18))
 	hint_label.add_theme_color_override("font_color", Color(0.85, 0.65, 0.3))
 	# 오른쪽 위에 붙이고, 폭은 글자 크기대로 둔다(오른쪽 여백만큼 안쪽으로).
 	hint_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT, Control.PRESET_MODE_MINSIZE)

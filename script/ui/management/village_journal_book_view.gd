@@ -67,7 +67,7 @@ static func _label(text: String, size: int) -> Label:
 	var label := Label.new()
 	label.text = text
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_size_override("font_size", size)
+	label.add_theme_font_size_override("font_size", UiTypography.size(size))
 	return label
 
 

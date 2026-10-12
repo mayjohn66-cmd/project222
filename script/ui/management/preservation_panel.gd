@@ -163,14 +163,14 @@ func _button(text_value: String, action: Callable) -> Button:
 	var button := Button.new()
 	button.text = text_value
 	button.add_theme_color_override("font_color", Color("51382d"))
-	button.add_theme_font_size_override("font_size", 16)
+	button.add_theme_font_size_override("font_size", UiTypography.size(16))
 	button.pressed.connect(action)
 	return button
 
 func _label() -> Label:
 	var label := Label.new()
 	label.add_theme_color_override("font_color", Color("51382d"))
-	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_font_size_override("font_size", UiTypography.size(16))
 	return label
 
 func _install(id: String) -> void:

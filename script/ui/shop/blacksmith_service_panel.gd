@@ -67,7 +67,7 @@ func label(text: String, size: int) -> Label:
 	var value := Label.new()
 	value.text = text
 	value.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	value.add_theme_font_size_override("font_size",size)
+	value.add_theme_font_size_override("font_size",UiTypography.size(size))
 	value.add_theme_color_override("font_color",Color("38220f"))
 	return value
 func make_button(text: String) -> Button:

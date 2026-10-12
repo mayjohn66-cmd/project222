@@ -129,4 +129,4 @@ mouse_filter = 2
 layout_mode = 2
 text = "선택 지역: 숲"
 autowrap_mode = 3
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 24

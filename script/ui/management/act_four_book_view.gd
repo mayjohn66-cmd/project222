@@ -48,7 +48,7 @@ static func _label(parent: Control, text: String, font_size: int) -> void:
 	label.text = text
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_font_size_override("font_size",font_size)
+	label.add_theme_font_size_override("font_size",UiTypography.size(font_size))
 	parent.add_child(label)
 static func add_schedule(menu: Control) -> void:
 	if not ActFourFlow.done("a6_crossroad_market"): return

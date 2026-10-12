@@ -45,13 +45,13 @@ func _ready() -> void:
 	column.custom_minimum_size = Vector2.ZERO
 	column.add_theme_constant_override("separation", 12)
 	balance = Label.new()
-	balance.add_theme_font_size_override("font_size", 22)
+	balance.add_theme_font_size_override("font_size", UiTypography.size(22))
 	column.add_child(balance)
 	column.move_child(balance, 0)
 	var hint := Label.new()
 	hint.text = "구매한 도구는 보유 장비에 들어갑니다. 가방에 넣고 출발하세요."
 	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	hint.add_theme_font_size_override("font_size", 17)
+	hint.add_theme_font_size_override("font_size", UiTypography.size(17))
 	column.add_child(hint)
 	column.move_child(hint, 1)
 	var scroll := ScrollContainer.new()

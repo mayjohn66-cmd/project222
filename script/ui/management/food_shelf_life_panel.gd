@@ -40,7 +40,7 @@ func _label(text_value: String) -> void:
 	label.text = text_value
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.add_theme_color_override("font_color", Color("51382d"))
-	label.add_theme_font_size_override("font_size", 16)
+	label.add_theme_font_size_override("font_size", UiTypography.size(16))
 	rows.add_child(label)
 
 func open() -> void:

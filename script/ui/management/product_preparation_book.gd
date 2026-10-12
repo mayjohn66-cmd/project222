@@ -36,7 +36,7 @@ func _ready() -> void:
 		button.text = entry[1]
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.custom_minimum_size.y = 42
-		button.add_theme_font_size_override("font_size",16)
+		button.add_theme_font_size_override("font_size",UiTypography.size(16))
 		button.clip_text = true
 		bar.add_child(button)
 		tabs[entry[0]] = button
@@ -53,7 +53,7 @@ func _ready() -> void:
 	summary = text(left,"",17)
 	only_ready = CheckBox.new()
 	only_ready.text = "지금 만들 수 있는 상품만"
-	only_ready.add_theme_font_size_override("font_size",16)
+	only_ready.add_theme_font_size_override("font_size",UiTypography.size(16))
 	left.add_child(only_ready)
 	only_ready.toggled.connect(func(_value): selected = ""; refresh())
 	list_scroll = ScrollContainer.new()
@@ -93,7 +93,7 @@ func text(parent: Node, value: String, font := 18) -> Label:
 	var label := Label.new()
 	label.text = value
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_size_override("font_size",font)
+	label.add_theme_font_size_override("font_size",UiTypography.size(font))
 	parent.add_child(label)
 	return label
 func refresh(force := true) -> void:
@@ -129,7 +129,7 @@ func refresh(force := true) -> void:
 		var button := Button.new()
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.custom_minimum_size.y = 62
-		button.add_theme_font_size_override("font_size",18)
+		button.add_theme_font_size_override("font_size",UiTypography.size(18))
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.clip_text = true
 		button.text = host.get_facility_display_name(entry["facility_id"]) + "\n" + ProductPreparationData.facility_summary(world,entry) if mode == "facilities" else str(entry["title"]) + "\n" + str(entry["status"]) + (" · 이야기 있음" if not entry["notes"].is_empty() else "")

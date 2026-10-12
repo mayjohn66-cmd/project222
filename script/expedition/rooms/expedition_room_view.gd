@@ -47,7 +47,7 @@ func _ready() -> void:
 
 func _button(caption: String, parent: Control) -> Button:
 	var button := Button.new()
-	button.add_theme_font_size_override("font_size", 18)
+	button.add_theme_font_size_override("font_size", UiTypography.size(18))
 	button.text = caption
 	button.custom_minimum_size = Vector2(42, 40)
 	button.focus_mode = Control.FOCUS_NONE
@@ -183,7 +183,7 @@ func _draw() -> void:
 			var damage_at := stage.project(note["position"], float(note.get("height", 0.9)))
 			ExpeditionDamageDigits.draw_number(self, damage_at, int(note["amount"]), float(note["life"]))
 		else:
-			draw_string(get_theme_default_font(), note_at - Vector2(0, cell * 0.5), str(note["text"]), HORIZONTAL_ALIGNMENT_LEFT, -1, 18, Color.WHITE)
+			draw_string(get_theme_default_font(), note_at - Vector2(0, cell * 0.5), str(note["text"]), HORIZONTAL_ALIGNMENT_LEFT, -1, UiTypography.size(18), Color.WHITE)
 	# 피격: 화면 가장자리가 붉게 번쩍인다(무적 시간 동안 서서히 사라짐). 네 변을 대각선으로 맞닿는 사다리꼴 그라데이션으로 그려
 	# 모서리에서 겹쳐 더 진해지지 않게 한다(바깥 = 붉음, 안쪽 = 투명).
 	if model.hurt_remaining > 0.0:
@@ -208,7 +208,7 @@ func _draw_object(site: Dictionary = {}) -> void:
 	var at := model.object_position if site.is_empty() else Vector2(float(site["x"]),float(site["y"]))
 	var caption: String = "채집" if model.object_kind == "gather" else ("휴식" if model.object_kind == "heal" else "상자")
 	if not site.is_empty(): caption = str(site["label"])
-	draw_string(get_theme_default_font(), _point(at) + Vector2(-20, -36 * tile_scale), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, 14)
+	draw_string(get_theme_default_font(), _point(at) + Vector2(-20, -36 * tile_scale), caption, HORIZONTAL_ALIGNMENT_LEFT, -1, UiTypography.size(14))
 
 func _draw_enemy(enemy: Dictionary) -> void:
 	var at := _point(enemy["position"])
@@ -220,4 +220,4 @@ func _draw_enemy(enemy: Dictionary) -> void:
 	draw_rect(bar, Color("322330"))
 	bar.size.x *= float(enemy["hp"]) / float(enemy["max_hp"])
 	draw_rect(bar, Color("ea8a8a"))
-	draw_string(get_theme_default_font(), at + Vector2(-48, -radius - 17), str(enemy["name"]), HORIZONTAL_ALIGNMENT_CENTER, 96, 12, Color("f4eddb"))
+	draw_string(get_theme_default_font(), at + Vector2(-48, -radius - 17), str(enemy["name"]), HORIZONTAL_ALIGNMENT_CENTER, 96, UiTypography.size(12), Color("f4eddb"))

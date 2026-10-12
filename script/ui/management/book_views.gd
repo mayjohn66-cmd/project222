@@ -61,9 +61,9 @@ static func paint_cover(canvas: CanvasItem,font: Font,x_spine: float,x_end: floa
 
 
 static func _centered(canvas: CanvasItem,font: Font,text: String,box: Rect2,font_size: int,color: Color) -> void:
-	var sz := font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size)
-	var asc := font.get_ascent(font_size)
-	canvas.draw_string(font,Vector2(box.position.x + (box.size.x - sz.x) * 0.5,box.position.y + (box.size.y - sz.y) * 0.5 + asc),text,HORIZONTAL_ALIGNMENT_LEFT,-1,font_size,color)
+	var sz := font.get_string_size(text,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(font_size))
+	var asc := font.get_ascent(UiTypography.size(font_size))
+	canvas.draw_string(font,Vector2(box.position.x + (box.size.x - sz.x) * 0.5,box.position.y + (box.size.y - sz.y) * 0.5 + asc),text,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(font_size),color)
 
 
 # 포스트잇 한 장을 그린다(오른쪽 줄·왼쪽 줄·책장에 실려 넘어가는 3D 포스트잇이 모두 이 그림을 쓴다 → 어디서나 같은 모양).
@@ -85,10 +85,10 @@ static func paint_flag(c: CanvasItem,font: Font,r: Rect2,color: Color,label: Str
 	c.draw_polygon(PackedVector2Array([Vector2(r.position.x,top),Vector2(r.end.x,top),Vector2(r.end.x,bottom),Vector2(r.position.x,bottom)]),PackedColorArray([color.lightened(0.10),color.lightened(0.10),color.darkened(0.03),color.darkened(0.03)]))
 	c.draw_rect(r,color.darkened(0.2),false,1.0)
 	if with_text and font != null:
-		var sz := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,15)
-		var ty := top + (bottom - top) * 0.5 + sz.y * 0.5 - font.get_descent(15)
+		var sz := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(15))
+		var ty := top + (bottom - top) * 0.5 + sz.y * 0.5 - font.get_descent(UiTypography.size(15))
 		var tx := ax - 16.0 - sz.x if mirrored else ax + 16.0
-		c.draw_string(font,Vector2(tx,ty),label,HORIZONTAL_ALIGNMENT_LEFT,-1,15,FLAG_TEXT)
+		c.draw_string(font,Vector2(tx,ty),label,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(15),FLAG_TEXT)
 
 
 # 책장에 실려 넘어가는 포스트잇의 질감용(3D): 자기 크기 전체에 포스트잇 한 장(그림자 없음). 2 배로 그려 또렷하게 한다.
@@ -141,8 +141,8 @@ class Paper extends Control:
 		var key := Rect2(width - 112.0,y,46.0,22.0)
 		draw_rect(key,Color("f5eddc"))
 		draw_rect(key,Color("b9a582"),false,2.0)
-		draw_string(font,Vector2(key.position.x + 7.0,key.position.y + 16.0),"ESC",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("44392e"))
-		draw_string(font,Vector2(key.end.x + 8.0,key.position.y + 17.0),"닫기",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("f5eddc"))
+		draw_string(font,Vector2(key.position.x + 7.0,key.position.y + 16.0),"ESC",HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(14),Color("44392e"))
+		draw_string(font,Vector2(key.end.x + 8.0,key.position.y + 17.0),"닫기",HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(16),Color("f5eddc"))
 
 	func set_mode(value: int) -> void:
 		mode = clampi(value,0,BookViews.TAB_PAPERS.size() - 1)
@@ -295,8 +295,8 @@ class Hint extends Control:
 		var key := Rect2(0.0,0.0,46.0,22.0)
 		draw_rect(key,Color("f5eddc"))
 		draw_rect(key,Color("b9a582"),false,2.0)
-		draw_string(font,Vector2(7.0,16.0),"ESC",HORIZONTAL_ALIGNMENT_LEFT,-1,14,Color("44392e"))
-		draw_string(font,Vector2(key.end.x + 8.0,17.0),"닫기",HORIZONTAL_ALIGNMENT_LEFT,-1,16,Color("f5eddc"))
+		draw_string(font,Vector2(7.0,16.0),"ESC",HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(14),Color("44392e"))
+		draw_string(font,Vector2(key.end.x + 8.0,17.0),"닫기",HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(16),Color("f5eddc"))
 
 
 # 현재 탭보다 앞 탭의 포스트잇: 넘어간 종이에 붙은 채 책의 왼쪽 가장자리에 모인다(오른쪽 Strip 의 거울상). 누르면 그 탭으로 돌아간다.

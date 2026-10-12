@@ -108,8 +108,8 @@ static func theme() -> Theme:
 		return _theme
 
 	var t := Theme.new()
-	t.default_font = preload("res://art/fonts/Silver.ttf")
-	t.default_font_size = 18
+	t.default_font = UiTypography.FONT
+	t.default_font_size = UiTypography.DEFAULT_SIZE
 
 	for type in ["Label", "RichTextLabel", "CheckBox", "OptionButton", "ItemList", "LineEdit"]:
 		t.set_color("font_color", type, INK)

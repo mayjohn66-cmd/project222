@@ -37,7 +37,7 @@ static func content(button: Button) -> void:
 	count.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	count.vertical_alignment = VERTICAL_ALIGNMENT_BOTTOM
 	count.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	count.add_theme_font_size_override("font_size",16)
+	count.add_theme_font_size_override("font_size",UiTypography.size(16))
 	count.add_theme_color_override("font_color",Color("fff4d6"))
 	count.add_theme_color_override("font_outline_color",Color("593e28"))
 	count.add_theme_constant_override("outline_size",3)

@@ -29,7 +29,7 @@ static func attach(menu: Control, data: Dictionary) -> void:
 	margin.add_child(view.body)
 	view.label = Label.new()
 	view.label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	view.label.add_theme_font_size_override("font_size",17)
+	view.label.add_theme_font_size_override("font_size",UiTypography.size(17))
 	view.body.add_child(view.label)
 	view.actions = VBoxContainer.new()
 	view.body.add_child(view.actions)
@@ -67,7 +67,7 @@ func refresh() -> void:
 		button.custom_minimum_size.y = 42
 		button.clip_text = true
 		button.tooltip_text = button.text
-		button.add_theme_font_size_override("font_size",17)
+		button.add_theme_font_size_override("font_size",UiTypography.size(17))
 		actions.add_child(button)
 		button.pressed.connect(open_recipe.bind(entry["item"],entry["recipe"]))
 

@@ -297,17 +297,27 @@ const GENDER_LABELS := {"male": "남성 점장", "female": "여성 점장"}
 func _build_nickname_dialog() -> void:
 	nickname_dialog = ConfirmationDialog.new()
 	nickname_dialog.title = "이름 짓기"
+	nickname_dialog.min_size = Vector2i(480, 460)
+	var paper := StyleBoxFlat.new()
+	paper.bg_color = Color("fff5df")
+	paper.border_color = Color("9f7444")
+	paper.set_border_width_all(2)
+	paper.set_content_margin_all(20)
+	nickname_dialog.add_theme_stylebox_override("panel", paper)
 	nickname_dialog.get_ok_button().text = "이 이름으로 시작"
 	nickname_dialog.get_cancel_button().text = "취소"
 	var box := VBoxContainer.new()
-	box.add_theme_constant_override("separation",10)
+	box.add_theme_constant_override("separation",12)
 	var hint := Label.new()
 	hint.text = "이세계의 편의점을 이끌 점장의 이름을 지어 주세요.\n영업 일지(관리 창) 표지에 적힙니다."
+	hint.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	hint.custom_minimum_size.x = 420
+	hint.add_theme_color_override("font_color", Color("51382d"))
 	box.add_child(hint)
 	nickname_edit = LineEdit.new()
 	nickname_edit.max_length = PlayerProgress.PLAYER_NAME_MAX
 	nickname_edit.placeholder_text = "이름 (최대 %d자)" % PlayerProgress.PLAYER_NAME_MAX
-	nickname_edit.custom_minimum_size = Vector2(320,0)
+	nickname_edit.custom_minimum_size = Vector2(420,44)
 	nickname_edit.text_changed.connect(_on_nickname_changed)
 	nickname_edit.text_submitted.connect(func(_text: String) -> void:
 		if not nickname_dialog.get_ok_button().disabled: nickname_dialog.get_ok_button().pressed.emit())
@@ -333,7 +343,7 @@ func _build_gender_picker() -> Control:
 		button.toggle_mode = true
 		button.button_group = group
 		button.button_pressed = gender == chosen_gender
-		button.custom_minimum_size = Vector2(120, 0)
+		button.custom_minimum_size = Vector2(144, 44)
 		button.pressed.connect(_on_gender_chosen.bind(gender))
 		buttons.add_child(button)
 

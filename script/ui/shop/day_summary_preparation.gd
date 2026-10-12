@@ -50,7 +50,7 @@ func _setup() -> void:
 func _label(parent: Node) -> Label:
 	var label := Label.new()
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_size_override("font_size", 18)
+	label.add_theme_font_size_override("font_size", UiTypography.size(18))
 	label.add_theme_color_override("font_color", Color("51382d"))
 	parent.add_child(label)
 	return label

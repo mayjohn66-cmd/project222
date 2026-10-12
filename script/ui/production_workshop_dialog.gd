@@ -21,7 +21,7 @@ func paper(color: String, padding: int = 12) -> StyleBoxFlat:
 func label(text_value: String, font_size: int = 16) -> Label:
 	var text_label := Label.new()
 	text_label.text = text_value
-	text_label.add_theme_font_size_override("font_size",font_size)
+	text_label.add_theme_font_size_override("font_size",UiTypography.size(font_size))
 	text_label.add_theme_color_override("font_color",Color("51382d"))
 	return text_label
 

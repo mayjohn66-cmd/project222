@@ -25,7 +25,7 @@ func _ready() -> void:
 	title.size = Vector2(220, 40)
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	title.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	title.add_theme_font_size_override("font_size", 16)
+	title.add_theme_font_size_override("font_size", UiTypography.size(16))
 	title.add_theme_color_override("font_color", Color("fff0d0"))
 	title.add_theme_color_override("font_outline_color", Color("302415"))
 	title.add_theme_constant_override("outline_size", 4)

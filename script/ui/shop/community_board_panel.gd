@@ -29,7 +29,7 @@ func _ready() -> void:
 	var title := Label.new()
 	title.text = panel_title()
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 24)
+	title.add_theme_font_size_override("font_size", UiTypography.size(24))
 	column.add_child(title)
 	count_label = Label.new()
 	count_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -48,11 +48,11 @@ func _ready() -> void:
 		list.add_child(card)
 		var heading := Label.new()
 		heading.text = str(entry["title"])
-		heading.add_theme_font_size_override("font_size", 20)
+		heading.add_theme_font_size_override("font_size", UiTypography.size(20))
 		card.add_child(heading)
 		var info := Label.new()
 		info.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		info.add_theme_font_size_override("font_size", 17)
+		info.add_theme_font_size_override("font_size", UiTypography.size(17))
 		card.add_child(info)
 		var action := Button.new()
 		action.custom_minimum_size.y = 42
@@ -62,7 +62,7 @@ func _ready() -> void:
 		cards[id] = {"info":info, "action":action}
 	message = Label.new()
 	message.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	message.add_theme_font_size_override("font_size", 17)
+	message.add_theme_font_size_override("font_size", UiTypography.size(17))
 	column.add_child(message)
 	close_button = Button.new()
 	close_button.text = "닫기 [E / Esc]"

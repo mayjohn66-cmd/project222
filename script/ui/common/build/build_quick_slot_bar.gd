@@ -847,7 +847,7 @@ func _create_slot_content(button: Button, index: int) -> void:
 		label.offset_top = definition[2]
 		label.offset_bottom = definition[3]
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if label.name == "Shortcut" else HORIZONTAL_ALIGNMENT_CENTER
-		label.add_theme_font_size_override("font_size",definition[4])
+		label.add_theme_font_size_override("font_size",UiTypography.size(definition[4]))
 		if label.name == "FurnitureCount":
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 			label.add_theme_color_override("font_color",Color("fff4d6"))
@@ -880,10 +880,10 @@ func _setup_build_presentation() -> void:
 		margin.add_theme_constant_override("margin_"+side,0)
 	var title = inventory_panel.get_node("Margin/Column/Header/Title")
 	title.text = "가구 가방"
-	title.add_theme_font_size_override("font_size",18)
+	title.add_theme_font_size_override("font_size",UiTypography.size(18))
 	var hint := Label.new()
 	hint.text = "드래그하여 퀵슬롯에 등록"
-	hint.add_theme_font_size_override("font_size",14)
+	hint.add_theme_font_size_override("font_size",UiTypography.size(14))
 	hint.add_theme_color_override("font_color",Color("896440"))
 	inventory_panel.get_node("Margin/Column/Header").add_child(hint)
 	style.button(bag_button)
@@ -905,7 +905,7 @@ func _setup_build_presentation() -> void:
 	var guide := Label.new()
 	guide.name = "BuildGuide"
 	guide.text = "건설 모드   ·   1–9 선택   /   R 회전   /   Esc 완료"
-	guide.add_theme_font_size_override("font_size",16)
+	guide.add_theme_font_size_override("font_size",UiTypography.size(16))
 	guide.add_theme_color_override("font_color",Color("fff1d4"))
 	guide.add_theme_color_override("font_outline_color",Color("493b2d"))
 	guide.add_theme_constant_override("outline_size",4)
@@ -935,7 +935,7 @@ func _refresh_new_mark(holder: Control, shown: bool) -> void:
 	mark = Label.new()
 	mark.name = NEW_MARK_NAME
 	mark.text = "NEW"
-	mark.add_theme_font_size_override("font_size", 12)
+	mark.add_theme_font_size_override("font_size", UiTypography.size(12))
 	mark.add_theme_color_override("font_color", Color("fff4d6"))
 	mark.add_theme_color_override("font_outline_color", Color("b3412f"))
 	mark.add_theme_constant_override("outline_size", 5)
@@ -952,7 +952,7 @@ func _show_unlock_notice(ids: Array[String]) -> void:
 		_notice_panel.offset_top = 64.0
 		_notice_panel.add_theme_stylebox_override("panel", preload("res://script/ui/common/build/build_ui_style.gd").paper())
 		_notice_label = Label.new()
-		_notice_label.add_theme_font_size_override("font_size", 17)
+		_notice_label.add_theme_font_size_override("font_size", UiTypography.size(17))
 		_notice_label.add_theme_color_override("font_color", Color("51382d"))
 		_notice_panel.add_child(_notice_label)
 		add_child(_notice_panel)

@@ -89,7 +89,7 @@ func _text(value: String, font_size: int) -> void:
 	label.text = value
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_font_size_override("font_size",font_size)
+	label.add_theme_font_size_override("font_size",UiTypography.size(font_size))
 	list.add_child(label)
 
 func _process(delta: float) -> void:

@@ -129,7 +129,7 @@ func refresh() -> void:
 		npc.mark.text = SETTINGS.merchant_name + " [E]"
 		npc.mark.size.x = 180
 		npc.mark.position.x = -90
-		npc.mark.add_theme_font_size_override("font_size", 18)
+		npc.mark.add_theme_font_size_override("font_size", UiTypography.size(18))
 
 # ---- 청소 단계(OpeningCleanup): 부서진 잔해 더미를 [E]로 치워 자재를 얻는다 ----
 # ResidentRequestDirector 도 이 클래스를 상속해 같은 처리 함수를 돌리므로, 청소 안내는 원래 안내자 하나만 맡는다.

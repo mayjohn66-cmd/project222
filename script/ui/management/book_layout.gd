@@ -39,7 +39,7 @@ static func _compact_buttons(row: Control) -> void:
 		b.text_overrun_behavior = TextServer.OVERRUN_TRIM_ELLIPSIS
 		b.custom_minimum_size.x = 0.0  # 장면에 박힌 최소 폭이 줄을 쪽 밖으로 밀지 않게 한다
 		b.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		b.add_theme_font_size_override("font_size",16)
+		b.add_theme_font_size_override("font_size",UiTypography.size(16))
 		for state in ["normal","hover","pressed","hover_pressed","disabled"]:
 			var sb: StyleBox = b.get_theme_stylebox(state)
 			if sb == null: continue

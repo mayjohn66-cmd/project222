@@ -14,6 +14,8 @@ func _ready() -> void:
 	box.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	root.add_child(box)
 	caption = Label.new()
+	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	caption.custom_minimum_size.x = 250
 	box.add_child(caption)
 	goal = Label.new()
 	goal.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

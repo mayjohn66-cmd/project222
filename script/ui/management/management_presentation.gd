@@ -26,7 +26,7 @@ static func box(color: String, padding: int = 12) -> StyleBoxFlat:
 static func tab_theme(root: Control, index: int) -> void:
 	var t := Theme.new()
 	t.default_font = root.get_theme_default_font()
-	t.default_font_size = 18
+	t.default_font_size = UiTypography.DEFAULT_SIZE
 	t.set_color("font_color","Label",Color("44392e"))
 	t.set_color("font_color","Button",Color("44392e"))
 	t.set_color("font_hover_color","Button",Color("44392e"))
@@ -91,7 +91,7 @@ static func install(menu: Control) -> void:
 		b.custom_minimum_size = Vector2(FLAG_OUT,FLAG_HEIGHT)
 		b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
-		b.add_theme_font_size_override("font_size",15)
+		b.add_theme_font_size_override("font_size",UiTypography.size(15))
 		for state in ["normal","hover","pressed","hover_pressed"]:
 			b.add_theme_stylebox_override(state,flag_style(INDEX_COLORS[i]))
 		b.add_theme_color_override("font_color",Color("2b2f55"))
@@ -118,7 +118,7 @@ static func install(menu: Control) -> void:
 	for side in ["left","right","top","bottom"]: fm.add_theme_constant_override("margin_"+side,0)
 	footer.get_node("FooterMargin/FooterRow/CoinIcon").custom_minimum_size = Vector2(20,20)
 	for label in [menu.money_label,menu.info_label]:
-		label.add_theme_font_size_override("font_size",15)
+		label.add_theme_font_size_override("font_size",UiTypography.size(15))
 		label.add_theme_color_override("font_color",Color("67543b"))
 	var area: Control = v.get_node("Body/ContentArea")
 	var contents := [menu.inventory_content,menu.production_content,menu.employee_content,menu.blueprint_content,menu.construction_content,menu.schedule_content,menu.history_content]
@@ -139,8 +139,8 @@ static func install(menu: Control) -> void:
 		for side in ["left","right","top","bottom"]: m.add_theme_constant_override("margin_"+side,16)
 	menu.history_content.get_node("MarginContainer/HistoryVBox").add_theme_constant_override("separation",10)
 	menu.schedule_content.get_node("MarginContainer/ScheduleVBox").add_theme_constant_override("separation",14)
-	menu.schedule_current_date_label.add_theme_font_size_override("font_size",22)
-	menu.history_title_label.add_theme_font_size_override("font_size",20)
+	menu.schedule_current_date_label.add_theme_font_size_override("font_size",UiTypography.size(22))
+	menu.history_title_label.add_theme_font_size_override("font_size",UiTypography.size(20))
 	var inv = menu.management_inventory
 	inv.get_node("MainVBox/ItemScroll").custom_minimum_size.y = 0
 	inv.get_node("MainVBox/ItemScroll").horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED

@@ -76,7 +76,7 @@ theme_override_colors/font_color = Color(1, 0.941176, 0.733333, 1)
 theme_override_colors/font_shadow_color = Color(0.121569, 0.0705882, 0.0470588, 1)
 theme_override_constants/shadow_offset_x = 2
 theme_override_constants/shadow_offset_y = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 40
 text = "편의점 관리"
 
 [node name="CloseButton" type="Button" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Header/HeaderMargin/HeaderRow" unique_id=1187458029]
@@ -310,7 +310,7 @@ stretch_mode = 5
 [node name="MoneyLabel" type="Label" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Footer/FooterMargin/FooterRow" unique_id=1105714281]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.941176, 0.733333, 1)
-theme_override_font_sizes/font_size = 18
+theme_override_font_sizes/font_size = 28
 text = "소지금: 500 G"
 
 [node name="FooterSeparator" type="VSeparator" parent="DimBackground/CenterContainer/MainPanel/MainVBox/Footer/FooterMargin/FooterRow"]

@@ -1576,7 +1576,7 @@ func _create_rumor_icon() -> void:
 
 	rumor_icon.add_theme_font_size_override(
 		"font_size",
-		22
+		UiTypography.size(22)
 	)
 
 	rumor_icon.add_theme_color_override(

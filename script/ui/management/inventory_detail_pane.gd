@@ -46,7 +46,7 @@ static func install(inv: Control) -> void:
 
 func _label(size_px: int,color: Color = INK) -> Label:
 	var l := Label.new()
-	l.add_theme_font_size_override("font_size",size_px)
+	l.add_theme_font_size_override("font_size",UiTypography.size(size_px))
 	l.add_theme_color_override("font_color",color)
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART

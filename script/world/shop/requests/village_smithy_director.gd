@@ -27,7 +27,7 @@ func _process(delta: float) -> void:
 	hint.z_index = 50
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hint.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	hint.add_theme_font_size_override("font_size",18)
+	hint.add_theme_font_size_override("font_size",UiTypography.size(18))
 	hint.add_theme_color_override("font_color",Color("fff0d0"))
 	hint.add_theme_color_override("font_outline_color",Color("302415"))
 	hint.add_theme_constant_override("outline_size",4)

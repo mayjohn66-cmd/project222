@@ -229,7 +229,7 @@ func _build_difficulty_selector() -> void:
 	difficulty_level_label = Label.new()
 	difficulty_level_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	difficulty_level_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	difficulty_level_label.add_theme_font_size_override("font_size", 20)
+	difficulty_level_label.add_theme_font_size_override("font_size", UiTypography.size(20))
 	difficulty_level_label.add_theme_color_override(
 		"font_color",
 		Color(0.96, 0.76, 0.39, 1)

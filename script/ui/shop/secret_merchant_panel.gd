@@ -54,12 +54,12 @@ func _ready() -> void:
 
 	var title := Label.new()
 	title.text = "심야의 비밀 상인"
-	title.add_theme_font_size_override("font_size", 26)
+	title.add_theme_font_size_override("font_size", UiTypography.size(26))
 	title.add_theme_color_override("font_color", Color(0.9, 0.78, 1.0))
 	column.add_child(title)
 
 	money_label = Label.new()
-	money_label.add_theme_font_size_override("font_size", 20)
+	money_label.add_theme_font_size_override("font_size", UiTypography.size(20))
 	money_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.5))
 	column.add_child(money_label)
 
@@ -74,7 +74,7 @@ func _ready() -> void:
 	scroll.add_child(list_box)
 
 	message_label = Label.new()
-	message_label.add_theme_font_size_override("font_size", 18)
+	message_label.add_theme_font_size_override("font_size", UiTypography.size(18))
 	message_label.add_theme_color_override("font_color", Color(0.85, 0.85, 0.9))
 	column.add_child(message_label)
 
@@ -146,13 +146,13 @@ func _make_row(
 	var name_label := Label.new()
 	name_label.text = _get_offer_name(offer)
 	name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	name_label.add_theme_font_size_override("font_size", 20)
+	name_label.add_theme_font_size_override("font_size", UiTypography.size(20))
 	name_label.add_theme_color_override("font_color", Color(0.96, 0.93, 0.85))
 	row.add_child(name_label)
 
 	var stock_label := Label.new()
 	stock_label.text = "재고 %d" % stock
-	stock_label.add_theme_font_size_override("font_size", 18)
+	stock_label.add_theme_font_size_override("font_size", UiTypography.size(18))
 	stock_label.add_theme_color_override("font_color", Color(0.8, 0.75, 0.9))
 	row.add_child(stock_label)
 
@@ -160,7 +160,7 @@ func _make_row(
 	price_label.text = "%d G" % price
 	price_label.custom_minimum_size = Vector2(90, 0)
 	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	price_label.add_theme_font_size_override("font_size", 20)
+	price_label.add_theme_font_size_override("font_size", UiTypography.size(20))
 	price_label.add_theme_color_override("font_color", Color(1.0, 0.9, 0.5))
 	row.add_child(price_label)
 

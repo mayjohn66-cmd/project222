@@ -34,7 +34,7 @@ func _ready() -> void:
 	caption.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	caption.add_theme_color_override("font_color", Color("493826"))
-	caption.add_theme_font_size_override("font_size", 16)
+	caption.add_theme_font_size_override("font_size", UiTypography.size(16))
 	card.add_child(caption)
 	get_viewport().size_changed.connect(_layout)
 	card.hide()

@@ -34,7 +34,7 @@ static func add_regions(map: Control, buttons: Dictionary, template: Button) -> 
 		label.offset_bottom = 32
 		label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		label.add_theme_font_size_override("font_size",18)
+		label.add_theme_font_size_override("font_size",UiTypography.size(18))
 		label.add_theme_color_override("font_color",Color("fff0d0"))
 		label.add_theme_color_override("font_outline_color",Color("3a392c"))
 		label.add_theme_constant_override("outline_size",4)

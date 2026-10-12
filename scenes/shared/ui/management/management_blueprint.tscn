@@ -22,7 +22,7 @@ theme_override_constants/separation = 16
 
 [node name="Title" type="Label" parent="MainVBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 40
 text = "제작"
 
 [node name="CategoryTabs" type="HBoxContainer" parent="MainVBox"]
@@ -96,7 +96,7 @@ theme_override_constants/separation = 16
 
 [node name="NameLabel" type="Label" parent="MainVBox/Body/DetailPanel/DetailScroll/Detail"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 40
 autowrap_mode = 2
 
 [node name="DescriptionLabel" type="Label" parent="MainVBox/Body/DetailPanel/DetailScroll/Detail"]

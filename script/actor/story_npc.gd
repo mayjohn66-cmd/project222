@@ -24,7 +24,7 @@ func _ready() -> void:
 	mark.size = Vector2(28, 32)
 	mark.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	mark.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	mark.add_theme_font_size_override("font_size", 30)
+	mark.add_theme_font_size_override("font_size", UiTypography.size(30))
 	mark.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
 	mark.add_theme_color_override("font_outline_color", Color(0.25, 0.15, 0.05))
 	mark.add_theme_constant_override("outline_size", 8)

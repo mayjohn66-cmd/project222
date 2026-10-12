@@ -25,7 +25,7 @@ func build(owner_view: ExpeditionRoomView) -> void:
 	view.hp_bar = HpBar.new()
 	stats.add_child(view.hp_bar)
 	view.hp_label = _label()
-	view.hp_label.add_theme_font_size_override("font_size", 14)
+	view.hp_label.add_theme_font_size_override("font_size", UiTypography.size(14))
 	view.hp_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stats.add_child(view.hp_label)
 	view.hp_label.hide()

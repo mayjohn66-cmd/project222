@@ -25,10 +25,11 @@ func _ready() -> void:
 	period = Label.new()
 	period.name = "PeriodCaption"
 	add_child(period)
-	_place(period, Rect2(-326,99,72,22))
+	_place(period, Rect2(-326,96,72,34))
 	period.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	period.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	period.add_theme_color_override("font_color",Color("f9e6ae"))
-	period.add_theme_font_size_override("font_size",14)
+	period.add_theme_font_size_override("font_size",UiTypography.size(14))
 	_style_label($DayLabel,Rect2(-238,25,202,50),16)
 	_style_label($TimeLabel,Rect2(-238,86,202,34),20)
 	_style_label($MoneyLabel,Rect2(-286,140,248,32),22)
@@ -39,7 +40,7 @@ func _ready() -> void:
 	money_digits = Control.new()
 	money_digits.name = "MoneyDigits"
 	add_child(money_digits)
-	_place(money_digits,Rect2(-284,141,246,30))
+	_place(money_digits,Rect2(-284,141,246,32))
 	_update_money_digits()
 	_update_sky()
 
@@ -81,7 +82,7 @@ func _style_label(label: Label, rect: Rect2, font_size: int) -> void:
 	_place(label,rect)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size",font_size)
+	label.add_theme_font_size_override("font_size",UiTypography.size(font_size))
 	label.add_theme_color_override("font_color",Color("382314"))
 
 func _process(delta: float) -> void:
@@ -98,7 +99,7 @@ func _update_sky() -> void:
 	sky.texture = NIGHT if hour >= 18 or hour < 6 else DAY
 	period.text = manager.get_period_name()
 	_update_weather(manager)
-	$TimeLabel.add_theme_font_size_override("font_size",16 if $TimeLabel.text.length() > 16 else 20)
+	$TimeLabel.add_theme_font_size_override("font_size",UiTypography.size(16 if $TimeLabel.text.length() > 16 else 20))
 
 func _update_money_digits() -> void:
 	if money_digits == null: return
@@ -114,7 +115,7 @@ func _update_money_digits() -> void:
 	for i in range(count):
 		var card := Panel.new()
 		card.position = Vector2(round(i*step),0)
-		card.size = Vector2(floor(step)-2,30)
+		card.size = Vector2(floor(step)-2,32)
 		card.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var style := StyleBoxFlat.new()
 		style.bg_color = Color("f2dbac")
@@ -134,7 +135,7 @@ func _update_money_digits() -> void:
 		digit.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		digit.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		digit.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-		digit.add_theme_font_size_override("font_size",clampi(int(step)-4,11,22))
+		digit.add_theme_font_size_override("font_size",UiTypography.size(clampi(int(step)-4,11,22)))
 		digit.add_theme_color_override("font_color",Color("77311e"))
 		digit.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		card.add_child(digit)

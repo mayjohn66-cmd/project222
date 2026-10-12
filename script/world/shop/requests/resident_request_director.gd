@@ -59,7 +59,7 @@ func _prepare_npc(id: String, npc_name: String, lines: Array) -> void:
 		npc.global_position = _guidance_position()
 		npc.mark.text = npc_name + " [E]"
 		npc.mark.position.x = -65
-		npc.mark.add_theme_font_size_override("font_size", 16)
+		npc.mark.add_theme_font_size_override("font_size", UiTypography.size(16))
 	elif _npc_needs_relocation():
 		npc.global_position = _guidance_position()
 
