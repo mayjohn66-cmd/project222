@@ -66,6 +66,13 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			and event.physical_keycode == KEY_Q:
 		model.swap_weapon()
 		get_viewport().set_input_as_handled()
+	elif _can_play() and event is InputEventKey and event.pressed and not event.echo:
+		if event.physical_keycode in [KEY_J, KEY_SPACE]:
+			model.basic_attack()
+			get_viewport().set_input_as_handled()
+		elif event.physical_keycode == KEY_R:
+			retreat_requested.emit()
+			get_viewport().set_input_as_handled()
 
 func _physics_process(delta: float) -> void:
 	if not visible or model == null:
@@ -100,6 +107,7 @@ func _physics_process(delta: float) -> void:
 		hint_label.text = "출구가 열렸습니다" if model.exit_open else "몬스터를 처치하면 출구가 열립니다"
 	if progress_guide != null:
 		hint_label.text = progress_guide.hint(hint_label.text)
+	hint_label.visible = model.interacting or not notice.is_empty() or not caption.is_empty()
 	hud.layout()
 	queue_redraw()
 

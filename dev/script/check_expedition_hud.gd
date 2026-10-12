@@ -110,9 +110,22 @@ func run() -> void:
 		check(hp_rect.position.x < 30 and hp_rect.position.y > screen_size.y - 90, "HP lower left at " + str(screen_size))
 		check(is_equal_approx(view.hp_bar.ratio,0.5), "HP fill still reflects actual health")
 		for button in view.hud.buttons:
-			var rect := button.get_global_rect()
-			check(Rect2(Vector2.ZERO,screen_size).encloses(rect), "button inside screen: " + button.text)
-			check(not hp_rect.intersects(rect), "button does not cover HP: " + button.text)
+			check(not button.is_visible_in_tree(), "no bottom action button: " + button.text)
+		check(not view.hp_label.is_visible_in_tree(), "no weapon/enemy footer text")
+		check(not view.hint_label.is_visible_in_tree(), "no idle guidance text")
+		var retreat_count := [0]
+		var on_retreat := func(): retreat_count[0] += 1
+		view.retreat_requested.connect(on_retreat)
+		var retreat_key := InputEventKey.new()
+		retreat_key.pressed = true
+		retreat_key.physical_keycode = KEY_R
+		view._unhandled_key_input(retreat_key)
+		check(retreat_count[0] == 1, "keyboard withdrawal remains available")
+		view.blocked = func(): return true
+		view._unhandled_key_input(retreat_key)
+		check(retreat_count[0] == 1, "menu blocks withdrawal key")
+		view.blocked = Callable()
+		view.retreat_requested.disconnect(on_retreat)
 		check_text(view.hud)
 		view.model.basic_attack()
 		view.queue_redraw()

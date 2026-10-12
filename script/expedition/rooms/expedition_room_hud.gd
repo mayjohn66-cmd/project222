@@ -1,13 +1,11 @@
 class_name ExpeditionRoomHud
 extends Control
-## 체력은 왼쪽 아래, 행동 버튼은 오른쪽 아래. 좁은 창에서는 버튼을 체력 위로 올린다.
+## 화면 하단은 HP만 표시한다. 필요한 진행 상태는 제목 아래에 표시한다.
 const MARGIN := 16.0
-const GAP := 6.0
 var view: ExpeditionRoomView
 var stats: VBoxContainer
 var controls: Control
 var buttons: Array[Button] = []
-var footer_height := 72.0
 
 func build(owner_view: ExpeditionRoomView) -> void:
 	view = owner_view
@@ -30,9 +28,12 @@ func build(owner_view: ExpeditionRoomView) -> void:
 	view.hp_label.add_theme_font_size_override("font_size", 14)
 	view.hp_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	stats.add_child(view.hp_label)
+	view.hp_label.hide()
 	controls = Control.new()
 	controls.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(controls)
+	# 이전 연결의 버튼 신호는 호환용으로 유지하고 화면에는 표시하지 않는다.
+	controls.hide()
 	for entry in [["←", Vector2.LEFT], ["↑", Vector2.UP], ["↓", Vector2.DOWN], ["→", Vector2.RIGHT]]:
 		var button := _button(str(entry[0]))
 		view.move_buttons[button] = entry[1]
@@ -65,31 +66,8 @@ func layout() -> void:
 	if view == null or controls == null: return
 	view.title_label.position = Vector2(MARGIN, 10)
 	view.title_label.size = Vector2(maxf(1, size.x - MARGIN * 2), 28)
-	stats.size = Vector2(260, 48)
-	var stats_height := maxf(48, stats.get_combined_minimum_size().y)
+	stats.size = Vector2(260, 22)
+	var stats_height := maxf(22, stats.get_combined_minimum_size().y)
 	stats.position = Vector2(MARGIN, size.y - MARGIN - stats_height)
-	var total_width := -GAP
-	for button in buttons: total_width += button.get_combined_minimum_size().x + GAP
-	var stacked := total_width + 260 + MARGIN * 3 > size.x
-	var available_width := maxf(42, size.x - MARGIN * 2)
-	var at := Vector2.ZERO
-	var row_height := 0.0
-	var used_width := 0.0
-	for button in buttons:
-		var button_size := button.get_combined_minimum_size()
-		if at.x > 0 and at.x + button_size.x > available_width:
-			at = Vector2(0, at.y + row_height + GAP)
-			row_height = 0
-		button.position = at
-		button.size = button_size
-		at.x += button_size.x + GAP
-		row_height = maxf(row_height, button_size.y)
-		used_width = maxf(used_width, at.x - GAP)
-	var controls_height := at.y + row_height
-	controls.size = Vector2(used_width, controls_height)
-	controls.position = Vector2(size.x - MARGIN - used_width,
-		size.y - MARGIN - controls_height - (stats_height + GAP if stacked else 0.0))
-	footer_height = maxf(stats_height, controls_height) + MARGIN + GAP
-	if stacked: footer_height = stats_height + controls_height + MARGIN + GAP * 2
-	view.hint_label.position = Vector2(MARGIN, size.y - footer_height - 48)
+	view.hint_label.position = Vector2(MARGIN, 42)
 	view.hint_label.size = Vector2(maxf(1, size.x - MARGIN * 2), 42)
