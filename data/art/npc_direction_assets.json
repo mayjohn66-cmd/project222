@@ -1,0 +1,2018 @@
+{
+  "naru": {
+    "name": "타블렌",
+    "base_path": "res://art/actors/npc/naru/south_west_compact.png",
+    "base_sha256": "961b20f4dda1fee51b3b6599aebd6dbda3aecb2885cc6d6efe53d8ad19dfe2c5",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/naru.png",
+    "reference_sha256": "aeadfa59ff0700be564a9c693952703194e8fa32e669ce7f37f3da330e2fa91a",
+    "reference_height": 76,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/naru/south.png",
+        "sha256": "7a8a0fb33428c8acc9d6cb98479bac478e83f657a36b0df6af4117509b8fb1f3",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          235,
+          402
+        ],
+        "native_bounds": [
+          190,
+          24,
+          425,
+          426
+        ],
+        "uniform_scale": 0.1890547263681592,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/naru.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/naru/south_east.png",
+        "sha256": "3951906bb58a8de786226a8bfcdb1e94f922e0d150b77f5192b492acc92cafe0",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/naru/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/naru/east.png",
+        "sha256": "e766fd8d6cc0d2685ae925bbe9b27aef8bc708148333984101a776cb026cc27a",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          225,
+          411
+        ],
+        "native_bounds": [
+          963,
+          24,
+          1188,
+          435
+        ],
+        "uniform_scale": 0.18491484184914841,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/naru.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/naru/north_east.png",
+        "sha256": "155abe5eaa34325213a16c39525b3a5c90817fc4804b6ed003deb680f8e365cb",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          218,
+          402
+        ],
+        "native_bounds": [
+          1361,
+          28,
+          1579,
+          430
+        ],
+        "uniform_scale": 0.1890547263681592,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/naru.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/naru/north.png",
+        "sha256": "3aa7c1bd4bc22b545743623219c471baeee32daf818240328e064904996bc301",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          227,
+          404
+        ],
+        "native_bounds": [
+          185,
+          447,
+          412,
+          851
+        ],
+        "uniform_scale": 0.18811881188118812,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/naru.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/naru/north_west.png",
+        "sha256": "1acaeeb27dd021e919a6fcae5303759d4350701c9cb85f86b15eb65abd36f036",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          212,
+          405
+        ],
+        "native_bounds": [
+          583,
+          452,
+          795,
+          857
+        ],
+        "uniform_scale": 0.18765432098765433,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/naru.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/naru/west.png",
+        "sha256": "6349a2ae6bb673c2cceb18ca3d7f80979510320b1f34d3711a8199a223c122b4",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 6,
+        "mirrored": false,
+        "native_subject_size": [
+          225,
+          409
+        ],
+        "native_bounds": [
+          959,
+          452,
+          1184,
+          861
+        ],
+        "uniform_scale": 0.18581907090464547,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/naru.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/naru/south_west_compact.png",
+        "sha256": "961b20f4dda1fee51b3b6599aebd6dbda3aecb2885cc6d6efe53d8ad19dfe2c5",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "doyun": {
+    "name": "코르빈",
+    "base_path": "res://art/actors/npc/doyun/south_west_compact.png",
+    "base_sha256": "68d6186e8b65adee303235799b9ba37c1598a1924a90065c2ad1a85158b9916a",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/doyun.png",
+    "reference_sha256": "0c2f79b099df2785bbc315ce9e94ff0e868f7c7868edfb2646e32c13f726f0cb",
+    "reference_height": 66,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/doyun/south.png",
+        "sha256": "ac35eaec29cd4bff87f862898b1f8ee69d140620f50672ac19c158e939b54406",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          215,
+          472
+        ],
+        "native_bounds": [
+          258,
+          25,
+          473,
+          497
+        ],
+        "uniform_scale": 0.13983050847457626,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/doyun.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/doyun/south_east.png",
+        "sha256": "43ce2b516a1e7bb2c5a466a2b31f9f5db6b771115443795b40ac529b49d359cb",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/doyun/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/doyun/east.png",
+        "sha256": "ed4d0252aab3ebb9d4fce95a881527d57c355d42b3e124cd72481cfbb58098f7",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": false,
+        "native_subject_size": [
+          167,
+          472
+        ],
+        "native_bounds": [
+          682,
+          25,
+          849,
+          497
+        ],
+        "uniform_scale": 0.13983050847457626,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/doyun.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/doyun/north_east.png",
+        "sha256": "959fdec72ce93fb2f9acbbda82b4fed0a998fb7dd4ac17adf1800ec0084317de",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          191,
+          470
+        ],
+        "native_bounds": [
+          1087,
+          26,
+          1278,
+          496
+        ],
+        "uniform_scale": 0.14042553191489363,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/doyun.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/doyun/north.png",
+        "sha256": "6f2b523db4d8a425739254404fdbd148f6f4920ac58a2b1a52e1eb3ba353260b",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          225,
+          463
+        ],
+        "native_bounds": [
+          248,
+          522,
+          473,
+          985
+        ],
+        "uniform_scale": 0.14254859611231102,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/doyun.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/doyun/north_west.png",
+        "sha256": "b89749c038a3d3dc931d52cbf48d1f14c01d4cd9703d47c4e29afb104c4e1bb1",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          199,
+          467
+        ],
+        "native_bounds": [
+          669,
+          524,
+          868,
+          991
+        ],
+        "uniform_scale": 0.14132762312633834,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/doyun.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/doyun/west.png",
+        "sha256": "5d7617b844481d8a5a7521aa04dfc475a9e075d03fb69c117c90feab5ea8affd",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          168,
+          473
+        ],
+        "native_bounds": [
+          1087,
+          518,
+          1255,
+          991
+        ],
+        "uniform_scale": 0.13953488372093023,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/doyun.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/doyun/south_west_compact.png",
+        "sha256": "68d6186e8b65adee303235799b9ba37c1598a1924a90065c2ad1a85158b9916a",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "sora": {
+    "name": "이세르",
+    "base_path": "res://art/actors/npc/sora/south_west_compact.png",
+    "base_sha256": "c021761a5859b37997cebd72adbeb06428d8aaa9cd62f43fa22418e56b42b68a",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/sora.png",
+    "reference_sha256": "6080653b497b672860f163bbd621f0076b8f2582d8e19faa61d926bbbabb174c",
+    "reference_height": 68,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/sora/south.png",
+        "sha256": "42c93f498a5c0adc9889a2cff03804c7aa0751985886466a71f6f15eb91bb037",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          230,
+          472
+        ],
+        "native_bounds": [
+          289,
+          23,
+          519,
+          495
+        ],
+        "uniform_scale": 0.1440677966101695,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/sora.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/sora/south_east.png",
+        "sha256": "5cd304947a6bcd47183d8c4ef7eba6b72ada9f6944e2e0e925128922aee2977b",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/sora/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/sora/east.png",
+        "sha256": "5ae1ae75391f7aae434a2ce1b1bd0e31a0e76796a80df70e93994794b4adb89f",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": false,
+        "native_subject_size": [
+          208,
+          467
+        ],
+        "native_bounds": [
+          647,
+          23,
+          855,
+          490
+        ],
+        "uniform_scale": 0.145610278372591,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/sora.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/sora/north_east.png",
+        "sha256": "2de6778f2bf8695816e4b2050da96cc0623a14b91e8a10eea2aa8e18a3990e56",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          214,
+          465
+        ],
+        "native_bounds": [
+          1052,
+          24,
+          1266,
+          489
+        ],
+        "uniform_scale": 0.14623655913978495,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/sora.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/sora/north.png",
+        "sha256": "6257db28d33d9d36bbd341cc9b7ee186420142fea360a7043b2123322a0216e4",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          226,
+          459
+        ],
+        "native_bounds": [
+          272,
+          525,
+          498,
+          984
+        ],
+        "uniform_scale": 0.14814814814814814,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/sora.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/sora/north_west.png",
+        "sha256": "aa3b2b90da90edad25702210155bce0bd59b2d61f9ecb66046bc8cf95daf9bf6",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          226,
+          464
+        ],
+        "native_bounds": [
+          658,
+          525,
+          884,
+          989
+        ],
+        "uniform_scale": 0.14655172413793102,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/sora.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/sora/west.png",
+        "sha256": "8bf7c3e1c9c438b108801b5ff9690c0b440036fef45755db45c95334d5425396",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          213,
+          471
+        ],
+        "native_bounds": [
+          1067,
+          525,
+          1280,
+          996
+        ],
+        "uniform_scale": 0.14437367303609341,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/sora.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/sora/south_west_compact.png",
+        "sha256": "c021761a5859b37997cebd72adbeb06428d8aaa9cd62f43fa22418e56b42b68a",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "neighbor_bread": {
+    "name": "오렐",
+    "base_path": "res://art/actors/npc/neighbor_bread/south_west_compact.png",
+    "base_sha256": "4b839862c6fcc236ee64684b42d34b63bed7a2b1db5836eceb958b5bda997433",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/neighbor_bread.png",
+    "reference_sha256": "5e105d7ec96d7d95f4072641269e49f0526b695f543df6ba9503ef7f6653dbe3",
+    "reference_height": 70,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/neighbor_bread/south.png",
+        "sha256": "bdec6a06b85985e237bdff484674847e03a23e3d6ae4703a31ed0daaec878585",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          191,
+          481
+        ],
+        "native_bounds": [
+          285,
+          28,
+          476,
+          509
+        ],
+        "uniform_scale": 0.14553014553014554,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/neighbor_bread.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/neighbor_bread/south_east.png",
+        "sha256": "1f7966d8291eae0a75c1f77add30b945b22812cd3214d2246d3ded44a400c251",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/neighbor_bread/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/neighbor_bread/east.png",
+        "sha256": "f2d60450ee0ddc8d1f861da9845ae6a1e90844f026c92dc59b81589811eb5fb8",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          189,
+          477
+        ],
+        "native_bounds": [
+          1058,
+          519,
+          1247,
+          996
+        ],
+        "uniform_scale": 0.14675052410901468,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/neighbor_bread.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/neighbor_bread/north_east.png",
+        "sha256": "0e3ee9d77d089f462c27f277910e6aae87e3e5f9639227934ab3ad9471aba7aa",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          175,
+          469
+        ],
+        "native_bounds": [
+          1064,
+          34,
+          1239,
+          503
+        ],
+        "uniform_scale": 0.14925373134328357,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/neighbor_bread.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/neighbor_bread/north.png",
+        "sha256": "a94e2d9dca23456766459738ff806a4e5952d59372da688b20659e83fcb3a965",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          179,
+          469
+        ],
+        "native_bounds": [
+          291,
+          519,
+          470,
+          988
+        ],
+        "uniform_scale": 0.14925373134328357,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/neighbor_bread.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/neighbor_bread/north_west.png",
+        "sha256": "12c504697e175b4124bd00225be49e5f372a586ecca42129474ea514b6eb97ac",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          179,
+          475
+        ],
+        "native_bounds": [
+          677,
+          519,
+          856,
+          994
+        ],
+        "uniform_scale": 0.14736842105263157,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/neighbor_bread.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/neighbor_bread/west.png",
+        "sha256": "a95344fd05154fd4bd0735f45f7fb60a528bbfc7cb03f850521eccaca300a486",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": false,
+        "native_subject_size": [
+          194,
+          482
+        ],
+        "native_bounds": [
+          672,
+          28,
+          866,
+          510
+        ],
+        "uniform_scale": 0.14522821576763487,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/neighbor_bread.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/neighbor_bread/south_west_compact.png",
+        "sha256": "4b839862c6fcc236ee64684b42d34b63bed7a2b1db5836eceb958b5bda997433",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "child_berries": {
+    "name": "피니아",
+    "base_path": "res://art/actors/npc/child_berries/south_west_compact.png",
+    "base_sha256": "74c2e1e38e1a2c626bb3cf98fd3eb00d83ed2f42d697b8249029778ae72a9a22",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/child_berries.png",
+    "reference_sha256": "6db9402404fbcc8726efe57dde341b9168cc68f11b1c7f45ccfeaa0d6b538209",
+    "reference_height": 72,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/child_berries/south.png",
+        "sha256": "68ea11777565f9ebe7e7c8ec8acf3370c58032930c9cb400ac15ddddf976e98a",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          249,
+          470
+        ],
+        "native_bounds": [
+          233,
+          25,
+          482,
+          495
+        ],
+        "uniform_scale": 0.15319148936170213,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/child_berries.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/child_berries/south_east.png",
+        "sha256": "d31a74b3554ab58af6d950db2cd5218411bae4d6e18ebfd2b4b9a12fb698723f",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/child_berries/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/child_berries/east.png",
+        "sha256": "5bc4f45649e62db2393c64133e438eee49618a595465bf6c7db4b3a2693a139b",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": true,
+        "native_subject_size": [
+          275,
+          466
+        ],
+        "native_bounds": [
+          648,
+          29,
+          923,
+          495
+        ],
+        "uniform_scale": 0.15450643776824036,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/child_berries.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/child_berries/north_east.png",
+        "sha256": "a0980a21c497267564ecb8546bc16e0512cffeaa4b484c3bd6520e794a4371ce",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          254,
+          460
+        ],
+        "native_bounds": [
+          636,
+          530,
+          890,
+          990
+        ],
+        "uniform_scale": 0.1565217391304348,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/child_berries.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/child_berries/north.png",
+        "sha256": "5850409d6dc5aff57ca166edec22d413d460ddd642e93e1452fe02b405f8f41f",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          206,
+          455
+        ],
+        "native_bounds": [
+          235,
+          530,
+          441,
+          985
+        ],
+        "uniform_scale": 0.15824175824175823,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/child_berries.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/child_berries/north_west.png",
+        "sha256": "829cd434dac108271b9e1766dcc8ef195b77928529a1ea495e44bcf62a917dc9",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          267,
+          470
+        ],
+        "native_bounds": [
+          1093,
+          25,
+          1360,
+          495
+        ],
+        "uniform_scale": 0.15319148936170213,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/child_berries.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/child_berries/west.png",
+        "sha256": "265c5dc8b19e816fa3d2722335c570d84d9bdda24b9f45523d610c829ae326d8",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          263,
+          463
+        ],
+        "native_bounds": [
+          1086,
+          532,
+          1349,
+          995
+        ],
+        "uniform_scale": 0.15550755939524838,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/child_berries.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/child_berries/south_west_compact.png",
+        "sha256": "74c2e1e38e1a2c626bb3cf98fd3eb00d83ed2f42d697b8249029778ae72a9a22",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "traveler_water": {
+    "name": "라슈",
+    "base_path": "res://art/actors/npc/traveler_water/south_west_compact.png",
+    "base_sha256": "294a0e14c956950eb68bcc971eba261f8a1998c767bef1b89418b02f9cf7b868",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/traveler_water.png",
+    "reference_sha256": "d7f466ab0dad17bc00282b69a616424df2e96d86bc7d1d67fb9abdf9ed23d5a5",
+    "reference_height": 66,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/traveler_water/south.png",
+        "sha256": "6ab2638d09f31ade1229712e9d9b2776e276c6d8c00ae377c61d76fc254e0a05",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          262,
+          469
+        ],
+        "native_bounds": [
+          213,
+          26,
+          475,
+          495
+        ],
+        "uniform_scale": 0.14072494669509594,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/traveler_water.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/traveler_water/south_east.png",
+        "sha256": "4f5990aa6e46338b370c7d512de780fc794dfba2806258be6a37f4599c36ee74",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/traveler_water/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/traveler_water/east.png",
+        "sha256": "5b9c03b1333ab67b90ab3e486b45c6203245b6ffd0358b360835e819e3383476",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          216,
+          463
+        ],
+        "native_bounds": [
+          1087,
+          536,
+          1303,
+          999
+        ],
+        "uniform_scale": 0.14254859611231102,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/traveler_water.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/traveler_water/north_east.png",
+        "sha256": "9686dba2a916eb996e619c4e75019cbb8c24fd3f51067da5774265806924189d",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          228,
+          456
+        ],
+        "native_bounds": [
+          636,
+          535,
+          864,
+          991
+        ],
+        "uniform_scale": 0.14473684210526316,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/traveler_water.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/traveler_water/north.png",
+        "sha256": "2c386232720ab7de9838dbbb9ea0bc78848e08a6d4fa0a684a03da1a951fc54c",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          230,
+          460
+        ],
+        "native_bounds": [
+          221,
+          531,
+          451,
+          991
+        ],
+        "uniform_scale": 0.14347826086956522,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/traveler_water.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/traveler_water/north_west.png",
+        "sha256": "4e39e8ba7bc28b0187ba07b37161e23a8d6e8fa4bd7cc746143ad7414c6d59f1",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          240,
+          462
+        ],
+        "native_bounds": [
+          1089,
+          33,
+          1329,
+          495
+        ],
+        "uniform_scale": 0.14285714285714285,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/traveler_water.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/traveler_water/west.png",
+        "sha256": "2709bff31f7ba8e05df6a91167e02d6e4f517c8d8d668620cf581b55d12e8e52",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": false,
+        "native_subject_size": [
+          229,
+          469
+        ],
+        "native_bounds": [
+          648,
+          33,
+          877,
+          502
+        ],
+        "uniform_scale": 0.14072494669509594,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/traveler_water.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/traveler_water/south_west_compact.png",
+        "sha256": "294a0e14c956950eb68bcc971eba261f8a1998c767bef1b89418b02f9cf7b868",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "gatherer_herbs": {
+    "name": "엘미",
+    "base_path": "res://art/actors/npc/gatherer_herbs/south_west_compact.png",
+    "base_sha256": "36fe5ae73bf9d6e4c548679597327b5205ee46000d571ef320e3513340928841",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/gatherer_herbs.png",
+    "reference_sha256": "bf2b7adf2f260469f8dc366288bd1fc0a2086f77eb460216993a455753f38201",
+    "reference_height": 68,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/gatherer_herbs/south.png",
+        "sha256": "8f3b1476f9e3f8cdd92441e8d1cc73b02d544e44ccf923aec7fbc428e5f6f449",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          242,
+          479
+        ],
+        "native_bounds": [
+          204,
+          21,
+          446,
+          500
+        ],
+        "uniform_scale": 0.1419624217118998,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/gatherer_herbs.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/gatherer_herbs/south_east.png",
+        "sha256": "1bf58c63558225ac34db40d23448873875dbea2ad0166bf9196d5b2d82a16b28",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/gatherer_herbs/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/gatherer_herbs/east.png",
+        "sha256": "8ac3521d21c0de0e41763f699343fe9452cf55263935a7a12ae2afe4f72ba08f",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": true,
+        "native_subject_size": [
+          220,
+          476
+        ],
+        "native_bounds": [
+          657,
+          28,
+          877,
+          504
+        ],
+        "uniform_scale": 0.14285714285714285,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/gatherer_herbs.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/gatherer_herbs/north_east.png",
+        "sha256": "ad5666395d42186e656aea62931e18380b724263a355a241051f100fa8316dc9",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          223,
+          477
+        ],
+        "native_bounds": [
+          1133,
+          23,
+          1356,
+          500
+        ],
+        "uniform_scale": 0.14255765199161424,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/gatherer_herbs.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/gatherer_herbs/north.png",
+        "sha256": "9288436f21f41d7c964ef8dee870ddb7465814ee923c1e9f918ef8f2c5eb6bc2",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          241,
+          466
+        ],
+        "native_bounds": [
+          196,
+          528,
+          437,
+          994
+        ],
+        "uniform_scale": 0.1459227467811159,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/gatherer_herbs.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/gatherer_herbs/north_west.png",
+        "sha256": "f57c89b9aa73bea1c096618937bf2c689eebf494efa4de73ec128dc5bda88920",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          219,
+          472
+        ],
+        "native_bounds": [
+          655,
+          528,
+          874,
+          1000
+        ],
+        "uniform_scale": 0.1440677966101695,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/gatherer_herbs.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/gatherer_herbs/west.png",
+        "sha256": "f6fd539e181829ea86042b4eb74aa22dc8a871c6206ea488b7515be0bcac38bb",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          219,
+          474
+        ],
+        "native_bounds": [
+          1120,
+          528,
+          1339,
+          1002
+        ],
+        "uniform_scale": 0.14345991561181434,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/gatherer_herbs.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/gatherer_herbs/south_west_compact.png",
+        "sha256": "36fe5ae73bf9d6e4c548679597327b5205ee46000d571ef320e3513340928841",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "miner_ore": {
+    "name": "바르크",
+    "base_path": "res://art/actors/npc/miner_ore/south_west_compact.png",
+    "base_sha256": "cc62ab7989b407dfb66253437fd177daad133f65f1d44f7e66f473779536cdb4",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/miner_ore.png",
+    "reference_sha256": "2536a14343e10ee5f99aeb1a002166123d007122ffb4f4ebfeaffcfcf59deb46",
+    "reference_height": 80,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/miner_ore/south.png",
+        "sha256": "cfaf9009af26f721c1997ece4e8527e91ee9b69bc34386fa1e90291a031547da",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          305,
+          441
+        ],
+        "native_bounds": [
+          156,
+          44,
+          461,
+          485
+        ],
+        "uniform_scale": 0.18140589569160998,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/miner_ore.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/miner_ore/south_east.png",
+        "sha256": "066a29c529e3517a2bcb83f3a89eb9aa7f074c554e5af8512997a22dd663e8de",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/miner_ore/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/miner_ore/east.png",
+        "sha256": "0c14f61a7503f1ea6b599474121df195b36f7395960cb5a431bc4b04ae769439",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": true,
+        "native_subject_size": [
+          209,
+          455
+        ],
+        "native_bounds": [
+          655,
+          44,
+          864,
+          499
+        ],
+        "uniform_scale": 0.17582417582417584,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/miner_ore.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/miner_ore/north_east.png",
+        "sha256": "0025e79549581bf60c270511e516d2d3f24eb0d7a37685542864a306b0230c8c",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          254,
+          455
+        ],
+        "native_bounds": [
+          1101,
+          44,
+          1355,
+          499
+        ],
+        "uniform_scale": 0.17582417582417584,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/miner_ore.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/miner_ore/north.png",
+        "sha256": "7ba51d3fcefacd61dbbbe2645b2bffe693afaebca4e4e780163cf3a3719151a1",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          309,
+          444
+        ],
+        "native_bounds": [
+          153,
+          537,
+          462,
+          981
+        ],
+        "uniform_scale": 0.18018018018018017,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/miner_ore.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/miner_ore/north_west.png",
+        "sha256": "2b289e9770725d84f31dea22c41a87979e8ea3a8ea4a36a0ace46026a54920ef",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": true,
+        "native_subject_size": [
+          254,
+          455
+        ],
+        "native_bounds": [
+          1101,
+          44,
+          1355,
+          499
+        ],
+        "uniform_scale": 0.17582417582417584,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/miner_ore.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/miner_ore/west.png",
+        "sha256": "70ffe827f32c57990ceeee86b03097371447c34724dbefafc8c1b20040c89629",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          207,
+          456
+        ],
+        "native_bounds": [
+          1142,
+          537,
+          1349,
+          993
+        ],
+        "uniform_scale": 0.17543859649122806,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/miner_ore.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/miner_ore/south_west_compact.png",
+        "sha256": "cc62ab7989b407dfb66253437fd177daad133f65f1d44f7e66f473779536cdb4",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "healer_moss": {
+    "name": "세이나",
+    "base_path": "res://art/actors/npc/healer_moss/south_west_compact.png",
+    "base_sha256": "011dea34536797d0a48fcf926c8a9e2d92eaa28ecf76f494dea61a771cf7f33d",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/healer_moss.png",
+    "reference_sha256": "373246185f886354a6b73faeffbef2f21f94e86ec539d209c855f9c512137a02",
+    "reference_height": 68,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/healer_moss/south.png",
+        "sha256": "6501e010a702b0f5e786cf8b60eb21db2909bae7d538a494678b2bf7bcc40e86",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          238,
+          473
+        ],
+        "native_bounds": [
+          240,
+          26,
+          478,
+          499
+        ],
+        "uniform_scale": 0.14376321353065538,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/healer_moss.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/healer_moss/south_east.png",
+        "sha256": "b372e51eae6a6aedb00c5196fa0ade5f7e758e9116a31ea96dd14484d05164b2",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/healer_moss/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/healer_moss/east.png",
+        "sha256": "33beb471db8a5eb4b8de6d05e33560a0d096478f9116113373cce10e2d92c50f",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          212,
+          476
+        ],
+        "native_bounds": [
+          1091,
+          524,
+          1303,
+          1000
+        ],
+        "uniform_scale": 0.14285714285714285,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/healer_moss.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/healer_moss/north_east.png",
+        "sha256": "fdb8cc9731e425515736532bc5c81906999e672862c80aec2728594397c4043c",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          218,
+          461
+        ],
+        "native_bounds": [
+          1094,
+          31,
+          1312,
+          492
+        ],
+        "uniform_scale": 0.1475054229934924,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/healer_moss.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/healer_moss/north.png",
+        "sha256": "2f5c8498af4da2e468e35a5f8d9f343b920ed77bf46d78f81c2a79df297fdf9d",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          247,
+          463
+        ],
+        "native_bounds": [
+          219,
+          524,
+          466,
+          987
+        ],
+        "uniform_scale": 0.1468682505399568,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/healer_moss.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/healer_moss/north_west.png",
+        "sha256": "1c9046981e40242fb10f70dfe662d55ec2a5a8e2645a5e44d321168c45b2fe8a",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          224,
+          463
+        ],
+        "native_bounds": [
+          663,
+          524,
+          887,
+          987
+        ],
+        "uniform_scale": 0.1468682505399568,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/healer_moss.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/healer_moss/west.png",
+        "sha256": "57ee824ad74ce19d76993d4fa4a6610fceab6b3f4c95372a4e90721343416a50",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": false,
+        "native_subject_size": [
+          218,
+          469
+        ],
+        "native_bounds": [
+          660,
+          30,
+          878,
+          499
+        ],
+        "uniform_scale": 0.14498933901918976,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/healer_moss.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/healer_moss/south_west_compact.png",
+        "sha256": "011dea34536797d0a48fcf926c8a9e2d92eaa28ecf76f494dea61a771cf7f33d",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "delvin": {
+    "name": "델빈",
+    "base_path": "res://art/actors/npc/delvin/south_west_compact.png",
+    "base_sha256": "2967ed31b44c6791a0230623df8d4e04ba9b29dea9264271250210e1ac0f31ea",
+    "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/delvin.png",
+    "reference_sha256": "b052a4ab410d60581c3deb515472cc3ed025615b5865036a0c69f4474cc3e67e",
+    "reference_height": 68,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/delvin/south.png",
+        "sha256": "c979dd59aea2a293e3f885f8c0f1dca09b86898707e68a22209cb2b957fa6c4c",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          229,
+          457
+        ],
+        "native_bounds": [
+          249,
+          29,
+          478,
+          486
+        ],
+        "uniform_scale": 0.1487964989059081,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/delvin.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/delvin/south_east.png",
+        "sha256": "de805c393f1ad7037ce4cfe813826519d3ddf0d69cd3f98e75a2643204a25304",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/npc/delvin/south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/delvin/east.png",
+        "sha256": "45efe69af858e7018aa0dc635d385ac2cf338751caa209f4e56afedd0a398ecf",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          227,
+          471
+        ],
+        "native_bounds": [
+          1052,
+          515,
+          1279,
+          986
+        ],
+        "uniform_scale": 0.14437367303609341,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/delvin.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/delvin/north_east.png",
+        "sha256": "722e73217d5f8f844f732b35972681f04dd72694a3e790887428ac6eaff6fb54",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          215,
+          458
+        ],
+        "native_bounds": [
+          1065,
+          29,
+          1280,
+          487
+        ],
+        "uniform_scale": 0.14847161572052403,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/delvin.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/delvin/north.png",
+        "sha256": "1adf289b2b9276df4d4f25db059b3bd6212c3794e0106c5cbc608fed93317258",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          223,
+          464
+        ],
+        "native_bounds": [
+          248,
+          512,
+          471,
+          976
+        ],
+        "uniform_scale": 0.14655172413793102,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/delvin.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/delvin/north_west.png",
+        "sha256": "bbc9116d064a4ad53e0eb76cc9589550d8fb4a1d10565aea7ed8a262b4fa9b3a",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          223,
+          462
+        ],
+        "native_bounds": [
+          657,
+          516,
+          880,
+          978
+        ],
+        "uniform_scale": 0.1471861471861472,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/delvin.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/delvin/west.png",
+        "sha256": "4e35281756bd2265e23589c8617b8390f9b1423a2be77c670ed1b151f374f71a",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": false,
+        "native_subject_size": [
+          223,
+          460
+        ],
+        "native_bounds": [
+          657,
+          29,
+          880,
+          489
+        ],
+        "uniform_scale": 0.14782608695652175,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/delvin.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/npc/delvin/south_west_compact.png",
+        "sha256": "2967ed31b44c6791a0230623df8d4e04ba9b29dea9264271250210e1ac0f31ea",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "blacksmith": {
+    "name": "대장장이",
+    "base_path": "res://art/actors/poses/blacksmith_south_west_compact.png",
+    "base_sha256": "50cd396989498da19cba3643df9f4cb03506be67933288050362289272a42f94",
+    "reference": "docs/그림_작업/받은그림/상태와_인물/생성_원본/actor_blacksmith_proportions.png",
+    "reference_sha256": "9ec671c2f9b6b1043905cb71b7ecaa19ead0a0cdc75819bfc56456f78852b96b",
+    "reference_height": 70,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/blacksmith/south.png",
+        "sha256": "9686d3039af3016643e72a0c374e5e23730fa086d57f6fb4add9a44ae4321255",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          261,
+          471
+        ],
+        "native_bounds": [
+          184,
+          28,
+          445,
+          499
+        ],
+        "uniform_scale": 0.14861995753715498,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/blacksmith.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/blacksmith/south_east.png",
+        "sha256": "132aed5757f467e0dfda3e19e36289bd2e334c620d9781d8e0b77c1a0bab063d",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/poses/blacksmith_south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/blacksmith/east.png",
+        "sha256": "3fecae416519416060945706b71e30418b429d8f92e44e35666b5971586530d2",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": false,
+        "native_subject_size": [
+          169,
+          470
+        ],
+        "native_bounds": [
+          678,
+          32,
+          847,
+          502
+        ],
+        "uniform_scale": 0.14893617021276595,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/blacksmith.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/blacksmith/north_east.png",
+        "sha256": "3ca6d59e71b8cd26c1f9275d382d597f796edd090e9e0bd01b8100b955a34459",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          249,
+          473
+        ],
+        "native_bounds": [
+          1115,
+          28,
+          1364,
+          501
+        ],
+        "uniform_scale": 0.14799154334038056,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/blacksmith.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/blacksmith/north.png",
+        "sha256": "9b4cb2eb37f259573f371f51bf766bd95a80dc0e80e190bd04f5f3fe21610599",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          264,
+          463
+        ],
+        "native_bounds": [
+          189,
+          523,
+          453,
+          986
+        ],
+        "uniform_scale": 0.1511879049676026,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/blacksmith.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/blacksmith/north_west.png",
+        "sha256": "4ee5403e50a59aa42655e68b873b6083c81c22397971e8d31e45ddcbd983114d",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          231,
+          468
+        ],
+        "native_bounds": [
+          639,
+          518,
+          870,
+          986
+        ],
+        "uniform_scale": 0.14957264957264957,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/blacksmith.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/blacksmith/west.png",
+        "sha256": "a78d1997f2d827db503943df40c41c3bd326fdaaafe15f2b31ed2252ed5aa34d",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          163,
+          463
+        ],
+        "native_bounds": [
+          1155,
+          523,
+          1318,
+          986
+        ],
+        "uniform_scale": 0.1511879049676026,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/blacksmith.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/poses/blacksmith_south_west_compact.png",
+        "sha256": "50cd396989498da19cba3643df9f4cb03506be67933288050362289272a42f94",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  },
+  "commuter": {
+    "name": "현대 직장인",
+    "base_path": "res://art/actors/poses/commuter_south_west_compact.png",
+    "base_sha256": "5dc45133e97e8b1ebddb33d4f26b626751fbce55816821cadcc949bafb148558",
+    "reference": "docs/그림_작업/받은그림/상태와_인물/생성_원본/actor_commuter_proportions.png",
+    "reference_sha256": "22f074c9c3021be2ca08e0afe7a772db0957acb53292a8e2b750201dc945fd52",
+    "reference_height": 70,
+    "directions": {
+      "south": {
+        "path": "res://art/actors/directions/commuter/south.png",
+        "sha256": "9475c3aaef470360693007257124f6acf8ce391a80d2e42700e3c3b21fb2da2a",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 0,
+        "mirrored": false,
+        "native_subject_size": [
+          241,
+          474
+        ],
+        "native_bounds": [
+          209,
+          24,
+          450,
+          498
+        ],
+        "uniform_scale": 0.14767932489451477,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/commuter.png"
+      },
+      "south-east": {
+        "path": "res://art/actors/directions/commuter/south_east.png",
+        "sha256": "c54614991a752673b0b4ea0b646d87a92cb982a935ba0089be5b5063a675d7f3",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "mirror_of_existing",
+        "mirrored": true,
+        "source_path": "res://art/actors/poses/commuter_south_west_compact.png"
+      },
+      "east": {
+        "path": "res://art/actors/directions/commuter/east.png",
+        "sha256": "e32d2fca5a1401a92e23f5af4258493a0d35f2cd5313da796815fa50473588fe",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 5,
+        "mirrored": false,
+        "native_subject_size": [
+          174,
+          470
+        ],
+        "native_bounds": [
+          1135,
+          531,
+          1309,
+          1001
+        ],
+        "uniform_scale": 0.14893617021276595,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/commuter.png"
+      },
+      "north-east": {
+        "path": "res://art/actors/directions/commuter/north_east.png",
+        "sha256": "dac55182d9b2a3617d9eea37fb2eff49edea6fd092e0cbdc9493153c27eeefa9",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 2,
+        "mirrored": false,
+        "native_subject_size": [
+          217,
+          468
+        ],
+        "native_bounds": [
+          1128,
+          24,
+          1345,
+          492
+        ],
+        "uniform_scale": 0.14957264957264957,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/commuter.png"
+      },
+      "north": {
+        "path": "res://art/actors/directions/commuter/north.png",
+        "sha256": "21cd125076af0408363645904ae8d72e0728a518e80a48d96192ce75d96d8346",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 3,
+        "mirrored": false,
+        "native_subject_size": [
+          241,
+          465
+        ],
+        "native_bounds": [
+          202,
+          530,
+          443,
+          995
+        ],
+        "uniform_scale": 0.15053763440860216,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/commuter.png"
+      },
+      "north-west": {
+        "path": "res://art/actors/directions/commuter/north_west.png",
+        "sha256": "b2dc34d6c02ff51ee33c99315235a2371cdc772c33b6194de681e4ae34454956",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 4,
+        "mirrored": false,
+        "native_subject_size": [
+          218,
+          471
+        ],
+        "native_bounds": [
+          644,
+          530,
+          862,
+          1001
+        ],
+        "uniform_scale": 0.14861995753715498,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/commuter.png"
+      },
+      "west": {
+        "path": "res://art/actors/directions/commuter/west.png",
+        "sha256": "dfaa93705da93d638d7cb22c1985f22f19331086f981d1ffe35c55273befe7e7",
+        "feet": [
+          48,
+          90
+        ],
+        "cell": 1,
+        "mirrored": false,
+        "native_subject_size": [
+          176,
+          471
+        ],
+        "native_bounds": [
+          679,
+          25,
+          855,
+          496
+        ],
+        "uniform_scale": 0.14861995753715498,
+        "source_kind": "native_turnaround",
+        "source": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/commuter.png"
+      },
+      "south-west": {
+        "path": "res://art/actors/poses/commuter_south_west_compact.png",
+        "sha256": "5dc45133e97e8b1ebddb33d4f26b626751fbce55816821cadcc949bafb148558",
+        "feet": [
+          48,
+          90
+        ],
+        "source_kind": "unchanged_existing"
+      }
+    }
+  }
+}

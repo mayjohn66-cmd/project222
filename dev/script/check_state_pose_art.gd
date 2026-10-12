@@ -44,7 +44,7 @@ func run() -> void:
 		var row: Dictionary = ActorPoseArt.assets()[id]
 		check(FileAccess.get_sha256(str(row.path)) == row.sha256,"pose source selected: " + str(id))
 		var set_data := ActorSpriteFrames.load_set(ActorPoseArt.PREFIX+str(id))
-		check(not set_data.is_empty() and set_data.has("static_direction"),"only prepared static pose")
+		check(not set_data.is_empty() and (set_data.has("static_direction") or set_data.get("directional_idle",false)),"only prepared idle pose")
 		var identity := str(row.get("identity",""))
 		if NpcSpriteArt.assets().has(identity):
 			var standing := NpcSpriteArt.load_set("npc:"+identity)

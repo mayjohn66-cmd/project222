@@ -1,0 +1,170 @@
+[
+  {
+    "id": "naru",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/naru.png",
+    "raw_sha256": "c683e5eded7e77f18ccf6da46436aeac3289f0c2c23e2975850a313aea1dcd78",
+    "reference_sha256": "aeadfa59ff0700be564a9c693952703194e8fa32e669ce7f37f3da330e2fa91a",
+    "base_sha256": "961b20f4dda1fee51b3b6599aebd6dbda3aecb2885cc6d6efe53d8ad19dfe2c5",
+    "size": [
+      1774,
+      887
+    ],
+    "height": 76,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "doyun",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/doyun.png",
+    "raw_sha256": "0e036901e76bcb8e28b4557c901c7865ed73ac86f5a1be0c6a47866a6397f9e7",
+    "reference_sha256": "0c2f79b099df2785bbc315ce9e94ff0e868f7c7868edfb2646e32c13f726f0cb",
+    "base_sha256": "68d6186e8b65adee303235799b9ba37c1598a1924a90065c2ad1a85158b9916a",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 66,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "sora",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/sora.png",
+    "raw_sha256": "5507a9550b26ae2ddf456515cae936c946cc5491e42d887901ad7ed337cb9207",
+    "reference_sha256": "6080653b497b672860f163bbd621f0076b8f2582d8e19faa61d926bbbabb174c",
+    "base_sha256": "c021761a5859b37997cebd72adbeb06428d8aaa9cd62f43fa22418e56b42b68a",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 68,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "neighbor_bread",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/neighbor_bread.png",
+    "raw_sha256": "4b3368bc70eb6f291a89c8c4d53378b5cbe1006bae6e159a362c764be112f6f2",
+    "reference_sha256": "5e105d7ec96d7d95f4072641269e49f0526b695f543df6ba9503ef7f6653dbe3",
+    "base_sha256": "4b839862c6fcc236ee64684b42d34b63bed7a2b1db5836eceb958b5bda997433",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 70,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "child_berries",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/child_berries.png",
+    "raw_sha256": "58d6b9e1e9548be2d044deb6b769355375feed5dad0fbaa4fc6130462ea661b9",
+    "reference_sha256": "6db9402404fbcc8726efe57dde341b9168cc68f11b1c7f45ccfeaa0d6b538209",
+    "base_sha256": "74c2e1e38e1a2c626bb3cf98fd3eb00d83ed2f42d697b8249029778ae72a9a22",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 72,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "traveler_water",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/traveler_water.png",
+    "raw_sha256": "b4f3256f5a655b604692ccf5922ff0e0370590249dbb3d05f78bed52d90b545c",
+    "reference_sha256": "d7f466ab0dad17bc00282b69a616424df2e96d86bc7d1d67fb9abdf9ed23d5a5",
+    "base_sha256": "294a0e14c956950eb68bcc971eba261f8a1998c767bef1b89418b02f9cf7b868",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 66,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "gatherer_herbs",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/gatherer_herbs.png",
+    "raw_sha256": "cdb728a61122f7cc2d667f40cd76648bf4a934cbaa79bfbdde066679ecb490cb",
+    "reference_sha256": "bf2b7adf2f260469f8dc366288bd1fc0a2086f77eb460216993a455753f38201",
+    "base_sha256": "36fe5ae73bf9d6e4c548679597327b5205ee46000d571ef320e3513340928841",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 68,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "miner_ore",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/miner_ore.png",
+    "raw_sha256": "0c9eae09acfe05cfbf86e82857201bedc578ff997564112226ee4d0a935741ea",
+    "reference_sha256": "2536a14343e10ee5f99aeb1a002166123d007122ffb4f4ebfeaffcfcf59deb46",
+    "base_sha256": "cc62ab7989b407dfb66253437fd177daad133f65f1d44f7e66f473779536cdb4",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 80,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "healer_moss",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/healer_moss.png",
+    "raw_sha256": "1215307c486f79f968a1ab2a421de1b16bad2008f29d90cbd6758e289122f732",
+    "reference_sha256": "373246185f886354a6b73faeffbef2f21f94e86ec539d209c855f9c512137a02",
+    "base_sha256": "011dea34536797d0a48fcf926c8a9e2d92eaa28ecf76f494dea61a771cf7f33d",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 68,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "delvin",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/delvin.png",
+    "raw_sha256": "61f2f16796e86478d83e50f413b7d56d01161fade3182e4b42b6487db9ee4df2",
+    "reference_sha256": "b052a4ab410d60581c3deb515472cc3ed025615b5865036a0c69f4474cc3e67e",
+    "base_sha256": "2967ed31b44c6791a0230623df8d4e04ba9b29dea9264271250210e1ac0f31ea",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 68,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "blacksmith",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/blacksmith.png",
+    "raw_sha256": "4b1c890c1e331b784d9f23e011d20768e4e43725d3717835b3ff06bd313148e5",
+    "reference_sha256": "9ec671c2f9b6b1043905cb71b7ecaa19ead0a0cdc75819bfc56456f78852b96b",
+    "base_sha256": "50cd396989498da19cba3643df9f4cb03506be67933288050362289272a42f94",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 70,
+    "frames": 8,
+    "existing_preserved": true
+  },
+  {
+    "id": "commuter",
+    "raw": "docs/그림_작업/받은그림/NPC_추가_방향/생성_원본/commuter.png",
+    "raw_sha256": "da289c72523bd745664a2df530d86e7299cbaa615abdbb147cbad90d871d9254",
+    "reference_sha256": "22f074c9c3021be2ca08e0afe7a772db0957acb53292a8e2b750201dc945fd52",
+    "base_sha256": "5dc45133e97e8b1ebddb33d4f26b626751fbce55816821cadcc949bafb148558",
+    "size": [
+      1536,
+      1024
+    ],
+    "height": 70,
+    "frames": 8,
+    "existing_preserved": true
+  }
+]

@@ -37,6 +37,9 @@ static func load_set(key: String) -> Dictionary:
 	if not key.begins_with(PREFIX): return {}
 	var row: Dictionary = assets().get(key.trim_prefix(PREFIX), {})
 	if row.is_empty() or not ResourceLoader.exists(str(row.path)): return {}
+	if str(row.get("pose","")) == "standing":
+		var directional := NpcDirectionArt.load_set(key.trim_prefix(PREFIX),row)
+		if not directional.is_empty(): return directional
 	var texture := load(str(row.path)) as Texture2D
 	if texture == null: return {}
 	var bounds := texture.get_image().get_used_rect()

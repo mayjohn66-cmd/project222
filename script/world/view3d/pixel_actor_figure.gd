@@ -49,14 +49,15 @@ func _make_mesh(shader: Shader, layer: int) -> MeshInstance3D:
 
 
 func animate(delta: float) -> void:
-	if walking and delta > 0.0 and not frame_set.has("static_direction"):
+	direction = str(frame_set.get("static_direction", ActorSpriteFrames.direction_for(facing_yaw_deg, _camera_yaw)))
+	var walk_frames: Array = frame_set.get("directions",{}).get(direction,{}).get("walk",[])
+	if walking and delta > 0.0 and not walk_frames.is_empty() and not frame_set.has("static_direction"):
 		var frames_per_second := clampf(maxf(move_speed, 0.0) / STEP_LENGTH * float(ActorSpriteFrames.FRAME_COUNT), MIN_FPS, MAX_FPS)
 		phase = fposmod(phase + frames_per_second / float(ActorSpriteFrames.FRAME_COUNT) * delta, 1.0)
 		frame_index = int(floor(phase * ActorSpriteFrames.FRAME_COUNT))
 	else:
 		phase = 0.0
 		frame_index = -1
-	direction = str(frame_set.get("static_direction", ActorSpriteFrames.direction_for(facing_yaw_deg, _camera_yaw)))
 	_apply_frame()
 
 
@@ -65,7 +66,7 @@ func _apply_frame() -> void:
 		return
 	direction = str(frame_set.get("static_direction", direction))
 	var pose: Dictionary = frame_set.directions[direction]
-	var frame: Dictionary = pose.idle if frame_index < 0 else pose.walk[frame_index]
+	var frame: Dictionary = pose.idle if frame_index < 0 or frame_index >= pose.walk.size() else pose.walk[frame_index]
 	if _last_frame_path == frame.path:
 		return
 	_last_frame_path = frame.path

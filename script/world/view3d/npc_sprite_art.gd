@@ -1,6 +1,6 @@
 class_name NpcSpriteArt
 extends RefCounted
-## 이름 있는 NPC의 정지 그림. 한 방향만 있는 그림을 가짜 8방향/걷기로 복제하지 않는다.
+## 이름 있는 NPC의 정지 그림. 준비한 추가 방향을 읽고, 누락 시 기존 한 방향으로 표시한다.
 const DATA_PATH := "res://data/art/npc_sprite_assets.json"
 const PREFIX := "npc:"
 static var _assets: Dictionary = {}
@@ -35,6 +35,8 @@ static func load_set(key: String) -> Dictionary:
 	var id := key.trim_prefix(PREFIX)
 	if not assets().has(id): return {}
 	var row: Dictionary = assets()[id]
+	var directional := NpcDirectionArt.load_set(id,row)
+	if not directional.is_empty(): return directional
 	var path := str(row.path)
 	if not ResourceLoader.exists(path): return {}
 	var texture := load(path) as Texture2D

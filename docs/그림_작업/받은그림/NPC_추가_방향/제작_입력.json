@@ -1,0 +1,431 @@
+{
+  "date": "2026-10-12",
+  "scope": "원본 디자인으로 추가 방향 제작, 기존 남서 선택 PNG 유지",
+  "rejected": {
+    "path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-00967d6e-daa6-4c60-80d7-7e2c7c784357.png",
+    "reason": "축소본 참조로 원본 얼굴/모자/가방 디자인 변경; 게임 미적용",
+    "sha256": "a2290d0c27cf4971d2ee34789fc3b29bc1f17ee8df634533f0167b5f44dbdecf"
+  },
+  "entries": [
+    {
+      "id": "naru",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-abde8301-620a-48fe-87a1-8a2ca54883b6.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/naru.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied ORIGINAL pixel-art merchant into ONE 8-direction turnaround sheet of the EXACT SAME character. The supplied original is authoritative: preserve his recognizable face, narrow eye shape, long/slightly tilted brown hat crown and wide brim, dark full beard, red neck scarf, blue inner shirt, mustard coat reaching thighs, brown belt/trousers/boots, and shoulder satchel with yellow buckle. Maintain EXACT original head-to-body proportions and clothing shapes/materials. Do NOT redesign, do NOT make a fatter round head, do NOT make the legs shorter, do NOT exaggerate chibi. Reconstruct only surfaces newly revealed by rotation. Eight FULL-BODY standing idle rotations, crisp pixel art with the same coarse square pixel clusters, original palette and original outline. No walking poses, hands resting naturally. EXACT 4 columns x 2 rows grid, eight equal cells, each figure center aligned and same height/baseline with generous 15% transparent padding. Top row: (1) front SOUTH face straight toward viewer; (2) SOUTH-EAST facing DOWN-RIGHT, nose points RIGHT, right-facing front three-quarter; (3) EAST right profile, nose points RIGHT; (4) NORTH-EAST facing UP-RIGHT, back three-quarter, only right edge of face possibly visible. Bottom row: (5) NORTH true back, NO visible face; (6) NORTH-WEST facing UP-LEFT, back three-quarter; (7) WEST left profile, nose points LEFT; (8) SOUTH-WEST facing DOWN-LEFT, reproduce supplied original orientation/design as faithfully as possible. DIRECTIONS ARE SCREEN COMPASS. Keep shoulder satchel on the same anatomical side throughout rotations. Camera elevated ~30deg in all cells consistent with original. Transparent actual alpha, no cast shadow, no ground, no backdrop, no text/numbers/labels/gridlines/watermarks. Landscape2:1 sheet. This is an orientation edit of original, not a new character design.",
+      "columns": 4,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          2,
+          false
+        ],
+        "north-east": [
+          3,
+          false
+        ],
+        "north": [
+          4,
+          false
+        ],
+        "north-west": [
+          5,
+          false
+        ],
+        "west": [
+          6,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "c683e5eded7e77f18ccf6da46436aeac3289f0c2c23e2975850a313aea1dcd78"
+    },
+    {
+      "id": "doyun",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-86745bb5-3376-4571-aae1-003e34653e02.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/doyun.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied original pixel-art character into ONE six-view rotation sheet of the EXACT SAME individual. The original is authoritative for face, hairstyle, outfit, accessories, color palette, head/body proportions and coarse square pixel clusters. Character identity: black spiky short hair, straight brows, blue short-sleeve shirt with rolled pale cuffs, navy apron, dark trousers and brown boots; hands relaxed, NO folded arms. Keep ALL actual reference clothing details including apron fastening/book/earrings/belt if present. Do NOT invent accessories or redesign their face, do NOT shorten legs or inflate the head. Reconstruct only surfaces revealed by turning. EXACT 3 columns by 2 rows, six evenly spaced full-body idle figures, consistent height and baseline, 15% transparent padding within every cell, neither body nor shoes cropped. Top row: (1) SOUTH front facing viewer; (2) EAST true right profile, nose points RIGHT, body facing RIGHT; (3) NORTH-EAST back-three-quarter facing upper-right, back mostly visible. Bottom row: (4) NORTH true back with NO visible face; (5) NORTH-WEST back-three-quarter facing upper-left, back mostly visible; (6) WEST true left profile, nose points LEFT, body facing LEFT. Screen compass directions. Camera 30deg elevated consistent with supplied reference. Same neutral standing idle stance in every view, no walking. EXACT original pixel-art style, no gradients/antialiasing, no finer painterly texture or muddy noise. Preserve accessory anatomical side in all new rotations. Landscape canvas, genuine transparent alpha, NO background/ground/shadow/text/labels/numbers/gridlines/watermark. This is a turnaround edit, not a new character design.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          1,
+          false
+        ],
+        "north-east": [
+          2,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          4,
+          false
+        ],
+        "west": [
+          5,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "0e036901e76bcb8e28b4557c901c7865ed73ac86f5a1be0c6a47866a6397f9e7"
+    },
+    {
+      "id": "sora",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-33590fe8-0c1d-46e7-b875-1112715c872c.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/sora.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied original pixel-art character into ONE six-view rotation sheet of the EXACT SAME individual. The original is authoritative for face, hairstyle, outfit, accessories, color palette, head/body proportions and coarse square pixel clusters. Character identity: long reddish brown hair, olive high-neck shirt, tan long coat, brown boots; same small dark book held near waist. Keep ALL actual reference clothing details including apron fastening/book/earrings/belt if present. Do NOT invent accessories or redesign their face, do NOT shorten legs or inflate the head. Reconstruct only surfaces revealed by turning. EXACT 3 columns by 2 rows, six evenly spaced full-body idle figures, consistent height and baseline, 15% transparent padding within every cell, neither body nor shoes cropped. Top row: (1) SOUTH front facing viewer; (2) EAST true right profile, nose points RIGHT, body facing RIGHT; (3) NORTH-EAST back-three-quarter facing upper-right, back mostly visible. Bottom row: (4) NORTH true back with NO visible face; (5) NORTH-WEST back-three-quarter facing upper-left, back mostly visible; (6) WEST true left profile, nose points LEFT, body facing LEFT. Screen compass directions. Camera 30deg elevated consistent with supplied reference. Same neutral standing idle stance in every view, no walking. EXACT original pixel-art style, no gradients/antialiasing, no finer painterly texture or muddy noise. Preserve accessory anatomical side in all new rotations. Landscape canvas, genuine transparent alpha, NO background/ground/shadow/text/labels/numbers/gridlines/watermark. This is a turnaround edit, not a new character design.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          1,
+          false
+        ],
+        "north-east": [
+          2,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          4,
+          false
+        ],
+        "west": [
+          5,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "5507a9550b26ae2ddf456515cae936c946cc5491e42d887901ad7ed337cb9207"
+    },
+    {
+      "id": "neighbor_bread",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-15b56332-b609-4ca0-893f-3abfcb8daa5f.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/neighbor_bread.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied original pixel-art character into ONE six-view rotation sheet of the EXACT SAME individual. The original is authoritative for face, hairstyle, outfit, accessories, color palette, head/body proportions and coarse square pixel clusters. Character identity: brown tied-back hair, maroon blouse with pale cream apron, long muted brown skirt, brown shoes; gentle adult woman. Keep ALL actual reference clothing details including apron fastening/book/earrings/belt if present. Do NOT invent accessories or redesign their face, do NOT shorten legs or inflate the head. Reconstruct only surfaces revealed by turning. EXACT 3 columns by 2 rows, six evenly spaced full-body idle figures, consistent height and baseline, 15% transparent padding within every cell, neither body nor shoes cropped. Top row: (1) SOUTH front facing viewer; (2) EAST true right profile, nose points RIGHT, body facing RIGHT; (3) NORTH-EAST back-three-quarter facing upper-right, back mostly visible. Bottom row: (4) NORTH true back with NO visible face; (5) NORTH-WEST back-three-quarter facing upper-left, back mostly visible; (6) WEST true left profile, nose points LEFT, body facing LEFT. Screen compass directions. Camera 30deg elevated consistent with supplied reference. Same neutral standing idle stance in every view, no walking. EXACT original pixel-art style, no gradients/antialiasing, no finer painterly texture or muddy noise. Preserve accessory anatomical side in all new rotations. Landscape canvas, genuine transparent alpha, NO background/ground/shadow/text/labels/numbers/gridlines/watermark. This is a turnaround edit, not a new character design.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          5,
+          false
+        ],
+        "north-east": [
+          2,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          4,
+          false
+        ],
+        "west": [
+          1,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "4b3368bc70eb6f291a89c8c4d53378b5cbe1006bae6e159a362c764be112f6f2"
+    },
+    {
+      "id": "child_berries",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-7c84e778-b887-4281-83ad-cf979dccc8fe.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/child_berries.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied ORIGINAL sprite to ONE six-view rotation sheet of the EXACT SAME character. Reference is authoritative for face, hairstyle, proportions, costume, accessory placement and pixel style: small red-haired CHILD, high red ponytail with blue tie, teal jacket with yellow cuffs over yellow shirt, brown short skirt, dark socks, brown boots and brown backpack. Preserve every existing design detail. Only turn the character; do NOT redesign their face or outfit, do NOT shorten limbs or inflate head. Match original coarse pixel clusters and colors, no painterly smoothing or fine noise. EXACT 3 columns x 2 rows; six separated full-body standing idle sprites at the same height and baseline, relaxed neutral stance, camera 30deg elevated matching original. Top-left: SOUTH facing straight toward viewer. Top-middle: EAST, strict right-facing PROFILE with nose pointing RIGHT. Top-right: NORTH-EAST, back three-quarter facing upper-right. Bottom-left: NORTH, straight back NO face visible. Bottom-middle: NORTH-WEST, back three-quarter facing upper-left. Bottom-right: WEST, strict left-facing PROFILE with nose pointing LEFT. These are SCREEN directions. Keep ponytail/braid/backpack/satchel/belt anatomical side consistent across views. Both feet fully visible; 15% empty padding within each equal grid cell. Genuine transparent alpha, landscape canvas, NO colored fog/backdrop/ground/shadow/text/numbers/labels/gridlines/watermarks. Original character turnaround, no new character design.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          1,
+          true
+        ],
+        "north-east": [
+          4,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          2,
+          false
+        ],
+        "west": [
+          5,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "58d6b9e1e9548be2d044deb6b769355375feed5dad0fbaa4fc6130462ea661b9"
+    },
+    {
+      "id": "traveler_water",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-3071d867-5f22-4192-a956-40472e43c909.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/traveler_water.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied ORIGINAL sprite to ONE six-view rotation sheet of the EXACT SAME character. Reference is authoritative for face, hairstyle, proportions, costume, accessory placement and pixel style: short layered dark blue-black hair, blue hooded capelet, dark blue-grey traveler clothes, belt and brown boots. Preserve every existing design detail. Only turn the character; do NOT redesign their face or outfit, do NOT shorten limbs or inflate head. Match original coarse pixel clusters and colors, no painterly smoothing or fine noise. EXACT 3 columns x 2 rows; six separated full-body standing idle sprites at the same height and baseline, relaxed neutral stance, camera 30deg elevated matching original. Top-left: SOUTH facing straight toward viewer. Top-middle: EAST, strict right-facing PROFILE with nose pointing RIGHT. Top-right: NORTH-EAST, back three-quarter facing upper-right. Bottom-left: NORTH, straight back NO face visible. Bottom-middle: NORTH-WEST, back three-quarter facing upper-left. Bottom-right: WEST, strict left-facing PROFILE with nose pointing LEFT. These are SCREEN directions. Keep ponytail/braid/backpack/satchel/belt anatomical side consistent across views. Both feet fully visible; 15% empty padding within each equal grid cell. Genuine transparent alpha, landscape canvas, NO colored fog/backdrop/ground/shadow/text/numbers/labels/gridlines/watermarks. Original character turnaround, no new character design.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          5,
+          false
+        ],
+        "north-east": [
+          4,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          2,
+          false
+        ],
+        "west": [
+          1,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "b4f3256f5a655b604692ccf5922ff0e0370590249dbb3d05f78bed52d90b545c"
+    },
+    {
+      "id": "gatherer_herbs",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-4048f420-a3c1-47e2-923f-70fe43691061.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/gatherer_herbs.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied ORIGINAL sprite to ONE six-view rotation sheet of the EXACT SAME character. Reference is authoritative for face, hairstyle, proportions, costume, accessory placement and pixel style: brown side braid tied with green ribbon, green cape, pale cream blouse, tan-brown skirt, brown shoes, little shoulder satchel with flowers and herbs. Preserve every existing design detail. Only turn the character; do NOT redesign their face or outfit, do NOT shorten limbs or inflate head. Match original coarse pixel clusters and colors, no painterly smoothing or fine noise. EXACT 3 columns x 2 rows; six separated full-body standing idle sprites at the same height and baseline, relaxed neutral stance, camera 30deg elevated matching original. Top-left: SOUTH facing straight toward viewer. Top-middle: EAST, strict right-facing PROFILE with nose pointing RIGHT. Top-right: NORTH-EAST, back three-quarter facing upper-right. Bottom-left: NORTH, straight back NO face visible. Bottom-middle: NORTH-WEST, back three-quarter facing upper-left. Bottom-right: WEST, strict left-facing PROFILE with nose pointing LEFT. These are SCREEN directions. Keep ponytail/braid/backpack/satchel/belt anatomical side consistent across views. Both feet fully visible; 15% empty padding within each equal grid cell. Genuine transparent alpha, landscape canvas, NO colored fog/backdrop/ground/shadow/text/numbers/labels/gridlines/watermarks. Original character turnaround, no new character design.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          1,
+          true
+        ],
+        "north-east": [
+          2,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          4,
+          false
+        ],
+        "west": [
+          5,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "cdb728a61122f7cc2d667f40cd76648bf4a934cbaa79bfbdde066679ecb490cb"
+    },
+    {
+      "id": "miner_ore",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-5aa231e9-2e1f-4a38-9d62-88af85920343.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/miner_ore.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied ORIGINAL sprite to ONE six-view rotation sheet of the EXACT SAME character. Reference is authoritative for face, hairstyle, proportions, costume, accessory placement and pixel style: stocky bearded adult miner, brass mining helmet with front lamp, thick purple-blue beard, brown shirt and trousers, brown boots and work belt. Preserve every existing design detail. Only turn the character; do NOT redesign their face or outfit, do NOT shorten limbs or inflate head. Match original coarse pixel clusters and colors, no painterly smoothing or fine noise. EXACT 3 columns x 2 rows; six separated full-body standing idle sprites at the same height and baseline, relaxed neutral stance, camera 30deg elevated matching original. Top-left: SOUTH facing straight toward viewer. Top-middle: EAST, strict right-facing PROFILE with nose pointing RIGHT. Top-right: NORTH-EAST, back three-quarter facing upper-right. Bottom-left: NORTH, straight back NO face visible. Bottom-middle: NORTH-WEST, back three-quarter facing upper-left. Bottom-right: WEST, strict left-facing PROFILE with nose pointing LEFT. These are SCREEN directions. Keep ponytail/braid/backpack/satchel/belt anatomical side consistent across views. Both feet fully visible; 15% empty padding within each equal grid cell. Genuine transparent alpha, landscape canvas, NO colored fog/backdrop/ground/shadow/text/numbers/labels/gridlines/watermarks. Original character turnaround, no new character design.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          1,
+          true
+        ],
+        "north-east": [
+          2,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          2,
+          true
+        ],
+        "west": [
+          5,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "0c9eae09acfe05cfbf86e82857201bedc578ff997564112226ee4d0a935741ea"
+    },
+    {
+      "id": "healer_moss",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-666074e5-dbe6-41d2-a98c-57fa4278eb9b.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/healer_moss.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied ORIGINAL pixel sprite into ONE six-view turnaround sheet of the SAME character. The original is authoritative: black hair tied low in a bun, turquoise eyes, dark teal hooded cape with gold brooch, pale cream blouse and olive trousers, little brown shoulder bag with herbs. Preserve original face, hairstyle, head-to-body proportions, all clothing shapes/colors, accessories and original coarse pixel clusters. Rotation only, no redesign, no new clothing, no extra accessories, no shorter legs or bigger head. SAME neutral full-body standing idle in every cell, 30deg elevated camera matching original. EXACT 3 columns x 2 rows with equal cells and consistent height/baseline, all feet visible, 15% transparent padding. Top row left-to-right: SOUTH front facing viewer; EAST strict right profile NOSE POINTS RIGHT; NORTH-EAST back three-quarter facing upper-right, back mostly visible. Bottom row left-to-right: NORTH straight back, NO visible face; NORTH-WEST back three-quarter facing upper-left; WEST strict left profile NOSE POINTS LEFT. These are screen directions. Left/right views must actually face opposite ways. Match original crisp pixel palette/outline, no gradients or smoothing, no photorealism. Genuine transparent alpha and nothing behind or under the six figures: NO fog, background, glow, shadow, floor, labels, text, numbers, cell borders or watermark. Landscape canvas. Edit orientation of original, do not create a replacement character.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          5,
+          false
+        ],
+        "north-east": [
+          2,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          4,
+          false
+        ],
+        "west": [
+          1,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "1215307c486f79f968a1ab2a421de1b16bad2008f29d90cbd6758e289122f732"
+    },
+    {
+      "id": "delvin",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-5b9402bf-436a-4dca-913d-3a17d8d82dbc.png",
+      "reference": "docs/그림_작업/받은그림/개인_NPC_등각/생성_원본/delvin.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied ORIGINAL pixel sprite into ONE six-view turnaround sheet of the SAME character. The original is authoritative: young male with tousled orange-brown hair, blue jacket over yellow shirt, dark blue trousers, brown boots, yellow-gold coin pouch at belt. Preserve original face, hairstyle, head-to-body proportions, all clothing shapes/colors, accessories and original coarse pixel clusters. Rotation only, no redesign, no new clothing, no extra accessories, no shorter legs or bigger head. SAME neutral full-body standing idle in every cell, 30deg elevated camera matching original. EXACT 3 columns x 2 rows with equal cells and consistent height/baseline, all feet visible, 15% transparent padding. Top row left-to-right: SOUTH front facing viewer; EAST strict right profile NOSE POINTS RIGHT; NORTH-EAST back three-quarter facing upper-right, back mostly visible. Bottom row left-to-right: NORTH straight back, NO visible face; NORTH-WEST back three-quarter facing upper-left; WEST strict left profile NOSE POINTS LEFT. These are screen directions. Left/right views must actually face opposite ways. Match original crisp pixel palette/outline, no gradients or smoothing, no photorealism. Genuine transparent alpha and nothing behind or under the six figures: NO fog, background, glow, shadow, floor, labels, text, numbers, cell borders or watermark. Landscape canvas. Edit orientation of original, do not create a replacement character.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          5,
+          false
+        ],
+        "north-east": [
+          2,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          4,
+          false
+        ],
+        "west": [
+          1,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "61f2f16796e86478d83e50f413b7d56d01161fade3182e4b42b6487db9ee4df2"
+    },
+    {
+      "id": "blacksmith",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-7a86fc72-f937-4729-938d-6c625735ef99.png",
+      "reference": "docs/그림_작업/받은그림/상태와_인물/생성_원본/actor_blacksmith_proportions.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied ORIGINAL pixel sprite into ONE six-view turnaround sheet of the SAME character. The original is authoritative: black swept-back spiky hair, short dark beard, pale rolled-sleeve shirt, brown leather apron with waist pockets, dark trousers and brown boots. Preserve reference tool if held, no new tool. Preserve original face, hairstyle, head-to-body proportions, all clothing shapes/colors, accessories and original coarse pixel clusters. Rotation only, no redesign, no new clothing, no extra accessories, no shorter legs or bigger head. SAME neutral full-body standing idle in every cell, 30deg elevated camera matching original. EXACT 3 columns x 2 rows with equal cells and consistent height/baseline, all feet visible, 15% transparent padding. Top row left-to-right: SOUTH front facing viewer; EAST strict right profile NOSE POINTS RIGHT; NORTH-EAST back three-quarter facing upper-right, back mostly visible. Bottom row left-to-right: NORTH straight back, NO visible face; NORTH-WEST back three-quarter facing upper-left; WEST strict left profile NOSE POINTS LEFT. These are screen directions. Left/right views must actually face opposite ways. Match original crisp pixel palette/outline, no gradients or smoothing, no photorealism. Genuine transparent alpha and nothing behind or under the six figures: NO fog, background, glow, shadow, floor, labels, text, numbers, cell borders or watermark. Landscape canvas. Edit orientation of original, do not create a replacement character.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          1,
+          false
+        ],
+        "north-east": [
+          2,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          4,
+          false
+        ],
+        "west": [
+          5,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "4b1c890c1e331b784d9f23e011d20768e4e43725d3717835b3ff06bd313148e5"
+    },
+    {
+      "id": "commuter",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-b3dfea26-d667-4d47-a6be-9866755a8275.png",
+      "reference": "docs/그림_작업/받은그림/상태와_인물/생성_원본/actor_commuter_proportions.png",
+      "prompt": "Use case: identity-preserve. EDIT the supplied ORIGINAL pixel sprite into ONE six-view turnaround sheet of the SAME character. The original is authoritative: modern adult office worker, brown neatly side-parted hair, navy suit jacket and trousers, pale shirt, blue tie, brown shoes, holding small briefcase low at side. Preserve original face, hairstyle, head-to-body proportions, all clothing shapes/colors, accessories and original coarse pixel clusters. Rotation only, no redesign, no new clothing, no extra accessories, no shorter legs or bigger head. SAME neutral full-body standing idle in every cell, 30deg elevated camera matching original. EXACT 3 columns x 2 rows with equal cells and consistent height/baseline, all feet visible, 15% transparent padding. Top row left-to-right: SOUTH front facing viewer; EAST strict right profile NOSE POINTS RIGHT; NORTH-EAST back three-quarter facing upper-right, back mostly visible. Bottom row left-to-right: NORTH straight back, NO visible face; NORTH-WEST back three-quarter facing upper-left; WEST strict left profile NOSE POINTS LEFT. These are screen directions. Left/right views must actually face opposite ways. Match original crisp pixel palette/outline, no gradients or smoothing, no photorealism. Genuine transparent alpha and nothing behind or under the six figures: NO fog, background, glow, shadow, floor, labels, text, numbers, cell borders or watermark. Landscape canvas. Edit orientation of original, do not create a replacement character.",
+      "columns": 3,
+      "cells": {
+        "south": [
+          0,
+          false
+        ],
+        "east": [
+          5,
+          false
+        ],
+        "north-east": [
+          2,
+          false
+        ],
+        "north": [
+          3,
+          false
+        ],
+        "north-west": [
+          4,
+          false
+        ],
+        "west": [
+          1,
+          false
+        ]
+      },
+      "tool": "built-in image_gen",
+      "generated_sha256": "da289c72523bd745664a2df530d86e7299cbaa615abdbb147cbad90d871d9254"
+    }
+  ]
+}

@@ -56,6 +56,9 @@ func run() -> void:
 		if not figure is PixelActorFigure: continue
 		check(figure.sprite_key == key, "correct identity: " + key)
 		var sprite := figure as PixelActorFigure
+		sprite.direction = "south-west"
+		sprite.frame_index = -1
+		sprite._apply_frame()
 		var frame: Dictionary = sprite.frame_set.directions["south-west"].idle
 		check(frame.texture.get_size() == Vector2(96,96), "corrected 96px source: " + key)
 		check(FileAccess.get_sha256(frame.path) == str(NpcSpriteArt.assets()[str(actor.beat.npc_id)].sha256), "source pixels preserved: " + key)
@@ -66,8 +69,8 @@ func run() -> void:
 			sprite.walking = true
 			sprite.animate(0.15)
 			view._sort_and_update()
-			check(sprite.direction == "south-west" and sprite.frame_index == -1, "prepared static direction remains valid during movement")
-			check(sprite._mesh.mesh.size == extent and sprite._id_mesh.mesh.size == extent, "stable matching color/mask geometry")
+			check(sprite.direction == ActorSpriteFrames.direction_for(yaw,view._camera.global_rotation_degrees.y) and sprite.frame_index == -1, "prepared idle direction follows movement without fake walk")
+			check(sprite._mesh.mesh.size == sprite._id_mesh.mesh.size, "matching selected direction color/mask geometry")
 		check(sprite._material.get_shader_parameter("normal_texture") != null, "normal map participates in world lighting")
 		check(sprite._material.get_shader_parameter("frame_offset") == sprite._id_material.get_shader_parameter("frame_offset"), "color/mask feet agree")
 	# Guide and merchant must not be confused with ordinary villager/peddler customers.
