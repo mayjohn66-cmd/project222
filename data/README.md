@@ -20,4 +20,4 @@ data/
 └─ village_map_layout.json # 마을 지도 배치
 ```
 
-값을 바꾼 뒤에는 `python tools/balance_baseline.py .`(밸런스), 이야기 글은 `check_request_text`로 확인한다.
+값을 바꾼 뒤에는 `python tools/balance/balance_baseline.py .`(밸런스), 이야기 글은 `check_request_text`로 확인한다.

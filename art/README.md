@@ -1,6 +1,6 @@
 # art/ — 게임이 쓰는 그림 (PNG 약 2,000장)
 
-그림 담당(ChatGPT·사용자)의 영역. 코드 담당은 그림을 직접 만들거나 지우지 않는다(삭제는 계획·승인 뒤). 규격은 `docs/에셋_규격서_초안.md`, 검사는 `python tools/validate_assets.py`.
+그림 담당(ChatGPT·사용자)의 영역. 코드 담당은 그림을 직접 만들거나 지우지 않는다(삭제는 계획·승인 뒤). 규격은 `docs/에셋_규격서_초안.md`, 검사는 `python tools/art/validate_assets.py`.
 
 ```
 art/
