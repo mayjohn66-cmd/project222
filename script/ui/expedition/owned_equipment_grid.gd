@@ -211,29 +211,3 @@ func _sync_model_with_instances() -> void:
 				"[보유 장비] 배치 실패: "
 				+ item_id
 			)
-
-
-# =========================
-# 배치 조작
-# =========================
-
-func add_placement(
-	item_id: String,
-	cell: Vector2i,
-	rotated: bool = false,
-	extra_data: Dictionary = {}
-) -> int:
-	var uid: int = model.add_item(
-		item_id,
-		cell,
-		1,
-		rotated,
-		extra_data
-	)
-
-	if uid != -1:
-		refresh()
-
-	return uid
-
-

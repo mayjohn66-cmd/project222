@@ -97,18 +97,3 @@ static func is_customer_door_rotation_allowed(
 	).has(
 		normalized_rotation
 	)
-
-
-static func get_lot_name(
-	lot_type: String
-) -> String:
-	match normalize_lot_type(
-		lot_type
-	):
-		LOT_TYPE_CORNER:
-			return "모서리형 편의점"
-
-		LOT_TYPE_ROADSIDE:
-			return "도로변 편의점"
-
-	return "알 수 없는 부지"

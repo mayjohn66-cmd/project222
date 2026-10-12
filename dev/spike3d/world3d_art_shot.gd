@@ -10,6 +10,8 @@ func _ready() -> void:
 		if args[i] == "--out" and i + 1 < args.size(): out_dir = args[i + 1]
 		if args[i] == "--only" and i + 1 < args.size(): only_id = args[i + 1]
 	DirAccess.make_dir_recursive_absolute(out_dir)
+	# 비교 사진은 게임 자원이 아니므로 Godot가 불러오지 않게 한다(저장소에도 올리지 않음: .gitignore).
+	FileAccess.open(out_dir.path_join(".gdignore"), FileAccess.WRITE)
 	var rules: Array = VillageMirror.load_rules()
 	for a in _read_assets():
 		if only_id != "" and str(a["id"]) != only_id: continue

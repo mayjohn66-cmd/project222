@@ -892,23 +892,6 @@ func _get_history_weekday_name(
 	return "알 수 없는 요일"
 
 
-func get_category_display_name(
-	category_id: String
-) -> String:
-	match category_id:
-		ItemData.CATEGORY_FOOD:
-			return "음식"
-
-		ItemData.CATEGORY_CONSUMABLE:
-			return "소비품"
-
-		ItemData.CATEGORY_TOOL:
-			return "도구"
-
-		ItemData.CATEGORY_ETC:
-			return "기타"
-
-	return category_id
 
 func get_schedule_result_text(
 	event_id: String,

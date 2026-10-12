@@ -32,3 +32,7 @@ __pycache__/
 
 # Windows 배포 결과와 검사 로그는 소스 저장소에 넣지 않는다.
 builds/
+
+# 3D 그림 비교 사진(dev/spike3d/world3d_art_shot.gd 결과)
+/screenshots/
+/dev/spike3d/screenshots/

@@ -295,15 +295,6 @@ func create_empty_inventory_slot() -> Dictionary:
 	}
 
 
-func initialize_inventory_slots() -> void:
-	inventory_slots.clear()
-
-	for _slot_index in range(
-		PLAYER_INVENTORY_SLOT_COUNT
-	):
-		inventory_slots.append(
-			create_empty_inventory_slot()
-		)
 
 func rebuild_inventory_slots_from_counts() -> bool:
 	# Counts are the saved source of truth. The legacy slot projection must

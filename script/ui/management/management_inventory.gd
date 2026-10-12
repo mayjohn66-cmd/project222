@@ -94,28 +94,6 @@ func _ready() -> void:
 		"[통합 인벤토리] 준비 완료"
 	)
 
-func set_item_transfer_mode(
-	enabled: bool,
-	source_inventory: String = "player"
-) -> void:
-	item_transfer_mode = enabled
-
-	if source_inventory.is_empty():
-		item_transfer_source = "player"
-	else:
-		item_transfer_source = source_inventory
-
-	if not is_node_ready():
-		return
-
-	if item_transfer_mode:
-		item_grid.columns = 3
-	else:
-		item_grid.columns = (
-			default_item_grid_columns
-		)
-
-	refresh_inventory()
 
 func select_inventory_group(
 	inventory_group: String

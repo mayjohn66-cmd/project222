@@ -283,17 +283,6 @@ static func get_group_period_multiplier(
 	return float(weights.get(period, 1.0))
 
 
-static func get_all_customer_groups() -> Array[Dictionary]:
-	ensure_loaded()
-
-	var result: Array[Dictionary] = []
-
-	for data in customer_groups.values():
-		result.append(
-			data.duplicate(true)
-		)
-
-	return result
 
 
 static func get_customer_group(
