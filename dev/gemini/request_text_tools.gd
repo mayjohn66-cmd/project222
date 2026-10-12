@@ -359,8 +359,8 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 				_need(errors, tag, "summary", summary, MAX_SUMMARY)
 				_need_lines(errors, warns, tag, lines)
 				_need(errors, tag, "completion", completion, MAX_COMPLETION)
-				if not "|".join(lines).contains("게시판") or not "|".join(lines).contains("전달"):
-					warns.append("%s 플레이어 행동 안내가 없음: 창고에 준비한 뒤 게시판에서 직접 전달하도록 안내하세요" % tag)
+				if _has_control_hint(lines):
+					warns.append("%s 대사에 조작 안내가 있음: '게시판에서 전달'·'다시 말을 걸어' 같은 안내는 summary와 수첩이 맡고 대사는 자연스러운 부탁으로 쓰세요" % tag)
 			KIND_RESIDENT_INTRODUCTION, KIND_TUTORIAL_DIALOGUE:
 				_need_lines(errors,warns,tag,lines)
 			KIND_TRADE_OFFER:
@@ -385,8 +385,8 @@ static func validate_rows(header: PackedStringArray, rows: Array, known: Diction
 				if not summary.is_empty():
 					errors.append("%s resident_request는 summary가 비어야 함" % tag)
 
-				if not "|".join(lines).contains("말을 걸"):
-					warns.append("%s 플레이어 행동 안내가 없음: 창고에 준비한 뒤 '다시 말을 걸어 줘'로 안내하세요" % tag)
+				if _has_control_hint(lines):
+					warns.append("%s 대사에 조작 안내가 있음: '다시 말을 걸어 줘' 대신 '가져다줘' 같은 자연스러운 부탁으로 쓰세요" % tag)
 			KIND_COMMUNITY_REQUEST:
 				_need(errors, tag, "title", title, MAX_TITLE)
 				_need(errors, tag, "summary", summary, MAX_SUMMARY)
@@ -674,3 +674,9 @@ static func merge_draft(texts: Dictionary, draft_rows: Array, sources: Dictionar
 		state_lines.append(csv_line(PackedStringArray([parts[1], parts[0], new_state[key]])))
 
 	return {"csv": "\n".join(lines) + "\n", "state_csv": "\n".join(state_lines) + "\n"}
+
+
+# 대사 안의 조작 안내(2026-10-12 사용자 결정: 이웃은 조작법을 말하지 않는다. 안내는 summary·수첩·게시판 카드가 맡는다).
+static func _has_control_hint(lines: PackedStringArray) -> bool:
+	var joined: String = "|".join(lines)
+	return joined.contains("말을 걸") or (joined.contains("게시판") and joined.contains("전달"))

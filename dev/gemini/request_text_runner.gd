@@ -27,7 +27,7 @@ const BASE_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임
 - 열: id, kind, title, summary, lines, completion 을 **탭 문자**로 구분한다(쉼표로 구분하지 않는다). 칸 안에는 쉼표를 써도 되지만 탭과 줄바꿈은 쓰지 않고, 따옴표로 감싸지 않는다. 비우는 칸은 탭 사이를 비워 둔다(칸 수는 항상 6개).
 - 준 항목마다 정확히 한 행. id와 kind는 내가 준 그대로 쓴다. 새 id를 만들거나 빼지 않는다.
 - kind별로 채울 열: resident_request = title, lines, completion / community_request = title, summary, completion / resident_greeting = lines 만. 나머지 열은 비운다.
-- 개인 부탁: personal_request = title, summary, lines, completion. 창고에 물품을 준비한 뒤 게시판에서 직접 전달하는 안내를 유지한다.
+- 개인 부탁: personal_request = title, summary, lines, completion. 전달 방법(창고·게시판)은 summary가 안내하고, 대사는 \"가져다줘\"처럼 자연스러운 부탁으로 쓴다.
 - 우물 저녁 모임(service_text)의 화자와 장면 순서를 유지한다. 화자 이름은 화면에서 붙이므로 대사에 중복 쓰지 않고, 새 물품·돈·친밀도 지급을 약속하지 않는다.
 - 추가 종류: resident_introduction / tutorial_dialogue = lines; trade_offer = title; tutorial_step = title, summary, lines, completion; service_text = 현재 행에서 채워진 글 열만. 기능 안내와 조작 키의 의미는 유지한다.
 - lines와 completion의 여러 칸은 | 로 나눈다. 칸 수와 역할(예: 인사말은 아침·안부·하루 이야기·밤 순서)은 "현재 문장"과 같게 맞춘다.
@@ -36,7 +36,7 @@ const BASE_PROMPT: String = """너는 편의점 경영 + 판타지 원정 게임
 - 쓰지 않는 말: 퀘스트, 의뢰, 보상, 레벨, 경험치, 미션, 임무, 스탯, 수락, 클리어. 사람이 하는 자연스러운 부탁으로 말한다.
 - 수량·돈·평판 숫자는 쓰지 않는다(몇 개, 두 개 같은 표현도 금지). 필요한 재료 이름은 말해도 된다. 숫자는 게임 데이터가 정하므로 글이 틀려지지 않게 한다.
 - 이미 게임 데이터에 있는 인물 이름만 쓰고 새 이름·지역은 만들지 않는다.
-- 플레이어가 해야 할 행동(예: 창고에 준비한 뒤 다시 말을 걸기)은 "현재 문장"의 안내를 그대로 살린다. "내가 가지러 올게", "다시 와서 받아 갈게"처럼 플레이어가 기다리면 되는 것처럼 읽히는 말은 쓰지 않는다.
+- 이웃은 조작법("다시 말을 걸어 줘", "게시판에서 전달해 줘")을 말하지 않는다. 플레이어가 할 일은 "가져다줘", "보여 줘"처럼 자연스러운 부탁으로 쓴다. "내가 가지러 올게", "다시 와서 받아 갈게"처럼 플레이어가 기다리면 되는 것처럼 읽히는 말은 쓰지 않는다.
 - 말투(반말/존댓말)는 "현재 문장"과 같게 하고, 한 문장 안에서 섞지 않는다.
 - 같은 종류의 항목들이 모두 같은 구조(감탄 → 부탁 → 소문)로 시작하지 않게 한다. 현대적인 것에 놀라는 반응은 항목 중 일부에만 넣고 나머지는 부탁과 사정을 자연스럽게 말한다.
 - 흔한 상투 표현을 피한다: "덕분에", "정말 고마워", "~로구나!", "~에게도 말해 줄게/소개해 줄게/추천해 줄게", 느낌표 연속. 감사는 그 사람이 처한 사정과 말버릇으로 다르게 표현한다(짧게 한마디, 퉁명스럽게, 걱정 섞어서 등).
@@ -386,7 +386,7 @@ static func _repairable(result: Dictionary) -> Array[String]:
 		problems.append(str(e))
 
 	for w in result["warns"]:
-		if str(w).contains("수량 표현") or str(w).contains("한 칸이") or str(w).contains("상투 표현") or str(w).contains("반복 어구") or str(w).contains("줄 수가 현재와 다름") or str(w).contains("행동 안내가 없음"):
+		if str(w).contains("수량 표현") or str(w).contains("한 칸이") or str(w).contains("상투 표현") or str(w).contains("반복 어구") or str(w).contains("줄 수가 현재와 다름") or str(w).contains("조작 안내가 있음"):
 			problems.append(str(w))
 
 	return problems
@@ -433,7 +433,7 @@ func _sync(sources: Dictionary) -> void:
 const POLISH_PROMPT: String = """
 [지금은 다듬기 단계] 아래 "다듬을 초안"은 가벼운 모델이 쓴 초안이다. 이것을 사람이 쓴 것처럼 다듬는다.
 - 초안이 이미 자연스러운 줄은 그대로 둔다. 어색한 표현, 상투적인 말, 말투가 섞인 곳, 인물 말버릇과 안 맞는 곳만 고친다.
-- id, title, 칸 수, 칸별 역할(부탁 / 플레이어 행동 안내 / 소문 / 마무리)은 바꾸지 않는다. 플레이어 행동 안내("다시 말을 걸...")는 반드시 남긴다.
+- id, title, 칸 수, 칸별 역할(부탁 / 플레이어 행동 안내 / 소문 / 마무리)은 바꾸지 않는다. 플레이어에게 바라는 행동 줄은 남기되 조작법이 아닌 자연스러운 부탁으로 쓴다.
 - 한 칸의 길이 제한과 금지어, 수량 표현 금지는 그대로 지킨다."""
 
 # 초안 파일을 본 모델로 다듬어 <이름>_polished.csv 로 저장한다. 기본 모델 gemini-3.8-flash(--model 또는 GEMINI_POLISH_MODEL 로 바꿈), 예비 모델 없이 호출한다.

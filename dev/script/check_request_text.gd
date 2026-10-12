@@ -86,7 +86,7 @@ func _run() -> void:
 	_check("행상인 나루" in cprompt and "길목 등불" in cprompt, "게시판 프롬프트에 주민 이름과 완성 장소")
 	_check(Runner.clean_rows("```csv\nid,kind,title,summary,lines,completion\na,b,c,,d,e\n```\n") == "a,b,c,,d,e\n", "코드블록·머리글 제거")
 	_check(Runner.BASE_PROMPT.contains("새 id를 만들거나 빼지 않는다"), "기본 지침에 id 고정 규칙")
-	_check(Runner.BASE_PROMPT.contains("다시 말을 걸기") and Runner.BASE_PROMPT.contains("가지러 올게"), "기본 지침에 플레이어 행동 유지 규칙")
+	_check(Runner.BASE_PROMPT.contains("조작법") and Runner.BASE_PROMPT.contains("가지러 올게"), "기본 지침에 조작법 대신 자연스러운 부탁 규칙")
 	_check(Runner.BASE_PROMPT.contains("말투(반말/존댓말)"), "기본 지침에 말투 일관 규칙")
 	_check(Runner.BASE_PROMPT.contains("상투 표현") and Runner.BASE_PROMPT.contains("되풀이하지"), "기본 지침에 상투·반복 금지 규칙")
 	var slop_header: PackedStringArray = Tools.COLUMNS
@@ -99,7 +99,7 @@ func _run() -> void:
 	var slop_text: String = "\n".join(PackedStringArray(slop["warns"]))
 	_check(slop_text.contains("상투 표현 '덕분에'"), "상투 표현을 주의로 알림")
 	_check(slop_text.contains("반복 어구 '오늘 밤은'"), "여러 항목의 반복 어구를 주의로 알림")
-	_check(not slop_text.contains("말을 걸"), "행동 안내 칸은 반복 검사에서 제외")
+	_check(not slop_text.contains("반복 어구 '다시 말을") and not slop_text.contains("반복 어구 '말을 걸어"), "조작 안내 칸은 반복 검사에서 제외")
 	_check(Runner._repairable(slop).size() >= 3, "상투·반복 주의는 자동 수정 대상")
 	var missing: String = Runner.clean_rows("a_id,resident_request,제목,\"한 줄, 두 줄|창고에 두고 다시 말을 걸어 줘\",끝")
 	var missing_cells: PackedStringArray = Tools.parse_csv_line(missing.strip_edges())
@@ -130,14 +130,17 @@ func _run() -> void:
 	_check(Runner.csv_to_tsv("a,\"b,c\",d\n") == "a\tb,c\td", "CSV를 탭 구분으로 바꿈")
 	_check(Runner.BASE_PROMPT.contains("탭 문자"), "기본 지침이 탭 구분을 요청")
 	_check(Runner.BASE_PROMPT.contains("칸을 지우지 말고") and Runner.build_repair_prompt("id\tkind\n", ["x"]).contains("칸(줄)을 지우거나"), "지침과 수정 요청이 칸 수 유지를 요구")
-	var cnt_known: Dictionary = {"resident_request": {"cnt_id": {"id": "cnt_id", "lines": ["부탁", "말을 걸어 줘", "소문"], "completion": ["끝"]}}}
-	var cnt_rows: Array = [PackedStringArray(["cnt_id", "resident_request", "제목", "", "부탁|말을 걸어 줘", "끝"])]
+	var cnt_known: Dictionary = {"resident_request": {"cnt_id": {"id": "cnt_id", "lines": ["부탁", "가져다줘", "소문"], "completion": ["끝"]}}}
+	var cnt_rows: Array = [PackedStringArray(["cnt_id", "resident_request", "제목", "", "부탁|가져다줘", "끝"])]
 	var cnt: Dictionary = Tools.validate_rows(Tools.COLUMNS, cnt_rows, cnt_known, "cnt")
 	_check("\n".join(PackedStringArray(cnt["warns"])).contains("대사 줄 수가 현재와 다름(현재 3줄, 초안 2줄)"), "줄 수가 줄면 주의")
 	_check(Runner._repairable(cnt).size() == 1, "줄 수 주의는 자동 수정 대상")
-	var act_rows: Array = [PackedStringArray(["act_id", "resident_request", "제목", "", "부탁해.|창고에 두었으니 확인해 줘.", "끝"])]
+	var act_rows: Array = [PackedStringArray(["act_id", "resident_request", "제목", "", "부탁해.|창고에 두고 다시 말을 걸어 줘.", "끝"])]
 	var act: Dictionary = Tools.validate_rows(Tools.COLUMNS, act_rows, {}, "act")
-	_check("\n".join(PackedStringArray(act["warns"])).contains("플레이어 행동 안내가 없음"), "'말을 걸' 안내가 없으면 주의")
+	_check("\n".join(PackedStringArray(act["warns"])).contains("대사에 조작 안내가 있음"), "대사에 '말을 걸' 조작 안내가 있으면 주의")
+	var natural_rows: Array = [PackedStringArray(["act_id", "resident_request", "제목", "", "부탁해.|구하면 가져다줘.", "끝"])]
+	var natural: Dictionary = Tools.validate_rows(Tools.COLUMNS, natural_rows, {}, "act")
+	_check(not "\n".join(PackedStringArray(natural["warns"])).contains("조작 안내"), "자연스러운 부탁은 조작 안내 주의 없음")
 	_check(Runner.filter_ids(["a", "b", "c"], PackedStringArray(["b", "c"])) == ["b", "c"] and Runner.filter_ids(["a"], PackedStringArray()) == ["a"], "--ids 로 고른 id만 남김")
 	var fp_a: String = Tools.fingerprint({"id": "x", "npc": "이웃 주민", "item": "bread", "amount": 2})
 	var fp_b: String = Tools.fingerprint({"id": "x", "npc": "이웃 오렐", "item": "bread", "amount": 2})
@@ -227,6 +230,7 @@ func _check_content_registration(sources: Dictionary) -> void:
 			exported.append(row)
 			_check(row == texts.get(kind + ":" + id), "내보내기 시 현재 CSV 문구 보존: " + kind + "/" + id)
 	var validation := Tools.validate_rows(Tools.COLUMNS, exported, sources)
+	if not (validation["errors"].is_empty() and validation["warns"].is_empty()): print("EXPORT_VALIDATION ", validation)
 	_check(validation["errors"].is_empty() and validation["warns"].is_empty(), "전체 내보내기 문구가 최신 엄격 검사 통과")
 	var voices := Tools.load_voices()
 	_check(voices.has("miner_ore") and voices.get("naru_provisions", {}).get("name") == "타블렌" and voices.get("well_evening_sora", {}).get("name") == "이세르", "공통 인물 말투와 추가 콘텐츠 말투 함께 읽기")
@@ -237,9 +241,9 @@ func _check_content_registration(sources: Dictionary) -> void:
 	var gathering_prompt := Runner.build_prompt(Tools.KIND_SERVICE_TEXT, sources, sources)
 	_check(gathering_prompt.contains("말하는 사람: 장면 서술") and gathering_prompt.contains("말하는 사람: 여행자 이세르") and gathering_prompt.contains("화자 이름은 대사에 쓰지 않음"), "모임 프롬프트에 서술·화자·표시 규칙 포함")
 	var action_bad := Tools.row_from_source(Tools.KIND_PERSONAL_REQUEST, personal["naru_provisions"])
-	action_bad[4] = "빵이 필요해.|내가 나중에 가지러 갈게."
+	action_bad[4] = "빵이 필요해.|창고에 두고 게시판에서 전달해 줘."
 	var action_result := Tools.validate_rows(Tools.COLUMNS, [action_bad], sources)
-	_check(str(action_result["warns"]).contains("행동 안내가 없음") and not Runner._repairable(action_result).is_empty(), "개인 부탁의 직접 전달 안내 누락도 자동 수정 대상")
+	_check(str(action_result["warns"]).contains("조작 안내가 있음") and not Runner._repairable(action_result).is_empty(), "개인 부탁 대사의 조작 안내도 자동 수정 대상")
 	var todo := Tools.find_todo(sources, texts, {})
 	_check(todo["orphan"].is_empty() and Tools.count_targets(todo["new"]) == 0, "새 개인 부탁·모임을 포함해 미등록·누락 ID 없음")
 	var missing := texts.duplicate()
