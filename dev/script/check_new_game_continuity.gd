@@ -239,6 +239,21 @@ func expedition_run(region: String = "forest") -> void:
 	await settle_dialogues()
 	checkpoint("return_" + str(runs))
 
+func tutorial_conversation(expected: String) -> bool:
+	var tutorial: TutorialDirector = world.get_node("TutorialDirector")
+	tutorial.refresh()
+	check(tutorial.flow.current().get("id","") == expected,"natural tutorial step "+expected)
+	if not is_instance_valid(tutorial.npc):
+		check(false,"tutorial visitor available for "+expected)
+		return false
+	player.global_position = tutorial.npc.global_position+Vector2(20,0)
+	var interacted := tutorial.try_interact()
+	check(interacted,"actual NPC conversation for "+expected)
+	if not interacted: return false
+	drain(tutorial.dialogue)
+	await settle_dialogues()
+	return true
+
 func ensure_materials(needs: Dictionary) -> void:
 	for i in range(12):
 		var ready := true
@@ -321,8 +336,11 @@ func run() -> void:
 	await settle_dialogues()
 	check(OpeningJourneyFlow.traded(),"trade succeeds using salvaged food")
 	checkpoint("barter")
+	# Read the real merchant's request before leaving, then report the return.
+	if not await tutorial_conversation("expedition"): finish(); return
 	await expedition_run()
 	if failures > 0: finish(); return
+	if not await tutorial_conversation("expedition"): finish(); return
 	var raw := ""
 	for id in GameState.inventory:
 		if GameState.get_item_count(str(id)) > 0 and OpeningJourneyFlow.is_raw_material(str(id)):
@@ -336,6 +354,9 @@ func run() -> void:
 	await checkout_visit()
 	check(OpeningJourneyFlow.core_finished(),"core tutorial completes after actual material payment")
 	checkpoint("core_tutorial")
+	if OS.get_cmdline_user_args().has("--core-only"):
+		finish()
+		return
 	# Optional food-care page must not block residents.
 	var cashier = world.get_node("ManualCheckoutController")
 	player.global_position = builder.get_cell_world_position(get_tree().get_nodes_in_group("register")[0].get_worker_cells()[0])

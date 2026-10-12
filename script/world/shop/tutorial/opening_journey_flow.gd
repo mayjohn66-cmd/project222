@@ -17,6 +17,7 @@ static func legacy_finished() -> bool:
 static func core_finished() -> bool:
 	if legacy_finished(): return true
 	for step in SETTINGS.steps:
+		if bool(step.get("disabled",false)): continue
 		if bool(step.get("optional", false)): continue
 		if PlayerProgress.story_beat_days.has("tutorial_step:" + str(step["id"]) + ":done"): continue
 		# 나중에 끼워 넣은 단계(skip_if_later_started)는 뒤 단계를 이미 시작한 저장에서는 요구하지 않는다.

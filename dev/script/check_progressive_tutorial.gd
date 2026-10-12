@@ -164,17 +164,11 @@ func run() -> void:
 	check(OpeningJourneyFlow.traded() and not OpeningJourneyFlow.trade(), "reload cannot charge barter twice")
 	drain(director.dialogue)
 	advance_self()
-	check(director.flow.current()["id"] == "shop_days" and OpeningJourneyFlow.regular_customers_allowed(), "after barter the shop keeps trading on its remaining stock")
-	check(not director.flow.goal_met(director.flow.current(),world) and not OpeningJourneyFlow.stock_depleted(get_tree()), "remaining food keeps the shop-days step open")
-	check(GameState.get_item_count("plywood") > 0, "building material does not count as shop stock")
-	# 남은 식품을 모두 판 것으로 만든다: 창고·진열대 모두 0
-	for id in ["bread", "water"]: GameState.remove_item(id, GameState.get_item_count(id))
-	for shelf in get_tree().get_nodes_in_group("shelf"):
-		for slot in shelf.slots:
-			slot["item_id"] = ""
-			slot["stock"] = 0
-	check(OpeningJourneyFlow.stock_depleted(get_tree()), "zero stock everywhere opens the next story")
-	advance_self()
+	check(director.flow.current()["id"] == "expedition" and OpeningJourneyFlow.regular_customers_allowed(), "barter immediately opens expedition while shop sales remain available")
+	check(GameState.get_item_count("bread") > 0 or GameState.get_item_count("water") > 0, "remaining food does not block the first expedition")
+	director.flow.mark("shop_days","intro")
+	check(director.flow.current()["id"] == "expedition", "old pending shop-days record does not restore the stock gate")
+	check(GameState.get_item_count("plywood") > 0, "transition preserves building materials")
 	check(director.flow.current()["id"] == "expedition", "empty shelves lead to the merchant's expedition request")
 	check(not director.flow.goal_met(director.flow.current(),world), "unreturned expedition does not progress")
 	talk_merchant()

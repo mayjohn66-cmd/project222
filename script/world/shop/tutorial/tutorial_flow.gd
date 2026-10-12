@@ -21,6 +21,7 @@ func _later_started(step: Dictionary) -> bool:
 
 func current() -> Dictionary:
 	for step in settings.steps:
+		if bool(step.get("disabled",false)): continue
 		if done(str(step["id"])): continue
 		if bool(step.get("skip_if_later_started", false)) and _later_started(step): continue
 		if not bool(step.get("optional", false)) and OpeningJourneyFlow.legacy_finished(): continue
