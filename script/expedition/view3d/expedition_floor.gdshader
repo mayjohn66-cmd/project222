@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_lambert, specular_disabled;
+render_mode diffuse_lambert, specular_disabled, depth_prepass_alpha;
 // Same source tiles as the village; expedition cells run from integer corners to integer corners.
 uniform sampler2D tile_1 : source_color, filter_nearest;
 uniform sampler2D tile_2 : source_color, filter_nearest;
@@ -52,5 +52,8 @@ void fragment() {
 	float outside = max(max(-cell.x,cell.x-7.0),max(-cell.y,cell.y-7.0));
 	float dim = outside <= 0.0 ? 1.0 : max(0.55,ring_tint-0.05*(outside-1.0));
 	ALBEDO = color.rgb*tint.rgb*dim;
+	// Fade only outside the playable 8x8 square into the painted surroundings.
+	float edge_distance = max(max(-world_pos.x,world_pos.x-8.0),max(-world_pos.z,world_pos.z-8.0));
+	ALPHA = 1.0 - smoothstep(0.15,1.25,edge_distance);
 	DEPTH = FRAGCOORD.z;
 }

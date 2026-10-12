@@ -139,6 +139,9 @@ func _edge_rects() -> Array:
 # ---------------------------------------------------------------- 지역별
 
 func build(theme_id: String, rng: RandomNumberGenerator, model: RefCounted = null) -> void:
+	if use_prepared_art:
+		ExpeditionRoomComposition.build(self, model, rng)
+		return
 	_build_surroundings(theme_id, rng)
 	_build_floor_decor(theme_id, rng, model)
 

@@ -1,5 +1,5 @@
 {
-  "description": "Existing scenery templates converted to static sprites; existing nature and floor pictures reused, locations/collisions/gameplay unchanged.",
+  "description": "Existing scenery pixels and normal maps reused; quiet cosmetic placements and new backgrounds are configured in expedition_scene_compositions.json. Gameplay coordinates and collisions remain independent.",
   "assets": [
     {
       "anchor": [

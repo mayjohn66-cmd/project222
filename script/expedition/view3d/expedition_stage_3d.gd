@@ -50,6 +50,7 @@ var _time: float = 0.0
 var _tile_scale: float = 1.0
 var _pixel_floor_material: ShaderMaterial
 var _pixel_floor: MeshInstance3D
+var _backdrop: ExpeditionBackdrop
 
 
 func _ready() -> void:
@@ -70,6 +71,8 @@ func _ready() -> void:
 	_cam.far = 120.0
 	_cam.rotation_degrees = Vector3(-PITCH_DEG, YAW_DEG, 0.0)
 	_vp.add_child(_cam)
+	_backdrop = ExpeditionBackdrop.new()
+	_vp.add_child(_backdrop)
 	_sun = DirectionalLight3D.new()
 	_sun.shadow_enabled = true
 	_sun.rotation_degrees = Vector3(-52.0, 110.0, 0.0)
@@ -134,6 +137,7 @@ func _layout() -> void:
 	_cam.h_offset = -(want.x - got.x) / ppu_ctrl
 	_cam.v_offset = (want.y - got.y) / ppu_ctrl
 	_tile_scale = float(view.tile_scale)
+	_backdrop.layout(_cam, _vp.size)
 
 
 # ---------------------------------------------------------------- 방 만들기
@@ -168,6 +172,7 @@ func rebuild(model: RefCounted, region: String) -> void:
 	_exit_glow = null
 	_exit_bars = null
 	_ready_theme(region)
+	_backdrop.configure(self, region)
 	_scenery.clear_cache()
 	_wisps.clear()
 	_build_floor()

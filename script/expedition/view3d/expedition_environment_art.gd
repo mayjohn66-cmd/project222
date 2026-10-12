@@ -1,6 +1,6 @@
 class_name ExpeditionEnvironmentArt
 extends RefCounted
-## Existing scenery locations with transparent sprites and the shared 64×32 ground tiles.
+## Shared 64×32 ground tiles and transparent sprites for the room composition profiles.
 const MANIFEST := "res://data/art/expedition_environment_assets.json"
 const FLOOR := preload("res://script/expedition/view3d/expedition_floor.gdshader")
 static var _rows: Dictionary = {}
@@ -46,17 +46,18 @@ static func build_floor(stage: ExpeditionStage3D) -> bool:
 			if tex == null: return false
 			mat.set_shader_parameter("%s_%d" % [group,i],tex)
 			mat.set_shader_parameter("%s_normal_%d" % [group,i],SpriteNormalMaps.texture(tex))
-	var tint := Color.WHITE if grass else Color(0.94,0.95,1.0)
+	var composition := ExpeditionRoomComposition.profile(str(stage._backdrop.get_meta("region_id",stage.view.region_id)))
+	var tint := Color(str(composition.get("floor_tint","ffffff")))
 	tint = ExpeditionEnvironment.floor_tint(tint,stage.view.weather_overlay.environment,grass)
 	mat.set_shader_parameter("tint",tint)
 	mat.set_shader_parameter("ring_tint",float(stage._theme.ring_tint))
 	var mesh := PlaneMesh.new()
-	mesh.size = Vector2(13,13)
+	mesh.size = Vector2(11,11)
 	var node := MeshInstance3D.new()
 	node.name = "PixelGround"
 	node.mesh = mesh
 	node.material_override = mat
-	node.position = Vector3(3.5,0,3.5)
+	node.position = Vector3(4,0,4)
 	node.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	node.set_meta("environment_floor_kind",kind)
 	node.set_meta("puddles",PackedVector3Array())

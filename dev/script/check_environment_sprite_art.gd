@@ -126,7 +126,22 @@ func run() -> void:
 			if node.has_meta("environment_sprite_key"):
 				scenery_count += 1
 				check(node.mesh is QuadMesh and node.scale == Vector3.ONE and node.rotation == Vector3.ZERO,"scenery uses unwarped camera-facing pixels: " + region)
-		check(scenery_count > 25,"actual populated surroundings: " + region)
+		var composition := ExpeditionRoomComposition.profile(region)
+		var budget: int = composition.outside.size() + int(composition.floor_limit)
+		check(scenery_count <= budget + room.obstacles.size(),"bounded scenery: " + region)
+		check(scenery_count >= composition.outside.size(),"small composed groups present: " + region)
+		check(room_view.stage._backdrop.visible,"real background shown: " + region)
+		check(str(room_view.stage._backdrop.get_meta("background_path")) == str(composition.background_path),"region background linked: " + region)
+		check(FileAccess.get_sha256(str(composition.background_path)) == str(composition.sha256),"background pixels preserved: " + region)
+		check(FileAccess.get_sha256("res://"+str(composition.source)) == str(composition.source_sha256),"received background preserved: " + region)
+		var floor_decor := 0
+		for node in room_view.stage._content.get_children():
+			if node.get_meta("composition_group","") == "floor":
+				floor_decor += 1
+				var at := Vector2(node.position.x,node.position.z)
+				for area in room_view.stage._scenery._keepout(room): check(not (area as Rect2).has_point(at),"decor avoids play targets: " + region)
+		check(floor_decor <= int(composition.floor_limit),"few interior details: " + region)
+		print("[정리 후 장식] ",region," ",scenery_count," (충돌 오브젝트 포함)")
 		for value in room_view.stage._scenery._cache.values(): check(value.has("pixel_key"),"every active scenery template is 2D: " + region)
 		if region in ["swamp","river_valley"]:
 			check(room_view.stage._pixel_floor.get_meta("puddles").size() > 0,"swamp puddles reuse water images")

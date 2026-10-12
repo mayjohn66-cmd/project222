@@ -1,0 +1,586 @@
+{
+  "description": "Quiet backdrops and bounded cosmetic groups; gameplay coordinates/collision/loot remain independent.",
+  "profiles": {
+    "forest": {
+      "background_path": "res://art/received/expedition/backdrops/forest.png",
+      "source": "docs/그림_작업/받은그림/원정_배경/forest_received.png",
+      "outside": [
+        {
+          "key": "f_tree_pine",
+          "x": -0.85,
+          "y": 1.8,
+          "scale": 0.85,
+          "yaw": 0
+        },
+        {
+          "key": "f_tree_round",
+          "x": -0.8,
+          "y": 5.9,
+          "scale": 0.8,
+          "yaw": 0
+        },
+        {
+          "key": "f_tree_birch",
+          "x": 0.8,
+          "y": -0.8,
+          "scale": 0.85,
+          "yaw": 0
+        },
+        {
+          "key": "f_tree_big_oak",
+          "x": 6.7,
+          "y": -0.8,
+          "scale": 0.9,
+          "yaw": 0
+        },
+        {
+          "key": "f_bush_",
+          "x": -0.35,
+          "y": 7,
+          "scale": 0.6,
+          "yaw": 0
+        },
+        {
+          "key": "f_bush_",
+          "x": 7.4,
+          "y": -0.35,
+          "scale": 0.6,
+          "yaw": 0
+        }
+      ],
+      "floor": [
+        {
+          "key": "f_grass",
+          "x": 0.6,
+          "y": 2.8,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_grass",
+          "x": 7.3,
+          "y": 6.4,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_grass",
+          "x": 0.7,
+          "y": 6.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_grass",
+          "x": 7.1,
+          "y": 1.0,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_grass",
+          "x": 1.1,
+          "y": 5.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_grass",
+          "x": 6.8,
+          "y": 2.7,
+          "scale": 0.5,
+          "yaw": 0
+        }
+      ],
+      "floor_limit": 3,
+      "puddles": [],
+      "sha256": "183ed18671744dd54b6fbd62c174f703e9470608c873df935b6862f0241c2661",
+      "source_sha256": "183ed18671744dd54b6fbd62c174f703e9470608c873df935b6862f0241c2661",
+      "width": 1672,
+      "height": 941,
+      "floor_tint": "e3e4d2"
+    },
+    "mine": {
+      "background_path": "res://art/received/expedition/backdrops/mine.png",
+      "source": "docs/그림_작업/받은그림/원정_배경/mine_received.png",
+      "outside": [
+        {
+          "key": "m_rock",
+          "x": -0.7,
+          "y": 1.3,
+          "scale": 1.5,
+          "yaw": 0
+        },
+        {
+          "key": "m_rock",
+          "x": -0.8,
+          "y": 6.5,
+          "scale": 1.2,
+          "yaw": 0
+        },
+        {
+          "key": "m_rock",
+          "x": 0.8,
+          "y": -0.8,
+          "scale": 1.35,
+          "yaw": 0
+        },
+        {
+          "key": "m_rock",
+          "x": 6.9,
+          "y": -0.8,
+          "scale": 1.4,
+          "yaw": 0
+        },
+        {
+          "key": "m_stal",
+          "x": -0.4,
+          "y": 4.3,
+          "scale": 0.6,
+          "yaw": 0
+        },
+        {
+          "key": "m_stal",
+          "x": 5.5,
+          "y": -0.55,
+          "scale": 0.65,
+          "yaw": 0
+        },
+        {
+          "key": "m_crystal",
+          "x": 1.2,
+          "y": -0.5,
+          "scale": 0.7,
+          "yaw": 0
+        }
+      ],
+      "floor": [
+        {
+          "key": "m_rubble",
+          "x": 0.6,
+          "y": 2.8,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "m_rubble",
+          "x": 7.3,
+          "y": 6.4,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "m_rubble",
+          "x": 0.7,
+          "y": 6.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "m_rubble",
+          "x": 7.1,
+          "y": 1.0,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "m_rubble",
+          "x": 1.1,
+          "y": 5.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "m_rubble",
+          "x": 6.8,
+          "y": 2.7,
+          "scale": 0.5,
+          "yaw": 0
+        }
+      ],
+      "floor_limit": 3,
+      "puddles": [],
+      "sha256": "d1f21fb906266112542c79c91f297952bd664f5a6d0ed886b70d13f931862200",
+      "source_sha256": "d1f21fb906266112542c79c91f297952bd664f5a6d0ed886b70d13f931862200",
+      "width": 1672,
+      "height": 941,
+      "floor_tint": "748ba8"
+    },
+    "swamp": {
+      "background_path": "res://art/received/expedition/backdrops/swamp.png",
+      "source": "docs/그림_작업/받은그림/원정_배경/swamp_received.png",
+      "outside": [
+        {
+          "key": "s_dead",
+          "x": -0.8,
+          "y": 1.6,
+          "scale": 0.85,
+          "yaw": 0
+        },
+        {
+          "key": "s_dead",
+          "x": -0.8,
+          "y": 6.3,
+          "scale": 0.75,
+          "yaw": 0
+        },
+        {
+          "key": "s_dead",
+          "x": 6.4,
+          "y": -0.8,
+          "scale": 0.85,
+          "yaw": 0
+        },
+        {
+          "key": "s_reeds",
+          "x": -0.4,
+          "y": 3.8,
+          "scale": 0.65,
+          "yaw": 0
+        },
+        {
+          "key": "s_reeds",
+          "x": 1.0,
+          "y": -0.45,
+          "scale": 0.65,
+          "yaw": 0
+        }
+      ],
+      "floor": [
+        {
+          "key": "s_grass",
+          "x": 0.6,
+          "y": 2.8,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_mush",
+          "x": 7.3,
+          "y": 6.4,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_grass",
+          "x": 0.7,
+          "y": 6.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_mush",
+          "x": 7.1,
+          "y": 1.0,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_grass",
+          "x": 1.1,
+          "y": 5.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_mush",
+          "x": 6.8,
+          "y": 2.7,
+          "scale": 0.5,
+          "yaw": 0
+        }
+      ],
+      "floor_limit": 2,
+      "puddles": [
+        {
+          "x": -0.35,
+          "y": 2.8,
+          "radius": 0.7
+        },
+        {
+          "x": 5.7,
+          "y": -0.35,
+          "radius": 0.65
+        }
+      ],
+      "sha256": "81aa6bcfd727fe1baae98a0ff6f42ffe3efa58927a7a3324164837d2085d78aa",
+      "source_sha256": "81aa6bcfd727fe1baae98a0ff6f42ffe3efa58927a7a3324164837d2085d78aa",
+      "width": 1672,
+      "height": 941,
+      "floor_tint": "c5d0b9"
+    },
+    "hidden_ruins": {
+      "background_path": "res://art/received/expedition/backdrops/hidden_ruins.png",
+      "source": "docs/그림_작업/받은그림/원정_배경/hidden_ruins_received.png",
+      "outside": [
+        {
+          "key": "r_wall_2",
+          "x": -0.6,
+          "y": 1.4,
+          "scale": 0.75,
+          "yaw": 1.57079632679
+        },
+        {
+          "key": "r_wall_1",
+          "x": 6.2,
+          "y": -0.6,
+          "scale": 0.75,
+          "yaw": 0
+        },
+        {
+          "key": "r_col_0",
+          "x": -0.7,
+          "y": 5.7,
+          "scale": 0.65,
+          "yaw": 0
+        },
+        {
+          "key": "r_col_1",
+          "x": 0.8,
+          "y": -0.6,
+          "scale": 0.7,
+          "yaw": 0
+        }
+      ],
+      "floor": [
+        {
+          "key": "r_rubble",
+          "x": 0.6,
+          "y": 2.8,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "r_grass",
+          "x": 7.3,
+          "y": 6.4,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "r_rubble",
+          "x": 0.7,
+          "y": 6.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "r_grass",
+          "x": 7.1,
+          "y": 1.0,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "r_rubble",
+          "x": 1.1,
+          "y": 5.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "r_grass",
+          "x": 6.8,
+          "y": 2.7,
+          "scale": 0.5,
+          "yaw": 0
+        }
+      ],
+      "floor_limit": 3,
+      "puddles": [],
+      "sha256": "9a09bfdf86e847f5bb44f0c0c4fd03394e1b67f5cc3cbbba028bea07ca62d1ce",
+      "source_sha256": "9a09bfdf86e847f5bb44f0c0c4fd03394e1b67f5cc3cbbba028bea07ca62d1ce",
+      "width": 1672,
+      "height": 941,
+      "floor_tint": "c4cbb7"
+    },
+    "meadow": {
+      "background_path": "res://art/received/expedition/backdrops/meadow.png",
+      "source": "docs/그림_작업/받은그림/원정_배경/meadow_received.png",
+      "outside": [
+        {
+          "key": "f_tree_birch",
+          "x": -0.8,
+          "y": 5.7,
+          "scale": 0.75,
+          "yaw": 0
+        },
+        {
+          "key": "f_tree_round",
+          "x": 6.6,
+          "y": -0.8,
+          "scale": 0.75,
+          "yaw": 0
+        },
+        {
+          "key": "f_grass_b",
+          "x": -0.35,
+          "y": 2.8,
+          "scale": 0.6,
+          "yaw": 0
+        },
+        {
+          "key": "f_grass_b",
+          "x": 0.8,
+          "y": -0.45,
+          "scale": 0.6,
+          "yaw": 0
+        },
+        {
+          "key": "f_fl_a",
+          "x": 7.1,
+          "y": -0.3,
+          "scale": 0.55,
+          "yaw": 0
+        }
+      ],
+      "floor": [
+        {
+          "key": "f_grass",
+          "x": 0.6,
+          "y": 2.8,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_fl_a",
+          "x": 7.3,
+          "y": 6.4,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_grass",
+          "x": 0.7,
+          "y": 6.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_fl_a",
+          "x": 7.1,
+          "y": 1.0,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_grass",
+          "x": 1.1,
+          "y": 5.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "f_fl_a",
+          "x": 6.8,
+          "y": 2.7,
+          "scale": 0.5,
+          "yaw": 0
+        }
+      ],
+      "floor_limit": 2,
+      "puddles": [],
+      "sha256": "038012708f4bf4eed5c4f038b7a0d44ee532c1b69bedfb1ea8aa5e07d3434812",
+      "source_sha256": "038012708f4bf4eed5c4f038b7a0d44ee532c1b69bedfb1ea8aa5e07d3434812",
+      "width": 1672,
+      "height": 941,
+      "floor_tint": "e7e0bb"
+    },
+    "river_valley": {
+      "background_path": "res://art/received/expedition/backdrops/river_valley.png",
+      "source": "docs/그림_작업/받은그림/원정_배경/river_valley_received.png",
+      "outside": [
+        {
+          "key": "f_tree_birch",
+          "x": -0.8,
+          "y": 1.6,
+          "scale": 0.8,
+          "yaw": 0
+        },
+        {
+          "key": "f_tree_round",
+          "x": 6.7,
+          "y": -0.8,
+          "scale": 0.75,
+          "yaw": 0
+        },
+        {
+          "key": "s_reeds",
+          "x": -0.4,
+          "y": 5.7,
+          "scale": 0.7,
+          "yaw": 0
+        },
+        {
+          "key": "s_reeds",
+          "x": 1.1,
+          "y": -0.4,
+          "scale": 0.65,
+          "yaw": 0
+        }
+      ],
+      "floor": [
+        {
+          "key": "s_grass",
+          "x": 0.6,
+          "y": 2.8,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_grass",
+          "x": 7.3,
+          "y": 6.4,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_grass",
+          "x": 0.7,
+          "y": 6.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_grass",
+          "x": 7.1,
+          "y": 1.0,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_grass",
+          "x": 1.1,
+          "y": 5.7,
+          "scale": 0.5,
+          "yaw": 0
+        },
+        {
+          "key": "s_grass",
+          "x": 6.8,
+          "y": 2.7,
+          "scale": 0.5,
+          "yaw": 0
+        }
+      ],
+      "floor_limit": 2,
+      "puddles": [
+        {
+          "x": -0.35,
+          "y": 3.3,
+          "radius": 0.8
+        },
+        {
+          "x": 5.8,
+          "y": -0.35,
+          "radius": 0.7
+        }
+      ],
+      "sha256": "621344600e89452b0de51cb659dd7fbd31a5522ecf4cbf042b8419cde78f3b7e",
+      "source_sha256": "621344600e89452b0de51cb659dd7fbd31a5522ecf4cbf042b8419cde78f3b7e",
+      "width": 1672,
+      "height": 941,
+      "floor_tint": "d4e1c5"
+    }
+  }
+}
