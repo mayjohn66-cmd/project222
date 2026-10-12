@@ -1,9 +1,9 @@
 class_name ActorLooks
 extends RefCounted
-## 사람마다 다른 외형(옷 색·모자·등짐·손 소품). 값은 data/shop/catalogs/actor_looks_3d.csv 에 있다(코드에 박지 않음).
+## 사람마다 다른 외형(옷 색·모자·등짐·손 소품). 값은 data/shop/catalogs/view3d/actor_looks_3d.csv 에 있다(코드에 박지 않음).
 ## 손님은 소분류 id(없으면 대분류 id)로, 그 밖의 사람은 "player" "worker" 같은 역할 키로 찾는다. 빈 칸은 기본 외형 값을 쓴다.
 
-const DATA_PATH: String = "res://data/shop/catalogs/actor_looks_3d.csv"
+const DATA_PATH: String = "res://data/shop/catalogs/view3d/actor_looks_3d.csv"
 const COLOR_KEYS: Array = ["skin", "hair", "shirt", "apron", "pants", "shoe"]
 
 static var _rows: Dictionary = {}

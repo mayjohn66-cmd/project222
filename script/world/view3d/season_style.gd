@@ -1,9 +1,9 @@
 class_name SeasonStyle
 extends RefCounted
-## 계절별 3D 마을 꾸밈 표(data/shop/catalogs/season_3d.csv): 땅 색, 잎 색, 낙엽수 맨가지, 지붕 눈, 풀 다발, 빛 색조.
+## 계절별 3D 마을 꾸밈 표(data/shop/catalogs/view3d/season_3d.csv): 땅 색, 잎 색, 낙엽수 맨가지, 지붕 눈, 풀 다발, 빛 색조.
 ## 값을 바꾸려면 코드가 아니라 이 CSV 를 고친다.
 
-const CSV_PATH := "res://data/shop/catalogs/season_3d.csv"
+const CSV_PATH := "res://data/shop/catalogs/view3d/season_3d.csv"
 const SEASONS: Array = ["spring", "summer", "autumn", "winter"]
 const COLOR_KEYS: Array = ["grass_tint", "road_tint", "paving_tint", "leaf_tint", "pine_tint", "bush_tint", "tuft_tint", "sun_tint", "ambient_tint"]
 const NUM_KEYS: Array = ["bare_trees", "roof_white", "tufts", "flower_rate", "tree_keep", "hide_shrubs", "snowman_rate", "bush_rate", "tuft_density", "tuft_height", "leaf_fall", "tree_rate", "litter_rate"]

@@ -57,13 +57,13 @@ def scroll_report(root, items, price, scroll_price, units_per_day=5):
 def main():
     root = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
     items = {r["id"]: r for r in read(root / "data/core/items.csv")}
-    furniture = {r["id"]: r for r in read(root / "data/shop/catalogs/furniture_items.csv")}
-    merchant = read(root / "data/shop/catalogs/secret_merchant.csv")
+    furniture = {r["id"]: r for r in read(root / "data/shop/catalogs/furniture/furniture_items.csv")}
+    merchant = read(root / "data/shop/catalogs/economy/secret_merchant.csv")
     price = {k: int(v["price"]) for k, v in items.items()}
-    groups = {g["group_id"]: g for g in read(root / "data/shop/catalogs/customer_groups.csv")}
-    types = read(root / "data/shop/catalogs/customer_types.csv")
+    groups = {g["group_id"]: g for g in read(root / "data/shop/catalogs/customer/customer_groups.csv")}
+    types = read(root / "data/shop/catalogs/customer/customer_types.csv")
     demands = defaultdict(list)
-    for r in read(root / "data/shop/catalogs/customer_demands.csv"):
+    for r in read(root / "data/shop/catalogs/customer/customer_demands.csv"):
         demands[r["customer_type_id"]].append((r["target_type"], r["target_id"], float(r["weight"])))
     rates = [float(r["rate"]) for r in read(root / "data/shop/customer_arrival.csv")]
     problems = 0

@@ -436,7 +436,7 @@ func initialize_furniture_inventory() -> void:
 	furniture_inventory.clear()
 
 	var path: String = (
-		"res://data/shop/catalogs/starting_furniture.csv"
+		"res://data/shop/catalogs/furniture/starting_furniture.csv"
 	)
 
 	if not FileAccess.file_exists(path):

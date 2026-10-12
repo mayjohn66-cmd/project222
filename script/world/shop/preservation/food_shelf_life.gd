@@ -8,7 +8,7 @@ static var _settling: bool = false
 
 static func rules() -> Dictionary:
 	if not _rules.is_empty(): return _rules
-	var file := FileAccess.open("res://data/shop/catalogs/food_shelf_life.csv", FileAccess.READ)
+	var file := FileAccess.open("res://data/shop/catalogs/economy/food_shelf_life.csv", FileAccess.READ)
 	file.get_csv_line()
 	while not file.eof_reached():
 		var row := file.get_csv_line()

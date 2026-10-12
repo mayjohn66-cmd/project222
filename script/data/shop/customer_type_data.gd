@@ -11,11 +11,11 @@ extends RefCounted
 # 손님 한 명의 customer_type_id는 소분류 ID이고, 대분류는 group_id로 얻는다.
 
 const GROUPS_CSV_PATH: String = (
-	"res://data/shop/catalogs/customer_groups.csv"
+	"res://data/shop/catalogs/customer/customer_groups.csv"
 )
 
 const CSV_PATH: String = (
-	"res://data/shop/catalogs/customer_types.csv"
+	"res://data/shop/catalogs/customer/customer_types.csv"
 )
 
 static var customer_groups: Dictionary = {}

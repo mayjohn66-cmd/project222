@@ -13,8 +13,8 @@ def rd(p):
 items = {r["id"]: r for r in rd("data/core/items.csv")}
 price = {k: int(v["price"]) for k, v in items.items()}
 sellable = {k for k, v in items.items() if v["sellable"] == "true"}
-demands = rd("data/shop/catalogs/customer_demands.csv")
-types = {r["group_id"]: int(r["weight"]) for r in rd("data/shop/catalogs/customer_groups.csv")}
+demands = rd("data/shop/catalogs/customer/customer_demands.csv")
+types = {r["group_id"]: int(r["weight"]) for r in rd("data/shop/catalogs/customer/customer_groups.csv")}
 
 customers_per_day = sum(float(r["rate"]) for r in rd("data/shop/customer_arrival.csv"))
 

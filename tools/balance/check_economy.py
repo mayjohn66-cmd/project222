@@ -115,10 +115,10 @@ def main():
             print(f"{region:13} 난이도{d} 방{rooms}: 재료 {value:6.0f}원 / {minutes:.1f}분 = 분당 {value / minutes:5.0f}원, 두루마리 {scrolls:.2f}개, 지도 {maps:.2f}개  ({top})")
 
     print("\n== 손님 소분류별 객단가와 시작 재고 커버율 (재고 없음 기준 기대) ==")
-    groups = {g["group_id"]: g for g in read(root / "data/shop/catalogs/customer_groups.csv")}
-    types = read(root / "data/shop/catalogs/customer_types.csv")
+    groups = {g["group_id"]: g for g in read(root / "data/shop/catalogs/customer/customer_groups.csv")}
+    types = read(root / "data/shop/catalogs/customer/customer_types.csv")
     demands = defaultdict(list)
-    for r in read(root / "data/shop/catalogs/customer_demands.csv"):
+    for r in read(root / "data/shop/catalogs/customer/customer_demands.csv"):
         demands[r["customer_type_id"]].append((r["target_type"], r["target_id"], float(r["weight"])))
     sellable = {i for i, r in items.items() if r["sellable"].lower() == "true"}
     by_category = defaultdict(list)
@@ -181,7 +181,7 @@ def main():
         print(f"{region:8} 난이도1: 하루 재료 가치 {need_value:,.0f}원이 필요 -> 원정 {need_value / v:.1f}회/일 ({need_value / v * m:.1f}분/일, 하루 = 10분)")
 
     print("\n== 비밀 상인 가격 점검 ==")
-    merchant = read(root / "data/shop/catalogs/secret_merchant.csv")
+    merchant = read(root / "data/shop/catalogs/economy/secret_merchant.csv")
     ruins_v, ruins_m = run_value[("hidden_ruins", 1)]
     other_avg = sum(v for v, _ in best.values()) / len(best)
     for r in merchant:

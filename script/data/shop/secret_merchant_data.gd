@@ -8,7 +8,7 @@ extends RefCounted
 # item_id가 scroll_random이면 아직 배우지 않았고 갖고 있지 않은 레시피 두루마리 중 하나를 뽑고,
 # 가격은 행의 가격 x (두루마리 희귀도 - 1)이다(희귀도 2 = 기준가, 3 = 2배).
 
-const CSV_PATH: String = "res://data/shop/catalogs/secret_merchant.csv"
+const CSV_PATH: String = "res://data/shop/catalogs/economy/secret_merchant.csv"
 const RANDOM_SCROLL_ID: String = "scroll_random"
 
 static var entries: Array[Dictionary] = []

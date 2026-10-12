@@ -1,8 +1,8 @@
 class_name Furniture3DData
 extends RefCounted
-## 가구의 3D 표현 값(높이 등). 값은 data/shop/catalogs/furniture_3d.csv 에 있다(코드에 박지 않음).
+## 가구의 3D 표현 값(높이 등). 값은 data/shop/catalogs/view3d/furniture_3d.csv 에 있다(코드에 박지 않음).
 
-const DATA_PATH: String = "res://data/shop/catalogs/furniture_3d.csv"
+const DATA_PATH: String = "res://data/shop/catalogs/view3d/furniture_3d.csv"
 const DEFAULT_ROW: Dictionary = {"kind": "box", "height_blocks": 1.0, "depth_ratio": 1.0, "stack_step_blocks": 0.0, "base_blocks": 0.0, "texture": "plank", "tint": Color.WHITE}
 
 static var _rows: Dictionary = {}

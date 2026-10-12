@@ -1,10 +1,10 @@
 class_name WeatherSystem
 extends RefCounted
 ## 날씨 계산(순수 함수, 저장할 값 없음). 날짜(total_day)와 시각만으로 "그날 몇 시부터 몇 시까지 비/눈"이 정해진다.
-## 같은 날은 언제 불러도 같은 결과라서 저장·불러오기와 상관없이 일정하다. 확률·길이는 data/shop/catalogs/weather_3d.csv.
+## 같은 날은 언제 불러도 같은 결과라서 저장·불러오기와 상관없이 일정하다. 확률·길이는 data/shop/catalogs/view3d/weather_3d.csv.
 ## 게임 쪽(손님 수 등)에서 쓰려면 WeatherSystem.forecast(GameState.total_day, 시각) 를 그냥 부르면 된다.
 
-const CSV_PATH := "res://data/shop/catalogs/weather_3d.csv"
+const CSV_PATH := "res://data/shop/catalogs/view3d/weather_3d.csv"
 const FADE_HOURS: float = 1.0  # 시작·끝에서 서서히 세지고 약해지는 시간
 
 static var _cache: Dictionary = {}

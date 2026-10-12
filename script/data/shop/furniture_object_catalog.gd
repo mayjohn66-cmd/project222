@@ -2,7 +2,7 @@ class_name FurnitureObjectCatalog
 extends RefCounted
 ## 새로 만드는 집기의 재질·발전 조건·창고 규격. 이미 소유한 집기의 설치는 제한하지 않는다.
 
-const PATH := "res://data/shop/catalogs/furniture_progression.csv"
+const PATH := "res://data/shop/catalogs/furniture/furniture_progression.csv"
 const PREFIX := "furniture_craft:"
 const PRODUCT_STORY_PREFIX := "crafting_path:"
 static var _rows: Dictionary = {}

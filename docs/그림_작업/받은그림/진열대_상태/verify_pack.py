@@ -35,7 +35,7 @@ for record in m["catalogs"]+m["references"]:
         unchanged(path)
     else:assert sha(root/path)==record["sha256"],path
     unchanged(path)
-with (root/"data/shop/catalogs/shelf_data.csv").open(encoding="utf-8-sig") as stream:
+with (root/"data/shop/catalogs/furniture/shelf_data.csv").open(encoding="utf-8-sig") as stream:
     configs={r["id"]:r for r in csv.DictReader(stream)}
 expected={(key,d,stack) for key,row in configs.items() for d in range(4) for stack in range(1,int(row["max_stack_level"])+1)}
 actual=set();compositions=0

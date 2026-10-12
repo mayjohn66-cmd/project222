@@ -144,8 +144,8 @@ def run():
         item_map.append({"item_id":row["id"],"name":row["name"],"glyph":"goods/"+Path(path).stem+".png",
                          "source":path,"source_sha256":sha(ROOT/path),"runtime_icon_connected":bool(row["icon_path"]),"anchor":[8,14]})
     by_id={row["item_id"]:goods[row["source"]] for row in item_map}
-    config=read_csv("data/shop/catalogs/shelf_data.csv")
-    builds={r["id"]:r for r in read_csv("data/shop/catalogs/build_objects.csv")}
+    config=read_csv("data/shop/catalogs/furniture/shelf_data.csv")
+    builds={r["id"]:r for r in read_csv("data/shop/catalogs/furniture/build_objects.csv")}
     cases={}
     def layers(body,anchors,spl,capacity,rack=False,view=0):
         outputs={}
@@ -292,7 +292,7 @@ def run():
     save_json(OUT/"items.json",{"shelf_allowed_items":len(item_map),"unique_glyphs":len(names),"items":item_map})
     save_json(BASE/"manifest.json",{"date":"2026-10-10","tool":"built-in image_gen + user-authorized Pillow processing",
         "status":"pixel_candidates_not_runtime_connected","source_assets":[{"file":p.name,"sha256":sha(p),"size":list(Image.open(p).size)} for p in [BASE/"shelf_empty_source.png",BASE/"rack_empty_source.png"]],
-        "catalogs":[{"path":p,"sha256":sha(ROOT/p),"normalized_sha256":hashlib.sha256((ROOT/p).read_bytes().replace(b"\r\n",b"\n")).hexdigest()} for p in ["data/core/items.csv","data/shop/catalogs/shelf_data.csv","data/shop/catalogs/build_objects.csv"]],
+        "catalogs":[{"path":p,"sha256":sha(ROOT/p),"normalized_sha256":hashlib.sha256((ROOT/p).read_bytes().replace(b"\r\n",b"\n")).hexdigest()} for p in ["data/core/items.csv","data/shop/catalogs/furniture/shelf_data.csv","data/shop/catalogs/furniture/build_objects.csv"]],
         "counts":{"shelf_bodies":84,"warehouse_bodies":12,"empty_units":16,"glyphs":len(names),"mapped_items":len(item_map),"native_pngs":len(records),"runtime_icon_items":sum(r["runtime_icon_connected"] for r in item_map),"received_fish_candidate_items":sum(not r["runtime_icon_connected"] for r in item_map)},
         "references":[{"path":p,"sha256":sha(ROOT/p)} for p in [*[f"art/received/furniture/shelf_1x1/rotation_{d}.png" for d in range(4)],*[f"art/received/furniture/{name}/rotation_0.png" for name in ["warehouse_rack","wood_warehouse_rack","steel_warehouse_rack"]]]],
         "authorization":"User requested priority 2 continuation after approving Codex image generation and Python pixel processing. General Claude/Pixel Lab policy remains unchanged.",

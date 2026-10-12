@@ -3,7 +3,7 @@ extends RefCounted
 
 
 const DATA_PATH: String = (
-	"res://data/shop/catalogs/furniture_items.csv"
+	"res://data/shop/catalogs/furniture/furniture_items.csv"
 )
 
 

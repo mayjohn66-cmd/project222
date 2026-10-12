@@ -27,12 +27,12 @@
       "normalized_sha256": "8b8f28cec708b20fd9f5f359491a62d78173d1ee46db8e2618745df614986842"
     },
     {
-      "path": "data/shop/catalogs/shelf_data.csv",
+      "path": "data/shop/catalogs/furniture/shelf_data.csv",
       "sha256": "bc41a26ed5e4c38e0f9bff7526fcd84551e6ec6833d34340bf648cc690193280",
       "normalized_sha256": "9719ddfbdaa4daeb26784a51653ff00281675b0bfd340baf305928d4abd51948"
     },
     {
-      "path": "data/shop/catalogs/build_objects.csv",
+      "path": "data/shop/catalogs/furniture/build_objects.csv",
       "sha256": "1898623e3c8c1ecf6a44a8ef2dadfe2ce4ccff12c107ba40ab21956058edd89b",
       "normalized_sha256": "7231c93801a3e42fad5d014a8597d338d112957e63822ada9f15a6e6464362c2"
     }

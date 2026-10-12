@@ -3,7 +3,7 @@ extends RefCounted
 
 
 const DATA_PATH: String = (
-	"res://data/shop/catalogs/build_objects.csv"
+	"res://data/shop/catalogs/furniture/build_objects.csv"
 )
 
 
@@ -154,7 +154,7 @@ static func load_data() -> void:
 			and area_profile_path.is_empty()
 		):
 			area_profile_path = (
-				"res://data/shop/catalogs/register_area_default.tres"
+				"res://data/shop/catalogs/furniture/register_area_default.tres"
 			)
 
 		if not VALID_BUILD_TYPES.has(

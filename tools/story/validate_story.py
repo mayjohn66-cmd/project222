@@ -43,7 +43,7 @@ def main():
     root = Path(sys.argv[1] if len(sys.argv) > 1 else ".")
     target = Path(sys.argv[2]) if len(sys.argv) > 2 else root / "data/story/story_beats.csv"
     items = {r["id"] for r in read(root / "data/core/items.csv")}
-    furniture = {r["id"] for r in read(root / "data/shop/catalogs/furniture_items.csv")}
+    furniture = {r["id"] for r in read(root / "data/shop/catalogs/furniture/furniture_items.csv")}
     npcs = {r["npc_id"] for r in read(root / "data/story/story_npcs.csv")}
     errors, warns = [], []
 

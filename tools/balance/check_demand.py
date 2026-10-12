@@ -47,8 +47,8 @@ def main():
     for i in sellable:
         by_category[items[i]["category"]].append(i)
 
-    groups = {g["group_id"]: g for g in read(root / "data/shop/catalogs/customer_groups.csv")}
-    types = read(root / "data/shop/catalogs/customer_types.csv")
+    groups = {g["group_id"]: g for g in read(root / "data/shop/catalogs/customer/customer_groups.csv")}
+    types = read(root / "data/shop/catalogs/customer/customer_types.csv")
     type_ids = {t["customer_type_id"] for t in types}
     problems = 0
 
@@ -77,7 +77,7 @@ def main():
 
     owners = set(groups) | type_ids
     demands = defaultdict(list)
-    for r in read(root / "data/shop/catalogs/customer_demands.csv"):
+    for r in read(root / "data/shop/catalogs/customer/customer_demands.csv"):
         t, kind, target, weight = r["customer_type_id"], r["target_type"], r["target_id"], float(r["weight"])
         if t not in owners:
             print(f"[오류] 수요 행의 손님 ID가 없음: {t}")

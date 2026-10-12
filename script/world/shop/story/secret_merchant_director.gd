@@ -5,7 +5,7 @@ extends Node
 # 심야에 낮은 확률로 비밀 상인을 가게 안에 세우고, 플레이어가 말을 걸면 판매 창을 연다.
 # - 심야(0~6시)가 시작될 때 GameConfig.SECRET_MERCHANT_NIGHT_CHANCE 확률로 나타나 06:00에 떠난다.
 # - 첫 원정을 다녀온 뒤부터 나올 수 있다(초반 혼란 방지).
-# - 판매 목록은 data/shop/catalogs/secret_merchant.csv, 방문할 때마다 진열이 새로 정해진다.
+# - 판매 목록은 data/shop/catalogs/economy/secret_merchant.csv, 방문할 때마다 진열이 새로 정해진다.
 
 const TALK_DISTANCE: float = 90.0
 

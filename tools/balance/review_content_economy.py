@@ -64,7 +64,7 @@ print("- 비교: 시작 식품 빵 1개 판매가 %dG, 원정 숲 1회(난이도
 
 # 3. 식품 기한
 print("\n## 3. 식품 기한과 마감 할인\n")
-sl = {r["item_id"]: r for r in rows("data/shop/catalogs/food_shelf_life.csv")}
+sl = {r["item_id"]: r for r in rows("data/shop/catalogs/economy/food_shelf_life.csv")}
 rec = {}
 for r in rows("data/production/product_recipes.csv"): rec[r["result_item_id"]] = r
 ing = {}
@@ -81,8 +81,8 @@ print("- 퇴비 재료 판매가: %dG (만료 식품 2개 → 1개)" % price("fo
 
 # 4. 가구
 print("\n## 4. 진열대·창고 (같은 자리 대비 용량과 재료 가치)\n")
-cap = {r["id"]: r for r in rows("data/shop/catalogs/shelf_data.csv")}
-prog = {r["id"]: r for r in rows("data/shop/catalogs/furniture_progression.csv")}
+cap = {r["id"]: r for r in rows("data/shop/catalogs/furniture/shelf_data.csv")}
+prog = {r["id"]: r for r in rows("data/shop/catalogs/furniture/furniture_progression.csv")}
 fr = {}
 for r in rows("data/production/furniture_recipes.csv"):
     fr.setdefault(r["furniture_id"], []).append((r["item_id"], int(r["amount"])))

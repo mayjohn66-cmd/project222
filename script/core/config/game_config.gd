@@ -17,7 +17,7 @@ const DAY_START_HOUR: int = 6
 const EXPEDITION_TIME_SCALE: float = 0.5
 
 # 심야 비밀 상인: 밤(심야 시간대)이 시작될 때 이 확률로 찾아와 06:00까지 머문다.
-# 첫 원정을 다녀온 뒤부터 나올 수 있다. 판매 목록은 data/shop/catalogs/secret_merchant.csv.
+# 첫 원정을 다녀온 뒤부터 나올 수 있다. 판매 목록은 data/shop/catalogs/economy/secret_merchant.csv.
 const SECRET_MERCHANT_NIGHT_CHANCE: float = 0.10
 
 # 하루 4등분 시간대 시작 시각(각 6시간): 아침 6~12 / 낮 12~18 / 저녁 18~24 / 심야 0~6.

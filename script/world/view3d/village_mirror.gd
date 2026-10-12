@@ -2,7 +2,7 @@ class_name VillageMirror
 extends RefCounted
 ## 마을(매장 바깥)을 3D 도트 방식으로 옮기는 "읽기 전용 거울". StoreView3D 가 소유한다.
 ## 읽는 곳: StoreExterior(칸마다 풀·길·보도 → 바닥), 마을 노드들의 StaticBody2D(발자국 충돌 모양 → 상자).
-## 높이·질감은 data/shop/catalogs/village_3d.csv 의 규칙(노드 이름 또는 스프라이트 그림 파일 이름에 포함된 글자)으로 정한다. 규칙이 없으면 스프라이트 높이로 추정한다.
+## 높이·질감은 data/shop/catalogs/view3d/village_3d.csv 의 규칙(노드 이름 또는 스프라이트 그림 파일 이름에 포함된 글자)으로 정한다. 규칙이 없으면 스프라이트 높이로 추정한다.
 ## 게임 코드는 수정하지 않는다(2D 숨김은 StoreView3D 가 visible 만 바꿈).
 
 var _hidden: Dictionary = {}  # 계절로 숨긴 물체 key → 서명
@@ -10,7 +10,7 @@ var _footprints: Dictionary = {}  # 물체 key → 3D 발자국(칸 좌표 Rect2
 const COLLISION_3D := "Collision3D"
 const COLLISION_INSET := 0.04  # 보이는 발자국보다 살짝 안쪽(칸)
 const CONTAINERS: Array = ["NearbyHouses", "VillageExtraHouses", "VillageBlacksmith", "VillageToolShop", "VillageBuildings", "VillageDecor", "VillageGathering", "DungeonRoadside", "DungeonWall"]
-const RULES_PATH: String = "res://data/shop/catalogs/village_3d.csv"
+const RULES_PATH: String = "res://data/shop/catalogs/view3d/village_3d.csv"
 const GROUND_TEXTURES: Dictionary = {"grass": ["grass", Color(0.62, 0.6, 0.46)], "road": ["brick", Color(0.5, 0.46, 0.46)], "paving": ["brick", Color(0.82, 0.76, 0.68)], "dirt": ["dirt", Color(0.86, 0.78, 0.66)]}
 # 깔끔한 스타일(PlaceholderTextures.clean)용: 질감 자체가 이미 밝은 색이라 곱하는 색을 거의 1 로 둔다.
 const GROUND_TEXTURES_CLEAN: Dictionary = {"grass": ["grass", Color(1.0, 1.0, 1.0)], "road": ["brick", Color(0.96, 0.96, 0.98)], "paving": ["brick", Color(1.0, 0.93, 0.8)], "dirt": ["dirt", Color(1.0, 0.95, 0.88)]}

@@ -2,7 +2,7 @@ class_name CustomerDemandData
 extends RefCounted
 
 const CSV_PATH: String = (
-	"res://data/shop/catalogs/customer_demands.csv"
+	"res://data/shop/catalogs/customer/customer_demands.csv"
 )
 
 static var demands_by_type: Dictionary = {}

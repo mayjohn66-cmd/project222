@@ -9,7 +9,11 @@ data/
 ├─ production/             # 상품·가구 제작법, 재료, 해금 조건
 ├─ fishing/                # 낚시 어종·장소·요리(JSON)
 ├─ shop/
-│  ├─ catalogs/            # 가구·상품·진열대·손님 종류 등(19개)
+│  ├─ catalogs/            # 가구·손님·3D 표현·경제(19개, 4개 폴더로 분류)
+│  │  ├─ furniture/ (6)    #   건축 목록·가구 정보·진행·시작 가구·진열대 칸수·계산대 구역
+│  │  ├─ customer/  (3)    #   손님 대분류·소분류·수요
+│  │  ├─ view3d/    (8)    #   3D 표현: 인물 외형·가구·아이템·계절·날씨·마을 건물·마을 그림 연결
+│  │  └─ economy/   (2)    #   식품 유통기한·비밀 상인 판매 목록
 │  ├─ events/              # 매장 행사
 │  ├─ employees/           # 직원
 │  ├─ requests/            # requests_text.csv(모든 이야기 글) · quest_visits.csv(손님 입장 방식)

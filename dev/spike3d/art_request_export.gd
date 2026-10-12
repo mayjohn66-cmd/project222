@@ -76,7 +76,7 @@ func _ready() -> void:
 
 func _read_assets() -> Array:
 	var assets: Array = []
-	var file := FileAccess.open("res://data/shop/catalogs/village_3d_assets.csv", FileAccess.READ)
+	var file := FileAccess.open("res://data/shop/catalogs/view3d/village_3d_assets.csv", FileAccess.READ)
 	var header: PackedStringArray = file.get_csv_line()
 
 	while not file.eof_reached():

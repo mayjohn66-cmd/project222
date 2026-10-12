@@ -1,7 +1,0 @@
-[gd_resource type="Resource" script_class="RegisterAreaProfile" format=3 uid="uid://b8ju17tg1jrel"]
-
-[ext_resource type="Script" uid="uid://bmejpda3arjp6" path="res://script/data/shop/register_area_profile.gd" id="1_q7dlk"]
-
-[resource]
-script = ExtResource("1_q7dlk")
-metadata/_custom_type_script = "uid://bmejpda3arjp6"

@@ -283,7 +283,7 @@ func _page_goods() -> void:
 func _page_village() -> void:
 	_size = 28.0
 	var rules: Array = VillageMirror.load_rules()
-	var file := FileAccess.open("res://data/shop/catalogs/village_3d_assets.csv", FileAccess.READ)
+	var file := FileAccess.open("res://data/shop/catalogs/view3d/village_3d_assets.csv", FileAccess.READ)
 	var header: PackedStringArray = file.get_csv_line()
 	var x: float = 0.0
 	var z: float = 0.0

@@ -1,7 +1,7 @@
 class_name WorldWeatherData
 extends RefCounted
 ## 3D WeatherSystem과 같은 CSV·날짜 난수·시간 경계를 사용한다.
-const PATH := "res://data/shop/catalogs/weather_3d.csv"
+const PATH := "res://data/shop/catalogs/view3d/weather_3d.csv"
 static var rows: Dictionary = {}
 
 static func day_plan(day: int) -> Dictionary:

@@ -1,10 +1,10 @@
 class_name ShelfAssets
 extends RefCounted
 ## 진열대 3D 모델: 나무 틀(옆판·뒷판·선반 판)과 선반에 놓인 상품. 상품은 아이템마다 모양(빵, 병, 플라스크, 그릇, 광석 …)이 있고
-## 색은 아이콘 평균색에서 뽑는다. 모양 지정은 data/shop/catalogs/item_3d.csv, 칸 수·재고는 진열대 노드(slots)에서 읽는다.
+## 색은 아이콘 평균색에서 뽑는다. 모양 지정은 data/shop/catalogs/view3d/item_3d.csv, 칸 수·재고는 진열대 노드(slots)에서 읽는다.
 ## 좌표는 (u = 진열대 길이 방향, v = 뒤→앞 방향, y = 높이)로 정하고 회전에 맞춰 칸 좌표(x, z)로 옮긴다.
 
-const SHAPES_PATH: String = "res://data/shop/catalogs/item_3d.csv"
+const SHAPES_PATH: String = "res://data/shop/catalogs/view3d/item_3d.csv"
 const DEPTH: float = 0.5
 const FIRST_LEVEL_H: float = 1.4
 const STACK_LEVEL_H: float = 1.0

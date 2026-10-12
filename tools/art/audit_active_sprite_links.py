@@ -66,7 +66,7 @@ def main():
         for table in tables:
             active_tables.add(table)
             check(table in selection, "Unmapped active event: "+event["event_id"]+" / "+table)
-    with (ROOT/"data/shop/catalogs/furniture_items.csv").open(encoding="utf-8-sig", newline="") as f:
+    with (ROOT/"data/shop/catalogs/furniture/furniture_items.csv").open(encoding="utf-8-sig", newline="") as f:
         furniture = list(csv.DictReader(f))
     for row in furniture:
         path = row["icon_path"]
