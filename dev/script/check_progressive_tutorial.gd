@@ -164,9 +164,23 @@ func run() -> void:
 	check(OpeningJourneyFlow.traded() and not OpeningJourneyFlow.trade(), "reload cannot charge barter twice")
 	drain(director.dialogue)
 	advance_self()
-	check(director.flow.current()["id"] == "expedition", "gear motivates exploration before crafting")
+	check(director.flow.current()["id"] == "shop_days" and OpeningJourneyFlow.regular_customers_allowed(), "after barter the shop keeps trading on its remaining stock")
+	check(not director.flow.goal_met(director.flow.current(),world) and not OpeningJourneyFlow.stock_depleted(get_tree()), "remaining food keeps the shop-days step open")
+	check(GameState.get_item_count("plywood") > 0, "building material does not count as shop stock")
+	# 남은 식품을 모두 판 것으로 만든다: 창고·진열대 모두 0
+	for id in ["bread", "water"]: GameState.remove_item(id, GameState.get_item_count(id))
+	for shelf in get_tree().get_nodes_in_group("shelf"):
+		for slot in shelf.slots:
+			slot["item_id"] = ""
+			slot["stock"] = 0
+	check(OpeningJourneyFlow.stock_depleted(get_tree()), "zero stock everywhere opens the next story")
+	advance_self()
+	check(director.flow.current()["id"] == "expedition", "empty shelves lead to the merchant's expedition request")
 	check(not director.flow.goal_met(director.flow.current(),world), "unreturned expedition does not progress")
+	talk_merchant()
+	check(director.flow.seen("expedition"), "merchant request is heard before leaving")
 	PlayerProgress.record_expedition_completed()
+	talk_merchant()
 	advance_self()
 	check(director.flow.current()["id"] == "raw_sale" and GameState.get_furniture_count("magic_oven") == 0, "return leads to raw sale with no compulsory oven")
 	manager.open_shop()
@@ -225,7 +239,7 @@ func run() -> void:
 	talk_merchant()
 	check(director.flow.current().is_empty(), "optional crafting ends on collected output")
 	var sources := Tools.load_sources()
-	check(sources[Tools.KIND_TUTORIAL_STEP].size() == 9 and sources[Tools.KIND_TUTORIAL_DIALOGUE].size() == 8, "all revised tutorial prose registered in story tool")
+	check(sources[Tools.KIND_TUTORIAL_STEP].size() == 10 and sources[Tools.KIND_TUTORIAL_DIALOGUE].size() == 8, "all revised tutorial prose registered in story tool")
 	check(sources[Tools.KIND_SERVICE_TEXT].has("arrival_peddler_return"), "merchant reunion registered for prose drafting")
 	var step_prompt := Writer.build_prompt(Tools.KIND_TUTORIAL_STEP, sources, sources)
 	check(step_prompt.contains("플레이어 독백") and step_prompt.contains("현대 기기는 플레이어만 이해"), "Gemini receives player monologue and modern-knowledge boundary")

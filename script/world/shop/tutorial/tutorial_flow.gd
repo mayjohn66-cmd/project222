@@ -53,6 +53,7 @@ func goal_met(step: Dictionary, world: Node) -> bool:
 		"checkout": return PlayerProgress.story_beat_days.has(CheckoutTutorial.BEAT_ID)
 		"barter": return OpeningJourneyFlow.traded()
 		"raw_sale": return PlayerProgress.story_beat_days.has(OpeningJourneyFlow.RAW_SALE)
+		"stock_depleted": return OpeningJourneyFlow.stock_depleted(world.get_tree())
 		"expedition": return PlayerProgress.has_completed_expedition()
 		"production": return PlayerProgress.story_beat_days.has("tutorial_event:produced_bread")
 	return false

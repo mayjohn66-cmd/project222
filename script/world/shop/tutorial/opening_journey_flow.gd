@@ -17,10 +17,42 @@ static func legacy_finished() -> bool:
 static func core_finished() -> bool:
 	if legacy_finished(): return true
 	for step in SETTINGS.steps:
-		if not bool(step.get("optional", false)) \
-				and not PlayerProgress.story_beat_days.has("tutorial_step:" + str(step["id"]) + ":done"):
-			return false
+		if bool(step.get("optional", false)): continue
+		if PlayerProgress.story_beat_days.has("tutorial_step:" + str(step["id"]) + ":done"): continue
+		# 나중에 끼워 넣은 단계(skip_if_later_started)는 뒤 단계를 이미 시작한 저장에서는 요구하지 않는다.
+		if bool(step.get("skip_if_later_started", false)) and _later_started(step): continue
+		return false
 	return true
+
+static func _later_started(step: Dictionary) -> bool:
+	var found := false
+	for other in SETTINGS.steps:
+		if other == step:
+			found = true
+			continue
+		if found and (PlayerProgress.story_beat_days.has("tutorial_step:" + str(other["id"]) + ":intro") \
+				or PlayerProgress.story_beat_days.has("tutorial_step:" + str(other["id"]) + ":done")):
+			return true
+	return false
+
+# 교환을 마친 뒤에는 첫 원정 전에도 일반 손님이 온다(넉넉한 재고로 며칠 영업하는 구간).
+static func regular_customers_allowed() -> bool:
+	return traded()
+
+# 가게와 함께 온 판매 상품(store_product: 빵·물 같은 이세계 물품)이 창고·진열대 어디에도 남아 있지 않다.
+# 합판 같은 자재(material)는 세지 않는다. 교환을 마친 뒤에만 뜻이 있다.
+static func stock_depleted(tree: SceneTree) -> bool:
+	if not traded(): return false
+	for id in ItemData.get_sellable_items():
+		if _is_store_product(str(id)) and GameState.get_item_count(str(id)) > 0: return false
+	for shelf in tree.get_nodes_in_group("shelf"):
+		if not is_instance_valid(shelf) or shelf.is_queued_for_deletion() or shelf.get_meta("is_build_preview", false): continue
+		for slot in shelf.get("slots"):
+			if int(slot.get("stock", 0)) > 0 and _is_store_product(str(slot.get("item_id", ""))): return false
+	return true
+
+static func _is_store_product(id: String) -> bool:
+	return str(ItemData.get_item(id).get("item_type", "")) == ItemData.ITEM_TYPE_STORE_PRODUCT
 
 static func optional_available(step: Dictionary) -> bool:
 	if bool(step.get("after_core", false)):
