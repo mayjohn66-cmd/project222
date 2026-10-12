@@ -110,7 +110,7 @@ custom_minimum_size = Vector2(86, 32)
 layout_mode = 2
 size_flags_horizontal = 0
 text = "← 지도"
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 19
 theme_override_colors/font_color = Color(0.22, 0.13, 0.08, 1)
 theme_override_colors/font_hover_color = Color(0.22, 0.13, 0.08, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.96, 0.81, 1)
@@ -129,7 +129,7 @@ autowrap_mode = 3
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(0.94, 0.92, 0.84, 1)
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 19
 text = "지역 설명"
 autowrap_mode = 3
 
@@ -137,7 +137,7 @@ autowrap_mode = 3
 visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.76, 0.39, 1)
-theme_override_font_sizes/font_size = 22
+theme_override_font_sizes/font_size = 19
 text = "입장 조건"
 autowrap_mode = 3
 
@@ -147,7 +147,7 @@ layout_mode = 2
 [node name="DifficultyLabel" type="Label" parent="RegionInfoCard/CardMargin/CardColumn"]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.96, 0.76, 0.39, 1)
-theme_override_font_sizes/font_size = 26
+theme_override_font_sizes/font_size = 19
 text = "난이도"
 
 [node name="Header" type="PanelContainer" parent="."]
@@ -168,7 +168,7 @@ layout_mode = 2
 [node name="PrepTitleLabel" type="Label" parent="Header/HeaderColumn" unique_id=65906578]
 layout_mode = 2
 text = "원정 지도"
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 38
 
 [node name="DestinationLabel" type="Label" parent="Header/HeaderColumn"]
 layout_mode = 2
@@ -249,7 +249,7 @@ offset_top = -88.0
 offset_right = -40.0
 offset_bottom = -34.0
 text = "원정 출발"
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 38
 theme_override_colors/font_color = Color(0.22, 0.13, 0.08, 1)
 theme_override_colors/font_hover_color = Color(0.22, 0.13, 0.08, 1)
 theme_override_colors/font_pressed_color = Color(1, 0.96, 0.81, 1)

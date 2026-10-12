@@ -18,7 +18,7 @@ size_flags_horizontal = 4
 offset_transform_enabled = true
 offset_transform_position = Vector2(-70, 30)
 horizontal_alignment = 1
-theme_override_font_sizes/font_size = 20
+theme_override_font_sizes/font_size = 19
 text = "생산 설비"
 
 [node name="StatusLabel" type="Label" parent="."]
@@ -27,7 +27,7 @@ offset_top = -116.0
 offset_right = 80.0
 offset_bottom = -90.0
 mouse_filter = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 19
 text = "대기 중"
 horizontal_alignment = 1
 

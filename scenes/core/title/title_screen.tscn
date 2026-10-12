@@ -59,7 +59,7 @@ layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.956863, 0.839216, 1)
 theme_override_colors/font_outline_color = Color(0.156863, 0.113725, 0.074510, 1)
 theme_override_constants/outline_size = 4
-theme_override_font_sizes/font_size = 30
+theme_override_font_sizes/font_size = 38
 text = "숲너머 편의점"
 horizontal_alignment = 1
 
@@ -67,21 +67,21 @@ horizontal_alignment = 1
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 38
 text = "새 게임"
 
 [node name="ContinueButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1007886096]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 38
 text = "이어하기"
 
 [node name="DeleteSaveButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1307776234]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 38
 text = "저장 기록 삭제"
 
 [node name="StatusLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1580178094]

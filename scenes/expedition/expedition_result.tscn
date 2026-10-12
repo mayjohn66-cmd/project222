@@ -15,7 +15,7 @@ theme_override_constants/separation = 12
 [node name="ResultTitleLabel" type="Label" parent="VBoxContainer" unique_id=176329148]
 layout_mode = 2
 text = "원정 결과"
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 38
 horizontal_alignment = 1
 
 [node name="ResultScroll" type="ScrollContainer" parent="VBoxContainer"]
@@ -31,7 +31,7 @@ theme_override_constants/separation = 20
 [node name="ResultInfoLabel" type="Label" parent="VBoxContainer/ResultScroll/ResultBody" unique_id=765125406]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 28
+theme_override_font_sizes/font_size = 38
 text = "결과"
 autowrap_mode = 3
 
@@ -42,5 +42,5 @@ theme_override_colors/font_color = Color(0.22, 0.13, 0.06, 1)
 theme_override_colors/font_hover_color = Color(0.22, 0.13, 0.06, 1)
 theme_override_colors/font_pressed_color = Color(0.22, 0.13, 0.06, 1)
 theme_override_colors/font_focus_color = Color(0.22, 0.13, 0.06, 1)
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 38
 text = "확인"

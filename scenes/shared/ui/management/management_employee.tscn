@@ -22,7 +22,7 @@ theme_override_constants/separation = 16
 
 [node name="Title" type="Label" parent="MainVBox"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 38
 text = "직원 관리"
 
 [node name="Tabs" type="HBoxContainer" parent="MainVBox"]

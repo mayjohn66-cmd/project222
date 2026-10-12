@@ -17,7 +17,7 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="VBoxContainer/TitleHBox" unique_id=1904538583]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_font_sizes/font_size = 34
+theme_override_font_sizes/font_size = 38
 text = "인벤토리"
 
 [node name="CloseButton" type="Button" parent="VBoxContainer/TitleHBox" unique_id=1784026870]

@@ -155,7 +155,7 @@ static func apply(theme: Theme) -> void:
 	theme.set_constant("close_h_offset","Window",28)
 	theme.set_constant("close_v_offset","Window",32)
 	theme.set_font("title_font","Window",UiTypography.FONT)
-	theme.set_font_size("title_font_size","Window",28)
+	theme.set_font_size("title_font_size","Window",UiTypography.DEFAULT_SIZE)
 	theme.set_icon("close","Window",ICONS["close"])
 	theme.set_icon("close_pressed","Window",ICONS["close"])
 	theme.set_icon("close","CloseAction",ICONS["close"])

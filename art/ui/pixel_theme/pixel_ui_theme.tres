@@ -1464,14 +1464,14 @@ texture_margin_bottom = 7.0
 
 [resource]
 default_font = ExtResource("font_silver")
-default_font_size = 28
+default_font_size = 38
 Button/colors/font_color = Color(0.2901961, 0.1882353, 0.14117648, 1)
 Button/colors/font_disabled_color = Color(0.39176473, 0.25411764, 0.19058825, 1)
 Button/colors/font_focus_color = Color(0.2901961, 0.1882353, 0.14117648, 1)
 Button/colors/font_hover_color = Color(0.2901961, 0.1882353, 0.14117648, 1)
 Button/colors/font_hover_pressed_color = Color(0.2901961, 0.1882353, 0.14117648, 1)
 Button/colors/font_pressed_color = Color(0.2901961, 0.1882353, 0.14117648, 1)
-Button/font_sizes/font_size = 28
+Button/font_sizes/font_size = 38
 Button/styles/disabled = SubResource("StyleBoxFlat_oe3qx")
 Button/styles/focus = SubResource("StyleBoxFlat_gdsh5")
 Button/styles/hover = SubResource("StyleBoxFlat_5glxv")
@@ -1776,7 +1776,7 @@ Window/constants/close_h_offset = 28
 Window/constants/close_v_offset = 32
 Window/constants/title_height = 40
 Window/constants/title_outline_size = 0
-Window/font_sizes/title_font_size = 28
+Window/font_sizes/title_font_size = 38
 Window/fonts/title_font = ExtResource("font_silver")
 Window/icons/close = ExtResource("15_qjgpw")
 Window/icons/close_pressed = ExtResource("15_qjgpw")
