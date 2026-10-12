@@ -111,10 +111,10 @@ func run() -> void:
 	check(view._ready_done, "actual main renderer ready")
 	check(view.floor_node.tile_width == 96 and view.floor_node.tile_height == 48, "logical coordinate grid preserved")
 	check(is_equal_approx(view.tile_low, 64.0), "native 64x32 display")
-	check(is_equal_approx(view.camera2d.zoom.x, 64.0 / 96.0), "2D and 3D share camera scale")
+	check(is_equal_approx(view.camera2d.zoom.x, StoreView3D.PLAY_ZOOM), "readable default play zoom independent of native texture size")
 	check(view._ground_material.shader == ReceivedWorldArt.FLOOR_SHADER, "shop floor uses supplied tiles")
 	var px := view._camera.unproject_position(Vector3(0.5,0.0,-0.5)).x - view._camera.unproject_position(Vector3(-0.5,0.0,0.5)).x
-	check(absf(px - 64.0) < 0.05, "one diamond is exactly 64 display pixels")
+	check(absf(px - 96.0*view.camera2d.zoom.x) < 0.05, "2D and rendered world use the same camera zoom")
 	for kind in ["tile","wood","grass","dirt","road","paving"]:
 		check(ReceivedWorldArt.floor_material(kind) != null, "three floor variants " + kind)
 		check_floor_variants(kind)
@@ -190,8 +190,9 @@ func run() -> void:
 		check(ReceivedWorldArt.nature(view,"nature_test",Vector2.ZERO,Vector2.ONE,{"style":"tree","variant":variant},"fixture"),"supplied nature " + variant)
 		check(view._items.nature_test["mesh"].position == view._items.nature_test["id_mesh"].position,"nature silhouette position " + variant)
 	view._remove_item("nature_test")
-	check(not ReceivedWorldArt.nature(view,"nature_test",Vector2.ZERO,Vector2.ONE,{"style":"tree","variant":"autumn"},"fixture"),"autumn leaf colors use seasonal model")
-	check(not ReceivedWorldArt.nature(view,"nature_test",Vector2.ZERO,Vector2.ONE,{"style":"flower_bush","variant":"berry"},"fixture"),"harvestable berry display preserved")
+	check(ReceivedWorldArt.nature(view,"nature_test",Vector2.ZERO,Vector2.ONE,{"style":"tree","variant":"autumn"},"fixture") and view._items.nature_test.nature_state == "autumn_orange","autumn uses its supplied seasonal sprite")
+	check(ReceivedWorldArt.nature(view,"nature_test",Vector2.ZERO,Vector2.ONE,{"style":"flower_bush","variant":"berry"},"fixture") and view._items.nature_test.nature_state == "berry_ready","harvestable berry uses its supplied ready sprite")
+	view._remove_item("nature_test")
 	for kind in view.village._ground:
 		if kind != "grass" or view.current_season() != "winter":
 			check(view.village._ground[kind].material.shader == ReceivedWorldArt.FLOOR_SHADER,"outside ground connected " + str(kind))

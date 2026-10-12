@@ -13,7 +13,7 @@ func run() -> void:
 	freeze(world)
 	world.get_node("UI").hide()
 	view.camera2d.global_position = view.cell_to_world(Vector2(4.5,3.5))
-	view.camera2d.zoom = Vector2.ONE*view.match_zoom*0.72
+	view.camera2d.zoom = Vector2.ONE*StoreView3D.PLAY_ZOOM
 	view.camera2d.reset_smoothing()
 	view.camera2d.force_update_scroll()
 	view._sync_camera()
