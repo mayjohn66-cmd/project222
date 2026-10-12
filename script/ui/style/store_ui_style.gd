@@ -108,6 +108,7 @@ static func theme() -> Theme:
 		return _theme
 
 	var t := Theme.new()
+	t.default_font = preload("res://art/fonts/Silver.ttf")
 	t.default_font_size = 18
 
 	for type in ["Label", "RichTextLabel", "CheckBox", "OptionButton", "ItemList", "LineEdit"]:

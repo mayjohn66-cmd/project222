@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dcisd008ss1n0" path="res://script/ui/common/menu/title_screen.gd" id="1_6d6rd"]
 [ext_resource type="Texture2D" path="res://art/ui/backgrounds/forest_shop_title.png" id="2_background"]
+[ext_resource type="Texture2D" path="res://art/ui/title/forest_beyond_store_logo.png" id="3_logo"]
 
 [node name="TitleScreen" type="Control" unique_id=1776288594]
 layout_mode = 3
@@ -41,29 +42,55 @@ size_flags_vertical = 3
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=1238172877]
 layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="TitleLogo" type="TextureRect" parent="CenterContainer/VBoxContainer"]
+custom_minimum_size = Vector2(440, 196)
+layout_mode = 2
+mouse_filter = 2
+texture_filter = 2
+texture = ExtResource("3_logo")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=766716976]
+visible = false
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.956863, 0.839216, 1)
 theme_override_colors/font_outline_color = Color(0.156863, 0.113725, 0.074510, 1)
 theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 30
-text = "편의점 게임"
+text = "숲너머 편의점"
+horizontal_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="CenterContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.239216, 0.152941, 0.101961, 1)
+theme_override_colors/font_outline_color = Color(1, 0.956863, 0.839216, 1)
+theme_override_constants/outline_size = 2
+theme_override_font_sizes/font_size = 24
+text = "낯선 세계에서 시작하는 작은 가게 이야기"
 horizontal_alignment = 1
 
 [node name="NewGameButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=504837553]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 28
 text = "새 게임"
 
 [node name="ContinueButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1007886096]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 28
 text = "이어하기"
 
 [node name="DeleteSaveButton" type="Button" parent="CenterContainer/VBoxContainer" unique_id=1307776234]
 custom_minimum_size = Vector2(240, 50)
 layout_mode = 2
+size_flags_horizontal = 4
+theme_override_font_sizes/font_size = 28
 text = "저장 기록 삭제"
 
 [node name="StatusLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1580178094]

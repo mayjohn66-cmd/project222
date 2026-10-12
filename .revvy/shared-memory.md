@@ -172,3 +172,5 @@ off.
 - 2026-10-12 Codex: 사용자 타이틀 연결 승인→후보 원본 동일SHA로 art/ui/backgrounds/forest_shop_title.png·import 추가, title_screen.tscn 배경 TextureRect 전체앵커/비율유지덮기/클릭무시·제목30px 외곽선. 격리GPU 실제1152×648/800×600·마우스새게임/이름창/취소22 실패0, import2 ERROR0. 받은그림/타이틀_배경/제작_기록.md 실행캡처. 폰트파일/테마·게임규칙·RC1 미변경; 사용자 Silver는 로컬 설정 유지.
 
 - 2026-10-12 Codex: 사용자 새이름후보→추천 숲너머 편의점 출력 요청, 내장 image_gen 1회 투명로고1881×836 RGBA 원본보존. 받은그림/타이틀_로고/제작_기록.md에 prompt/SHA/PNG디코딩/실제alpha검사·좌우패딩 한계 기록. 부제는 별도Label후속, 게임이름설정·art/실행연결·RC1 미변경.
+
+- 2026-10-12 Codex: 사용자 로고/폰트 미적용 지적→후보 원본 동일SHA art/ui/title/forest_beyond_store_logo.png 연결·중앙440×196/비율유지·부제·버튼240×50/Silver28px. 사용자 Downloads/Silver.ttf 원본포함(SHA5bbbcd90…)·공용테마/default_font와 StoreUiStyle·관리테마 상속·원정 fallback_font 하드지정 제거. TTF AA/hint/subpixel OFF·oversampling1·라이선스/배포README에 PoppyWorks 출처. 격리GPU93/전체로드912/원정HUD102 실패0·import2 ERROR0, 로고기록 실행캡처. 이전RC1 미재빌드, 시스템 설치 의존 제거·저장경로 유지 위해config/name 기존값.

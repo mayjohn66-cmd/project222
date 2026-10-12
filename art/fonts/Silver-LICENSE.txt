@@ -1,0 +1,14 @@
+Silver font attribution and license notice
+
+Silver by Poppy Works / Wolfgang Wozniak.
+Copyright notice embedded in the supplied font: 2019 Poppy Works.
+Major contributors named by the author: Itou Hiro (PixelMPlus), leedheo (DOSGothic), ぶち.
+Source and author licensing terms: https://poppyworks.itch.io/silver
+License stated by the author: Creative Commons Attribution 4.0 International (CC BY 4.0).
+License link: https://creativecommons.org/licenses/by/4.0/
+
+The font file supplied by the user was copied without modification.
+Official page checked on 2026-10-12. The author states that personal and
+commercial use is free with attribution, with a separate license required
+if production spending or earnings exceed USD 100,000, or for urgent support.
+See the source page for the full current terms and contact information.
