@@ -13,6 +13,7 @@ var elapsed := 0.0
 var story_panel: VillageStoryPanel
 var memory_panel: ResidentMemoryPanel
 var story_action: Dictionary = {}
+var visit_resident := ""   # 비어 있지 않으면 이 주민이 손님으로 와서 말을 거는 중이다(QuestVisitDirector). 거리·보이는지와 상관없이 이 주민이 대화 대상.
 var afterglow_action := ""
 
 func _ready() -> void:
@@ -146,8 +147,35 @@ func _blocked() -> bool:
 		or (editor != null and editor.active) or (story != null and story.talking) or (merchant != null and merchant.shopping) \
 		or (cashier != null and cashier.is_busy())
 
+# ---- 방문 감독(QuestVisitDirector)이 부르는 공통 API: visit_target / begin_visit / visit_busy ----
+func visit_target() -> Dictionary:
+	if talking: return {}
+	for entry in VillageLifeFlow.entries():
+		var id := str(entry["id"])
+		if visit_action(id).is_empty() or not QuestVisitDirector.can_visit("life:" + id): continue
+		return {"id": id, "key": "life:" + id, "name": str(VillageLifeFlow.resident(id).get("name", id)), "standing": residents.get(id)}
+	return {}
+
+func begin_visit(id: String) -> bool:
+	visit_resident = id
+	var ok := try_interact()
+	visit_resident = ""
+	return ok
+
+func visit_busy() -> bool:
+	return talking
+
+# 이 주민에게 지금 건넬 이야기(소개·부탁·전달·후일담). 단순 안부는 {}. 재촉·준비 중 단계는 방문 사유가 아니다.
+func visit_action(resident_id: String) -> Dictionary:
+	if not MarketAfterglowFlow.pending(resident_id).is_empty(): return {"stage": "afterglow", "flow": "afterglow"}
+	var action := _next_story_action(resident_id)
+	if action.is_empty() or str(action.get("stage", "")) in ["reminder", "preparing", "wait"]: return {}
+	return action
+
 func nearest() -> Dictionary:
 	if _blocked(): return {}
+	if not visit_resident.is_empty() and not VillageLifeFlow.resident(visit_resident).is_empty() and not talking:
+		return {"id": visit_resident, "name": str(VillageLifeFlow.resident(visit_resident)["name"])}
 	var best: Dictionary = {}
 	var distance: float = VillageLifeFlow.SETTINGS.interaction_distance
 	for id in residents:

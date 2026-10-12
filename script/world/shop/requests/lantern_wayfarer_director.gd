@@ -57,7 +57,23 @@ func refresh() -> void:
 	npc.title.text = LanternWayfarerFlow.SETTINGS.npc_name + " [E]\n" + ("다시 찾아온 길손" if state == "return" else "등불 곁에서 쉬는 중")
 	npc.title.show()
 
+# ---- 방문 감독 API ----
+var visit_force := false
+func visit_target() -> Dictionary:
+	if open or not is_instance_valid(npc) or not QuestVisitDirector.can_visit("lantern"): return {}
+	if not LanternWayfarerFlow.phase(manager.current_hour) in ["introduction", "supplies", "return"]: return {}
+	return {"id": "lantern_wayfarer", "key": "lantern", "name": LanternWayfarerFlow.SETTINGS.npc_name, "standing": npc}
+func begin_visit(_id: String) -> bool:
+	visit_force = true
+	var ok := try_interact()
+	visit_force = false
+	return ok
+func visit_busy() -> bool:
+	return open
 func near() -> bool:
+	if visit_force:
+		return not open and is_instance_valid(npc) and not npc.is_queued_for_deletion() \
+			and LanternWayfarerFlow.phase(manager.current_hour) in ["introduction", "supplies", "return"]
 	return not open and is_instance_valid(npc) and npc.visible and not npc.is_queued_for_deletion() \
 		and not get_parent().get_node("VillageLifeDirector")._blocked() \
 		and LanternWayfarerFlow.phase(manager.current_hour) in ["introduction", "supplies", "return"] \

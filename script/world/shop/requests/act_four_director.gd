@@ -71,6 +71,24 @@ func npc_for(role: String):
 		var merchant = world.get_node_or_null("SecretMerchantDirector")
 		return merchant.active_npc if merchant != null and is_instance_valid(merchant.active_npc) else null
 	return life.residents.get(role,visitors.get(role))
+# ---- 방문 감독 API ----
+var visit_role := ""
+func visit_target() -> Dictionary:
+	if talking or not ActFourFlow.started(): return {}
+	for entry in ActFourFlow.SETTINGS.events:
+		var current := ActFourFlow.step(str(entry["id"]))
+		var role := str(current.get("resident", ""))
+		if current.is_empty() or not ROLES.has(role) or not ActFourFlow.step_reason(str(entry["id"])).is_empty(): continue
+		if not QuestVisitDirector.can_visit("act4:" + role): continue
+		return {"id": role, "key": "act4:" + role, "name": str(ROLES[role]["name"]), "standing": visitors.get(role)}
+	return {}
+func begin_visit(role: String) -> bool:
+	visit_role = role
+	var ok := try_interact()
+	visit_role = ""
+	return ok
+func visit_busy() -> bool:
+	return talking
 func nearest() -> Dictionary:
 	if talking or not ActFourFlow.started() or world.get_node("WorldInteractions").blocked(): return {}
 	if player.in_production_room or player.in_warehouse_room or player.shelf_panel.visible or player.rumor_dialog.visible: return {}
@@ -87,8 +105,10 @@ func nearest() -> Dictionary:
 		if current.is_empty(): continue
 		var role := str(current["resident"])
 		var npc = npc_for(role)
-		if not is_instance_valid(npc) or not npc.visible or npc.is_queued_for_deletion() or player.global_position.distance_to(npc.global_position) > VillageLifeFlow.SETTINGS.interaction_distance: continue
-		if life.residents.has(role) and not VillageLifeFlow.greeted_today(role): continue
+		var forced: bool = not visit_role.is_empty() and role == visit_role
+		if not forced and (not is_instance_valid(npc) or not npc.visible or npc.is_queued_for_deletion() or player.global_position.distance_to(npc.global_position) > VillageLifeFlow.SETTINGS.interaction_distance): continue
+		if not forced and life.residents.has(role) and not VillageLifeFlow.greeted_today(role): continue
+		if not visit_role.is_empty() and role != visit_role: continue
 		current["reason"] = ActFourFlow.step_reason(str(entry["id"]))
 		# 구매 대기 중에는 준비 안내로 E를 가로채지 않고 기존 상인의 판매 창을 연다.
 		if role == "merchant" and current.get("map_purchase",false) and not str(current["reason"]).is_empty(): continue

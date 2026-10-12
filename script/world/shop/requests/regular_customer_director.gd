@@ -95,7 +95,43 @@ func _position(site: Node2D) -> Vector2:
 			query.transform = Transform2D(0,point)
 			if player.get_world_2d().direct_space_state.intersect_shape(query,1).is_empty(): return point
 	return Vector2.INF
+# ---- 방문 감독 API ----
+var visit_force := false
+func _pick_entry() -> Dictionary:
+	for stages in [["finish","after"],["intro","request"],["wait"]]:
+		for entry in story_flow.SETTINGS.events:
+			if story_flow.phase(str(entry["id"])) in stages and not _live_purchase(str(entry["id"])): return entry
+	return {}
+func visit_target() -> Dictionary:
+	if open: return {}
+	var entry := _pick_entry()
+	if entry.is_empty() or story_flow.phase(str(entry["id"])) == "wait": return {}   # 준비 중 재촉은 방문 사유가 아니다
+	if not QuestVisitDirector.can_visit("regular:" + str(entry["id"])): return {}
+	return {"id": str(entry["id"]), "key": "regular:" + str(entry["id"]), "name": CustomerTypeData.get_display_name(str(entry["type"])), "standing": npc if is_instance_valid(npc) and current_id == str(entry["id"]) else null}
+func begin_visit(id: String) -> bool:
+	if open: return false
+	var chosen: Dictionary = {}
+	for entry in story_flow.SETTINGS.events:
+		if str(entry["id"]) == id: chosen = entry
+	if chosen.is_empty(): return false
+	if not is_instance_valid(npc) or current_id != id:
+		_hide_visitor()
+		npc = VillageResident.new()
+		npc.resident_id = id
+		npc.customer_type_id = str(chosen["type"])
+		npc.customer_group_id = CustomerTypeData.get_group_id(npc.customer_type_id)
+		npc.name = "RegularCustomerVisitor"
+		world.get_node("Actors").add_child(npc)
+		npc.hide()
+		current_id = id
+	visit_force = true
+	var ok := try_interact()
+	visit_force = false
+	return ok
+func visit_busy() -> bool:
+	return open
 func near() -> bool:
+	if visit_force: return not open and is_instance_valid(npc) and not npc.is_queued_for_deletion()
 	return not open and is_instance_valid(npc) and npc.visible and not npc.is_queued_for_deletion() \
 		and not get_parent()._blocked() and player.global_position.distance_to(npc.global_position) <= story_flow.SETTINGS.interaction_distance
 func interaction_hint() -> String:

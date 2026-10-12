@@ -77,6 +77,26 @@ func all_present(current: Dictionary) -> bool:
 		var npc = npc_for(str(id))
 		if not is_instance_valid(npc) or not npc.visible or npc.is_queued_for_deletion() or npc.global_position.distance_to(site.global_position) > VillageExpansionFlow.SETTINGS.arrival_distance: return false
 	return true
+# ---- 방문 감독 API (모임 단계는 여럿이 한 장소에 모이는 이야기라 대상이 아니다) ----
+var visit_id := ""
+func visit_target() -> Dictionary:
+	if talking: return {}
+	for entry in VillageExpansionFlow.SETTINGS.events:
+		var id := str(entry["id"])
+		var current := VillageExpansionFlow.step(id)
+		if current.is_empty() or current.get("mode", "") == "gather": continue
+		if not VillageExpansionFlow.step_reason(id, manager.current_hour).is_empty(): continue
+		var resident := str(current["resident"])
+		if not QuestVisitDirector.can_visit("expansion:" + resident): continue
+		return {"id": resident, "key": "expansion:" + resident, "name": str(VillageLifeFlow.resident(resident).get("name", resident)), "standing": npc_for(resident)}
+	return {}
+func begin_visit(resident: String) -> bool:
+	visit_id = resident
+	var ok := try_interact()
+	visit_id = ""
+	return ok
+func visit_busy() -> bool:
+	return talking
 func nearest() -> Dictionary:
 	if talking or life._blocked(): return {}
 	var fallback: Dictionary = {}
@@ -91,8 +111,10 @@ func nearest() -> Dictionary:
 			if not all_present(current): reason = "이웃들이 모임 자리로 오고 있어요."
 		else:
 			var npc = npc_for(str(current["resident"]))
-			if not is_instance_valid(npc) or not npc.visible or npc.is_queued_for_deletion() or player.global_position.distance_to(npc.global_position) > VillageLifeFlow.SETTINGS.interaction_distance: continue
-			if VillageLifeFlow.available(VillageLifeFlow.resident(str(current["resident"]))) and not VillageLifeFlow.greeted_today(str(current["resident"])): continue
+			var forced: bool = not visit_id.is_empty() and str(current["resident"]) == visit_id
+			if not visit_id.is_empty() and not forced: continue
+			if not forced and (not is_instance_valid(npc) or not npc.visible or npc.is_queued_for_deletion() or player.global_position.distance_to(npc.global_position) > VillageLifeFlow.SETTINGS.interaction_distance): continue
+			if not forced and VillageLifeFlow.available(VillageLifeFlow.resident(str(current["resident"]))) and not VillageLifeFlow.greeted_today(str(current["resident"])): continue
 		current["reason"] = reason
 		if reason.is_empty(): return current
 		if fallback.is_empty(): fallback = current

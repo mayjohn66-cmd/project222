@@ -1,8 +1,14 @@
 class_name QuestVisitDirector
 extends Node
-## 주민 부탁을 NPC가 '손님으로 입장해' 계산대에서 건네게 한다(시험판: data/shop/requests/quest_visits.csv 의 부탁만).
-## 흐름: 개점 중 부탁 차례가 되면 그 NPC가 문으로 들어와 → 소개(부탁) 대사 → 부탁 수락 기록 → 실제 상품을 계산 → 필요한 물건 안내 → 퇴장.
-## 열 수 없는 때(영업 중 아님·진열 상품 없음·계산대 없음)는 아무 일도 하지 않는다. 그때는 기존 서 있는 NPC(ResidentRequestDirector)가 맡는다.
+## 부탁·이야기를 NPC가 '손님으로 입장해' 건네게 한다(대상은 data/shop/requests/quest_visits.csv).
+## 두 가지 출처를 같은 방식으로 다룬다.
+##  - request: 주민 부탁(ResidentRequestFlow). 문 앞에서 부탁 대사 → 수락 기록 → 실제 상품 계산 → 필요한 물건 안내 → 퇴장.
+##  - provider: 마을·길손 이야기를 맡은 감독들(VillageLifeDirector, 단골·원정 만남·날씨 인사, 마을 확장, 4막, 등불 길손).
+##    각 감독이 visit_target() / begin_visit(id) / visit_busy() 세 함수를 내놓으면, 이 감독이 그 주민을 문으로 들여보내
+##    대화를 그 감독의 원래 방식 그대로 열고(보상·기록도 원래대로), 끝나면 실제 상품을 계산하게 한다.
+## 흐름(공통): 개점 중 차례가 되면 문으로 들어옴 → 대화 → 진열 상품 계산 → 퇴장. 같은 이야기 대상은 하루에 한 번만 온다.
+## CSV 줄: `*` = 모든 주민 부탁 / `life:*`·`act4:*`·`expansion:*`·`regular:*`·`lantern` = 해당 감독 전부 (개별 id도 가능: `life:naru`)
+## 열 수 없는 때(영업 중 아님·진열 상품 없음·계산대 없음)는 아무 일도 하지 않는다. 그때는 기존 서 있는 NPC가 맡는다.
 ## 튜토리얼의 CheckoutTutorial 과 같은 안내 손님(CheckoutGuideCustomer)을 쓰되, 튜토리얼 코드는 건드리지 않는다.
 
 const CSV_PATH := "res://data/shop/requests/quest_visits.csv"
@@ -27,6 +33,12 @@ var previous_timer_paused: bool = false
 var previous_player_physics: bool = true
 var aborting: bool = false
 var elapsed: float = 0.0
+var kind: String = ""          # "request" | "provider"
+var provider: Node = null
+var pick: Dictionary = {}
+var pick_key: String = ""
+var talk_started: bool = false
+var hidden_npc: Node = null
 
 # ---- 대상 부탁 목록 ----
 static func ids() -> Array[String]:
@@ -41,17 +53,38 @@ static func ids() -> Array[String]:
 				if cells.size() >= 1 and not cells[0].strip_edges().is_empty(): _ids.append(cells[0].strip_edges())
 	return _ids
 
+static func covers_request(id: String) -> bool:
+	return ids().has("*") or ids().has(id)
+
+static func covers_life(id: String) -> bool:
+	return ids().has("life:*") or ids().has("life:" + id)
+
+static var _visited: Dictionary = {}   # "life:naru" 같은 키 -> 마지막으로 온 날
+
+# 이 이야기 대상(키 "종류:id")을 손님 입장으로 건네도 되는가: CSV에 있고, 오늘 아직 안 왔다.
+static func can_visit(key: String) -> bool:
+	var group := key.get_slice(":", 0)
+	if not (ids().has(key) or ids().has(group + ":*") or ids().has(group)): return false
+	return int(_visited.get(key, -1)) != GameState.total_day
+
+static func mark_visited(key: String) -> void:
+	_visited[key] = GameState.total_day
+
 # 지금 차례인 부탁이 '손님 입장'으로 건네야 하는 것이면 그 부탁을, 아니면 {}.
 static func pending_request() -> Dictionary:
 	var current := ResidentRequestFlow.current()
 	if current.is_empty() or ResidentRequestFlow.accepted(str(current["id"])): return {}
-	if not ids().has(str(current["id"])): return {}
+	if not covers_request(str(current["id"])): return {}
 	if not ResidentStoryFlow.pending_introduction().is_empty(): return {} # 새 손님 소개가 먼저다
 	return current
 
 # 서 있는 NPC를 숨겨야 하나: 영업 중이라 손님으로 올 수 있을 때만 숨긴다. 영업 전·후에는 기존 NPC가 대체한다.
 static func replaces_standing_npc(world: Node) -> bool:
-	if pending_request().is_empty(): return false
+	var wanted := pending_request()
+	if wanted.is_empty(): return false
+	# 오늘 이미 왔다 갔는데 부탁이 그대로면(중단됨) 서 있는 NPC가 맡는다.
+	var director = world.get_node_or_null("QuestVisitDirector")
+	if int(_visited.get("request:" + str(wanted["id"]), -1)) == GameState.total_day and (director == null or not is_instance_valid(director.guide)): return false
 	var manager = world.get_node_or_null("DayManager")
 	return manager != null and bool(manager.shop_open) and not bool(manager.closing_shop)
 
@@ -67,6 +100,9 @@ func _ready() -> void:
 	manager.shop_opened.connect(try_start)
 
 func _process(delta: float) -> void:
+	if is_instance_valid(guide) and kind == "provider" and stage == "intro" and talk_started:
+		if not is_instance_valid(provider) or not provider.visit_busy(): _talk_done()
+		return
 	if is_instance_valid(guide):
 		if not manager.shop_open or manager.closing_shop or guide.force_exit_requested \
 				or not is_instance_valid(guide_register) or guide_register.is_queued_for_deletion():
@@ -86,7 +122,9 @@ func _process(delta: float) -> void:
 func try_start() -> void:
 	if is_instance_valid(guide): return
 	var wanted := pending_request()
-	if wanted.is_empty(): return
+	if not wanted.is_empty() and int(_visited.get("request:" + str(wanted["id"]), -1)) == GameState.total_day: wanted = {}   # 오늘 이미 왔다 갔다(중단됐으면 서 있는 NPC가 맡는다)
+	var provider_pick: Dictionary = {} if not wanted.is_empty() else _provider_pick()
+	if wanted.is_empty() and provider_pick.is_empty(): return
 	var world := get_parent()
 	var tutorial = world.get_node_or_null("TutorialDirector")
 	if tutorial != null and tutorial.enabled and tutorial.is_guiding(): return
@@ -128,18 +166,70 @@ func try_start() -> void:
 			break
 		if is_instance_valid(guide_register): break
 	if not is_instance_valid(guide_register): return
+	kind = "request" if not wanted.is_empty() else "provider"
+	if kind == "request": mark_visited("request:" + str(wanted["id"]))
 	request = wanted
+	pick = provider_pick
+	provider = pick.get("provider")
+	talk_started = false
 	guide = GUIDE_SCENE.instantiate()
 	guide.guide_register = guide_register
 	guide.guide_item_id = items[0]
 	world.get_node("Actors").add_child(guide)
-	_relabel(guide, str(request["npc"]))
+	_relabel(guide, str(request["npc"]) if kind == "request" else str(pick["name"]))
 	guide.global_position = door.get_customer_target_position()
 	stage = "intro"
 	manager.customer_spawner.process_mode = Node.PROCESS_MODE_DISABLED
-	_show_dialogue(_lines("lines"))
+	if kind == "request":
+		_show_dialogue(_lines("lines"))
+	else:
+		_begin_provider_talk()
 
-# 안내 손님이 만든 이름표(마지막 Label)를 부탁한 사람 이름으로 바꾼다.
+# ---- 이야기를 맡은 감독들(provider) ----
+func _providers() -> Array[Node]:
+	var result: Array[Node] = []
+	var life = get_parent().get_node_or_null("VillageLifeDirector")
+	if life != null:
+		result.append(life)
+		for child in life.get_children():
+			if child.has_method("visit_target"): result.append(child)
+	var lantern = get_parent().get_node_or_null("LanternWayfarerDirector")
+	if lantern != null: result.append(lantern)
+	return result
+
+# 지금 건넬 이야기가 있는 첫 감독과 그 대상.
+func _provider_pick() -> Dictionary:
+	for node in _providers():
+		if not node.has_method("visit_target") or node.visit_busy(): continue
+		var target: Dictionary = node.visit_target()
+		if target.is_empty(): continue
+		target["provider"] = node
+		return target
+	return {}
+
+func _begin_provider_talk() -> void:
+	if not is_instance_valid(provider): _abort(); return
+	mark_visited(str(pick.get("key", "")))
+	var standing = pick.get("standing")
+	if is_instance_valid(standing) and standing.visible:
+		standing.hide()          # 같은 사람이 마을에도 서 있으면 겹치므로 방문 동안 감춘다
+		hidden_npc = standing
+	talk_started = provider.begin_visit(str(pick["id"]))
+	if not talk_started: _abort()
+
+func _talk_done() -> void:
+	talk_started = false
+	_show_hidden_resident()
+	if not is_instance_valid(guide): return
+	if guide.prepare_practice_checkout(customer_cell):
+		stage = "checkout"
+	else:
+		_abort()
+
+func _show_hidden_resident() -> void:
+	if is_instance_valid(hidden_npc): hidden_npc.show()
+	hidden_npc = null
+
 func _relabel(customer: Node, npc_name: String) -> void:
 	for child in customer.get_children():
 		if child is Label and child.text == TutorialDirector.SETTINGS.guide_name: child.text = npc_name
@@ -194,6 +284,12 @@ func _on_dialogue_finished() -> void:
 
 func _on_checkout_completed(customer, _amount: int) -> void:
 	if customer != guide: return
+	if kind == "provider":
+		guide.go_to_exit()
+		_release()
+		guide = null
+		stage = ""
+		return
 	stage = "finished"
 	_show_dialogue(_hint_lines())
 
@@ -215,6 +311,8 @@ func _release() -> void:
 
 func _abort() -> void:
 	aborting = true
+	talk_started = false
+	_show_hidden_resident()
 	if dialogue.open: dialogue.close()
 	_restore_dialogue_state()
 	if is_instance_valid(guide_register) and guide_register.get_waiting_customer() == guide:
@@ -227,5 +325,6 @@ func _abort() -> void:
 	aborting = false
 
 func _exit_tree() -> void:
+	_show_hidden_resident()
 	_restore_dialogue_state()
 	_release()
