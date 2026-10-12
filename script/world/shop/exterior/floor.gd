@@ -296,7 +296,7 @@ func _refresh_wood_walls(boundary: StaticBody2D) -> void:
 	if not is_instance_valid(boundary): return
 	var walls = get_parent().get_node_or_null("WoodWalls")
 	if walls == null:
-		walls = preload("res://script/world/shop/wood_walls.gd").new()
+		walls = preload("res://script/world/shop/exterior/wood_walls.gd").new()
 		walls.name = "WoodWalls"
 		get_parent().add_child(walls)
 	walls.global_position = global_position

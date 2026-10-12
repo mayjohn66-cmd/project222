@@ -1255,7 +1255,7 @@ func toggle_shop_at_door() -> String:
 	return "가게를 열었습니다. 손님을 맞이하세요."
 
 func _install_world_interactions() -> void:
-	var interaction = preload("res://script/world/shop/world_interactions.gd").new()
+	var interaction = preload("res://script/world/shop/operation/world_interactions.gd").new()
 	interaction.name = "WorldInteractions"
 	get_parent().add_child(interaction)
 	var fishing = preload("res://script/world/shop/fishing/fishing_director.gd").new()

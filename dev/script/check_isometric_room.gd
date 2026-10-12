@@ -10,7 +10,7 @@ func check(ok: bool, caption: String) -> void:
 		push_error(caption)
 
 func _ready() -> void:
-	var floor_node = load("res://script/world/shop/floor.gd").new()
+	var floor_node = load("res://script/world/shop/exterior/floor.gd").new()
 	for cell in [Vector2i.ZERO, Vector2i(3, 4), Vector2i(7, 7)]:
 		var at: Vector2 = floor_node.grid_to_local(cell)
 		check(at.is_equal_approx(GRID.project(Vector2(cell), Vector2(96, 48))), "same shop tile position " + str(cell))

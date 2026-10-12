@@ -1,7 +1,7 @@
 @tool
 class_name StoreExterior
 extends Node2D
-const TILE_GRID_OVERLAY = preload("res://script/world/shop/tile_grid_overlay.gd")
+const TILE_GRID_OVERLAY = preload("res://script/world/shop/exterior/tile_grid_overlay.gd")
 const VILLAGE_LAYOUT_PATH := "res://data/village_map_layout.json"
 const VILLAGE_LAYOUT_FALLBACK := GameConfig.VILLAGE_LAYOUT_USER_PATH
 
@@ -1268,55 +1268,55 @@ func _refresh_dungeon_wall() -> void:
 	var world := get_parent()
 	var wall = world.get_node_or_null("DungeonWall")
 	if wall == null:
-		wall = preload("res://script/world/shop/dungeon_wall.gd").new()
+		wall = preload("res://script/world/shop/exterior/dungeon_wall.gd").new()
 		wall.name = "DungeonWall"
 		world.add_child(wall)
 	wall.rebuild(self)
 	var roadside = world.get_node_or_null("DungeonRoadside")
 	if roadside == null:
-		roadside = preload("res://script/world/shop/dungeon_roadside.gd").new()
+		roadside = preload("res://script/world/shop/exterior/dungeon_roadside.gd").new()
 		roadside.name = "DungeonRoadside"
 		world.add_child(roadside)
 	roadside.rebuild(self)
 	var houses = world.get_node_or_null("NearbyHouses")
 	if houses == null:
-		houses = preload("res://script/world/shop/nearby_houses.gd").new()
+		houses = preload("res://script/world/shop/village/nearby_houses.gd").new()
 		houses.name = "NearbyHouses"
 		world.add_child(houses)
 	houses.rebuild(self)
 	var extra_houses = world.get_node_or_null("VillageExtraHouses")
 	if extra_houses == null:
-		extra_houses = preload("res://script/world/shop/village_extra_houses.gd").new()
+		extra_houses = preload("res://script/world/shop/village/village_extra_houses.gd").new()
 		extra_houses.name = "VillageExtraHouses"
 		world.add_child(extra_houses)
 	extra_houses.rebuild(self)
 	var smithy = world.get_node_or_null("VillageBlacksmith")
 	if smithy == null:
-		smithy = preload("res://script/world/shop/village_blacksmith.gd").new()
+		smithy = preload("res://script/world/shop/village/village_blacksmith.gd").new()
 		smithy.name = "VillageBlacksmith"
 		world.add_child(smithy)
 	smithy.rebuild(self)
 	var tool_shop = world.get_node_or_null("VillageToolShop")
 	if tool_shop == null:
-		tool_shop = preload("res://script/world/shop/village_tool_shop.gd").new()
+		tool_shop = preload("res://script/world/shop/village/village_tool_shop.gd").new()
 		tool_shop.name = "VillageToolShop"
 		world.add_child(tool_shop)
 	tool_shop.rebuild(self)
 	var buildings = world.get_node_or_null("VillageBuildings")
 	if buildings == null:
-		buildings = preload("res://script/world/shop/village_buildings.gd").new()
+		buildings = preload("res://script/world/shop/village/village_buildings.gd").new()
 		buildings.name = "VillageBuildings"
 		world.add_child(buildings)
 	buildings.rebuild(self)
 	var decor = world.get_node_or_null("VillageDecor")
 	if decor == null:
-		decor = preload("res://script/world/shop/village_decor.gd").new()
+		decor = preload("res://script/world/shop/village/village_decor.gd").new()
 		decor.name = "VillageDecor"
 		world.add_child(decor)
 	decor.rebuild(self)
 	var gathering = world.get_node_or_null("VillageGathering")
 	if gathering == null:
-		gathering = preload("res://script/world/shop/village_gathering.gd").new()
+		gathering = preload("res://script/world/shop/village/village_gathering.gd").new()
 		gathering.name = "VillageGathering"
 		world.add_child(gathering)
 	gathering.rebuild(self)

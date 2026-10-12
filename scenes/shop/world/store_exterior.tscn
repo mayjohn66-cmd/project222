@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bfwxor261s6is"]
 
-[ext_resource type="Script" uid="uid://bxahgeub2hsw1" path="res://script/world/shop/store_exterior.gd" id="1_t8uxu"]
+[ext_resource type="Script" uid="uid://bxahgeub2hsw1" path="res://script/world/shop/exterior/store_exterior.gd" id="1_t8uxu"]
 
 [node name="StoreExterior" type="Node2D" unique_id=303048049]
 z_index = -20
