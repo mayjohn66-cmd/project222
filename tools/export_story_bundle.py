@@ -1,6 +1,7 @@
 """스토리 전체를 파일 하나로 묶는다(제미나이 웹에 통째로 올려 분석시키는 용도).
 
-실행: python tools/export_story_bundle.py   → docs/스토리/분석용_묶음.md
+실행: python tools/export_story_bundle.py [출력경로] [요청문파일]   → 기본 docs/스토리/분석용_묶음.md
+  요청문파일(.md/.txt)을 주면 맨 위의 "분석 요청" 대신 그 글을 넣는다(예: 스토리보드 새로 쓰기 요청). 자료 부분은 항상 최신 데이터로 다시 만든다.
 묶는 것: 요청 프롬프트 + 전체 정리 + 세계관 + 인물 설정 + 4막 흐름 + 모든 글(막·사건 순서)과 이웃 이야기(story_beats).
 """
 import csv, sys
@@ -25,6 +26,9 @@ PROMPT = """# 스토리 일관성 분석 요청
 
 ---
 """
+
+if len(sys.argv) > 2:
+    PROMPT = Path(sys.argv[2]).read_text(encoding="utf-8").strip() + "\n\n---\n"
 
 def read(p):
     return (root / p).read_text(encoding="utf-8").strip()
