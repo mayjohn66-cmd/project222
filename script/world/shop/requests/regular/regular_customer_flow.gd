@@ -1,6 +1,6 @@
 class_name RegularCustomerFlow
 extends RefCounted
-const RECORDS = preload("res://script/world/shop/requests/regular_customer_records.gd")
+const RECORDS = preload("res://script/world/shop/requests/regular/regular_customer_records.gd")
 const SETTINGS = RECORDS.SETTINGS
 const JOURNAL_PREFIX := "regular:"
 static func title(id: String) -> String: return RequestTextData.text("service_text",id + "_intro","title",id)

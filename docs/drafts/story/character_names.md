@@ -29,4 +29,4 @@
 
 ## 바꿀 곳
 - **Claude(`feature/story-script`)**: `data/shop/requests/requests_text.csv`의 글(인사·소개·부탁), `world_setting.md`.
-- **ChatGPT**: `scenes/shop/requests/default_village_life.tres`, `default_resident_story.tres`, `default_resident_requests.tres`, `default_resident_trade.tres`(표시 이름 `name`/`npc` 값), `script/ui/shop/village_smithy_panel.gd`, `script/world/shop/requests/village_smithy_director.gd`, 튜토리얼 안내 인물 표시 이름. id는 바꾸지 않는다.
+- **ChatGPT**: `scenes/shop/requests/default_village_life.tres`, `default_resident_story.tres`, `default_resident_requests.tres`, `default_resident_trade.tres`(표시 이름 `name`/`npc` 값), `script/ui/shop/village_smithy_panel.gd`, `script/world/shop/requests/village/village_smithy_director.gd`, 튜토리얼 안내 인물 표시 이름. id는 바꾸지 않는다.

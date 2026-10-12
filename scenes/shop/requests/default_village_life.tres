@@ -1,5 +1,5 @@
 [gd_resource type="Resource" script_class="VillageLifeSettings" load_steps=2 format=3]
-[ext_resource type="Script" path="res://script/world/shop/requests/village_life_settings.gd" id="1"]
+[ext_resource type="Script" path="res://script/world/shop/requests/village/village_life_settings.gd" id="1"]
 [resource]
 script = ExtResource("1")
 well_item = "raw_water"

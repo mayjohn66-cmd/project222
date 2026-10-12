@@ -8,9 +8,9 @@
   "source_files": [
     "scenes/shop/requests/default_community_requests.tres",
     "scenes/shop/requests/default_village_life.tres",
-    "script/world/shop/requests/community_request_flow.gd",
-    "script/world/shop/requests/village_smithy_flow.gd",
-    "script/world/shop/requests/village_smithy_director.gd",
+    "script/world/shop/requests/resident/community_request_flow.gd",
+    "script/world/shop/requests/village/village_smithy_flow.gd",
+    "script/world/shop/requests/village/village_smithy_director.gd",
     "script/ui/shop/village_smithy_panel.gd",
     "script/expedition/services/equipment_enhancement_service.gd",
     "script/expedition/services/expedition_result_service.gd",

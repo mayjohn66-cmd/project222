@@ -5,7 +5,7 @@ const ENABLED := true
 const ACTION_PREFIX := "supply:"
 
 static func available() -> bool:
-	var life = load("res://script/world/shop/requests/village_life_flow.gd")
+	var life = load("res://script/world/shop/requests/village/village_life_flow.gd")
 	return ENABLED and life.available(life.resident("naru")) and life.friendship("naru") >= 1
 
 static func items() -> Array[String]:
@@ -50,6 +50,6 @@ static func next_step() -> String:
 	if not ENABLED or ResidentRequestFlow.done("traveler_water") or not ResidentRequestFlow.done("neighbor_bread") or not ResidentRequestFlow.done("gatherer_herbs"): return ""
 	if not ResidentStoryFlow.introduction_read("peddler"): return "가게를 열어 행상인 타블렌을 만나세요. 채집 도구를 구할 길을 먼저 마련합니다."
 	if not ResidentRequestFlow.done("settle_naru"): return "타블렌의 부탁으로 노점 자리를 마련하세요."
-	var life = load("res://script/world/shop/requests/village_life_flow.gd")
+	var life = load("res://script/world/shop/requests/village/village_life_flow.gd")
 	if life.friendship("naru") < 1: return "노점에 있는 타블렌에게 안부를 나눈 뒤 도구를 살펴보세요. [E]"
 	return "타블렌의 노점 [E] → 채집용 물병 구매 → 원정 가방에 넣기. 도구를 준비하면 라슈가 물을 부탁합니다."

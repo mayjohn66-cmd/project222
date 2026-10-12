@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="ResidentRequestSettings" format=3 uid="uid://bfhosd52avs7m"]
 
-[ext_resource type="Script" uid="uid://dncggypsj5jo1" path="res://script/world/shop/requests/resident_request_settings.gd" id="1"]
+[ext_resource type="Script" uid="uid://dncggypsj5jo1" path="res://script/world/shop/requests/resident/resident_request_settings.gd" id="1"]
 
 [resource]
 script = ExtResource("1")

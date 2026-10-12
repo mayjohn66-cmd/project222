@@ -2,7 +2,7 @@ extends "res://dev/script/check_market_afterglow.gd"
 # Prior tutorial/settlement history and interaction approach positions are fixtures.
 # Return settlement, actual board/book buttons, E/Esc, dialogue completion and
 # exact consumption/rewards run through production code. No user save is touched.
-const F = preload("res://script/world/shop/requests/village_expansion_flow.gd")
+const F = preload("res://script/world/shop/requests/village/village_expansion_flow.gd")
 
 func key(code: Key) -> void:
 	for pressed in [true,false]:

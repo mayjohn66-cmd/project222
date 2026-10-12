@@ -1,5 +1,5 @@
 extends Node
-const F = preload("res://script/world/shop/requests/act_four_flow.gd")
+const F = preload("res://script/world/shop/requests/act_four/act_four_flow.gd")
 const ResultService = preload("res://script/expedition/services/expedition_result_service.gd")
 const Tools = preload("res://dev/gemini/request_text_tools.gd")
 var checks := 0

@@ -1,4 +1,13 @@
-# requests/ — 이야기·부탁 엔진 (73개)
+# requests/ — 이야기·부탁 엔진 (73개, 2026-10-12 5개 폴더로 분류)
+
+```
+requests/
+├─ resident/  (20)  # 주민 부탁·교환 노점·기억·마을 부탁 게시판·제작 배우기·개인 부탁·초반 안내
+├─ village/   (33)  # 마을 이야기: village_* · lantern_wayfarer_* · market_afterglow_*
+├─ regular/   (13)  # 단골·날씨·계절·매장 행사 후속
+├─ act_four/   (6)  # 4막
+└─ visit/      (1)  # 손님 입장 방식
+```
 
 한 이야기는 보통 파일 3개다: **`_director`**(화면·입력) + **`_flow`**(진행 규칙·기록) + **`_settings`**(수치). 구조·조건은 `scenes/shop/requests/default_*.tres`, 대사는 `data/shop/requests/requests_text.csv`.
 

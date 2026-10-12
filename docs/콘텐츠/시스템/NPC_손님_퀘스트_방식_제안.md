@@ -70,7 +70,7 @@
 | 입장 못 할 때(3번) | **서 있는 NPC가 대체**. 영업 전·후나 진열 상품·계산대·문이 없으면 기존 NPC가 그대로 말을 건다. 영업 중에는 서 있는 NPC가 사라지고 손님으로 온다 |
 | 전달·보고(4번) | 그대로(수락된 부탁은 서 있는 NPC에게 `[E]`로 전달). 이번 시험 범위 밖 |
 
-**새 파일**: `script/world/shop/requests/quest_visit_director.gd`(`QuestVisitDirector`, 월드 씬 `main.tscn`에 노드 추가), `data/shop/requests/quest_visits.csv`, 테스트 `dev/script/check_quest_visit.gd`. **바꾼 파일**: `resident_request_director.gd`(영업 중에는 서 있는 NPC를 치우는 7줄). 튜토리얼 코드(`CheckoutTutorial`)와 `customer.gd`는 건드리지 않았다. 안내 손님(`CheckoutGuideCustomer`)을 그대로 쓴다.
+**새 파일**: `script/world/shop/requests/visit/quest_visit_director.gd`(`QuestVisitDirector`, 월드 씬 `main.tscn`에 노드 추가), `data/shop/requests/quest_visits.csv`, 테스트 `dev/script/check_quest_visit.gd`. **바꾼 파일**: `resident_request_director.gd`(영업 중에는 서 있는 NPC를 치우는 7줄). 튜토리얼 코드(`CheckoutTutorial`)와 `customer.gd`는 건드리지 않았다. 안내 손님(`CheckoutGuideCustomer`)을 그대로 쓴다.
 
 **알려진 한계**
 - 안내 손님 모습은 튜토리얼 델빈과 같은 "마을 사람" 모양이고, 이름표만 오렐로 바꿨다. NPC별 겉모습은 아직 아니다.

@@ -1,5 +1,5 @@
 extends Node
-const F = preload("res://script/world/shop/requests/village_expansion_flow.gd")
+const F = preload("res://script/world/shop/requests/village/village_expansion_flow.gd")
 const Tools = preload("res://dev/gemini/request_text_tools.gd")
 var checks := 0
 var failures := 0
