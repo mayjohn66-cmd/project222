@@ -1,0 +1,21 @@
+store_raid_bought	service_text			상비약 챙겼다. 동료들 짐에도 나눠 넣어야지.	
+store_raid_closing	service_text			깊은 숲에 갈 사람들 채비가 오늘이면 마무리된다.|끝내 상비약을 못 구한 이도 있겠지.	
+store_raid_finished	service_text			깊은 숲으로 향할 이들의 준비 기간이 지났다.|상비약을 챙기러 왔던 발걸음을 영업 기록에 남겼다.	
+store_raid_missing	service_text			상비약이 안 보이네. 출발 전에 챙겨야 하는데.	
+store_raid_ongoing	service_text			깊은 숲으로 향할 사람들이 아직 짐을 챙기고 있다.|가방에 넣어 둘 상비약을 찾는 발걸음이 이어진다.	
+store_raid_rumor	service_text			험한 숲으로 들어갈 사람들이 길에서 모인다더라.|가시에 긁히거나 다칠 때 쓸 상비약을 챙긴대.|길 떠나기 전에 가게도 들르겠지.	
+smith_heard_naru	service_text			광석까지 챙겨 왔네. 장비도 꽤 손에 익었겠다.|코르빈이 이런 도구를 잘 볼 줄 알지. 한번 살펴봐 달라고 해.	
+act4_a2_intro	service_text			표지를 따라왔더니 정말 불 켜진 가게가 있네.|수레를 잠깐 세워 두겠네. 길에 챙길 만한 물건이 있는지 좀 둘러보지.	
+act4_a2_sale	service_text			고개를 넘기 전에 마실 물과 열매를 여기서 챙겼네.|수레를 끄는 동행들한테도 여기 얘기를 해 두지.	
+act4_a2_finish	service_text			어제 챙긴 물건 덕에 거친 고개를 한결 편하게 넘었네.|이 길을 다시 지날 땐 수레를 여길 거쳐 가도록 하지.	
+act4_a5_intro	service_text			다음 여정에도 여기서 만든 먹거리를 싣고 가고 싶군.|들를 때마다 꾸러미를 맡겨도 되겠나? 값은 제대로 치름세.	
+act4_a5_delivery	service_text			꾸러미 받아 가네. 야영지에서 다들 기다리고 있거든.|매듭까지 단단하군. 이번에도 고맙네.	
+act4_a5_finish	service_text			야영지에서 다들 남김없이 먹었네. 값은 여기 치름세.|다음 여정 때도 꾸러미 부탁하네.	
+store_lanterns_rumor	service_text			저녁을 차분히 보내려고 물건을 고르는 이웃이 꽤 있어.|발광 등불을 하나 두고 갈대 차도 곁들이고 싶어 하더군.|해가 진 뒤에도 좋아하는 일을 조금씩 할 수 있겠지.	
+store_lunch_rumor	service_text			봄길을 천천히 걸어 보려는 이웃들이 꽤 있네.|주머니에 쏙 들어가는 약초 빵이나 말린 열매를 찾더라고.|한입 먹고 다시 걸을 수 있는 간식이 편하겠지.	
+store_market_rumor	service_text			곧 봄 장터라서 다들 나들이 준비로 바쁘네.|함께 먹을 빵이랑 열매 주스를 챙겨 가는 모양이야.|나눠 먹을 몫까지 가게에서 사 가려는 발걸음이 보여.	
+store_summer_rumor	service_text			이웃들이 길목에서 잠시 머물며 쉰다고 하네.|마실 물이랑 열매 주스도 가게에서 챙겨 간다더군.|잠깐 앉아 이야기할 때도 마실 게 있으면 좋잖아.	
+store_teatime_rumor	service_text			물소리를 들으며 오후를 보내려는 사람들이 많아졌어.|미네랄 워터나 갈대 차를 가져가고 싶어 하더라고.|꼭 바삐 움직이지 않아도 좋은 오후가 있지.	
+store_thanks_rumor	service_text			도움을 받았던 이웃에게 고마움을 전하려는 발걸음이 보여.|말린 열매 한 봉지나 은 펜던트를 골라 보려나 봐.|거창하지 않아도 마음을 담을 수 있잖아.	
+store_trail_rumor	service_text			머지않아 다시 길을 나서는 여행자들이 늘었네.|보따리에 넣을 빵과 물을 여기서 챙기고 싶어 해.|출발 전에 잠깐 들를 수 있는 가게가 반갑겠지.	
+store_winter_rumor	service_text			긴 저녁길을 나설 채비를 하는 이웃들이 꽤 있네.|약초 음료랑 손난로가 가게에 있는지 찾아보더라고.|집에 돌아가는 길에도 작은 온기가 반갑겠지.	
