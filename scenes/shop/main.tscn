@@ -20,6 +20,7 @@
 [ext_resource type="Script" path="res://script/world/shop/checkout_tutorial.gd" id="22_checkout_tutorial"]
 [ext_resource type="Script" path="res://script/world/shop/tutorial/tutorial_director.gd" id="23_tutorial"]
 [ext_resource type="Script" path="res://script/world/shop/requests/resident_request_director.gd" id="24_requests"]
+[ext_resource type="Script" path="res://script/world/shop/requests/quest_visit_director.gd" id="24b_quest_visit"]
 [ext_resource type="Script" path="res://script/world/shop/requests/village_settlement.gd" id="25_settlement"]
 [ext_resource type="Script" path="res://script/world/shop/requests/village_life_director.gd" id="26_life"]
 [ext_resource type="Script" path="res://script/world/shop/requests/community_board_director.gd" id="27_board"]
@@ -102,6 +103,9 @@ script = ExtResource("23_tutorial")
 
 [node name="ResidentRequestDirector" type="Node" parent="."]
 script = ExtResource("24_requests")
+
+[node name="QuestVisitDirector" type="Node" parent="."]
+script = ExtResource("24b_quest_visit")
 
 [node name="VillageSettlement" type="Node" parent="."]
 script = ExtResource("25_settlement")

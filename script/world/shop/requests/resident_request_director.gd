@@ -40,6 +40,11 @@ func refresh() -> void:
 	if not landmark.is_empty(): objective += "\n함께 만들 곳: " + landmark
 	panel.display("주민 부탁 · " + str(request["title"]) + "\n마을 평판 %d" % ResidentRequestFlow.reputation(), objective)
 	panel.root.visible = SHOW_LEFT_PANEL and not talking and not _blocked()
+	# 시험판: 영업 중에는 이 부탁을 NPC가 손님으로 입장해 건넨다(QuestVisitDirector). 서 있는 NPC는 영업 전·후에만 대신한다.
+	if not talking and QuestVisitDirector.replaces_standing_npc(get_parent()):
+		if is_instance_valid(npc): npc.leave()
+		npc = null
+		return
 	if talking or _blocked(): return
 	_prepare_npc(str(request["id"]), str(request["npc"]), request["lines"])
 
