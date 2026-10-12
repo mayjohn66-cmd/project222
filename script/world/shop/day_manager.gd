@@ -836,7 +836,7 @@ func _commit_expedition_scene_change() -> void:
 		expedition_transition_pending = false
 		GameState.remove_meta("shop_expedition_prep")
 		var interactions = get_parent().get_node_or_null("WorldInteractions")
-		if interactions: interactions.show_message("던전 장면을 불러오지 못했습니다. 다시 시도해주세요.")
+		if interactions: interactions.show_message("원정 장면을 불러오지 못했습니다. 다시 시도해주세요.")
 		push_error(
 			"[원정] 씬 전환에 실패했습니다: "
 			+ str(scene_error)

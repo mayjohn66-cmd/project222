@@ -1,5 +1,5 @@
 event_id,title,discovery_start_day,discovery_end_day,start_day,end_day,rumor_customer_type_id,dialogue_id,description,event_kind,season_id,repeat_days
-dungeon_raid,대규모 던전 공략,2,3,4,6,traveler,dungeon_raid_rumor,모험가들이 공략을 준비하며 동료 몫의 포션을 찾습니다.,common,,28
+dungeon_raid,깊은 숲 원정 채비,2,3,4,6,traveler,dungeon_raid_rumor,모험가들이 깊은 숲으로 떠날 채비를 하며 동료 몫의 상비약을 찾습니다.,common,,28
 spring_market,봄맞이 장터,8,12,15,19,any,spring_market_rumor,이웃들이 봄 장터에 나눠 먹을 빵과 열매 주스를 챙깁니다.,seasonal,spring,0
 trail_supplies,길손들의 여행 준비,18,21,22,24,any,trail_supplies_rumor,길손들이 보따리에 넣을 빵과 물을 찾습니다.,common,,28
 summer_cool_break,여름 길목의 쉼,4,7,8,12,any,summer_cool_break_rumor,잠깐 쉬어 가려는 이웃들이 물과 열매 주스를 챙깁니다.,seasonal,summer,0

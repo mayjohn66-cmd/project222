@@ -168,7 +168,7 @@ def main():
             tid = t["customer_type_id"]
             line.append(f"{t['display_name']} {type_price[tid]:.0f}원/커버 {type_cover[tid] * 100:.0f}%")
         print(f"{gd['display_name']:8} " + ", ".join(line))
-    print(f"기본 가중치 기준 평균 객단가 {avg_price:.0f}원, 시작 재고(물·빵·포션)로 채워지는 수요 {cover_all * 100:.0f}%")
+    print(f"기본 가중치 기준 평균 객단가 {avg_price:.0f}원, 시작 재고(물·빵·상비약)로 채워지는 수요 {cover_all * 100:.0f}%")
     per_day = 27.0
     print(f"하루 {per_day:.0f}명 x {avg_price:.0f}원 = 재고가 충분할 때 하루 최대 매출 약 {per_day * avg_price:,.0f}원")
 

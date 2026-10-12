@@ -165,7 +165,7 @@ func _list_column() -> PanelContainer:
 	tree.custom_minimum_size = Vector2(0, 210)
 	var root := tree.create_item()
 	root.set_text(0, "현재 보유 상품")
-	for item_text in ["물  ×12", "빵  ×8", "포션  ×5", "철광석  ×21", "숲 약초  ×14", "수정 원석  ×3"]:
+	for item_text in ["물  ×12", "빵  ×8", "상비약  ×5", "철광석  ×21", "숲 약초  ×14", "수정 원석  ×3"]:
 		var item := tree.create_item(root)
 		item.set_text(0, item_text)
 	box.add_child(tree)
