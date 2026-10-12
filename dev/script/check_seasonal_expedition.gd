@@ -1,4 +1,4 @@
-extends "res://tools/check_expedition_run.gd"
+extends "res://tools/code/check_expedition_run.gd"
 const Tools = preload("res://dev/gemini/request_text_tools.gd")
 const Writer = preload("res://dev/gemini/request_text_runner.gd")
 var checks := 0

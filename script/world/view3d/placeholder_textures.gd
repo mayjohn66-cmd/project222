@@ -81,7 +81,7 @@ static func albedo(kind: String, size: int) -> ImageTexture:
 	return ImageTexture.create_from_image(img)
 
 
-# 높이 맵(줄눈 낮음) → 법선 맵. tools/height_to_normal.py 와 같은 계산.
+# 높이 맵(줄눈 낮음) → 법선 맵. tools/art/height_to_normal.py 와 같은 계산.
 static func normal(kind: String, size: int, levels: int = 2) -> ImageTexture:
 	var heights: Array = []
 	var rows: int = 3 if size % 3 == 0 else 2

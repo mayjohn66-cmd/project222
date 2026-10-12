@@ -52,11 +52,11 @@ docs/
 - [스토리 뼈대 (초안 v0.1)](스토리/뼈대.md)
 - [스토리 스크립트 작성 가이드 (제미나이용, 초안 v0.1)](스토리/작성_가이드.md)
 - [스토리 전체 정리 (2026-10-06, Claude)](스토리/전체_정리.md)
-- [분석용 묶음 — 제미나이에 통째로 올려 일관성 분석(`python tools/export_story_bundle.py`로 다시 생성)](스토리/분석용_묶음.md)
-- 스토리 글 자동 점검: `python tools/audit_story.py` (화자별 말투, 전이 원인 단정어, 숫자·현대어, 같은 줄 중복)
+- [분석용 묶음 — 제미나이에 통째로 올려 일관성 분석(`python tools/story/export_story_bundle.py`로 다시 생성)](스토리/분석용_묶음.md)
+- 스토리 글 자동 점검: `python tools/story/audit_story.py` (화자별 말투, 전이 원인 단정어, 숫자·현대어, 같은 줄 중복)
 - [프롤로그 장면 시나리오 요청 (제미나이용)](스토리/프롤로그_시나리오_요청.md) · [초반 전체 소설 집필 요청 (제미나이용)](스토리/초반_소설_요청.md)
-- [막별 고쳐 쓰기 요청 6개 — 다른 모델에 통째로 붙여 넣는 요청문 (`python tools/export_rewrite_prompts.py`)](스토리/고쳐쓰기_요청/README.md)
-- [전체 스토리 — 게임에 들어간 모든 글을 막·사건 순서로 (`python tools/export_story_full.py`로 다시 생성)](스토리/전체_스토리.md)
+- [막별 고쳐 쓰기 요청 6개 — 다른 모델에 통째로 붙여 넣는 요청문 (`python tools/story/export_rewrite_prompts.py`)](스토리/고쳐쓰기_요청/README.md)
+- [전체 스토리 — 게임에 들어간 모든 글을 막·사건 순서로 (`python tools/story/export_story_full.py`로 다시 생성)](스토리/전체_스토리.md)
 
 ## 6. 그림·3D
 
@@ -95,7 +95,7 @@ docs/
 
 ## 성능
 
-[코드 정리 후보](코드_정리_후보.md) — 안 쓰는 스크립트·씬·함수 후보(`tools/unused_scan.py`). 삭제 전 승인 필요.
+[코드 정리 후보](코드_정리_후보.md) — 안 쓰는 스크립트·씬·함수 후보(`tools/code/unused_scan.py`). 삭제 전 승인 필요.
 
 [구조 정리안](구조_정리안.md) — 폴더·콘텐츠 구조 지도와 정리(이동) 제안. 이동은 승인 뒤 단계별로.
 
@@ -105,7 +105,7 @@ docs/
 
 - [10월 15일 Windows 전달 준비와 완료 기준](배포/목요일_전달_준비.md)
 
-`python tools/docs_check.py` — 깨진 링크와, 이 목록·콘텐츠 지도 어디에도 없는 문서를 찾는다. 문서를 추가한 날 한 번 돌린다.
+`python tools/code/docs_check.py` — 깨진 링크와, 이 목록·콘텐츠 지도 어디에도 없는 문서를 찾는다. 문서를 추가한 날 한 번 돌린다.
 
 ## 7. 보관(끝난 기록)
 

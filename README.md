@@ -9,8 +9,8 @@
 ## 검증 명령
 
 ```
-python tools/balance_baseline.py .
-python tools/validate_assets.py . --extra-items docs/drafts/items_materials_draft.csv
+python tools/balance/balance_baseline.py .
+python tools/art/validate_assets.py . --extra-items docs/drafts/items_materials_draft.csv
 ```
 
 (`validate_assets.py`는 Pillow가 필요하다: `pip install pillow`)

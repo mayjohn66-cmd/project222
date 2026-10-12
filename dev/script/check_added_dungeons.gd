@@ -1,4 +1,4 @@
-extends "res://tools/check_expedition_run.gd"
+extends "res://tools/code/check_expedition_run.gd"
 const CONTENT = preload("res://scenes/expedition/rooms/default_content_settings.tres")
 const CONFIG = preload("res://scenes/expedition/rooms/default_room_settings.tres")
 const DEPARTURE = preload("res://script/expedition/services/expedition_departure_service.gd")

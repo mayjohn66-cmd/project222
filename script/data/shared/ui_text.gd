@@ -2,7 +2,7 @@ class_name UiText
 extends RefCounted
 ## 화면에 나오는 짧은 안내 문구를 코드 밖(data/ui/ui_text.csv)에서 가져온다.
 ## 키는 "화면.부분.이름" 형식. 값에 %s·%d 가 있으면 f() 로 채운다.
-## 새 UI 문구는 코드에 직접 쓰지 않고 여기에 추가한다. 기존 문구는 손댈 때 하나씩 옮긴다(진행 상황: tools/ui_text_scan.py).
+## 새 UI 문구는 코드에 직접 쓰지 않고 여기에 추가한다. 기존 문구는 손댈 때 하나씩 옮긴다(진행 상황: tools/code/ui_text_scan.py).
 const CSV_PATH := "res://data/ui/ui_text.csv"
 static var _rows: Dictionary = {}
 static var _loaded := false

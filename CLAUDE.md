@@ -14,7 +14,7 @@
 사용자 + AI 2개(Claude, ChatGPT)가 같은 저장소를 쓴다. 규칙은 `AI_협업_규칙.md`에 있으니 **작업 전에 반드시 읽는다.**
 
 - **내 담당: 코드 정리와 밸런스** (`data/`, `docs/`, `tools/`, 기존 코드 정리).
-- **이미지 생성도 내 담당**(2026-10-07): Claude Code 의 Pixel Lab MCP 또는 `tools/pixellab_batch.py` 로만 만든다. 결과는 `docs/그림_작업/받은그림/`에 모아 사용자에게 보여 주고, 고른 것만 `art/`에 넣는다. 기존 그림은 덮어쓰지 않는다.
+- **이미지 생성도 내 담당**(2026-10-07): Claude Code 의 Pixel Lab MCP 또는 `tools/art/pixellab_batch.py` 로만 만든다. 결과는 `docs/그림_작업/받은그림/`에 모아 사용자에게 보여 주고, 고른 것만 `art/`에 넣는다. 기존 그림은 덮어쓰지 않는다.
 - ChatGPT 담당: 새 기능 코드 생성(이미지는 만들지 않음).
 - 새 기능은 기존 큰 파일에 덧붙이지 않는다(`expedition.gd`, `game_state.gd`, `build_manager.gd`, `worker.gd`, `day_manager.gd`).
 - 작업은 **`main`에서 직접** 한다(2026-10-05 사용자 지침, `docs/AI_협업_규칙.md` 2장). 작게 커밋하고, 푸시 전 `git pull --rebase origin main`, 강제 푸시 금지. 커밋 메시지는 `[data]`, `[code]`, `[art]`, `[docs]`, `[tools]` 접두사.
@@ -22,7 +22,7 @@
 
 ## 3. 먼저 읽을 문서
 
-**문서를 찾을 때는 `docs/README.md`(전체 길잡이)와 `docs/콘텐츠/README.md`(콘텐츠 지도: 플레이어가 만나는 순서, 현행/구 기록 표시)부터 연다.** 문서를 추가한 날은 `python tools/docs_check.py`로 깨진 링크와 목록에서 빠진 문서를 확인한다.
+**문서를 찾을 때는 `docs/README.md`(전체 길잡이)와 `docs/콘텐츠/README.md`(콘텐츠 지도: 플레이어가 만나는 순서, 현행/구 기록 표시)부터 연다.** 문서를 추가한 날은 `python tools/code/docs_check.py`로 깨진 링크와 목록에서 빠진 문서를 확인한다.
 
 1. `docs/원정_규칙서.md` — 원정 개편 규칙(시간, 소형 맵, 티어, 재료, 경제). ✅확정 / 🟡제안 / ❓미정 태그를 구분해서 읽을 것.
 2. `docs/그림_3D/에셋_규격서.md` — 픽셀 스프라이트 규격, 현재 에셋 측정 결과.
@@ -32,7 +32,7 @@
 
 - 게임의 핵심은 "경영 시뮬레이션이지만 플레이어가 재료를 직접 구하고 제작해서 판매한다".
 - **원정에서 얻은 재료를 상점에서 그대로 팔 수 있어야 한다**(필수).
-- 현재 원정 데이터(재료, 드롭, 이벤트, 던전 등급)는 **2026-10-12 사용자 결정으로 정식 값으로 쓴다**(옛 "전부 테스트용" 표시 폐기). 수치는 밸런스 점검(`tools/balance_baseline.py` 등)으로 계속 조정한다. 게임 안의 옛 용어 "던전·포션"은 "깊은 숲·상비약"으로 정리했다(내부 id `dungeon_*`, `potion`은 그대로).
+- 현재 원정 데이터(재료, 드롭, 이벤트, 던전 등급)는 **2026-10-12 사용자 결정으로 정식 값으로 쓴다**(옛 "전부 테스트용" 표시 폐기). 수치는 밸런스 점검(`tools/balance/balance_baseline.py` 등)으로 계속 조정한다. 게임 안의 옛 용어 "던전·포션"은 "깊은 숲·상비약"으로 정리했다(내부 id `dungeon_*`, `potion`은 그대로).
 - 시작 자금(500,000)과 시작 재고(999개)는 작동 확인용 임의값이다. **밸런스 계산에서 무시**한다.
 - 원정은 원래 주말에만 입장할 수 있었으나 "딱딱하다"는 평가로 **요일 제한을 삭제**했다.
 - 플레이 피드백: "원정 파트 전체가 너무 옛날 머드 게임 같다." → 결정과 직접 조작이 있는 파트로 바꾼다.
@@ -61,8 +61,8 @@
 ## 7. 유용한 명령
 
 ```
-python tools/validate_assets.py . --extra-items docs/drafts/items_materials_draft.csv
-python tools/balance_baseline.py .
+python tools/art/validate_assets.py . --extra-items docs/drafts/items_materials_draft.csv
+python tools/balance/balance_baseline.py .
 ```
 - 검증기는 Pillow가 필요하다(`pip install pillow`).
 - `.gitignore`가 `.godot/`를 막는다. 커밋 전 `git status`로 `.godot`이 섞이지 않았는지 확인한다.
@@ -74,7 +74,7 @@ python tools/balance_baseline.py .
 끝난 일: 저장소 상태 확인, 로컬 Godot 실행 확인(클라우드), 개발용 파일 `dev/` 이동, 글 452행 전체 교정, 문서 정리, 검사 56개 정비.
 
 1. **인수인계 표의 Claude 줄 9개(3, 5, 7, 9, 11, 13, 15, 17, 19) 처리:** 각 사건의 초기 수치·답례·접근 시점 검토. `docs/콘텐츠/검토/경제_검토_20261005.md`와 줄마다 대조해 닫는다.
-2. **밸런스 데이터:** 재료 24종은 이미 `items.csv`·`expedition_loot.csv`에 반영됨(2026-10-06 확인, 중복 id 0개). 이후 밸런스 변경은 `tools/balance_baseline.py` 등을 돌려 결과를 커밋 설명에 붙인다.
+2. **밸런스 데이터:** 재료 24종은 이미 `items.csv`·`expedition_loot.csv`에 반영됨(2026-10-06 확인, 중복 id 0개). 이후 밸런스 변경은 `tools/balance/balance_baseline.py` 등을 돌려 결과를 커밋 설명에 붙인다.
 3. **사용자 PC 확인 결과 반영:** `dev/run_all_checks.sh`와 게임 실행 결과. 실패가 나오면 ChatGPT(코드)에 넘기거나 시험을 갱신한다.
 4. **시간 시스템 재설계 준비:** `day_manager.gd`의 심야 운영 함수군 정리는 시간 규칙이 확정된 뒤에(규칙서 2장). 손님 스폰을 게임 시간 기준 도착률로 바꾸는 것 포함.
 5. **스토리:** 2년 차 개인 변화 부탁(인물당 2~3개)은 게임 완성 뒤 추가. 첫 해를 닫는 짧은 장면, 점장 사연은 사용자 결정 대기(`docs/스토리/전체_정리.md` 6장).
@@ -82,7 +82,7 @@ python tools/balance_baseline.py .
 ## 9. 작업 원칙
 
 - 수치는 코드에 박지 말고 CSV나 설정 상수로 뺀다.
-- 데이터를 바꾸면 `tools/balance_baseline.py`, 이미지를 추가하면 `tools/validate_assets.py`를 돌려 결과를 커밋 설명에 붙인다.
+- 데이터를 바꾸면 `tools/balance/balance_baseline.py`, 이미지를 추가하면 `tools/art/validate_assets.py`를 돌려 결과를 커밋 설명에 붙인다.
 - 실행해 보지 않은 코드를 "동작한다"고 말하지 않는다. 확인하지 못한 것은 확인하지 못했다고 쓴다.
 - 미정 항목(❓)은 임의로 정하지 말고 사용자에게 묻는다.
 

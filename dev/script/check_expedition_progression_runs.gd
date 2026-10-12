@@ -1,4 +1,4 @@
-extends "res://tools/check_expedition_run.gd"
+extends "res://tools/code/check_expedition_run.gd"
 # Extra complete runs cover the optional wheat and required water region choices.
 func _ready() -> void:
 	if not OS.get_user_data_dir().contains("foodbag_checks"):

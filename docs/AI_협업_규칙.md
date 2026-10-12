@@ -11,11 +11,11 @@
 | `docs/` (규칙서, 규격서) | Claude가 작성, 모두 참조 | 구현 전에 반드시 읽기 |
 | `tools/` (검증·계산 스크립트) | Claude | `validate_assets.py`, `balance_baseline.py` |
 | 기존 코드 정리·리팩터링 | Claude | 큰 파일 분리는 기능 작업이 안정된 뒤에 |
-| 스토리 스크립트(대사·장면 초안) | 제미나이 | **`docs/drafts/story/`에 초안만 쓴다.** 형식은 `docs/스토리/작성_가이드.md`, 게임 데이터(`data/story/`)에 넣는 것은 검사(`tools/validate_story.py`)와 사용자 승인 뒤. 코드·수치·이미지는 건드리지 않음 |
-| `art/` (이미지) | 사용자 + Claude(Pixel Lab, 2026-10-07 변경: 이미지 생성은 Claude Code 에서만) | **Claude는 Claude Code 의 Pixel Lab MCP 도구나 `tools/pixellab_batch.py` 로 Pixel Lab 에 요청해 `docs/그림_작업/받은그림/` 에 모으고, 사용자가 고른 것만 `art/` 에 넣는다.** 이미 있는 그림은 덮어쓰지 않는다. ChatGPT는 이미지를 생성하거나 덮어쓰지 않음. 규격은 `docs/그림_3D/에셋_규격서.md` |
+| 스토리 스크립트(대사·장면 초안) | 제미나이 | **`docs/drafts/story/`에 초안만 쓴다.** 형식은 `docs/스토리/작성_가이드.md`, 게임 데이터(`data/story/`)에 넣는 것은 검사(`tools/story/validate_story.py`)와 사용자 승인 뒤. 코드·수치·이미지는 건드리지 않음 |
+| `art/` (이미지) | 사용자 + Claude(Pixel Lab, 2026-10-07 변경: 이미지 생성은 Claude Code 에서만) | **Claude는 Claude Code 의 Pixel Lab MCP 도구나 `tools/art/pixellab_batch.py` 로 Pixel Lab 에 요청해 `docs/그림_작업/받은그림/` 에 모으고, 사용자가 고른 것만 `art/` 에 넣는다.** 이미 있는 그림은 덮어쓰지 않는다. ChatGPT는 이미지를 생성하거나 덮어쓰지 않음. 규격은 `docs/그림_3D/에셋_규격서.md` |
 | 새 기능 코드 (`script/`, `scenes/`) | ChatGPT | **새 파일로 추가**, 기존 큰 파일에 덧붙이지 않기 |
 
-이미지 생성은 **Claude Code(Pixel Lab MCP 또는 `tools/pixellab_batch.py`)에서만** 합니다(2026-10-07 사용자 지침). ChatGPT·제미나이는 이미지 파일을 만들거나 덮어쓰지 않습니다. Claude는 사용자가 요청한 범위만 만들고, 한 번에 만드는 개수와 예산(스크립트는 `--limit`, `--budget-usd`)을 지키고 결과 시트를 사용자에게 보여 준 뒤 고른 것만 반영합니다. 이미지가 없을 때는 임시 이미지(`ArtLoader`)로 게임이 죽지 않게만 합니다.
+이미지 생성은 **Claude Code(Pixel Lab MCP 또는 `tools/art/pixellab_batch.py`)에서만** 합니다(2026-10-07 사용자 지침). ChatGPT·제미나이는 이미지 파일을 만들거나 덮어쓰지 않습니다. Claude는 사용자가 요청한 범위만 만들고, 한 번에 만드는 개수와 예산(스크립트는 `--limit`, `--budget-usd`)을 지키고 결과 시트를 사용자에게 보여 준 뒤 고른 것만 반영합니다. 이미지가 없을 때는 임시 이미지(`ArtLoader`)로 게임이 죽지 않게만 합니다.
 
 담당이 아닌 구역을 고쳐야 하면 먼저 사용자에게 알리고 허락을 받습니다.
 
@@ -50,13 +50,13 @@
 ## 5. 수치와 데이터
 
 - 수치는 코드에 직접 쓰지 않고 `data/`의 CSV나 설정 상수로 뺍니다.
-- 데이터를 바꾸면 `tools/balance_baseline.py`를 돌려 결과를 커밋 설명에 붙입니다.
+- 데이터를 바꾸면 `tools/balance/balance_baseline.py`를 돌려 결과를 커밋 설명에 붙입니다.
 - 코드를 바꾸면 Godot 4.7.1로 실행 검증을 하고 결과를 커밋 설명에 붙입니다(Godot가 있는 환경에서만).
   - `godot --headless --path . --import`를 두 번 돌려 두 번째에 오류가 0인지 확인(첫 실행은 가져오기 순서 때문에 테마 관련 가짜 오류가 나옴)
-  - `godot --headless --path . res://tools/check_godot.tscn`으로 모든 `.gd`와 `.tscn`이 로드되는지 확인
-  - 원정 흐름을 바꿨다면 `godot --headless --path . res://tools/check_expedition_run.tscn`으로 원정 한 판을 끝까지 자동 진행(로드 검사로는 안 잡히는 실행 중 타입 오류용). 종료 코드가 0이고 로그에 `SCRIPT ERROR`가 없어야 함
+  - `godot --headless --path . res://tools/code/check_godot.tscn`으로 모든 `.gd`와 `.tscn`이 로드되는지 확인
+  - 원정 흐름을 바꿨다면 `godot --headless --path . res://tools/code/check_expedition_run.tscn`으로 원정 한 판을 끝까지 자동 진행(로드 검사로는 안 잡히는 실행 중 타입 오류용). 종료 코드가 0이고 로그에 `SCRIPT ERROR`가 없어야 함
   - 실행하면 `.translation`(CSV 번역 부산물)이 바뀌므로 커밋하지 않고 `git checkout`으로 되돌림
-- 이미지를 추가하면 `tools/validate_assets.py`를 돌려 **FAIL이 없는지** 확인하고 결과를 커밋 설명에 붙입니다. 검증 실패 목록은 Claude가 사용자에게 넘깁니다.
+- 이미지를 추가하면 `tools/art/validate_assets.py`를 돌려 **FAIL이 없는지** 확인하고 결과를 커밋 설명에 붙입니다. 검증 실패 목록은 Claude가 사용자에게 넘깁니다.
 - 이미지 도구(API 키, 크레딧)의 키는 저장소에 넣지 않고 사용자 환경 설정으로만 관리합니다. Pixel Lab 토큰은 환경 변수 `PIXELLAB_TOKEN` 으로만 읽고, 채팅·파일·로그에 출력하지 않습니다.
 
 ## 6. 하지 않는 것

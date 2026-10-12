@@ -177,7 +177,7 @@ static func make_heights(kind: String, size: int) -> Array:
 	return heights
 
 
-# 높이 맵을 회색조 이미지로(밝을수록 높음). tools/height_to_normal.py 의 입력과 같은 형식.
+# 높이 맵을 회색조 이미지로(밝을수록 높음). tools/art/height_to_normal.py 의 입력과 같은 형식.
 static func make_height_image(kind: String, size: int) -> Image:
 	var heights: Array = make_heights(kind, size)
 	var img := Image.create(size, size, false, Image.FORMAT_L8)
@@ -190,7 +190,7 @@ static func make_height_image(kind: String, size: int) -> Image:
 	return img
 
 
-# 높이 맵 → 법선 맵. tools/height_to_normal.py 와 같은 계산(Sobel, 기울기를 levels 단계로 끊음).
+# 높이 맵 → 법선 맵. tools/art/height_to_normal.py 와 같은 계산(Sobel, 기울기를 levels 단계로 끊음).
 static func make_normal(kind: String, size: int = 16, levels: int = 2) -> ImageTexture:
 	var heights: Array = make_heights(kind, size)
 	var img := Image.create(size, size, false, Image.FORMAT_RGBA8)

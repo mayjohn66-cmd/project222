@@ -1,4 +1,4 @@
-extends "res://tools/check_expedition_run.gd"
+extends "res://tools/code/check_expedition_run.gd"
 
 # Claude 담당 검증 도구의 공통 시나리오를 상속하고 방 조작만 확장한다.
 func _drain(inst) -> void:

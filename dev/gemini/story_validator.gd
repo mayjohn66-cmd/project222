@@ -1,5 +1,5 @@
 extends Node
-## 스토리 초안 검사기(Godot판). tools/validate_story.py 와 같은 검사를 파이썬 없이 한다.
+## 스토리 초안 검사기(Godot판). tools/story/validate_story.py 와 같은 검사를 파이썬 없이 한다.
 ##
 ## 실행: godot --headless --path . res://dev/gemini/validate_story.tscn -- --file docs/drafts/story/<파일>.csv
 ## 파일을 안 주면 data/story/story_beats.csv 를 검사한다. 오류가 있으면 종료 코드 1.

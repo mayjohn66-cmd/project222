@@ -10,7 +10,7 @@ extends RefCounted
 #   - 방어를 아무리 쌓아도 피해가 0이나 최소값으로 뚝 떨어지지 않고 조금씩 줄어든다(면역 없음).
 #   - 공격력과 방어력의 "비율"이 중요해서, 난이도가 오르며 적 공격이 함께 오르면 방어도 함께 올라야 한다.
 #   - 능력치 숫자는 화면에 보이지 않으므로 이 곡선이 완만해야 한다(사용자 결정: 공개는 HP 그림뿐).
-# 수치 표는 `python tools/check_equipment.py .`의 "피해 계산식 표".
+# 수치 표는 `python tools/balance/check_equipment.py .`의 "피해 계산식 표".
 
 static func calculate(
 	attack: float,
