@@ -10,8 +10,8 @@ const FURNITURE_PREFIX := "furniture:"
 const REACH_CELLS := 1.7           # 더미에서 이만큼(칸) 안이면 [E]로 치울 수 있다
 
 const GROUPS := 6                   # 잔해 더미 수(집기가 6개 미만이면 그 수만큼)
-# 모두 치우면 얻는 것. 키가 `furniture:` 로 시작하면 가구(보관함에 들어간다), 아니면 아이템. 합계는 더미들에 나뉜다.
-const LOOT_TOTAL := {"bread": 4, "water": 8, "plywood": 4, "furniture:register": 1, "furniture:shelf_1x1": 2}
+# 모두 치우면 얻는 것. 식품 수량은 하루 판매량 측정(docs/콘텐츠/프롤로그와_1막/재고_소진_원정_유도안.md 8장)에서 정했다: 첫 손님·교환을 빼고 약 3영업일분(빵 14, 물 10). 키가 `furniture:` 로 시작하면 가구(보관함에 들어간다), 아니면 아이템. 합계는 더미들에 나뉜다.
+const LOOT_TOTAL := {"bread": 14, "water": 10, "plywood": 4, "furniture:register": 1, "furniture:shelf_1x1": 2}
 # 어울리는 더미(그 더미가 치우는 집기 종류)에 먼저 놓는다. 없으면 아무 더미나.
 const LOOT_HOME := {"bread": ["cooler", "chest"], "water": ["cooler", "chest"], "plywood": ["gondola", "rack", "cabinet", "table"], "furniture:register": ["counter"], "furniture:shelf_1x1": ["gondola", "rack"]}
 
