@@ -1,5 +1,5 @@
 {
-  "source_commit": "72987750a021ce5f60d12ce9943b578f0c5d01e3",
+  "source_commit": "5a0afa530593515b6bfbd1ff48c23be6baeff75b",
   "scope": "Tracked images only; runtime includes all script/scenes/data/art/addons text, not a proven main-scene reachability graph.",
   "limitation": "Dynamic directories are conservatively preserved. Unmatched images require code/data/dev/tools/doc review before removal. All docs originals and records are preserved. No deletion performed.",
   "summary": {
@@ -8,7 +8,7 @@
     "runtime_path_reference": 1001,
     "candidate_no_runtime_reference": 64,
     "preserve_dev_review": 84,
-    "preserve_source_and_records": 3760,
+    "preserve_source_and_records": 3762,
     "preserve_review_images": 49
   },
   "candidate_count": 64,

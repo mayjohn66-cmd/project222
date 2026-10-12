@@ -30,6 +30,7 @@ func run() -> void:
 	PlayerProgress.load_save_data({})
 	check(PlayerProgress.player_gender == "male", "옛 저장(성별 없음)은 남성")
 	var panel = load("res://scenes/shop/main.tscn").instantiate()
+	panel.get_node("TutorialDirector").enabled = false
 	add_child(panel)
 	for i in range(4): await get_tree().process_frame
 	var dlg = panel.find_child("StoryDialoguePanel", true, false)
@@ -46,7 +47,7 @@ func run() -> void:
 		check(dlg.portrait.visible and dlg.portrait.texture == PlayerPortraits.find_for("female"), "플레이어 대사는 여성 초상화")
 		dlg.start("타블렌", null, lines)
 		check(dlg.portrait.texture != PlayerPortraits.find_for("female"), "NPC 대사는 NPC 초상화")
-	# 주인공 걷기 그림: 고른 성별의 스프라이트를 쓰고, 앉는 연출 중에는 기존 모델로 돌아간다
+	# 고른 성별의 걷기·제작된 좌식 그림을 쓰고, 없는 자세만 기존 모델로 돌아간다.
 	var player_node: Node = panel.get_node_or_null("Actors/Player")
 	check(player_node != null, "주인공 노드를 찾았다")
 	if player_node != null:
@@ -55,7 +56,17 @@ func run() -> void:
 			check(StoreActorVisuals.sprite_key(player_node, "player") == "player_" + g, "주인공 그림 키 player_" + g)
 			check(not ActorSpriteFrames.load_set("player_" + g).is_empty(), "주인공 그림 세트 읽힘 player_" + g)
 		player_node.set_meta("sitting", true)
-		check(StoreActorVisuals.sprite_key(player_node, "player") == "", "앉는 연출 중에는 그림 대신 기존 모델")
+		for g in PlayerProgress.GENDERS:
+			PlayerProgress.player_gender = g
+			for direction in ["south-west", "south-east", "north-west", "north-east"]:
+				player_node.set_meta("seat_direction", direction)
+				var pose_key := StoreActorVisuals.sprite_key(player_node, "player")
+				check(pose_key == "pose:player_" + g + ":seat:" + direction, "성별·방향에 맞는 좌식 그림 " + g + " " + direction)
+				check(not ActorPoseArt.load_set(pose_key).is_empty(), "좌식 그림 파일 읽힘 " + g + " " + direction)
+		player_node.set_meta("sit_kind", "missing_test_pose")
+		check(StoreActorVisuals.sprite_key(player_node, "player") == "", "미제작 자세만 기존 모델로")
+		player_node.remove_meta("sit_kind")
+		player_node.remove_meta("seat_direction")
 		player_node.remove_meta("sitting")
 	# 대사 표시(서술 *, 표정 {이름})
 	var m: Dictionary = DialogueMarks.parse("*{피곤}눈꺼풀이 무겁다.")

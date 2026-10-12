@@ -1,7 +1,7 @@
 {
-  "source_commit": "72987750a021ce5f60d12ce9943b578f0c5d01e3",
-  "approval_status": "awaiting_user_review",
-  "deletion_performed": false,
+  "source_commit": "5a0afa530593515b6bfbd1ff48c23be6baeff75b",
+  "approval_status": "completed_with_user_approval",
+  "deletion_performed": true,
   "images": [
     {
       "path": "art/expedition/region_forest.png",
@@ -11,6 +11,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -27,6 +29,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -43,6 +47,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -59,6 +65,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -75,6 +83,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -91,6 +101,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -107,6 +119,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -123,6 +137,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -138,7 +154,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_female_determined.png"
       ],
@@ -154,7 +173,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_female_flustered.png"
       ],
@@ -170,7 +192,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "art/portraits/player/aligned/player_female_neutral.png",
         "docs/그림_작업/받은그림/초상화/player_female_neutral.png",
@@ -191,7 +216,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_female_smile.png"
       ],
@@ -207,7 +235,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_female_surprised.png"
       ],
@@ -223,7 +254,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_female_tired.png"
       ],
@@ -239,7 +273,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_female_worried.png"
       ],
@@ -255,7 +292,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_male_determined.png"
       ],
@@ -271,7 +311,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_male_flustered.png"
       ],
@@ -287,7 +330,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "art/portraits/player/aligned/player_male_neutral.png",
         "docs/그림_작업/받은그림/초상화/player_male_neutral.png",
@@ -308,7 +354,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_male_smile.png"
       ],
@@ -324,7 +373,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_male_surprised.png"
       ],
@@ -340,7 +392,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_male_tired.png"
       ],
@@ -356,7 +411,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/초상화/player_male_worried.png"
       ],
@@ -374,6 +432,8 @@
       "dynamic_references": [],
       "other_references": [
         "docs/drafts/asset_baseline_report.md",
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -390,6 +450,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -406,6 +468,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -422,6 +486,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -438,6 +504,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -454,6 +522,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -470,6 +540,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -486,6 +558,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -502,6 +576,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -518,6 +594,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -534,6 +612,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -550,6 +630,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -566,6 +648,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -583,6 +667,8 @@
       "dynamic_references": [],
       "other_references": [
         "docs/drafts/asset_baseline_report.md",
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -600,6 +686,8 @@
       "dynamic_references": [],
       "other_references": [
         "docs/drafts/asset_baseline_report.md",
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -617,6 +705,8 @@
       "dynamic_references": [],
       "other_references": [
         "docs/drafts/asset_baseline_report.md",
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -634,6 +724,8 @@
       "dynamic_references": [],
       "other_references": [
         "docs/drafts/asset_baseline_report.md",
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -651,6 +743,8 @@
       "dynamic_references": [],
       "other_references": [
         "docs/drafts/asset_baseline_report.md",
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -668,6 +762,8 @@
       "dynamic_references": [],
       "other_references": [
         "docs/drafts/asset_baseline_report.md",
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -684,6 +780,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -700,6 +798,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -716,6 +816,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -732,6 +834,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -748,6 +852,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -764,6 +870,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -780,6 +888,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -796,6 +906,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -811,7 +923,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [],
       "active_identical_copies": [],
       "review_priority": "unmatched_image",
@@ -825,7 +940,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [],
       "active_identical_copies": [],
       "review_priority": "unmatched_image",
@@ -839,7 +957,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [],
       "active_identical_copies": [],
       "review_priority": "unmatched_image",
@@ -853,7 +974,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [],
       "active_identical_copies": [],
       "review_priority": "unmatched_image",
@@ -867,7 +991,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/바닥/dirt_a.png"
       ],
@@ -883,7 +1010,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/바닥/grass_a2.png"
       ],
@@ -899,7 +1029,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/바닥/paving_b.png"
       ],
@@ -915,7 +1048,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/바닥/road_b.png"
       ],
@@ -931,7 +1067,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/바닥/tile_b.png"
       ],
@@ -947,7 +1086,10 @@
       "status": "candidate_no_runtime_reference",
       "runtime_references": [],
       "dynamic_references": [],
-      "other_references": [],
+      "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md"
+      ],
       "identical_copies": [
         "docs/그림_작업/받은그림/바닥/wood_b.png"
       ],
@@ -964,6 +1106,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -980,6 +1124,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -996,6 +1142,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -1012,6 +1160,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -1028,6 +1178,8 @@
       "runtime_references": [],
       "dynamic_references": [],
       "other_references": [
+        "docs/그림_작업/정리_검토/삭제_후보.json",
+        "docs/그림_작업/정리_검토/정리_계획.md",
         "files.txt"
       ],
       "identical_copies": [],
@@ -1036,5 +1188,45 @@
       "import_companion": "art/world/plaza_props_v1/supply_cart.png.import",
       "import_companion_sha256": "cf0aee73bd7baa35a4551a4092606b2f252f557e14c8ef35ffc7ffaaf3d2de2d"
     }
-  ]
+  ],
+  "approved_date": "2026-10-12",
+  "deleted_image_count": 64,
+  "deleted_import_count": 64,
+  "deleted_image_bytes": 15603069,
+  "preserved_image_hashes_verified": 5908,
+  "backup_sha256": "401e2c97392d045b10e01225d28236849e8aff9b26f4de0d5d0d2fc97bbbccbd",
+  "verification": {
+    "active_sprite_links": {
+      "checks": 1777,
+      "failures": 0
+    },
+    "resource_load": {
+      "checks": 914,
+      "failures": 0
+    },
+    "player_portraits_and_seated_art": {
+      "checks": 59,
+      "failures": 0
+    },
+    "shop_art_gpu": {
+      "checks": 1954,
+      "failures": 0
+    },
+    "expedition_art_gpu": {
+      "checks": 1014,
+      "failures": 0
+    },
+    "fishing_tiles_gpu": {
+      "checks": 70,
+      "failures": 0
+    },
+    "new_game_first_dialogue_gpu": {
+      "checks": 14,
+      "failures": 0
+    },
+    "assets": {
+      "failures": 0,
+      "warnings": 23
+    }
+  }
 }

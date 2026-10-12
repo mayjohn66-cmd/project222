@@ -176,3 +176,5 @@ off.
 - 2026-10-12 Codex: 사용자 로고/폰트 미적용 지적→후보 원본 동일SHA art/ui/title/forest_beyond_store_logo.png 연결·중앙440×196/비율유지·부제·버튼240×50/Silver28px. 사용자 Downloads/Silver.ttf 원본포함(SHA5bbbcd90…)·공용테마/default_font와 StoreUiStyle·관리테마 상속·원정 fallback_font 하드지정 제거. TTF AA/hint/subpixel OFF·oversampling1·라이선스/배포README에 PoppyWorks 출처. 격리GPU93/전체로드912/원정HUD102 실패0·import2 ERROR0, 로고기록 실행캡처. 이전RC1 미재빌드, 시스템 설치 의존 제거·저장경로 유지 위해config/name 기존값.
 
 - 2026-10-12 Codex: 사용자 부제삭제/안쓰는그림정리 요청→타이틀 SubtitleLabel 제거·격리GPU92 실패0/두해상도·클릭/이름창/취소. 추적그림5970/art2076 검토, 정적참조1001/동적보호1011·미참조 art64(14.88MiB)와 import64 정리후보, docs원본3760/dev84/검사49/플러그인1 보존. docs/그림_작업/정리_검토/정리_계획.md·SHA목록/작업폴더 ZIP128파일 CRC검증. 협업규칙2장 계획/승인에 따라 실제그림삭제는 사용자 검토대기·활성감사1777실패0. 폴더이름만으로삭제금지, 승인직전최신참조/해시/절대경로재검사.
+
+- 2026-10-12 Codex: 사용자64+import64 삭제승인→최신main 재검사/백업SHA/128절대경로·각SHA검증 후 art/ 파일만 literal삭제·files.txt80옛항목정리. docs/그림_작업/정리_검토/삭제_후보.json 완료표시·후검사JSON, 남은이미지5908 SHA불변·동적루트보호/후보0(보수적범위). 캐시없는격리복사본 import2 ERROR0·로드914/활성1777/진열GPU1954/원정GPU1014/낚시GPU70/새게임첫대화GPU14/초상화59 실패0·에셋FAIL0 WARN23. 초상화옛검사43중1의 3D좌식기준은128복원 baseline에도동일실패, dev검사를실제남녀4방향좌식·미제작fallback로갱신. 받은원본보존·runtime규칙/저장/RC1 미변경.
