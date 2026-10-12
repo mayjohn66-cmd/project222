@@ -891,7 +891,7 @@ func _sync(model: RefCounted, delta: float) -> void:
 	for o in _object_nodes:
 		(o as Node3D).visible = not model.object_consumed
 
-	# 출구: 열렸으면 초록 빛, 닫혔으면 창살
+	# 길목: 전투 중에는 어둡게, 통행 가능하면 자연스러운 길 색으로 표시한다.
 	if _exit_glow != null:
 		_exit_glow.visible = bool(model.exit_open)
 		_exit_bars.visible = not bool(model.exit_open)

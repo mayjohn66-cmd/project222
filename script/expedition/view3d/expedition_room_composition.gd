@@ -35,10 +35,5 @@ static func build(scenery: ExpeditionScenery, model: RefCounted, rng: RandomNumb
 			placed += 1
 	for point in chosen.get("puddles", []):
 		ExpeditionEnvironmentArt.puddle(stage,Vector2(float(point.x),float(point.y)),float(point.radius))
-	match stage._theme_id:
-		"mine": scenery._exit_mine()
-		"swamp": scenery._exit_swamp()
-		"hidden_ruins": scenery._exit_ruins()
-		_:
-			scenery._forest_path(rng)
-			scenery._exit_forest()
+	if stage._theme_id == "forest": scenery._forest_path(rng)
+	ExpeditionExitPath.build(stage,model)

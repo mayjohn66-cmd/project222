@@ -107,7 +107,9 @@ func _physics_process(delta: float) -> void:
 		hint_label.text = "출구가 열렸습니다" if model.exit_open else "몬스터를 처치하면 출구가 열립니다"
 	if progress_guide != null:
 		hint_label.text = progress_guide.hint(hint_label.text)
-	hint_label.visible = model.interacting or not notice.is_empty() or not caption.is_empty()
+	var unsafe_exit: bool = not model.exit_open and model.player_position.distance_to(model.exit_position) <= model.settings.interaction_reach
+	if unsafe_exit: hint_label.text = UiText.t("expedition.room.unsafe_path")
+	hint_label.visible = model.interacting or not notice.is_empty() or not caption.is_empty() or unsafe_exit
 	hud.layout()
 	queue_redraw()
 
@@ -144,7 +146,6 @@ func _draw() -> void:
 		stage.active = use_3d
 		stage.visible = use_3d
 	_layout_board()
-	draw_string(ThemeDB.fallback_font, _point(model.exit_position) + Vector2(-18, -12), "출구", HORIZONTAL_ALIGNMENT_LEFT, -1, 16)
 	for enemy in model.enemies:
 		if int(enemy["hp"]) > 0 and float(enemy["windup"]) >= 0.0:
 			var reach: float = model.settings.boss_reach if enemy["boss"] else model.settings.enemy_reach

@@ -891,7 +891,8 @@
       "kind": null,
       "boss": false,
       "pixel_unit": 0.022,
-      "source_sha256": "50f1d7197bed5d7c7b7dccd41a1afabefdef5d6e617b28948af627cfd4487748"
+      "source_sha256": "50f1d7197bed5d7c7b7dccd41a1afabefdef5d6e617b28948af627cfd4487748",
+      "runtime_role": "legacy_exit_reference"
     },
     {
       "id": "exit_closed",
@@ -911,7 +912,8 @@
       "kind": null,
       "boss": false,
       "pixel_unit": 0.022,
-      "source_sha256": "2baa76725acc1083208f1b95a9ee8357e4132f49b39613b85511a47937ea640d"
+      "source_sha256": "2baa76725acc1083208f1b95a9ee8357e4132f49b39613b85511a47937ea640d",
+      "runtime_role": "legacy_exit_reference"
     },
     {
       "id": "wild_berry_site",

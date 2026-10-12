@@ -47,6 +47,11 @@ def main():
         assert abs(image.width/image.height - 16/9) < .01
         assert image.getchannel('A').getextrema() == (255,255)
         assert len(profile['outside']) + profile['floor_limit'] <= 10
+        trail = profile['exit_path']
+        assert trail['kind'] in {'dirt','wood','paving'}
+        assert 0 < trail['width'] <= 2 and trail['length'] > trail['inside'] > 0
+        for i in range(1,4):
+            assert (ROOT / f"art/received/floors/{trail['kind']}_{i}.png").is_file()
         for entry in profile['outside'] + profile['floor']:
             key = entry['key']
             assert key in known or key+'_rot0' in known, key

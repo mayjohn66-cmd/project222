@@ -174,12 +174,13 @@ func run() -> void:
 	check(view.stage._object_nodes.size() == 2, "both gathering choices shown")
 	for i in view.stage._object_nodes.size():
 		check(view.stage._object_nodes[i].position == Vector3(float(sites.gathering_sites[i].x),0,float(sites.gathering_sites[i].y)), "original site coordinates retained")
-	# Gate, ruins column, and static torches are placed by the live scenery builder.
+	# Natural exit trail, ruins column, and static torches use the live room builder.
 	var ruins := model("ancient_guardian", "", true)
 	bind(ruins, "hidden_ruins")
 	await frames(1) # rebuild queues previous room nodes for deletion.
-	verify_sprite(view.stage._exit_bars, ExpeditionSpriteArt.assets().exit_closed)
-	verify_sprite(view.stage._exit_glow, ExpeditionSpriteArt.assets().exit_open)
+	check(view.stage._exit_bars.mesh is PlaneMesh and view.stage._exit_glow.mesh is PlaneMesh,"exit is a ground path, not a gate sprite")
+	check(view.stage._exit_glow.get_meta("exit_trigger_position") == ruins.exit_position,"natural path uses actual next-room position")
+	check((view.stage._exit_glow.material_override as ShaderMaterial).get_shader_parameter("normal_1") != null,"exit trail keeps ground normal lighting")
 	check(not view.stage._exit_glow.visible and view.stage._exit_bars.visible, "occupied room closes exit image")
 	var columns := 0
 	var torches := 0
