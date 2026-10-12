@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bcj2gged4m4t5"
+
+[deps]
+
+files=["res://data/shop/catalogs/customer/customer_types.display.translation", "res://data/shop/catalogs/customer/customer_types.group.translation", "res://data/shop/catalogs/customer/customer_types.weight.translation", "res://data/shop/catalogs/customer/customer_types.description.translation"]
+
+source_file="res://data/shop/catalogs/customer/customer_types.csv"
+dest_files=["res://data/shop/catalogs/customer/customer_types.display.translation", "res://data/shop/catalogs/customer/customer_types.group.translation", "res://data/shop/catalogs/customer/customer_types.weight.translation", "res://data/shop/catalogs/customer/customer_types.description.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

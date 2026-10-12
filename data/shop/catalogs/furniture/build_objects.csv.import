@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bea5n8fsgpvxp"
+
+[deps]
+
+files=["res://data/shop/catalogs/furniture/build_objects.scene.translation", "res://data/shop/catalogs/furniture/build_objects.grid.translation", "res://data/shop/catalogs/furniture/build_objects.grid.translation", "res://data/shop/catalogs/furniture/build_objects.rotatable.translation", "res://data/shop/catalogs/furniture/build_objects.blocks.translation", "res://data/shop/catalogs/furniture/build_objects.placement.translation", "res://data/shop/catalogs/furniture/build_objects.build.translation", "res://data/shop/catalogs/furniture/build_objects.area.translation"]
+
+source_file="res://data/shop/catalogs/furniture/build_objects.csv"
+dest_files=["res://data/shop/catalogs/furniture/build_objects.scene.translation", "res://data/shop/catalogs/furniture/build_objects.grid.translation", "res://data/shop/catalogs/furniture/build_objects.grid.translation", "res://data/shop/catalogs/furniture/build_objects.rotatable.translation", "res://data/shop/catalogs/furniture/build_objects.blocks.translation", "res://data/shop/catalogs/furniture/build_objects.placement.translation", "res://data/shop/catalogs/furniture/build_objects.build.translation", "res://data/shop/catalogs/furniture/build_objects.area.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

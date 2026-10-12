@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://cgtir20yxly8v"
+
+[deps]
+
+files=["res://data/shop/catalogs/view3d/weather_3d.rain.translation", "res://data/shop/catalogs/view3d/weather_3d.snow.translation", "res://data/shop/catalogs/view3d/weather_3d.min.translation", "res://data/shop/catalogs/view3d/weather_3d.max.translation", "res://data/shop/catalogs/view3d/weather_3d.rain.translation", "res://data/shop/catalogs/view3d/weather_3d.rain.translation", "res://data/shop/catalogs/view3d/weather_3d.snow.translation", "res://data/shop/catalogs/view3d/weather_3d.snow.translation", "res://data/shop/catalogs/view3d/weather_3d.note.translation"]
+
+source_file="res://data/shop/catalogs/view3d/weather_3d.csv"
+dest_files=["res://data/shop/catalogs/view3d/weather_3d.rain.translation", "res://data/shop/catalogs/view3d/weather_3d.snow.translation", "res://data/shop/catalogs/view3d/weather_3d.min.translation", "res://data/shop/catalogs/view3d/weather_3d.max.translation", "res://data/shop/catalogs/view3d/weather_3d.rain.translation", "res://data/shop/catalogs/view3d/weather_3d.rain.translation", "res://data/shop/catalogs/view3d/weather_3d.snow.translation", "res://data/shop/catalogs/view3d/weather_3d.snow.translation", "res://data/shop/catalogs/view3d/weather_3d.note.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

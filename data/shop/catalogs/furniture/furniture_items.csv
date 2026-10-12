@@ -1,0 +1,29 @@
+id,name,category,icon_path,description,craft_category,effect_type,effect_value,effect_group,max_effective_count,effect_target
+shelf_1x1,간이 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,부서진 선반 조각을 가지와 수액으로 급히 묶어 세운 진열대다. 가게를 다시 세우는 첫 진열 자리다.,store,,0,,0,
+shelf_2x1,2×1 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,중형 상품 진열대다.,store,,0,,0,
+shelf_3x1,3×1 진열대,sales,res://art/furniture/pixel_v1/shelf_3x1.png,대형 상품 진열대다.,store,,0,,0,
+warehouse_rack,창고 선반,facility,res://art/furniture/pixel_v1/warehouse_rack.png,아이템을 보관하는 창고용 선반이다.,construction,,0,,0,
+register,계산대,facility,res://art/furniture/pixel_v1/register.png,상품을 계산하는 계산대다.,store,,0,,0,
+door,문,facility,res://art/furniture/pixel_v1/door.png,매장의 출입문이다.,construction,,0,,0,
+warehouse_door,창고 문,facility,res://art/furniture/pixel_v1/warehouse_door.png,창고로 이동하는 문이다.,construction,,0,,0,
+production_door,생산실 문,facility,res://art/furniture/pixel_v1/production_door.png,생산·보관 구역으로 이동하는 문이다.,construction,,0,,0,
+drink_machine,음료 제조기,production,res://art/furniture/pixel_v1/drink_machine.png,음료 상품을 생산하는 설비다.,production,,0,,0,
+plant_small,작은 화분,decoration,res://art/furniture/pixel_v1/plant_small.png,일반 손님의 방문 비중을 높입니다.,interior,customer_weight,0.20,plant,2,normal
+wall_poster,상품 포스터,decoration,res://art/furniture/pixel_v1/wall_poster.png,손님의 구매욕구를 높이는 포스터다.,interior,purchase_desire,0.03,poster,2,
+magic_oven,화덕,production,res://art/furniture/pixel_v1/magic_oven.png,빵을 굽는 생산 설비다.,production,,0,,0,
+night_lantern,심야의 등불,decoration,res://art/furniture/pixel_v1/night_lantern.png,매장을 은은하게 밝혀 평판이 오르고 손님이 더 자주 찾아옵니다.,interior,reputation,2.0,lantern,1,
+antique_cabinet,골동품 진열장,decoration,res://art/furniture/pixel_v1/antique_cabinet.png,수집가의 방문 비중을 높입니다.,interior,customer_weight,0.40,cabinet,1,collector
+old_world_map,낡은 세계지도,decoration,res://art/furniture/pixel_v1/old_world_map.png,여행자의 방문 비중을 높입니다.,interior,customer_weight,0.30,worldmap,1,traveler
+adventurer_banner,모험가 깃발,decoration,res://art/furniture/pixel_v1/adventurer_banner.png,모험가의 방문 비중을 높입니다.,interior,customer_weight,0.30,banner,1,adventurer
+wood_shelf_1x1,작은 나무 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,주운 가지를 수액으로 묶어 만든 소박한 진열대. 새 가게의 작은 수확을 올려 두기 좋다. 한 층만 사용할 수 있다.,store,,0,,0,
+wood_shelf_2x1,넓은 나무 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,가지와 나무틀을 넓게 엮은 진열대. 서로 다른 원정 재료를 나란히 놓을 수 있지만 위로 더 쌓을 수는 없다.,store,,0,,0,
+reinforced_shelf_2x1,철제 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,나무틀에 철제 이음쇠를 더해 튼튼하게 만들었다. 상품을 더 담고 같은 진열대를 하나 더 얹어 두 층으로 사용할 수 있다.,store,,0,,0,
+modern_shelf_1x1,소형 편의점 진열대,sales,res://art/furniture/pixel_v1/shelf_1x1.png,플레이어가 기억하는 흰 선반과 가격표 띠를 현지 재료로 재현한 철제 진열대. 좁은 자리에도 많은 상품을 진열할 수 있다.,store,,0,,0,
+modern_shelf_2x1,표준 편의점 진열대,sales,res://art/furniture/pixel_v1/shelf_2x1.png,흰 철판과 곧은 기둥을 가진 익숙한 편의점 진열대. 원재료에서 이웃과 만든 제품까지 네 종류를 한 층에 나누어 놓는다.,store,,0,,0,
+modern_shelf_3x1,대형 편의점 진열대,sales,res://art/furniture/pixel_v1/shelf_3x1.png,처음의 편의점을 떠올리며 길게 만든 철제 진열대. 넓은 설치 자리와 재료가 필요하지만 다양한 상품을 함께 전시할 수 있다.,store,,0,,0,
+wood_register,나무 거래 계산대,facility,res://art/furniture/pixel_v1/register.png,나무 상판과 작은 동전함으로 만든 거래 자리. 손님과 상품을 확인하고 현지 화폐를 받는다. 플레이어 직접 계산과 직원 계산 모두 가능하다.,store,,0,,0,
+modern_register,재현 편의점 계산대,facility,res://art/furniture/pixel_v1/register.png,매끈한 상판과 단말기 형태를 재현한 계산대. 황무지의 가게에 처음의 익숙함을 더한다. 결제 속도와 직접 계산 방식은 기존 계산대와 같다.,store,,0,,0,
+wood_warehouse_rack,나무 창고 선반,facility,res://art/furniture/pixel_v1/warehouse_rack.png,가지를 묶어 만든 창고용 선반. 진열할 수확물을 잠시 정리해 두는 공간이다. 냉장이나 냉동 기능은 없다.,construction,,0,,0,
+steel_warehouse_rack,철제 창고 선반,facility,res://art/furniture/pixel_v1/warehouse_rack.png,철제 기둥과 단단한 선반으로 만든 넉넉한 창고 집기. 다음 계절을 준비할 재료를 종류별로 정리한다. 냉장이나 냉동 기능은 없다.,construction,,0,,0,
+fridge_unit,냉장함,facility,res://art/received/furniture/fridge_unit/empty_rotation_0.png,"세로형 유리문 냉장고. 가까이 가서 상호작용하면 새순·물박하를 계절이 지나도 신선하게 넣어 둘 수 있다. 같은 종류를 여러 대 놓아도 보관함은 하나를 같이 쓴다.",store,,0,,0,
+freezer_unit,냉동함,facility,res://art/received/furniture/freezer_unit/empty_rotation_0.png,"뚜껑이 달린 긴 냉동고. 새순·물박하에 더해 서리 얼음까지 녹지 않게 보관한다. 같은 종류를 여러 대 놓아도 보관함은 하나를 같이 쓴다.",store,,0,,0,

@@ -1,0 +1,19 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bfeom7r8n85o6"
+
+[deps]
+
+files=["res://data/shop/catalogs/furniture/shelf_data.slots.translation", "res://data/shop/catalogs/furniture/shelf_data.slot.translation", "res://data/shop/catalogs/furniture/shelf_data.max.translation"]
+
+source_file="res://data/shop/catalogs/furniture/shelf_data.csv"
+dest_files=["res://data/shop/catalogs/furniture/shelf_data.slots.translation", "res://data/shop/catalogs/furniture/shelf_data.slot.translation", "res://data/shop/catalogs/furniture/shelf_data.max.translation"]
+
+[params]
+
+compress=1
+delimiter=0
+unescape_keys=false
+unescape_translations=true

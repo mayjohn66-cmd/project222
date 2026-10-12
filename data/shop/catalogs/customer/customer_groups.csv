@@ -1,0 +1,9 @@
+group_id,display_name,weight,description,season_weights,period_weights
+normal,일반 손님,35,근처에서 생활하는 일반 손님,spring:1|summer:1|autumn:1|winter:1,morning:1|day:1|evening:1.2|night:0.8
+traveler,여행자,15,다른 지역에서 찾아온 여행자,spring:1|summer:1.4|autumn:1.1|winter:0.6,morning:0.8|day:1.4|evening:1|night:0.4
+adventurer,모험가,15,깊은 숲을 오가며 상비약과 든든한 음식을 찾는 손님,spring:1|summer:1|autumn:1.4|winter:0.8,morning:0.7|day:0.6|evening:2|night:0.8
+miner,광부,10,광산에서 일하며 광물과 든든한 음식을 찾는 손님,spring:1|summer:1|autumn:1|winter:1.3,morning:1.6|day:0.8|evening:1.4|night:0.3
+herbalist,약초꾼,8,숲에서 약초와 열매를 다루는 손님,spring:1.5|summer:1.3|autumn:0.9|winter:0.3,morning:1.8|day:1|evening:0.4|night:0.1
+child,아이,7,달콤한 간식과 음료를 좋아하는 동네 아이,spring:1.3|summer:1.5|autumn:0.9|winter:0.5,morning:0.5|day:2|evening:0.5|night:0
+collector,수집가,5,귀한 물건과 값나가는 물건을 찾는 손님,spring:1|summer:0.8|autumn:1.5|winter:1.2,morning:0.3|day:0.8|evening:1.5|night:1.5
+marsh_local,늪 주민,5,늪지에서 온 손님,spring:1.2|summer:1.4|autumn:1|winter:0.6,morning:1|day:0.8|evening:1.2|night:1.4
