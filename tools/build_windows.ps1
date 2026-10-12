@@ -57,7 +57,7 @@ try {
     Invoke-Engine 'import1' @('--headless','--path',('"'+$buildRoot+'"'),'--editor','--import','--quit') $true
     Invoke-Engine 'import2' @('--headless','--path',('"'+$buildRoot+'"'),'--editor','--import','--quit')
     Invoke-Engine 'export' @('--headless','--path',('"'+$buildRoot+'"'),'--export-release','"Windows Desktop"',('"'+(Join-Path $outputRoot 'Project222.exe')+'"'))
-    Invoke-Engine 'licenses' @('--headless','--script',('"'+(Join-Path $PSScriptRoot 'write_engine_licenses.gd')+'"'),'--',('"--out='+(Join-Path $outputRoot 'GODOT_LICENSES.txt')+'"'))
+    Invoke-Engine 'licenses' @('--headless','--path',('"'+$buildRoot+'"'),'--script',('"'+(Join-Path $PSScriptRoot 'write_engine_licenses.gd')+'"'),'--',('"--out='+(Join-Path $outputRoot 'GODOT_LICENSES.txt')+'"'))
 } finally { $env:APPDATA=$oldAppData }
 foreach ($name in @('Project222.exe','Project222.pck')) {
     if (-not (Test-Path -LiteralPath (Join-Path $outputRoot $name))) { throw ('Missing '+$name) }
