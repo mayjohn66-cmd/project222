@@ -1,0 +1,30 @@
+{
+  "label": "rc1-20261012",
+  "source_commit": "5ff989268ccd568aa1b7739def98550949b20786",
+  "tracked_source_dirty": false,
+  "godot": "4.7.1.stable.official.a13da4feb",
+  "architecture": "x86_64",
+  "built_at_utc": "2026-10-12T07:10:55.2135267Z",
+  "files": [
+    {
+      "name": "Project222.exe",
+      "bytes": 109071360,
+      "sha256": "7947b251ecef456d21668a7164a5ef36d61b38708c7ddb92bac2659e3437a76d"
+    },
+    {
+      "name": "Project222.pck",
+      "bytes": 43816740,
+      "sha256": "77dd4b8d514872e7a3df5d97e26c8895cbce76f60bfe975b201a487fc99cebda"
+    },
+    {
+      "name": "README_KO.txt",
+      "bytes": 1776,
+      "sha256": "b185f8a927de6e66dcea08dfce3430c6b02e025b9c21354053161b025cc5def6"
+    },
+    {
+      "name": "GODOT_LICENSES.txt",
+      "bytes": 110930,
+      "sha256": "7a8ddf24cf0cc4e7fe46abfbfed9dff44ebca8f330999545af70bc3a975d918b"
+    }
+  ]
+}
