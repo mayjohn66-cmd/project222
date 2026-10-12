@@ -30,8 +30,12 @@ PROMPT = """# 스토리 일관성 분석 요청
 if len(sys.argv) > 2:
     PROMPT = Path(sys.argv[2]).read_text(encoding="utf-8").strip() + "\n\n---\n"
 
+import re
+
 def read(p):
-    return (root / p).read_text(encoding="utf-8").strip()
+    text = (root / p).read_text(encoding="utf-8").strip()
+    # 묶음은 다른 폴더로 옮겨 올리는 파일이라 상대 링크는 의미가 없다: [글자](주소) → 글자
+    return re.sub(r"\[([^\]]+)\]\((?!https?://)[^)]+\)", r"\1", text)
 
 def rows(p):
     with open(root / p, encoding="utf-8", newline="") as f:
@@ -48,4 +52,4 @@ full, _ = export_story_full.build()
 parts.append("\n\n# [자료] 게임에 들어간 모든 글(이야기 순서)\n\n" + full.replace("# 전체 스토리", "## 전체 스토리", 1))
 
 out.write_text("\n".join(parts) + "\n", encoding="utf-8")
-print(f"→ {out.relative_to(root)} ({out.stat().st_size // 1024} KB)")
+print(f"→ {out} ({out.stat().st_size // 1024} KB)")
