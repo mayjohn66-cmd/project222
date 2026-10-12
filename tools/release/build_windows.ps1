@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory=$true)][string]$GodotExe,
-    [string]$ProjectDirectory = (Split-Path -Parent $PSScriptRoot),
+    [string]$ProjectDirectory = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)),
     [string]$OutputDirectory,
     [string]$TemplateDirectory,
     [string]$BuildLabel = 'playtest'
@@ -62,7 +62,7 @@ try {
 foreach ($name in @('Project222.exe','Project222.pck')) {
     if (-not (Test-Path -LiteralPath (Join-Path $outputRoot $name))) { throw ('Missing '+$name) }
 }
-Copy-Item -LiteralPath (Join-Path $PSScriptRoot '../docs/배포/플레이테스트_안내.txt') -Destination (Join-Path $outputRoot 'README_KO.txt')
+Copy-Item -LiteralPath (Join-Path $PSScriptRoot '../../docs/배포/플레이테스트_안내.txt') -Destination (Join-Path $outputRoot 'README_KO.txt')
 $manifest=[ordered]@{label=$BuildLabel;source_commit=$revision;tracked_source_dirty=$false;godot=$version;architecture='x86_64';built_at_utc=[DateTime]::UtcNow.ToString('o');files=@()}
 foreach ($name in @('Project222.exe','Project222.pck','README_KO.txt','GODOT_LICENSES.txt')) {
     $file=Join-Path $outputRoot $name
