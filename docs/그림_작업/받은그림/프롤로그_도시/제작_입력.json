@@ -1,0 +1,111 @@
+{
+  "date": "2026-10-12",
+  "reference_style": [
+    "art/received/village/tool_shop.png",
+    "art/received/floors/paving_1.png"
+  ],
+  "assets": [
+    {
+      "id": "small_shop",
+      "group": "building",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-89f2b896-4efc-44df-81aa-cd790d80224c.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE isolated game building sprite for an existing isometric pixel-art convenience-store game. Reference1 is STYLE ONLY (pixel clusters, warm outlined materials, isometric projection), reference2 is the exact isometric ground projection. Subject: ONE compact modern Korean neighborhood one-story shop with a pale warm cream facade, warm brick base, flat parapet roof, large glass shopfront, plain teal signboard WITHOUT lettering, small simple awning; no merchandise outside. Modern ordinary contemporary neighborhood, no fantasy or medieval design. Elevated isometric camera 30deg, equal X/Y ground axes, ground-edge slopes EXACTLY 1 vertical pixel per 2 horizontal pixels, see roof and two sides. A compact rectangular footprint, complete structure shown with safe padding. Handcrafted clean pixel art, readable coherent clusters, dark warm outline, controlled warm palette and clear material shading matching reference quality, no forced tiny coarse blocks, no gradients or photorealism. Base rests directly on ground but NO drawn ground tile, NO surrounding pavement, NO cast shadow. One building only, centered full view, genuine transparent alpha, no backdrop, no people/cars/trees, no captions/text/logos/watermark. Preserve aspect ratio; asset intended to fit native 256px-scale building art. Soft warm neutral daylight without baked nighttime glow. Both visible facades finished.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "e2cf5222fba2a9d1fdc18a9c33edf2c8178863739d1d230023620f1f9d98f010"
+    },
+    {
+      "id": "apartment",
+      "group": "building",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-033d3d6c-a99c-43da-8cf5-91e488bf211f.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE isolated game building sprite for an existing isometric pixel-art convenience-store game. Reference1 is STYLE ONLY (pixel clusters, warm outlined materials, isometric projection), reference2 is the exact isometric ground projection. Subject: ONE compact modern Korean three-story low-rise apartment, warm muted beige plaster and reddish brick ground level, regular windows, modest balconies with simple railings, flat rooftop parapet, one plain street door; no hanging clutter. Modern ordinary contemporary neighborhood, no fantasy or medieval design. Elevated isometric camera 30deg, equal X/Y ground axes, ground-edge slopes EXACTLY 1 vertical pixel per 2 horizontal pixels, see roof and two sides. A compact rectangular footprint, complete structure shown with safe padding. Handcrafted clean pixel art, readable coherent clusters, dark warm outline, controlled warm palette and clear material shading matching reference quality, no forced tiny coarse blocks, no gradients or photorealism. Base rests directly on ground but NO drawn ground tile, NO surrounding pavement, NO cast shadow. One building only, centered full view, genuine transparent alpha, no backdrop, no people/cars/trees, no captions/text/logos/watermark. Preserve aspect ratio; asset intended to fit native 256px-scale building art. Soft warm neutral daylight without baked nighttime glow. Both visible facades finished.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "def19895143c6db9228ea1ec8816dac44f21b99e4aaff7226cf1737e7a820534",
+      "first_attempt": {
+        "path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-843c5f33-fee0-47a1-8e6c-451668a2a2ac.png",
+        "sha256": "dfa0fe7ad6d9f918ff5e250d4a97598b7e34af987dc5be10e0f9deff418e2432",
+        "reason": "아래쪽 기단이 캔버스 가장자리에서 잘림; 게임 미사용"
+      },
+      "correction_prompt": "Use case: precise-object-edit. Edit this existing apartment sprite ONLY to fix the clipped bottom edge. Keep the exact same building design, facade, floors, windows, balconies, colors, outline, pixel style, angle and original proportions. Add generous TRANSPARENT padding all around, at least 12% below and on sides, uniformly reduce/reframe the complete building within the canvas if necessary. Complete the small missing bottom foundation edge naturally so no structure touches a canvas edge. Show the entire building including every base corner. No redesign or new parts, no surrounding pavement/ground tile, no cast shadow, no text. Genuine transparent alpha. This is a framing/bottom-edge correction of the existing building, not a new design."
+    },
+    {
+      "id": "office",
+      "group": "building",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-5d04c8c4-dddd-405a-8b2d-dc3c00360871.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE isolated game building sprite for an existing isometric pixel-art convenience-store game. Reference1 is STYLE ONLY (pixel clusters, warm outlined materials, isometric projection), reference2 is the exact isometric ground projection. Subject: ONE compact modern two-story neighborhood office building, muted pale blue-grey panels, clear repeated dark blue glass window bays, flat roof with restrained rooftop unit, simple recessed entrance; no signs or logos. Modern ordinary contemporary neighborhood, no fantasy or medieval design. Elevated isometric camera 30deg, equal X/Y ground axes, ground-edge slopes EXACTLY 1 vertical pixel per 2 horizontal pixels, see roof and two sides. A compact rectangular footprint, complete structure shown with safe padding. Handcrafted clean pixel art, readable coherent clusters, dark warm outline, controlled warm palette and clear material shading matching reference quality, no forced tiny coarse blocks, no gradients or photorealism. Base rests directly on ground but NO drawn ground tile, NO surrounding pavement, NO cast shadow. One building only, centered full view, genuine transparent alpha, no backdrop, no people/cars/trees, no captions/text/logos/watermark. Preserve aspect ratio; asset intended to fit native 256px-scale building art. Soft warm neutral daylight without baked nighttime glow. Both visible facades finished.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "ac54a5698c191344cd65d69ede51c240dd435c3ea1d586063241f6323db0c126"
+    },
+    {
+      "id": "cafe",
+      "group": "building",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-4eead2c3-801b-4ebb-b833-aa76e3241b47.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE isolated game building sprite for an existing isometric pixel-art convenience-store game. Reference1 is STYLE ONLY (pixel clusters, warm outlined materials, isometric projection), reference2 is the exact isometric ground projection. Subject: ONE compact modern one-story neighborhood cafe, warm terracotta brick facade, pale cream flat parapet roof, large front windows, simple muted olive awning and blank cream sign strip WITHOUT lettering, one glass door; no furniture outside. Modern ordinary contemporary neighborhood, no fantasy or medieval design. Elevated isometric camera 30deg, equal X/Y ground axes, ground-edge slopes EXACTLY 1 vertical pixel per 2 horizontal pixels, see roof and two sides. A compact rectangular footprint, complete structure shown with safe padding. Handcrafted clean pixel art, readable coherent clusters, dark warm outline, controlled warm palette and clear material shading matching reference quality, no forced tiny coarse blocks, no gradients or photorealism. Base rests directly on ground but NO drawn ground tile, NO surrounding pavement, NO cast shadow. One building only, centered full view, genuine transparent alpha, no backdrop, no people/cars/trees, no captions/text/logos/watermark. Preserve aspect ratio; asset intended to fit native 256px-scale building art. Soft warm neutral daylight without baked nighttime glow. Both visible facades finished.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "df84c5e80f9eea82f47132af7af970c47153323bd25db78438267e5d7e265dc6"
+    },
+    {
+      "id": "sedan",
+      "group": "vehicle",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-c3a0b857-1b85-454c-83fe-4c80d875d522.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE six-view sprite sheet of the SAME modern vehicle for the ordinary city prologue of this pixel game. Subject: one ordinary compact red sedan, dark blue-grey windows, plain alloy wheels, white headlights at front, clearly RED tail lights at rear; NO brand badge. Match reference1 warm crisp outlined pixel style and reference2 ground isometric projection. Six isolated FULL vehicles on EXACT 3 columns x 2 rows, equal cells and empty spacing, no cropping. Top row (1) isometric front-three-quarter moving DOWN-RIGHT (SOUTH-EAST), NOSE points RIGHT and DOWN, see roof and white front headlights; (2) isometric front-three-quarter moving DOWN-LEFT (SOUTH-WEST), nose points LEFT and DOWN; (3) RIGHT-facing horizontal SIDE view, low eye-level ~10deg, NOSE points RIGHT. Bottom row (4) isometric rear-three-quarter moving UP-RIGHT (NORTH-EAST), see RED rear lights, nose away upper-right; (5) isometric rear-three-quarter moving UP-LEFT (NORTH-WEST), see RED rear lights, nose away upper-left; (6) LEFT-facing horizontal SIDE view, low eye-level ~10deg, NOSE points LEFT. Isometric views use elevated30deg/2:1 ground edges; side views are for eye-height window POV. Keep exact same wheels/roof/body details throughout, same scale. Crisp coherent pixel clusters and controlled palette, never squash vehicle or render tiny smeared blocks. GENUINE TRANSPARENT ALPHA, no backdrop, street, ground, cast shadow, labels/numbers/gridlines/watermark. Leave at least 12% empty margins in every cell.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "68f48ee5b632c67000c418d1ebfa93497a3838ce834f450c10779fddbbe716cd"
+    },
+    {
+      "id": "taxi",
+      "group": "vehicle",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-f0ecb634-ad2e-4329-b32e-cba2a29d755b.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE six-view sprite sheet of the SAME modern vehicle for the ordinary city prologue of this pixel game. Subject: one ordinary compact yellow taxi sedan, dark blue-grey windows, small unlettered taxi roof block, plain wheels, white headlights at front, clearly RED tail lights at rear; NO brand or readable text. Match reference1 warm crisp outlined pixel style and reference2 ground isometric projection. Six isolated FULL vehicles on EXACT 3 columns x 2 rows, equal cells and empty spacing, no cropping. Top row (1) isometric front-three-quarter moving DOWN-RIGHT (SOUTH-EAST), NOSE points RIGHT and DOWN, see roof and white front headlights; (2) isometric front-three-quarter moving DOWN-LEFT (SOUTH-WEST), nose points LEFT and DOWN; (3) RIGHT-facing horizontal SIDE view, low eye-level ~10deg, NOSE points RIGHT. Bottom row (4) isometric rear-three-quarter moving UP-RIGHT (NORTH-EAST), see RED rear lights, nose away upper-right; (5) isometric rear-three-quarter moving UP-LEFT (NORTH-WEST), see RED rear lights, nose away upper-left; (6) LEFT-facing horizontal SIDE view, low eye-level ~10deg, NOSE points LEFT. Isometric views use elevated30deg/2:1 ground edges; side views are for eye-height window POV. Keep exact same wheels/roof/body details throughout, same scale. Crisp coherent pixel clusters and controlled palette, never squash vehicle or render tiny smeared blocks. GENUINE TRANSPARENT ALPHA, no backdrop, street, ground, cast shadow, labels/numbers/gridlines/watermark. Leave at least 12% empty margins in every cell.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "6eda5244950b57681b1cf94dc441ec42714a6a5df9111e3ce7ddd4759c7e7c63"
+    },
+    {
+      "id": "truck",
+      "group": "vehicle",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-cd9a34c2-9a0e-4fd7-bac1-d3e7405286d0.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE six-view sprite sheet of the SAME modern vehicle for the ordinary city prologue of this pixel game. Subject: one small white delivery van/truck with compact cab and simple white box cargo body, dark blue-grey windows, black tyres, white front headlights and red rear lights; NO brand, logos or text. Match reference1 warm crisp outlined pixel style and reference2 ground isometric projection. Six isolated FULL vehicles on EXACT 3 columns x 2 rows, equal cells and empty spacing, no cropping. Top row (1) isometric front-three-quarter moving DOWN-RIGHT (SOUTH-EAST), NOSE points RIGHT and DOWN, see roof and white front headlights; (2) isometric front-three-quarter moving DOWN-LEFT (SOUTH-WEST), nose points LEFT and DOWN; (3) RIGHT-facing horizontal SIDE view, low eye-level ~10deg, NOSE points RIGHT. Bottom row (4) isometric rear-three-quarter moving UP-RIGHT (NORTH-EAST), see RED rear lights, nose away upper-right; (5) isometric rear-three-quarter moving UP-LEFT (NORTH-WEST), see RED rear lights, nose away upper-left; (6) LEFT-facing horizontal SIDE view, low eye-level ~10deg, NOSE points LEFT. Isometric views use elevated30deg/2:1 ground edges; side views are for eye-height window POV. Keep exact same wheels/roof/body details throughout, same scale. Crisp coherent pixel clusters and controlled palette, never squash vehicle or render tiny smeared blocks. GENUINE TRANSPARENT ALPHA, no backdrop, street, ground, cast shadow, labels/numbers/gridlines/watermark. Leave at least 12% empty margins in every cell.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "13684f71287d1383d883c97775d0e4667d9649ec761c73abc32d7f622ae1dbbb"
+    },
+    {
+      "id": "streetlamp",
+      "group": "prop",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-d1eb34eb-d1a2-44c3-86d0-6232e87d87d2.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE isolated slender full-height sprite for the modern city prologue of a pixel-art convenience-store game. Subject: ONE modern Korean roadside curved-arm streetlamp: slender dark grey metal pole, simple curved arm, rectangular warm pale lamp head, small bolted base; NOT a medieval lantern. Match reference warm coherent pixel clusters and outlined materials; ordinary modern street. Elevated isometric30deg camera, equal ground axes and EXACT2:1 edge slopes. Full subject centered with generous transparent margins, no clipping. Clean readable silhouette at game scale, no baked cast shadow, no ground tile, no gradient backdrop, no labels, no extra props, no text/logos/watermark. GENUINE TRANSPARENT ALPHA. Neutral daylight with restrained warm highlights, no blurry glow halo.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "8f047e58ecb391b405866a9f93c567a63ef3ee13154b922f8d0ff810cb3a20ff"
+    },
+    {
+      "id": "traffic_signal",
+      "group": "prop",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-04a4f70b-2f2c-4b32-a835-d76fdf39f641.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE isolated slender full-height sprite for the modern city prologue of a pixel-art convenience-store game. Subject: ONE modern roadside traffic signal on a slim dark grey pole, compact vertical three-round-light housing with green bottom lamp lit subtly and red/amber upper lamps dark, plain base; no signs or arrows. Match reference warm coherent pixel clusters and outlined materials; ordinary modern street. Elevated isometric30deg camera, equal ground axes and EXACT2:1 edge slopes. Full subject centered with generous transparent margins, no clipping. Clean readable silhouette at game scale, no baked cast shadow, no ground tile, no gradient backdrop, no labels, no extra props, no text/logos/watermark. GENUINE TRANSPARENT ALPHA. Neutral daylight with restrained warm highlights, no blurry glow halo.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "dc5647eef4a63eb9560f1b374b746ed83c1bb804351a6a7e7e1dabd0a2ec94a6"
+    },
+    {
+      "id": "bus_stop",
+      "group": "prop",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-3168b6c0-e61c-4836-86f2-bb2e6e7b3981.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE isolated slender full-height sprite for the modern city prologue of a pixel-art convenience-store game. Subject: ONE simple modern bus stop sign: slender dark grey pole, modest blue-and-cream rectangular panel with a small readable bus pictogram ONLY, blank pale lower panel, small base; no written words, no route numbers, no logos, no shelter. Match reference warm coherent pixel clusters and outlined materials; ordinary modern street. Elevated isometric30deg camera, equal ground axes and EXACT2:1 edge slopes. Full subject centered with generous transparent margins, no clipping. Clean readable silhouette at game scale, no baked cast shadow, no ground tile, no gradient backdrop, no labels, no extra props, no text/logos/watermark. GENUINE TRANSPARENT ALPHA. Neutral daylight with restrained warm highlights, no blurry glow halo.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "fe0262b8f8ae35570d2fd6adaeba35cdbe787d9d302c316eb7aef46c84f36715"
+    },
+    {
+      "id": "planter",
+      "group": "prop",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-7baad883-7b5e-4c9d-856d-27265bdf0dba.png",
+      "prompt": "Use case: stylized-concept. Asset: ONE isolated low wide sprite for the modern city prologue of a pixel-art convenience-store game. Subject: ONE low modern rectangular street planter, muted grey concrete container with a compact cared-for green shrub and a few small pale cream flowers, clean planting surface, no grass outside box. Match reference warm coherent pixel clusters and outlined materials; ordinary modern street. Elevated isometric30deg camera, equal ground axes and EXACT2:1 edge slopes. Full subject centered with generous transparent margins, no clipping. Clean readable silhouette at game scale, no baked cast shadow, no ground tile, no gradient backdrop, no labels, no extra props, no text/logos/watermark. GENUINE TRANSPARENT ALPHA. Neutral daylight with restrained warm highlights, no blurry glow halo.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "c746ba1715ce95ba19b52319a9cc28f4617e78b7ecb90e98c6e7b1dc8032b962"
+    },
+    {
+      "id": "window_street",
+      "group": "background",
+      "generated_path": "C:\\Users\\john9\\.codex\\generated_images\\01a0f21e-f0fe-7852-bbc3-ba543c654967\\exec-a700d4ed-2cfa-4bfb-9021-5f548694cc28.png",
+      "prompt": "Use case: illustration-story. Asset: ONE painted pixel-art panoramic distant city street facade background seen at seated human eye level from a convenience-store window. Reference images show the four exact contemporary neighborhood building DESIGNS and palette to reuse as the across-the-street facades: pale shop with blank teal sign, warm beige low apartment with balconies, pale blue-grey office windows, warm brick cafe with olive awning. Convert these designs to natural eye-height perspective of the facades, NOT isometric bird's-eye view. A quiet ordinary Korean modern neighborhood, several low-rise buildings across a straight road, restrained rooftop utilities, broad clear pale blue sky in upper half, very thin opposite sidewalk visible along bottom. The canvas is a WIDE 2.5:1 PANORAMA. Consistent crisp handcrafted pixel clusters matching references, dark warm outlines, no painterly blur/fine noise, warm gentle daylight. No front road or foreground pavement, no cars, no people, no trees/grass, no window frame, no indoor furniture, no text/readable signage/logos/watermarks, no fantasy imagery. Fully opaque background. Far scenery intended to sit behind actual animated traffic and window frame rendered by game.",
+      "tool": "built-in image_gen",
+      "generated_sha256": "159578c30a6755f09a8e1703daed4964dbd5c9af36615bc381324618ae1f1a01"
+    }
+  ]
+}

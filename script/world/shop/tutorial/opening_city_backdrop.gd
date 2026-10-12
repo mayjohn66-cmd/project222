@@ -1,6 +1,6 @@
 class_name OpeningCityBackdrop
 extends RefCounted
-## 새 게임 프롤로그의 "익숙한 도시 거리". 가게 바깥을 현대 거리처럼 보이게 하는 임시 입방체 장식이다(새 그림 파일 없음).
+## 새 게임 프롤로그의 현대 거리. 준비된 도시 그림을 우선하고 누락 시 기존 표시를 사용한다.
 ## 숲(풀·나무·꽃)은 숨겨 두었다가 `show_forest()`에서 한꺼번에 되돌린다. 모든 항목 이름은 `cut_` 로 시작해
 ## 매장 벽(`wall`)·마을 물체 정리 코드와 섞이지 않는다. 배치 수치는 아래 상수로 조정한다.
 
@@ -72,6 +72,16 @@ func build() -> void:
 	var east: float = far_walk_x + SIDEWALK_WIDTH + 2.0
 	var north: float = y0 - STREET_LENGTH
 	var south: float = far_walk_y + SIDEWALK_WIDTH + 2.0
+	# 도시 장면의 빈 땅도 포장으로 연결한다. 지면은 모든 인물/건물보다 뒤에서 그린다.
+	var base_areas := [Rect2(Vector2(west-8.0,north-8.0),Vector2(east-west+18.0,y0-north+8.0)),
+		Rect2(Vector2(west-8.0,y1),Vector2(east-west+18.0,south-y1+8.0)),
+		Rect2(Vector2(west-8.0,y0),Vector2(x0-west+8.0,y1-y0)),
+		Rect2(Vector2(x1,y0),Vector2(east-x1+10.0,y1-y0))]
+	for index in base_areas.size():
+		var area: Rect2 = base_areas[index]
+		var base_key := _key("city_base%d" % index)
+		OpeningCityArt.ground(view,base_key,area.position,area.end,"paving")
+		view._items[base_key]["fixed_rank"] = -0.95
 
 	# 인도 → 도로(남쪽 가로 길, 동쪽 세로 길) → 건너편 인도
 	_slab("walk_s1", Vector2(west, south_walk_y), Vector2(east, south_road_y), 0.16, CURB)
@@ -136,6 +146,16 @@ func build() -> void:
 	cars[1]["wrap"] = Vector2(west - 2.0, east + 2.0)
 	cars[2]["wrap"] = Vector2(north - 2.0, south_road_y + 2.0)
 	cars[3]["wrap"] = Vector2(west - 2.0, east + 2.0)
+	# 짧은 도입을 읽기 쉬운 소수의 생활 소품과 횡단보도로 보강한다.
+	for spec in [["signal","traffic_signal",Vector2(east_walk_x+0.4,south_walk_y+0.2),2.8],
+			["bus","bus_stop",Vector2(x0+2.5,far_walk_y+0.6),2.6],
+			["planter0","planter",Vector2(x0+0.6,south_walk_y+0.35),0.0],
+			["planter1","planter",Vector2(east_walk_x+0.4,y0+2.0),0.0]]:
+		var point: Vector2 = spec[2]
+		OpeningCityArt.draw(view,_key(str(spec[0])),str(spec[1]),point,point+Vector2(0.5,0.5),false,float(spec[3]))
+	for stripe in 6:
+		var at_x := east_walk_x+1.1+float(stripe)*0.42
+		_slab("cross%d"%stripe,Vector2(at_x,south_road_y+0.15),Vector2(at_x+0.24,far_walk_y-0.15),0.07,Color(1.25,1.25,1.18))
 
 
 func _key(name: String) -> String:
@@ -145,11 +165,18 @@ func _key(name: String) -> String:
 
 
 func _slab(name: String, lo: Vector2, hi: Vector2, height_blocks: float, tint: Color, kind: String = "tile") -> void:
-	view._set_item(_key(name), lo, hi, height_blocks, kind, tint, "")
+	var key := _key(name)
+	if name.begins_with("road_") and OpeningCityArt.ground(view,key,lo,hi,"road"): return
+	if name.begins_with("walk_") and OpeningCityArt.ground(view,key,lo,hi,"paving"): return
+	view._set_item(key, lo, hi, height_blocks, kind, tint, "")
 
 
 func _lamp(name: String, at: Vector2) -> void:
-	view._set_item(_key(name + "p"), at, at + Vector2(0.14, 0.14), 3.6, "tile", LAMP_POLE, "")
+	var key := _key(name+"p")
+	if OpeningCityArt.draw(view,key,"streetlamp",at,at+Vector2(0.14,0.14),false,3.6):
+		OpeningCityArt.lamp_light(view,key)
+		return
+	view._set_item(key, at, at + Vector2(0.14, 0.14), 3.6, "tile", LAMP_POLE, "")
 	view._set_item(_key(name + "h"), at + Vector2(-0.12, -0.12), at + Vector2(0.4, 0.26), 0.22, "tile", LAMP_LIGHT, "", 3.6)
 
 
@@ -176,7 +203,12 @@ func _building_row(name: String, lo: Vector2, hi: Vector2, along_x: bool, seed_v
 			b = Vector2(hi.x, lo.y + at + width)
 
 		var kind: String = "brick" if rng.randf() < 0.5 else "tile"
-		view._set_item(_key("%s%d" % [name, index]), a, b, height_blocks, kind, tint, "")
+		var key := _key("%s%d" % [name,index])
+		if OpeningCityArt.draw(view,key,OpeningCityArt.BUILDINGS[posmod(index+seed_value,4)],a,b,not along_x,height_blocks):
+			at += width+0.2
+			index += 1
+			continue
+		view._set_item(key, a, b, height_blocks, kind, tint, "")
 		# 가게 앞 창처럼 보이는 어두운 띠(길 쪽 면을 살짝 덮는 얇은 상자)
 		var band_a: Vector2 = a
 		var band_b: Vector2 = b
@@ -197,7 +229,7 @@ func _car(name: String, axis: String, lane: float, start: float, speed: float, c
 	var length: float = 2.2
 	var width: float = 1.0
 	var color: Color = CAR_COLORS[color_index % CAR_COLORS.size()]
-	var info: Dictionary = {"body": _key(name + "b"), "cabin": _key(name + "c"), "axis": axis, "lane": lane, "pos": start, "speed": speed, "length": length, "width": width, "color": color}
+	var info: Dictionary = {"body": _key(name + "b"), "cabin": _key(name + "c"), "axis": axis, "lane": lane, "pos": start, "speed": speed, "length": length, "width": width, "color": color,"art_id":OpeningCityArt.vehicle_id(color_index,axis,speed)}
 	cars.append(info)
 	_place_car(info)
 
@@ -228,12 +260,13 @@ func _place_car(info: Dictionary) -> void:
 	var cabin_key: String = str(info["cabin"])
 
 	if not view._items.has(body_key):
+		if OpeningCityArt.draw(view,body_key,str(info.art_id),a,b): return
 		view._set_item(body_key, a, b, 0.55, "tile", info["color"], "", 0.12)
 		view._set_item(cabin_key, ca, cb, 0.5, "tile", CAR_CABIN, "", 0.67)
 		return
 
 	_move_item(body_key, a, b)
-	_move_item(cabin_key, ca, cb)
+	if view._items.has(cabin_key): _move_item(cabin_key, ca, cb)
 
 
 # 이미 만든 항목을 새 바닥 사각형으로 옮긴다(정렬이 쓰는 min/max/center도 함께 갱신).
@@ -247,7 +280,7 @@ func _move_item(key: String, lo: Vector2, hi: Vector2) -> void:
 	item["center"] = center
 
 	for node_key in ["mesh", "id_mesh"]:
-		(item[node_key] as Node3D).position = center
+		(item[node_key] as Node3D).position = Vector3(center.x,0,center.z) if item.has("city_sprite_id") else center
 
 
 # ---------------------------------------------------------------- 매 프레임
@@ -322,29 +355,4 @@ func _hide_nature() -> void:
 
 # 풀·길 바닥 질감을 도시 콘크리트로 바꿨다가(`city=true`) 되돌린다. 지면 재질이 새로 만들어졌으면 그것도 다시 칠한다.
 func _recolor_ground(city: bool) -> void:
-	if view.village == null:
-		return
-
-	for kind in view.village._ground.keys():
-		var material: ShaderMaterial = view.village._ground[kind]["material"]
-		var saved: Dictionary = _ground_saved.get(kind, {})
-
-		if city:
-			if not saved.is_empty() and saved["material"] == material:
-				continue  # 이미 칠한 재질
-
-			_ground_saved[kind] = {"material": material, "albedo": material.get_shader_parameter("albedo_tex"), "normal": material.get_shader_parameter("normal_tex"), "tint": material.get_shader_parameter("tint")}
-			var tile: Dictionary = view._texture_cache.get("tile", {})
-
-			if not tile.is_empty():
-				material.set_shader_parameter("albedo_tex", tile["albedo"])
-				material.set_shader_parameter("normal_tex", tile["normal"])
-
-			material.set_shader_parameter("tint", CONCRETE)
-		elif not saved.is_empty() and saved["material"] == material:
-			material.set_shader_parameter("albedo_tex", saved["albedo"])
-			material.set_shader_parameter("normal_tex", saved["normal"])
-			material.set_shader_parameter("tint", saved["tint"])
-
-	if not city:
-		_ground_saved.clear()
+	OpeningCityGround.apply(view,_ground_saved,city)

@@ -20,9 +20,9 @@ func state(director: TutorialDirector) -> String:
 # 대사가 열려 있으면 끝까지 읽는다(한 줄에 두 번: 글자 다 보이기 → 다음 줄).
 func read_all(director: TutorialDirector) -> void:
 	var guard := 0
-	while director.dialogue.open and guard < 40:
-		director.dialogue._advance()
-		await wait(0.08)
+	while director.dialogue.open and guard < 240:
+		if not director.cutscene.active: director.dialogue._advance()
+		await wait(0.15)
 		guard += 1
 
 func run() -> void:

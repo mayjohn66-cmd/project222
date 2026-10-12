@@ -1,0 +1,639 @@
+{
+  "assets": [
+    {
+      "id": "small_shop",
+      "group": "building",
+      "path": "res://art/received/opening_city/small_shop.png",
+      "sha256": "709532cca40ed238c2ad3277b3ea6d0db155df158fa80d5353976d9f6026b024",
+      "anchor": [
+        128.0,
+        248.0
+      ],
+      "footprint_width": 240,
+      "size": [
+        256,
+        320
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/small_shop.png",
+      "source_sha256": "e2cf5222fba2a9d1fdc18a9c33edf2c8178863739d1d230023620f1f9d98f010",
+      "source_bounds": [
+        95,
+        105,
+        1253,
+        1090
+      ],
+      "uniform_scale": 0.20725388601036268
+    },
+    {
+      "id": "apartment",
+      "group": "building",
+      "path": "res://art/received/opening_city/apartment.png",
+      "sha256": "31f0909d1812e4515b66e1f3d90d6ef26b519e2ea2aa4ca173d516f62b3221df",
+      "anchor": [
+        128.0,
+        248.0
+      ],
+      "footprint_width": 240,
+      "size": [
+        256,
+        320
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/apartment.png",
+      "source_sha256": "def19895143c6db9228ea1ec8816dac44f21b99e4aaff7226cf1737e7a820534",
+      "source_bounds": [
+        275,
+        93,
+        1117,
+        1090
+      ],
+      "uniform_scale": 0.2850356294536817
+    },
+    {
+      "id": "office",
+      "group": "building",
+      "path": "res://art/received/opening_city/office.png",
+      "sha256": "20f4190a9ae45da262b26bd42bbb7049c89c7809dec424c2267fe24b2d79cb8c",
+      "anchor": [
+        128.0,
+        248.0
+      ],
+      "footprint_width": 240,
+      "size": [
+        256,
+        320
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/office.png",
+      "source_sha256": "ac54a5698c191344cd65d69ede51c240dd435c3ea1d586063241f6323db0c126",
+      "source_bounds": [
+        150,
+        38,
+        1307,
+        1150
+      ],
+      "uniform_scale": 0.20743301642178047
+    },
+    {
+      "id": "cafe",
+      "group": "building",
+      "path": "res://art/received/opening_city/cafe.png",
+      "sha256": "8283cc7d0c99a6045207d4e5ebe7f22b46d2e7e479fe82eba012c30669a63528",
+      "anchor": [
+        128.0,
+        248.0
+      ],
+      "footprint_width": 240,
+      "size": [
+        256,
+        320
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/cafe.png",
+      "source_sha256": "df84c5e80f9eea82f47132af7af970c47153323bd25db78438267e5d7e265dc6",
+      "source_bounds": [
+        127,
+        187,
+        1236,
+        1115
+      ],
+      "uniform_scale": 0.2164111812443643
+    },
+    {
+      "id": "sedan_south_east",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/sedan_south_east.png",
+      "sha256": "af23926c4388bd38e0fd1cf957182b0f123a8bc540c4c470675ddb6fd1aeef53",
+      "anchor": [
+        80.0,
+        80.0
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/sedan.png",
+      "source_sha256": "68f48ee5b632c67000c418d1ebfa93497a3838ce834f450c10779fddbbe716cd",
+      "source_bounds": [
+        49,
+        169,
+        477,
+        460
+      ],
+      "uniform_scale": 0.3364485981308411
+    },
+    {
+      "id": "sedan_south_west",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/sedan_south_west.png",
+      "sha256": "d1fb6c26134d6de31be993fc7308ac084207366c5a976935ae6f799b4ee02b48",
+      "anchor": [
+        80.0,
+        80.0
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/sedan.png",
+      "source_sha256": "68f48ee5b632c67000c418d1ebfa93497a3838ce834f450c10779fddbbe716cd",
+      "source_bounds": [
+        544,
+        173,
+        970,
+        464
+      ],
+      "uniform_scale": 0.3380281690140845
+    },
+    {
+      "id": "sedan_side_right",
+      "group": "vehicle_side",
+      "path": "res://art/received/opening_city/sedan_side_right.png",
+      "sha256": "6c1960c463167979b011005370402af9263c53e7796a71f2746392e0a533390e",
+      "anchor": [
+        80.0,
+        100
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        112
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/sedan.png",
+      "source_sha256": "68f48ee5b632c67000c418d1ebfa93497a3838ce834f450c10779fddbbe716cd",
+      "source_bounds": [
+        1018,
+        252,
+        1502,
+        443
+      ],
+      "uniform_scale": 0.2975206611570248
+    },
+    {
+      "id": "sedan_north_east",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/sedan_north_east.png",
+      "sha256": "69700b5218a710fafe7887637e18f624a55c3522424bd1aa5b4e508087a661fa",
+      "anchor": [
+        80.0,
+        80.0
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/sedan.png",
+      "source_sha256": "68f48ee5b632c67000c418d1ebfa93497a3838ce834f450c10779fddbbe716cd",
+      "source_bounds": [
+        53,
+        592,
+        481,
+        868
+      ],
+      "uniform_scale": 0.3364485981308411
+    },
+    {
+      "id": "sedan_north_west",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/sedan_north_west.png",
+      "sha256": "c5d1acf28f732461fd65566c16342355d829e77bca9b81cc382a245522e2391a",
+      "anchor": [
+        80.0,
+        80.0
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/sedan.png",
+      "source_sha256": "68f48ee5b632c67000c418d1ebfa93497a3838ce834f450c10779fddbbe716cd",
+      "source_bounds": [
+        544,
+        591,
+        965,
+        868
+      ],
+      "uniform_scale": 0.342042755344418
+    },
+    {
+      "id": "sedan_side_left",
+      "group": "vehicle_side",
+      "path": "res://art/received/opening_city/sedan_side_left.png",
+      "sha256": "b2c522449df65ab48b3ad1c4305b85032fce68e0411c986d2db406292f369fd7",
+      "anchor": [
+        80.0,
+        100
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        112
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/sedan.png",
+      "source_sha256": "68f48ee5b632c67000c418d1ebfa93497a3838ce834f450c10779fddbbe716cd",
+      "source_bounds": [
+        1017,
+        687,
+        1502,
+        879
+      ],
+      "uniform_scale": 0.29690721649484536
+    },
+    {
+      "id": "taxi_south_east",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/taxi_south_east.png",
+      "sha256": "5359373f00890d83c7e327237186a02acf6bb58483402a80023086c4fce74b3b",
+      "anchor": [
+        80.0,
+        80.0
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/taxi.png",
+      "source_sha256": "6eda5244950b57681b1cf94dc441ec42714a6a5df9111e3ce7ddd4759c7e7c63",
+      "source_bounds": [
+        68,
+        176,
+        479,
+        467
+      ],
+      "uniform_scale": 0.35036496350364965
+    },
+    {
+      "id": "taxi_south_west",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/taxi_south_west.png",
+      "sha256": "67d3cafa055493da9458b567abb0fc9e21d66d850f48719db717b156d193c8aa",
+      "anchor": [
+        80.0,
+        80.0
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/taxi.png",
+      "source_sha256": "6eda5244950b57681b1cf94dc441ec42714a6a5df9111e3ce7ddd4759c7e7c63",
+      "source_bounds": [
+        552,
+        176,
+        958,
+        466
+      ],
+      "uniform_scale": 0.35467980295566504
+    },
+    {
+      "id": "taxi_side_right",
+      "group": "vehicle_side",
+      "path": "res://art/received/opening_city/taxi_side_right.png",
+      "sha256": "ea4564bb7095ef060e832fefa59e4015188fb0da63acb95353bd7f49c5f0de98",
+      "anchor": [
+        80.0,
+        100
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        112
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/taxi.png",
+      "source_sha256": "6eda5244950b57681b1cf94dc441ec42714a6a5df9111e3ce7ddd4759c7e7c63",
+      "source_bounds": [
+        1038,
+        210,
+        1492,
+        418
+      ],
+      "uniform_scale": 0.31718061674008813
+    },
+    {
+      "id": "taxi_north_east",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/taxi_north_east.png",
+      "sha256": "b641d6fae0b6e192dcc342c40385fb5e637167c6f87fae3f0c2e135774069e30",
+      "anchor": [
+        80.0,
+        80.0
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/taxi.png",
+      "source_sha256": "6eda5244950b57681b1cf94dc441ec42714a6a5df9111e3ce7ddd4759c7e7c63",
+      "source_bounds": [
+        72,
+        593,
+        476,
+        860
+      ],
+      "uniform_scale": 0.3564356435643564
+    },
+    {
+      "id": "taxi_north_west",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/taxi_north_west.png",
+      "sha256": "480428d097a50c296b49164b6a68e8136465d7b579698e1c909c6384ad7e6c2a",
+      "anchor": [
+        80.0,
+        80.0
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/taxi.png",
+      "source_sha256": "6eda5244950b57681b1cf94dc441ec42714a6a5df9111e3ce7ddd4759c7e7c63",
+      "source_bounds": [
+        533,
+        593,
+        922,
+        859
+      ],
+      "uniform_scale": 0.37017994858611825
+    },
+    {
+      "id": "taxi_side_left",
+      "group": "vehicle_side",
+      "path": "res://art/received/opening_city/taxi_side_left.png",
+      "sha256": "9c1d53e007402577e57bfdbbaeb3a4d60518533296dc9384364e0bdced3d8158",
+      "anchor": [
+        80.0,
+        100
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        112
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/taxi.png",
+      "source_sha256": "6eda5244950b57681b1cf94dc441ec42714a6a5df9111e3ce7ddd4759c7e7c63",
+      "source_bounds": [
+        1028,
+        642,
+        1488,
+        848
+      ],
+      "uniform_scale": 0.3130434782608696
+    },
+    {
+      "id": "truck_south_east",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/truck_south_east.png",
+      "sha256": "c7e9a771c77b56508207a2f2221644ed3c21ad56b699eae5f0eef87dce431aaf",
+      "anchor": [
+        79.5,
+        88.75
+      ],
+      "footprint_width": 109,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/truck.png",
+      "source_sha256": "13684f71287d1383d883c97775d0e4667d9649ec761c73abc32d7f622ae1dbbb",
+      "source_bounds": [
+        75,
+        110,
+        475,
+        491
+      ],
+      "uniform_scale": 0.27296587926509186
+    },
+    {
+      "id": "truck_south_west",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/truck_south_west.png",
+      "sha256": "a9de2aa3a0caf568c45d323433e8bbcd601d2c08e6e9787c353f7c3190d45596",
+      "anchor": [
+        80.0,
+        89.0
+      ],
+      "footprint_width": 108,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/truck.png",
+      "source_sha256": "13684f71287d1383d883c97775d0e4667d9649ec761c73abc32d7f622ae1dbbb",
+      "source_bounds": [
+        550,
+        110,
+        950,
+        494
+      ],
+      "uniform_scale": 0.2708333333333333
+    },
+    {
+      "id": "truck_side_right",
+      "group": "vehicle_side",
+      "path": "res://art/received/opening_city/truck_side_right.png",
+      "sha256": "0bdd5021f998eb3263a12901e7244f81bfd6e03868f2923bfbdee78f4c3668b8",
+      "anchor": [
+        80.0,
+        100
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        112
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/truck.png",
+      "source_sha256": "13684f71287d1383d883c97775d0e4667d9649ec761c73abc32d7f622ae1dbbb",
+      "source_bounds": [
+        1068,
+        205,
+        1491,
+        448
+      ],
+      "uniform_scale": 0.3404255319148936
+    },
+    {
+      "id": "truck_north_east",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/truck_north_east.png",
+      "sha256": "c4da74f28b02d7df51aa3a196bbdd8baf054a91f8b8d7b51e2c5befb64aa0e70",
+      "anchor": [
+        79.5,
+        85.25
+      ],
+      "footprint_width": 123,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/truck.png",
+      "source_sha256": "13684f71287d1383d883c97775d0e4667d9649ec761c73abc32d7f622ae1dbbb",
+      "source_bounds": [
+        75,
+        583,
+        475,
+        922
+      ],
+      "uniform_scale": 0.30678466076696165
+    },
+    {
+      "id": "truck_north_west",
+      "group": "vehicle_iso",
+      "path": "res://art/received/opening_city/truck_north_west.png",
+      "sha256": "ab2b3233c912316fa21db9da75bfa5725e20d467486838c349ab6683da7f32ca",
+      "anchor": [
+        80.0,
+        86.0
+      ],
+      "footprint_width": 120,
+      "size": [
+        160,
+        128
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/truck.png",
+      "source_sha256": "13684f71287d1383d883c97775d0e4667d9649ec761c73abc32d7f622ae1dbbb",
+      "source_bounds": [
+        549,
+        583,
+        941,
+        922
+      ],
+      "uniform_scale": 0.30678466076696165
+    },
+    {
+      "id": "truck_side_left",
+      "group": "vehicle_side",
+      "path": "res://art/received/opening_city/truck_side_left.png",
+      "sha256": "5e2617212179254912f78aebf5c3a8a2e6d4c9bf9f3ec6883ce9e82487479b04",
+      "anchor": [
+        80.0,
+        100
+      ],
+      "footprint_width": 144,
+      "size": [
+        160,
+        112
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/truck.png",
+      "source_sha256": "13684f71287d1383d883c97775d0e4667d9649ec761c73abc32d7f622ae1dbbb",
+      "source_bounds": [
+        1047,
+        667,
+        1483,
+        920
+      ],
+      "uniform_scale": 0.3302752293577982
+    },
+    {
+      "id": "streetlamp",
+      "group": "prop",
+      "path": "res://art/received/opening_city/streetlamp.png",
+      "sha256": "98f5fb77555dd91cd36c64e0b99bd12c3b4d93c7fb7809959502c5bd9c8ebf5b",
+      "anchor": [
+        55.782051282051285,
+        193
+      ],
+      "footprint_width": 57,
+      "size": [
+        80,
+        208
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/streetlamp.png",
+      "source_sha256": "8f047e58ecb391b405866a9f93c567a63ef3ee13154b922f8d0ff810cb3a20ff",
+      "source_bounds": [
+        167,
+        125,
+        647,
+        1680
+      ],
+      "uniform_scale": 0.11832797427652733
+    },
+    {
+      "id": "traffic_signal",
+      "group": "prop",
+      "path": "res://art/received/opening_city/traffic_signal.png",
+      "sha256": "530ee9ac2ec32101054d2dcee959a8720b8ad24de2971342d850868b1a784217",
+      "anchor": [
+        41.51851851851852,
+        177
+      ],
+      "footprint_width": 28,
+      "size": [
+        80,
+        192
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/traffic_signal.png",
+      "source_sha256": "dc5647eef4a63eb9560f1b374b746ed83c1bb804351a6a7e7e1dabd0a2ec94a6",
+      "source_bounds": [
+        318,
+        191,
+        562,
+        1632
+      ],
+      "uniform_scale": 0.11658570437196392
+    },
+    {
+      "id": "bus_stop",
+      "group": "prop",
+      "path": "res://art/received/opening_city/bus_stop.png",
+      "sha256": "06610c66cea6c1f444b4d4480579bf226d055f0032eb8b2e6b363a73781eb4ed",
+      "anchor": [
+        29.657894736842106,
+        177
+      ],
+      "footprint_width": 44,
+      "size": [
+        80,
+        192
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/bus_stop.png",
+      "source_sha256": "fe0262b8f8ae35570d2fd6adaeba35cdbe787d9d302c316eb7aef46c84f36715",
+      "source_bounds": [
+        279,
+        244,
+        626,
+        1559
+      ],
+      "uniform_scale": 0.12775665399239544
+    },
+    {
+      "id": "planter",
+      "group": "prop",
+      "path": "res://art/received/opening_city/planter.png",
+      "sha256": "581be84c35557e7d5cdfc86841f5851e32f05b036c0007ae247a26add029e705",
+      "anchor": [
+        79.5,
+        67.25
+      ],
+      "footprint_width": 131,
+      "size": [
+        160,
+        112
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/planter.png",
+      "source_sha256": "c746ba1715ce95ba19b52319a9cc28f4617e78b7ecb90e98c6e7b1dc8032b962",
+      "source_bounds": [
+        451,
+        197,
+        1324,
+        784
+      ],
+      "uniform_scale": 0.14991482112436116
+    },
+    {
+      "id": "window_street",
+      "group": "background",
+      "path": "res://art/received/opening_city/window_street.png",
+      "sha256": "159578c30a6755f09a8e1703daed4964dbd5c9af36615bc381324618ae1f1a01",
+      "size": [
+        1983,
+        793
+      ],
+      "source": "docs/그림_작업/받은그림/프롤로그_도시/생성_원본/window_street.png"
+    }
+  ]
+}

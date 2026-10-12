@@ -2,12 +2,12 @@ class_name OpeningWindowPov
 extends Node
 ## 프롤로그의 1인칭 창밖 장면. 앉은 주인공의 눈높이에서 원근 카메라로 창문 너머 거리(차, 가로등, 건물)를 보여 준다.
 ## 가게의 등각 3D 화면(깊이 정렬 셰이더)과는 별개의 작은 3D 세계(`SubViewport`)이므로 서로 영향이 없다.
-## 화면은 작게 그려 키워서(`SHRINK`) 픽셀 그림 느낌을 낸다.
+## 원본 비율과 최근접 필터를 유지하며 화면 해상도로 렌더한다.
 ##   `attach(layer)`   화면 층에 붙인다(가장 아래). 처음엔 숨김.
 ##   `show_pov()` / `hide_pov()`
 ##   `set_drowsy(0~1)` 졸음: 고개가 숙여지고 시야가 흔들린다(눈꺼풀 막은 연출 쪽에서 따로 덮는다).
 
-const SHRINK := 3                    # 화면 크기를 몇 분의 1로 그려 키우나(픽셀 느낌)
+const SHRINK := 1                    # 원본 그림을 전체 화면에서 렌더한다.
 const FOV := 68.0
 const EYE_HEIGHT := 1.12
 const EYE_Z := 1.0                  # 창벽에서 눈까지 거리(앉은 자리에서 창이 화면의 일부로 보이게)
@@ -200,11 +200,13 @@ func _build_street(root: Node3D) -> void:
 	for i in range(-8, 9):
 		_box(street, Vector3(float(i) * 2.4 - 0.5, 0.0, -5.45), Vector3(float(i) * 2.4 + 0.5, 0.012, -5.35), Color(0.95, 0.95, 0.9))
 
-	# 건너편 건물 줄(층마다 창)
+	# 그림 원경이 준비되어 있으면 창/문 입방체 줄을 대신 표시한다.
+	var prepared := OpeningWindowCityArt.background(street)
+	# 건너편 건물 줄(층마다 창): 그림 누락 시 기존 표시.
 	var x: float = -34.0
 	var index: int = 0
 
-	while x < 34.0:
+	while x < 34.0 and not prepared:
 		var width: float = _rng.randf_range(5.0, 9.0)
 		var height: float = _rng.randf_range(5.0, 12.0)
 		var color: Color = BUILDING_COLORS[index % BUILDING_COLORS.size()]
@@ -225,6 +227,13 @@ func _build_street(root: Node3D) -> void:
 	# 가로등
 	for i in range(-3, 4):
 		var lx: float = float(i) * 6.0 + 1.5
+		if prepared:
+			var tex := OpeningCityArt.texture("streetlamp")
+			var row: Dictionary = OpeningCityArt.rows().streetlamp
+			var unit := 3.6/maxf(float(row.anchor[1])-tex.get_image().get_used_rect().position.y,1.0)
+			var lamp := OpeningWindowCityArt.quad(street,"streetlamp",tex.get_width()*unit,true)
+			lamp.position += Vector3(lx,0,-2.4)
+			continue
 		_box(street, Vector3(lx - 0.05, 0.0, -2.4), Vector3(lx + 0.05, 3.6, -2.3), Color(0.15, 0.15, 0.17))
 		_box(street, Vector3(lx - 0.18, 3.6, -2.5), Vector3(lx + 0.18, 3.75, -2.2), Color(1.0, 0.82, 0.4), 0.9)
 
@@ -244,6 +253,7 @@ func _style_car(car: Dictionary, first: bool, spread: float) -> void:
 
 	for child in node.get_children():
 		child.queue_free()
+	if OpeningWindowCityArt.style_car(self,car,first,spread): return
 
 	var lane: int = int(car["lane"])
 	var dir: float = 1.0 if lane == 0 else -1.0
