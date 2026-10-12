@@ -1,0 +1,59 @@
+{
+  "source_commit": "72987750a021ce5f60d12ce9943b578f0c5d01e3",
+  "scope": "Tracked images only; runtime includes all script/scenes/data/art/addons text, not a proven main-scene reachability graph.",
+  "limitation": "Dynamic directories are conservatively preserved. Unmatched images require code/data/dev/tools/doc review before removal. All docs originals and records are preserved. No deletion performed.",
+  "summary": {
+    "preserve_editor_assets": 1,
+    "dynamic_directory_preserve": 1011,
+    "runtime_path_reference": 1001,
+    "candidate_no_runtime_reference": 64,
+    "preserve_dev_review": 84,
+    "preserve_source_and_records": 3760,
+    "preserve_review_images": 49
+  },
+  "candidate_count": 64,
+  "candidate_bytes": 15603069,
+  "dynamic_prefixes": {
+    "art/actors/": [
+      "script/world/view3d/actor_sprite_frames.gd"
+    ],
+    "art/characters/cozy_v1/": [
+      "script/expedition/contacts/expedition_contact_room.gd",
+      "script/ui/management/management_employee.gd",
+      "script/world/shop/employees/employee_applicant.gd"
+    ],
+    "art/npc/expr/": [
+      "script/data/story/npc_portraits.gd"
+    ],
+    "art/received/": [
+      "script/world/view3d/received_world_art.gd"
+    ],
+    "art/received/fishing/": [
+      "script/expedition/view3d/expedition_environment_art.gd",
+      "script/world/shop/fishing/fishing_tile_art.gd"
+    ],
+    "art/received/floors/": [
+      "script/expedition/view3d/expedition_environment_art.gd",
+      "script/expedition/view3d/expedition_exit_path.gd",
+      "script/world/shop/fishing/fishing_tile_art.gd",
+      "script/world/shop/tutorial/opening_city_art.gd",
+      "script/world/shop/tutorial/opening_city_ground.gd"
+    ],
+    "art/received/furniture/": [
+      "script/world/view3d/container_stock_art.gd"
+    ],
+    "art/received/shop_shell/": [
+      "script/world/view3d/pixel_shop_art.gd"
+    ],
+    "art/received/shop_storage/": [
+      "script/world/view3d/pixel_shop_art.gd"
+    ],
+    "art/ui/damage_digits/": [
+      "script/expedition/rooms/expedition_damage_digits.gd"
+    ],
+    "art/world3d/": [
+      "script/world/view3d/village_assets.gd"
+    ]
+  },
+  "full_inventory_location": "work/image_cleanup_full_inventory.json (local audit artifact; not a runtime resource)"
+}

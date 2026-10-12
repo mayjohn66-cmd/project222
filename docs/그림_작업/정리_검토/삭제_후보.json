@@ -1,0 +1,1040 @@
+{
+  "source_commit": "72987750a021ce5f60d12ce9943b578f0c5d01e3",
+  "approval_status": "awaiting_user_review",
+  "deletion_performed": false,
+  "images": [
+    {
+      "path": "art/expedition/region_forest.png",
+      "bytes": 1389387,
+      "sha256": "735b48dcc3847d1ee7e2cb5f557f42aa9a3ab1c080b4d56b494d9f4ec9b9e810",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/expedition/region_forest.png.import",
+      "import_companion_sha256": "803561efd3dade3b34ef5fdfa664f0ddc61a2922ee0bde9e2e32ea550388ddcb"
+    },
+    {
+      "path": "art/expedition/region_forest_simple.svg",
+      "bytes": 440,
+      "sha256": "fec85fbbf050629cadcef5c76ec0881a8c0142bb69f2d9cb7101654c9eedb689",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/expedition/region_forest_simple.svg.import",
+      "import_companion_sha256": "bee50ef42aaf2316baa370e59b16554f041b0aafe70c8a18bd8850684280550f"
+    },
+    {
+      "path": "art/expedition/region_mine.png",
+      "bytes": 1738462,
+      "sha256": "cbb3b27b28865ebca4b7f74bb2779f5f93e4f5260581b2afe12b627f4588e7f4",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/expedition/region_mine.png.import",
+      "import_companion_sha256": "61d0e30d62c8c13aacca6076caf68bfe9861e04ce63216b2d830984e9e85b63a"
+    },
+    {
+      "path": "art/expedition/region_mine_simple.svg",
+      "bytes": 406,
+      "sha256": "2eee0eb3852a6189a75de12c5dda5e5c64f3c46e02684fd3cb0958f9b0ac4667",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/expedition/region_mine_simple.svg.import",
+      "import_companion_sha256": "2c0cafb14da169baeb37f98fa3326102e77daf0400a9ea670b6f45d289ad7141"
+    },
+    {
+      "path": "art/expedition/region_ruins.png",
+      "bytes": 1772424,
+      "sha256": "9def398f277ada27ef24999268fe14ce2f85b4e098cfa64e1dd6041168fd68e3",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/expedition/region_ruins.png.import",
+      "import_companion_sha256": "4221df6db9cc6294217b58f23726da3ac0d44d1c63391bcdb7799e05a83598ab"
+    },
+    {
+      "path": "art/expedition/region_ruins_simple.svg",
+      "bytes": 483,
+      "sha256": "aa42336004780a161402f08948cfc02555556e49d572420d40f3115acfa909b9",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/expedition/region_ruins_simple.svg.import",
+      "import_companion_sha256": "90556fa60215e3f1471022403451d01cc6dfab07457899557a36365e4c84010c"
+    },
+    {
+      "path": "art/expedition/region_swamp.png",
+      "bytes": 1514615,
+      "sha256": "7a405cd2b3a4e2f4e9d774618fa5798fa317b983c2145e86fbe4527102a12912",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/expedition/region_swamp.png.import",
+      "import_companion_sha256": "bb99b2e213ebbe1fff90dfd38918f92b306e1f7e9d2d12f7c5dedd52fd2bfc44"
+    },
+    {
+      "path": "art/expedition/region_swamp_simple.svg",
+      "bytes": 562,
+      "sha256": "e544a33031d6d7f91f8f5b13477e8f9db643bd9890729e6fe71f8bee5cc24ae0",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/expedition/region_swamp_simple.svg.import",
+      "import_companion_sha256": "aeb35282e7ccc4034323a6976352a1590571cb4e5440045c23f72c6dfedb5c25"
+    },
+    {
+      "path": "art/portraits/player/player_female_determined.png",
+      "bytes": 4883,
+      "sha256": "fad61620020e8c354431da067cc92bfdacb2dbe4587eff8e964af1ca1fbd6ca9",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_female_determined.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_female_determined.png.import",
+      "import_companion_sha256": "d51a94b86c92fe98f842ee011a5eb61af73002cdbdb500af02eb2eb702628249"
+    },
+    {
+      "path": "art/portraits/player/player_female_flustered.png",
+      "bytes": 5092,
+      "sha256": "3544e10c28985060bbd255d913e3c144f02c50c118f9d6dcb5030c6b55b451af",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_female_flustered.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_female_flustered.png.import",
+      "import_companion_sha256": "f2a2cce067e28e5d3afa28d670cf8d2e82505045863aee6c5ab09debaae6e371"
+    },
+    {
+      "path": "art/portraits/player/player_female_neutral.png",
+      "bytes": 4734,
+      "sha256": "84179b4602ce6b2c74a5b3c61c25ef46834a207d123b91dd5914a3d0b465cb46",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "art/portraits/player/aligned/player_female_neutral.png",
+        "docs/그림_작업/받은그림/초상화/player_female_neutral.png",
+        "docs/그림_작업/받은그림/초상화/주인공_후보/female_C_2x.png",
+        "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_female_neutral.png"
+      ],
+      "active_identical_copies": [
+        "art/portraits/player/aligned/player_female_neutral.png"
+      ],
+      "review_priority": "replaced_duplicate",
+      "import_companion": "art/portraits/player/player_female_neutral.png.import",
+      "import_companion_sha256": "a3118b7f33037aa82645bd3534964cc6acc2d9e218773d7415869203d3292391"
+    },
+    {
+      "path": "art/portraits/player/player_female_smile.png",
+      "bytes": 4872,
+      "sha256": "8017a237213be7fe6f4df63e9b3e04de2eac4579258325e5199369b05a53a830",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_female_smile.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_female_smile.png.import",
+      "import_companion_sha256": "cbe75065ab0f31329c81021a6e4625ceda2f3f3710f4a66eabe9c80b2bcfcd3a"
+    },
+    {
+      "path": "art/portraits/player/player_female_surprised.png",
+      "bytes": 5072,
+      "sha256": "76558377fd51d778c8930b91eb29f2eb5da5a931038ee46b0d5615afa833e01d",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_female_surprised.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_female_surprised.png.import",
+      "import_companion_sha256": "f39bdb3b87eccbbdbdd705899e822a1a4aaf73893e4a7809d088015594e2bdb6"
+    },
+    {
+      "path": "art/portraits/player/player_female_tired.png",
+      "bytes": 4855,
+      "sha256": "b88f42f8f1c132f8b160ef2a606c719842e5e411b29e4b2debed9fd6d5d1cfae",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_female_tired.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_female_tired.png.import",
+      "import_companion_sha256": "0e9806233bdc9326ff9288c2118d9b4d28c1845f4eb77819cdd511e94a34e405"
+    },
+    {
+      "path": "art/portraits/player/player_female_worried.png",
+      "bytes": 5091,
+      "sha256": "fb68fcd6126faf033f0535df9446deea7f3f59c1a821346601e67af37d304248",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_female_worried.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_female_worried.png.import",
+      "import_companion_sha256": "ca0dfa991e99b8273c3f4a02b175c8df16749750400f8386c719af6ef2224d87"
+    },
+    {
+      "path": "art/portraits/player/player_male_determined.png",
+      "bytes": 4982,
+      "sha256": "a44d20523b10c852f0c97d82d6dc805537c4fce3a0e0ae541e7c10814f405743",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_male_determined.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_male_determined.png.import",
+      "import_companion_sha256": "fc70bcfe58298a0e569783373026ea904f3ae5d61b5bf01c0e58c8a3feb97ca0"
+    },
+    {
+      "path": "art/portraits/player/player_male_flustered.png",
+      "bytes": 4789,
+      "sha256": "68701d0355c9b64524ff4a0323cce17e487a009bce91b496c4a9af852ccddd49",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_male_flustered.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_male_flustered.png.import",
+      "import_companion_sha256": "1d0111b5e30aaf255c73f8ad3bec918f8cfdb0491f1583c235d4d5b9846ab362"
+    },
+    {
+      "path": "art/portraits/player/player_male_neutral.png",
+      "bytes": 4483,
+      "sha256": "3c1cbc9254d658c9fa5cccf02b01540d692848f7cc3cbc6ca7cff230ed7b8b86",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "art/portraits/player/aligned/player_male_neutral.png",
+        "docs/그림_작업/받은그림/초상화/player_male_neutral.png",
+        "docs/그림_작업/받은그림/초상화/주인공_후보/male_B_2x.png",
+        "docs/그림_작업/받은그림/초상화/주인공_후보/표정_픽셀보정/player_male_neutral.png"
+      ],
+      "active_identical_copies": [
+        "art/portraits/player/aligned/player_male_neutral.png"
+      ],
+      "review_priority": "replaced_duplicate",
+      "import_companion": "art/portraits/player/player_male_neutral.png.import",
+      "import_companion_sha256": "3b46b667c7a99314502faba20f2ed9df466f27b2d1427bccd81619cf82d76b4f"
+    },
+    {
+      "path": "art/portraits/player/player_male_smile.png",
+      "bytes": 4746,
+      "sha256": "81e558bbe31b43cabb5615c52afe6a4b1c1769ec436a287113b87dfc90aa9050",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_male_smile.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_male_smile.png.import",
+      "import_companion_sha256": "eb796a0fa5e9006a5d2a9cfdd8b1ca2be4837239eea2bc887ef6f448c8da7de3"
+    },
+    {
+      "path": "art/portraits/player/player_male_surprised.png",
+      "bytes": 4691,
+      "sha256": "b3bd48a1b1dd1d04e1079dedd89f77bf7e5d3f84795f5dc13f5e064bd5c98d7d",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_male_surprised.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_male_surprised.png.import",
+      "import_companion_sha256": "52fda28ca4f0fab8700548252769880a823898efff84def30935265ae8da3b29"
+    },
+    {
+      "path": "art/portraits/player/player_male_tired.png",
+      "bytes": 4759,
+      "sha256": "e4c6891180b40932b211a92c3b7e1f19959fbcbc10d19861d549a99bbec36058",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_male_tired.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_male_tired.png.import",
+      "import_companion_sha256": "54676d0147d900707d8e1d7148f60dcdcb59156ad9c13dbec9b4d801e73222fe"
+    },
+    {
+      "path": "art/portraits/player/player_male_worried.png",
+      "bytes": 4685,
+      "sha256": "51f85ad4888f64de8988dd824350cf66c5593ab3a36963028ee9ce92e86d07e0",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/초상화/player_male_worried.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/portraits/player/player_male_worried.png.import",
+      "import_companion_sha256": "758707a2c0e80b057066d03b4bf0accf81ce45ff0a0d531459186263eddb4f26"
+    },
+    {
+      "path": "art/ui/pixel_theme/arrow_down_disabled.png",
+      "bytes": 107,
+      "sha256": "e6dfa90c4777a20b5b0a7e4042a805d37f5b8ae166b3eed823629740a081a41c",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "docs/drafts/asset_baseline_report.md",
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/arrow_down_disabled.png.import",
+      "import_companion_sha256": "8d5fbe21856766a2aad260023de76d7f886d7550cd38c3ac8d1d32f2255e1fce"
+    },
+    {
+      "path": "art/ui/pixel_theme/grabber.png",
+      "bytes": 178,
+      "sha256": "9c2a35488f9941b3c9c442679880a59676c9cf8b22c4ac215693b3a4265aa11f",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/grabber.png.import",
+      "import_companion_sha256": "8f1aae15e715adf32112234fc1b1bf64ce8caed92368fabf7df20678b27ae4b7"
+    },
+    {
+      "path": "art/ui/pixel_theme/grabber_hover.png",
+      "bytes": 178,
+      "sha256": "3265a5d287eebbcc144cd8ef0e12a8857aa7ca29b654af5b574a34bf4479c1d6",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/grabber_hover.png.import",
+      "import_companion_sha256": "06eba9722da5da596e471e57473ca081d9903431fb812d47654d68c78bef01cd"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_bag.png",
+      "bytes": 170,
+      "sha256": "80bb5ace224e57e05e9cedec3133fb9ef30ff17c5ef959a8166c6949be661557",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_bag.png.import",
+      "import_companion_sha256": "85c3d4f93f2144099bb0ca64c8f778173d2249e58d53a51184c7e868fba365ec"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_calendar.png",
+      "bytes": 157,
+      "sha256": "1dcb665a71f3057c480deeff77f6361f5bf29abd578bd75bf19f50becd56bcc7",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_calendar.png.import",
+      "import_companion_sha256": "8d3f5de239ff6e5ba602503dc4d6c57542ebcc0c6e05fc87c277082653d8e59a"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_hammer.png",
+      "bytes": 183,
+      "sha256": "890a8edd5df19b8df337d4139e8a5058d1cba3b6622055cc81cc2bf634f0680e",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_hammer.png.import",
+      "import_companion_sha256": "13aeb25cf8b777b70c0452772f940f0227c9b96fc05073e01e92b9905dfd2855"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_map.png",
+      "bytes": 189,
+      "sha256": "a1186226346df6dd504acfa2ceaf10729d887d0dc02d8998ea7743d395e5f089",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_map.png.import",
+      "import_companion_sha256": "2a71395498cbe20f16baac19efeaae32c17e759f808f749bbba88509820e2281"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_menu_large.png",
+      "bytes": 6319,
+      "sha256": "412f3912e174b9848877ba678b3ee43faf1fafc3302fdbc5668ee300459a1ac8",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_menu_large.png.import",
+      "import_companion_sha256": "81add0c3f523b1ec836e200fb76d343d2de59fa8698611fac34803dd2e56ad62"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_minus.png",
+      "bytes": 110,
+      "sha256": "38524190a457f38de4d1fee21b8048ca699afaa67822ba74af9e2a26185457af",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_minus.png.import",
+      "import_companion_sha256": "c32fc3d9b1b5c8cc78784a24994d1203f8ddc0045534712b106c8ae78293aaa6"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_open_sign.png",
+      "bytes": 422,
+      "sha256": "5a9ede07e24d911e872b78c06af49a6901b8af29307a2a8f2c739bc15a5dfc1b",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_open_sign.png.import",
+      "import_companion_sha256": "ef77e3aaabd9b01cead715ea23841e8caf484c874b9125dc770771b97e7768dc"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_plus.png",
+      "bytes": 152,
+      "sha256": "c53344b1d59c2cc35fbc5f96e83fec9eddd8c1a94d03d40f6b6ce5bb223ad655",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_plus.png.import",
+      "import_companion_sha256": "c70f9a1e5510de474cf37fa4834690088261f3b099b8954153c0e5496b3b27d4"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_shop_open_large.png",
+      "bytes": 7874,
+      "sha256": "cdb2ef60c42ed38fbb97e4c76d2106b0d056050a6ecc288b8fd0c19957a18bc1",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_shop_open_large.png.import",
+      "import_companion_sha256": "ef429c77165cdd487c8a29d5eefd35cfb8c60d53d7c15c899ce6415dde6a6a49"
+    },
+    {
+      "path": "art/ui/pixel_theme/icon_shop_symbol.png",
+      "bytes": 539,
+      "sha256": "fa194d517d88a43d4b296322578f7f2266c489ffbef6622ba6dd683cca025647",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/icon_shop_symbol.png.import",
+      "import_companion_sha256": "17917d4130f36986aaa4fb3fa3c87545851924b45af13288f11c39b7ce56dcbb"
+    },
+    {
+      "path": "art/ui/pixel_theme/open_shop_slot_disabled.png",
+      "bytes": 570,
+      "sha256": "88f0185839f466de9f551a84a03b41df308bb9fc196ef07f1cb090b497d91738",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "docs/drafts/asset_baseline_report.md",
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/open_shop_slot_disabled.png.import",
+      "import_companion_sha256": "4153949eac11ab9eb03ca464a64fb74cd139e1eb449925128e05fea503eb1bf1"
+    },
+    {
+      "path": "art/ui/pixel_theme/open_shop_slot_hover.png",
+      "bytes": 572,
+      "sha256": "11cb4b060838f5a4f4fb9a976e658d22076a0f6165368543b84df21306c6ec37",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "docs/drafts/asset_baseline_report.md",
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/open_shop_slot_hover.png.import",
+      "import_companion_sha256": "7f004b0dc10e41af2d02aa0e463fba3b242f325d85a6d21b6c1ec8cf827c73b6"
+    },
+    {
+      "path": "art/ui/pixel_theme/open_shop_slot_normal.png",
+      "bytes": 583,
+      "sha256": "9d0eefa07f728e437c5c499af15b15a96f769eb4f267098549637b2075bc389e",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "docs/drafts/asset_baseline_report.md",
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/open_shop_slot_normal.png.import",
+      "import_companion_sha256": "5a95286cd621ef2b3746f517415a2a324f0d5ca543eb0b2b6c018daa4e8d9990"
+    },
+    {
+      "path": "art/ui/pixel_theme/open_shop_slot_pressed.png",
+      "bytes": 596,
+      "sha256": "63ceda167c3c7c84978065fe55bfdddbc41e4d165a7f8d12ec849220627c8e52",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "docs/drafts/asset_baseline_report.md",
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/open_shop_slot_pressed.png.import",
+      "import_companion_sha256": "60e5d7645e280f9d5395eb359ecc374d417f6ba80d90a85f9833b22e904904b2"
+    },
+    {
+      "path": "art/ui/pixel_theme/progress_bg.png",
+      "bytes": 110,
+      "sha256": "b6c523179d64fa64ac0e66fb30db0e408e8a1400631664b3513e7643c151e842",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "docs/drafts/asset_baseline_report.md",
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/progress_bg.png.import",
+      "import_companion_sha256": "c8fb399d7b4edf0965c762056b79edec531c0039e13e5a74e127a296255d9ac9"
+    },
+    {
+      "path": "art/ui/pixel_theme/progress_fill.png",
+      "bytes": 120,
+      "sha256": "a0a64c4cbecb3886e45ae595f6242083011297b064186532a12b749b56f5534c",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "docs/drafts/asset_baseline_report.md",
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/progress_fill.png.import",
+      "import_companion_sha256": "3d2bb96af3988396ea66a3c8ef38d50591e95f98e96324cca7fd1a5d66462eb9"
+    },
+    {
+      "path": "art/ui/pixel_theme/slider_track.png",
+      "bytes": 103,
+      "sha256": "df5cded124504e5b35668e2dc07aa0bfb83805f2fa3635d917465fc36e15d24b",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/slider_track.png.import",
+      "import_companion_sha256": "7572f5fa4f162545c56efa22df418ed26cd1252c8db4d5f2ff269862b7f4a7bc"
+    },
+    {
+      "path": "art/ui/pixel_theme/slider_track_active.png",
+      "bytes": 112,
+      "sha256": "2c5deb39b082db246dd29a706be79e29daaf10662ad708c650a52bc18557c031",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/slider_track_active.png.import",
+      "import_companion_sha256": "2369a634adcae25181cd9b6895458ae54e90b652c6a2dac345bf296bd65d6508"
+    },
+    {
+      "path": "art/ui/pixel_theme/slot_hover.png",
+      "bytes": 202,
+      "sha256": "e5548f77967b988c4001f0de252fb982dc862520695644f70e5588cb85bbd1aa",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/slot_hover.png.import",
+      "import_companion_sha256": "ae944714d1e8d7e8b49bc498511fafcb1bf9b71bbbe44fc7f1efe9ea3774ca5e"
+    },
+    {
+      "path": "art/ui/pixel_theme/slot_normal.png",
+      "bytes": 204,
+      "sha256": "3b09279c1e3047521d2613e1b4c524cd0d3c2ec97864d492fe5c68aa75825159",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/slot_normal.png.import",
+      "import_companion_sha256": "6327e30153a1a116ba0acab7df2becb22f5d4807fe135af001d0a2b89c5f4ba9"
+    },
+    {
+      "path": "art/ui/pixel_theme/slot_selected.png",
+      "bytes": 202,
+      "sha256": "55ec26f0cde5bf16cd359e80aaaa5c5da8d3ad657833b63f90b82ff98f352a48",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/slot_selected.png.import",
+      "import_companion_sha256": "f84b0cf34d39ffcb67af954d70be946050091b0426380085c33f787deef5fe58"
+    },
+    {
+      "path": "art/ui/pixel_theme/tab_normal.png",
+      "bytes": 149,
+      "sha256": "db312977c71bc620fbbee7e238f621e004d84fd5155c8de89ba933e5975e5674",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/tab_normal.png.import",
+      "import_companion_sha256": "c5ec5d08ab2b709820a338211200de9fbfcdb6ef06692e9e055335873f0ba019"
+    },
+    {
+      "path": "art/ui/pixel_theme/tab_selected.png",
+      "bytes": 150,
+      "sha256": "5b6ba0e88ff4cc1a4823b2742b1cc3f0bbdde8a98beb80daf02e6c2ee63cce82",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/pixel_theme/tab_selected.png.import",
+      "import_companion_sha256": "cc9ba8276ab38a61fe3a1141608fd1d13ed5d27b3cfdaedf914a7c1627557678"
+    },
+    {
+      "path": "art/ui/reference_theme/title.png",
+      "bytes": 12273,
+      "sha256": "a76b85b1001a97f786946ed8d1fb275ee5f4f1f454907ce339bfe3c0e31ede6c",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/ui/reference_theme/title.png.import",
+      "import_companion_sha256": "204d65ea4cc636f1ab05c94e67a34f15814d0f444c4925c4afa20ccdcf5ed6a6"
+    },
+    {
+      "path": "art/world/cozy_v3/grass.png",
+      "bytes": 158,
+      "sha256": "0d816c67cfe08d53d8c9d1140b2043d4bcec6c41d441bb69433ef7308b03d8a4",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/cozy_v3/grass.png.import",
+      "import_companion_sha256": "20eaba5749b9e40cecd7e4ca63c10d9bb33337250036d4d9b4d82805f2863ffd"
+    },
+    {
+      "path": "art/world/cozy_v3/paving.png",
+      "bytes": 158,
+      "sha256": "3274223d38563ee690269a1af9202a176c51b87c42ae894d1c066d663e802fbb",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/cozy_v3/paving.png.import",
+      "import_companion_sha256": "8b756a5d07c3068d991d647848704d90ec829dd6924778450fece4501ec2bb02"
+    },
+    {
+      "path": "art/world/cozy_v3/road.png",
+      "bytes": 158,
+      "sha256": "d63731e4b6732a9d49b2f9359d9cf20305e513a408ad74522760bc5c4c518b5c",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/cozy_v3/road.png.import",
+      "import_companion_sha256": "4c29bde8cd45c0cb92b0f2d46c5cd7364ffe5585efc2372b00265f00de465b3c"
+    },
+    {
+      "path": "art/world/cozy_v3/wood.png",
+      "bytes": 158,
+      "sha256": "79c434f8c2f448acadc2e9182e0d65f8585e7c402c78b54c3175100a478ad24d",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/cozy_v3/wood.png.import",
+      "import_companion_sha256": "d8eec604f4e0d3500ccefba51764cdf662f0d7972acffb3cc9125e1086a2c395"
+    },
+    {
+      "path": "art/world/ground/dirt.png",
+      "bytes": 1935,
+      "sha256": "e359eb15011c19f702766a2ed2f8467b5f690b315279f308739981938a18fdd8",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/바닥/dirt_a.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/ground/dirt.png.import",
+      "import_companion_sha256": "4cfe2988cb494e4e06b1d444b68bc19dcdc3c917e2dd03cfb8487f96e64ecad0"
+    },
+    {
+      "path": "art/world/ground/grass.png",
+      "bytes": 4872,
+      "sha256": "ec72e3651f23237a99592c40264b7ceadbf51be18169fd86384cdf6ea09e49bf",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/바닥/grass_a2.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/ground/grass.png.import",
+      "import_companion_sha256": "3f84355c24ce3a5dbafbf8414191f7ff903598fc6d9071d713888c2e707cc203"
+    },
+    {
+      "path": "art/world/ground/paving.png",
+      "bytes": 2622,
+      "sha256": "f3f8ce3f236b501f8bd31d2535ba18bdaef467c087519e486ca7f8f71d7e7831",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/바닥/paving_b.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/ground/paving.png.import",
+      "import_companion_sha256": "d33b2a07f4a4505895a4eff706ecc28ccc3e53938f846fda8a3774f614d79f9c"
+    },
+    {
+      "path": "art/world/ground/road.png",
+      "bytes": 2838,
+      "sha256": "2be879e21a82b8e77bd86b461d1f910903614067e9631c6d446566fadcf1a926",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/바닥/road_b.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/ground/road.png.import",
+      "import_companion_sha256": "4933af9c6f7bb4608ef45a0a51b69f6708c85c6cc4b655e12b4d6f4ca6013840"
+    },
+    {
+      "path": "art/world/ground/tile.png",
+      "bytes": 1947,
+      "sha256": "724f854775f037be9d68882e878265357bae4eebe8879560cde5b21064dcc9d4",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/바닥/tile_b.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/ground/tile.png.import",
+      "import_companion_sha256": "2421055cb104545c3c1eaa70e55054d2a860eacd1b62c11b049d5e129663b3ce"
+    },
+    {
+      "path": "art/world/ground/wood.png",
+      "bytes": 672,
+      "sha256": "e87f7a81ea6faf25e4ad55441f1646401fdb94f41d90d02b50181830e9a57b72",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [],
+      "identical_copies": [
+        "docs/그림_작업/받은그림/바닥/wood_b.png"
+      ],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/ground/wood.png.import",
+      "import_companion_sha256": "0ba849bcdf6baa6f9d92ad1045811a1d2eb2586c28819d0c5ed8975e652545ea"
+    },
+    {
+      "path": "art/world/plaza_props_v1/herb_stall.png",
+      "bytes": 2353445,
+      "sha256": "d395c9c941ee63e9f53405a2fec4a2733089bca6b2e095957214f04db983ca07",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/plaza_props_v1/herb_stall.png.import",
+      "import_companion_sha256": "d74d5682bd56a84b34d52174b55dbc578181d6a1c852d8f01e9ced4704342875"
+    },
+    {
+      "path": "art/world/plaza_props_v1/herb_stall_flat_roof_v5.png",
+      "bytes": 1812030,
+      "sha256": "3a2143433da8bf9453e8af81b9ff09d4e783eb75767618c508287032465eaca3",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/plaza_props_v1/herb_stall_flat_roof_v5.png.import",
+      "import_companion_sha256": "2e1f6a4c5fa34c1919c58511bcba7ec250c1b76d557beef09d2d297332c941fe"
+    },
+    {
+      "path": "art/world/plaza_props_v1/herb_stall_tile_aligned_v2.png",
+      "bytes": 1991528,
+      "sha256": "d4b177608d4225f8e8019bbe2546857c0540836ade0bfbc27e98e986a4addc86",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/plaza_props_v1/herb_stall_tile_aligned_v2.png.import",
+      "import_companion_sha256": "df44729f927fd9d78f99111953764da022ec08ff10c6b99145b3bf50a70dcc27"
+    },
+    {
+      "path": "art/world/plaza_props_v1/herb_stall_tile_aligned_v3.png",
+      "bytes": 1325013,
+      "sha256": "111f99c34918ff483a2d13cb90f4c055897459f45245b56417b8f46862653298",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/plaza_props_v1/herb_stall_tile_aligned_v3.png.import",
+      "import_companion_sha256": "2a443a2d298374985e340b2b5689b230593daff062222e05890d332520bb051f"
+    },
+    {
+      "path": "art/world/plaza_props_v1/supply_cart.png",
+      "bytes": 1588498,
+      "sha256": "8b012f82f4869c3b4b83000a6f74c5b18a886a031574e378b9e1aa45f6b98a53",
+      "status": "candidate_no_runtime_reference",
+      "runtime_references": [],
+      "dynamic_references": [],
+      "other_references": [
+        "files.txt"
+      ],
+      "identical_copies": [],
+      "active_identical_copies": [],
+      "review_priority": "unmatched_image",
+      "import_companion": "art/world/plaza_props_v1/supply_cart.png.import",
+      "import_companion_sha256": "cf0aee73bd7baa35a4551a4092606b2f252f557e14c8ef35ffc7ffaaf3d2de2d"
+    }
+  ]
+}

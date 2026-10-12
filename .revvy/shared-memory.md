@@ -174,3 +174,5 @@ off.
 - 2026-10-12 Codex: 사용자 새이름후보→추천 숲너머 편의점 출력 요청, 내장 image_gen 1회 투명로고1881×836 RGBA 원본보존. 받은그림/타이틀_로고/제작_기록.md에 prompt/SHA/PNG디코딩/실제alpha검사·좌우패딩 한계 기록. 부제는 별도Label후속, 게임이름설정·art/실행연결·RC1 미변경.
 
 - 2026-10-12 Codex: 사용자 로고/폰트 미적용 지적→후보 원본 동일SHA art/ui/title/forest_beyond_store_logo.png 연결·중앙440×196/비율유지·부제·버튼240×50/Silver28px. 사용자 Downloads/Silver.ttf 원본포함(SHA5bbbcd90…)·공용테마/default_font와 StoreUiStyle·관리테마 상속·원정 fallback_font 하드지정 제거. TTF AA/hint/subpixel OFF·oversampling1·라이선스/배포README에 PoppyWorks 출처. 격리GPU93/전체로드912/원정HUD102 실패0·import2 ERROR0, 로고기록 실행캡처. 이전RC1 미재빌드, 시스템 설치 의존 제거·저장경로 유지 위해config/name 기존값.
+
+- 2026-10-12 Codex: 사용자 부제삭제/안쓰는그림정리 요청→타이틀 SubtitleLabel 제거·격리GPU92 실패0/두해상도·클릭/이름창/취소. 추적그림5970/art2076 검토, 정적참조1001/동적보호1011·미참조 art64(14.88MiB)와 import64 정리후보, docs원본3760/dev84/검사49/플러그인1 보존. docs/그림_작업/정리_검토/정리_계획.md·SHA목록/작업폴더 ZIP128파일 CRC검증. 협업규칙2장 계획/승인에 따라 실제그림삭제는 사용자 검토대기·활성감사1777실패0. 폴더이름만으로삭제금지, 승인직전최신참조/해시/절대경로재검사.
