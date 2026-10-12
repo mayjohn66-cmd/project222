@@ -43,51 +43,74 @@
 [ext_resource type="Texture2D" uid="uid://cermde272vyxo" path="res://art/ui/pixel_theme/vseparator.png" id="48_vseparator"]
 [ext_resource type="Texture2D" uid="uid://d2kv17dy20mjt" path="res://art/ui/pixel_theme/spin_updown.png" id="49_spin_updown"]
 
-[sub_resource type="StyleBoxTexture" id="StyleButtonDisabled"]
-content_margin_left = 18.0
-content_margin_top = 10.0
-content_margin_right = 18.0
-content_margin_bottom = 10.0
-texture = ExtResource("6_button_disabled")
-texture_margin_left = 14.0
-texture_margin_top = 10.0
-texture_margin_right = 14.0
-texture_margin_bottom = 10.0
+[ext_resource type="Texture2D" path="res://art/ui/controls/button_normal.png" id="control_button_normal"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/button_hover.png" id="control_button_hover"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/button_selected.png" id="control_button_selected"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/button_disabled.png" id="control_button_disabled"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/input_normal.png" id="control_input_normal"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/input_focus.png" id="control_input_focus"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/input_readonly.png" id="control_input_readonly"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/tab_normal.png" id="control_tab_normal"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/tab_hover.png" id="control_tab_hover"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/tab_selected.png" id="control_tab_selected"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/tab_disabled.png" id="control_tab_disabled"]
+[ext_resource type="Texture2D" path="res://art/ui/controls/close.png" id="control_close"]
 
-[sub_resource type="StyleBoxEmpty" id="StyleFocus"]
+[sub_resource type="StyleBoxTexture" id="StyleButtonDisabled"]
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 12.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_button_disabled")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+
+[sub_resource type="StyleBoxFlat" id="StyleFocus"]
+bg_color = Color(0,0,0,0)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.208,0.416,0.388,1)
 
 [sub_resource type="StyleBoxTexture" id="StyleButtonHover"]
-content_margin_left = 18.0
-content_margin_top = 10.0
-content_margin_right = 18.0
-content_margin_bottom = 10.0
-texture = ExtResource("4_button_hover")
-texture_margin_left = 14.0
-texture_margin_top = 10.0
-texture_margin_right = 14.0
-texture_margin_bottom = 10.0
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 12.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_button_hover")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
 
 [sub_resource type="StyleBoxTexture" id="StyleButtonPressed"]
-content_margin_left = 18.0
-content_margin_top = 10.0
-content_margin_right = 18.0
-content_margin_bottom = 10.0
-texture = ExtResource("11_slot_selected")
-texture_margin_left = 14.0
-texture_margin_top = 10.0
-texture_margin_right = 14.0
-texture_margin_bottom = 10.0
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 12.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_button_selected")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
 
 [sub_resource type="StyleBoxTexture" id="StyleButtonNormal"]
-content_margin_left = 18.0
-content_margin_top = 10.0
-content_margin_right = 18.0
-content_margin_bottom = 10.0
-texture = ExtResource("4_button_hover")
-texture_margin_left = 14.0
-texture_margin_top = 10.0
-texture_margin_right = 14.0
-texture_margin_bottom = 10.0
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 12.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_button_normal")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
 
 [sub_resource type="StyleBoxTexture" id="StyleHScrollGrabber"]
 texture = ExtResource("41_hscroll_grabber")
@@ -201,26 +224,28 @@ axis_stretch_horizontal = 1
 axis_stretch_vertical = 1
 
 [sub_resource type="StyleBoxTexture" id="StyleTabSelected"]
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 8.0
-texture = ExtResource("8_tab_selected")
-texture_margin_left = 9.0
-texture_margin_top = 9.0
-texture_margin_right = 9.0
-texture_margin_bottom = 5.0
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 12.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_tab_selected")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
 
 [sub_resource type="StyleBoxTexture" id="StyleTabNormal"]
-content_margin_left = 14.0
-content_margin_top = 10.0
-content_margin_right = 14.0
-content_margin_bottom = 8.0
-texture = ExtResource("7_tab_normal")
-texture_margin_left = 9.0
-texture_margin_top = 9.0
-texture_margin_right = 9.0
-texture_margin_bottom = 5.0
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 12.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_tab_normal")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
 
 [sub_resource type="StyleBoxTexture" id="StyleVScrollGrabber"]
 texture = ExtResource("44_vscroll_grabber")
@@ -256,6 +281,75 @@ texture_margin_left = 1.0
 texture_margin_top = 1.0
 texture_margin_right = 1.0
 texture_margin_bottom = 1.0
+
+[sub_resource type="StyleBoxTexture" id="InputNormal"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_input_normal")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="InputFocus"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_input_focus")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="InputReadonly"]
+content_margin_left = 10.0
+content_margin_top = 7.0
+content_margin_right = 10.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_input_readonly")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="TabHover"]
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 12.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_tab_hover")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxTexture" id="TabDisabled"]
+content_margin_left = 12.0
+content_margin_top = 7.0
+content_margin_right = 12.0
+content_margin_bottom = 7.0
+texture = ExtResource("control_tab_disabled")
+texture_margin_left = 3.0
+texture_margin_top = 3.0
+texture_margin_right = 3.0
+texture_margin_bottom = 3.0
+
+[sub_resource type="StyleBoxFlat" id="WindowBorder"]
+bg_color = Color(0.914,0.906,0.875,1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.439,0.482,0.463,1)
+expand_margin_left = 2.0
+expand_margin_top = 40.0
+expand_margin_right = 2.0
+expand_margin_bottom = 2.0
+shadow_color = Color(0,0,0,0.22)
+shadow_size = 4
 
 [resource]
 default_font = ExtResource("font_silver")
@@ -333,11 +427,12 @@ ItemList/styles/panel = SubResource("StyleInset")
 ItemList/styles/selected = SubResource("StyleSlotSelected")
 ItemList/styles/selected_focus = SubResource("StyleSlotSelected")
 Label/colors/font_color = Color(0.184314, 0.113725, 0.0823529, 1)
-LineEdit/colors/font_color = Color(0.956863, 0.890196, 0.709804, 1)
-LineEdit/colors/placeholder_color = Color(0.666667, 0.584314, 0.466667, 1)
+LineEdit/colors/font_color = Color(0.204,0.235,0.231,1)
+LineEdit/colors/placeholder_color = Color(0.412,0.439,0.424,1)
+LineEdit/colors/font_placeholder_color = Color(0.412,0.439,0.424,1)
 LineEdit/icons/clear = ExtResource("14_close")
-LineEdit/styles/focus = SubResource("StyleSlotSelected")
-LineEdit/styles/normal = SubResource("StyleInset")
+LineEdit/styles/focus = SubResource("InputFocus")
+LineEdit/styles/normal = SubResource("InputNormal")
 MenuButton/colors/font_color = Color(0.184314, 0.113725, 0.0823529, 1)
 MenuButton/colors/font_hover_color = Color(0.34, 0.17, 0.05, 1)
 MenuButton/colors/font_pressed_color = Color(1, 0.956863, 0.811765, 1)
@@ -395,9 +490,9 @@ TabBar/icons/decrement_highlight = ExtResource("32_arrow_left")
 TabBar/icons/drop_mark = ExtResource("29_arrow_down")
 TabBar/icons/increment = ExtResource("33_arrow_right")
 TabBar/icons/increment_highlight = ExtResource("33_arrow_right")
-TabBar/styles/tab_disabled = SubResource("StyleButtonDisabled")
-TabBar/styles/tab_focus = SubResource("StyleSlotSelected")
-TabBar/styles/tab_hovered = SubResource("StyleButtonHover")
+TabBar/styles/tab_disabled = SubResource("TabDisabled")
+TabBar/styles/tab_focus = SubResource("StyleFocus")
+TabBar/styles/tab_hovered = SubResource("TabHover")
 TabBar/styles/tab_selected = SubResource("StyleTabSelected")
 TabBar/styles/tab_unselected = SubResource("StyleTabNormal")
 TabContainer/icons/decrement = ExtResource("32_arrow_left")
@@ -406,14 +501,14 @@ TabContainer/icons/drop_mark = ExtResource("29_arrow_down")
 TabContainer/icons/increment = ExtResource("33_arrow_right")
 TabContainer/icons/increment_highlight = ExtResource("33_arrow_right")
 TabContainer/styles/panel = SubResource("StylePanel")
-TabContainer/styles/tab_disabled = SubResource("StyleButtonDisabled")
-TabContainer/styles/tab_focus = SubResource("StyleSlotSelected")
-TabContainer/styles/tab_hovered = SubResource("StyleButtonHover")
+TabContainer/styles/tab_disabled = SubResource("TabDisabled")
+TabContainer/styles/tab_focus = SubResource("StyleFocus")
+TabContainer/styles/tab_hovered = SubResource("TabHover")
 TabContainer/styles/tab_selected = SubResource("StyleTabSelected")
 TabContainer/styles/tab_unselected = SubResource("StyleTabNormal")
-TextEdit/colors/font_color = Color(0.956863, 0.890196, 0.709804, 1)
-TextEdit/styles/focus = SubResource("StyleSlotSelected")
-TextEdit/styles/normal = SubResource("StyleInset")
+TextEdit/colors/font_color = Color(0.204,0.235,0.231,1)
+TextEdit/styles/focus = SubResource("InputFocus")
+TextEdit/styles/normal = SubResource("InputNormal")
 TooltipLabel/colors/font_color = Color(0.184314, 0.113725, 0.0823529, 1)
 TooltipPanel/styles/panel = SubResource("StylePanel")
 Tree/colors/font_color = Color(0.956863, 0.890196, 0.709804, 1)
@@ -445,8 +540,24 @@ VScrollBar/styles/grabber_pressed = SubResource("StyleVScrollGrabberPressed")
 VScrollBar/styles/scroll = SubResource("StyleVScrollTrack")
 VScrollBar/styles/scroll_focus = SubResource("StyleVScrollTrack")
 VSeparator/styles/separator = SubResource("StyleVSeparator")
-Window/colors/title_color = Color(0.956863, 0.890196, 0.709804, 1)
-Window/icons/close = ExtResource("14_close")
-Window/styles/embedded_border = SubResource("StylePanel")
+Window/colors/title_color = Color(0.204,0.235,0.231,1)
+Window/icons/close = ExtResource("control_close")
+Window/styles/embedded_border = SubResource("WindowBorder")
 WoodHeader/base_type = &"PanelContainer"
 WoodHeader/styles/panel = SubResource("StyleInset")
+LineEdit/styles/read_only = SubResource("InputReadonly")
+LineEdit/colors/caret_color = Color(0.208,0.416,0.388,1)
+LineEdit/colors/selection_color = Color(0.729,0.839,0.804,1)
+LineEdit/colors/font_selected_color = Color(0.204,0.235,0.231,1)
+TextEdit/styles/read_only = SubResource("InputReadonly")
+TextEdit/colors/caret_color = Color(0.208,0.416,0.388,1)
+TextEdit/colors/selection_color = Color(0.729,0.839,0.804,1)
+TextEdit/colors/font_selected_color = Color(0.204,0.235,0.231,1)
+Window/styles/embedded_unfocused_border = SubResource("WindowBorder")
+Window/constants/title_height = 40
+Window/constants/title_outline_size = 0
+Window/constants/close_h_offset = 28
+Window/constants/close_v_offset = 32
+Window/fonts/title_font = ExtResource("font_silver")
+Window/font_sizes/title_font_size = 28
+Window/icons/close_pressed = ExtResource("control_close")

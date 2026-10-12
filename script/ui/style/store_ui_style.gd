@@ -1,6 +1,6 @@
 class_name StoreUiStyle
 extends RefCounted
-## 새 UI 스타일 "이세계로 온 편의점". 값(색·굵기)은 한곳에 모아 두고, 위젯 모양은 StyleBoxFlat 으로 코드가 만든다(그림 파일 없이 바꿀 수 있다).
+## 매장 배경·종이 스타일. 조작부는 InteractionUiStyle의 별도 그림과 상태 기준을 쓴다.
 ## 모티프: 편의점 간판의 초록 띠, 진열대 가격표, 영수증 종이. 모서리는 도트처럼 각지게, 그림자는 번지지 않고 한 칸 어긋나게.
 
 # ---- 색 (매장 벽의 브랜드색 StoreShell.BRAND 와 같은 초록을 쓴다)
@@ -141,4 +141,5 @@ static func theme() -> Theme:
 		t.set_stylebox("grabber_pressed", type, box(BRAND_DEEP, BRAND_DEEP, 0, Vector4(0, 0, 0, 0)))
 
 	_theme = t
+	InteractionUiStyle.apply(t)
 	return t

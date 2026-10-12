@@ -26,7 +26,21 @@ func run() -> void:
 	check(title.nickname_dialog.visible, "name dialog opens")
 	check(title.nickname_dialog.get_contents_minimum_size().y <= 600, "name dialog content fits")
 	check(title.nickname_dialog.get_theme_stylebox("panel").bg_color.get_luminance() > 0.7, "readable name panel background")
-	title.nickname_edit.text = "글씨점검"
+	var border = title.nickname_dialog.get_theme_stylebox("embedded_border","Window")
+	check(border is StyleBoxFlat and border.expand_margin_top >= title.nickname_dialog.get_theme_constant("title_height","Window"), "title bar has a complete opaque background")
+	var title_luminance: float = title.nickname_dialog.get_theme_color("title_color","Window").srgb_to_linear().get_luminance()
+	var bar_luminance: float = border.bg_color.srgb_to_linear().get_luminance()
+	check((bar_luminance+0.05)/(title_luminance+0.05) >= 4.5, "title text contrasts with neutral bar")
+	check(title.nickname_edit.get_theme_stylebox("normal").texture.resource_path.begins_with("res://art/ui/controls/"), "input uses new neutral art")
+	check(title.nickname_dialog.get_ok_button().disabled, "empty name cannot start")
+	for character in "글씨점검":
+		var key := InputEventKey.new()
+		key.pressed = true
+		key.unicode = character.unicode_at(0)
+		Input.parse_input_event(key)
+		await frames(1)
+	check(title.nickname_edit.text == "글씨점검", "keyboard enters player name")
+	check(not title.nickname_dialog.get_ok_button().disabled, "valid name can start")
 	title.nickname_dialog.confirmed.emit()
 	title.nickname_dialog.hide()
 	await frames(60)

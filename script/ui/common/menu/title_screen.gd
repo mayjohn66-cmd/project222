@@ -305,7 +305,9 @@ func _build_nickname_dialog() -> void:
 	paper.set_content_margin_all(20)
 	nickname_dialog.add_theme_stylebox_override("panel", paper)
 	nickname_dialog.get_ok_button().text = "이 이름으로 시작"
+	nickname_dialog.get_ok_button().custom_minimum_size = Vector2(180,42)
 	nickname_dialog.get_cancel_button().text = "취소"
+	nickname_dialog.get_cancel_button().custom_minimum_size = Vector2(96,42)
 	var box := VBoxContainer.new()
 	box.add_theme_constant_override("separation",12)
 	var hint := Label.new()

@@ -1053,18 +1053,10 @@ func select_info_tab(tab: InfoTab) -> void:
 func refresh_shop_history() -> void:
 	ActFourBookView.refresh_button(self)
 	# 현재 선택한 버튼 하나만 비활성화
-	basic_info_button.disabled = (
-		current_info_tab == InfoTab.BASIC
-	)
-	detail_info_button.disabled = (
-		current_info_tab == InfoTab.DETAIL
-	)
-	sales_trend_button.disabled = (
-		current_info_tab == InfoTab.TREND
-	)
-	extra_record_button.disabled = (
-		current_info_tab == InfoTab.RECORD
-	)
+	InteractionUiStyle.select_tab(basic_info_button,current_info_tab == InfoTab.BASIC)
+	InteractionUiStyle.select_tab(detail_info_button,current_info_tab == InfoTab.DETAIL)
+	InteractionUiStyle.select_tab(sales_trend_button,current_info_tab == InfoTab.TREND)
+	InteractionUiStyle.select_tab(extra_record_button,current_info_tab == InfoTab.RECORD)
 
 	# 이정표 탭은 자식이 쪽(page) 둘뿐이어야 하므로 보관한 글 칸을 비운다. 나머지 탭은 글 칸을 다시 쓴다.
 	_reset_info_labels(current_info_tab != InfoTab.MILESTONES)

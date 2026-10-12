@@ -723,8 +723,8 @@ func _select_production_tab(
 	facility_status_scroll.visible = show_status
 	$MainHBox.visible = not show_status
 
-	facility_status_button.disabled = show_status
-	recipe_tab_button.disabled = not show_status
+	InteractionUiStyle.select_tab(facility_status_button,show_status)
+	InteractionUiStyle.select_tab(recipe_tab_button,not show_status)
 
 	if show_status:
 		refresh_facility_status()

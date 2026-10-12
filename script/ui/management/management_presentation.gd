@@ -1,7 +1,6 @@
 extends RefCounted
 const ACCENTS := ["98703e","b06b3d","4b8068","527e9a","97754c","897299","567d86"]
 const PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef"]
-const INDEX_COLORS := ["f2cf5b","ef8fa6","8fcf9a","7bbbe0","eeb06a","b79bdb","7fd0c8"]
 # 포스트잇 책갈피: 포스트잇은 쪽에 붙어 있고 책 옆면 밖으로 FLAG_OUT 만큼 튀어나와 있다(탭 이름이 적힘). 지금 펼친 탭의 포스트잇만
 # 쪽 안쪽 여백으로 BookViews.ONTO 만큼 붙는다(한 장의 포스트잇이 쪽 가장자리를 감싼 모양, Strip 이 그림). 나머지는 밖으로 튀어나온 부분만 보인다.
 const FLAG_OUT := 100.0
@@ -9,7 +8,7 @@ const FLAG_HEIGHT := 44.0
 const FLAG_GAP := 20  # 포스트잇 사이 간격
 
 # 포스트잇의 모양은 BookViews.Strip(책 밖)·BookViews.Note(쪽 위)가 그린다. 버튼은 글자와 클릭만 맡는다.
-static func flag_style(_color: String) -> StyleBoxEmpty:
+static func flag_style() -> StyleBoxEmpty:
 	var s := StyleBoxEmpty.new()
 	s.content_margin_left = 16
 	s.content_margin_right = 6
@@ -44,6 +43,7 @@ static func tab_theme(root: Control, index: int) -> void:
 	focus.border_color = Color(ACCENTS[index])
 	focus.set_border_width_all(2)
 	t.set_stylebox("focus","Button",focus)
+	InteractionUiStyle.apply(t)
 	root.theme = t
 
 static func inset(control: Control, amount: int = 16) -> void:
@@ -93,7 +93,7 @@ static func install(menu: Control) -> void:
 		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		b.add_theme_font_size_override("font_size",UiTypography.size(15))
 		for state in ["normal","hover","pressed","hover_pressed"]:
-			b.add_theme_stylebox_override(state,flag_style(INDEX_COLORS[i]))
+			b.add_theme_stylebox_override(state,flag_style())
 		b.add_theme_color_override("font_color",Color("2b2f55"))
 		b.add_theme_color_override("font_pressed_color",Color("493e33"))
 		b.add_theme_color_override("font_hover_pressed_color",Color("493e33"))
@@ -198,6 +198,9 @@ static func apply_tab(menu: Control) -> void:
 	for i in range(nav.get_child_count()):
 		var button: Button = nav.get_child(i)
 		button.custom_minimum_size.x = FLAG_OUT
+		var ink := InteractionUiStyle.LIGHT if i == menu.current_tab else InteractionUiStyle.INK
+		for key in ["font_color","font_hover_color","font_pressed_color","font_hover_pressed_color"]:
+			button.add_theme_color_override(key,ink)
 	_sync_note.call_deferred(menu)
 	var last: int = int(menu.get_meta("book_last_tab",-1))
 	menu.set_meta("book_last_tab",menu.current_tab)
@@ -231,7 +234,7 @@ static func _sync_note(menu: Control) -> void:
 		nb.modulate.a = 1.0 if on_right else 0.0
 		nb.mouse_filter = Control.MOUSE_FILTER_STOP if on_right else Control.MOUSE_FILTER_IGNORE
 		var nr := nb.get_global_rect()
-		var color := Color(INDEX_COLORS[bi % INDEX_COLORS.size()])
+		var color := tab_color(menu,bi)
 		if strip != null:
 			list.append({"rect": Rect2(nr.position - strip.get_global_rect().position,nr.size),"color": color,"hidden": not on_right,"current": bi == menu.current_tab})
 		if side == "left":
@@ -470,7 +473,7 @@ static func _make_flip(menu: Control,stage: BookStage3D,forward: bool,order: Arr
 	for t in order:
 		var zr := stage.flag_z_range(nav.get_child(t).get_global_rect())
 		var art: Dictionary = arts[carry.size()]
-		carry.append({"z0": zr.x,"z1": zr.y,"color": Color(INDEX_COLORS[t % INDEX_COLORS.size()]),"tex_right": art["right"].get_texture(),"tex_left": art["left"].get_texture(),"len": nav.get_child(t).size.x / 100.0})
+		carry.append({"z0": zr.x,"z1": zr.y,"color": tab_color(menu,t),"tex_right": art["right"].get_texture(),"tex_left": art["left"].get_texture(),"len": nav.get_child(t).size.x / 100.0})
 	var geo: Dictionary = stage.page_geometry()
 	var flip := BookFlip3D.new()
 	flip.name = "BookFlip3D"
@@ -558,6 +561,9 @@ static func _flag_arts(menu: Control,order: Array) -> Array:
 	var out: Array = []
 	for t in order:
 		var nb: Button = nav.get_child(t)
-		var color := Color(INDEX_COLORS[t % INDEX_COLORS.size()])
+		var color := tab_color(menu,t)
 		out.append({"right": BookViews.make_flag_art(holder,color,nb.text,false,nb.size),"left": BookViews.make_flag_art(holder,color,nb.text,true,nb.size)})
 	return out
+
+static func tab_color(menu: Control,index: int) -> Color:
+	return InteractionUiStyle.SELECTED if index == menu.current_tab else InteractionUiStyle.NEUTRAL

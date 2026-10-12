@@ -117,7 +117,7 @@ func refresh(force := true) -> void:
 	var detail_position := detail_scroll.scroll_vertical
 	revision += 1
 	clear(list)
-	for key in tabs: tabs[key].disabled = key == mode
+	for key in tabs: InteractionUiStyle.select_tab(tabs[key],key == mode)
 	only_ready.visible = mode == "today" and not first_steps
 	entries = machines if mode == "facilities" else recipes
 	if mode == "learned": entries.sort_custom(func(a,b): return a["title"] < b["title"])

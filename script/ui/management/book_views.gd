@@ -82,13 +82,13 @@ static func paint_flag(c: CanvasItem,font: Font,r: Rect2,color: Color,label: Str
 			sh.size.x -= cut
 		if sh.size.x > 0.0: c.draw_rect(sh,Color(0.16,0.11,0.06,0.28))
 	# 본체: 하나로 이어진 한 장의 종이. 위가 밝고 아래가 살짝 짙다(접힌 선·붙은 자국 없이 일체형)
-	c.draw_polygon(PackedVector2Array([Vector2(r.position.x,top),Vector2(r.end.x,top),Vector2(r.end.x,bottom),Vector2(r.position.x,bottom)]),PackedColorArray([color.lightened(0.10),color.lightened(0.10),color.darkened(0.03),color.darkened(0.03)]))
-	c.draw_rect(r,color.darkened(0.2),false,1.0)
+	var selected := color.is_equal_approx(InteractionUiStyle.SELECTED)
+	InteractionUiStyle.patch("tab_selected" if selected else "tab_normal").draw(c.get_canvas_item(),r)
 	if with_text and font != null:
 		var sz := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(15))
 		var ty := top + (bottom - top) * 0.5 + sz.y * 0.5 - font.get_descent(UiTypography.size(15))
 		var tx := ax - 16.0 - sz.x if mirrored else ax + 16.0
-		c.draw_string(font,Vector2(tx,ty),label,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(15),FLAG_TEXT)
+		c.draw_string(font,Vector2(tx,ty),label,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(15),InteractionUiStyle.LIGHT if selected else InteractionUiStyle.INK)
 
 
 # 책장에 실려 넘어가는 포스트잇의 질감용(3D): 자기 크기 전체에 포스트잇 한 장(그림자 없음). 2 배로 그려 또렷하게 한다.

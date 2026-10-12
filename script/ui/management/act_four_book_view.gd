@@ -13,7 +13,7 @@ static func refresh_button(menu: Control) -> void:
 	var button: Button = menu.get_meta("act4_button",null)
 	if button == null: return
 	button.visible = ActFourFlow.started()
-	button.disabled = menu.current_info_tab == ManagementTabs.InfoTab.MILESTONES
+	InteractionUiStyle.select_tab(button,menu.current_info_tab == ManagementTabs.InfoTab.MILESTONES)
 	# 소탭 다섯 개가 왼쪽 쪽에 모두 읽히도록 완전한 짧은 이름을 쓴다.
 	menu.basic_info_button.text = "기본" if button.visible else "기본 정보"
 	menu.detail_info_button.text = "상세" if button.visible else "상세 정보"

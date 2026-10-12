@@ -1,0 +1,180 @@
+{
+  "tool": "built-in image_gen",
+  "source_size": [
+    2048,
+    768
+  ],
+  "source_mode": "RGBA",
+  "source_sha256": "320b3ab368259c0ab73179c134f79bf572a84d3442a5d7dd52fc4d1e8361e68a",
+  "processing": "manual frame bounds; discard outside glow; nearest resize; 16-color palette; opaque rect sprites",
+  "frames": [
+    {
+      "id": "button_normal",
+      "source_rect": [
+        96,
+        116,
+        496,
+        227
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "2faf1df8171d2cfdd28ab32ac11983bfda564fee7fa3d3f67a02f3ef1a3fe317"
+    },
+    {
+      "id": "button_hover",
+      "source_rect": [
+        581,
+        116,
+        983,
+        227
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "709108598a63b42340077e178d77eab4ccef2d4c85fb0b0af97934380ac4db1a"
+    },
+    {
+      "id": "button_selected",
+      "source_rect": [
+        1069,
+        116,
+        1472,
+        227
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "9ccc2c34bdca7491e262648d70f96ee04edb10a4e93337bd764f60f46ced7b29"
+    },
+    {
+      "id": "button_disabled",
+      "source_rect": [
+        1556,
+        116,
+        1955,
+        227
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "aa7ae80cfaf0a8d53d040bec4ad7e5b1d9ad238c780799850c3a2a827c0b8a69"
+    },
+    {
+      "id": "input_normal",
+      "source_rect": [
+        96,
+        335,
+        496,
+        442
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "2bef19d5e0c38d05bb757c9c676c1502c2bca89c1f5ea76f9fd72e268b5857fb"
+    },
+    {
+      "id": "input_focus",
+      "source_rect": [
+        581,
+        335,
+        983,
+        442
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "0813ccdc3e144ffe4bda5f511b0f7820711db96292f0dc9b56156b8096d02883"
+    },
+    {
+      "id": "input_readonly",
+      "source_rect": [
+        1069,
+        335,
+        1472,
+        442
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "e8e7271ed556ded81aa333fac72fe4231b8c841c444b2ba03df56bec558f89aa"
+    },
+    {
+      "id": "tab_normal",
+      "source_rect": [
+        1556,
+        335,
+        1955,
+        442
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "9c8ad93622e3c1cf434afcbfcb8df9387dea77953111d0c8c576cc9c54547207"
+    },
+    {
+      "id": "tab_hover",
+      "source_rect": [
+        96,
+        545,
+        496,
+        655
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "09892ba48d82b85ec6a41ed95654a5941d55581899ff153471960484ad9f0bc0"
+    },
+    {
+      "id": "tab_selected",
+      "source_rect": [
+        581,
+        545,
+        983,
+        655
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "02e5298a2ca75d4131fc9c6446dfa2bc0943115ac847552abbe6cd3e747e8d67"
+    },
+    {
+      "id": "tab_disabled",
+      "source_rect": [
+        1069,
+        545,
+        1472,
+        655
+      ],
+      "size": [
+        96,
+        32
+      ],
+      "sha256": "a205383d6f46e58a9c9647a687666221f43db29a3698d1bc32a7e4e94e87b50d"
+    },
+    {
+      "id": "close",
+      "source_rect": [
+        1700,
+        545,
+        1813,
+        655
+      ],
+      "size": [
+        24,
+        24
+      ],
+      "sha256": "bc874b7acfe8d2a95395d0ec962df28eba384ebba90f0f67b52bb9525d24277c"
+    }
+  ]
+}

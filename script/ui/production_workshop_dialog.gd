@@ -98,12 +98,7 @@ func _ready() -> void:
 	$Content/ProductionCountRow/ProductionCountLabel.text = "만들 횟수"
 	for button_name in ["StartButton","CollectButton"]:
 		var button: Button = content.get_node(button_name)
-		button.add_theme_stylebox_override("normal",paper("567d69",10))
-		button.add_theme_stylebox_override("hover",paper("688f7b",10))
-		button.add_theme_stylebox_override("pressed",paper("42624f",10))
-		button.add_theme_stylebox_override("disabled",paper("d3c5aa",10))
-		button.add_theme_color_override("font_color",Color("fff4df"))
-		button.add_theme_color_override("font_disabled_color",Color("82725b"))
+		InteractionUiStyle.apply_button(button)
 
 func clear(container: Node) -> void:
 	for child in container.get_children():

@@ -84,9 +84,7 @@ func refresh_view() -> void:
 	# 현재 탭 버튼 비활성화
 	for tab in employee_tab_buttons:
 		var button: Button = employee_tab_buttons[tab]
-		button.disabled = (
-			int(tab) == int(current_employee_tab)
-		)
+		InteractionUiStyle.select_tab(button,int(tab) == int(current_employee_tab))
 
 	# 탭 안내 문구
 	match current_employee_tab:

@@ -100,9 +100,9 @@ func select_tab(
 
 func refresh_view() -> void:
 	if ShopSpaceConstruction.render(self): return
-	store_button.disabled = current_tab == ConstructionTab.STORE
-	production_room_button.disabled = current_tab == ConstructionTab.PRODUCTION_ROOM
-	warehouse_button.disabled = current_tab == ConstructionTab.WAREHOUSE
+	InteractionUiStyle.select_tab(store_button,current_tab == ConstructionTab.STORE)
+	InteractionUiStyle.select_tab(production_room_button,current_tab == ConstructionTab.PRODUCTION_ROOM)
+	InteractionUiStyle.select_tab(warehouse_button,current_tab == ConstructionTab.WAREHOUSE)
 	match current_tab:
 		ConstructionTab.STORE:
 			_refresh_store_expansion()

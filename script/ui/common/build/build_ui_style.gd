@@ -24,3 +24,4 @@ static func button(b: Button) -> void:
  for state in ["font_pressed_color","font_hover_pressed_color"]:
   b.add_theme_color_override(state,Color("fff6df"))
  b.add_theme_font_size_override("font_size",UiTypography.size(18))
+ InteractionUiStyle.apply_button(b)
