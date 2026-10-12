@@ -12,7 +12,7 @@ const GAME_TILE: Vector2 = Vector2(96.0, 48.0)  # 2D 게임의 칸 크기
 # 확대 배율(shrink)에 따라 정해지는 값. 3배: 낮은 해상도 칸 36×18, 블록 22px, 질감 18, 2D 줌 1.125 / 1배: 칸 96×48, 블록 60px, 질감 48, 2D 줌 1.0.
 # 기본은 DEFAULT_SHRINK(2026-10-08 사용자 결정: 3배는 도트가 너무 뭉개져 1배로 되돌림). configure_scale(n) 으로 1·2·3배를 고를 수 있다(노드를 장면에 넣기 전에 호출).
 const DEFAULT_SHRINK: int = 1
-const PLAY_ZOOM: float = 1.0  # 가게·인물이 읽히는 기본 시야. 64px 원화의 좌표 배율과 별개다.
+const PLAY_ZOOM: float = 1.15  # 가게·인물이 읽히는 기본 시야. 64px 원화의 좌표 배율과 별개다.
 var shrink: int = DEFAULT_SHRINK  # 낮은 해상도 → 화면 확대 배율
 var tile_low: float = 36.0  # 낮은 해상도에서 한 칸 마름모 폭
 var block_px: float = 22.0  # 1블록 = 낮은 해상도 세로 px
