@@ -168,3 +168,5 @@ off.
 - 2026-10-12 Codex: Windows RC1 후보생성완료(source5ff98926, rc1-20261012): 캐시없는 Git runtime archive import2/export/license ERROR0·ZIP80308649바이트·exe/pck/readme/licenses/BuildInfo/SHA6파일. 별도새폴더압축해제 SHA256전부통과·실제exe headless120프레임 ERROR0/exit0. clade/work/delivery/Project222-Windows-RC1.zip; docs/배포/검사/첫_후보_빌드.json. 첫coldimport테마ctex경고는import2게이트로판정, 원본프로젝트/사용자저장미수정; 다른PC실조작검사는여전히필수대기.
 
 - 2026-10-12 Codex: 사용자 배경 출력 요청→내장 image_gen 1회 숲속 편의점 타이틀 후보1672×941 RGB PNG·중앙 메뉴 여백·원본 비율 보존, docs/그림_작업/받은그림/타이틀_배경/제작_기록.md. 실제 그림/PNG디코딩/SHA 확인. UI수정 사용자연기로 art/·폰트·테마·게임연결·RC1 미변경; 다음 연결 때 제목/버튼 대비 확인.
+
+- 2026-10-12 Codex: 사용자 타이틀 연결 승인→후보 원본 동일SHA로 art/ui/backgrounds/forest_shop_title.png·import 추가, title_screen.tscn 배경 TextureRect 전체앵커/비율유지덮기/클릭무시·제목30px 외곽선. 격리GPU 실제1152×648/800×600·마우스새게임/이름창/취소22 실패0, import2 ERROR0. 받은그림/타이틀_배경/제작_기록.md 실행캡처. 폰트파일/테마·게임규칙·RC1 미변경; 사용자 Silver는 로컬 설정 유지.

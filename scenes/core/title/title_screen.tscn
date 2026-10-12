@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://c0uq5w2vpwxki"]
 
 [ext_resource type="Script" uid="uid://dcisd008ss1n0" path="res://script/ui/common/menu/title_screen.gd" id="1_6d6rd"]
+[ext_resource type="Texture2D" path="res://art/ui/backgrounds/forest_shop_title.png" id="2_background"]
 
 [node name="TitleScreen" type="Control" unique_id=1776288594]
 layout_mode = 3
@@ -10,6 +11,19 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_6d6rd")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+texture_filter = 2
+texture = ExtResource("2_background")
+expand_mode = 1
+stretch_mode = 6
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=1544250292]
 layout_mode = 1
@@ -30,6 +44,10 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=766716976]
 layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.956863, 0.839216, 1)
+theme_override_colors/font_outline_color = Color(0.156863, 0.113725, 0.074510, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 30
 text = "편의점 게임"
 horizontal_alignment = 1
 
