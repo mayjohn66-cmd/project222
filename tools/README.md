@@ -8,7 +8,7 @@ tools/
 │  balance_baseline · check_economy · check_demand · check_arrival · check_enhancement · check_equipment
 │  check_map_supply · check_merchant · recipe_prices · review_content_economy · build_scroll_drops · build_draft
 ├─ story/     # 이야기: export_story_bundle(제미나이 검수용 묶음) · export_story_full · export_story_text
-│  merge_story_csv(검수 결과 합치기, 먼저 점검만) · validate_story · audit_story · export_rewrite_prompts
+│  merge_story_csv(검수 결과 합치기, 먼저 점검만) · audit_completion(콘텐츠 완료 조건 점검표 생성) · validate_story · audit_story · export_rewrite_prompts
 ├─ code/      # 코드 점검: unused_scan(안 쓰는 코드 후보) · dynamic_call_check · ui_text_scan · docs_check
 │  check_godot.tscn(모든 .gd·.tscn 로드 검사) · check_expedition_run.tscn(원정 한 판 검사)
 ├─ art/       # 그림 가공·설치·검증: prepare_* · install_* · iso_* · normalize_* · ingest_world3d · pixellab_batch
