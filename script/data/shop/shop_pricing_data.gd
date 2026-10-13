@@ -31,7 +31,7 @@ static func ensure_loaded() -> void:
 			settings[key] = DEFAULT_SETTINGS[key]
 
 
-static func reload() -> void:
+static func reload_data() -> void:
 	_loaded = false
 	ensure_loaded()
 

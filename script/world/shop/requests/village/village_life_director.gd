@@ -85,7 +85,7 @@ func refresh() -> void:
 	for entry in VillageLifeFlow.entries():
 		var id := str(entry["id"])
 		var site := VillageSettlement.find_site(world, str(entry["site"]))
-		var open: bool = VillageLifeFlow.available(entry) and site != null and site.visible and not (editor != null and editor.active)
+		var open: bool = VillageLifeFlow.available(entry) and site != null and (site.visible or VillageHousing.under_construction(site)) and not (editor != null and editor.active)
 		var npc = residents.get(id)
 		if not open:
 			if is_instance_valid(npc): npc.queue_free()

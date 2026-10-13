@@ -19,6 +19,7 @@ var expedition_checkpoint: Dictionary = {}
 var current_day: int = 1
 var total_day: int = 1
 var preservation_state: Dictionary = {}
+var village_homes: Dictionary = {}   # 주민 집터 배정 {resident_id: {slot, day}} (VillageHousing)
 var price_steps: Dictionary = {}   # 상품 가격 단계 {item_id: step} (ShopPricing). 기본(0)은 저장하지 않는다
 
 
@@ -215,6 +216,8 @@ func initialize_new_game():
 	tool_enhancement_levels.clear()
 	furniture_inventory.clear()
 	price_steps.clear()
+	village_homes.clear()
+	VillageHousing.adopt_legacy = false
 	furniture_inventory_initialized = false
 	initialize_furniture_inventory()
 	initialize_build_quick_slots()
@@ -732,6 +735,7 @@ func create_save_data() -> Dictionary:
 		"inventory": inventory.duplicate(true),
 		"preservation": preservation_state.duplicate(true),
 		"price_steps": price_steps.duplicate(true),
+		"village_homes": village_homes.duplicate(true),
 		"furniture_inventory": furniture_inventory.duplicate(true),
 		"build_quick_slots": build_quick_slots.duplicate(),
 		"store_layout": store_layout.duplicate(true),
@@ -1447,6 +1451,8 @@ func apply_save_data(data: Dictionary) -> bool:
 	inventory = data["inventory"].duplicate(true)
 	preservation_state = data.get("preservation", PreservationService.initial_state(total_day)).duplicate(true)
 	price_steps = _clean_price_steps(data.get("price_steps", {}))
+	village_homes = _clean_village_homes(data.get("village_homes", {}))
+	VillageHousing.adopt_legacy = not data.has("village_homes")
 
 	if not rebuild_inventory_slots_from_counts():
 		push_error(
@@ -2942,6 +2948,16 @@ func upgrade_warehouse() -> bool:
 
 
 # 저장된 가격 단계를 읽는다. 옛 저장(키 없음)·알 수 없는 값은 기본(0)으로 처리해 버린다.
+func _clean_village_homes(raw: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if not raw is Dictionary:
+		return result
+	for key in raw:
+		var entry: Variant = raw[key]
+		if entry is Dictionary and not str(entry.get("slot", "")).is_empty():
+			result[str(key)] = {"slot": str(entry["slot"]), "day": int(entry.get("day", 0))}
+	return result
+
 func _clean_price_steps(raw: Variant) -> Dictionary:
 	var result: Dictionary = {}
 	if not raw is Dictionary:

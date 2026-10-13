@@ -28,11 +28,18 @@ static func apply_world(world: Node) -> void:
 		if site != null: open_sites[site.get_instance_id()] = true
 	for landmark in ResidentStoryFlow.SETTINGS.landmarks:
 		if not ResidentRequestFlow.done(str(landmark["request"])): continue
+		# 집이 있는 주민은 정착하면 편의점 옆 집터를 받고, 다음 날부터 그 자리에 집이 보인다.
+		if VillageHousing.is_house_path(str(landmark["path"])):
+			if not editing and VillageHousing.place(world, str(landmark["request"]), str(landmark["path"])):
+				var house := find_site(world, str(landmark["path"]))
+				if house != null: open_sites[house.get_instance_id()] = true
+			continue
 		var paths: Array = [str(landmark["path"])]
 		paths.append_array(landmark.get("additional_paths", []))
 		for path in paths:
 			var site := find_site(world, str(path))
 			if site != null: open_sites[site.get_instance_id()] = true
+	VillageHousing.adopt_legacy = false
 	for group_name in ResidentStoryFlow.SETTINGS.managed_groups:
 		var group := world.get_node_or_null(NodePath(group_name))
 		if group == null: continue

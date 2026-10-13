@@ -34,7 +34,7 @@ static func ensure_loaded() -> void:
 		values[key] = float(CsvReader.get_cell(row, indexes, "value"))
 
 
-static func reload() -> void:
+static func reload_data() -> void:
 	_loaded = false
 	ensure_loaded()
 

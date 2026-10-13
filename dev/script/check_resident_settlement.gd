@@ -66,6 +66,19 @@ func run() -> void:
 		VillageSettlement.apply_world(world)
 		var landmark: Dictionary = ResidentStoryFlow.SETTINGS.landmarks[index]
 		var building = VillageSettlement.find_site(world, str(landmark["path"]))
+		if VillageHousing.is_house_path(str(landmark["path"])):
+			# 집이 있는 주민은 집터를 받고, 정착한 다음 날부터 편의점 옆 집터에 집이 보인다.
+			var resident := VillageHousing.resident_of(str(landmark["request"]))
+			var plot := VillageHousing.slot_of(resident)
+			check(not plot.is_empty(), "house settler is assigned a plot")
+			var future_house = VillageSettlement.find_site(world, str(landmark["path"]))
+			check(not future_house.visible and future_house.collision_layer == 0, "house is not built on the day of settling")
+			check(VillageHousing.under_construction(future_house), "plot is marked so the resident can stand there while it is built")
+			GameState.total_day += 1
+			VillageSettlement.apply_world(world)
+			building = VillageSettlement.find_site(world, str(landmark["path"]))
+			var terrain: Node2D = world.get_node("StoreExterior")
+			check(building.global_position.distance_to(terrain.to_global(terrain.grid_to_local(VillageHousing.cell_of(resident)))) < 1.0, "house stands on its plot beside the shop")
 		check(building.visible and building.collision_layer > 0, "completed landmark has matching visual and collision")
 		check(ResidentStoryFlow.stage() == index + 1, "settlement grows one stage at a time")
 		check(GameState.get_money() == money_before + int(request["money"]) and ResidentRequestFlow.reputation() == reputation_before + 1, "settlement pays small reward and reputation once")
@@ -74,6 +87,7 @@ func run() -> void:
 		PlayerProgress.reset()
 		PlayerProgress.load_save_data(saved)
 		world.get_node("StoreExterior").refresh_village_layout()
+		VillageSettlement.apply_world(world)
 		check(VillageSettlement.find_site(world, str(landmark["path"])).visible and ResidentStoryFlow.stage() == index + 1, "save load and exterior rebuild preserve settlement")
 	check(ResidentRequestFlow.total_completed_count() == 9 and ResidentRequestFlow.completed_count() == 6, "followups preserve original customer milestone count")
 	check(ResidentStoryFlow.place_name() == "함께 만든 작은 마을", "three residents form a small village")

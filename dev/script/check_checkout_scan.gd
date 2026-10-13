@@ -34,7 +34,7 @@ func check(ok: bool, label: String) -> void:
 
 
 func _ready() -> void:
-	CheckoutData.reload()
+	CheckoutData.reload_data()
 	# 데이터
 	check(is_equal_approx(CheckoutData.value("tip_rate"), 0.05), "팁 비율은 5%")
 	check(CheckoutData.value("scan_perfect_half") < CheckoutData.value("scan_good_half"), "완벽 구간이 보통 구간보다 좁다")
