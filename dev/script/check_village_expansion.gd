@@ -71,6 +71,7 @@ func board_accept(id: String) -> bool:
 		board.panel.close()
 		return false
 	card["action"].pressed.emit()
+	if board.request_offer.root.visible: board.request_offer.accept_button.pressed.emit()
 	board.panel.close()
 	return F.accepted(id)
 func talk(current: Dictionary) -> bool:

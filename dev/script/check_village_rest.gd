@@ -83,6 +83,7 @@ func run() -> void:
 	player.global_position = VillageSettlement.find_site(world, CommunityRequestFlow.SETTINGS.board_path).global_position
 	check(world.get_node("WorldInteractions").try_interact() and board.open, "real E opens preparation board")
 	board.panel.cards[prep]["action"].pressed.emit()
+	if board.request_offer.root.visible: board.request_offer.accept_button.pressed.emit()
 	check(CommunityRequestFlow.accepted(prep) and not CommunityRequestFlow.accept(prep), "actual preparation card accepts once")
 	GameState.remove_item("dry_branch", GameState.get_item_count("dry_branch"))
 	GameState.remove_item("stone_shard", GameState.get_item_count("stone_shard"))
@@ -105,6 +106,7 @@ func run() -> void:
 	var request_count := ResidentRequestFlow.completed_count()
 	var visitors := VillageVisitorFlow.available_types()
 	board.panel.cards[prep]["action"].pressed.emit()
+	if board.request_offer.root.visible: board.request_offer.accept_button.pressed.emit()
 	bench = VillageRestFlow.site(world)
 	check(VillageRestFlow.prepared() and bench != null and bench.visible and bench.collision_layer > 0, "delivery opens actual reused-art bench")
 	check(GameState.get_item_count("dry_branch") == 0 and GameState.get_item_count("stone_shard") == 0 and GameState.money == money + 40 and ResidentRequestFlow.reputation() == reputation + 1, "exact one-time preparation cost and initial reward")

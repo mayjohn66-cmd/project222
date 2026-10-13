@@ -71,11 +71,14 @@ func returned_material(table: String, item: String, needed: int) -> void:
 	check(GameState.get_item_count(item) >= needed,"existing loot supplies required material: " + item)
 
 func journal_button(menu, title: String) -> Button:
-	for card in menu.schedule_list.get_children():
-		var labels: Array[Node] = card.find_children("*","Label",true,false)
-		if labels.is_empty() or labels[0].text != title: continue
-		for child in card.get_children():
-			if child is Button: return child
+	# 일정 책의 부탁 수첩(목록-상세)에서 부탁을 골라 상세의 목적지 버튼을 찾는다.
+	var notebook := menu.request_list.get_node_or_null("RequestNotebook") as RequestNotebookView
+	if notebook == null: return null
+	for row in notebook.rows:
+		if row["title"] == title:
+			notebook._select_category(str(row["category"]))
+			notebook._select(str(row["id"]))
+			return notebook.detail_page.get_node_or_null("RequestDestination") as Button
 	return null
 
 func expansion_talk(id: String) -> void:
@@ -121,9 +124,10 @@ func run() -> void:
 	check(PersonalRequestFlow.locked_reason(entry).is_empty(),"existing personal request prerequisites are ready")
 	check(open_board(),"actual board director opens at approach position")
 	await click(board.panel.cards["personal:"+id]["action"])
+	if board.request_offer.root.visible: board.request_offer.accept_button.pressed.emit()
 	check(PersonalRequestFlow.accepted(id) and not PersonalRequestFlow.can_deliver(id),"actual accept changes no missing stock into a reward")
-	check(board.panel.message.text.contains("맡았습니다"),"accept retains existing status message")
-	check(board.panel.introduction().contains("소지품") and board.panel.introduction().contains("꺼낸 뒤"),"board distinguishes inventory from physical stored stock")
+	check(board.panel.cards["personal:"+id]["action"].text.contains("준비하는 중") and board.panel.cards["personal:"+id]["action"].disabled,"accepted request shows it is being prepared until goods are carried")
+	check(not board.panel.introduction().contains("꺼낸 뒤"),"board no longer repeats the inventory instructions")
 	check(board.panel.cards["personal:"+id]["info"].text.contains("소지품"),"actual personal card identifies its inventory count")
 	var before: Dictionary = GameState.create_save_data().duplicate(true)
 	PersonalRequestFlow.information(entry)
@@ -141,6 +145,7 @@ func run() -> void:
 	check(open_board(),"board reopens after return")
 	board.panel.refresh()
 	await click(board.panel.cards["personal:"+id]["action"])
+	if board.request_offer.root.visible: board.request_offer.accept_button.pressed.emit()
 	check(PersonalRequestFlow.done(id) and GameState.get_money() == money + int(entry["money"]) and ResidentRequestFlow.reputation() == reputation + int(entry["reputation"]),"actual delivery pays existing reward exactly once")
 	for item in totals: check(GameState.get_item_count(item) == int(stock.get(item,0)) - int(totals[item]),"actual delivery consumes exact owned amount: " + str(item))
 	check(PersonalRequestFlow.deliver(id).is_empty(),"repeat delivery cannot pay twice")
@@ -191,6 +196,7 @@ func run() -> void:
 	var story := "shared_snack"
 	check(open_board(),"board opens for next multi-resident story")
 	await click(board.panel.cards[F.JOURNAL_PREFIX+story]["action"])
+	if board.request_offer.root.visible: board.request_offer.accept_button.pressed.emit()
 	check(F.accepted(story),"actual button accepts current unlocked story")
 	await click(board.panel.close_button)
 	await expansion_talk(story)

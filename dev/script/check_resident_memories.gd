@@ -29,9 +29,11 @@ func talk(giver: String) -> bool:
 	return world.get_node("WorldInteractions").try_interact() and life.talking
 func drain() -> void:
 	for i in range(100):
-		if not life.dialogue.open: return
+		if not life.dialogue.open: break
 		life.dialogue._advance()
-	check(false, "dialogue terminates")
+	# 소개 대사가 끝나면 수락·거절 확인창이 먼저 뜬다. 수락을 눌러 이야기를 시작한다.
+	if life.request_offer.root.visible: life.request_offer.accept_button.pressed.emit()
+	if life.dialogue.open: check(false, "dialogue terminates")
 func save_reload() -> bool:
 	var saved := GameState.create_save_data().duplicate(true)
 	return GameState.is_save_data_valid(saved) and GameState.apply_save_data(saved)

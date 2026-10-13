@@ -35,6 +35,7 @@ func run() -> void:
 	player.global_position = VillageSettlement.find_site(world,CommunityRequestFlow.SETTINGS.board_path).global_position
 	check(board.try_interact(),"actual board opens preparation")
 	board.panel.cards["well_gathering"]["action"].pressed.emit()
+	if board.request_offer.root.visible: board.request_offer.accept_button.pressed.emit()
 	check(CommunityRequestFlow.accepted("well_gathering"),"preparation explicitly accepted")
 	for item in ["bread","water"]: GameState.remove_item(item,GameState.get_item_count(item))
 	GameState.add_item("bread",3)
@@ -44,6 +45,7 @@ func run() -> void:
 	var reputation := ResidentRequestFlow.reputation()
 	board.panel.refresh()
 	board.panel.cards["well_gathering"]["action"].pressed.emit()
+	if board.request_offer.root.visible: board.request_offer.accept_button.pressed.emit()
 	check(VillageGatheringFlow.pending() and GameState.money == money + 40 and ResidentRequestFlow.reputation() == reputation + 1,"preparation grants exact reward and opens event")
 	check(GameState.get_item_count("bread") == 0 and GameState.get_item_count("water") == 0,"preparation consumes exact materials")
 	check(CommunityRequestFlow.deliver("well_gathering").is_empty(),"preparation reward cannot repeat")
