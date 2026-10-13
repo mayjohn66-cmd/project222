@@ -39,6 +39,7 @@ var exit_open: bool = false
 var finished: bool = false
 var attack_remaining: float = 0.0
 var attack_flash: float = 0.0
+var attack_serial: int = 0 # Successful inputs only; visual event, never a damage multiplier.
 var hurt_remaining: float = 0.0
 var elapsed: float = 0.0
 
@@ -172,6 +173,7 @@ func basic_attack() -> bool:
 	if finished or attack_remaining > 0.0:
 		return false
 	attack_remaining = attack_profile.cooldown
+	attack_serial += 1
 	attack_flash = 0.12
 	interacting = false
 	interaction_progress = 0.0

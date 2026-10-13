@@ -35,6 +35,7 @@ var _p: Dictionary = {"ts": 24, "block_px": 22.0, "unit_px_z": 20.0}
 var _player: BlockyFigure
 var _player_prev: Vector2 = Vector2.ZERO
 var _prev_flash: float = 0.0
+var _prev_attack_serial: int = 0
 var _prev_hurt: float = 0.0
 var _fx: Array = []  # 일시 효과: {kind, node, t, ...}
 var _proj_nodes: Array = []
@@ -187,6 +188,8 @@ func rebuild(model: RefCounted, region: String) -> void:
 	_build_enemies(model)
 	_player_prev = model.player_position
 	_prev_flash = 0.0
+	_prev_attack_serial = 0
+	if _player is ExpeditionPixelPlayer: _player.cancel_attack()
 	_prev_hurt = 0.0
 	_weapon_method = -1
 	_clear_fx()
@@ -788,14 +791,14 @@ func _sync(model: RefCounted, delta: float) -> void:
 	if _player.walking:
 		_player.move_speed = lerpf(_player.move_speed, clampf(moved / maxf(delta, 0.0001), 0.5, 5.0), 0.3)
 
-	# 무기 모양(공격 방식이 바뀌면 다시 쥐게 한다)과 공격 동작: 모델이 공격을 시작하면(attack_flash 가 0 → 양수) 휘두른다.
+	# Detect successful attacks even when render FPS skips the short flash window.
 	var method: int = int(model.attack_profile.method)
 
 	if method != _weapon_method:
 		_weapon_method = method
 		_player.set_weapon("staff" if method == ExpeditionAttackProfile.Method.PROJECTILE else "sword")
 
-	if float(model.attack_flash) > 0.0 and _prev_flash <= 0.0:
+	if int(model.attack_serial) != _prev_attack_serial:
 		var dur: float = maxf(0.3, float(model.attack_profile.cooldown) * 0.85)
 		_player.play_attack(dur, method == ExpeditionAttackProfile.Method.PROJECTILE, float(model.attack_profile.arc_degrees))
 
@@ -803,6 +806,8 @@ func _sync(model: RefCounted, delta: float) -> void:
 			_spawn_slash(model, dur)
 
 	_prev_flash = float(model.attack_flash)
+	_prev_attack_serial = int(model.attack_serial)
+	if model.player_hp <= 0 and _player is ExpeditionPixelPlayer: _player.cancel_attack()
 
 	# 피격: 몸이 젖혀지고 붉게 번쩍이며 적에게서 밀려난다. 무적 시간 끝 무렵엔 깜빡인다.
 	if float(model.hurt_remaining) > 0.0 and _prev_hurt <= 0.0:
