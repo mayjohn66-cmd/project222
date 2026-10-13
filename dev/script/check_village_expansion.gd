@@ -282,7 +282,9 @@ func verify_edges() -> void:
 	var removed_site: StaticBody2D = world.get_node("VillageBuildings/VillageGranary")
 	VillageSettlement.apply_world(world)
 	check(not removed_site.visible and VillageSettlement.find_site(world,"VillageBuildings/VillageGranary") == null,"content respects user's removed granary")
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	CheckoutOptions.force_for_test(true)  # 시험은 스캔 없이 시간 결제(스캔은 check_manual_checkout)
+	call_deferred("run")
 func run() -> void:
 	GameState.initialize_new_game()
 	world = load("res://scenes/shop/main.tscn").instantiate()

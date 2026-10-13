@@ -43,6 +43,9 @@ var daily_unmet_demand: Dictionary = {}
 var daily_price_walkouts: int = 0        # 가격이 비싸서 사지 않고 나간 손님 수
 var daily_price_lost_revenue: int = 0    # 그때 놓친 매출
 var daily_price_bonus: int = 0           # 싸게 팔아 늘어난 판매 개수
+var daily_tips: int = 0                  # 완벽 스캔으로 받은 팁 합계
+var daily_patience_walkouts: int = 0     # 계산 기다리다 지쳐 나간 손님 수
+var daily_patience_lost: int = 0         # 그때 놓친 매출
 
 var facility_recipe_picker: OptionButton
 var facility_detail_label: Label
@@ -335,6 +338,9 @@ func reset_shop_stats():
 	daily_price_walkouts = 0
 	daily_price_lost_revenue = 0
 	daily_price_bonus = 0
+	daily_tips = 0
+	daily_patience_walkouts = 0
+	daily_patience_lost = 0
 
 	update_shop_stats_ui()
 
@@ -362,7 +368,10 @@ func get_daily_shop_stats() -> Dictionary:
 
 		"price_walkouts": daily_price_walkouts,
 		"price_lost_revenue": daily_price_lost_revenue,
-		"price_bonus": daily_price_bonus
+		"price_bonus": daily_price_bonus,
+		"tips": daily_tips,
+		"patience_walkouts": daily_patience_walkouts,
+		"patience_lost": daily_patience_lost
 	}
 
 
@@ -458,6 +467,15 @@ func show_rumor_dialog(
 func record_price_walkout(_item_id: String, _amount: int, lost_revenue: int) -> void:
 	daily_price_walkouts += 1
 	daily_price_lost_revenue += maxi(lost_revenue, 0)
+
+
+func record_tip(amount: int) -> void:
+	daily_tips += maxi(amount, 0)
+
+
+func record_patience_walkout(lost_revenue: int) -> void:
+	daily_patience_walkouts += 1
+	daily_patience_lost += maxi(lost_revenue, 0)
 
 
 func record_price_bonus(_item_id: String, extra: int) -> void:

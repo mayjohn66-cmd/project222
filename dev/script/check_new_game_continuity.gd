@@ -272,7 +272,9 @@ func snap(label: String) -> void:
 			await RenderingServer.frame_post_draw
 			get_viewport().get_texture().get_image().save_png(arg.trim_prefix("--snap=")+"-"+label+".png")
 
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	CheckoutOptions.force_for_test(true)  # 시험은 스캔 없이 시간 결제(스캔은 check_manual_checkout)
+	call_deferred("run")
 func run() -> void:
 	if not OS.get_user_data_dir().contains("foodbag_checks"):
 		check(false,"isolated new-game project required"); finish(); return

@@ -108,6 +108,24 @@ func _ready() -> void:
 			_on_store_event_discovered
 		)
 
+var register_wait: float = 0.0   # 계산대에서 기다린 시간(CheckoutPatience)
+
+func _process(delta: float) -> void:
+	var patience: String = CheckoutPatience.tick(self, delta)
+	if patience == "warn":
+		StoreEventRemark.say(self, "저기요, 계산 좀 해 주세요.")
+	elif patience == "leave":
+		_leave_unserved()
+
+# 오래 기다리다 물건을 두고 나간다.
+func _leave_unserved() -> void:
+	var lost: int = FoodShelfLife.customer_total(self)
+	player.record_patience_walkout(lost)
+	StoreEventRemark.say(self, "됐어요, 그냥 갈게요.")
+	if is_instance_valid(target_register) and target_register.get_waiting_customer() == self:
+		target_register.finish_checkout()
+	go_to_exit()
+
 func _physics_process(
 	delta: float
 ) -> void:

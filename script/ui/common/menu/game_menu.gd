@@ -108,6 +108,8 @@ const GAME_SETTINGS_SERVICE_SCRIPT = preload(
 
 
 
+var simple_checkout_button: CheckBox
+
 var game_settings_service = (
 	GAME_SETTINGS_SERVICE_SCRIPT.new()
 )
@@ -242,6 +244,12 @@ func _ready() -> void:
 	fullscreen_button.toggled.connect(
 		_on_fullscreen_toggled
 	)
+
+	simple_checkout_button = CheckBox.new()
+	simple_checkout_button.text = "간편 계산 (스캔 없이 자동 결제)"
+	fullscreen_button.get_parent().add_child(simple_checkout_button)
+	fullscreen_button.get_parent().move_child(simple_checkout_button, fullscreen_button.get_index() + 1)
+	simple_checkout_button.toggled.connect(_on_simple_checkout_toggled)
 
 	for speed_option in GameConfig.GAME_SPEED_OPTIONS:
 		speed_option_button.add_item(
@@ -517,6 +525,13 @@ func _on_fullscreen_toggled(
 		_save_game_settings()
 
 
+func _on_simple_checkout_toggled(enabled: bool) -> void:
+	CheckoutOptions.set_simple(enabled)
+
+	if not loading_settings:
+		_save_game_settings()
+
+
 func _on_game_speed_selected(
 	index: int
 ) -> void:
@@ -544,7 +559,8 @@ func _save_game_settings() -> void:
 	game_settings_service.save_settings(
 		master_volume_slider.value,
 		fullscreen_button.button_pressed,
-		GameSpeed.get_current()
+		GameSpeed.get_current(),
+		simple_checkout_button.button_pressed
 	)
 
 
@@ -580,6 +596,10 @@ func _load_game_settings() -> void:
 	fullscreen_button.set_pressed_no_signal(
 		saved_fullscreen
 	)
+
+	var saved_simple: bool = bool(settings.get("simple_checkout", false))
+	simple_checkout_button.set_pressed_no_signal(saved_simple)
+	CheckoutOptions.set_simple(saved_simple)
 
 	game_settings_service.apply_master_volume(
 		master_volume_slider.value

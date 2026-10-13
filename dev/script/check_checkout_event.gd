@@ -9,7 +9,9 @@ func drain(dialogue: StoryDialoguePanel) -> void:
 	for i in range(30):
 		if not dialogue.open: break
 		dialogue._advance()
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	CheckoutOptions.force_for_test(true)  # 시험은 스캔 없이 시간 결제(스캔은 check_manual_checkout)
+	call_deferred("run")
 func run() -> void:
 	var world = load("res://scenes/shop/main.tscn").instantiate()
 	add_child(world)

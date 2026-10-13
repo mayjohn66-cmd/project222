@@ -26,6 +26,7 @@ func selection(id: String, rotation: int) -> void:
 	manager.build_selection_state.restore_selection(manager.furniture_catalog.find(id), rotation)
 
 func _ready() -> void:
+	CheckoutOptions.force_for_test(true)  # 시험은 스캔 없이 시간 결제(스캔은 check_manual_checkout)
 	ManagementMenu.PRESENTATION.animations_enabled = false  # 책 여닫기 연출 중의 위치를 재지 않게 한다
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("run")

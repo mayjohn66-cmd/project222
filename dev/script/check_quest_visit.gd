@@ -24,7 +24,9 @@ func drain(panel: StoryDialoguePanel) -> void:
 func frames(count: int = 3) -> void:
 	for i in range(count): await get_tree().process_frame
 
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	CheckoutOptions.force_for_test(true)  # 시험은 스캔 없이 시간 결제(스캔은 check_manual_checkout)
+	call_deferred("run")
 
 func run() -> void:
 	GameState.initialize_new_game()

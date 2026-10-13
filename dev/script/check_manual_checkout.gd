@@ -29,7 +29,7 @@ func run() -> void:
 		{"build_id": "door", "anchor": Vector2i(0, 4), "rotation_index": 3},
 		{"build_id": "register", "anchor": Vector2i(4, 3), "rotation_index": 0},
 		{"build_id": "shelf_1x1", "anchor": Vector2i(2, 2), "rotation_index": 0,
-		 "shelf_slots": [{"item_id": "water", "stock": 3, "capacity": 5}]}
+		 "shelf_slots": [{"item_id": "water", "stock": 5, "capacity": 5}]}
 	]
 	world.get_node("BuildManager")._restore_current_area_layout(layout)
 	await get_tree().process_frame
@@ -104,9 +104,50 @@ func run() -> void:
 	player.global_position = world.get_node("BuildManager").get_cell_world_position(register.get_checkout_cells()[0])
 	check(not cashier.try_interact(), "customer side cannot operate register")
 	player.global_position = world.get_node("BuildManager").get_cell_world_position(cell)
+	money_before = player.money
 	cashier.try_interact()
+	check(cashier.is_busy() and cashier.scan != null, "ordinary customer is checked out with the scan timing")
 	cashier._process(2.0)
+	check(not customer.purchase_completed, "scan checkout does not finish by waiting")
+	cashier.scan.cursor = cashier.scan.center + cashier.scan.good_half + 0.05
+	cashier.try_interact()
+	check(cashier.is_busy() and not customer.purchase_completed, "missing the scan keeps the customer waiting")
+	cashier.scan.cursor = cashier.scan.center
+	var price: int = ItemData.get_item_price("water")
+	cashier.try_interact()
 	check(customer.purchase_completed and player.successful_sales == sales_before + 2, "ordinary customer completes through existing checkout path")
+	check(player.money == money_before + price + CheckoutScan.tip_for(price) and player.daily_tips == CheckoutScan.tip_for(price), "perfect scan pays the 5% tip")
+	# 간편 계산: 예전처럼 시간으로 결제하고 팁은 없다.
+	var simple_customer = load("res://scenes/shop/actors/customer.tscn").instantiate()
+	world.get_node("Actors").add_child(simple_customer)
+	simple_customer.set_physics_process(false)
+	check(shelf.take_items_by_id("water", 1) == 1, "second picked item")
+	simple_customer.carried_item_id = "water"
+	simple_customer.carried_amount = 1
+	simple_customer.target_register = register
+	register.request_checkout(simple_customer)
+	CheckoutOptions.set_simple(true)
+	money_before = player.money
+	cashier.try_interact()
+	check(cashier.is_busy() and cashier.scan == null, "simple checkout skips the scan")
+	cashier._process(2.0)
+	check(simple_customer.purchase_completed and player.money == money_before + price, "simple checkout pays the price without tip")
+	CheckoutOptions.set_simple(false)
+	# 인내심: 오래 기다리면 물건을 두고 나간다.
+	var impatient = load("res://scenes/shop/actors/customer.tscn").instantiate()
+	world.get_node("Actors").add_child(impatient)
+	impatient.set_physics_process(false)
+	check(shelf.take_items_by_id("water", 1) == 1, "third picked item")
+	impatient.carried_item_id = "water"
+	impatient.carried_amount = 1
+	impatient.target_register = register
+	impatient.state = impatient.CustomerState.GO_TO_REGISTER
+	register.request_checkout(impatient)
+	impatient.register_wait = CheckoutData.value("patience_seconds") - 0.01
+	var walkouts_before: int = player.daily_patience_walkouts
+	for i in range(3): await get_tree().process_frame
+	check(impatient.force_exit_requested and player.daily_patience_walkouts == walkouts_before + 1, "customer leaves when patience runs out")
+	check(register.get_waiting_customer() != impatient, "register is released after the customer leaves")
 	manager.hour_timer.start(0.3)
 	manager.close_shop_manually()
 	var hour: int = manager.current_hour

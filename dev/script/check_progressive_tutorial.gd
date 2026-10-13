@@ -61,7 +61,9 @@ func pay_visit() -> void:
 	check(checkout.guide.purchase_completed, "actual checkout finished")
 	drain(checkout.dialogue)
 
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	CheckoutOptions.force_for_test(true)  # 시험은 스캔 없이 시간 결제(스캔은 check_manual_checkout)
+	call_deferred("run")
 func run() -> void:
 	OpeningStoreLayout.set_props(OpeningStoreLayout.default_props())  # 사용자가 저장한 배치와 무관하게 기본 배치로 검사(위치 숫자가 기본 배치 기준)
 	GameState.initialize_new_game()

@@ -4,6 +4,7 @@ extends Node
 var checks := 0
 var failures := 0
 func _ready() -> void:
+	CheckoutOptions.force_for_test(true)  # 시험은 스캔 없이 시간 결제(스캔은 check_manual_checkout)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	call_deferred("run")
 func check(ok: bool, message: String) -> void:

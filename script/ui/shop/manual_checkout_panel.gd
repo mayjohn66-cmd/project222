@@ -8,6 +8,8 @@ var info: Label
 var progress: ProgressBar
 var action: Button
 var cancel: Button
+var scan_view: CheckoutScanView
+var scan: CheckoutScan
 
 func _ready() -> void:
 	layer = 15
@@ -30,6 +32,9 @@ func _ready() -> void:
 	progress.max_value = 1.0
 	progress.show_percentage = false
 	column.add_child(progress)
+	scan_view = CheckoutScanView.new()
+	scan_view.visible = false
+	column.add_child(scan_view)
 	var row := HBoxContainer.new()
 	row.alignment = BoxContainer.ALIGNMENT_CENTER
 	column.add_child(row)
@@ -48,9 +53,15 @@ func _ready() -> void:
 func display(caption: String, value: float, busy: bool, enabled: bool, action_text: String = "결제 [E]") -> void:
 	root.visible = not caption.is_empty()
 	info.text = caption
-	progress.visible = busy
+	progress.visible = busy and scan == null
+	scan_view.visible = busy and scan != null
 	progress.value = value
 	action.disabled = busy or not enabled
 	action.text = action_text
 	cancel.visible = busy
 
+
+# 스캔 중이면 막대를 보이고, 없으면(간편 계산·튜토리얼) 진행 막대를 쓴다.
+func set_scan(value: CheckoutScan) -> void:
+	scan = value
+	scan_view.scan = value

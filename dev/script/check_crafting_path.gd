@@ -46,7 +46,9 @@ func save_reload() -> void:
 	PlayerProgress.reset()
 	PlayerProgress.load_save_data(saved)
 
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	CheckoutOptions.force_for_test(true)  # 시험은 스캔 없이 시간 결제(스캔은 check_manual_checkout)
+	call_deferred("run")
 
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()

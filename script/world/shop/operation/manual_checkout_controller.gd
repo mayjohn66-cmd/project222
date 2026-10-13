@@ -14,6 +14,9 @@ var active_register
 var active_customer
 var active_cell := Vector2i(-1, -1)
 var elapsed: float = 0.0
+var scan: CheckoutScan   # 스캔 중일 때만 있다. 간편 계산·튜토리얼 손님은 null(예전 진행 막대)
+var feedback := ""
+var feedback_left: float = 0.0
 
 func _ready() -> void:
 	player = get_parent().get_node("Actors/Player")
@@ -62,7 +65,9 @@ func nearest_register():
 
 func try_interact() -> bool:
 	if blocked(): return false
-	if is_busy(): return true
+	if is_busy():
+		if scan != null: _press_scan()
+		return true
 	var register = nearest_register()
 	if register == null: return false
 	var customer = register.get_waiting_customer()
@@ -81,7 +86,16 @@ func try_interact() -> bool:
 	active_customer = customer
 	active_cell = cell
 	elapsed = 0.0
+	scan = null
+	if uses_scan(customer):
+		scan = CheckoutScan.new()
+		scan.start(randf())
+	panel.set_scan(scan)
 	return true
+
+# 간편 계산을 켰거나 튜토리얼 손님이면 스캔 없이 예전처럼 시간으로 결제한다.
+func uses_scan(customer) -> bool:
+	return not CheckoutOptions.simple() and not customer.has_method("can_be_checked_out_by")
 
 func _can_charge(customer) -> bool:
 	if is_instance_valid(customer) and FoodShelfLife.tracked(customer.carried_item_id) and FoodShelfLife.customer_total(customer) <= 0:
@@ -101,12 +115,35 @@ func _process(delta: float) -> void:
 				or _cashier_cell(active_register) != active_cell:
 			cancel_checkout()
 		elif not blocked():
-			elapsed += delta
-			if elapsed >= checkout_seconds:
-				_finish_checkout()
+			if scan != null:
+				# 배속과 상관없이 같은 손놀림이 필요하도록 실제 시간으로 움직인다.
+				scan.step(delta / maxf(Engine.time_scale, 0.01))
+			else:
+				elapsed += delta
+				if elapsed >= checkout_seconds:
+					_finish_checkout()
+	if feedback_left > 0.0:
+		feedback_left = maxf(feedback_left - delta / maxf(Engine.time_scale, 0.01), 0.0)
 	_update_panel()
 
-func _finish_checkout() -> void:
+func _press_scan() -> void:
+	if scan == null or blocked(): return
+	var result: String = scan.press(randf())
+	match result:
+		CheckoutScan.PERFECT:
+			_finish_checkout(CheckoutScan.tip_for(FoodShelfLife.customer_total(active_customer)))
+		CheckoutScan.GOOD:
+			_finish_checkout(0)
+		CheckoutScan.FAILED:
+			_finish_checkout(0)
+		_:
+			_set_feedback("빗나갔다! (%d/%d)" % [scan.misses, scan.miss_limit])
+
+func _set_feedback(text: String) -> void:
+	feedback = text
+	feedback_left = 0.8
+
+func _finish_checkout(tip: int = 0) -> void:
 	var customer = active_customer
 	var register = active_register
 	var price: int = FoodShelfLife.customer_total(customer)
@@ -119,6 +156,10 @@ func _finish_checkout() -> void:
 		register.finish_checkout()
 	cancel_checkout()
 	if customer.purchase_completed:
+		if tip > 0:
+			player.add_money(tip)
+			player.record_tip(tip)
+			_set_feedback("완벽! 팁 +%dG" % tip)
 		checkout_completed.emit(customer, price)
 
 func cancel_checkout() -> void:
@@ -129,6 +170,8 @@ func cancel_checkout() -> void:
 	active_customer = null
 	active_cell = Vector2i(-1, -1)
 	elapsed = 0.0
+	scan = null
+	if is_instance_valid(panel): panel.set_scan(null)
 	if is_inside_tree(): checkout_cancelled.emit()
 
 func _update_panel() -> void:
@@ -140,6 +183,9 @@ func _update_panel() -> void:
 		panel.display("", 0.0, false, false)
 		return
 	var customer = register.get_waiting_customer()
+	if customer == null and feedback_left > 0.0:
+		panel.display(feedback, 0.0, false, false)
+		return
 	if customer == null:
 		panel.display("계산대 · 진열 상품 확인" if PowerRepairFlow.powered() else "계산대 전원 꺼짐 · 옆 장부로 상품 확인", 0.0, false, true, "상품 조회 [E]" if PowerRepairFlow.powered() else "장부 조회 [E]")
 		return
@@ -154,7 +200,9 @@ func _update_panel() -> void:
 	var caption := "%s ×%d · %dG" % [ItemData.get_item_name(customer.carried_item_id),
 		customer.carried_amount, FoodShelfLife.customer_total(customer)]
 	if not available: caption = "직원이 계산 중입니다"
-	panel.display(caption, elapsed / maxf(checkout_seconds, 0.01), is_busy(), available, "결제 [E]" if PowerRepairFlow.powered() else "손으로 계산 [E]")
+	elif feedback_left > 0.0: caption = feedback
+	elif is_busy() and scan != null: caption += " · 노란 칸에서 [E]"
+	panel.display(caption, elapsed / maxf(checkout_seconds, 0.01), is_busy(), available, ("스캔 [E]" if scan != null and is_busy() else "결제 [E]") if PowerRepairFlow.powered() else "손으로 계산 [E]")
 
 func _exit_tree() -> void:
 	cancel_checkout()
