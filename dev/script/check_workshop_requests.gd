@@ -51,7 +51,9 @@ func produce(recipe_id: String, count: int) -> void:
 	facility._process(facility.remaining_seconds + 1)
 	check(facility.collect_production(),"real output enters warehouse " + recipe_id)
 
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	RequestOfferPanel.auto_accept_for_test = true  # 주민 제안 확인창은 이 시험의 대상이 아니므로 바로 수락한다(check_request_proposals 가 확인창 자체를 시험한다)
+	call_deferred("run")
 func run() -> void:
 	GameState.initialize_new_game()
 	world = load("res://scenes/shop/main.tscn").instantiate()

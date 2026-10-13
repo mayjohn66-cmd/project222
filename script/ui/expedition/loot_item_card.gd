@@ -93,6 +93,11 @@ func _get_drag_data(
 
 	set_drag_preview(preview)
 
+	return drag_payload()
+
+
+# 끌기 정보(가방 쪽 드롭 영역이 읽는다). 미리보기와 따로 둬서 시험에서 바로 읽을 수 있다.
+func drag_payload() -> Dictionary:
 	return {
 		"source": "loot",
 		"loot_index": loot_index,

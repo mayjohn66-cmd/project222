@@ -273,6 +273,7 @@ func snap(label: String) -> void:
 			get_viewport().get_texture().get_image().save_png(arg.trim_prefix("--snap=")+"-"+label+".png")
 
 func _ready() -> void:
+	RequestOfferPanel.auto_accept_for_test = true  # 주민 제안 확인창은 이 시험의 대상이 아니므로 바로 수락한다(check_request_proposals 가 확인창 자체를 시험한다)
 	CheckoutOptions.force_for_test(true)  # 시험은 스캔 없이 시간 결제(스캔은 check_manual_checkout)
 	call_deferred("run")
 func run() -> void:

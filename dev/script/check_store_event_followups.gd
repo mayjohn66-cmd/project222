@@ -15,7 +15,9 @@ func check(ok: bool, caption: String) -> void:
 	else:
 		failures += 1
 		push_error(caption)
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	RequestOfferPanel.auto_accept_for_test = true  # 주민 제안 확인창은 이 시험의 대상이 아니므로 바로 수락한다(check_request_proposals 가 확인창 자체를 시험한다)
+	call_deferred("run")
 func settle() -> void:
 	for i in range(8): await get_tree().process_frame
 func unlock() -> void:

@@ -45,6 +45,7 @@ func click_book(button: Button, menu: ManagementMenu) -> void:
 	await frames()
 
 func run() -> void:
+	RequestOfferPanel.auto_accept_for_test = true  # 주민 제안 확인창은 이 시험의 대상이 아니므로 바로 수락한다
 	check(OS.get_user_data_dir().contains("foodbag_checks"),"isolated progression test project")
 	if not OS.get_user_data_dir().contains("foodbag_checks"): get_tree().quit(1); return
 	seed(8123)

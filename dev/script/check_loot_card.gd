@@ -31,7 +31,7 @@ func _ready() -> void:
 	check(card.custom_minimum_size == Vector2(48, 48), "카드 크기가 가방 칸(52px 격자)과 같다")
 	var drag: Variant = null
 	card.controller = self
-	drag = card._get_drag_data(Vector2.ZERO)
+	drag = card.drag_payload()
 	check(drag is Dictionary and drag["source"] == "loot" and drag["item_id"] == with_icon and int(drag["amount"]) == 3, "끌기 정보는 그대로")
 	if not without_icon.is_empty():
 		var plain := LootItemCard.new()

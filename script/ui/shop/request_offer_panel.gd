@@ -67,6 +67,9 @@ func _button(text: String) -> Button:
 	InteractionUiStyle.apply_button(button)
 	return button
 
+# 시험 전용: 켜면 확인창이 뜨자마자 수락한다(옛 시험이 수락 확인창 없이 쓰던 흐름을 그대로 쓰게 한다).
+static var auto_accept_for_test: bool = false
+
 func display(proposal: Dictionary) -> void:
 	title_label.text = str(proposal.get("title", "주민의 부탁"))
 	description.text = RequestProposalData.description(proposal)
@@ -76,6 +79,7 @@ func display(proposal: Dictionary) -> void:
 	_fit_screen()
 	call_deferred("_fit_screen")
 	decline_button.grab_focus()
+	if auto_accept_for_test: _answer(true)
 
 func _fit_screen() -> void:
 	if not is_instance_valid(root): return

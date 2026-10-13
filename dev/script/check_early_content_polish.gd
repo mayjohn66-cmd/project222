@@ -18,7 +18,9 @@ func drain(panel: StoryDialoguePanel) -> void:
 		if not panel.open: break
 		panel._advance()
 
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	RequestOfferPanel.auto_accept_for_test = true  # 주민 제안 확인창은 이 시험의 대상이 아니므로 바로 수락한다(check_request_proposals 가 확인창 자체를 시험한다)
+	call_deferred("run")
 
 func run() -> void:
 	GameState.initialize_new_game()
@@ -41,7 +43,11 @@ func run() -> void:
 		check(str(request["item"]) == expected, "first requests use expedition materials")
 		resident.refresh()
 		player.global_position = resident.npc.global_position + Vector2(20, 0)
-		check(resident.try_interact() and ResidentRequestFlow.accepted(str(request["id"])), "actual resident dialogue accepts request")
+		var opened: bool = resident.try_interact()
+		for i in range(60):
+			if not resident.dialogue.open: break
+			resident.dialogue._advance()   # 대사를 끝까지 읽으면 수락 확인창이 뜨고(시험은 자동 수락) 수락된다
+		check(opened and ResidentRequestFlow.accepted(str(request["id"])), "actual resident dialogue accepts request")
 		drain(resident.dialogue)
 		var accepted_save := PlayerProgress.to_save_data().duplicate(true)
 		PlayerProgress.reset()

@@ -9,7 +9,9 @@ func check(ok: bool, label_text: String) -> void:
 		failures += 1
 		push_error(label_text)
 
-func _ready() -> void: call_deferred("run")
+func _ready() -> void:
+	RequestOfferPanel.auto_accept_for_test = true  # 주민 제안 확인창은 이 시험의 대상이 아니므로 바로 수락한다(check_request_proposals 가 확인창 자체를 시험한다)
+	call_deferred("run")
 
 func make_host():
 	var inst = load("res://scenes/expedition/expedition.tscn").instantiate()
