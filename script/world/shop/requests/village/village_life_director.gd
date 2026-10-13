@@ -93,7 +93,7 @@ func refresh() -> void:
 		var open: bool = VillageLifeFlow.available(entry) and site != null and (site.visible or VillageHousing.under_construction(site)) and not (editor != null and editor.active)
 		var npc = residents.get(id)
 		if not open:
-			if is_instance_valid(npc): npc.queue_free()
+			CustomerGates.dismiss(npc)
 			residents.erase(id)
 			continue
 		var position := _approach_position(site)
@@ -108,6 +108,7 @@ func refresh() -> void:
 			world.get_node("Actors").add_child(npc)
 			residents[id] = npc
 			npc.global_position = position
+			CustomerGates.appear(npc)
 		npc.visible = true
 		var routine := VillageRoutine.location(entry,manager.current_hour)
 		var destination_site := VillageSettlement.find_site(world,str(routine["path"]))

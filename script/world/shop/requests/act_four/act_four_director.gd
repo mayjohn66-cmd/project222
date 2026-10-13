@@ -41,7 +41,7 @@ func refresh() -> void:
 	for role in ROLES:
 		var npc = visitors.get(role)
 		if not needed.has(role) or board == null or not board.visible:
-			if is_instance_valid(npc): npc.queue_free()
+			CustomerGates.dismiss(npc)
 			visitors.erase(role)
 			continue
 		if not is_instance_valid(npc):
@@ -63,6 +63,7 @@ func refresh() -> void:
 			npc.customer_group_id = CustomerTypeData.get_group_id(npc.customer_type_id)
 			world.get_node("Actors").add_child(npc)
 			npc.global_position = point
+			CustomerGates.appear(npc)
 			npc.set_physics_process(false)
 			visitors[role] = npc
 		npc.title.text = str(ROLES[role]["name"]) + " [E]"

@@ -42,7 +42,7 @@ func refresh() -> void:
 	var editor = get_parent().get_node_or_null("VillageMapEditor")
 	var present: bool = state in ["introduction", "supplies", "return"] and target != null and not (editor != null and editor.active)
 	if not present:
-		if is_instance_valid(npc): npc.queue_free()
+		CustomerGates.dismiss(npc)
 		npc = null
 		return
 	var position: Vector2 = get_parent().get_node("VillageLifeDirector")._approach_position(target)
@@ -56,6 +56,7 @@ func refresh() -> void:
 		npc.customer_group_id = LanternWayfarerFlow.SETTINGS.customer_group
 		npc.name = "LanternWayfarer"
 		get_parent().get_node("Actors").add_child(npc)
+		CustomerGates.appear(npc)
 	npc.global_position = position
 	npc.show()
 	npc.title.text = LanternWayfarerFlow.SETTINGS.npc_name + " [E]\n" + ("다시 찾아온 길손" if state == "return" else "등불 곁에서 쉬는 중")

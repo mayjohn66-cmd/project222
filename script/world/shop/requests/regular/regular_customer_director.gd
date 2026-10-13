@@ -32,7 +32,7 @@ func _process(delta: float) -> void:
 	elapsed = 0.0
 	if not open: refresh()
 func _hide_visitor() -> void:
-	if is_instance_valid(npc): npc.queue_free()
+	CustomerGates.dismiss(npc)
 	npc = null
 	current_id = ""
 func _live_purchase(id: String) -> bool:
@@ -70,6 +70,7 @@ func refresh() -> void:
 		npc.customer_group_id = CustomerTypeData.get_group_id(npc.customer_type_id)
 		npc.name = "RegularCustomerVisitor"
 		world.get_node("Actors").add_child(npc)
+		CustomerGates.appear(npc)
 		current_id = id
 	npc.global_position = point
 	npc.title.text = visitor_prefix + CustomerTypeData.get_display_name(npc.customer_type_id) + " [E]"

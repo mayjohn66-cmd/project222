@@ -39,6 +39,13 @@ func _process(delta: float) -> void:
 func leave() -> void:
 	remove_from_group("story_npc")
 
+	# 문으로 나가 보도를 따라 도로 끝(화면 밖)으로 사라진다. 문을 못 찾으면 제자리에서 흐려진다.
+	var world: Node = get_parent().get_parent() if get_parent() != null else null
+	var door: Node = CustomerGates.entrance_door(world) if world != null else null
+	if world != null and door != null:
+		CustomerGates.walk_out_through_door(self, world, door)
+		return
+
 	var tween := create_tween()
 	tween.tween_property(self, "modulate:a", 0.0, 0.5)
 	tween.tween_callback(queue_free)

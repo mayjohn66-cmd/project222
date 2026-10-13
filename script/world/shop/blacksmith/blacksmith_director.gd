@@ -30,7 +30,7 @@ func _process(delta: float) -> void:
 	refresh()
 func refresh() -> void:
 	if not BlacksmithProgressionFlow.npc_available():
-		if is_instance_valid(npc): npc.queue_free()
+		CustomerGates.dismiss(npc)
 		npc = null
 		return
 	var world := get_parent()
@@ -50,6 +50,7 @@ func refresh() -> void:
 		npc.set_meta("look_key","story_npc") # resident_id로 대장장이 전용 그림을 고른다.
 		world.get_node("Actors").add_child(npc)
 		npc.set_physics_process(false)
+		CustomerGates.appear(npc)
 	npc.global_position = point
 	npc.title.text = "대장장이 [E]"
 	npc.show()

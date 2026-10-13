@@ -86,6 +86,41 @@ func run() -> void:
 		if view_now.has_point(spawn_position):
 			all_outside = false
 	check(all_outside, "생성 직후 위치는 모두 화면 밖")
+	# 문으로 들어오는 이야기 방문자: 처음 위치는 화면 밖, 도착하면 문 안쪽 자리, 떠날 때는 걸어 나가 사라진다
+	var door = CustomerGates.entrance_door(world)
+	check(door != null, "입구 문을 찾는다")
+	var inside: Vector2 = door.call("get_customer_target_position")
+	var visitor := StoryNpc.new()
+	world.get_node("Actors").add_child(visitor)
+	camera.global_position = left_world
+	camera.force_update_scroll()
+	await get_tree().process_frame
+	CustomerGates.walk_in_through_door(visitor, world, door, inside)
+	var view_visit: Rect2 = CustomerGates.visible_world_rect(exterior)
+	check(not view_visit.has_point(visitor.global_position) or visitor.global_position.distance_to(left_world) > 0.0, "이야기 방문자는 도로 끝 쪽에서 나타난다")
+	Engine.time_scale = 6.0
+	await get_tree().create_timer(18.0).timeout
+	Engine.time_scale = 1.0
+	check(visitor.global_position.distance_to(inside) < 2.0, "이야기 방문자가 문 안쪽 자리에 도착한다")
+	visitor.leave()
+	check(not visitor.is_in_group("story_npc"), "떠나는 방문자는 대화 대상에서 빠진다")
+	Engine.time_scale = 6.0
+	await get_tree().create_timer(24.0).timeout
+	Engine.time_scale = 1.0
+	check(not is_instance_valid(visitor) or visitor.is_queued_for_deletion(), "떠난 방문자는 걸어 나가 사라진다")
+	# 서 있는 인물의 등장·퇴장: 화면 안이면 서서히, 화면 밖이면 바로
+	var resident := Node2D.new()
+	world.get_node("Actors").add_child(resident)
+	resident.global_position = camera.global_position
+	CustomerGates.dismiss(resident)
+	check(not resident.is_queued_for_deletion(), "화면 안의 인물은 바로 지우지 않고 서서히 사라진다")
+	await get_tree().create_timer(CustomerGates.value("fade_seconds") + 0.3).timeout
+	check(not is_instance_valid(resident) or resident.is_queued_for_deletion(), "서서히 사라진 뒤 지워진다")
+	var far := Node2D.new()
+	world.get_node("Actors").add_child(far)
+	far.global_position = camera.global_position + Vector2(100000, 100000)
+	CustomerGates.dismiss(far)
+	check(far.is_queued_for_deletion(), "화면 밖의 인물은 바로 지운다")
 	# 투명도 안전망
 	var dummy := Node2D.new()
 	add_child(dummy)

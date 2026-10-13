@@ -68,9 +68,14 @@ func spawn_merchant() -> void:
 
 	var npc := MerchantNpc.new()
 	npc.setup(offers)
-	npc.global_position = _get_npc_position()
+	var inside := _get_npc_position()
+	npc.global_position = inside
 	actors.add_child(npc)
 	active_npc = npc
+	# 도로 끝(화면 밖)에서 보도를 따라 걸어 들어와 문 안쪽에 선다.
+	var door := CustomerGates.entrance_door(get_parent())
+	if door != null:
+		CustomerGates.walk_in_through_door(npc, get_parent(), door, inside)
 	ActFourRecords.record_merchant_visit()
 
 	DebugLog.write(

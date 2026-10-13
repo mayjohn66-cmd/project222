@@ -14,6 +14,10 @@ func check(ok: bool, label: String) -> void:
 
 
 func _ready() -> void:
+	call_deferred("run")
+
+
+func run() -> void:
 	VillageHouseSlotsData.reload_data()
 	var slots: Array[Dictionary] = VillageHouseSlotsData.slots
 	check(slots.size() >= 8, "집터가 8곳 이상 있다 (%d)" % slots.size())
@@ -57,6 +61,27 @@ func _ready() -> void:
 				corridors_ok = false
 	check(zones_ok, "집터가 편의점 부지·원정 출발 지점을 침범하지 않는다")
 	check(corridors_ok, "집터가 손님 출입 길을 막지 않는다")
+
+	# 실제 월드: 주민이 서 있을 수 있어야 한다(집터 곁에 걷는 땅이 있고 막히지 않는다)
+	var world = load("res://scenes/shop/main.tscn").instantiate()
+	add_child(world)
+	world.get_node("TutorialDirector").enabled = false
+	for i in range(4):
+		await get_tree().process_frame
+	var terrain: Node2D = world.get_node("StoreExterior")
+	var life = world.get_node("VillageLifeDirector")
+	var standable := true
+	for slot in slots:
+		var body := StaticBody2D.new()
+		world.add_child(body)
+		body.global_position = terrain.to_global(terrain.grid_to_local(slot["cell"]))
+		if life._approach_position(body) == Vector2.INF:
+			standable = false
+			print("  서 있을 곳 없음: ", slot["id"], slot["cell"])
+		body.queue_free()
+	check(standable, "모든 집터 곁에 주민이 설 자리가 있다")
+	world.queue_free()
+	await get_tree().process_frame
 
 	# 배정
 	var original: Dictionary = GameState.create_save_data()

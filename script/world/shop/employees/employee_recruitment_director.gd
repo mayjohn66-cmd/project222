@@ -47,6 +47,7 @@ func refresh_visit() -> void:
 	applicant.employee_id = id
 	world.get_node("Actors").add_child(applicant)
 	applicant.global_position = endpoints[0]
+	CustomerGates.appear(applicant)
 	applicant.set_destination(endpoints[1], "가게 앞에서 인사 기다리기")
 func visit_points() -> PackedVector2Array:
 	var doors := get_tree().get_nodes_in_group("door")

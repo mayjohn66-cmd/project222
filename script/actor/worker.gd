@@ -1302,8 +1302,19 @@ func begin_shift() -> void:
 		)
 	)
 
-	# 직원은 도로 끝에서 모습을 드러낸다.
+	# 직원은 도로 끝(화면에 보이면 화면 밖까지 물러난 지점)에서 걸어 들어온다.
+	var gate_start: Vector2 = CustomerGates.gate_position(
+		store_exterior,
+		sidewalk_route.get("start_cell", Vector2i.ZERO)
+	)
+	if gate_start != start_position:
+		var lead_in: Array = [start_position]
+		lead_in.append_array(sidewalk_route.get("approach_positions", []))
+		sidewalk_route["approach_positions"] = lead_in
+		start_position = gate_start
 	global_position = start_position
+	modulate.a = 1.0
+	CustomerGates.fade_in(self)
 	visible = true
 	commute_animation_running = true
 
@@ -1742,6 +1753,17 @@ func start_clock_out_commute() -> void:
 	if not is_instance_valid(self):
 		return
 
+	# 도로 끝이 화면 안이면 화면 밖 게이트까지 더 걸어가며 사라진다.
+	var gate_finish: Vector2 = CustomerGates.gate_position(
+		store_exterior,
+		sidewalk_route.get("finish_cell", Vector2i.ZERO)
+	)
+	if gate_finish != global_position:
+		CustomerGates.fade_out(self)
+		await _move_worker_along_points([gate_finish])
+		if not is_instance_valid(self):
+			return
+
 	commute_animation_running = false
 
 	DebugLog.write(
@@ -1783,6 +1805,7 @@ func complete_clock_out() -> void:
 
 	state = WorkerState.OFF_DUTY
 	visible = false
+	modulate.a = 1.0
 
 func finish_current_work():
 	if shift_ending or not on_duty:

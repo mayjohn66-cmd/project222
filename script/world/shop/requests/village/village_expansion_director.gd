@@ -37,7 +37,7 @@ func refresh() -> void:
 		var pending := not VillageExpansionFlow.done(str(entry["expansion_event"])) and VillageExpansionFlow.locked_reason(str(entry["expansion_event"])).is_empty()
 		var npc = visitors.get(id)
 		if not pending or board == null or not board.visible:
-			if is_instance_valid(npc): npc.queue_free()
+			CustomerGates.dismiss(npc)
 			visitors.erase(id)
 			continue
 		if not is_instance_valid(npc):
@@ -49,6 +49,7 @@ func refresh() -> void:
 			npc.customer_group_id = str(entry["group"])
 			world.get_node("Actors").add_child(npc)
 			npc.global_position = point
+			CustomerGates.appear(npc)
 			visitors[id] = npc
 			npc.set_physics_process(false)
 		npc.title.text = str(entry["name"]) + " [E]\n" + ("정착 이야기 이어가기" if VillageExpansionFlow.accepted(str(entry["expansion_event"])) else "정착 제안 듣기")
