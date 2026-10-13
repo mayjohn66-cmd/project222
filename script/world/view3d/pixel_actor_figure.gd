@@ -21,6 +21,8 @@ var _id_mesh: MeshInstance3D
 var _material: ShaderMaterial
 var _id_material: ShaderMaterial
 var _last_frame_path := ""
+var work_pose: Dictionary = {}
+var work_direction := ""
 
 
 func build(parent: Node, id_parent: Node, _head_ratio: float = 3.0, total: float = 0.95, _torso_fixed: float = -1.0, look: Dictionary = {}) -> void:
@@ -67,6 +69,9 @@ func _apply_frame() -> void:
 	direction = str(frame_set.get("static_direction", direction))
 	var pose: Dictionary = frame_set.directions[direction]
 	var frame: Dictionary = pose.idle if frame_index < 0 or frame_index >= pose.walk.size() else pose.walk[frame_index]
+	if not work_pose.is_empty():
+		pose = frame_set.directions[work_direction]
+		frame = work_pose
 	if _last_frame_path == frame.path:
 		return
 	_last_frame_path = frame.path
@@ -87,6 +92,11 @@ func _apply_frame() -> void:
 		material.set_shader_parameter("region", region)
 		material.set_shader_parameter("frame_offset", offset)
 	_material.set_shader_parameter("normal_texture", SpriteNormalMaps.texture(texture))
+
+
+func set_work_pose(value: Dictionary, facing: String) -> void:
+	work_pose = value
+	work_direction = facing
 
 
 func sync_sort(rank: float, count: float, camera: Camera3D, id_value: float) -> void:

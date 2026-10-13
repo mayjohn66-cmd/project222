@@ -1243,6 +1243,10 @@ func _sync_actors(delta: float) -> void:
 			var face: Vector2 = n.get_meta("face_dir")  # 연출: 멈춰 있을 때 바라볼 칸 방향
 			figure.facing_yaw_deg = rad_to_deg(atan2(face.x, face.y))
 
+		if figure is PixelActorFigure and n.is_in_group("worker"):
+			if not entry.has("restock_animation"):
+				entry["restock_animation"] = EmployeeRestockAnimation.new()
+			entry["restock_animation"].sync(n, figure, self, delta)
 		figure.animate(delta)
 
 	for id in _actors.keys():

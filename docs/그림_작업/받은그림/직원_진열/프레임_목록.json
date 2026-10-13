@@ -1,0 +1,445 @@
+{
+  "generated_source_sha256": "176e68c649d2deb1e503c22a2ef4b1ee66534b202c589f3991db11f312ba0a12",
+  "frame_size": [
+    64,
+    64
+  ],
+  "phase_weights": [
+    0.15,
+    0.3,
+    0.35,
+    0.2
+  ],
+  "protected_foot_rows": [
+    51,
+    64
+  ],
+  "employees": {
+    "worker_001": {
+      "south-east": {
+        "frames": [
+          {
+            "path": "art/actors/worker_001/animations/restock/south-east/frame_000.png",
+            "sha256": "35c88cf306d789e9145cdb44531b9426cb5b355e2d18a98628b334ae006c7cc3",
+            "donor_row_zero_based": 0,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/south-east/frame_001.png",
+            "sha256": "d79399337b2c740509459f216698ba19846dd4fb402a21eaa854505fefc9b695",
+            "donor_row_zero_based": 0,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/south-east/frame_002.png",
+            "sha256": "51d843ae21f47f99092ee4419a9cff28df9c4e93d17942eb447893209dc60df6",
+            "donor_row_zero_based": 0,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/south-east/frame_003.png",
+            "sha256": "cb8be84aeebe70def8d8534ffe4e1a033fed0cba7d2e1a96ea580c66b4152068",
+            "donor_row_zero_based": 0,
+            "arms_mirrored": false
+          }
+        ],
+        "arms_mirrored": false,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      },
+      "south-west": {
+        "frames": [
+          {
+            "path": "art/actors/worker_001/animations/restock/south-west/frame_000.png",
+            "sha256": "bb11cd810392fae4a472738337a7db7fba3b24f4138c826f9c7f87d5c442bd14",
+            "donor_row_zero_based": 1,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/south-west/frame_001.png",
+            "sha256": "70921d223f9d7714f6503e2ea19ff96693fe9b0091d88fb405ae6b32c9fcf396",
+            "donor_row_zero_based": 0,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/south-west/frame_002.png",
+            "sha256": "7b21005a2f504f96b476e12d584db61a6903d4bec7e97a6aa8dd170eb6fb715e",
+            "donor_row_zero_based": 1,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/south-west/frame_003.png",
+            "sha256": "ac27581f1a435d4457a6db440ba967961d000c0cf3e3b337e1d9442dc01172b1",
+            "donor_row_zero_based": 1,
+            "arms_mirrored": false
+          }
+        ],
+        "arms_mirrored": false,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      },
+      "north-west": {
+        "frames": [
+          {
+            "path": "art/actors/worker_001/animations/restock/north-west/frame_000.png",
+            "sha256": "9d886953287f0151e0173469ed9a65396b4d196a48ba0d5d3f7ece460a62d816",
+            "donor_row_zero_based": 2,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/north-west/frame_001.png",
+            "sha256": "bf4a8e58d1c47f86b169619ee1500c3721ed13c52566d7f20c9334186eee2a89",
+            "donor_row_zero_based": 2,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/north-west/frame_002.png",
+            "sha256": "af30c095be74236474fe74671fd6be145a565847744572753c935eaeed7c5ed5",
+            "donor_row_zero_based": 2,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/north-west/frame_003.png",
+            "sha256": "d436888a697fd728437c1eb577997fedfcc28911b538e1538edeea0c1d23669f",
+            "donor_row_zero_based": 2,
+            "arms_mirrored": false
+          }
+        ],
+        "arms_mirrored": false,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      },
+      "north-east": {
+        "frames": [
+          {
+            "path": "art/actors/worker_001/animations/restock/north-east/frame_000.png",
+            "sha256": "b3e15f8fb64ea8fa7bf22c36d0e6d6f75685593a3f4adbbd2b1934425262e84a",
+            "donor_row_zero_based": 2,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/north-east/frame_001.png",
+            "sha256": "42e0acf486a68085f9c1e4e06aa00ec202503f4094bb01071fa340a7d864fa98",
+            "donor_row_zero_based": 2,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/north-east/frame_002.png",
+            "sha256": "c949600b3389e10c778cb1f15ad8d07e2e70cd880f82b9091754b06d876d19dc",
+            "donor_row_zero_based": 2,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_001/animations/restock/north-east/frame_003.png",
+            "sha256": "628126d68ffedb69db52e6700265834da547fbe06744ae3e6f5ee71bdd243271",
+            "donor_row_zero_based": 2,
+            "arms_mirrored": true
+          }
+        ],
+        "arms_mirrored": true,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      }
+    },
+    "worker_002": {
+      "south-east": {
+        "frames": [
+          {
+            "path": "art/actors/worker_002/animations/restock/south-east/frame_000.png",
+            "sha256": "04e097848ba8dd6c887fbb0acaf0a4230124b5af6169fa0757926944ceb96c4e",
+            "donor_row_zero_based": 3,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/south-east/frame_001.png",
+            "sha256": "26f7feff21168de150b7cacc2a40a22fe3e07a0b069120dd3ef9f3dc7c4301b7",
+            "donor_row_zero_based": 3,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/south-east/frame_002.png",
+            "sha256": "156e95ad83f5f49e16cdf6f33765fc24819da60b4f9ebcb2f947db2b71b3f533",
+            "donor_row_zero_based": 3,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/south-east/frame_003.png",
+            "sha256": "0ae674d9e5c801325431d2f714c3e2e32eefb89395f0398d7b941836020b09e8",
+            "donor_row_zero_based": 3,
+            "arms_mirrored": false
+          }
+        ],
+        "arms_mirrored": false,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      },
+      "south-west": {
+        "frames": [
+          {
+            "path": "art/actors/worker_002/animations/restock/south-west/frame_000.png",
+            "sha256": "05dd1db2bd460c7d0d68f75e1ef6cfb81d0b03d72f84d76ab2966f8e929edab1",
+            "donor_row_zero_based": 4,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/south-west/frame_001.png",
+            "sha256": "a776e6a1754c264552a8eb41540df903cc5e17d57166afca4b49f3b875e5c257",
+            "donor_row_zero_based": 3,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/south-west/frame_002.png",
+            "sha256": "8b0c5b2d82147446b2e2627025b5abd3f57051ba7133f38614af258feb75c57b",
+            "donor_row_zero_based": 4,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/south-west/frame_003.png",
+            "sha256": "361b490cc3249493fc1bf27dbf087ec55efd8f37e639c2fe7822cf10c377df3b",
+            "donor_row_zero_based": 4,
+            "arms_mirrored": false
+          }
+        ],
+        "arms_mirrored": false,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      },
+      "north-west": {
+        "frames": [
+          {
+            "path": "art/actors/worker_002/animations/restock/north-west/frame_000.png",
+            "sha256": "850d793cc4779d4a308ad049129eac18bfe1b06aa0161c11b60744e675749aa0",
+            "donor_row_zero_based": 5,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/north-west/frame_001.png",
+            "sha256": "bb82a674bf4baa5593869288083431e319d20efd24345dbfc4c5e7dd2ac4e406",
+            "donor_row_zero_based": 5,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/north-west/frame_002.png",
+            "sha256": "d43fad48edd868a78eb12325278f3bec7b6c4cb225ebc24e9aa900c63b6fd967",
+            "donor_row_zero_based": 5,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/north-west/frame_003.png",
+            "sha256": "73aaa702235dc01b779ead1453e712b68d15e8fe274a57d9e36d51ad43b1d020",
+            "donor_row_zero_based": 5,
+            "arms_mirrored": false
+          }
+        ],
+        "arms_mirrored": false,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      },
+      "north-east": {
+        "frames": [
+          {
+            "path": "art/actors/worker_002/animations/restock/north-east/frame_000.png",
+            "sha256": "37bf75c671b187eb431df1e5c88fd6ecdac150d0d24c7bcdbb42d91b02444b0c",
+            "donor_row_zero_based": 5,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/north-east/frame_001.png",
+            "sha256": "c0d02de618fb23086972360f3f02170cb42ea5df222963085c3db7b9e225792e",
+            "donor_row_zero_based": 5,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/north-east/frame_002.png",
+            "sha256": "34bb4c847f9a90d3647b840928042c4b73131454ee1642c56fd099b8bf9f306a",
+            "donor_row_zero_based": 5,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_002/animations/restock/north-east/frame_003.png",
+            "sha256": "e6bc7b11c3247cb489b844f515fa639c7b24d41163f699ba05225e85df84abdc",
+            "donor_row_zero_based": 5,
+            "arms_mirrored": true
+          }
+        ],
+        "arms_mirrored": true,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      }
+    },
+    "worker_003": {
+      "south-east": {
+        "frames": [
+          {
+            "path": "art/actors/worker_003/animations/restock/south-east/frame_000.png",
+            "sha256": "caf5160215aa0e5a30da01fa3e658142e143bbdd4cfd430b4f027dbff45ed793",
+            "donor_row_zero_based": 6,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/south-east/frame_001.png",
+            "sha256": "17a735c26e909e1c295f94d73c06665604d825d5de9bf7dc653089d30939f264",
+            "donor_row_zero_based": 6,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/south-east/frame_002.png",
+            "sha256": "48ec1256c94e9d900f66d6b5c979be8c8081f0a0ab7b9a0634a2a76c87a57e93",
+            "donor_row_zero_based": 6,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/south-east/frame_003.png",
+            "sha256": "22b666e0010cb27c493dd2362467d0abb2c212384e4a620817d8300418ca0ad4",
+            "donor_row_zero_based": 6,
+            "arms_mirrored": false
+          }
+        ],
+        "arms_mirrored": false,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      },
+      "south-west": {
+        "frames": [
+          {
+            "path": "art/actors/worker_003/animations/restock/south-west/frame_000.png",
+            "sha256": "bfc5985f678ab2912581dfe0614c9bb27d822bb53d291e6b124d156a0f6ec216",
+            "donor_row_zero_based": 7,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/south-west/frame_001.png",
+            "sha256": "3d0f7c56eb72c99fa81172b3ae5968a37c94a3e45191027ea78eced9f780fe8f",
+            "donor_row_zero_based": 6,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/south-west/frame_002.png",
+            "sha256": "9cc61e84bb32c3b0d7dc702667216f38f8926294408a004b0999259a32cea959",
+            "donor_row_zero_based": 7,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/south-west/frame_003.png",
+            "sha256": "bcb45ed9c7f20af1b4c91ee99be28f7a43d83b7d81506d9dddc38399f51f62b3",
+            "donor_row_zero_based": 7,
+            "arms_mirrored": false
+          }
+        ],
+        "arms_mirrored": false,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      },
+      "north-west": {
+        "frames": [
+          {
+            "path": "art/actors/worker_003/animations/restock/north-west/frame_000.png",
+            "sha256": "92550622f3221274e19a32ba689f2833b931648d661df323f367534e84842d5a",
+            "donor_row_zero_based": 8,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/north-west/frame_001.png",
+            "sha256": "f519beb834cafef0d3ac93dd0f348ddffa4c656552acc54bd96e6b8206faa720",
+            "donor_row_zero_based": 8,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/north-west/frame_002.png",
+            "sha256": "2307df3958aaca09d5d02039a6c3bafa35f62d3a247d519b31b237f7a2b53e36",
+            "donor_row_zero_based": 8,
+            "arms_mirrored": false
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/north-west/frame_003.png",
+            "sha256": "8d1c778bcc09c276e25d8aeab003197cdf006eded0fe4f0879ebfb52a1b14d9a",
+            "donor_row_zero_based": 8,
+            "arms_mirrored": false
+          }
+        ],
+        "arms_mirrored": false,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      },
+      "north-east": {
+        "frames": [
+          {
+            "path": "art/actors/worker_003/animations/restock/north-east/frame_000.png",
+            "sha256": "7dc7b09151916bdcacbfd99967b2d6acc564a0ac502d1c8fc0837a7675510333",
+            "donor_row_zero_based": 8,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/north-east/frame_001.png",
+            "sha256": "4fa9fcfc2a067008d8adfe13fa9ae0ba279495087f40bed6c20838855279c4ec",
+            "donor_row_zero_based": 8,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/north-east/frame_002.png",
+            "sha256": "1a800ed568544e8bf01be408e44b4cd07d52554882c2f7dde5c90334f1bedab5",
+            "donor_row_zero_based": 8,
+            "arms_mirrored": true
+          },
+          {
+            "path": "art/actors/worker_003/animations/restock/north-east/frame_003.png",
+            "sha256": "2c2dd3b65297c41c311f58c24d516bc4caba3a69538796292ecd4019d88b644d",
+            "donor_row_zero_based": 8,
+            "arms_mirrored": true
+          }
+        ],
+        "arms_mirrored": true,
+        "protected_head_rect": [
+          0,
+          0,
+          64,
+          26
+        ]
+      }
+    }
+  }
+}
