@@ -96,6 +96,7 @@ func run() -> void:
 	check(text().contains("창고 선반에 1개") and button("낚싯대 드리우기").disabled, "stored rod tells withdrawal route without enabling remote tool use")
 	await snap("stored-rod"); await key(KEY_ESCAPE)
 	check(storage.withdraw_slot_to_inventory(0, 1) == 1, "actual shelf withdrawal returns rod")
+	director.player.global_position = director.spots.position_for("fish_bank")  # 창고에서 돌아온 뒤 부두 끝에 선 상태로 드리운다
 	director.open_menu(); await click(button("낚싯대 드리우기"))
 	check(director.mode == "waiting" and not director.manager.hour_timer.paused, "withdrawn rod casts and keeps world time running")
 	director.remaining = 0; director._process(0.01); await key(KEY_E)
