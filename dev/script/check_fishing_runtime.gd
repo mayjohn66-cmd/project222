@@ -263,7 +263,9 @@ func run() -> void:
 	var input := InputEventKey.new()
 	input.keycode = KEY_E; input.physical_keycode = KEY_E; input.pressed = true
 	director._input(input)
-	check(director.mode == "closed" and FishingRecords.discovered() == 1, "actual E reels exactly one fish")
+	check(director.mode == "reeling" and FishingRecords.discovered() == 0, "E at bite starts reeling without granting a fish")
+	director.reel_game.progress = 1.0; director._process(0.01)
+	check(director.mode == "closed" and FishingRecords.discovered() == 1, "landing the reel receives exactly one fish")
 	var caught_count := FishingRecords.discovered()
 	director.reel()
 	check(FishingRecords.discovered() == caught_count, "repeated reel after closure no additional discovery")

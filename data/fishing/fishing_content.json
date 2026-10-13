@@ -1896,7 +1896,13 @@
     "bite_max_seconds": 28,
     "interaction_distance": 70,
     "request_reputation": 1,
-    "enabled": true
+    "enabled": true,
+    "reel": {
+      "_note": "당기기 규칙(2026-10-13). bite_window=입질 뒤 챔질 가능 시간(초), zone_size=낚싯줄 구역 크기(막대 길이 대비), fish_speed=물고기 이동 속도, zone_speed·response=구역 이동 속도·반응, gain/drain=구역 안/밖에서 게이지가 차고 줄어드는 속도(초당), start=시작 게이지, time_limit=제한 시간(초), retarget_min/max=물고기가 방향을 바꾸는 간격(초). 희귀할수록 어렵다.",
+      "common": {"bite_window": 1.5, "zone_size": 0.30, "fish_speed": 0.38, "zone_speed": 0.95, "response": 7.0, "gain": 0.30, "drain": 0.18, "start": 0.35, "time_limit": 14.0, "retarget_min": 0.7, "retarget_max": 1.5},
+      "seasonal": {"bite_window": 1.1, "zone_size": 0.24, "fish_speed": 0.55, "zone_speed": 0.95, "response": 7.0, "gain": 0.26, "drain": 0.22, "start": 0.30, "time_limit": 14.0, "retarget_min": 0.6, "retarget_max": 1.3},
+      "rare": {"bite_window": 0.8, "zone_size": 0.21, "fish_speed": 0.68, "zone_speed": 0.95, "response": 7.0, "gain": 0.25, "drain": 0.25, "start": 0.25, "time_limit": 16.0, "retarget_min": 0.5, "retarget_max": 1.1}
+    }
   },
   "npc_types": {
     "naru": "peddler",

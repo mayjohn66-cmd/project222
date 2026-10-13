@@ -205,7 +205,8 @@ func run() -> void:
 		if filled == GameState.PLAYER_INVENTORY_SLOT_COUNT: break
 	GameState.rebuild_inventory_slots_from_counts()
 	await key(KEY_E)
-	check(director.mode == "full" and GameState.get_item_count(pending) == 0 and not FishingRecords.has("catch"),"actual E at full inventory cannot grant fish or discovery")
+	director.reel_game.progress = 1.0; director._process(0.01)
+	check(director.mode == "full" and GameState.get_item_count(pending) == 0 and not FishingRecords.has("catch"),"landing at full inventory cannot grant fish or discovery")
 	check(text(director.panel.body).contains("소지 공간이 부족"),"full catch explains releasing or returning to arrange stock")
 	before = GameState.create_save_data().duplicate(true)
 	await snap("fishing-full")
@@ -221,6 +222,7 @@ func run() -> void:
 	director.remaining = 0; director._process(0.01); await frames(12)
 	pending = director.pending_fish
 	await key(KEY_E)
+	director.reel_game.progress = 1.0; director._process(0.01)
 	check(director.mode == "closed" and GameState.get_item_count(pending) == 1 and FishingRecords.has("caught:"+pending),"after capacity recovery actual E receives exactly one live rolled fish")
 	director.reel()
 	check(GameState.get_item_count(pending) == 1,"closed cast cannot grant a second fish")

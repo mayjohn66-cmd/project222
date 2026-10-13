@@ -20,6 +20,10 @@ var previous_physics := true
 var rng := RandomNumberGenerator.new()
 var status: Label
 var reel_button: Button
+var reel_game: FishingReel
+var reel_view: FishingReelView
+var bite_left := 0.0
+var hold_pointer := false
 var visitor: Node2D
 var owned_visitors: Array[Node2D] = []
 var meeting: Array[Node2D] = []
@@ -84,6 +88,8 @@ func close() -> void:
 	if mode == "closed": return
 	panel.root.hide()
 	pending_fish = ""
+	reel_game = null
+	hold_pointer = false
 	mode = "closed"
 	world.remove_meta("fishing_open")
 	if owns_clock and is_instance_valid(manager) and not manager.summary_open and not manager.closing_shop:
@@ -327,9 +333,11 @@ func cast() -> void:
 	panel.frame.anchor_top = 0.34
 	panel.frame.anchor_bottom = 0.89
 	status = panel.text("찌를 바라보며 기다립니다…\n가게와 물가의 시간이 함께 흐릅니다.")
-	reel_button = panel.button("찌가 움직이면 [E]로 건지기", reel, true)
+	reel_button = panel.button("찌가 움직이면 [E]로 챔질", _reel_pressed, true)
+	reel_button.button_down.connect(func(): hold_pointer = true)
+	reel_button.button_up.connect(func(): hold_pointer = false)
 func _process(delta: float) -> void:
-	if mode not in ["waiting", "bite", "full"]: return
+	if mode not in ["waiting", "bite", "reeling", "full"]: return
 	if not clock_running():
 		close()
 		_notice("시간이 멈춰 낚싯대를 거두었습니다. 물품은 지급되지 않았습니다.")
@@ -340,18 +348,62 @@ func _process(delta: float) -> void:
 			pending_fish = FishingService.roll(location, hour(), weather(), rng)
 			if pending_fish.is_empty(): close(); return
 			mode = "bite"
-			status.text = "찌가 움직입니다! [E]로 천천히 건져 보세요."
+			var rarity := str(FishingData.entry(pending_fish).get("rarity", "common"))
+			bite_left = FishingReel.bite_window(rarity)
+			status.text = "찌가 움직입니다! 지금 [E]로 챔질하세요!"
 			reel_button.disabled = false
-			reel_button.text = "건지기 [E]"
+			reel_button.text = "챔질! [E]"
+	elif mode == "bite":
+		bite_left -= delta
+		if bite_left <= 0: _escape("입질을 놓쳤습니다. 물고기가 도망갔어요.")
+	elif mode == "reeling":
+		var result := reel_game.step(delta, Input.is_action_pressed("interact") or hold_pointer)
+		reel_view.queue_redraw()
+		if result == FishingReel.RESULT_LANDED:
+			mode = "bite"
+			reel()
+		elif result == FishingReel.RESULT_ESCAPED:
+			_escape("줄이 풀려 물고기가 도망갔습니다.")
+func _reel_pressed() -> void:
+	if mode == "bite": _start_reel()
+	elif mode == "full": reel()
+func _start_reel() -> void:
+	if mode != "bite" or pending_fish.is_empty(): return
+	var rarity := str(FishingData.entry(pending_fish).get("rarity", "common"))
+	reel_game = FishingReel.new()
+	reel_game.start(rarity, rng)
+	reel_view = FishingReelView.new()
+	reel_view.reel = reel_game
+	panel.body.add_child(reel_view)
+	mode = "reeling"
+	hold_pointer = false
+	status.text = "[E]를 누르고 있으면 낚싯줄 구역이 올라가고, 놓으면 내려갑니다.\n물고기를 구역 안에 붙여 두세요!"
+	reel_button.text = "누르고 있기 [E 길게]"
+func _escape(message: String) -> void:
+	pending_fish = ""
+	if is_instance_valid(reel_view):
+		reel_view.queue_free()
+		reel_view = null
+	reel_game = null
+	hold_pointer = false
+	mode = "waiting"
+	remaining = rng.randf_range(float(FishingData.data()["settings"]["bite_min_seconds"]), float(FishingData.data()["settings"]["bite_max_seconds"]))
+	status.text = message + "\n다시 찌를 바라보며 기다립니다…"
+	reel_button.disabled = true
+	reel_button.text = "찌가 움직이면 [E]로 챔질"
 func reel() -> void:
 	if mode not in ["bite", "full"] or pending_fish.is_empty() or not clock_running(): return
 	if not FishingService.receive(pending_fish):
+		if is_instance_valid(reel_view):
+			reel_view.queue_free()
+			reel_view = null
 		if mode != "full": panel.button("물가로 놓아주기 · 지급 없음", close)
 		mode = "full"
 		status.text = "소지 공간이 부족합니다. 놓아주거나 낚싯대를 거두고 재고를 정리할 수 있습니다."
 		return
 	var caught := pending_fish
 	pending_fish = ""
+	reel_game = null
 	close()
 	_notice("%s 1마리를 건졌습니다. 진열하거나 보존해 두세요." % ItemData.get_item_name(caught))
 func show_notes() -> void:
@@ -371,8 +423,9 @@ func _input(event: InputEvent) -> void:
 		if mode == "dialogue": dialogue.close()
 		else: pending_entry.clear(); close()
 		get_viewport().set_input_as_handled()
-	elif event.is_action_pressed("interact") and mode in ["waiting", "bite", "full"]:
-		if mode != "waiting": reel()
+	elif event.is_action_pressed("interact") and mode in ["waiting", "bite", "reeling", "full"]:
+		if mode == "bite": _start_reel()
+		elif mode == "full": reel()
 		get_viewport().set_input_as_handled()
 func _notice(value: String) -> void:
 	var interactions = world.get_node_or_null("WorldInteractions")
