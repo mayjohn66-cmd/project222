@@ -76,7 +76,7 @@ func _process(_delta: float) -> void:
 	marker.global_position = target.global_position + Vector2(-24,-64)
 	marker.show()
 	var heading := "목적지"
-	for entry in VillageJournalFlow.entries():
+	for entry in RequestNotebookData.entries():
 		if entry["id"] == tracked_id: heading = str(entry["title"])
 	var delta_position: Vector2 = target.global_position - player.global_position
 	var directions := ["→","↘","↓","↙","←","↖","↑","↗"]

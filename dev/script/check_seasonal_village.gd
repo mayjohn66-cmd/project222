@@ -32,9 +32,19 @@ func talk(id: String) -> bool:
 	return world.get_node("WorldInteractions").try_interact() and life.talking
 func drain(panel: StoryDialoguePanel) -> void:
 	for i in range(100):
-		if not panel.open: return
+		if not panel.open: break
 		panel._advance()
-	check(false, "dialogue finishes")
+	if life.request_offer.root.visible:
+		var action := life.story_action.duplicate(true)
+		var before := PlayerProgress.to_save_data().duplicate(true)
+		life.request_offer.decline_button.pressed.emit()
+		check(PlayerProgress.to_save_data() == before and not life.talking, "seasonal proposal decline does not accept the event")
+		check(talk(str(action["resident"])), "seasonal proposal can be retried")
+		for i in range(100):
+			if not life.dialogue.open: break
+			life.dialogue._advance()
+		life.request_offer.accept_button.pressed.emit()
+	check(not panel.open, "dialogue finishes")
 func _ready() -> void: call_deferred("run")
 func run() -> void:
 	world = load("res://scenes/shop/main.tscn").instantiate()

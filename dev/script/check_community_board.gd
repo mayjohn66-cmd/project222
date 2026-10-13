@@ -59,10 +59,12 @@ func run() -> void:
 	get_window().size = Vector2i(1152,648)
 	await settle()
 	var args := OS.get_cmdline_user_args()
-	if not args.is_empty():
+	if not args.is_empty() and DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png(args[0])
 	await click(director.panel.cards["path_light"]["action"])
+	check(director.request_offer.root.visible and not CommunityRequestFlow.accepted("path_light"), "board click asks for accept or decline")
+	await click(director.request_offer.accept_button)
 	check(CommunityRequestFlow.accepted("path_light"), "actual mouse click accepts request")
 	var branches: int = GameState.get_item_count("dry_branch")
 	GameState.remove_item("dry_branch", branches)

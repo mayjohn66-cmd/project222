@@ -19,9 +19,18 @@ func settle() -> void:
 	for i in range(8): await get_tree().process_frame
 func drain() -> void:
 	for i in range(80):
-		if not market.dialogue.open: return
+		if not market.dialogue.open: break
 		market.dialogue._advance()
-	check(false, "market conversation ends")
+	if market.request_offer.root.visible:
+		var before := PlayerProgress.to_save_data().duplicate(true)
+		market.request_offer.decline_button.pressed.emit()
+		check(PlayerProgress.to_save_data() == before and not market.talking, "declining market proposal does not accept or consume materials")
+		check(market.try_interact(), "market proposal can be heard again")
+		for i in range(80):
+			if not market.dialogue.open: break
+			market.dialogue._advance()
+		market.request_offer.accept_button.pressed.emit()
+	check(not market.dialogue.open, "market conversation ends")
 func unlock() -> void:
 	for step in TutorialDirector.SETTINGS.steps: PlayerProgress.record_story_beat("tutorial_step:" + str(step["id"]) + ":done", GameState.total_day)
 	PlayerProgress.record_story_beat(CheckoutTutorial.BEAT_ID, GameState.total_day)
@@ -97,7 +106,7 @@ func run() -> void:
 	GameState.add_item("wild_berry", 1)
 	check(talk() and not market.panel.cards["prepare"]["action"].disabled, "enough goods enable real delivery button")
 	var args := OS.get_cmdline_user_args()
-	if not args.is_empty():
+	if not args.is_empty() and DisplayServer.get_name() != "headless":
 		await settle()
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png(args[0])

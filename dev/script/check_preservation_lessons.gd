@@ -20,6 +20,14 @@ func frames() -> void:
 func _ready() -> void: call_deferred("verify")
 func read_all() -> void:
 	while life.talking and life.dialogue.root.visible: life.dialogue._advance()
+	if life.request_offer.root.visible:
+		var action := life.story_action.duplicate(true)
+		var before := PlayerProgress.to_save_data().duplicate(true)
+		life.request_offer.decline_button.pressed.emit()
+		check(PlayerProgress.to_save_data() == before and not life.talking, "preservation proposal decline leaves no accepted lesson")
+		check(talk(str(action["resident"])), "preservation proposal can be retried")
+		while life.dialogue.open: life.dialogue._advance()
+		life.request_offer.accept_button.pressed.emit()
 func talk(giver: String) -> bool:
 	PlayerProgress.story_beat_days[VillageLifeFlow.PREFIX + "greeted:" + giver] = GameState.total_day
 	life.refresh()

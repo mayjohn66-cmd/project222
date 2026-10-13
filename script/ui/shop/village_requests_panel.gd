@@ -1,6 +1,13 @@
 class_name VillageRequestsPanel
 extends CommunityBoardPanel
 
+func _ready() -> void:
+	super._ready()
+	message.hide()
+	close_button.text = "닫기"
+
+func introduction() -> String: return ""
+
 func entries() -> Array[Dictionary]:
 	var result := super.entries()
 	for entry in PersonalRequestFlow.entries():
@@ -33,7 +40,7 @@ func refresh() -> void:
 		if PersonalRequestFlow.done(id): card["action"].text = "함께 완료한 부탁"
 		elif not reason.is_empty(): card["action"].text = "아직 준비 중"
 		elif PersonalRequestFlow.accepted(id): card["action"].text = "물품 전달하기" if PersonalRequestFlow.can_deliver(id) else "물품을 준비하는 중"
-		else: card["action"].text = "개인 부탁 맡기"
+		else: card["action"].text = "제안 살펴보기"
 
 	for entry in VillageExpansionFlow.SETTINGS.events:
 		var id := str(entry["id"])
@@ -41,3 +48,8 @@ func refresh() -> void:
 		card["info"].text = VillageExpansionFlow.information(id)
 		card["action"].disabled = VillageExpansionFlow.accepted(id) or not VillageExpansionFlow.locked_reason(id).is_empty()
 		card["action"].text = ResidentFollowthroughGuide.story_button(VillageExpansionFlow.accepted(id),VillageExpansionFlow.done(id),not str(entry.get("repeat","")).is_empty(),VillageExpansionFlow.locked_reason(id),"주민에게 이어서 듣기 [E]")
+	for entry in CommunityRequestFlow.SETTINGS.requests:
+		var id := str(entry["id"])
+		if not CommunityRequestFlow.accepted(id) and not CommunityRequestFlow.done(id) and CommunityRequestFlow.locked_reason(CommunityRequestFlow.request(id)).is_empty():
+			cards[id]["action"].text = "제안 살펴보기"
+	message.visible = not message.text.is_empty()

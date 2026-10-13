@@ -24,6 +24,12 @@ func _flow() -> void:
 	for c in get_children():
 		if c is Control and (c as Control).visible and not (c as Control).top_level:
 			items.append(c)
+	# 수첩의 목록·상세 묶음은 양쪽 쪽을 함께 사용한다. 다른 탭의 기존 흐름은 유지.
+	var spread_height := 0.0
+	if not items.is_empty() and bool(items[0].get_meta("book_spread", false)):
+		var spread: Control = items.pop_front()
+		fit_child_in_rect(spread, Rect2(0, 0, size.x, spread.get_combined_minimum_size().y))
+		spread_height = spread.get_combined_minimum_size().y + sep
 	# 단 폭에 맞춘 뒤의 높이(줄바꿈하는 글은 폭이 정해져야 높이가 정해진다)
 	var heights: Array[float] = []
 	var total := 0.0
@@ -34,14 +40,14 @@ func _flow() -> void:
 		total += h + sep
 	var half := total * 0.5
 	var col := 0
-	var y := 0.0
-	var left_h := 0.0
-	var right_h := 0.0
+	var y := spread_height
+	var left_h := spread_height
+	var right_h := spread_height
 	for i in range(items.size()):
-		if col == 0 and y > 0.0 and y + heights[i] * 0.5 > half:
+		if col == 0 and y > spread_height and y - spread_height + heights[i] * 0.5 > half:
 			left_h = y - sep
 			col = 1
-			y = 0.0
+			y = spread_height
 		fit_child_in_rect(items[i],Rect2(float(col) * (col_w + gap),y,col_w,heights[i]))
 		y += heights[i] + sep
 	if col == 0: left_h = y - sep

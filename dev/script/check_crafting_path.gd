@@ -20,9 +20,19 @@ func settle() -> void:
 
 func drain() -> void:
 	for i in range(100):
-		if not life.dialogue.open: return
+		if not life.dialogue.open: break
 		life.dialogue._advance()
-	check(false,"dialogue terminates")
+	if life.request_offer.root.visible:
+		var action := life.story_action.duplicate(true)
+		var before := PlayerProgress.to_save_data().duplicate(true)
+		life.request_offer.decline_button.pressed.emit()
+		check(PlayerProgress.to_save_data() == before and not life.talking, "declining crafting proposal neither teaches recipes nor writes acceptance")
+		check(talk(str(action["resident"])), "crafting proposal can be heard again")
+		for i in range(100):
+			if not life.dialogue.open: break
+			life.dialogue._advance()
+		life.request_offer.accept_button.pressed.emit()
+	check(not life.dialogue.open,"dialogue terminates")
 
 func talk(giver: String) -> bool:
 	life.refresh()

@@ -8,6 +8,8 @@ var open := false
 var previous_paused := false
 var previous_physics := true
 var elapsed := 0.0
+var request_offer: RequestOfferPanel
+var offered_id := ""
 
 func create_panel() -> CommunityBoardPanel: return VillageRequestsPanel.new()
 func modal_key() -> String: return "community_board_open"
@@ -19,6 +21,9 @@ func _ready() -> void:
 	add_child(panel)
 	panel.action_requested.connect(_on_action)
 	panel.closed.connect(_on_closed)
+	request_offer = RequestOfferPanel.new()
+	add_child(request_offer)
+	request_offer.answered.connect(_answer_offer)
 
 func _process(delta: float) -> void:
 	elapsed += delta
@@ -75,6 +80,26 @@ func try_interact() -> bool:
 
 func _on_action(id: String) -> void:
 	if not open: return
+	if request_offer.root.visible: return
+	if panel is VillageRequestsPanel:
+		var proposal := RequestProposalData.board(id)
+		if not proposal.is_empty():
+			offered_id = id
+			panel.root.hide()
+			panel.backdrop.hide()
+			request_offer.display(proposal)
+			return
+	_perform_action(id)
+
+func _answer_offer(accepted: bool) -> void:
+	var id := offered_id
+	offered_id = ""
+	if not open: return
+	# 확인창에서 생각하는 동안 조건이나 수락 상태가 바뀌어도 곧바로 전달하지 않는다.
+	if accepted and not RequestProposalData.board(id).is_empty(): _perform_action(id)
+	panel.display()
+
+func _perform_action(id: String) -> void:
 	if id.begins_with(ActFourFlow.JOURNAL_PREFIX):
 		var event_id := id.trim_prefix(ActFourFlow.JOURNAL_PREFIX)
 		if ActFourFlow.accept(event_id): panel.message.text = ActFourFlow.information(event_id)
@@ -89,7 +114,7 @@ func _on_action(id: String) -> void:
 	if id.begins_with("personal:"):
 		var personal_id := id.trim_prefix("personal:")
 		if not PersonalRequestFlow.accepted(personal_id):
-			if PersonalRequestFlow.accept(personal_id): panel.message.text = "개인 부탁을 맡았습니다. 기한 없이 준비한 뒤 게시판에서 전달하세요."
+			PersonalRequestFlow.accept(personal_id)
 		else:
 			var result := PersonalRequestFlow.deliver(personal_id)
 			if not result.is_empty():
@@ -99,7 +124,7 @@ func _on_action(id: String) -> void:
 		panel.refresh()
 		return
 	if not CommunityRequestFlow.accepted(id):
-		if CommunityRequestFlow.accept(id): panel.message.text = "부탁을 맡았습니다. 준비되면 이 게시판에서 전달하세요."
+		CommunityRequestFlow.accept(id)
 	else:
 		var result := CommunityRequestFlow.deliver(id)
 		if not result.is_empty():
@@ -116,6 +141,8 @@ func _announce_visitors(previous: Array[String]) -> void:
 	if not names.is_empty(): panel.message.text += "\n새 손님: " + " · ".join(names) + " · 개점하면 찾아와요."
 
 func _on_closed() -> void:
+	if is_instance_valid(request_offer): request_offer.dismiss()
+	offered_id = ""
 	if not open: return
 	open = false
 	get_parent().remove_meta(modal_key())

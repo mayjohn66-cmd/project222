@@ -2,7 +2,7 @@ class_name QuestVisitDirector
 extends Node
 ## 부탁·이야기를 NPC가 '손님으로 입장해' 건네게 한다(대상은 data/shop/requests/quest_visits.csv).
 ## 두 가지 출처를 같은 방식으로 다룬다.
-##  - request: 주민 부탁(ResidentRequestFlow). 문 앞에서 부탁 대사 → 수락 기록 → 실제 상품 계산 → 필요한 물건 안내 → 퇴장.
+##  - request: 주민 부탁(ResidentRequestFlow). 부탁 대사 → 수락/거절 응답 → 실제 상품 계산 → 퇴장. 수락한 내용은 수첩에 기록.
 ##  - provider: 마을·길손 이야기를 맡은 감독들(VillageLifeDirector, 단골·원정 만남·날씨 인사, 마을 확장, 4막, 등불 길손).
 ##    각 감독이 visit_target() / begin_visit(id) / visit_busy() 세 함수를 내놓으면, 이 감독이 그 주민을 문으로 들여보내
 ##    대화를 그 감독의 원래 방식 그대로 열고(보상·기록도 원래대로), 끝나면 실제 상품을 계산하게 한다.
@@ -39,6 +39,7 @@ var pick: Dictionary = {}
 var pick_key: String = ""
 var talk_started: bool = false
 var hidden_npc: Node = null
+var request_offer: RequestOfferPanel
 
 # ---- 대상 부탁 목록 ----
 static func ids() -> Array[String]:
@@ -95,6 +96,9 @@ func _ready() -> void:
 	dialogue = StoryDialoguePanel.new()
 	add_child(dialogue)
 	dialogue.finished.connect(_on_dialogue_finished)
+	request_offer = RequestOfferPanel.new()
+	add_child(request_offer)
+	request_offer.answered.connect(_answer_request)
 	cashier.checkout_completed.connect(_on_checkout_completed)
 	cashier.checkout_cancelled.connect(_keep_position)
 	manager.shop_opened.connect(try_start)
@@ -263,24 +267,28 @@ func _restore_dialogue_state() -> void:
 	player.set_physics_process(previous_player_physics)
 
 func _on_dialogue_finished() -> void:
-	_restore_dialogue_state()
 	if aborting or not is_instance_valid(guide): return
 	if dialogue.line_index < dialogue.lines.size():
 		_abort()
 		return
 	if stage == "intro":
-		# 부탁을 끝까지 들었으니 수락으로 기록한다(서 있는 NPC와 같은 기록).
-		ResidentRequestFlow.accept(request)
-		if guide.prepare_practice_checkout(customer_cell):
-			stage = "checkout"
-		else:
-			_abort()
+		stage = "offer"
+		request_offer.display(RequestProposalData.resident(request))
 	elif stage == "finished":
+		_restore_dialogue_state()
 		guide.go_to_exit()
 		_release()
 		guide = null
 		stage = ""
 		request = {}
+
+func _answer_request(accepted: bool) -> void:
+	if stage != "offer" or not is_instance_valid(guide): return
+	if accepted: ResidentRequestFlow.accept(request)
+	_restore_dialogue_state()
+	# 부탁을 거절해도 손님은 원래 골라 온 상품을 구매한다.
+	if guide.prepare_practice_checkout(customer_cell): stage = "checkout"
+	else: _abort()
 
 func _on_checkout_completed(customer, _amount: int) -> void:
 	if customer != guide: return
@@ -291,7 +299,12 @@ func _on_checkout_completed(customer, _amount: int) -> void:
 		stage = ""
 		return
 	stage = "finished"
-	_show_dialogue(_hint_lines())
+	# 요구 수량·조작 안내는 수첩에서 확인한다. 구매 뒤에는 실제 퇴장만 처리.
+	guide.go_to_exit()
+	_release()
+	guide = null
+	stage = ""
+	request = {}
 
 func _keep_position() -> void:
 	if not aborting and is_instance_valid(guide) and is_instance_valid(guide_register) \
@@ -311,6 +324,7 @@ func _release() -> void:
 
 func _abort() -> void:
 	aborting = true
+	if is_instance_valid(request_offer): request_offer.dismiss()
 	talk_started = false
 	_show_hidden_resident()
 	if dialogue.open: dialogue.close()
@@ -325,6 +339,7 @@ func _abort() -> void:
 	aborting = false
 
 func _exit_tree() -> void:
+	if is_instance_valid(request_offer): request_offer.dismiss()
 	_show_hidden_resident()
 	_restore_dialogue_state()
 	_release()

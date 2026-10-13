@@ -436,6 +436,8 @@ func refresh_schedule() -> void:
 	)
 
 	if discovered_events.is_empty():
+		# 부탁 수첩에는 빈 행사 안내를 덧붙이지 않는다.
+		if VillageJournalFlow.available(): return
 		var empty_label := Label.new()
 
 		empty_label.text = (

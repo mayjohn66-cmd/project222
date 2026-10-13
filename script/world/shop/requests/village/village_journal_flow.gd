@@ -106,6 +106,7 @@ static func information(id: String) -> String:
 	return ""
 
 static func destination(world: Node, id: String) -> Node2D:
+	if id.begins_with("request:"): return RequestNotebookData.destination(world, id)
 	if id == BlacksmithProgressionFlow.JOURNAL_ID: return BlacksmithProgressionFlow.destination(world)
 	if id == "fishing:journal":
 		var spots = world.get_node_or_null("FishingSpots")

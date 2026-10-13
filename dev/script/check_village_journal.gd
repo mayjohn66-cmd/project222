@@ -29,11 +29,13 @@ func key(code: Key) -> void:
 
 # 책의 일정 탭 "마을 수첩"에서 제목이 title 인 칸의 목적지 단추
 func book_button(menu, title: String) -> Button:
-	for card in menu.schedule_list.get_children():
-		var labels: Array = card.find_children("*", "Label", true, false)
-		if not labels.is_empty() and (labels[0] as Label).text == title:
-			for child in card.get_children():
-				if child is Button: return child
+	var notebook := menu.schedule_list.get_node_or_null("RequestNotebook") as RequestNotebookView
+	if notebook == null: return null
+	for row in notebook.rows:
+		if row["title"] == title:
+			notebook._select_category(str(row["category"]))
+			notebook._select(str(row["id"]))
+			return notebook.detail_page.get_node_or_null("RequestDestination") as Button
 	return null
 
 func _ready() -> void: call_deferred("run")
@@ -59,6 +61,9 @@ func run() -> void:
 	check(VillageJournalFlow.available() and world.get_node_or_null("UI/VillageJournalButton") == null, "journal becomes available without settlement and has no floating button")
 	check(VillageJournalFlow.destination(world,"resident:naru") == null and VillageJournalFlow.destination(world,"place:settle_naru") == null, "hidden residents and places cannot be tracked")
 	check(not VillageJournalFlow.information("next_request").is_empty(), "next request gives current action and warehouse counts")
+	check(RequestNotebookData.entries().is_empty(), "unaccepted future requests are not prewritten in the book")
+	check(ResidentRequestFlow.accept(ResidentRequestFlow.current()), "fixture records a real accepted resident request")
+	var request_title := str(ResidentRequestFlow.current()["title"])
 	player.set_physics_process(false)
 	manager.hour_timer.paused = false
 	var progress_before := PlayerProgress.to_save_data().duplicate(true)
@@ -66,18 +71,18 @@ func run() -> void:
 	var inventory_before: Dictionary = GameState.inventory.duplicate(true)
 	await key(KEY_N)
 	check(menu.visible and menu.current_tab == ManagementMenu.MenuTab.SCHEDULE, "N opens the management book on the schedule tab")
-	var next_button := book_button(menu, "다음 주민 부탁")
+	var next_button := book_button(menu, request_title)
 	check(next_button != null and not next_button.disabled, "book lists the village journal and the current request NPC can be marked")
 	await click(next_button)
-	check(journal.tracked_id == "next_request", "actual action selects destination")
-	check(book_button(menu, "다음 주민 부탁").text == "목적지 표시 해제", "book button flips to clear after marking")
+	check(journal.tracked_id == "request:neighbor_bread", "actual action selects destination")
+	check(book_button(menu, request_title).text == "표시 해제", "book button flips to clear after marking")
 	await key(KEY_ESCAPE)
 	check(not menu.visible and not manager.hour_timer.paused and not player.is_physics_processing(), "Escape closes the book and restores clock and exact movement state")
 	check(journal.marker.is_inside_tree() and journal.marker.visible and journal.guidance.visible, "marker and directional hint appear after closing")
 	check(PlayerProgress.to_save_data() == progress_before and GameState.get_money() == money_before and GameState.inventory == inventory_before, "viewing and tracking award nothing and preserve saved progress")
 	await key(KEY_N)
 	check(menu.visible and menu.current_tab == ManagementMenu.MenuTab.SCHEDULE, "N opens the book again")
-	await click(book_button(menu, "다음 주민 부탁"))
+	await click(book_button(menu, request_title))
 	check(journal.tracked_id.is_empty(), "same card clears the marked destination")
 	await key(KEY_ESCAPE)
 	check(not menu.visible and not journal.marker.visible, "Escape closes the book and no marker remains")
@@ -102,7 +107,7 @@ func run() -> void:
 	check(menu.visible and book_button(menu, "행상인 타블렌") != null, "settled neighbors appear in the book journal")
 	await settle()
 	var args := OS.get_cmdline_user_args()
-	if not args.is_empty():
+	if not args.is_empty() and DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png(args[0])
 	await key(KEY_ESCAPE)

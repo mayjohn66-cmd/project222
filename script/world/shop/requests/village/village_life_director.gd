@@ -15,6 +15,8 @@ var memory_panel: ResidentMemoryPanel
 var story_action: Dictionary = {}
 var visit_resident := ""   # 비어 있지 않으면 이 주민이 손님으로 와서 말을 거는 중이다(QuestVisitDirector). 거리·보이는지와 상관없이 이 주민이 대화 대상.
 var afterglow_action := ""
+var request_offer: RequestOfferPanel
+var proposal_confirmed := false
 
 func _ready() -> void:
 	player = get_parent().get_node("Actors/Player")
@@ -22,6 +24,9 @@ func _ready() -> void:
 	dialogue = StoryDialoguePanel.new()
 	add_child(dialogue)
 	dialogue.finished.connect(_end_talk)
+	request_offer = RequestOfferPanel.new()
+	add_child(request_offer)
+	request_offer.answered.connect(_answer_offer)
 	story_panel = VillageStoryPanel.new()
 	add_child(story_panel)
 	story_panel.closed.connect(_end_talk)
@@ -234,6 +239,7 @@ func try_interact() -> bool:
 	var target := nearest()
 	if target.is_empty(): return false
 	story_action = {}
+	proposal_confirmed = false
 	afterglow_action = ""
 	var lines: Array[String] = []
 	if target["id"] == "well":
@@ -284,6 +290,9 @@ func try_interact() -> bool:
 
 func _end_talk() -> void:
 	if not talking: return
+	if dialogue.line_index >= dialogue.lines.size() and story_action.get("stage", "") in ["introduction", "intro"] and not proposal_confirmed:
+		request_offer.display(RequestProposalData.story(story_action))
+		return
 	if dialogue.line_index >= dialogue.lines.size():
 		if not afterglow_action.is_empty(): MarketAfterglowFlow.listen(afterglow_action)
 		if story_action.get("flow", "") == "power_repair":
@@ -323,6 +332,11 @@ func _end_talk() -> void:
 	if is_instance_valid(player): player.set_physics_process(previous_physics)
 	call_deferred("refresh")
 
+func _answer_offer(accepted: bool) -> void:
+	proposal_confirmed = accepted
+	if not accepted: story_action = {}
+	_end_talk()
+
 func _select_memory(id: String) -> void:
 	if not talking or not story_panel.root.visible or not VillageStoryFlow.select(id): return
 	story_panel.root.hide()
@@ -343,6 +357,7 @@ func _select_resident_memory(scene_id: String) -> void:
 	dialogue.start(str(VillageLifeFlow.resident(giver)["name"]), null, lines)
 
 func _exit_tree() -> void:
+	if is_instance_valid(request_offer): request_offer.dismiss()
 	# Leaving a scene is not proof that its conversation was fully read.
 	story_action = {}
 	afterglow_action = ""

@@ -16,9 +16,19 @@ func settle() -> void:
 
 func read_all(dialogue: StoryDialoguePanel) -> void:
 	for i in range(50):
-		if not dialogue.open: return
+		if not dialogue.open: break
 		dialogue._advance()
-	check(false, "dialogue must end")
+	var owner = dialogue.get_parent()
+	if owner is LanternWayfarerDirector and owner.request_offer.root.visible:
+		var before := PlayerProgress.to_save_data().duplicate(true)
+		owner.request_offer.decline_button.pressed.emit()
+		check(PlayerProgress.to_save_data() == before and not owner.open, "declining wayfarer proposal does not accept or consume goods")
+		check(owner.try_interact(), "wayfarer proposal can be retried")
+		for i in range(50):
+			if not dialogue.open: break
+			dialogue._advance()
+		owner.request_offer.accept_button.pressed.emit()
+	check(not dialogue.open, "dialogue must end")
 
 func unlock() -> void:
 	for step in TutorialDirector.SETTINGS.steps:
@@ -91,7 +101,7 @@ func run() -> void:
 	var money := GameState.money
 	var wheat := GameState.get_item_count("wheat")
 	var args := OS.get_cmdline_user_args()
-	if not args.is_empty():
+	if not args.is_empty() and DisplayServer.get_name() != "headless":
 		await settle()
 		await RenderingServer.frame_post_draw
 		get_viewport().get_texture().get_image().save_png(args[0])

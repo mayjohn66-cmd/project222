@@ -1,6 +1,15 @@
 class_name ResidentRequestDirector
 extends TutorialDirector
 
+var request_offer: RequestOfferPanel
+var offered_request: Dictionary = {}
+
+func _ready() -> void:
+	super._ready()
+	request_offer = RequestOfferPanel.new()
+	add_child(request_offer)
+	request_offer.answered.connect(_answer_request)
+
 # 안내 NPC의 접근 가능한 자리 선택, 대화 거리, 시간/이동 복원을 재사용한다.
 func is_guiding() -> bool:
 	return enabled and (not ResidentRequestFlow.current().is_empty() or not ResidentStoryFlow.pending_introduction().is_empty())
@@ -77,7 +86,7 @@ func try_interact() -> bool:
 	if request.is_empty(): return false
 	var lines: Array[String] = []
 	if not ResidentRequestFlow.accepted(str(request["id"])):
-		ResidentRequestFlow.accept(request)
+		offered_request = request.duplicate(true)
 		lines.assign(request["lines"])
 	elif ResidentRequestFlow.can_deliver(request):
 		var result := ResidentRequestFlow.deliver(request)
@@ -91,7 +100,6 @@ func try_interact() -> bool:
 			lines.append("새 손님 소식: %s! 가게를 열면 소개받은 손님이 방문해요." % CustomerTypeData.get_display_name(type_id))
 	else:
 		lines.assign(request["lines"])
-		lines.append("필요한 물건은 %s %d개야. 소지품에 챙겨 줘. 진열대나 보관 선반에 있다면 먼저 꺼내 줘." % [ItemData.get_item_name(str(request["item"])), int(request["amount"])])
 	_start_resident_dialogue(str(request["npc"]), lines)
 	return true
 
@@ -105,3 +113,20 @@ func _start_resident_dialogue(npc_name: String, lines: Array[String]) -> void:
 	player.velocity = Vector2.ZERO
 	get_parent().set_meta("progressive_tutorial_dialogue", true)
 	dialogue.start(npc_name, ArtLoader.load_texture("res://art/npc/npc_placeholder.png"), lines)
+
+func _end_talk() -> void:
+	if not offered_request.is_empty() and talking and dialogue.line_index >= dialogue.lines.size():
+		request_offer.display(RequestProposalData.resident(offered_request))
+		return
+	offered_request.clear()
+	super._end_talk()
+
+func _exit_tree() -> void:
+	if is_instance_valid(request_offer): request_offer.dismiss()
+	offered_request.clear()
+	super._exit_tree()
+
+func _answer_request(accepted: bool) -> void:
+	if accepted: ResidentRequestFlow.accept(offered_request)
+	offered_request.clear()
+	super._end_talk()

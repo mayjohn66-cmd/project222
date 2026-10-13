@@ -12,6 +12,7 @@ var world: Node
 var player
 var manager
 var life: VillageLifeDirector
+var request_offer: RequestOfferPanel
 
 func _ready() -> void:
 	life = get_parent()
@@ -21,6 +22,9 @@ func _ready() -> void:
 	dialogue = StoryDialoguePanel.new()
 	add_child(dialogue)
 	dialogue.finished.connect(_end_talk)
+	request_offer = RequestOfferPanel.new()
+	add_child(request_offer)
+	request_offer.answered.connect(_answer_offer)
 	panel = VillageMarketPanel.new()
 	add_child(panel)
 	panel.closed.connect(_end_talk)
@@ -86,7 +90,9 @@ func _prepare(id: String) -> void:
 func _end_talk() -> void:
 	if not talking: return
 	if dialogue.line_index >= dialogue.lines.size():
-		if stage == "intro": VillageMarketFlow.accept()
+		if stage == "intro":
+			request_offer.display({"title": VillageMarketFlow.title(), "requirements": VillageMarketFlow.SETTINGS.requirements, "reward_text": VillageMarketFlow.reward_description()})
+			return
 		elif stage == "event" and VillageMarketFlow.finish(manager.current_hour, world): manager.customer_spawner.refresh_spawn_interval()
 	stage = ""
 	talking = false
@@ -99,6 +105,12 @@ func _end_talk() -> void:
 	life.call_deferred("refresh")
 	world.get_node("ResidentRequestDirector").call_deferred("refresh")
 
+func _answer_offer(accepted: bool) -> void:
+	if accepted: VillageMarketFlow.accept()
+	stage = ""
+	_end_talk()
+
 func _exit_tree() -> void:
+	if is_instance_valid(request_offer): request_offer.dismiss()
 	stage = ""
 	_end_talk()

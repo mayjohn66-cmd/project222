@@ -12,6 +12,7 @@ var previous_physics := true
 var elapsed := 0.0
 var dialogue_phase := ""
 var encounter_hour := -1
+var request_offer: RequestOfferPanel
 
 func _ready() -> void:
 	player = get_parent().get_node("Actors/Player")
@@ -19,6 +20,9 @@ func _ready() -> void:
 	dialogue = StoryDialoguePanel.new()
 	add_child(dialogue)
 	dialogue.finished.connect(_end_dialogue)
+	request_offer = RequestOfferPanel.new()
+	add_child(request_offer)
+	request_offer.answered.connect(_answer_offer)
 	panel = LanternWayfarerPanel.new()
 	add_child(panel)
 	panel.closed.connect(_release)
@@ -122,15 +126,21 @@ func _help(id: String) -> void:
 func _end_dialogue() -> void:
 	if not open: return
 	var fully_read := dialogue.line_index >= dialogue.lines.size()
-	if fully_read and dialogue_phase == "introduction" and LanternWayfarerFlow.accept(encounter_hour):
-		dialogue_phase = ""
-		panel.display()
+	if fully_read and dialogue_phase == "introduction":
+		request_offer.display({"title": LanternWayfarerFlow.title()})
 		return
 	if fully_read and dialogue_phase == "return" and LanternWayfarerFlow.finish():
 		manager.customer_spawner.refresh_spawn_interval()
 	_release()
 
+func _answer_offer(accepted: bool) -> void:
+	if accepted and LanternWayfarerFlow.accept(encounter_hour):
+		dialogue_phase = ""
+		panel.display()
+	else: _release()
+
 func _release() -> void:
+	if is_instance_valid(request_offer): request_offer.dismiss()
 	if not open: return
 	open = false
 	dialogue_phase = ""

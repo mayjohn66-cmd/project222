@@ -11,6 +11,9 @@ func drain(dialogue: StoryDialoguePanel) -> void:
 	for i in range(40):
 		if not dialogue.open: break
 		dialogue._advance()
+	var owner = dialogue.get_parent()
+	if owner is ResidentRequestDirector and owner.request_offer.root.visible:
+		owner.request_offer.accept_button.pressed.emit()
 
 func _ready() -> void: call_deferred("run")
 
@@ -59,7 +62,7 @@ func run() -> void:
 	director.refresh()
 	check(director.try_interact(),"E reminder remains accessible without requested stock")
 	var reminder := "\n".join(director.dialogue.lines)
-	check(reminder.contains("소지품") and not reminder.contains("창고로 옮겨"),"actual NPC reminder requests carried goods without constructing a warehouse")
+	check(not reminder.contains("먼저 꺼내") and not reminder.contains("창고로 옮겨"),"actual NPC reminder does not repeat inventory instructions")
 	check(VillageJournalFlow.information("next_request").contains("소지품 기준"),"journal's quantity matches the same carried inventory")
 	drain(director.dialogue)
 	var saved := PlayerProgress.to_save_data()
