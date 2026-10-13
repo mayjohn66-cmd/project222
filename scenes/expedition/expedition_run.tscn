@@ -57,6 +57,11 @@ text = "임시 보관함"
 layout_mode = 2
 columns = 4
 
+[node name="LootHintLabel" type="Label" parent="LootPanel/VBoxContainer"]
+layout_mode = 2
+text = "아이콘을 끌어 가방에 넣으세요. 남기면 버려집니다."
+horizontal_alignment = 1
+
 [node name="LootConfirmButton" type="Button" parent="LootPanel/VBoxContainer" unique_id=953225142]
 layout_mode = 2
 text = "정리 완료"

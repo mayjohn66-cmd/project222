@@ -383,11 +383,6 @@ func refresh_loot_ui():
 
 		var card = LOOT_ITEM_CARD_SCRIPT.new()
 
-		card.custom_minimum_size = Vector2(
-			100,
-			80
-		)
-
 		host.loot_grid.add_child(card)
 
 		card.setup(
