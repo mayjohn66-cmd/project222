@@ -87,7 +87,7 @@ static func paint_flag(c: CanvasItem,font: Font,r: Rect2,color: Color,label: Str
 	if with_text and font != null:
 		var sz := font.get_string_size(label,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(15))
 		var ty := top + (bottom - top) * 0.5 + sz.y * 0.5 - font.get_descent(UiTypography.size(15))
-		var tx := ax - 16.0 - sz.x if mirrored else ax + 16.0
+		var tx := roundf(r.position.x + (r.size.x - sz.x) * 0.5)
 		c.draw_string(font,Vector2(tx,ty),label,HORIZONTAL_ALIGNMENT_LEFT,-1,UiTypography.size(15),FLAG_TEXT)
 
 

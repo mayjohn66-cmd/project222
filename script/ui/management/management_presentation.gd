@@ -10,10 +10,11 @@ const FLAG_HEIGHT := 44.0
 const FLAG_GAP := 20  # 포스트잇 사이 간격
 
 # 포스트잇의 모양은 BookViews.Strip(책 밖)·BookViews.Note(쪽 위)가 그린다. 버튼은 글자와 클릭만 맡는다.
-static func flag_style(_color: String) -> StyleBoxEmpty:
+static func flag_style(_color: String,attached: bool = false) -> StyleBoxEmpty:
 	var s := StyleBoxEmpty.new()
-	s.content_margin_left = 16
-	s.content_margin_right = 6
+	s.content_margin_left = 6
+	# 선택한 종이는 버튼보다 ONTO만큼 왼쪽까지 이어진다.
+	s.content_margin_right = 6 + BookViews.ONTO if attached else 6
 	s.content_margin_top = 4
 	s.content_margin_bottom = 4
 	return s
@@ -92,10 +93,10 @@ static func install(menu: Control) -> void:
 		var b: Button = buttons[i]
 		b.custom_minimum_size = Vector2(FLAG_OUT,FLAG_HEIGHT)
 		b.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN
-		b.alignment = HORIZONTAL_ALIGNMENT_LEFT
+		b.alignment = HORIZONTAL_ALIGNMENT_CENTER
 		b.add_theme_font_size_override("font_size",UiTypography.size(15))
 		for state in ["normal","hover","pressed","hover_pressed"]:
-			b.add_theme_stylebox_override(state,flag_style(""))
+			b.add_theme_stylebox_override(state,flag_style("",state in ["pressed","hover_pressed"]))
 		for key in ["font_color","font_hover_color","font_pressed_color","font_hover_pressed_color"]:
 			b.add_theme_color_override(key,InteractionUiStyle.INK)
 		b.add_theme_stylebox_override("focus",StyleBoxEmpty.new())
