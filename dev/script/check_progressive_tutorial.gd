@@ -124,6 +124,12 @@ func run() -> void:
 		player.global_position = director._cell_world(OpeningCleanup.piles()[i]["stand"])
 		check(director.try_interact() and OpeningCleanup.done(i), "E cleans rubble pile %d" % i)
 	check(not director._cleanup_murmur({}).is_empty() and not director._cleanup_murmur({"bread": 1}).is_empty() and director._cleanup_murmur({"bread": 1}) != director._cleanup_murmur({}), "each cleaned pile has a murmur line (empty piles get their own)")
+	var no_marks := true
+	for n in range(6):
+		for loot in [{}, {"bread": 1}]:
+			var murmur: String = director._cleanup_murmur(loot)
+			if murmur.contains("{") or murmur.contains("}") or murmur.begins_with("*") or murmur.begins_with(">"): no_marks = false
+	check(no_marks, "cleanup murmur shows no expression marks as text")
 	check(GameState.get_item_count("bread") == OpeningCleanup.LOOT_TOTAL["bread"] and GameState.get_item_count("water") == OpeningCleanup.LOOT_TOTAL["water"] and GameState.get_item_count("plywood") == 4 and GameState.get_item_count("iron_ore") == 0, "cleaning yields bread water and plywood only")
 	check(GameState.get_furniture_count("register") == 1 and GameState.get_furniture_count("shelf_1x1") == 2, "cleaning yields the register and two simple shelves")
 	var branches_after: int = GameState.get_item_count("plywood")

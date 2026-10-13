@@ -166,10 +166,11 @@ func _cleanup_murmur(loot: Dictionary) -> String:
 
 	if loot.is_empty():
 		var empty: Array[String] = RequestTextData.lines("tutorial_dialogue", "cleanup_murmur_empty")
-		return empty[order % empty.size()]
+		return DialogueMarks.plain_text(empty[order % empty.size()])
 
 	var lines: Array[String] = RequestTextData.lines("tutorial_dialogue", "cleanup_murmur")
-	return lines[mini(order, lines.size() - 1)]
+	# 화면 한 줄 쪽지라 초상화가 없다. 표정 표시({기본} 등)는 글자로 보이지 않게 떼어 낸다.
+	return DialogueMarks.plain_text(lines[mini(order, lines.size() - 1)])
 
 func _ensure_cleanup_ui() -> void:
 	if _cleanup_layer != null: return
