@@ -779,7 +779,7 @@ func _add_facility_card(cards: GridContainer, id: String, facility: ProductionFa
 	row.add_child(content)
 	var title := Label.new()
 	title.text = get_facility_display_name(id)
-	title.add_theme_font_size_override("font_size",UiTypography.size(22))
+	title.add_theme_font_size_override("font_size",UiTypography.BOOK_HEADING_SIZE)
 	content.add_child(title)
 	var status := Label.new()
 	status.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -793,6 +793,6 @@ func _add_facility_card(cards: GridContainer, id: String, facility: ProductionFa
 	var note := Label.new()
 	note.text = "현장에서 [E]로 배운 제조법을 선택하고 완성품을 수령합니다."
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	note.add_theme_font_size_override("font_size",UiTypography.size(15))
+	note.add_theme_font_size_override("font_size",UiTypography.BOOK_BODY_SIZE)
 	note.add_theme_color_override("font_color",Color("90694b"))
 	content.add_child(note)

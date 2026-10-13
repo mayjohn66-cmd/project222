@@ -5,6 +5,10 @@ const FONT = preload("res://art/fonts/Silver_ui.tres")
 const DESIGN_SIZE := 19
 const SMALL_SIZE := DESIGN_SIZE
 const DEFAULT_SIZE := DESIGN_SIZE * 2
+# 펼친 수첩은 목록과 설명을 같은 배율로 읽고, 제목만 한 단계 크게 쓴다.
+const BOOK_BODY_SIZE := SMALL_SIZE
+const BOOK_CONTROL_SIZE := SMALL_SIZE
+const BOOK_HEADING_SIZE := DEFAULT_SIZE
 
 static func size(legacy_size: int) -> int:
 	if legacy_size < 18:

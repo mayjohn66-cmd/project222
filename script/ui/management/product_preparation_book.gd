@@ -36,7 +36,7 @@ func _ready() -> void:
 		button.text = entry[1]
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.custom_minimum_size.y = 42
-		button.add_theme_font_size_override("font_size",UiTypography.size(16))
+		button.add_theme_font_size_override("font_size",UiTypography.BOOK_CONTROL_SIZE)
 		button.clip_text = true
 		bar.add_child(button)
 		tabs[entry[0]] = button
@@ -50,10 +50,10 @@ func _ready() -> void:
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	left.size_flags_stretch_ratio = 1
 	body.add_child(left)
-	summary = text(left,"",17)
+	summary = text(left,"",UiTypography.BOOK_BODY_SIZE)
 	only_ready = CheckBox.new()
 	only_ready.text = "지금 만들 수 있는 상품만"
-	only_ready.add_theme_font_size_override("font_size",UiTypography.size(16))
+	only_ready.add_theme_font_size_override("font_size",UiTypography.BOOK_CONTROL_SIZE)
 	left.add_child(only_ready)
 	only_ready.toggled.connect(func(_value): selected = ""; refresh())
 	list_scroll = ScrollContainer.new()
@@ -89,11 +89,11 @@ func select_tab(value: String) -> void:
 	refresh()
 func clear(parent: Node) -> void:
 	for child in parent.get_children(): parent.remove_child(child); child.queue_free()
-func text(parent: Node, value: String, font := 18) -> Label:
+func text(parent: Node, value: String, font := UiTypography.BOOK_BODY_SIZE) -> Label:
 	var label := Label.new()
 	label.text = value
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	label.add_theme_font_size_override("font_size",UiTypography.size(font))
+	label.add_theme_font_size_override("font_size",font)
 	parent.add_child(label)
 	return label
 func refresh(force := true) -> void:
@@ -129,7 +129,7 @@ func refresh(force := true) -> void:
 		var button := Button.new()
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.custom_minimum_size.y = 62
-		button.add_theme_font_size_override("font_size",UiTypography.size(18))
+		button.add_theme_font_size_override("font_size",UiTypography.BOOK_CONTROL_SIZE)
 		button.alignment = HORIZONTAL_ALIGNMENT_LEFT
 		button.clip_text = true
 		button.text = host.get_facility_display_name(entry["facility_id"]) + "\n" + ProductPreparationData.facility_summary(world,entry) if mode == "facilities" else str(entry["title"]) + "\n" + str(entry["status"]) + (" · 이야기 있음" if not entry["notes"].is_empty() else "")
@@ -164,17 +164,17 @@ func _render_detail() -> void:
 		if mode == "facilities": _facility_detail(entry)
 		else: _recipe_detail(entry)
 		return
-	text(detail,ProductNextStepGuidance.empty_title() if ProductNextStepGuidance.ENABLED else "오늘 필요한 것을 천천히 준비해 보세요.",22)
+	text(detail,ProductNextStepGuidance.empty_title() if ProductNextStepGuidance.ENABLED else "오늘 필요한 것을 천천히 준비해 보세요.",UiTypography.BOOK_HEADING_SIZE)
 	text(detail,ProductNextStepGuidance.empty_message(mode,only_ready.button_pressed) if ProductNextStepGuidance.ENABLED else "제작과 완성품 수령은 현장 설비에서 진행합니다. 원정 재료를 그대로 진열해도 됩니다.")
 func _recipe_detail(entry: Dictionary) -> void:
 	var recipe: Dictionary = entry["recipe"]
 	var item := str(recipe["result_item_id"])
-	text(detail,str(entry["title"]) + " ×" + str(recipe["result_amount"]),22)
+	text(detail,str(entry["title"]) + " ×" + str(recipe["result_amount"]),UiTypography.BOOK_HEADING_SIZE)
 	text(detail,str(entry["status"]) + " · 1회 " + str(recipe["craft_time"]) + "초")
 	text(detail,"필요 설비 · " + host.get_facility_display_name(str(recipe["facility_id"])))
-	text(detail,ProductPreparationContext.source(recipe),16)
-	for note in entry["notes"]: text(detail,str(note),17)
-	text(detail,"1회분 재료",20)
+	text(detail,ProductPreparationContext.source(recipe),UiTypography.BOOK_BODY_SIZE)
+	for note in entry["notes"]: text(detail,str(note),UiTypography.BOOK_BODY_SIZE)
+	text(detail,"1회분 재료",UiTypography.BOOK_BODY_SIZE)
 	var ingredients := ProductionRecipeService.collect_required_ingredients(recipe,1)
 	for id in ingredients:
 		var need := int(ingredients[id])
@@ -186,9 +186,9 @@ func _recipe_detail(entry: Dictionary) -> void:
 		var preserved := ProductPreparationData.preservation_note(str(id))
 		if not preserved.is_empty(): line += "\n" + preserved
 		text(detail,line)
-		for note in notes.get(str(id),[]): text(detail,"이 재료를 사용하는 이야기 · " + str(note),16)
+		for note in notes.get(str(id),[]): text(detail,"이 재료를 사용하는 이야기 · " + str(note),UiTypography.BOOK_BODY_SIZE)
 	var stock := GameState.get_item_count(item)
-	text(detail,"완성품 소지 " + str(stock) + "개",17)
+	text(detail,"완성품 소지 " + str(stock) + "개",UiTypography.BOOK_BODY_SIZE)
 	var action := "설비에서 [E]로 제조법을 선택하세요."
 	match str(entry["status"]):
 		"생산실 마련": action = "생산실 문을 설치해 첫 공간을 마련하세요."
@@ -197,10 +197,10 @@ func _recipe_detail(entry: Dictionary) -> void:
 		"완성품 수령 먼저": action = "설비에서 [E]로 완성품을 수령하세요."
 		"설비 사용 중": action = "가공이 끝나길 기다린 뒤 설비에서 [E]로 완성품을 수령하세요. 책을 열어 둔 동안 가공도 멈춥니다."
 		"재료 준비": action = "부족한 재료를 소지품에 챙긴 뒤 설비에서 [E]로 제조법을 선택하세요."
-	text(detail,"책을 닫고 " + action,17)
+	text(detail,"책을 닫고 " + action,UiTypography.BOOK_BODY_SIZE)
 func _facility_detail(entry: Dictionary) -> void:
 	var id := str(entry["facility_id"])
-	text(detail,host.get_facility_display_name(id),22)
+	text(detail,host.get_facility_display_name(id),UiTypography.BOOK_HEADING_SIZE)
 	var node = entry["node"]
 	if is_instance_valid(node):
 		text(detail,"위치 · " + ProductPreparationData.location(world,node))
@@ -213,6 +213,6 @@ func _facility_detail(entry: Dictionary) -> void:
 	for recipe in ProductRecipeData.get_learned_recipes():
 		var name := ItemData.get_item_name(str(recipe["result_item_id"]))
 		if recipe["facility_id"] == id and name not in products: products.append(name)
-	text(detail,"배운 상품에 사용하는 설비",20)
+	text(detail,"배운 상품에 사용하는 설비",UiTypography.BOOK_BODY_SIZE)
 	text(detail," · ".join(products.slice(0,ProductPreparationData.MAX_EXAMPLES)) if not products.is_empty() else "이 설비에서 사용할 배운 제조법이 아직 없습니다.")
 	text(detail,ProductNextStepGuidance.facility_action(world,entry) if ProductNextStepGuidance.ENABLED else "책을 닫고 현장에서 [E]로 재료를 가공하거나 완성품을 수령하세요.")

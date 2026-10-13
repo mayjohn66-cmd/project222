@@ -473,7 +473,7 @@ func refresh_schedule() -> void:
 		if entries.is_empty(): continue
 		var heading := Label.new()
 		heading.text = "공용 이벤트" if kind == "common" else "계절 이벤트"
-		heading.add_theme_font_size_override("font_size", UiTypography.size(20))
+		heading.add_theme_font_size_override("font_size", UiTypography.BOOK_HEADING_SIZE)
 		schedule_list.add_child(heading)
 		for event in entries: _create_schedule_entry(event)
 
@@ -1130,7 +1130,7 @@ func _add_store_info_text(text: String) -> void:
 		)
 		label.add_theme_font_size_override(
 			"font_size",
-			UiTypography.size(20)
+			UiTypography.BOOK_BODY_SIZE
 		)
 		history_list.add_child(label)
 
@@ -1469,7 +1469,7 @@ func _add_sales_trend_row(
 		+ " · %d G" % revenue
 	)
 	caption.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	caption.add_theme_font_size_override("font_size", UiTypography.size(18))
+	caption.add_theme_font_size_override("font_size", UiTypography.BOOK_BODY_SIZE)
 	row.add_child(caption)
 
 	var bar := ProgressBar.new()

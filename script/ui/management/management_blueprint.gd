@@ -63,7 +63,7 @@ func _ready() -> void:
 	if FurnitureGuide.ENABLED:
 		guide_summary = Label.new()
 		guide_summary.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-		guide_summary.add_theme_font_size_override("font_size",UiTypography.size(18))
+		guide_summary.add_theme_font_size_override("font_size",UiTypography.BOOK_BODY_SIZE)
 		name_label.get_parent().add_child(guide_summary)
 		name_label.get_parent().move_child(guide_summary,name_label.get_index()+1)
 	# 고정 레이아웃은 management_blueprint.tscn에서 관리한다.

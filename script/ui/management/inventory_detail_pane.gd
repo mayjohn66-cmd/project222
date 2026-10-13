@@ -46,7 +46,7 @@ static func install(inv: Control) -> void:
 
 func _label(size_px: int,color: Color = INK) -> Label:
 	var l := Label.new()
-	l.add_theme_font_size_override("font_size",UiTypography.size(size_px))
+	l.add_theme_font_size_override("font_size",size_px)
 	l.add_theme_color_override("font_color",color)
 	l.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	l.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -63,7 +63,7 @@ func _build() -> void:
 	content.add_theme_constant_override("separation",12)
 	_scroll.add_child(content)
 	add_theme_constant_override("separation",12)
-	_name = _label(28)
+	_name = _label(UiTypography.BOOK_HEADING_SIZE)
 	content.add_child(_name)
 	_frame = PanelContainer.new()
 	_frame.custom_minimum_size = Vector2(0,190)
@@ -85,22 +85,22 @@ func _build() -> void:
 	_preview = FurniturePreview.new()
 	_preview.visible = false
 	_frame.add_child(_preview)
-	_price = _label(20)
+	_price = _label(UiTypography.BOOK_BODY_SIZE)
 	content.add_child(_price)
-	_acquire = _label(18)
+	_acquire = _label(UiTypography.BOOK_BODY_SIZE)
 	content.add_child(_acquire)
-	_use = _label(17,INK_DIM)
+	_use = _label(UiTypography.BOOK_BODY_SIZE,INK_DIM)
 	_use.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	content.add_child(_use)
 	var line := HSeparator.new()
 	line.modulate = PAPER_LINE
 	content.add_child(line)
-	_desc = _label(17,INK_DIM)
+	_desc = _label(UiTypography.BOOK_BODY_SIZE,INK_DIM)
 	_desc.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
 	_desc.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_desc.vertical_alignment = VERTICAL_ALIGNMENT_TOP
 	content.add_child(_desc)
-	_hint = _label(18,INK_DIM)
+	_hint = _label(UiTypography.BOOK_BODY_SIZE,INK_DIM)
 	_hint.text = "왼쪽에서 물건을 고르면\n여기에 자세한 설명이 적힙니다."
 	_hint.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	_hint.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

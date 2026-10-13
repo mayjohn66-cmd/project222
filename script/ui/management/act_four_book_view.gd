@@ -25,16 +25,16 @@ static func render(menu: Control) -> void:
 	# 두 자식은 BookFlowVBox가 각각 왼쪽·오른쪽 쪽에 배치한다.
 	var left := _page(menu.history_list,"MilestonePage")
 	var right := _page(menu.history_list,"CluePage")
-	_label(left,"길목의 이정표 · %d/5" % ActFourFlow.milestone_count(),22)
+	_label(left,"길목의 이정표 · %d/5" % ActFourFlow.milestone_count(),UiTypography.BOOK_HEADING_SIZE)
 	for entry in ActFourFlow.SETTINGS.milestones:
-		_label(left,("● " if ActFourFlow.milestone_complete(entry) else "○ ") + str(entry["name"]),18)
-	_label(left,"지금 이어갈 이야기",19)
-	_label(left,ActFourFlow.current_goal(),16)
-	_label(right,"유적의 단서 수첩",22)
+		_label(left,("● " if ActFourFlow.milestone_complete(entry) else "○ ") + str(entry["name"]),UiTypography.BOOK_BODY_SIZE)
+	_label(left,"지금 이어갈 이야기",UiTypography.BOOK_BODY_SIZE)
+	_label(left,ActFourFlow.current_goal(),UiTypography.BOOK_BODY_SIZE)
+	_label(right,"유적의 단서 수첩",UiTypography.BOOK_HEADING_SIZE)
 	var clues := ActFourFlow.clues()
-	if clues.is_empty(): _label(right,"아직 남겨 둔 단서는 없습니다. 길 위의 이야기는 유적을 찾지 않아도 이어집니다.",17)
-	for clue in clues: _label(right,"· " + clue,17)
-	_label(right,"단서는 답을 정하지 않고, 이웃과 나눈 질문으로 남습니다.",16)
+	if clues.is_empty(): _label(right,"아직 남겨 둔 단서는 없습니다. 길 위의 이야기는 유적을 찾지 않아도 이어집니다.",UiTypography.BOOK_BODY_SIZE)
+	for clue in clues: _label(right,"· " + clue,UiTypography.BOOK_BODY_SIZE)
+	_label(right,"단서는 답을 정하지 않고, 이웃과 나눈 질문으로 남습니다.",UiTypography.BOOK_BODY_SIZE)
 static func _page(row: Control, name_text: String) -> VBoxContainer:
 	var page := VBoxContainer.new()
 	page.name = name_text
@@ -48,11 +48,11 @@ static func _label(parent: Control, text: String, font_size: int) -> void:
 	label.text = text
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	label.add_theme_font_size_override("font_size",UiTypography.size(font_size))
+	label.add_theme_font_size_override("font_size",font_size)
 	parent.add_child(label)
 static func add_schedule(menu: Control) -> void:
 	if not ActFourFlow.done("a6_crossroad_market"): return
 	var entry := VBoxContainer.new()
 	menu.schedule_list.add_child(entry)
-	_label(entry,"길이 모이는 날 · 계절 장터",20)
-	_label(entry,"매 계절 %d~%d일 · 준비와 판매 뒤 이웃에게 후일담 듣기\n이미 맡은 준비는 다음 장터 철에도 이어갈 수 있어요." % [VillageExpansionFlow.SETTINGS.festival_start_day,VillageExpansionFlow.SETTINGS.festival_end_day],17)
+	_label(entry,"길이 모이는 날 · 계절 장터",UiTypography.BOOK_HEADING_SIZE)
+	_label(entry,"매 계절 %d~%d일 · 준비와 판매 뒤 이웃에게 후일담 듣기\n이미 맡은 준비는 다음 장터 철에도 이어갈 수 있어요." % [VillageExpansionFlow.SETTINGS.festival_start_day,VillageExpansionFlow.SETTINGS.festival_end_day],UiTypography.BOOK_BODY_SIZE)

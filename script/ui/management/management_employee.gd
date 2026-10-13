@@ -211,7 +211,7 @@ func _create_employee_entry(worker: Node) -> void:
 
 	var name_label := Label.new()
 	name_label.text = str(worker.get_employee_display_name())
-	name_label.add_theme_font_size_override("font_size", UiTypography.size(22))
+	name_label.add_theme_font_size_override("font_size", UiTypography.BOOK_HEADING_SIZE)
 	identity_row.add_child(name_label)
 
 	var hired: bool = bool(worker.get("is_hired"))
@@ -571,7 +571,7 @@ func _create_training_controls(
 	if not EmployeeRecruitmentFlow.training_available(str(worker.get("employee_id"))): return
 	var title := Label.new()
 	title.text = "직원 교육"
-	title.add_theme_font_size_override("font_size", UiTypography.size(20))
+	title.add_theme_font_size_override("font_size", UiTypography.BOOK_HEADING_SIZE)
 	parent.add_child(title)
 
 	var stat_names: Dictionary = {

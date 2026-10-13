@@ -24,7 +24,7 @@ func _ready() -> void:
 	left.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	left.add_theme_constant_override("separation", 12)
 	add_child(left)
-	left.add_child(_label("부탁 수첩", UiTypography.DEFAULT_SIZE))
+	left.add_child(_label("부탁 수첩", UiTypography.BOOK_HEADING_SIZE))
 	var filters := HBoxContainer.new()
 	filters.add_theme_constant_override("separation", 8)
 	left.add_child(filters)
@@ -106,7 +106,7 @@ func _select(id: String) -> void:
 	if selected.is_empty():
 		detail_page.add_child(_label("주민과 나눈 약속을 이곳에 남깁니다.", UiTypography.SMALL_SIZE))
 		return
-	detail_page.add_child(_label(str(selected["title"]), UiTypography.DEFAULT_SIZE))
+	detail_page.add_child(_label(str(selected["title"]), UiTypography.BOOK_HEADING_SIZE))
 	var detail := RequestNotebookData.detail(selected)
 	detail_page.add_child(_label(str(detail.get("context", "")), UiTypography.SMALL_SIZE))
 	if float(detail["progress"]) >= 0:
@@ -121,7 +121,7 @@ func _select(id: String) -> void:
 	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
 	detail_page.add_child(scroll)
-	var text := _label(str(detail["text"]), UiTypography.DEFAULT_SIZE)
+	var text := _label(str(detail["text"]), UiTypography.BOOK_BODY_SIZE)
 	text.name = "RequestDetail"
 	text.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(text)
@@ -132,7 +132,7 @@ func _select(id: String) -> void:
 	var target := RequestNotebookData.destination(world, id)
 	var director := world.get_node_or_null("VillageJournalDirector") as VillageJournalDirector
 	var tracked := director != null and director.tracked_id == id
-	var button := _button("표시 해제" if tracked else "목적지 표시", UiTypography.DEFAULT_SIZE)
+	var button := _button("표시 해제" if tracked else "목적지 표시", UiTypography.BOOK_CONTROL_SIZE)
 	button.name = "RequestDestination"
 	button.disabled = director == null or (target == null and not tracked)
 	button.pressed.connect(func():
