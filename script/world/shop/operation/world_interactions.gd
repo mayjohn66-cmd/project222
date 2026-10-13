@@ -5,6 +5,8 @@ var terrain: Node2D
 var prompt: Label
 var message_until := 0
 var message_origin := Vector2.INF
+var expedition_confirm_until := 0   # 원정 출발은 이 시각 안에 [E]를 한 번 더 눌러야 한다(실수로 장면이 바뀌는 것을 막는다)
+const EXPEDITION_CONFIRM_MSEC := 4000
 
 func _ready() -> void:
  player = get_parent().get_node("Actors/Player")
@@ -142,7 +144,7 @@ func _process(_delta: float) -> void:
   prompt.text = smithy.interaction_hint()
   return
  if near_dungeon():
-  prompt.text = "[E] 원정으로 출발하기"
+  prompt.text = "[E] 한 번 더: 원정 출발" if Time.get_ticks_msec() <= expedition_confirm_until else "[E] 원정 준비 화면으로 이동"
   return
  if nearest_door(): prompt.text = "[E] 가게 닫기 · 영업 중" if manager.shop_open else "[E] 가게 열기 · 영업 종료"
  else: prompt.text = ""
@@ -193,6 +195,11 @@ func try_interact() -> bool:
  var cashier = get_parent().get_node_or_null("ManualCheckoutController")
  if cashier != null and cashier.try_interact(): return true
  if near_dungeon():
+  if Time.get_ticks_msec() > expedition_confirm_until:
+   expedition_confirm_until = Time.get_ticks_msec()+EXPEDITION_CONFIRM_MSEC
+   show_message("원정을 떠나면 다른 화면으로 넘어갑니다. 정말 출발하려면 [E]를 한 번 더 누르세요.")
+   return true
+  expedition_confirm_until = 0
   manager.enter_expedition_scene()
   return true
  if nearest_door():
