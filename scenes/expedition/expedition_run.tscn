@@ -28,6 +28,7 @@ layout_mode = 2
 
 [node name="BagTitleLabel" type="Label" parent="BagPanel/VBoxContainer" unique_id=128824263]
 layout_mode = 2
+text = "가방"
 
 [node name="BagGridView" type="Control" parent="BagPanel/VBoxContainer" unique_id=1217393357]
 layout_mode = 2
