@@ -9,6 +9,25 @@ var player
 var manager
 var checkout: CheckoutTutorial
 
+func click_response(button: Button) -> void:
+	for i in range(6): await get_tree().process_frame
+	var point := button.get_global_rect().get_center()
+	for pressed in [true, false]:
+		var event := InputEventMouseButton.new()
+		event.button_index = MOUSE_BUTTON_LEFT
+		event.position = point
+		event.pressed = pressed
+		get_viewport().push_input(event, true)
+		await get_tree().process_frame
+	for i in range(6): await get_tree().process_frame
+
+func capture_offer(name: String) -> void:
+	if DisplayServer.get_name() == "headless": return
+	for arg in OS.get_cmdline_user_args():
+		if arg.begins_with("--barter-capture="):
+			await RenderingServer.frame_post_draw
+			get_viewport().get_texture().get_image().save_png(arg.trim_prefix("--barter-capture=") + "-" + name + ".png")
+
 func check(ok: bool, text: String) -> void:
 	checks += 1
 	if ok: print("PASS: ", text)
@@ -141,6 +160,8 @@ func run() -> void:
 	manager.hour_timer.stop()
 	talk_merchant()
 	check(director.barter_panel.root.visible and director.flow.seen("barter"), "full offer opens explicit barter choice")
+	check(director.barter_panel.cards["arrival_barter"]["action"].text == "수락" and director.barter_panel.close_button.text == "거절", "offer exposes accept and decline responses")
+	check(not director.barter_panel.message.visible and not director.barter_panel.count_label.visible, "offer does not display persistent instructions or a subtitle")
 	for size in [Vector2i(1152,648), Vector2i(593,523), Vector2i(800,450)]:
 		get_window().size = size
 		for i in range(4): await get_tree().process_frame
@@ -148,16 +169,27 @@ func run() -> void:
 		var area := get_viewport().get_visible_rect()
 		check(area.encloses(director.barter_panel.close_button.get_global_rect()), "barter close remains visible at " + str(size))
 		check(area.encloses(director.barter_panel.cards["arrival_barter"]["action"].get_global_rect()), "barter confirm remains visible at " + str(size))
-	director.barter_panel.close()
+		check(area.encloses(director.barter_panel.root.get_global_rect()), "compact offer stays entirely on screen at " + str(size))
+		await capture_offer(str(size.x) + "x" + str(size.y))
+	var inventory_before := GameState.inventory.duplicate(true)
+	await click_response(director.barter_panel.close_button)
 	check(not OpeningJourneyFlow.traded() and not director.talking, "canceling barter spends nothing and restores control")
+	check(GameState.inventory == inventory_before and player.is_physics_processing() == director.physics_was_enabled and manager.hour_timer.paused == director.timer_was_paused, "decline click restores movement and clock without consuming goods")
 	var bread_owned: int = GameState.get_item_count("bread")
 	GameState.remove_item("bread", bread_owned)
 	check(not OpeningJourneyFlow.trade() and GameState.get_item_count("rusty_sword") == 0, "insufficient food cannot receive gear")
 	GameState.add_item("bread", bread_owned)
 	talk_merchant()
+	GameState.remove_item("bread", bread_owned)
+	director.barter_panel.refresh()
+	check(director.barter_panel.cards["arrival_barter"]["action"].disabled and director.barter_panel.shortage_label.visible, "missing goods disable accept with a contextual shortage")
+	await capture_offer("shortage")
+	GameState.add_item("bread", bread_owned)
+	director.barter_panel.refresh()
+	check(not director.barter_panel.shortage_label.visible, "shortage disappears once goods are available")
 	money_before = player.money
 	var water_owned: int = GameState.get_item_count("water")
-	director.barter_panel.action_requested.emit("arrival_barter")
+	await click_response(director.barter_panel.cards["arrival_barter"]["action"])
 	check(OpeningJourneyFlow.traded() and GameState.get_item_count("bread") == bread_owned - 2 and GameState.get_item_count("water") == water_owned - 1, "barter spends exact real food")
 	check(player.money == money_before and GameState.get_item_count("rusty_sword") == 1 and GameState.get_item_count("leather_armor") == 1, "barter grants native gear without coin charge")
 	check(not OpeningJourneyFlow.trade(), "barter cannot repeat")
