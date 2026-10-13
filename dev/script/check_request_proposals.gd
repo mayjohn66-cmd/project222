@@ -163,7 +163,7 @@ func run() -> void:
 	await click(menu.inventory_button)
 	await get_tree().create_timer(1.6, true).timeout
 	check(menu.current_tab == ManagementTabs.MenuTab.INVENTORY, "all seven pages turn back to inventory")
-	var stage = menu.get_meta("book_stage", null)
+	var stage = menu.get_meta("book_stage") if menu.has_meta("book_stage") else null
 	if is_instance_valid(stage):
 		for i in range(menu.inventory_button.get_parent().get_child_count()):
 			var flag: Button = menu.inventory_button.get_parent().get_child(i)

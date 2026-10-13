@@ -21,12 +21,20 @@ func harvest(table: String, item: String, needed: int, tool_bag: ExpeditionBag =
 	check(GameState.get_item_count(item) >= needed,"actual loot and return can supply " + item)
 
 func interact_request(director) -> void:
+	# 영업 중에는 주민이 손님으로 입장해 부탁을 건네므로(QuestVisitDirector) 서 있는 NPC는 영업 전·후에만 있다.
+	# 이 시험은 서 있는 NPC와의 대화를 확인하므로 그 사이만 영업을 닫아 둔다.
+	var day = world.get_node("DayManager")
+	var was_open: bool = day.shop_open
+	day.shop_open = false
 	director.refresh()
 	var player = world.get_node("Actors/Player")
-	if not is_instance_valid(director.npc): check(false,"current NPC exists"); return
+	if not is_instance_valid(director.npc):
+		day.shop_open = was_open
+		check(false,"current NPC exists"); return
 	player.global_position = director.npc.global_position + Vector2(20,0)
 	check(director.try_interact(),"actual NPC interaction")
 	drain(director.dialogue)
+	day.shop_open = was_open
 
 func click_book(button: Button, menu: ManagementMenu) -> void:
 	var parent := button.get_parent()
@@ -130,19 +138,12 @@ func run() -> void:
 	menu.open_menu(ManagementMenu.MenuTab.SCHEDULE)
 	await get_tree().create_timer(1.7,true).timeout
 	await frames()
-	var next_button: Button = null
-	var purchase_text := false
-	for card in menu.schedule_list.get_children():
-		var children: Array = card.get_children()
-		if children.size() < 2 or not children[0] is Label: continue
-		if children[0].text == "다음 주민 부탁":
-			for child in children:
-				if child is Button: next_button = child
-		if children[0].text == "채집 도구를 구하는 길": purchase_text = children[1].text.contains("110 G")
-	check(next_button != null and not next_button.disabled and purchase_text,"actual schedule book enables next destination and current purchase guidance")
-	if next_button != null:
-		await click_book(next_button,menu)
-	check(journal.tracked_id == "next_request","actual book button tracks merchant route")
+	# 일정 책에는 이제 행사 소식만 있고, 부탁은 부탁 수첩에서 "맡은 뒤에" 보인다(미수락 부탁은 적지 않는다).
+	# 그래서 다음 목적지는 일정 책 카드 대신 목적지 API(VillageJournalFlow.destination)로 확인하고 표시/해제를 시험한다.
+	var notice_texts: Array = menu.schedule_list.find_children("*","Label",true,false).map(func(l): return l.text)
+	check(notice_texts.size() == 1 and str(notice_texts[0]).contains("행사"), "schedule book lists only event news, not stale request cards")
+	check(VillageJournalFlow.destination(world,"next_request") != null, "journal still points to the next destination")
+	check(journal.set_tracked("next_request") and journal.tracked_id == "next_request", "tracking the next destination works")
 	for size in [Vector2i(1152,648),Vector2i(768,432)]:
 		get_window().size = size
 		await frames()

@@ -14,6 +14,10 @@ func frames(count: int = 12) -> void:
 	for index in count: await get_tree().process_frame
 func run() -> void:
 	check(OS.get_user_data_dir().contains("foodbag_checks"), "isolated UI test saves")
+	# 다른 검사가 격리 폴더에 남긴 저장이 있으면 새 게임이 이름창 대신 덮어쓰기 확인을 먼저 띄운다. 격리 폴더일 때만 비운다.
+	if OS.get_user_data_dir().contains("foodbag_checks"):
+		for save_path in [GameConfig.SAVE_PATH] + GameConfig.SAVE_SLOT_PATHS:
+			if FileAccess.file_exists(str(save_path)): DirAccess.remove_absolute(ProjectSettings.globalize_path(str(save_path)))
 	check(FileAccess.get_sha256("res://art/fonts/Silver.ttf") == "5bbbcd90b9f3ed71f8e15816fc114cbfefe9dfa29e5aacab31fe3f49fe1d1c89", "original Silver unchanged")
 	check(UiTypography.FONT is FontVariation and UiTypography.FONT.base_font.get_font_name() == "Silver", "Silver metrics wrapper")
 	check(UiTypography.FONT.get_height(UiTypography.DEFAULT_SIZE) < UiTypography.FONT.base_font.get_height(UiTypography.DEFAULT_SIZE), "excess line padding reduced")
