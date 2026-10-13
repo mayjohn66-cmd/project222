@@ -128,10 +128,14 @@ var current_info_tab: ManagementTabs.InfoTab = ManagementTabs.InfoTab.BASIC
 var current_tab: MenuTab = MenuTab.INVENTORY
 var _paused_by_menu: bool = false
 var space_menu: ShopSpaceMenu
+var request_button: Button
+var request_content: Control
+var request_list: VBoxContainer
 
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	RequestNotebookTab.install(self)
 	space_menu = ShopSpaceMenu.new()
 	add_child(space_menu)
 	inventory_button.pressed.connect(
@@ -276,8 +280,9 @@ func select_tab(
 	schedule_content.visible = false
 	history_content.visible = false
 	construction_content.visible = false
+	request_content.visible = false
 
-	# 선택된 항목은 청록색 눌림 상태로 표시
+	# 본문 상태와 포스트잇의 쪽 위치는 별도로 표시한다.
 	inventory_button.button_pressed = false
 	production_button.button_pressed = false
 	employee_button.button_pressed = false
@@ -285,6 +290,7 @@ func select_tab(
 	schedule_button.button_pressed = false
 	history_button.button_pressed = false
 	construction_button.button_pressed = false
+	request_button.button_pressed = false
 
 	match tab:
 		MenuTab.INVENTORY:
@@ -366,6 +372,12 @@ func select_tab(
 				UiText.t("management.tab.history.desc")
 			)
 
+		MenuTab.REQUESTS:
+			request_content.visible = true
+			request_button.button_pressed = true
+			info_label.text = ""
+			RequestNotebookTab.refresh(self)
+
 
 func refresh_common_info() -> void:
 	money_label.text = (
@@ -394,7 +406,6 @@ func refresh_schedule() -> void:
 	for child in schedule_list.get_children():
 		schedule_list.remove_child(child)
 		child.queue_free()
-	VillageJournalBookView.add_schedule(self)
 	ActFourBookView.add_schedule(self)
 
 	schedule_current_date_label.text = (
@@ -436,14 +447,10 @@ func refresh_schedule() -> void:
 	)
 
 	if discovered_events.is_empty():
-		# 부탁 수첩에는 빈 행사 안내를 덧붙이지 않는다.
-		if VillageJournalFlow.available(): return
 		var empty_label := Label.new()
 
-		empty_label.text = (
-			"현재 예정되었거나 진행 중인 일정이 없습니다."
-			+ "\n새로운 정보는 가게를 방문한 손님에게서 얻을 수 있습니다."
-		)
+		empty_label.text = "아직 들은 행사 소식이 없습니다."
+		empty_label.add_theme_font_size_override("font_size", UiTypography.SMALL_SIZE)
 
 		empty_label.horizontal_alignment = (
 			HORIZONTAL_ALIGNMENT_CENTER

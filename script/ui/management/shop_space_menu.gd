@@ -20,6 +20,7 @@ func refresh() -> void:
 	host.production_button.visible = tab_available(host.MenuTab.PRODUCTION)
 	host.construction_button.visible = tab_available(host.MenuTab.CONSTRUCTION)
 	host.employee_button.visible = tab_available(host.MenuTab.EMPLOYEE)
+	host.request_button.visible = tab_available(host.MenuTab.REQUESTS)
 	if not tab_available(int(host.current_tab)):
 		host.select_tab(host.MenuTab.INVENTORY)
 	host.construction_content.refresh_view()
@@ -37,6 +38,7 @@ func tab_available(tab: int) -> bool:
 		host.MenuTab.PRODUCTION: return ShopSpaceProgression.production_introduced()
 		host.MenuTab.CONSTRUCTION: return ShopSpaceProgression.production_offered()
 		host.MenuTab.EMPLOYEE: return not ShopSpaceProgression.active() or OpeningJourneyFlow.core_finished()
+		host.MenuTab.REQUESTS: return VillageJournalFlow.available()
 	return true
 
 func _process(delta: float) -> void:

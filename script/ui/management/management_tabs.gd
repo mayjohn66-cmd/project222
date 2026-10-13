@@ -10,7 +10,8 @@ enum MenuTab {
 	BLUEPRINT,
 	CONSTRUCTION,
 	SCHEDULE,
-	HISTORY
+	HISTORY,
+	REQUESTS
 }
 
 enum InfoTab {

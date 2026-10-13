@@ -18,7 +18,7 @@ const LEATHER_DARK := Color("3d2a1d")
 const GOLD := Color("d9a441")
 const BRAND := Color("235740")
 # 탭마다 쪽 종이 색이 조금씩 다르다(인벤토리·생산·직원·설계도·건설·일정·정보 순)
-const TAB_PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef"]
+const TAB_PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef","f5eddc"]
 
 
 static func page_width(control_size: Vector2) -> float:

@@ -40,18 +40,18 @@ func _style_label(label: Label) -> void:
 func near_board() -> bool:
 	return VillageJournalFlow.available() and not get_parent().get_node("VillageLifeDirector")._blocked()
 
-# N: 마을 수첩은 관리 책의 일정 탭에 있다(VillageJournalBookView). 책이 열려 있는 동안은 게임이 멈춰 이 노드가 입력을 못 받으므로
+# N: 마을 수첩은 관리 책의 부탁 탭에 있다(VillageJournalBookView). 책이 열려 있는 동안은 게임이 멈춰 이 노드가 입력을 못 받으므로
 # 닫기는 다른 탭과 같이 Esc 로 한다(아래 menu.visible 갈래는 책이 열린 채 멈추지 않는 경우를 위한 것).
 func _unhandled_key_input(event: InputEvent) -> void:
 	if event is InputEventKey and event.pressed and not event.echo and event.keycode == KEY_N:
 		var menu := get_parent().get_node_or_null("UI/ManagementMenu") as ManagementMenu
 		if menu == null: return
 		if menu.visible:
-			if menu.current_tab == ManagementTabs.MenuTab.SCHEDULE: menu.close_menu()
-			else: menu.select_tab(ManagementTabs.MenuTab.SCHEDULE)
+			if menu.current_tab == ManagementTabs.MenuTab.REQUESTS: menu.close_menu()
+			else: menu.select_tab(ManagementTabs.MenuTab.REQUESTS)
 			get_viewport().set_input_as_handled()
 		elif near_board():
-			menu.open_menu(ManagementTabs.MenuTab.SCHEDULE)
+			menu.open_menu(ManagementTabs.MenuTab.REQUESTS)
 			get_viewport().set_input_as_handled()
 
 # 책의 일정 탭에서 "목적지 표시"를 눌렀을 때. 같은 곳을 다시 누르면 해제한다. 표시했으면 true.

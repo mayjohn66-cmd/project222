@@ -29,7 +29,7 @@ func key(code: Key) -> void:
 
 # 책의 일정 탭 "마을 수첩"에서 제목이 title 인 칸의 목적지 단추
 func book_button(menu, title: String) -> Button:
-	var notebook := menu.schedule_list.get_node_or_null("RequestNotebook") as RequestNotebookView
+	var notebook := menu.request_list.get_node_or_null("RequestNotebook") as RequestNotebookView
 	if notebook == null: return null
 	for row in notebook.rows:
 		if row["title"] == title:
@@ -70,7 +70,7 @@ func run() -> void:
 	var money_before: int = GameState.get_money()
 	var inventory_before: Dictionary = GameState.inventory.duplicate(true)
 	await key(KEY_N)
-	check(menu.visible and menu.current_tab == ManagementMenu.MenuTab.SCHEDULE, "N opens the management book on the schedule tab")
+	check(menu.visible and menu.current_tab == ManagementMenu.MenuTab.REQUESTS, "N opens the management book on the schedule tab")
 	var next_button := book_button(menu, request_title)
 	check(next_button != null and not next_button.disabled, "book lists the village journal and the current request NPC can be marked")
 	await click(next_button)
@@ -81,7 +81,7 @@ func run() -> void:
 	check(journal.marker.is_inside_tree() and journal.marker.visible and journal.guidance.visible, "marker and directional hint appear after closing")
 	check(PlayerProgress.to_save_data() == progress_before and GameState.get_money() == money_before and GameState.inventory == inventory_before, "viewing and tracking award nothing and preserve saved progress")
 	await key(KEY_N)
-	check(menu.visible and menu.current_tab == ManagementMenu.MenuTab.SCHEDULE, "N opens the book again")
+	check(menu.visible and menu.current_tab == ManagementMenu.MenuTab.REQUESTS, "N opens the book again")
 	await click(book_button(menu, request_title))
 	check(journal.tracked_id.is_empty(), "same card clears the marked destination")
 	await key(KEY_ESCAPE)

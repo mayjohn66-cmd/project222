@@ -33,7 +33,11 @@ func click(button: Button) -> void:
 	if button.get_viewport() != get_viewport():
 		var menu_node: Control = world.get_node("UI/ManagementMenu")
 		var stage = menu_node.get_meta("book_stage", null)
-		if is_instance_valid(stage): point += stage._offset
+		if is_instance_valid(stage):
+			point += stage._offset
+			if button.get_parent() == menu_node.inventory_button.get_parent():
+				for flag in stage.left_flags.items:
+					if int(flag["tab"]) == button.get_index(): point = (flag["rect"] as Rect2).get_center()
 	for down in [true, false]:
 		var event := InputEventMouseButton.new()
 		event.position = point
@@ -61,6 +65,11 @@ func record(id: String) -> Dictionary:
 	for row in RequestNotebookData.entries():
 		if row["id"] == id: return row
 	return {}
+
+func label_text(node: Node) -> String:
+	var text: String = node.text if node is Label else ""
+	for child in node.get_children(): text += "\n" + label_text(child)
+	return text
 
 func start_resident() -> void:
 	resident.refresh()
@@ -130,12 +139,43 @@ func run() -> void:
 	check(float(RequestNotebookData.detail(record("request:neighbor_bread"))["progress"]) == 100, "real carried goods update notebook readiness")
 	var menu: ManagementMenu = world.get_node("UI/ManagementMenu")
 	get_window().size = Vector2i(1152,648)
-	menu.open_menu(ManagementTabs.MenuTab.SCHEDULE)
+	menu.open_menu(ManagementTabs.MenuTab.REQUESTS)
 	await get_tree().create_timer(2.0, true).timeout
-	var notebook := menu.schedule_list.get_node("RequestNotebook") as RequestNotebookView
+	var notebook := menu.request_list.get_node("RequestNotebook") as RequestNotebookView
 	check(notebook != null and notebook.selection_buttons.has("request:neighbor_bread"), "book shows accepted request in left-hand list")
 	check(notebook.detail_page.get_node("RequestProgress").value == 100, "selected request detail shows actual preparation progress")
 	check(notebook.get_child(0).get_global_rect().end.x < notebook.detail_page.get_global_rect().position.x, "list and detail use separate book pages")
+	check(menu.request_button.text == "부탁" and menu.inventory_button.get_parent().get_child_count() == 8, "requests have an independent eighth post-it")
+	check(ManagementTabs.MenuTab.HISTORY == 6 and ManagementTabs.MenuTab.REQUESTS == 7, "existing tab indices remain unchanged")
+	var colors := {}
+	for i in range(8): colors[ManagementMenu.PRESENTATION.bookmark_color(i).to_html()] = true
+	check(colors.size() == 8 and InteractionUiStyle.button("normal").bg_color == InteractionUiStyle.PAPER, "post-its use distinct paper colors while regular buttons retain the palette")
+	await snapshot("request-tab")
+	GameState.discovered_store_events = {"spring_market": 1, "dungeon_raid": 1}
+	await click(menu.schedule_button)
+	await get_tree().create_timer(1.6, true).timeout
+	check(menu.current_tab == ManagementTabs.MenuTab.SCHEDULE and menu.schedule_content.visible and not menu.request_content.visible, "left-hand schedule post-it opens the original event page")
+	check(menu.schedule_list.get_node_or_null("RequestNotebook") == null and label_text(menu.schedule_list).contains("공용 이벤트") and label_text(menu.schedule_list).contains("계절 이벤트"), "event calendar retains both kinds without quest records")
+	await snapshot("event-tab")
+	await click(menu.request_button)
+	await get_tree().create_timer(1.6, true).timeout
+	check(menu.current_tab == ManagementTabs.MenuTab.REQUESTS and menu.request_content.visible and not menu.schedule_content.visible, "right-hand request post-it returns to the notebook")
+	await click(menu.inventory_button)
+	await get_tree().create_timer(1.6, true).timeout
+	check(menu.current_tab == ManagementTabs.MenuTab.INVENTORY, "all seven pages turn back to inventory")
+	var stage = menu.get_meta("book_stage", null)
+	if is_instance_valid(stage):
+		for i in range(menu.inventory_button.get_parent().get_child_count()):
+			var flag: Button = menu.inventory_button.get_parent().get_child(i)
+			if flag.visible:
+				var rect := flag.get_global_rect()
+				rect.position += stage._offset
+				check(get_viewport().get_visible_rect().encloses(rect), "post-it stays inside screen: " + flag.text)
+	await snapshot("all-postits")
+	await click(menu.request_button)
+	await get_tree().create_timer(1.6, true).timeout
+	check(menu.current_tab == ManagementTabs.MenuTab.REQUESTS and (stage == null or stage.at_rest()), "all seven pages turn forward to requests and settle")
+	notebook = menu.request_list.get_node("RequestNotebook") as RequestNotebookView
 	var save_before := PlayerProgress.to_save_data().duplicate(true)
 	var goods_before := GameState.inventory.duplicate(true)
 	await click(notebook.detail_page.get_node("RequestDestination"))
@@ -190,9 +230,9 @@ func run() -> void:
 	PlayerProgress.reset()
 	PlayerProgress.load_save_data(saved)
 	check(record("request:neighbor_bread")["category"] == "done" and not record("personal:" + personal).is_empty(), "notebook reconstructs accepted and completed records after load")
-	menu.open_menu(ManagementTabs.MenuTab.SCHEDULE)
+	menu.open_menu(ManagementTabs.MenuTab.REQUESTS)
 	await get_tree().create_timer(2.0, true).timeout
-	notebook = menu.schedule_list.get_node("RequestNotebook") as RequestNotebookView
+	notebook = menu.request_list.get_node("RequestNotebook") as RequestNotebookView
 	await click(notebook.category_buttons["done"])
 	await click(notebook.selection_buttons["request:neighbor_bread"])
 	await snapshot("completed-book")

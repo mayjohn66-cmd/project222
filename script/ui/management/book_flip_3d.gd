@@ -21,7 +21,7 @@ const SKIN := 0.006  # 앞면·뒷면 사이 두께의 절반
 
 const LEAF_TIME := 0.55  # 종이 한 장이 넘어가는 시간(초)
 const LEAF_STAGGER := 0.09  # 다음 장이 넘어가기 시작하기까지의 간격(초)
-const MAX_LEAVES := 6
+const MAX_LEAVES := 7
 const GAP := 0.012  # 겹친 종이 사이 높이
 const PARCHMENT := Color("f5eddc")
 

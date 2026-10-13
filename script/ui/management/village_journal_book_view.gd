@@ -1,10 +1,10 @@
 class_name VillageJournalBookView
 extends RefCounted
-## 마을 수첩을 관리 책의 일정 탭 안에 넣는다(2026-10-08 결정: 화면에 따로 띄우던 수첩 단추·팝업 대신 책에서 확인).
+## 부탁 포스트잇에서 기록을 확인한다. 행사 일정과는 별도의 책장이다.
 ## 왼쪽 기록 목록과 오른쪽 상세(RequestNotebookView). 아직 맡지 않은 부탁은 적지 않는다.
 ## 목적지를 고르면 월드의 VillageJournalDirector 가 책을 닫은 뒤 화살표·표시로 길을 안내한다.
 
-static func add_schedule(menu: Control) -> void:
+static func add_requests(menu: Control) -> void:
 	if not VillageJournalFlow.available():
 		return
 
@@ -16,7 +16,7 @@ static func add_schedule(menu: Control) -> void:
 	var notebook := RequestNotebookView.new()
 	notebook.menu = menu
 	notebook.world = world
-	menu.schedule_list.add_child(notebook)
+	menu.request_list.add_child(notebook)
 
 
 static func _world(menu: Node) -> Node:

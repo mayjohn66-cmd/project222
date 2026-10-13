@@ -13,6 +13,7 @@ static func apply(menu: Control) -> void:
 	_employee(menu)
 	_construction(menu)
 	_schedule(menu)
+	_flow_list(menu.request_list)
 	_history(menu)
 
 

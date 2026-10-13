@@ -1,7 +1,8 @@
 extends RefCounted
-const ACCENTS := ["98703e","b06b3d","4b8068","527e9a","97754c","897299","567d86"]
-const PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef"]
-const INDEX_BRIGHTNESS := [1.0,0.98,0.96,0.94,0.92,0.96,0.98]
+const ACCENTS := ["98703e","b06b3d","4b8068","527e9a","97754c","897299","567d86","a57179"]
+const PAPERS := ["f5eddc","f7eddf","f0f1e3","edf1ec","f4eddf","f3edf2","edf1ef","f5eddc"]
+# 포스트잇만 구역색을 사용한다. 본문 조작부는 종이/갈색 규칙을 유지한다.
+const BOOKMARK_COLORS := ["E8C979","EFBFA8","BFD0A6","B8CEDE","E1BB86","C6B7D9","B3CFC7","E3B8BD"]
 # 포스트잇 책갈피: 포스트잇은 쪽에 붙어 있고 책 옆면 밖으로 FLAG_OUT 만큼 튀어나와 있다(탭 이름이 적힘). 지금 펼친 탭의 포스트잇만
 # 쪽 안쪽 여백으로 BookViews.ONTO 만큼 붙는다(한 장의 포스트잇이 쪽 가장자리를 감싼 모양, Strip 이 그림). 나머지는 밖으로 튀어나온 부분만 보인다.
 const FLAG_OUT := 100.0
@@ -121,7 +122,7 @@ static func install(menu: Control) -> void:
 		label.add_theme_font_size_override("font_size",UiTypography.size(15))
 		label.add_theme_color_override("font_color",Color("67543b"))
 	var area: Control = v.get_node("Body/ContentArea")
-	var contents := [menu.inventory_content,menu.production_content,menu.employee_content,menu.blueprint_content,menu.construction_content,menu.schedule_content,menu.history_content]
+	var contents := [menu.inventory_content,menu.production_content,menu.employee_content,menu.blueprint_content,menu.construction_content,menu.schedule_content,menu.history_content,menu.request_content]
 	for i in range(contents.size()):
 		tab_theme(contents[i],i)
 		inset(contents[i],16)
@@ -134,7 +135,7 @@ static func install(menu: Control) -> void:
 		c.get_node("MainVBox").add_theme_constant_override("separation",10)
 	for c in [menu.employee_content,menu.blueprint_content]: c.get_node("MainVBox/Title").hide()
 	menu.construction_content.get_node("MainVBox/TitleLabel").hide()
-	for c in [menu.schedule_content,menu.history_content]:
+	for c in [menu.schedule_content,menu.history_content,menu.request_content]:
 		var m: MarginContainer = c.get_node("MarginContainer")
 		for side in ["left","right","top","bottom"]: m.add_theme_constant_override("margin_"+side,16)
 	menu.history_content.get_node("MarginContainer/HistoryVBox").add_theme_constant_override("separation",10)
@@ -163,6 +164,7 @@ static func install(menu: Control) -> void:
 	strip.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	for bi in range(nav.get_child_count()):
 		var nb: Button = nav.get_child(bi)
+		if not nb.visible: continue
 		if not nb.visible: continue
 		nb.mouse_entered.connect(func() -> void: strip.set_hover(bi))
 		nb.mouse_exited.connect(func() -> void: strip.set_hover(-1))
@@ -314,7 +316,10 @@ static func _ensure_stage(menu: Control) -> BookStage3D:
 	menu.add_child(stage)
 	menu.move_child(stage,menu.get_node("DimBackground").get_index() + 1)
 	stage.build(sv,menu.get_viewport_rect().size,"영업 일지",PlayerProgress.display_player_name())
-	stage.drag_allowed = func(dir: int) -> bool: return clampi(menu.current_tab + dir,0,6) != menu.current_tab
+	stage.drag_allowed = func(dir: int) -> bool:
+		var next := int(menu.current_tab) + dir
+		var nav: Control = menu.inventory_button.get_parent()
+		return next >= 0 and next < nav.get_child_count() and nav.get_child(next).visible
 	stage.drag_started.connect(func(dir: int) -> void: _drag_begin(menu,stage,dir))
 	stage.drag_moved.connect(func(th: float) -> void: _drag_move(menu,th))
 	stage.drag_ended.connect(func() -> void: _drag_end(menu,stage))
@@ -563,4 +568,4 @@ static func _flag_arts(menu: Control,order: Array) -> Array:
 	return out
 
 static func bookmark_color(index: int) -> Color:
-	return InteractionUiStyle.tone(InteractionUiStyle.PAPER,INDEX_BRIGHTNESS[index % INDEX_BRIGHTNESS.size()])
+	return Color(BOOKMARK_COLORS[index % BOOKMARK_COLORS.size()])
