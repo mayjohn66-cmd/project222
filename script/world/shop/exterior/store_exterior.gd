@@ -355,6 +355,7 @@ func is_wild() -> bool:
 # 이야기 기록이 바뀐 직후에도 곧바로 맞는 지형이 나오도록, 쓸 때마다 단계가 바뀌었는지 가볍게 확인한다.
 func _sync_wild() -> void:
 	if Engine.is_editor_hint(): return
+	if _terrain_fading: return   # 암전 중에는 어두워진 뒤에 갈아끼운다
 	if OpeningTerrain.wild() != _wild_active: _update_wild()
 
 func get_wild_kind(cell: Vector2i) -> String:
@@ -367,8 +368,23 @@ func _process(delta: float) -> void:
 	_wild_poll = 0.5
 	_update_wild()
 
+var _terrain_fading: bool = false
+
 func _update_wild() -> void:
+	if _terrain_fading: return
 	var now := OpeningTerrain.wild()
+	# 낯선 땅이 끝나는 순간(플레이 중)에는 화면을 어둡게 가린 뒤 지형을 바꾼다.
+	if _wild_active and not now and is_inside_tree() and TerrainFade.enabled():
+		_terrain_fading = true
+		TerrainFade.run(self, _finish_wild_end)
+		return
+	_apply_wild(now)
+
+func _finish_wild_end() -> void:
+	_terrain_fading = false
+	if is_inside_tree(): _apply_wild(OpeningTerrain.wild())
+
+func _apply_wild(now: bool) -> void:
 	var layout: Dictionary = OpeningTerrain.layout(self) if now else {}
 	# 켜지거나 꺼질 때, 또는 가게가 넓어져 부지가 바뀔 때 지형을 다시 만든다.
 	if now != _wild_active or layout.hash() != _wild_layout.hash():
