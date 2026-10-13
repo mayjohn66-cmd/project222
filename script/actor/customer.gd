@@ -554,6 +554,18 @@ func arrive_at_target():
 			carried_item_id = ""
 			carried_amount = 0
 
+			# 가격 단계: 비싸면 사지 않고 나가고, 싸면 민감한 손님이 한 개 더 산다(ShopPricing).
+			var price_stock: int = int(target_shelf.get_item_stock(wanted_item_id)) if target_shelf.has_method("get_item_stock") else 0
+			var price_reaction: Dictionary = ShopPricing.react(self, wanted_item_id, wanted_amount, price_stock)
+			if price_reaction["walkout"]:
+				player.record_price_walkout(wanted_item_id, wanted_amount, int(price_reaction["lost"]))
+				StoreEventRemark.say(self, ShopPricing.walkout_line(CustomerTypeData.get_group_id(get_customer_type_id())))
+				go_to_exit()
+				return
+			if int(price_reaction["bonus"]) > 0:
+				wanted_amount += int(price_reaction["bonus"])
+				player.record_price_bonus(wanted_item_id, int(price_reaction["bonus"]))
+
 			if target_shelf.has_method(
 				"take_items_by_id"
 			):

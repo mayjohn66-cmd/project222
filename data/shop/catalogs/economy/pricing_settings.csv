@@ -1,0 +1,5 @@
+key,value,note
+expensive_slope,1.2,비쌀 때 구매 포기 확률 = 민감도 x (배율-1) x 이 값
+cheap_bonus_slope,1.5,쌀 때 한 개 더 살 확률 = 민감도 x (1-배율) x 이 값
+min_accept,0.05,구매 확률의 하한
+max_bonus,0.9,더 살 확률의 상한

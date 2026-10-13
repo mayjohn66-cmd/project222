@@ -6,6 +6,10 @@ var cleanup_seen := false
 var products: Array[Dictionary] = []
 var product_table: Tree
 var detail: Label
+var selected_item := ""          # 가격 단계를 바꾸는 중인 상품
+var price_label: Label
+var price_down: Button
+var price_up: Button
 
 func _ready() -> void:
 	super._ready()
@@ -66,7 +70,7 @@ func _product_list() -> void:
 	product_table.custom_minimum_size.y = 200
 	for i in range(4):
 		product_table.set_column_title(i, ["상품", "진열", "판매가", "상태"][i])
-		product_table.set_column_custom_minimum_width(i, [125, 60, 95, 135][i])
+		product_table.set_column_custom_minimum_width(i, [105, 55, 140, 120][i])
 		product_table.set_column_expand(i, i == 0 or i == 3)
 	var paper := StyleBoxFlat.new()
 	paper.bg_color = Color("f9efd9")
@@ -85,11 +89,64 @@ func _product_list() -> void:
 		for column in range(4):
 			row.set_tooltip_text(column, _details(product))
 			if int(product["stock"]) == 0: row.set_custom_color(column, Color("776b60"))
-	_label("상품을 선택하면 설명과 진열 상태를 확인할 수 있습니다.")
+	_label("상품을 선택하면 설명과 진열 상태를 확인하고 판매 가격 단계를 바꿀 수 있습니다.")
 	detail = rows.get_child(rows.get_child_count() - 1)
+	_price_controls()
 	product_table.item_selected.connect(func() -> void:
 		var selected := product_table.get_selected()
-		if selected != null: detail.text = _details(selected.get_metadata(0)))
+		if selected != null:
+			var product: Dictionary = selected.get_metadata(0)
+			detail.text = _details(product)
+			selected_item = str(product["item_id"])
+			_update_price_controls())
+	# 가격을 바꾼 뒤 다시 그려도 같은 상품이 선택된 채로 남게 한다.
+	if not selected_item.is_empty():
+		var item := product_table.get_root().get_first_child()
+		while item != null:
+			if str(item.get_metadata(0)["item_id"]) == selected_item:
+				item.select(0)
+				break
+			item = item.get_next()
+	_update_price_controls()
+
+# 선택한 상품의 판매 가격 단계(아주 저렴 ~ 아주 비쌈)를 한 칸씩 바꾼다.
+func _price_controls() -> void:
+	var box := HBoxContainer.new()
+	box.name = "PriceControls"
+	rows.add_child(box)
+	price_down = Button.new()
+	price_down.name = "PriceDown"
+	price_down.text = "◀ 값 내리기"
+	price_down.pressed.connect(_shift_price.bind(-1))
+	box.add_child(price_down)
+	price_label = Label.new()
+	price_label.name = "PriceLabel"
+	price_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	price_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	price_label.add_theme_color_override("font_color", Color("51382d"))
+	box.add_child(price_label)
+	price_up = Button.new()
+	price_up.name = "PriceUp"
+	price_up.text = "값 올리기 ▶"
+	price_up.pressed.connect(_shift_price.bind(1))
+	box.add_child(price_up)
+	_label("비싸게 팔면 민감한 손님(아이·광부 등)은 그냥 나갈 수 있고, 싸게 팔면 한 개 더 사 가기도 합니다. 마감 할인은 자동으로 더해집니다.")
+
+func _shift_price(direction: int) -> void:
+	if selected_item.is_empty(): return
+	ShopPricing.shift(selected_item, direction)
+	refresh()
+
+func _update_price_controls() -> void:
+	if price_label == null: return
+	var has_item := not selected_item.is_empty() and ItemData.has_item(selected_item)
+	price_down.disabled = not has_item or ShopPricing.step_of(selected_item) <= int(ShopPricingData.step_ids().front())
+	price_up.disabled = not has_item or ShopPricing.step_of(selected_item) >= int(ShopPricingData.step_ids().back())
+	if not has_item:
+		price_label.text = "상품을 선택하세요"
+		return
+	var step := ShopPricing.step_of(selected_item)
+	price_label.text = "%s · 가격 단계 %s (기본 %dG → %dG)" % [ItemData.get_item_name(selected_item), ShopPricing.label(step), ItemData.get_item_price(selected_item), ShopPricing.sale_price(selected_item)]
 
 func _details(product: Dictionary) -> String:
 	var status := RegisterProductOverview.status_text(product)

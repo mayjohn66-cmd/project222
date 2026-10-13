@@ -16,6 +16,16 @@ static func tell(customer: Node, stage: String, item_id: String) -> void:
 		customer.player.add_child(notice)
 	notice.display(text)
 
+# 가격 반응 같은 짧은 손님 말(이벤트 글이 아니라 정해진 문장).
+static func say(customer: Node, text: String) -> void:
+	if text.is_empty() or not is_instance_valid(customer.player): return
+	var notice := customer.player.get_node_or_null("StoreEventRemark") as StoreEventRemark
+	if notice == null:
+		notice = StoreEventRemark.new()
+		notice.name = "StoreEventRemark"
+		customer.player.add_child(notice)
+	notice.display(text)
+
 func _ready() -> void:
 	layer = 6
 	card = PanelContainer.new()

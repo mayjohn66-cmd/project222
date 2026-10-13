@@ -1,0 +1,9 @@
+group_id,sensitivity,note
+normal,1.0,일반 손님: 기본가에서 가장 안정적
+traveler,0.5,여행자: 길에서 필요하면 값을 따지지 않는 편
+adventurer,0.6,모험가: 급하면 비싸도 산다
+miner,1.0,광부: 일하고 번 돈이라 값에 민감
+herbalist,0.8,약초꾼
+child,1.4,아이: 가장 민감(용돈)
+collector,0.3,수집가: 갖고 싶으면 비싸도 산다
+marsh_local,0.8,늪 주민

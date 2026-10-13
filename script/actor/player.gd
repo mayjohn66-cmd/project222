@@ -40,6 +40,9 @@ var money: int:
 var daily_visitors_by_customer_type: Dictionary = {}
 var daily_sold_items: Dictionary = {}
 var daily_unmet_demand: Dictionary = {}
+var daily_price_walkouts: int = 0        # 가격이 비싸서 사지 않고 나간 손님 수
+var daily_price_lost_revenue: int = 0    # 그때 놓친 매출
+var daily_price_bonus: int = 0           # 싸게 팔아 늘어난 판매 개수
 
 var facility_recipe_picker: OptionButton
 var facility_detail_label: Label
@@ -329,6 +332,9 @@ func reset_shop_stats():
 	daily_visitors_by_customer_type.clear()
 	daily_sold_items.clear()
 	daily_unmet_demand.clear()
+	daily_price_walkouts = 0
+	daily_price_lost_revenue = 0
+	daily_price_bonus = 0
 
 	update_shop_stats_ui()
 
@@ -352,7 +358,11 @@ func get_daily_shop_stats() -> Dictionary:
 
 		"unmet_demand": (
 			daily_unmet_demand.duplicate(true)
-		)
+		),
+
+		"price_walkouts": daily_price_walkouts,
+		"price_lost_revenue": daily_price_lost_revenue,
+		"price_bonus": daily_price_bonus
 	}
 
 
@@ -444,6 +454,15 @@ func show_rumor_dialog(
 			340
 		)
 	)
+
+func record_price_walkout(_item_id: String, _amount: int, lost_revenue: int) -> void:
+	daily_price_walkouts += 1
+	daily_price_lost_revenue += maxi(lost_revenue, 0)
+
+
+func record_price_bonus(_item_id: String, extra: int) -> void:
+	daily_price_bonus += maxi(extra, 0)
+
 
 func record_unmet_demand(
 	item_id: String,

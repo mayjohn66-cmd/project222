@@ -23,7 +23,7 @@ static func entries(world: Node) -> Array[Dictionary]:
 		var prices: Array[int] = []
 		var remaining := -1
 		var discounted := 0
-		var base: int = ItemData.get_item_price(item)
+		var base: int = ShopPricing.sale_price(item)
 		for batch in product["batches"]:
 			var days: int = FoodShelfLife.days_left(item, batch)
 			remaining = days if remaining < 0 else mini(remaining, days)
@@ -42,8 +42,9 @@ static func entries(world: Node) -> Array[Dictionary]:
 	return result
 
 static func price_text(product: Dictionary) -> String:
-	if product["min_price"] == product["max_price"]: return "%dG" % product["min_price"]
-	return "%d~%dG" % [product["min_price"], product["max_price"]]
+	var text: String = "%dG" % product["min_price"] if product["min_price"] == product["max_price"] else "%d~%dG" % [product["min_price"], product["max_price"]]
+	var step: int = ShopPricing.step_of(str(product.get("item_id", "")))
+	return text if step == 0 else "%s (%s)" % [text, ShopPricing.label(step)]
 
 static func status_text(product: Dictionary) -> String:
 	if int(product["stock"]) == 0: return "품절 · 진열 필요"

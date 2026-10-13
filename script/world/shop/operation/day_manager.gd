@@ -303,6 +303,7 @@ func show_day_summary():
 		+ best_selling_item_text
 		+ "\n가장 많이 놓친 수요: "
 		+ most_unmet_item_text
+		+ _price_reaction_summary(stats)
 	)
 
 	summary_open = true
@@ -310,6 +311,19 @@ func show_day_summary():
 
 	# 결산 확인 전까지 전체 게임 정지
 	get_tree().paused = true
+
+# 가격 단계 반응 요약(비싸서 나간 손님·싸서 더 팔린 상품). 가격을 조정하지 않았으면 비어 있다.
+func _price_reaction_summary(stats: Dictionary) -> String:
+	var walkouts: int = int(stats.get("price_walkouts", 0))
+	var bonus: int = int(stats.get("price_bonus", 0))
+	if walkouts <= 0 and bonus <= 0:
+		return ""
+	var text := "\n\n가격 반응"
+	if walkouts > 0:
+		text += "\n비싸서 그냥 나간 손님: %d명 (놓친 매출 약 %dG)" % [walkouts, int(stats.get("price_lost_revenue", 0))]
+	if bonus > 0:
+		text += "\n싸서 더 팔린 상품: %d개" % bonus
+	return text
 
 func confirm_next_day():
 	if not summary_open:
@@ -1274,6 +1288,9 @@ func _install_world_interactions() -> void:
 		player.daily_visitors_by_customer_type = stats.get("visitors_by_customer_type",{}).duplicate(true)
 		player.daily_sold_items = stats.get("sold_items",{}).duplicate(true)
 		player.daily_unmet_demand = stats.get("unmet_demand",{}).duplicate(true)
+		player.daily_price_walkouts = int(stats.get("price_walkouts",0))
+		player.daily_price_lost_revenue = int(stats.get("price_lost_revenue",0))
+		player.daily_price_bonus = int(stats.get("price_bonus",0))
 		player.update_shop_stats_ui()
 	if GameState.has_meta("shop_return_context"): GameState.remove_meta("shop_return_context")
 

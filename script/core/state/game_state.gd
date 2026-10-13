@@ -19,6 +19,7 @@ var expedition_checkpoint: Dictionary = {}
 var current_day: int = 1
 var total_day: int = 1
 var preservation_state: Dictionary = {}
+var price_steps: Dictionary = {}   # 상품 가격 단계 {item_id: step} (ShopPricing). 기본(0)은 저장하지 않는다
 
 
 # =========================
@@ -213,6 +214,7 @@ func initialize_new_game():
 	next_equipment_instance_id = 1
 	tool_enhancement_levels.clear()
 	furniture_inventory.clear()
+	price_steps.clear()
 	furniture_inventory_initialized = false
 	initialize_furniture_inventory()
 	initialize_build_quick_slots()
@@ -729,6 +731,7 @@ func create_save_data() -> Dictionary:
 		"player_state": player_state.duplicate(true),
 		"inventory": inventory.duplicate(true),
 		"preservation": preservation_state.duplicate(true),
+		"price_steps": price_steps.duplicate(true),
 		"furniture_inventory": furniture_inventory.duplicate(true),
 		"build_quick_slots": build_quick_slots.duplicate(),
 		"store_layout": store_layout.duplicate(true),
@@ -1443,6 +1446,7 @@ func apply_save_data(data: Dictionary) -> bool:
 	player_state = data["player_state"].duplicate(true)
 	inventory = data["inventory"].duplicate(true)
 	preservation_state = data.get("preservation", PreservationService.initial_state(total_day)).duplicate(true)
+	price_steps = _clean_price_steps(data.get("price_steps", {}))
 
 	if not rebuild_inventory_slots_from_counts():
 		push_error(
@@ -2935,3 +2939,16 @@ func upgrade_warehouse() -> bool:
 	)
 
 	return true
+
+
+# 저장된 가격 단계를 읽는다. 옛 저장(키 없음)·알 수 없는 값은 기본(0)으로 처리해 버린다.
+func _clean_price_steps(raw: Variant) -> Dictionary:
+	var result: Dictionary = {}
+	if not raw is Dictionary:
+		return result
+	var ids: Array = ShopPricingData.step_ids()
+	for key in raw:
+		var step: int = int(raw[key])
+		if step != 0 and step >= int(ids.front()) and step <= int(ids.back()):
+			result[str(key)] = step
+	return result

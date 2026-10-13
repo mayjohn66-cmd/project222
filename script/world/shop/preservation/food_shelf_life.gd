@@ -211,7 +211,7 @@ static func days_left(item: String, batch: Dictionary) -> int:
 
 static func unit_price(item: String, batch: Dictionary) -> int:
 	if days_left(item, batch) <= 0: return 0
-	var price: int = ItemData.get_item_price(item)
+	var price: int = ShopPricing.sale_price(item)   # 선택한 가격 단계 반영. 마감 할인은 그 위에 곱해진다
 	if state()["markdown"] and days_left(item, batch) <= SETTINGS.markdown_days:
 		return maxi(1, price * (100 - SETTINGS.markdown_percent) / 100)
 	return price
@@ -307,7 +307,7 @@ static func customer_batches(customer: Node) -> Array:
 	return batches
 
 static func customer_total(customer: Node) -> int:
-	if not tracked(customer.carried_item_id): return ItemData.get_item_price(customer.carried_item_id) * customer.carried_amount
+	if not tracked(customer.carried_item_id): return ShopPricing.sale_price(customer.carried_item_id) * customer.carried_amount
 	return receipt_total(customer.carried_item_id, customer_batches(customer))
 
 static func recover_customer(customer: Node) -> void:

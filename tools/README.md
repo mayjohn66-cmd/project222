@@ -5,7 +5,7 @@
 ```
 tools/
 ├─ balance/   # 밸런스 점검(읽기 전용): 가격·수요·강화·원정 보상
-│  balance_baseline · check_economy · check_demand · check_arrival · check_enhancement · check_equipment
+│  balance_baseline · check_pricing(가격 단계 기대 수익) · check_economy · check_demand · check_arrival · check_enhancement · check_equipment
 │  check_map_supply · check_merchant · recipe_prices · review_content_economy · build_scroll_drops · build_draft
 ├─ story/     # 이야기: export_story_bundle(제미나이 검수용 묶음) · export_story_full · export_story_text
 │  merge_story_csv(검수 결과 합치기, 먼저 점검만) · audit_completion(콘텐츠 완료 조건 점검표 생성) · validate_story · audit_story · export_rewrite_prompts

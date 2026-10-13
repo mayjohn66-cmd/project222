@@ -54,7 +54,7 @@ func setup(
 			HORIZONTAL_ALIGNMENT_RIGHT
 		)
 		stock_label.text = (
-			str(ItemData.get_item_price(item_id))
+			str(ShopPricing.sale_price(item_id))
 			+ "G"
 		)
 		tooltip_text = ItemData.get_item_name(item_id)

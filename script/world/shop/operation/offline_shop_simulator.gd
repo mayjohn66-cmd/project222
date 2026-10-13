@@ -130,7 +130,7 @@ static func _take_sale(tree: SceneTree, item_id: String, amount: int) -> Diction
 		if taken_total >= amount: break
 		var taken: int = shelf.take_items_by_id(item_id, amount - taken_total)
 		taken_total += taken
-		total += FoodShelfLife.receipt_total(item_id, shelf.get_meta("food_receipt", [])) if FoodShelfLife.tracked(item_id) else ItemData.get_item_price(item_id) * taken
+		total += FoodShelfLife.receipt_total(item_id, shelf.get_meta("food_receipt", [])) if FoodShelfLife.tracked(item_id) else ShopPricing.sale_price(item_id) * taken
 	return {"amount":taken_total, "total":total}
 
 
