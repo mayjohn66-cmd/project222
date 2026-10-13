@@ -232,9 +232,21 @@ func spawn_customer() -> void:
 		)
 	)
 
+	# 도로 끝이 화면 안에 보이면 화면 밖까지 바깥으로 물러난 지점(게이트)에서 걸어 들어온다.
+	var gate_start: Vector2 = CustomerGates.gate_position(
+		store_exterior,
+		sidewalk_route.get("start_cell", Vector2i.ZERO)
+	)
+	if gate_start != start_position:
+		var lead_in: Array = [start_position]
+		lead_in.append_array(sidewalk_route.get("approach_positions", []))
+		sidewalk_route["approach_positions"] = lead_in
+		start_position = gate_start
+
 	customer.global_position = (
 		start_position
 	)
+	CustomerGates.fade_in(customer)
 
 	await get_tree().physics_frame
 
@@ -270,7 +282,7 @@ func spawn_customer() -> void:
 	)
 
 	if not wants_to_enter:
-		# 관심이 없다면 보도를 따라 반대편 끝까지 간다.
+		# 관심이 없다면 보도를 따라 반대편 끝까지 가서, 화면 밖 게이트로 빠져나간다.
 		await move_customer_along_points(
 			customer,
 			sidewalk_route.get(
@@ -278,6 +290,13 @@ func spawn_customer() -> void:
 				[]
 			)
 		)
+		var gate_finish: Vector2 = CustomerGates.gate_position(
+			store_exterior,
+			sidewalk_route.get("finish_cell", Vector2i.ZERO)
+		)
+		if is_instance_valid(customer) and gate_finish != customer.global_position:
+			CustomerGates.fade_out(customer)
+			await move_customer_along_points(customer, [gate_finish])
 
 		if is_instance_valid(customer):
 			customer.queue_free()

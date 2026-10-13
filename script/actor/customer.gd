@@ -1026,6 +1026,20 @@ func finish_exit() -> void:
 		sidewalk_duration
 	)
 
+	# 5단계: 보도 끝이 화면 안이면 화면 밖 게이트까지 더 걸어가며 사라진다.
+	var gate_exit: Vector2 = CustomerGates.gate_position(
+		store_exterior,
+		store_exterior.call("get_sidewalk_spawn_cell_for_door", exit_door)
+	)
+	if gate_exit != sidewalk_exit_position:
+		exit_tween.tween_callback(CustomerGates.fade_out.bind(self))
+		exit_tween.tween_property(
+			self,
+			"global_position",
+			gate_exit,
+			clampf(sidewalk_exit_position.distance_to(gate_exit) / safe_speed, 0.2, 3.0)
+		)
+
 	await exit_tween.finished
 
 	if is_instance_valid(self):

@@ -1232,6 +1232,8 @@ func get_random_sidewalk_route_for_door(
 				finish_cell
 			)
 		),
+		"start_cell": start_cell,
+		"finish_cell": finish_cell,
 		"approach_positions": approach_positions,
 		"pass_positions": pass_positions
 	}
