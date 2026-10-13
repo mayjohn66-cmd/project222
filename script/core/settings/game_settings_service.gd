@@ -16,7 +16,7 @@ func load_settings() -> Dictionary:
 			"master_volume": 100.0,
 			"fullscreen": false,
 			"game_speed": 1.0,
-			"simple_checkout": false
+			"simple_checkout": true
 		}
 
 	if load_error != OK:
@@ -39,7 +39,7 @@ func load_settings() -> Dictionary:
 			config.get_value("gameplay", "game_speed", 1.0)
 		),
 		"simple_checkout": bool(
-			config.get_value("gameplay", "simple_checkout", false)
+			config.get_value("gameplay", "simple_checkout", true)
 		)
 	}
 
@@ -48,7 +48,7 @@ func save_settings(
 	master_volume: float,
 	fullscreen: bool,
 	game_speed: float = 1.0,
-	simple_checkout: bool = false
+	simple_checkout: bool = true
 ) -> bool:
 	var config := ConfigFile.new()
 

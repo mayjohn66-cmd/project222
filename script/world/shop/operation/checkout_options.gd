@@ -12,7 +12,8 @@ static func simple() -> bool:
 	if _simple < 0:
 		var config := ConfigFile.new()
 		var loaded: bool = config.load(GameConfig.SETTINGS_PATH) == OK
-		_simple = 1 if loaded and bool(config.get_value("gameplay", "simple_checkout", false)) else 0
+		# 기본값은 간편 계산(켜짐). 설정 파일이 없거나 항목이 없으면 간편 계산이다.
+		_simple = 1 if (not loaded or bool(config.get_value("gameplay", "simple_checkout", true))) else 0
 	return _simple == 1
 
 

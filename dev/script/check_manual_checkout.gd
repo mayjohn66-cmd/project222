@@ -105,6 +105,7 @@ func run() -> void:
 	check(not cashier.try_interact(), "customer side cannot operate register")
 	player.global_position = world.get_node("BuildManager").get_cell_world_position(cell)
 	money_before = player.money
+	CheckoutOptions.set_simple(false)   # 기본값은 간편 계산이므로 스캔 확인은 옵션을 끄고 한다
 	cashier.try_interact()
 	check(cashier.is_busy() and cashier.scan != null, "ordinary customer is checked out with the scan timing")
 	cashier._process(2.0)

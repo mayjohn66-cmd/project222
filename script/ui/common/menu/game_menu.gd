@@ -246,7 +246,7 @@ func _ready() -> void:
 	)
 
 	simple_checkout_button = CheckBox.new()
-	simple_checkout_button.text = "간편 계산 (스캔 없이 자동 결제)"
+	simple_checkout_button.text = "간편 계산 (끄면 스캔 타이밍으로 계산하고 팁을 받음)"
 	fullscreen_button.get_parent().add_child(simple_checkout_button)
 	fullscreen_button.get_parent().move_child(simple_checkout_button, fullscreen_button.get_index() + 1)
 	simple_checkout_button.toggled.connect(_on_simple_checkout_toggled)
@@ -597,7 +597,7 @@ func _load_game_settings() -> void:
 		saved_fullscreen
 	)
 
-	var saved_simple: bool = bool(settings.get("simple_checkout", false))
+	var saved_simple: bool = bool(settings.get("simple_checkout", true))
 	simple_checkout_button.set_pressed_no_signal(saved_simple)
 	CheckoutOptions.set_simple(saved_simple)
 
