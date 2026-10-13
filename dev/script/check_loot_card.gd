@@ -28,7 +28,7 @@ func _ready() -> void:
 	check(card.text.is_empty(), "아이콘이 있으면 글자는 비운다")
 	check(card.count_label != null and card.count_label.text == "×3", "수량 배지")
 	check(card.tooltip_text.contains(ItemData.get_item_name(with_icon)) and card.tooltip_text.contains("×3"), "마우스를 올리면 이름과 수량")
-	check(card.custom_minimum_size.x >= 64 and card.custom_minimum_size.y >= 64, "카드 크기가 아이콘이 읽힐 만큼 크다")
+	check(card.custom_minimum_size == Vector2(48, 48), "카드 크기가 가방 칸(52px 격자)과 같다")
 	var drag: Variant = null
 	card.controller = self
 	drag = card._get_drag_data(Vector2.ZERO)

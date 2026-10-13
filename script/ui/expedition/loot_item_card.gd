@@ -8,7 +8,9 @@ var amount: int = 1
 var controller: Node = null
 
 
-const CARD_SIZE := Vector2(72, 72)
+# 가방 칸(52px 격자에서 2px씩 띄운 48px 칸)과 같은 크기·색으로 맞춘다.
+const CARD_SIZE := Vector2(48, 48)
+const SLOT_STYLE = preload("res://script/ui/common/inventory/inventory_slot_style.gd")
 
 var icon_rect: TextureRect = null
 var count_label: Label = null
@@ -26,6 +28,8 @@ func setup(
 	controller = new_controller
 
 	custom_minimum_size = CARD_SIZE
+	SLOT_STYLE.apply(self)
+	focus_mode = Control.FOCUS_NONE
 	clip_contents = true
 	tooltip_text = "%s ×%d\n끌어서 가방에 넣으세요." % [ItemData.get_item_name(item_id), amount]
 
@@ -43,14 +47,14 @@ func setup(
 		icon_rect.expand_mode = TextureRect.EXPAND_IGNORE_SIZE
 		icon_rect.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
 		icon_rect.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		icon_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 6)
+		icon_rect.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT, Control.PRESET_MODE_MINSIZE, 2)
 		add_child(icon_rect)
 
 	# 수량 표시(가방 칸과 같은 모서리 배지)
 	count_label = Label.new()
 	count_label.text = "×%d" % amount
 	count_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-	count_label.add_theme_font_size_override("font_size", UiTypography.size(14))
+	count_label.add_theme_font_size_override("font_size", UiTypography.size(12))
 	count_label.add_theme_color_override("font_color", Color("fff0d0"))
 	count_label.add_theme_color_override("font_outline_color", Color("302415"))
 	count_label.add_theme_constant_override("outline_size", 4)
