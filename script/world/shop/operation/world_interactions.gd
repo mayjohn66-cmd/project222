@@ -26,6 +26,8 @@ func _ready() -> void:
 
 func blocked() -> bool:
  var world = get_parent()
+ var shelf_window := world.get_node_or_null("UI/ShelfPanel") as Control
+ if shelf_window != null and shelf_window.visible: return true
  if bool(world.get_meta("employee_recruitment_open",false)): return true
  if bool(world.get_meta("fishing_open",false)): return true
  if bool(world.get_meta("act_four_open",false)): return true

@@ -175,6 +175,7 @@ var pending_transfer_target_slot_index: int = -1
 func _ready():
 	visible = false
 	slot_action_panel.visible = false
+	add_child(ShelfWindowPriority.new())
 
 	close_button.pressed.connect(close)
 
@@ -582,7 +583,7 @@ func open_warehouse_action_menu(
 		"정보보기",
 		"옮기기",
 		"빼기",
-		300
+		ShelfWindowPriority.ACTION_Z
 	)
 
 func refresh_warehouse_title() -> void:
@@ -1109,7 +1110,7 @@ func open_warehouse_transfer_amount_panel(
 	)
 
 	restock_panel.visible = true
-	restock_panel.z_index = 400
+	restock_panel.z_index = ShelfWindowPriority.AMOUNT_Z
 
 	var viewport_size: Vector2 = (
 		get_viewport_rect().size
@@ -1244,7 +1245,7 @@ func open_action_menu(slot_index: int):
 		"정보보기",
 		"보충하기",
 		"비우기",
-		100
+		ShelfWindowPriority.ACTION_Z
 	)
 
 
@@ -1282,6 +1283,7 @@ func _show_action_menu(
 
 	slot_action_panel.global_position = popup_position
 	slot_action_panel.visible = true
+	ShelfWindowPriority.fit_action_popup.call_deferred(slot_action_panel, ACTION_MENU_SIZE)
 
 
 func close_action_menu():
@@ -1667,6 +1669,10 @@ func clear_container(container: Container):
 func _input(event):
 	if not visible:
 		return
+	# 진열대 조작 중에는 수첩을 겹쳐 열지 않는다.
+	if event.is_action_pressed("management_menu"):
+		get_viewport().set_input_as_handled()
+		return
 
 	if event.is_action_pressed("ui_cancel"):
 		# 액션 메뉴가 열려 있으면 액션 메뉴만 닫기
@@ -1752,7 +1758,7 @@ func open_warehouse_move_amount_panel() -> void:
 	close_action_menu()
 
 	restock_panel.visible = true
-	restock_panel.z_index = 400
+	restock_panel.z_index = ShelfWindowPriority.AMOUNT_Z
 
 	var viewport_size: Vector2 = (
 		get_viewport_rect().size
@@ -1830,7 +1836,7 @@ func open_restock_panel():
 	)
 
 	restock_panel.visible = true
-	restock_panel.z_index = 110
+	restock_panel.z_index = ShelfWindowPriority.AMOUNT_Z
 
 	# 화면 중앙 근처에 표시
 	var viewport_size: Vector2 = (
