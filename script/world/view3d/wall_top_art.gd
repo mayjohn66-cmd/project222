@@ -1,8 +1,13 @@
 class_name WallTopArt
 extends RefCounted
 ## 벽 전체 길이에 원본 몰딩 색을 쓰는 윗면을 연결한다. 바닥/충돌/PNG는 바꾸지 않는다.
-# 몰딩 윗선과 2px 겹쳐서 대각선 래스터 경계의 틈을 막는다.
-const TOP_PIXELS := 58.0
+# 원본 테두리 두 줄을 윗면으로 대체하고 1px 겹쳐 래스터 틈을 막는다.
+const TOP_PIXELS := 57.0
+
+static func attach_face(view: StoreView3D, key: String, direction: int) -> void:
+	for material in [view._items[key].material,view._items[key].id_material]:
+		material.set_shader_parameter("wall_top_attached",true)
+		material.set_shader_parameter("wall_top_profile_sign",1.0 if direction in [0,2] else -1.0)
 
 static func strip(view: StoreView3D, key: String, source: Texture2D, lo: Vector2, hi: Vector2,
 		base: Vector2, direction: int, cutaway: bool) -> void:
@@ -60,6 +65,7 @@ static func _make(view: StoreView3D, key: String, source: Texture2D, lo: Vector2
 		material.set_shader_parameter("wall_top_outward",outward)
 		material.set_shader_parameter("wall_top_profile_sign",sign_x)
 	item.material.set_shader_parameter("normal_base",Vector3.UP)
+	item.material.set_shader_parameter("normal_strength",0.15)
 	item["wall_top"] = true
 	item["min"].z = TOP_PIXELS
 	item["max"].z = TOP_PIXELS

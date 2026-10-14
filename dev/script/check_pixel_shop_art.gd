@@ -225,6 +225,8 @@ func run() -> void:
 		var item: Dictionary = view._items[key]
 		if item.get("signature","") == "pixel_wall" and str(item.received_art).contains("wall_full_"):
 			check(view._items.has(str(key)+"_top"),"each tall wall segment has a connected top "+key)
+			check(bool(item.material.get_shader_parameter("wall_top_attached")) and item.id_material.get_shader_parameter("wall_top_attached") == item.material.get_shader_parameter("wall_top_attached"),"cornice seam replacement follows the same color and picking mask "+key)
+			check(item.id_material.get_shader_parameter("wall_top_profile_sign") == item.material.get_shader_parameter("wall_top_profile_sign"),"wall seam follows its source direction "+key)
 		if not bool(item.get("wall_top",false)): continue
 		tops += 1
 		if str(key).contains("topcorner"): top_corners += 1

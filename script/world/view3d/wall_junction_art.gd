@@ -40,6 +40,7 @@ static func _draw(view: StoreView3D, key: String, corner: Vector2, wall_directio
 		"pixel_wall_endcap", Color.WHITE, 1.0, "", crop)
 	var item: Dictionary = view._items[key]
 	item["wall_endcap"] = true
+	WallTopArt.attach_face(view,key,face_direction)
 	item.material.set_shader_parameter("normal_base", Vector3(0,0,1) if face_direction in [0,2] else Vector3(1,0,0))
 	if face_direction in [1,2]:
 		item["cutaway"] = {"rect": Rect2(lo,hi-lo), "h": 0.0, "factor": 1.0, "base_origin": true}
