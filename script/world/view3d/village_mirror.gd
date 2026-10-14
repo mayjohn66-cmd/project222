@@ -139,8 +139,8 @@ static func find_rule(rule_list: Array, text: String) -> Dictionary:
 # ---------------------------------------------------------------- 바닥
 
 func _cell_kind(cell: Vector2i) -> String:
-	if exterior.is_wild():
-		return exterior.get_wild_kind(cell)  # 초반 낯선 땅: 풀밭과 흙길뿐
+	if exterior.is_wild() and not exterior.reveal_contains(cell):
+		return exterior.get_wild_kind(cell)  # 초반 낯선 땅: 풀밭과 흙길뿐(마을 지형이 열린 칸은 아래 마을 규칙)
 
 	var painted: String = exterior.get_layout_tile(cell)
 
@@ -169,7 +169,7 @@ func _cell_kind(cell: Vector2i) -> String:
 func sync_ground() -> void:
 	var cells: Array[Vector2i] = exterior.get_connected_map_cells()
 	var store_rect: Rect2i = view.floor_node.get_store_rect()
-	var sig: String = "%d|%s|%d|%s|%s|%d|%s" % [cells.size(), str(exterior.get_village_map_extent()), exterior._layout_tiles.hash(), str(store_rect), season, _footprints.hash(), str(exterior.is_wild())]
+	var sig: String = "%d|%s|%d|%s|%s|%d|%s|%s" % [cells.size(), str(exterior.get_village_map_extent()), exterior._layout_tiles.hash(), str(store_rect), season, _footprints.hash(), str(exterior.is_wild()), exterior.reveal_signature()]
 
 	if sig == _ground_signature:
 		return

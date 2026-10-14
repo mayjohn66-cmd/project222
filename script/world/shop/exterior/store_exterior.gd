@@ -153,8 +153,18 @@ func get_connected_map_cells() -> Array[Vector2i]:
 		for wild_cell in _wild_layout:
 			cells.append(wild_cell)
 
+		# 초반 땅이 마을 지형으로 열리는 동안에는 이미 열린 마을 칸도 걸을 수 있다.
+		for revealed_cell in _reveal_cells:
+			if not _wild_layout.has(revealed_cell):
+				cells.append(revealed_cell)
+
 		return cells
 
+	return _village_cells()
+
+# 마을 지형(평소 지형)의 칸 목록: 원형 지도 + 지도 편집기로 더한 칸 - 뺀 칸.
+func _village_cells() -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
 	var center := get_village_map_center_local()
 	var center_cell := Vector2i(roundi(center.x/tile_width+center.y/tile_height),roundi(center.y/tile_height-center.x/tile_width))
 	var radius := get_village_map_radius()
@@ -363,25 +373,98 @@ func get_wild_kind(cell: Vector2i) -> String:
 
 func _process(delta: float) -> void:
 	if Engine.is_editor_hint(): return
+	if _terrain_fading:
+		_process_reveal(delta)
+		return
 	_wild_poll -= delta
 	if _wild_poll > 0.0: return
 	_wild_poll = 0.5
 	_update_wild()
 
-var _terrain_fading: bool = false
+# ---- 초반 땅이 마을 지형으로 열리는 과정(점점 밝히기) ----
+# 지형은 마을 지형 하나다. 초반(낯선 땅)에는 그 일부만 열려 있고, 첫 재료 판매를 마치면 가게에서 바깥으로
+# 마을 지형이 천천히 열린다. 새로 열린 칸은 걸을 수 있고 마을 바닥 모양으로 그려진다.
+const REVEAL_SPEED := 130.0          # 가게에서 바깥으로 열리는 속도(px/초, 화면에 보이는 범위)
+const REVEAL_SLOW_SECONDS := 8.0     # 이 시간까지 위 속도로 열고, 나머지(화면 밖 먼 곳)는 곧바로 연다
+const REVEAL_STEP_SECONDS := 0.4     # 열린 칸을 갱신하는 간격
+const REVEAL_FINISH_SECONDS := 1.5   # 남은 먼 곳을 한꺼번에 여는 데 걸리는 시간
+
+var _terrain_fading: bool = false     # 열리는 중(이름은 예전 암전 때부터 쓰던 것)
+var _reveal_cells: Array[Vector2i] = []   # 열린 마을 칸(순서 있음, 가까운 칸부터)
+var _reveal_set: Dictionary = {}
+var _reveal_queue: Array[Vector2i] = []   # 아직 안 열린 마을 칸(가까운 순)
+var _reveal_origin: Vector2 = Vector2.ZERO
+var _reveal_radius: float = -1.0
+var _reveal_time: float = 0.0
+var _reveal_step_left: float = 0.0
+var _reveal_max_radius: float = 0.0
 
 func _update_wild() -> void:
 	if _terrain_fading: return
 	var now := OpeningTerrain.wild()
-	# 낯선 땅이 끝나는 순간(플레이 중)에는 화면을 어둡게 가린 뒤 지형을 바꾼다.
+	# 낯선 땅이 끝나는 순간(플레이 중)에는 마을 지형을 가게에서 바깥으로 천천히 연다.
 	if _wild_active and not now and is_inside_tree() and TerrainFade.enabled():
-		_terrain_fading = true
-		TerrainFade.run(self, _finish_wild_end)
+		_begin_reveal()
 		return
 	_apply_wild(now)
 
-func _finish_wild_end() -> void:
+func _begin_reveal() -> void:
+	_terrain_fading = true
+	var store_rect: Rect2i = OpeningTerrain.store_rect_of(self)
+	_reveal_origin = grid_to_local(store_rect.position + store_rect.size / 2)
+	_reveal_cells.clear()
+	_reveal_set.clear()
+	var cells := _village_cells()
+	cells.sort_custom(func(a: Vector2i, b: Vector2i) -> bool:
+		return grid_to_local(a).distance_squared_to(_reveal_origin) < grid_to_local(b).distance_squared_to(_reveal_origin))
+	_reveal_queue = cells
+	_reveal_max_radius = 0.0
+	if not cells.is_empty():
+		_reveal_max_radius = grid_to_local(cells.back()).distance_to(_reveal_origin) + 1.0
+	_reveal_time = 0.0
+	_reveal_step_left = 0.0
+	_reveal_radius = 0.0
+	_reveal_advance(0.0)
+
+func _reveal_advance(radius: float) -> void:
+	_reveal_radius = radius
+	var changed := false
+	while not _reveal_queue.is_empty() and grid_to_local(_reveal_queue.front()).distance_to(_reveal_origin) <= radius:
+		var cell: Vector2i = _reveal_queue.pop_front()
+		_reveal_cells.append(cell)
+		_reveal_set[cell] = true
+		changed = true
+	if changed: refresh_map_footprint()
+
+# 이 칸이 이미 열렸는가(낯선 땅 바닥 대신 마을 바닥 모양을 쓴다).
+func reveal_contains(cell: Vector2i) -> bool:
+	return _terrain_fading and _reveal_radius >= 0.0 and grid_to_local(cell).distance_to(_reveal_origin) <= _reveal_radius
+
+func reveal_signature() -> String:
+	return str(_reveal_cells.size()) if _terrain_fading else ""
+
+func _process_reveal(delta: float) -> void:
+	_reveal_time += delta
+	_reveal_step_left -= delta
+	if _reveal_step_left > 0.0: return
+	_reveal_step_left = REVEAL_STEP_SECONDS
+	var radius: float
+	if _reveal_time <= REVEAL_SLOW_SECONDS:
+		radius = REVEAL_SPEED * _reveal_time
+	else:
+		var slow_end := REVEAL_SPEED * REVEAL_SLOW_SECONDS
+		var t := clampf((_reveal_time - REVEAL_SLOW_SECONDS) / REVEAL_FINISH_SECONDS, 0.0, 1.0)
+		radius = lerpf(slow_end, _reveal_max_radius, t)
+	_reveal_advance(radius)
+	if _reveal_radius >= _reveal_max_radius and _reveal_queue.is_empty():
+		_finish_reveal()
+
+func _finish_reveal() -> void:
 	_terrain_fading = false
+	_reveal_radius = -1.0
+	_reveal_cells.clear()
+	_reveal_set.clear()
+	_reveal_queue.clear()
 	if is_inside_tree(): _apply_wild(OpeningTerrain.wild())
 
 func _apply_wild(now: bool) -> void:
@@ -690,7 +773,7 @@ func is_exterior_cell(
 	cell: Vector2i
 ) -> bool:
 	_sync_wild()
-	if _wild_active: return _wild_layout.has(cell)
+	if _wild_active: return _wild_layout.has(cell) or _reveal_set.has(cell)
 	var key := _map_cell_key(cell)
 	if _layout_removed_cells.has(key): return false
 	return _layout_added_cells.has(key) or _is_round_map_cell(cell)
