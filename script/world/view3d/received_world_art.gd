@@ -73,9 +73,10 @@ static func furniture(view: StoreView3D, key: String, node: Node, build_id: Stri
 
 static func billboard(view: StoreView3D, key: String, tex: Texture2D, anchor: Vector2,
 		lo: Vector2, hi: Vector2, base: Vector2, signature: String, tint: Color = Color.WHITE,
-		scale_factor: float = 1.0, normal_source_path: String = "") -> void:
+		scale_factor: float = 1.0, normal_source_path: String = "", pixel_region: Rect2i = Rect2i()) -> void:
 	var unit := sqrt(2.0) / TILE_WIDTH * scale_factor
 	var bounds := tex.get_image().get_used_rect()
+	if pixel_region.has_area(): bounds = bounds.intersection(pixel_region)
 	var quad := QuadMesh.new()
 	quad.size = Vector2(bounds.size) * unit
 	var offset := (Vector2(bounds.position) + Vector2(bounds.size) * 0.5 - anchor) * Vector2(unit, -unit)

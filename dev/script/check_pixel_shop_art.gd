@@ -219,6 +219,22 @@ func run() -> void:
 	view.player.in_production_room = false
 	view.player.in_warehouse_room = false
 	view._room_mirror.sync()
+	var caps: Array = []
+	for key in view._items:
+		if bool(view._items[key].get("wall_endcap",false)): caps.append(key)
+	check(caps.size() == 2,"both tall-to-window corners have an end face")
+	for key in caps:
+		var cap: Dictionary = view._items[key]
+		var region: Vector4 = cap.material.get_shader_parameter("region")
+		check(is_equal_approx(region.z,10.0/64.0),"end face keeps native ten-pixel width "+key)
+		check(cap.id_material.get_shader_parameter("region") == region,"end face color and picking mask use the same source crop "+key)
+		check(cap.material.get_shader_parameter("frame_texture") == ReceivedWorldArt.texture(cap.received_art),"end face reuses unchanged wall source "+key)
+	view._wall_signature = ""
+	view._sync_walls()
+	var rebuilt_caps := 0
+	for item in view._items.values():
+		if bool(item.get("wall_endcap",false)): rebuilt_caps += 1
+	check(rebuilt_caps == caps.size(),"wall rebuilding does not duplicate corner faces")
 	for key in view._items:
 		if str(key).begins_with("wall") or str(key).begins_with("rwall"):
 			check(view._items[key].material.get_shader_parameter("normal_texture") is Texture2D,"wall normal bound "+key)
