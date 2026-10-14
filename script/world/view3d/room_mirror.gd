@@ -115,12 +115,16 @@ func _build_walls(name: String, info: Dictionary, origin: Vector2, cols: int, ro
 		["e", Vector2(x1, y0), Vector2(x1 + t, y1), true],
 	]
 	var accent: Color = info.get("accent", StoreShell.BRAND)
+	var top_runs: Array = []
 
 	for w in walls:
 		var key: String = "rwall_%s_%s" % [name, w[0]]
 		var lo: Vector2 = w[1]
 		var hi: Vector2 = w[2]
 		var direction := 0 if w[0] == "n" else 2 if w[0] == "s" else 1 if w[0] == "e" else 3
+		var along_x := direction in [0,2]
+		top_runs.append({"along_x":along_x,"line":hi.y if direction == 0 else lo.y if direction == 2 else hi.x if direction == 3 else lo.x,
+			"lo":lo.x if along_x else lo.y,"hi":hi.x if along_x else hi.y,"direction":direction,"tall":true})
 		if PixelShopArt.wall_run(view, key, lo, hi, direction, true, bool(w[3])):
 			continue
 		var shell: Dictionary = StoreShell.build_wall(lo, hi, true, accent, {"ts": view.texture_size})
@@ -129,6 +133,7 @@ func _build_walls(name: String, info: Dictionary, origin: Vector2, cols: int, ro
 		if w[3]:
 			view._items[key]["cutaway"] = {"rect": Rect2(lo, hi - lo), "h": view.block_height(WALL_BLOCKS), "factor": 1.0, "base_origin": true}
 
+	WallTopArt.corners(view,"rwall_"+name+"_topcorner_",top_runs)
 	# 입구 문(서쪽 벽, 방 안쪽 = +x 를 본다)
 	var door_id: String = str(info["door"])
 	var pp: Dictionary = {"ts": view.texture_size, "block_px": view.block_px, "unit_px_z": (view.tile_low / sqrt(2.0)) * cos(deg_to_rad(30.0))}

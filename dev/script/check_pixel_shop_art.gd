@@ -219,6 +219,20 @@ func run() -> void:
 	view.player.in_production_room = false
 	view.player.in_warehouse_room = false
 	view._room_mirror.sync()
+	var tops := 0
+	var top_corners := 0
+	for key in view._items:
+		var item: Dictionary = view._items[key]
+		if item.get("signature","") == "pixel_wall" and str(item.received_art).contains("wall_full_"):
+			check(view._items.has(str(key)+"_top"),"each tall wall segment has a connected top "+key)
+		if not bool(item.get("wall_top",false)): continue
+		tops += 1
+		if str(key).contains("topcorner"): top_corners += 1
+		check(item.material.get_shader_parameter("normal_base") == Vector3.UP,"top surface responds to light as a horizontal face "+key)
+		check(item.mesh.mesh == item.id_mesh.mesh,"top geometry and picking geometry are identical "+key)
+		for parameter in ["frame_offset","wall_top_enabled","wall_top_corner","wall_top_bounds","wall_top_start","wall_top_along","wall_top_outward","wall_top_profile_sign"]:
+			check(item.material.get_shader_parameter(parameter) == item.id_material.get_shader_parameter(parameter),"top color/picking sampling matches "+key+" "+parameter)
+	check(tops > 18 and top_corners == 9,"shop rear corner and four corners of both rooms are closed")
 	var caps: Array = []
 	for key in view._items:
 		if bool(view._items[key].get("wall_endcap",false)): caps.append(key)
@@ -237,6 +251,10 @@ func run() -> void:
 	for item in view._items.values():
 		if bool(item.get("wall_endcap",false)): rebuilt_caps += 1
 	check(rebuilt_caps == caps.size(),"wall rebuilding does not duplicate corner faces")
+	var rebuilt_tops := 0
+	for item in view._items.values():
+		if bool(item.get("wall_top",false)): rebuilt_tops += 1
+	check(rebuilt_tops == tops,"wall rebuilding does not duplicate top strips or corner patches")
 	for key in view._items:
 		if str(key).begins_with("wall") or str(key).begins_with("rwall"):
 			check(view._items[key].material.get_shader_parameter("normal_texture") is Texture2D,"wall normal bound "+key)
@@ -257,6 +275,8 @@ func run() -> void:
 		check((second.position-first.position).is_equal_approx(c[3]),"wall repeat advances exactly one tile " + str(direction))
 		view._remove_item("proportion_probe_0")
 		view._remove_item("proportion_probe_1")
+		view._remove_item("proportion_probe_0_top")
+		view._remove_item("proportion_probe_1_top")
 	check(not PixelActorFigure.SPRITE_SHADER.code.contains("frame_scale"),"color shader cannot vertically compress artwork")
 	check(not PixelActorFigure.SPRITE_ID_SHADER.code.contains("frame_scale"),"mask shader cannot vertically compress artwork")
 	view.player.global_position = view.cell_to_world(Vector2(4.5,7.0))

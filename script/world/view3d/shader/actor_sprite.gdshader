@@ -15,6 +15,7 @@ uniform sampler2D emission_texture : filter_nearest;
 uniform float emission_strength = 0.0;
 uniform vec2 frame_offset = vec2(0.0);
 #include "res://script/world/view3d/shader/pixel_cutaway.gdshaderinc"
+#include "res://script/world/view3d/shader/wall_top.gdshaderinc"
 uniform float rank = 0.0;
 uniform float rank_count = 1.0;
 uniform bool use_sort = true;
@@ -23,10 +24,12 @@ void vertex() {
 	VERTEX.xy += frame_offset;
 }
 void fragment() {
-	vec4 color = texture(frame_texture, region.xy + UV * region.zw);
+	vec3 sample_at = world_sprite_sample(UV, region, vec2(textureSize(frame_texture, 0)));
+	if (sample_at.z < 0.5) { discard; }
+	vec2 at = sample_at.xy;
+	vec4 color = texture(frame_texture, at);
 	if (color.a < 0.5) { discard; }
-	if (cutaway_hidden(region.xy + UV * region.zw, vec2(textureSize(frame_texture, 0)))) { discard; }
-	vec2 at = region.xy + UV * region.zw;
+	if (cutaway_hidden(at, vec2(textureSize(frame_texture, 0)))) { discard; }
 	vec3 base = length(normal_base) > 0.1 ? normal_base : INV_VIEW_MATRIX[2].xyz;
 	vec3 n = use_normal ? texture(normal_texture, at).rgb * 2.0 - 1.0 : vec3(0.0,0.0,1.0);
 	vec3 tangent = normalize(INV_VIEW_MATRIX[0].xyz-base*dot(INV_VIEW_MATRIX[0].xyz,base));

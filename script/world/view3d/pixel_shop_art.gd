@@ -98,4 +98,5 @@ static func wall_run(view: StoreView3D, key: String, lo: Vector2, hi: Vector2,
 		view._items[panel_key].material.set_shader_parameter("normal_base",Vector3(0,0,1) if along_x else Vector3(1,0,0))
 		if cutaway:
 			view._items[panel_key]["cutaway"] = {"rect": Rect2(a,b-a), "h": 0.0, "factor":1.0, "base_origin":true}
+		if tall: WallTopArt.strip(view,panel_key+"_top",tex,a,b,base,direction,cutaway)
 	return true

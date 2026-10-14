@@ -680,6 +680,7 @@ func _sync_walls() -> void:
 		_items["wall%d" % index]["cutaway"] = {"rect": Rect2(lo_v, hi_v - lo_v), "h": block_height(wall_blocks), "factor": 1.0, "base_origin": true} if r["direction"] == 1 or r["direction"] == 2 else {}
 		index += 1
 	WallJunctionArt.sync(self, merged)
+	WallTopArt.corners(self,"wall_topcorner_",merged)
 
 
 # 앞쪽 벽 투시: 그림은 크기를 유지한 채 가까워지면 알파 컷아웃으로 시야를 연다. 모델 폴백은 기존 높이 처리를 유지한다.
