@@ -34,7 +34,7 @@ static func _draw(view: StoreView3D, key: String, corner: Vector2, wall_directio
 	var outer := corner + outward * StoreView3D.WALL_THICKNESS
 	var lo := corner.min(outer)
 	var hi := corner.max(outer)
-	# 원래 한 장의 기준점을 유지하고 끝의 10px만 UV로 참조한다. 좁은 면을 늘리지 않는다.
+	# 원래 한 장의 기준점을 유지하고 두께에 해당하는 끝단 픽셀만 참조한다. 면을 늘리지 않는다.
 	var base := corner + outward * 0.5
 	ReceivedWorldArt.billboard(view, key, source, Vector2(32,104), lo, hi, base,
 		"pixel_wall_endcap", Color.WHITE, 1.0, "", crop)

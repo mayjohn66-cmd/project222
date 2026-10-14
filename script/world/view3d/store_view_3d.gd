@@ -23,7 +23,8 @@ const PITCH_DEG: float = 30.0
 const WALK_GRACE_SECONDS: float = 0.12  # 마지막으로 움직인 뒤 이 시간까지는 걷는 중으로 본다(물리 갱신 사이 빈 프레임 흡수)
 const YAW_DEG: float = 45.0
 
-const WALL_THICKNESS: float = 0.3
+# 두께는 실내 경계 바깥으로만 늘린다. 반 칸은 원본 끝단16px와 정확히 맞는다.
+const WALL_THICKNESS: float = 0.5
 # 2D 벽 높이(96칸 기준 px)를 낮은 해상도 px 로: ×36/96. 120px → 45px ≈ 2.0블록, 75px → 28px ≈ 1.3블록 (캐릭터 25px 와의 비율도 같음)
 const WALL_TALL_BLOCKS: float = 2.0  # 안쪽 벽(2D 120px)
 const WALL_LOW_BLOCKS: float = 1.3  # 도로 쪽 벽(2D 75px)

@@ -226,7 +226,9 @@ func run() -> void:
 	for key in caps:
 		var cap: Dictionary = view._items[key]
 		var region: Vector4 = cap.material.get_shader_parameter("region")
-		check(is_equal_approx(region.z,10.0/64.0),"end face keeps native ten-pixel width "+key)
+		check(is_equal_approx(region.z,16.0/64.0),"thicker end face keeps native sixteen-pixel width "+key)
+		var footprint: Vector3 = cap.max - cap.min
+		check(is_equal_approx(maxf(footprint.x,footprint.y),0.5),"wall thickness grows outward by half a cell "+key)
 		check(cap.id_material.get_shader_parameter("region") == region,"end face color and picking mask use the same source crop "+key)
 		check(cap.material.get_shader_parameter("frame_texture") == ReceivedWorldArt.texture(cap.received_art),"end face reuses unchanged wall source "+key)
 	view._wall_signature = ""
